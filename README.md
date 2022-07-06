@@ -2,9 +2,10 @@
 
 ## Requirements
 
-`pip install cerberus`
+- Python 3
+- Cerberus: `pip install cerberus`
 
-Note: Some may experience a bug in pip-22.1.2, preventing them from installing cerberus (or anything else). In that case it may help to downgrade/upgrade pip.
+Note: Some may experience a bug in pip-22.1.2, preventing them from installing modules. In that case it may help to downgrade/upgrade pip.
 
 ## Contributing
 
