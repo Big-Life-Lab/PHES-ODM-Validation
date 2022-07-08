@@ -29,17 +29,3 @@ def downloadFile(url, dst: str):
     r = requests.get(url)
     with open(dst, "wb") as f:
         f.write(r.content)
-
-
-xlsxSchemaSheet = "parts"
-xlsxSchema = "schema.xlsx"
-csvSchema = "schema.csv"
-xlsxSchemaUrl = "https://osf.io/download/k94qe/"
-
-downloadFile(xlsxSchemaUrl, xlsxSchema)
-convertXlsx2Csv(xlsxSchema, xlsxSchemaSheet, csvSchema)
-(cols, rows) = importCsvFile(csvSchema)
-
-partId = cols["partID"]
-for row in rows:
-    print(row[partId])
