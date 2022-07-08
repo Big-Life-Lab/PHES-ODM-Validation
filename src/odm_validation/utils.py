@@ -11,17 +11,13 @@ def convertXlsx2Csv(xlsxFile, sheetName, csvFile: str):
     wb.convert(csvFile, ws)
 
 
-def importCsvFile(fileName: str) -> (dict, list):
-    """Return (cols, rows)"""
-    cols = {}
-    rows = []
+def importCsvFile(fileName: str) -> [dict]:
+    """Returns a list of dicts"""
+    result = []
     with open(fileName, newline='') as f:
-        r = csv.reader(f)
-        headers = next(r)
-        cols = dict(zip(headers, range(len(headers))))
-        for row in r:
-            rows.append(row)
-    return (cols, rows)
+        for row in csv.DictReader(f):
+            result.append(row)
+    return result
 
 
 def downloadFile(url, dst: str):

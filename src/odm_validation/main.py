@@ -1,16 +1,26 @@
 # This is a temporary test file to speed up initial development.
 
-from utils import downloadFile, convertXlsx2Csv, importCsvFile
+import os
+import pprint
 
-xlsxSchemaSheet = "parts"
-xlsxSchema = "schema.xlsx"
-csvSchema = "schema.csv"
-xlsxSchemaUrl = "https://osf.io/download/k94qe/"
+import utils
+import validate
 
-downloadFile(xlsxSchemaUrl, xlsxSchema)
-convertXlsx2Csv(xlsxSchema, xlsxSchemaSheet, csvSchema)
-(cols, rows) = importCsvFile(csvSchema)
 
-partId = cols["partID"]
-for row in rows:
-    print(row[partId])
+def fetchParts() -> [dict]:
+    xlsxOdm = "odm-v1.1.xlsx"
+    xlsxOdmSheet = "parts"
+    # xlsxOdmUrl = "https://osf.io/download/k94qe/"
+    csvSchema = f"odm-{xlsxOdmSheet}.csv"
+
+    # if not os.path.isfile(xlsxOdm):
+    #     utils.downloadFile(xlsxOdmUrl, xlsxOdm)
+    if not os.path.isfile(csvSchema):
+        utils.convertXlsx2Csv(xlsxOdm, xlsxOdmSheet, csvSchema)
+    return utils.importCsvFile(csvSchema)
+
+
+parts = fetchParts()
+schema = validate.generate_cerberus_schema(parts)
+pp = pprint.PrettyPrinter(width=80, compact=True)
+pp.pprint(schema)
