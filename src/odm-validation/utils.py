@@ -1,4 +1,5 @@
 import csv
+import requests
 
 # TODO: document requirement
 from xlsx2csv import Xlsx2csv
@@ -23,12 +24,21 @@ def importCsvFile(fileName: str) -> (dict, list):
     return (cols, rows)
 
 
-sheetName = "parts"
-xlsxFile = "data.xlsx"
-csvFile = "data.csv"
+def downloadFile(url, dst: str):
+    print(f"downloading {dst}...", flush=True)
+    r = requests.get(url)
+    with open(dst, "wb") as f:
+        f.write(r.content)
 
-convertXlsx2Csv(xlsxFile, sheetName, csvFile)
-(cols, rows) = importCsvFile(csvFile)
+
+xlsxSchemaSheet = "parts"
+xlsxSchema = "schema.xlsx"
+csvSchema = "schema.csv"
+xlsxSchemaUrl = "https://osf.io/download/k94qe/"
+
+downloadFile(xlsxSchemaUrl, xlsxSchema)
+convertXlsx2Csv(xlsxSchema, xlsxSchemaSheet, csvSchema)
+(cols, rows) = importCsvFile(csvSchema)
 
 partId = cols["partID"]
 for row in rows:
