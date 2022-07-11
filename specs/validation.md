@@ -1,3 +1,67 @@
+# Function Signature
+
+## Arguments
+
+The function should accept two arguments, the ODM data to be validated and the ODM data dictionary which contains the validation rules.
+
+1. The ODM data to be validated is a [dictionary](https://docs.python.org/3/tutorial/datastructures.html#dictionaries) whose keys are the table names and values are the table rows represented as a [list](https://developers.google.com/edu/python/lists) of dictionaries. For each dictionary within the list, the keys are the column names and values are the column values. For example, the data argument for a dataset consisting of the Address and Contact table can be seen below,
+    ```{python}
+    {
+        "Address": [
+            {
+                "addressID": "WastewaterSiteOttawa",
+                "addL1": "123 Laurier Avenue",
+                "addL2": "",
+                "city": "Ottawa",
+                "country": "Canada"
+                "datasetID": "",
+                "stateProvReg": "Ontario",
+                "zipCode": "KE2 TYU"
+            }
+        ],
+        "Contact": [
+            {
+                "contactID": "OttawaWWContact",
+                "organizationID": "WWOttawa",
+                "email": "ww@ottawa.ca",
+                "phone": "6137458999",
+                "firstName": "John",
+                "lastName": "Doe",
+                "role": "Technician",
+                "notes": ""
+            }
+        ]
+    }
+    ```
+
+2. The metadata for the validation rules are defined in the [data dictionary](https://github.com/Big-Life-Lab/PHES-ODM/tree/V2-first-draft/template) and should be passed in as a dictionary. The **parts** and **sets** sheets contains the metadata needed and should be passed in as a list of dictionaries. An example can be seen below,
+
+    ```{python}
+    {
+        "parts: [
+            {
+                "partID": "methodSetID",
+                "label": Method Set ID",
+                "partType": "attribute"
+                "dataType": "varchar"
+            }
+        ],
+        "sets": [
+            {
+                "setName (partID): "ynmCats",
+                "setType": "category",
+                "setValues (partID): "yes1"
+            }
+        ]
+    }
+    ```
+
+    Keep in mind, that in the example above, all the columns in the sheets have not been included.
+
+## Return
+
+The function should return a list of dictionaries, containing information about each error encountered during the validation process. The shape of the dictionary is dependant on the type of error and are outlined in the "Features" section below.
+
 # Features
 
 ## Validate the column names in a table
