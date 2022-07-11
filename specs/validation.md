@@ -162,28 +162,3 @@ For example, for the above example the function would return the following list,
     }
 ]
 ```
-
-## Validate the data type of each column in a table
-
-* Make sure the values in each column are the right type. For example, a string has not been put into a column that should only have numbers
-* Questions
-    * Is there a document which explains what each of these data types are?
-    * How do you get the valid categories for a category data type?
-    * I don't think the "See unit" and "table" data types are valid for this?
-* Info
-    * The current allowed dataTypes are
-        * any
-        * blob
-        * boolean
-        * category
-        * datetime
-        * float
-        * freetext
-        * integer
-        * NA
-        * See unit
-            * Look at value of the `unitSetID` column for this part. For example for `a1306s` its `geneticUnits`
-            * Go to the sets sheet and find all the rows whose `setName` is equal to the `unitSetID` value
-            * The allowed values are the filtered values for the `setValues` column. For example, for `geneticUnits` this is gcMl, ct, det, gcPpmov, gcGS, gcCrA, pp, gcL, prop, boc, doc,propV
-        * table
-        * varchar
