@@ -2,7 +2,7 @@
 
 ## Arguments
 
-The function should accept two arguments, the ODM data to be validated and the ODM data dictionary which contains the validation rules.
+The function should accept two arguments, the ODM data to be validated and a cerberus schema which contains the validation rules.
 
 1. The ODM data to be validated is a [dictionary](https://docs.python.org/3/tutorial/datastructures.html#dictionaries) whose keys are the table names and values are the table rows represented as a [list](https://developers.google.com/edu/python/lists) of dictionaries. For each dictionary within the list, the keys are the column names and values are the column values. For example, the data argument for a dataset consisting of the Address and Contact table can be seen below,
     ```{python}
@@ -34,29 +34,7 @@ The function should accept two arguments, the ODM data to be validated and the O
     }
     ```
 
-2. The metadata for the validation rules are defined in the [data dictionary](https://github.com/Big-Life-Lab/PHES-ODM/tree/V2-first-draft/template) and should be passed in as a dictionary. The **parts** and **sets** sheets contains the metadata needed and should be passed in as a list of dictionaries. An example can be seen below,
-
-    ```{python}
-    {
-        "parts: [
-            {
-                "partID": "methodSetID",
-                "label": Method Set ID",
-                "partType": "attribute"
-                "dataType": "varchar"
-            }
-        ],
-        "sets": [
-            {
-                "setName (partID): "ynmCats",
-                "setType": "category",
-                "setValues (partID): "yes1"
-            }
-        ]
-    }
-    ```
-
-    Keep in mind, that in the example above, all the columns in the sheets have not been included.
+2. The validation rules argument is a dictionary that contains all the rules the data argument should be validated against. The argument is a cerberus schema whose details and shape can be seen [here](https://docs.python-cerberus.org/en/stable/schemas.html#). Finally, the ODM provides a [function](./convert-to-cerberus-schema.md) as well as a YAML object which contains the rules encoded in the latest version of the ODM dictionary.
 
 ## Return
 
