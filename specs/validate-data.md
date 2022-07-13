@@ -5,7 +5,7 @@
 The function should accept two arguments, the ODM data to be validated and a cerberus schema which contains the validation rules.
 
 1. The ODM data to be validated is a [dictionary](https://docs.python.org/3/tutorial/datastructures.html#dictionaries) whose keys are the table names and values are the table rows represented as a [list](https://developers.google.com/edu/python/lists) of dictionaries. For each dictionary within the list, the keys are the column names and values are the column values. For example, the data argument for a dataset consisting of the Address and Contact table can be seen below,
-    ```{python}
+    ```python
     {
         "Address": [
             {
@@ -52,7 +52,7 @@ This rule is used to validate that all rows have the mandatory columns for that 
 
 For example, assume the user wants to validate the data shown below,
 
-```{python}
+```python
 {
     "Address": [
         {
@@ -72,7 +72,7 @@ For example, assume the user wants to validate the data shown below,
 
 with the following validation rules argument generated using the conversion function,
 
-```{python}
+```python
 {
     "Address": {
         "type": "dict", 
@@ -126,7 +126,7 @@ The error report will have the following fields
 
 For the above example the function would return the following error report,
 
-```{python}
+```python
 [
     {
         "errorType": "MissingMandatoryColumn",
