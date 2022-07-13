@@ -1,0 +1,2 @@
+ruleId,description,messageText
+MissingMandatoryColumn,Validates that the rows in a table has all its mandatory columns,Missing mandatory column <columnName> in table <tableName> in row number <rowIndex>
