@@ -42,54 +42,15 @@ The function should return a list of dictionaries, containing information about 
 
 # Features
 
-## Validate the column names in a table
+The next few sub sections specify what validation rules the function can currently handle. For each rule violation, the function will return an error report to help the user fix or debug the error.
 
-This rule is used to validate that the rows in a table has all its mandatory columns. For each table in the `data` argument, the metadata for this rule is present in the `parts` sheet in the `partID`, `<table_name>Table`, and `<table_name>Required` column.
+## MissingMandatoryColumn
 
-The `partID` has the name of the column.
+### Description
 
-The `<table_name>Table` column encodes how the `partID` is included in the table. The possible values are:
-1. **header**: Is a column in the table
-2. **input**:
-3. **PK**: Is a primary key column in the table
-4. **FK**: Is a foreign key column in the table referencing another table
-5. **NA**: Is not related to the table
+This rule is used to validate that all rows have the mandatory columns for that table.
 
-The `<table_name>Required` column encodes whether a column is mandatory or not. The possible values are:
-1. **mandatory**: The column is mandatory
-2. **optional**: The column is optional
-3. **NA**: The column is not part of the table
-
-For example, assume the following validation rules metadata argument
-
-```{python}
-{
-    "parts": [
-        {
-            "partID": "addressID",
-            "AddressTable": "PK",
-            "AddressTableRequired": "mandatory",
-            "ContactTable": "NA",
-            "ContactTableRequired": "NA"
-        },
-        {
-            "partID": "addL2",
-            "AddressTable": "header",
-            "AddressTableRequired": "optional",
-            "ContactTable": "NA",
-            "ContactTableRequired": "NA"
-        }
-        {
-            "partID": "contactID",
-            "AddressTable": "NA",
-            "AddressTableRequired": "NA",
-            "ContactTable": "PK",
-            "ContactTableRequired": "mandatory"
-        }
-    ]
-}
-```
-and the user wants to validate the data below,
+For example, assume the user wants to validate the data shown below,
 
 ```{python}
 {
@@ -109,34 +70,77 @@ and the user wants to validate the data below,
 }
 ```
 
+with the following validation rules argument generated using the conversion function,
+
+```{python}
+{
+    "Address": {
+        "type": "dict", 
+        "schema": {
+            "addressID: {
+                "type": "string", 
+                "required": True,
+                "meta": {
+                    "partID": "addressID",
+                    "AddressTableRequired": "mandatory"
+                }
+            },
+            "addL2: {
+                "type": "string",
+                "meta": {
+                    "partID": "addL2",
+                    "AddressTableRequired": "optional"
+                }
+            }
+        }
+    },
+    "Contact": {
+        "type": "dict",
+        "schema": {
+            "contactID": {
+                "type": "string", 
+                "required": True,
+                "meta": {
+                    "partID": "contactID",
+                    "ContactTableRequired": "mandatory"
+                }
+            }
+        }
+    }
+}
+```
+
 The function should return only one error for the second row in the `Address` table which is missing the mandatory `addressID` column.
 
-The returned error dictionary should have the following fields,
+### Error Report
 
-* **errorType**: MissingRequiredColumn
+The error report will have the following fields
+
+* **errorType**: MissingMandatoryColumn
 * **tableName**: The name of the table the error object is for
 * **columnName** The name of the column the error object is for
-* **rowIndex**: The index of the error row in the table
+* **rowNumber**: The row number with the error
 * **row** The dictionary containing the errorred row
-* **validationRules**: The dictionary containing the metadata fields used to produce the error
+* **validationRules**: The ODM data dictionary rule fields violated by this row
+* **message**: Missing mandatory column <columnName> in table <tableName> in row number <rowIndex>
 
-For example, for the above example the function would return the following list,
+For the above example the function would return the following error report,
 
 ```{python}
 [
     {
-        "errorType": "MissingRequiredColumn",
+        "errorType": "MissingMandatoryColumn",
         "tableName": "Address",
         "columnName": "addressID",
-        "rowIndex": 2,
+        "rowNumber": 2,
         "row": {
             "addL2": "12345 Lane Avenue"
         },
         "validationRules": {
             "partID": "addressID",
-            "AddressTable": "PK",
             "AddressTableRequired": "mandatory"
-        }
+        },
+        "message": "Missing mandatory column addressID in table Address in row number 2"
     }
 ]
 ```
