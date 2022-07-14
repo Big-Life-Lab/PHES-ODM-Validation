@@ -13,7 +13,7 @@ The function should accept two arguments, the ODM data to be validated and a cer
                 "addL1": "123 Laurier Avenue",
                 "addL2": "",
                 "city": "Ottawa",
-                "country": "Canada"
+                "country": "Canada",
                 "datasetID": "",
                 "stateProvReg": "Ontario",
                 "zipCode": "KE2 TYU"
@@ -75,17 +75,17 @@ with the following validation rules argument generated using the conversion func
 ```python
 {
     "Address": {
-        "type": "dict", 
+        "type": "dict",
         "schema": {
-            "addressID: {
-                "type": "string", 
+            "addressID": {
+                "type": "string",
                 "required": True,
                 "meta": {
                     "partID": "addressID",
                     "AddressTableRequired": "mandatory"
                 }
             },
-            "addL2: {
+            "addL2": {
                 "type": "string",
                 "meta": {
                     "partID": "addL2",
@@ -98,7 +98,7 @@ with the following validation rules argument generated using the conversion func
         "type": "dict",
         "schema": {
             "contactID": {
-                "type": "string", 
+                "type": "string",
                 "required": True,
                 "meta": {
                     "partID": "contactID",
