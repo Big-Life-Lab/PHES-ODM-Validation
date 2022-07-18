@@ -74,35 +74,41 @@ with the following validation rules argument generated using the conversion func
 
 ```python
 {
-    "Address": {
-        "type": "dict",
+    "address": {
+        "type": "list",
         "schema": {
-            "addressID": {
-                "type": "string",
-                "required": True,
-                "meta": {
-                    "partID": "addressID",
-                    "AddressTableRequired": "mandatory"
-                }
-            },
-            "addL2": {
-                "type": "string",
-                "meta": {
-                    "partID": "addL2",
-                    "AddressTableRequired": "optional"
+            "type": "dict",
+            "schema": {
+                "addressID": {
+                    "type": "string",
+                    "required": True,
+                    "meta": {
+                        "partID": "addressID",
+                        "AddressTableRequired": "mandatory"
+                    }
+                },
+                "addL2": {
+                    "type": "string",
+                    "meta": {
+                        "partID": "addL2",
+                        "AddressTableRequired": "optional"
+                    }
                 }
             }
         }
     },
-    "Contact": {
-        "type": "dict",
+    "contact": {
+        "type": "list",
         "schema": {
-            "contactID": {
-                "type": "string",
-                "required": True,
-                "meta": {
-                    "partID": "contactID",
-                    "ContactTableRequired": "mandatory"
+            "type": "dict",
+            "schema": {
+                "contactID": {
+                    "type": "string",
+                    "required": True,
+                    "meta": {
+                        "partID": "contactID",
+                        "ContactTableRequired": "mandatory"
+                    }
                 }
             }
         }
@@ -130,7 +136,7 @@ For the above example the function would return the following error report,
 [
     {
         "errorType": "MissingMandatoryColumn",
-        "tableName": "Address",
+        "tableName": "address",
         "columnName": "addressID",
         "rowNumber": 2,
         "row": {
