@@ -36,7 +36,7 @@ in the parts sheet in the partID, <table_name>Table, and <table_name>Required co
 }
 ```
 
-Fix the header `measure` to `measureID`
+Fix this error by changing the header name from `measure` to `measureID`
 
 ```
 {
