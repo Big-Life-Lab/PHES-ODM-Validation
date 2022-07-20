@@ -12,10 +12,18 @@ The function will take one argument, a dictionary containing the parts sheet fro
 {
     "parts": [
         {
+            "partID": "addresses",
+            "label": "Address table",
+            "partType": "table",
+            "addresses": "NA",
+            "addressesRequired": "NA"
+        },
+        {
             "partID": "addressID",
             "label": "Address ID",
-            "AddressTable": "PK",
-            "AddressTableRequired": "mandatory"
+            "partType": "attribute",
+            "addresses": "pK",
+            "addressesRequired": "mandatory"
         }
     ]
 }
@@ -27,7 +35,7 @@ The function will return a dictionary that is a valid cerberus validation object
 
 ```python
 {
-    "Address": {
+    "addresses": {
         "type": "list",
         "schema": {
             "type": "dict",
@@ -36,11 +44,14 @@ The function will return a dictionary that is a valid cerberus validation object
                     "required": True,
                     "meta": {
                         "partID": "addressID",
-                        "AddressTable": "PK",
-                        "AddressTableRequired": "mandatory"
+                        "addresses": "pK",
+                        "addressesRequired": "mandatory"
                     }
                 }
             }
+        },
+        "meta": {
+            "partID": "addresses"
         }
     }
 }
@@ -50,18 +61,18 @@ The function will return a dictionary that is a valid cerberus validation object
 
 This section will go over the validation features in the [specification for the `validate_data` function](./validate-data.md), and specify the creation of the cerberus object for it. The final result of the function is a cerberus object that is a combination of all the objects specified in each sub-section below.
 
-At a high level, the cerberus object is a dictionary whose field names are the names of the table as specified in the ODM and whose field values contains the schema for that table, specified in the cerberus format. The list of table names can be retreived by looking at the `partID` and the `partType` column in the dictionary. A `partType` value of `hasTable`, `lookupTable`, or `reportTable` implies that the corresponding part in the `partID` column is the name of a table. For example, consider the following ODM dictionary,
+At a high level, the cerberus object is a dictionary whose field names are the names of the tables as specified in the ODM and whose field values contains the schema for that table, specified in the cerberus format. The list of table names can be retreived by looking at the `partID` and the `partType` column in the dictionary. A `partType` value of `table` implies that the corresponding part in the `partID` column is the name of a table. For example, consider the following ODM dictionary,
 
 ```python
 {
     "parts": [
         {
-            "partID": "contact",
-            "partType": "reportTable"
+            "partID": "addresses",
+            "partType": "table"
         },
         {
-            "partID": "form",
-            "partType": "lookupTable"
+            "partID": "contacts",
+            "partType": "table"
         }
     ]
 }
@@ -71,18 +82,26 @@ The corresponding cerberus high level object would be,
 
 ```python
 {
-    "contact": {
+    "addresses": {
         "type": "list",
         "schema": {
             "type": "dict",
             # Fill in the remaining schema fields using the rest of the dictionary
+        },
+        "meta": {
+            "partID": "addresses",
+            "partType": "table"
         }
     },
-    "form": {
+    "contacts": {
         "type": "list",
         "schema": {
             "type": "dict",
             # Fill in the remaining schema fields using the rest of the dictionary
+        },
+        "meta": {
+            "partID": "contacts",
+            "partType": "table"
         }
     }
 }
@@ -95,7 +114,7 @@ The cerberus schema for each object is a list of dictionaries since that's how w
 The ODM dictionary fields used to generate the cerberus object for this rule are:
 
 * **partID**: Contains the name of a part
-* **<table_name>Table**: Used to indicate whether the part is associated with a table
+* **<table_name>**: Used to indicate whether the part is associated with a table
     
     Can have one of the following values:
     * **PK**: The part is a primary key for the table
@@ -117,41 +136,44 @@ An example parts dictionary argument is shown below,
 {
     "parts": [
         {
-            "partID": "address",
-            "partType": "reportTable",
-            "addressTable": "NA",
-            "addressTableRequired": "NA",
-            "contactTable": "NA",
-            "contactTableRequired": "NA"
+            "partID": "addresses",
+            "partType": "table",
+            "addresses": "NA",
+            "addressesRequired": "NA",
+            "contacts": "NA",
+            "contactsRequired": "NA"
         },
         {
-            "partID": "contact",
-            "partType": "reportTable",
-            "addressTable": "NA",
-            "addressTableRequired": "NA",
-            "contactTable": "NA",
-            "contactTableRequired": "NA"
+            "partID": "contacts",
+            "partType": "table",
+            "addresses": "NA",
+            "addressesTable": "NA",
+            "contacts": "NA",
+            "contactsRequired": "NA"
         }
         {
             "partID": "addressID",
-            "addressTable": "PK",
-            "addressTableRequired": "mandatory",
-            "contactTable": "NA",
-            "contactTableRequired": "NA"
+            "partType": "attribute",
+            "addresses": "PK",
+            "addressesRequired": "mandatory",
+            "contacts": "NA",
+            "contactsRequired": "NA"
         },
         {
             "partID": "addL2",
-            "addressTable": "header",
-            "addressTableRequired": "optional",
-            "contactTable": "NA",
-            "contactTableRequired": "NA"
+            "partType": "attribute",
+            "addresses": "header",
+            "addressesRequired": "optional",
+            "contacts": "NA",
+            "contactsRequired": "NA"
         },
         {
             "partID": "contactID",
-            "addressTable": "NA",
-            "addressTableRequired": "NA"
-            "contactTable": "PK",
-            "contactTableRequired": "mandatory"
+            "partType": "attribute",
+            "addresses": "NA",
+            "addressesRequired": "NA",
+            "contacts": "PK",
+            "contactsRequired": "NA"
         }
     ]
 }
@@ -161,7 +183,7 @@ The generated cerberus object is shown below,
 
 ```python
 {
-    "Address": {
+    "addresses": {
         "type": "list",
         "schema": {
             "type": "dict",
@@ -170,21 +192,25 @@ The generated cerberus object is shown below,
                     "required" True,
                     "meta": {
                         "partID": "addressID",
-                        "AddressTable": "PK",
-                        "AddressTableRequired": "mandatory",
+                        "addresses": "PK",
+                        "addressesRequired": "mandatory",
                     }
                 },
                 "addL2": {
                     "meta": {
-                        "partID": "addL2",
-                        "AddressTable": "header",
-                        "AddressTableRequired": "optional",
+                        "partID": "contactID",
+                        "contacts": "PK",
+                        "contactsRequired": "NA"
                     }
                 }
+            },
+            "meta": {
+                "partID": "addresses",
+                "partType": "table"
             }
         }
     },
-    "Contact": {
+    "contacts": {
         "type": "list",
         "schema": {
             "type": "dict",
@@ -198,6 +224,10 @@ The generated cerberus object is shown below,
                     }
                 }
             }
+        },
+        "meta": {
+            "partID": "contacts",
+            "partType": "table"
         }
     }
 }

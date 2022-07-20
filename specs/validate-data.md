@@ -5,34 +5,35 @@
 The function should accept two arguments, the ODM data to be validated and a cerberus schema which contains the validation rules.
 
 1. The ODM data to be validated is a [dictionary](https://docs.python.org/3/tutorial/datastructures.html#dictionaries) whose keys are the table names and values are the table rows represented as a [list](https://developers.google.com/edu/python/lists) of dictionaries. For each dictionary within the list, the keys are the column names and values are the column values. For example, the data argument for a dataset consisting of the Address and Contact table can be seen below,
-    ```python
-    {
-        "Address": [
-            {
-                "addressID": "WastewaterSiteOttawa",
-                "addL1": "123 Laurier Avenue",
-                "addL2": "",
-                "city": "Ottawa",
-                "country": "Canada",
-                "datasetID": "",
-                "stateProvReg": "Ontario",
-                "zipCode": "KE2 TYU"
-            }
-        ],
-        "Contact": [
-            {
-                "contactID": "OttawaWWContact",
-                "organizationID": "WWOttawa",
-                "email": "ww@ottawa.ca",
-                "phone": "6137458999",
-                "firstName": "John",
-                "lastName": "Doe",
-                "role": "Technician",
-                "notes": ""
-            }
-        ]
-    }
-    ```
+
+```python
+{
+    "addresses": [
+        {
+            "addressID": "WastewaterSiteOttawa",
+            "addL1": "123 Laurier Avenue",
+            "addL2": "",
+            "city": "Ottawa",
+            "country": "Canada",
+            "datasetID": "",
+            "stateProvReg": "Ontario",
+            "zipCode": "KE2 TYU"
+        }
+    ],
+    "contacts": [
+        {
+            "contactID": "OttawaWWContact",
+            "organizationID": "WWOttawa",
+            "email": "ww@ottawa.ca",
+            "phone": "6137458999",
+            "firstName": "John",
+            "lastName": "Doe",
+            "role": "Technician",
+            "notes": ""
+        }
+    ]
+}
+```
 
 2. The validation rules argument is a dictionary that contains all the rules the data argument should be validated against. The argument is a cerberus schema whose details and shape can be seen [here](https://docs.python-cerberus.org/en/stable/schemas.html#). Finally, the ODM provides a [function](./convert-to-cerberus-schema.md) as well as a YAML object which contains the rules encoded in the latest version of the ODM dictionary.
 
@@ -54,7 +55,7 @@ For example, assume the user wants to validate the data shown below,
 
 ```python
 {
-    "Address": [
+    "addresses": [
         {
             "addressID": "1",
         },
@@ -62,7 +63,7 @@ For example, assume the user wants to validate the data shown below,
             "addL2": "12345 Lane Avenue"
         }
     ],
-    "Contact": [
+    "contacts": [
         {
             "contactID": "1"
         }
@@ -74,43 +75,51 @@ with the following validation rules argument generated using the conversion func
 
 ```python
 {
-    "address": {
+    "addresses": {
         "type": "list",
         "schema": {
             "type": "dict",
             "schema": {
                 "addressID": {
-                    "type": "string",
-                    "required": True,
+                    "required" True,
                     "meta": {
                         "partID": "addressID",
-                        "AddressTableRequired": "mandatory"
+                        "addresses": "PK",
+                        "addressesRequired": "mandatory",
                     }
                 },
                 "addL2": {
-                    "type": "string",
                     "meta": {
-                        "partID": "addL2",
-                        "AddressTableRequired": "optional"
+                        "partID": "contactID",
+                        "contacts": "PK",
+                        "contactsRequired": "NA"
                     }
                 }
+            },
+            "meta": {
+                "partID": "addresses",
+                "partType": "table"
             }
         }
     },
-    "contact": {
+    "contacts": {
         "type": "list",
         "schema": {
             "type": "dict",
             "schema": {
                 "contactID": {
-                    "type": "string",
                     "required": True,
                     "meta": {
                         "partID": "contactID",
+                        "ContactTable": "PK",
                         "ContactTableRequired": "mandatory"
                     }
                 }
             }
+        },
+        "meta": {
+            "partID": "contacts",
+            "partType": "table"
         }
     }
 }
@@ -136,7 +145,7 @@ For the above example the function would return the following error report,
 [
     {
         "errorType": "MissingMandatoryColumn",
-        "tableName": "address",
+        "tableName": "addresses",
         "columnName": "addressID",
         "rowNumber": 2,
         "row": {
