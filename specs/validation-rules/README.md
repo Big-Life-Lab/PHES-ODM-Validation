@@ -1,9 +1,15 @@
-This folder contains the specifications for all the validation rules currently supported by the ODM. Each file contains information about one rule which includes: 
+# Validation rules 
 
-1. How to convert the data dictionary rows into the cerberus schema for the rule and 
-2. The error report returned to the user when the rule is violated.
+Validation rules are the set of rules that the ODM validation module currently checks against ODM data using the Python [functions](../module-functions.md). The full list of validation rules natively supported by the ODM can be seen in the [validation rules list CSV file](../../metadata/validation-rules-list.csv). The files in this folder provides more detailed specifications on the rules defined in the CSV file.
 
-At a high level, the cerberus object is a dictionary whose keys are the names of the tables as specified in the ODM and whose values contains the schema for the table. The list of table names can be retreived by looking at the `partID` and the `partType` column in the dictionary. A `partType` value of `table` implies that the corresponding part in the `partID` column is the name of a table. For example, consider the following ODM dictionary,
+Each markdown document contains the specifications for a single validation rule. Currently, the specification includes,
+
+1. The error report returned to the user when the rule is violated
+2. The parts of the data dictionary that contain the metadata required to implement a rule along with the logic for converting them to a cerberus schema.
+
+## The base Cerberus schema
+
+At a high level, the cerberus schema is a dictionary whose keys are the names of the tables as specified in the ODM and whose values contains the schema for the table. The list of table names can be retreived by looking at the `partID` and the `partType` column in the dictionary. A `partType` value of `table` implies that the corresponding part in the `partID` column is the name of a table. For example, consider the following ODM dictionary,
 
 ```python
 {
@@ -49,7 +55,7 @@ The corresponding cerberus high level object would be,
 }
 ```
 
-# Adding a new rule
+## Adding a new rule
 
 The ODM is open to adopting new validation rules. The steps to petition for a new rule are:
 
@@ -59,6 +65,7 @@ The ODM is open to adopting new validation rules. The steps to petition for a ne
     2. A description of your rule including examples of ODM data rows which will fail your rule and rows that will pass
     3. What the error report for a failed row will look like
     4. The parts of the ODM data dictionary that contains the metadata for you rules along with the logic for converting them to a cerberus schema
+    
     The simplest method is to create a copy of the [missing-mandatory-column.md](./missing-mandatory-column.md) and modifying it
 3. Add a new entry in the [validation rules list file](../../metadata/validation-rules-list.csv). The details about each column can be seen below:
     1. `ruleId`: The unique identifier for your rule

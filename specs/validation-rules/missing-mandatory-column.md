@@ -50,9 +50,8 @@ Example
 ]
 ```
 
-## Generating the cerberus schema
-
-The ODM dictionary fields used to generate the cerberus object for this rule are:
+## Rule metadata
+All the metadata for this rule is contained in the parts sheet in the data dictionary. The relevant columns are:
 
 * **partID**: Contains the name of a part
 * **<table_name>**: Used to indicate whether the part is associated with a table
@@ -70,7 +69,7 @@ The ODM dictionary fields used to generate the cerberus object for this rule are
     * **optional**: The column is not mandatory
     * **NA**: The column is not applicable
 
-An example parts dictionary argument is shown below,
+Example
 
 ```python
 {
@@ -119,7 +118,9 @@ An example parts dictionary argument is shown below,
 }
 ```
 
-The generated cerberus object is shown below,
+## Cerberus Schema
+
+The generated cerberus object for the example above is shown below,
 
 ```python
 {
@@ -138,9 +139,9 @@ The generated cerberus object is shown below,
                 },
                 "addL2": {
                     "meta": {
-                        "partID": "contactID",
-                        "contacts": "PK",
-                        "contactsRequired": "NA"
+                        "partID": "addL2",
+                        "addresses": "PK",
+                        "addressesRequired": "NA"
                     }
                 }
             },
@@ -159,8 +160,8 @@ The generated cerberus object is shown below,
                     "required": True,
                     "meta": {
                         "partID": "contactID",
-                        "ContactTable": "PK",
-                        "ContactTableRequired": "mandatory"
+                        "contacts": "PK",
+                        "contactsRequired": "mandatory"
                     }
                 }
             }
@@ -175,5 +176,5 @@ The generated cerberus object is shown below,
 
 The data dictionary columns that should be included in the `meta` field are:
 * partID
-* <table_name>Table
+* <table_name>
 * <table_name>Required
