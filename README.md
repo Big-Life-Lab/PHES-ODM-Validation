@@ -54,17 +54,21 @@ The emphasis of ODM validation is on providing guidance and support. When you va
 
 The ODM validation toolkit is comprised of:
 
-1. **rule list** (validationRuleList.csv) - A list and description of all rules, along with additional metadata such as the warning or error message.
-2. **rule documentation** (validationDocs.md) - Details and examples of the rules.
-3. **rule validation module** (odmvalidator) - a python package to validate ODM data.
-4. **rule schema** (validationSchema.py) - The machine-actionable schema. These are the actual rules that are are used by `odmvalidator` when validating ODM data. There is a core ODM rule schema (odmValidator...). Users can use the ODM validation schema to generate additional rules. The validation schema can be used to validate data in other settings, such as other environmental dictionaries or databases.
-5. **reference documents** - Additional documents describing rules. Examples of validation rules include validating measure data types (e.g. integer, string), ranges (e.g. number between 0 and 100), uniqueness (e.g. sample ID is not repeated).
+1. **rule list** (metadata/validationRuleList.csv) - A list and description of all rules, along with additional metadata such as the warning or error message.
+2. **rule documentation** (/validation-rules/) - Details and examples of the rules.
+3. **rule validation module** (odmvalidator) - a python package that contains functions to validate ODM data.
+4. **rule schema** (location? validationSchema.py) - The machine-actionable schema. These are the actual rules that are are used by `odmvalidator` when validating ODM data. There is a core ODM rule schema (odmValidator...). Users can use the ODM validation schema to generate additional rules. The validation schema can be used to validate data in other settings, such as other environmental dictionaries or databases.
+5. **reference documents (location?)** - Additional documents describing rules. Examples of validation rules include validating measure data types (e.g. integer, string), ranges (e.g. number between 0 and 100), uniqueness (e.g. sample ID is not repeated).
 
 Many rules are defined in the ODM parts and sets tables. For example, the parts table includes the data type for each measure. The sets tables lists units and aggregations that are allowed for each measure. The parts table also includes what headers are included in the manadtory and optional headers in ODM report tables.
 
 The _odmvalidator_ is the main workhorse within the toolkit. This program code accepts a ODM data and a schema and returns a validation report. We created _odmvalidator_ as an open-source python package that can be incorporated into a full range of information systems (i.e. ArgGIS, Microsoft 365, custom laboratory management information systems or data repositories). As a python package, data can be easily validated when it is stored a range of formats (CSV, Excel, SQL database).
 
 Underdevelopment is a publicly available web application that implements the toolkit, including the odmvalidator.
+
+## Adding a new rule
+
+New validation rules can be requested by anyone ODM user. Instructions on how to add a new rule is found in [/validation-rules/README.md](validation-rules/validation-rules/README.md). The validation rules README.md is a good source of additional information about how rules work.
 
 ## Contributing
 
