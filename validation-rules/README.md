@@ -19,7 +19,9 @@ The ODM is accepts new validation rules that are developed by users. As you can 
 The steps to request or generate a new rule are:
 
 1. Fork this Github repository and make a branch from `rules`.
+
    1.1. Name the branch: request/[ruleID]. The rule ID is a unique ID that will be used for your rule (use CascalCase). For example, if you named your new rule, `MyAmazingRule`, the new branch for this rule would be: `request/MyAmazingRule`.
+
    1.2. You'll make a PR to the `rules` branch after you generate your rule files and documentation.
 
 2. Add a new file at a new row at the bottom of [metadata/validation-rules-list.csv](../../metadata/validation-rules-list.csv) folder containing details about your new rule. These details should include:
@@ -36,7 +38,7 @@ The steps to request or generate a new rule are:
    2.10. `changes`: The list of changes
    2.11. `notes`
 
-3. Indentify metadata required for the rule.
+3. Identify metadata required for the rule.
 
    3.1. If rule is uses metadata from the ODM dictionary - include the include the parts of the ODM data dictionary that contains the metadata for your rules along with the logic for converting them to a cerberus schema. See information about the Cerberus schema below.
    3.2. If your rule contains other metadata - generate a Cerberus schema (see below) with the metadata or review and copy existing rules that have similar metadata as your rule. If you need help, make a GH issue or make at post on discussion board if you cannot file a similar rule (use tag...)

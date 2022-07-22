@@ -51,6 +51,7 @@ Example
 ```
 
 ## Rule metadata
+
 All the metadata for this rule is contained in the parts sheet in the data dictionary. The relevant columns are:
 
 * **partID**: Contains the name of a part
