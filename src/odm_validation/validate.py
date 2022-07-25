@@ -44,7 +44,9 @@ def generate_cerberus_schema(sparseParts):
         if tname is None:
             continue
         t = {}
-        if row.get(tname + "Required") == "Mandatory":
+        reqKey = tname + "Required"
+        reqVal = row.get(reqKey)
+        if reqVal == "Mandatory":
             t["required"] = True
         schema[tname]["schema"]["schema"][id] = t
     return schema
