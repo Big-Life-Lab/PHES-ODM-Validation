@@ -43,9 +43,8 @@ def generate_cerberus_schema(sparseParts):
         tname = attrTable(row, tableNames)
         if tname is None:
             continue
-        t = schema[tname]["schema"]["schema"]
-
-        t[id] = {}
+        t = {}
         if row.get(tname + "Required") == "Mandatory":
-            t[id]["required"] = True
+            t["required"] = True
+        schema[tname]["schema"]["schema"][id] = t
     return schema
