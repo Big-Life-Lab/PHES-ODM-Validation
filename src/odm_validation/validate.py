@@ -35,6 +35,9 @@ def generate_cerberus_schema(sparseParts):
             "schema": {
                 "type": "dict",
                 "schema": {}
+            },
+            "meta": {
+                "partID": t
             }
         }
 
@@ -43,10 +46,17 @@ def generate_cerberus_schema(sparseParts):
         tname = attrTable(row, tableNames)
         if tname is None:
             continue
-        t = {}
+        meta = {
+            "partID": id,
+            tname: "PK",
+        }
+        t = {
+            "meta": meta
+        }
         reqKey = tname + "Required"
         reqVal = row.get(reqKey)
         if reqVal == "Mandatory":
             t["required"] = True
+            meta[reqKey] = reqVal
         schema[tname]["schema"]["schema"][id] = t
     return schema
