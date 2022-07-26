@@ -1,0 +1,2 @@
+ruleId,label,description,messageType,messageText,status,firstReleased,added,lastUpdated,changes,notes
+MissingMandatoryColumn,Validates that the rows in a table has all its mandatory columns,"Validates that the rows in a table has all its mandatory columns. This rule uses the `partID`, `<table_name>Table`, <table_name>Required` columns in the dictionary to generate the corresponding cerberus fields. ",error,Missing mandatory column <columnName> in table <tableName> in row number <rowIndex>,active,v1.0.0,18/07/2022,,,
