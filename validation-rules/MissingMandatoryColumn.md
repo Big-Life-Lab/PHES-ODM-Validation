@@ -26,7 +26,7 @@ The error report will have the following fields
 * **columnName** The name of the missing column
 * **rowNumber**: The index of the table row with the error
 * **row** The dictionary containing the row
-* **validationRules**: The ODM data dictionary rule fields violated by this row
+* **validationRuleFields**: The ODM data dictionary rule fields violated by this row
 * **message**: Missing mandatory column <columnName> in table <tableName> in row number <rowIndex>
 
 Example
