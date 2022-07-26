@@ -141,43 +141,41 @@ The generated cerberus object for the example above is shown below,
                 "collection": {
                     "type": "string",
                     "allowed": ["comp3h", "comp8h", "flowPr"],
-                    "meta": {
-                        "ruleMeta": [
-                            {
-                                "ruleId": "InvalidCategory",
-                                "meta": [
-                                    {
-                                        "partID": "samples",
-                                        "partType": "table",
-                                        "samples": "header",
-                                        "dataType": "categorical",
-                                        "catSetID": "collectCat"
-                                    },
-                                    {
-                                        "partID": "comp3h",
-                                        "partType": "category",
-                                        "samples": "input",
-                                        "dataType": "varchar",
-                                        "catSetID": "collectCat"
-                                    },
-                                    {
-                                        "partID": "comp8h",
-                                        "partType": "category",
-                                        "samples": "input",
-                                        "dataType": "varchar",
-                                        "catSetID": "collectCat"
-                                    },
-                                    {
-                                        "partID": "flowPr",
-                                        "partType": "category",
-                                        "samples": "input",
-                                        "dataType": "varchar",
-                                        "catSetID": "collectCat"
-                                    }
-                                ]
-                            }
-                        ]
-                    }
+                    "meta": [
+                        {
+                            "ruleId": "InvalidCategory",
+                            "meta": [
+                                {
+                                    "partID": "samples",
+                                    "partType": "table",
+                                    "samples": "header",
+                                    "dataType": "categorical",
+                                    "catSetID": "collectCat"
+                                },
+                                {
+                                    "partID": "comp3h",
+                                    "partType": "category",
+                                    "samples": "input",
+                                    "dataType": "varchar",
+                                    "catSetID": "collectCat"
+                                },
+                                {
+                                    "partID": "comp8h",
+                                    "partType": "category",
+                                    "samples": "input",
+                                    "dataType": "varchar",
+                                    "catSetID": "collectCat"
+                                },
+                                {
+                                    "partID": "flowPr",
+                                    "partType": "category",
+                                    "samples": "input",
+                                    "dataType": "varchar",
+                                    "catSetID": "collectCat"
+                                }
+                            ]
+                        }
+                    ]
                 }
             }
         }
