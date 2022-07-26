@@ -136,7 +136,7 @@ The error report will have the following fields
 * **columnName** The name of the column the error object is for
 * **rowNumber**: The row number with the error
 * **row** The dictionary containing the errorred row
-* **validationRules**: The ODM data dictionary rule fields violated by this row
+* **validationRuleFields**: The ODM data dictionary rule fields violated by this row
 * **message**: Missing mandatory column <columnName> in table <tableName> in row number <rowIndex>
 
 For the above example the function would return the following error report,
