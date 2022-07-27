@@ -24,7 +24,8 @@ The error report will have the following fields
 * **tableName**: The name of the table whose row has the invalid category
 * **columnName** The name of the column with the invalid category
 * **rowNumber**: The index of the table row with the error
-* **row** The dictionary containing the row
+* **row** The row in the data that failed this validation rule
+* **invalidCategoryValue**: The invalid category value
 * **validationRuleFields**: The ODM data dictionary rule fields violated by this row
 * **message**: Invalid category <invalidCategoryValue> found in row <rowIndex> for column <columnName> in table <tableName>
 
@@ -40,6 +41,7 @@ Example
         "row": {
             "collection": "flow"
         },
+        "invalidCategoryValue": "flow",
         "validationRuleFields": [
             {
                 "partID": "samples",
