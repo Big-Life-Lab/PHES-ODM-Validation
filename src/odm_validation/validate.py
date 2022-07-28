@@ -2,6 +2,8 @@ import sys
 from cerberus import Validator
 from cerberus.errors import ValidationError, MAPPING_SCHEMA
 
+import rules
+
 __all__ = ["generate_cerberus_schema", "validate_data"]
 
 # constants
@@ -72,45 +74,47 @@ def generate_cerberus_schema(sparseParts):
     return schema
 
 
-def missing_mandatory_column(e):
-    assert type(e) is ValidationError
-    if e.code != MAPPING_SCHEMA.code:
-        return
-    (table, row_index) = e.document_path
-    column = e.info[0][0].schema_path[3]
-    row_number = row_index + 1
-    return {
-        "errorType": sys._getframe().f_code.co_name,
-        "tableName": table,
-        "columnName": column,
-        "rowNumber": row_number,
-        "row": e.value,
-        "validationRuleFields": e.constraint[column]["meta"],
-        "message": f"Missing mandatory column {column} in table {table} " +
-                   f"in row number {row_number}"
-    }
+# def mapping_schema_error(e):
+#     assert type(e) is ValidationError
+#     if e.code != MAPPING_SCHEMA.code:
+#         return
+#     (table, row_index) = e.document_path
+#     column = e.info[0][0].schema_path[3]
+#     row_number = row_index + 1
+#     meta = e.constraint[column]["meta"]
+#     metaFields = meta.copy().delete("message")
+#     return {
+#         "errorType": meta.
+#         "tableName": table,
+#         "columnName": column,
+#         "rowNumber": row_number,
+#         "row": e.value,
+#         "validationRuleFields": metaFields,
+#         "message": f"Missing mandatory column {column} in table {table} " +
+#                    f"in row number {row_number}"
+#     }
 
 
-def dummy_rule(e):
-    return
+# def dummy_rule(e):
+#     return
 
 
-def validate_data(schema, data) -> [dict]:
-    """Returns list of errors or None on success"""
-    v = Validator(schema)
-    if v.validate(data):
-        return
-    rules = [
-        dummy_rule,
-        missing_mandatory_column
-    ]
-    report = []
-    for table_error in v._errors:
-        for row_errors in table_error.info:
-            for e in row_errors:
-                for rule in rules:
-                    res = rule(e)
-                    if res:
-                        report.append(res)
+# def validate_data(schema, data) -> [dict]:
+#     """Returns list of errors or None on success"""
+#     v = Validator(schema)
+#     if v.validate(data):
+#         return
+#     rules = [
+#         dummy_rule,
+#         missing_mandatory_column
+#     ]
+#     report = []
+#     for table_error in v._errors:
+#         for row_errors in table_error.info:
+#             for e in row_errors:
+#                 for rule in rules:
+#                     res = rule(e)
+#                     if res:
+#                         report.append(res)
 
-    return report
+#     return report
