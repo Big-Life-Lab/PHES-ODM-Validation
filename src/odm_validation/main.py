@@ -21,48 +21,6 @@ def fetchParts() -> [dict]:
     return utils.importCsvFile(csvSchema)
 
 
-def get_table_attributes(table_names, attributes) -> dict:
-    """Returns dict of table names and their attribute parts."""
-    result = {}
-    for t in table_names:
-        result[t] = []
-    for a in attributes:
-        assert type(a) is dict
-        for t in table_names:
-            if a.get(t):
-                result[t].append(a)
-    return result
-
-
-def generate_rules(parts):
-    tables = list(filter(lambda x: x.get("partType") == "table", parts))
-    table_names = [row["partID"] for row in tables]
-    attributes = list(filter(lambda x: x.get("partType") == "attribute", parts))
-    table_attr = get_table_attributes(table_names, attributes)
-
-    rules = []
-    for t in table_names:
-        a = table_attr[t]
-        r = validation_rules.missing_mandatory_column(t, a)
-        rules.append(r)
-    return rules
-
-
-def generate_cerberus_schema(rules):
-    schema = {}
-    for r in rules:
-        if r.schema:
-            schema.update(r.schema)
-    return schema
-
-
-pp = pprint.PrettyPrinter(width=80, compact=True)
-sparseParts = fetchParts()
-parts = list(map(validate.stripRow, sparseParts))
-rules = generate_rules(parts)
-schema = generate_cerberus_schema(rules)
-pp.pprint(schema)
-
 data = {
     "addresses": [
         {
@@ -88,5 +46,11 @@ data = {
 }
 
 # print()
-# errors = validate.validate_data(schema, data)
-# pp.pprint(errors)
+pp = pprint.PrettyPrinter(width=80, compact=True)
+sparseParts = fetchParts()
+parts = list(map(validate.stripRow, sparseParts))
+rules = validation_rules.generate_rules(parts)
+schema = validation_rules.generate_cerberus_schema(rules)
+pp.pprint(schema)
+errors = validate.validate_data(rules, schema, data)
+pp.pprint(errors)

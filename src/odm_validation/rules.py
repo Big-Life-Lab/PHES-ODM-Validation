@@ -42,6 +42,9 @@ def init_table_schema(name, row_schema):
     }
 
 
+# {{{1 Rules
+
+
 def missing_mandatory_column(table, table_attr) -> Rule:
     """checks that a table has all its mandatory fields"""
     assert type(table_attr) is list
@@ -52,7 +55,8 @@ def missing_mandatory_column(table, table_attr) -> Rule:
         if part.get(required) == "Mandatory":
             fieldSchema = {id: {"required": True}}
             tableSchema.update(fieldSchema)
-    schema = {table: tableSchema} if tableSchema != {} else None
+    schema = init_table_schema(table, tableSchema)
+    # schema = {table: tableSchema} if tableSchema != {} else None
     msg = f"Missing mandatory column in table {table}."
     return Rule(schema=schema, message=msg)
 
@@ -84,6 +88,45 @@ def duplicate_primary_key(tablePks) -> Rule:
         return errors if len(errors) else None
 
     return Rule(validate=validate)
+
+
+# {{{1 Rule generation
+
+
+def get_table_attributes(table_names, attributes) -> dict:
+    """Returns dict of table names and their attribute parts."""
+    result = {}
+    for t in table_names:
+        result[t] = []
+    for a in attributes:
+        assert type(a) is dict
+        for t in table_names:
+            if a.get(t):
+                result[t].append(a)
+    return result
+
+
+def generate_rules(parts) -> [Rule]:
+    tables = list(filter(lambda x: x.get("partType") == "table", parts))
+    table_names = [row["partID"] for row in tables]
+    attributes = list(filter(lambda x: x.get("partType") == "attribute", parts))
+    table_attr = get_table_attributes(table_names, attributes)
+
+    rules = []
+    for t in table_names:
+        a = table_attr[t]
+        r = missing_mandatory_column(t, a)
+        rules.append(r)
+    return rules
+
+
+def generate_cerberus_schema(rules) -> Schema:
+    schema = {}
+    for r in rules:
+        if r.schema:
+            schema.update(r.schema)
+    return schema
+
 
 # data = {
 #     "addresses": [
