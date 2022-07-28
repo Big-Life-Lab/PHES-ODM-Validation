@@ -40,7 +40,12 @@ def stripRow(row: dict):
 #     return rules
 
 
-def gen_rule_error(rules, cerberus_error):
+def get_rule(rules, cerberus_error):
+    e = cerberus_error
+
+
+
+def gen_rule_error(ruleIds: set[str], cerberus_error):
     e = cerberus_error
     assert type(e) is ValidationError
     if e.code != MAPPING_SCHEMA.code:
@@ -51,7 +56,7 @@ def gen_rule_error(rules, cerberus_error):
     # meta = e.constraint[column]["meta"]
     # metaFields = meta.copy().delete("message")
     return {
-        # "errorType": meta,
+        "errorType": meta,
         "tableName": table,
         # "columnName": column,
         "rowNumber": row_number,
@@ -68,13 +73,15 @@ def validate_data(rules, schema, data) -> [dict]:
     Returns list of errors or None on success.
     """
     v = Validator(schema)
+    v.allow_unknown = True
     if v.validate(data):
         return
+    return v._errors
     report = []
     for table_error in v._errors:
         for row_errors in table_error.info:
             for e in row_errors:
-                res = gen_rule_error(e)
+                res = gen_rule_error(rules, e)
                 if res:
                     report.append(res)
     for r in rules:

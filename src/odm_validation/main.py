@@ -27,7 +27,7 @@ data = {
             "addressID": "1",
             # "datasetID": "2",
             "city": "Ottawa",
-            "country": "Canada",
+            "country": "Canada1",
         },
         {
             # "addressID": "2",
@@ -51,6 +51,6 @@ sparseParts = fetchParts()
 parts = list(map(validate.stripRow, sparseParts))
 rules = validation_rules.generate_rules(parts)
 schema = validation_rules.generate_cerberus_schema(rules)
-pp.pprint(schema)
+# pp.pprint(schema)
 errors = validate.validate_data(rules, schema, data)
 pp.pprint(errors)

@@ -5,6 +5,7 @@
 
 # - rule must
 
+import sys
 from dataclasses import dataclass
 from typing import Callable
 
@@ -25,6 +26,7 @@ class Rule:
     - a way to find the rule from cerberus error (if not using custom validation)
         - rule.schema can be filter
     """
+    name: str
     schema: Schema = None  # cerberus schema for all the tables
     message: str = ""   # cerberus error message
     validate: ValidateFunc = None  # for custom validation
@@ -33,9 +35,9 @@ class Rule:
 def init_table_schema(name, row_schema):
     return {
         name: {
-            "type": "list",
+            "type": "list",  # each table has a list of rows
             "schema": {
-                "type": "dict",
+                "type": "dict",  # each row is a dict
                 "schema": row_schema,
             }
         }
@@ -44,10 +46,10 @@ def init_table_schema(name, row_schema):
 
 # {{{1 Rules
 
-
 def missing_mandatory_column(table, table_attr) -> Rule:
     """checks that a table has all its mandatory fields"""
     assert type(table_attr) is list
+    name = sys._getframe().f_code.co_name
     tableSchema = {}
     required = table + "Required"
     for part in table_attr:
@@ -58,21 +60,23 @@ def missing_mandatory_column(table, table_attr) -> Rule:
     schema = init_table_schema(table, tableSchema)
     # schema = {table: tableSchema} if tableSchema != {} else None
     msg = f"Missing mandatory column in table {table}."
-    return Rule(schema=schema, message=msg)
+    return Rule(name=name, schema=schema, message=msg)
 
 
 def invalid_address_country():
+    name = sys._getframe().f_code.co_name
     schema = init_table_schema("addresses", {
         "country": {
-            "type": "list",
             "allowed": ["Canada"]
         }
     })
     msg = "Invalid country in address."
-    return Rule(schema=schema, message=msg)
+    return Rule(name=name, schema=schema, message=msg)
 
 
 def duplicate_primary_key(tablePks) -> Rule:
+    name = sys._getframe().f_code.co_name
+
     def validate(doc) -> [str]:
         assert type(doc) is dict
         errors = []
@@ -87,7 +91,7 @@ def duplicate_primary_key(tablePks) -> Rule:
                 ids.add(id)
         return errors if len(errors) else None
 
-    return Rule(validate=validate)
+    return Rule(name=name, validate=validate)
 
 
 # {{{1 Rule generation
@@ -106,6 +110,12 @@ def get_table_attributes(table_names, attributes) -> dict:
     return result
 
 
+def update_schema_rule_ids(rules):
+    for r in rules:
+        if not r.schema:
+            continue
+        r.schema["meta"] = {"ruleID": r.name}
+
 def generate_rules(parts) -> [Rule]:
     tables = list(filter(lambda x: x.get("partType") == "table", parts))
     table_names = [row["partID"] for row in tables]
@@ -117,6 +127,7 @@ def generate_rules(parts) -> [Rule]:
         a = table_attr[t]
         r = missing_mandatory_column(t, a)
         rules.append(r)
+    rules.append(invalid_address_country())
     return rules
 
 
