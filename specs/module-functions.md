@@ -142,7 +142,7 @@ Example
 }
 ```
 
-## Validating rules based on dictionary version
+## Validation rules based on dictionary version
 
 Validation rules are applied only to parts and lists with the 'status' property is 'active'.
 
