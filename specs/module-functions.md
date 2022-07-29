@@ -141,3 +141,58 @@ Example
     }
 }
 ```
+
+## Validating rules based on dictionary version
+
+Validation rules are applied only to parts and lists with the 'status' property is 'active'.
+
+Example of two parts from dictionary Version 2.
+
+```python
+{
+    "parts": [
+        {
+            "partID": "addresses",
+            "label": "Address table",
+            "partType": "table",
+            "addresses": "NA",
+            "addressesRequired": "NA",
+            "status": "active",
+            "changes": "added in version 2",
+            "firstReleased": "2",
+            "lastUpdated": "2"
+        },
+        {
+            "partID": "comp3",
+            "label": "Composite grab sample of 3",
+            "partType": "category",
+            "addresses": "NA",
+            "addressesRequired": "NA",
+            "status": "deprecitate",
+            "changes": "Use grab with collection number (collectNum) = 3",
+            "firstReleased": "1",
+            "lastUpdated": "1"
+        }
+    ]
+}
+```
+
+Include `addresses` in validation rules for Version 2.
+Exclude `comp3` in valation rules for Version 2, but include this part for validation rules in version 1.
+
+The example above shows the four parts and lists properties to support versioning:
+
+- `status` - The status of the part or list. 'active' means the part is used in the dictionary version. 'depreciated' means the part has been retired and not longer used in the version.
+- `firstReleased` - he version that the the part or set was first released.
+- `lastUpdated` - The date that the part was last updated.
+- `changes` - A description of the changes to the part of list from the previous version.
+
+### Validating rules prior to version 1
+
+The ODM validator was developed for Version 2, but with the ability to validate ODM Version 1.1 data. There are several properties in Version 2.0 parts to assist the development of Version 1 rules. These include:
+
+- `version1Table` - The version 1 report table where values for the part were recorded. In Version 1, `variables` and `variableCategories` were moved to `parts`.
+- `version1Location` - The table which the part appears in Version 1. There are three tables in Version 1: `variables`, `variableCategories` and `tables`. Thes parts within these tables were all moved to `parts` in Version 2. In Version 2, `variables` are identified as `partType = measure, meathod, or attribute`. Tables`are identified as`partType = table`.
+- `version1Variable` - The variable identifier in Version 1. A Version 1 variable is the equivalent of a `partType = method, measure, or attribute` in Version 2.
+- `version1Category` = The category identifier in Version 1. A Version 1 category is the equivalent a Version 2 part with `partType = category`.
+- `version1to2Changes` = A descript of changes from Version 1 to Version 2.
