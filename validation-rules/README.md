@@ -26,7 +26,7 @@ The steps to request or generate a new rule are:
 
 2. Add a new file at a new row at the bottom of [metadata/validation-rules-list.csv](../../metadata/validation-rules-list.csv) folder containing details about your new rule. These details should include:
 
-   2.1. `ruleId`: The unique identifier for your rule
+   2.1. `ruleId`: The unique identifier for your rule. The identifier should encode why validation would fail. For example, when validating whether a mandatory column is present in a table the rule ID should be "MissingMandatoryColumn" rather than "NoMissingMandatoryColumns"
    2.2. `label`: A short description
    2.3. `description`: A long description
    2.4. `messageType`: Whether this rule generates an error or a warning. The valid values are `error` and `warning`
