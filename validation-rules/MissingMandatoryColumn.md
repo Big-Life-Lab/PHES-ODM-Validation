@@ -132,19 +132,20 @@ The generated cerberus object for the example above is shown below,
             "schema": {
                 "addressID": {
                     "required" True,
-                    "meta": {
-                        "partID": "addressID",
-                        "addresses": "PK",
-                        "addressesRequired": "mandatory",
-                    }
+                    "meta": [
+                        {
+                            "ruleId": "MissingMandatoryColumn",
+                            "meta": [
+                                {
+                                    "partID": "addressID",
+                                    "addresses": "PK",
+                                    "addressesRequired": "mandatory",
+                                }
+                            ]
+                        }
+                    ]
                 },
-                "addL2": {
-                    "meta": {
-                        "partID": "addL2",
-                        "addresses": "PK",
-                        "addressesRequired": "NA"
-                    }
-                }
+                "addL2": {}
             },
             "meta": {
                 "partID": "addresses",
@@ -159,11 +160,18 @@ The generated cerberus object for the example above is shown below,
             "schema": {
                 "contactID": {
                     "required": True,
-                    "meta": {
-                        "partID": "contactID",
-                        "contacts": "PK",
-                        "contactsRequired": "mandatory"
-                    }
+                    "meta": [
+                        {
+                            "ruleId": "MissingMandatoryColumn",
+                            "meta": [
+                                {
+                                    "partID": "contactID",
+                                    "addresses": "PK",
+                                    "addressesRequired": "mandatory",
+                                }
+                            ]
+                        }
+                    ]
                 }
             }
         },
