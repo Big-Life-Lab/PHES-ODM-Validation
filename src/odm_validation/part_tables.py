@@ -19,6 +19,7 @@ class PartData:
     attr_rows: Dataset  # is_attr
     cat_rows: Dataset  # is_cat
     catset_values: Dict[str, List[str]]  # Ex: ["collection"] = ["flowPr", ...]
+    catset_meta: Dict[str, list]  # meta, by catset name
     catset_cat_rows: Dict[str, Dataset]  # is_cat, by catset name
     catset_attr_rows: Dataset  # is_catset_attr
     table_catset_attr_rows: Dict[str, Dataset]  # is_catset_attr, by table name
@@ -81,6 +82,12 @@ def strip(parts):
     return result
 
 
+def get_cat_meta(row):
+    """Returns metadata for both category-sets and categories."""
+    fields = ["partID", "partType", "catSetID"]
+    return {key: row[key] for key in fields}
+
+
 def gen_partdata(parts) -> PartData:
     # `parts` are stripped before processing. This is important for performance
     # and simplicity of implementation
@@ -93,12 +100,15 @@ def gen_partdata(parts) -> PartData:
     cat_rows = list(filter(is_cat, parts))
 
     catset_values = {}
+    catset_meta = {}
     catset_attr_rows = list(filter(is_catset_attr, parts))
     for catset_row in catset_attr_rows:
         catset = catset_row["catSetID"]
         catset_cat_rows = [x for x in cat_rows if x["catSetID"] == catset]
         values = list(map(get_partID, catset_cat_rows))
         catset_values[catset] = values
+        meta_rows = [catset_row] + catset_cat_rows
+        catset_meta[catset] = list(map(get_cat_meta, meta_rows))
 
     table_catset_attr_rows = {}
     for table in tables:
@@ -109,6 +119,7 @@ def gen_partdata(parts) -> PartData:
         all_rows=parts,
         attr_rows=attr_rows,
         cat_rows=cat_rows,
+        catset_meta=catset_meta,
         catset_values=catset_values,
         catset_attr_rows=catset_attr_rows,
         catset_cat_rows=catset_cat_rows,
@@ -131,13 +142,11 @@ def init_table_schema(name, attr_schema):
     }
 
 
-def init_attr_schema(cerb_rule: tuple, attr_row: Row,
-                     used_fields: List[str] = []):
+def init_attr_schema(cerb_rule: tuple, attr_row: Row, meta: List[dict] = []):
     attr = get_partID(attr_row)
-    used_fields.append("partID")
     return {
         attr: {
             cerb_rule[0]: cerb_rule[1],
-            "meta": {key: attr_row[key] for key in used_fields},
+            "meta": [{"partID": attr}] + meta
         }
     }

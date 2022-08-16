@@ -25,8 +25,8 @@ def missing_mandatory_column():
                 odm_rule = (table + "Required", pt.MANDATORY)
                 if attr_row.get(odm_rule[0], "").capitalize() != odm_rule[1]:
                     continue
-                used_fields = [odm_rule[0]]
-                attr_schema = pt.init_attr_schema(cerb_rule, attr_row, used_fields)
+                meta = [{odm_rule[0]: odm_rule[1]}]
+                attr_schema = pt.init_attr_schema(cerb_rule, attr_row, meta)
                 table_schema = pt.init_table_schema(table, attr_schema)
                 utils.deep_update(table_schema, schema)
         return schema
@@ -48,8 +48,8 @@ def invalid_category():
                 catset = row["catSetID"]
                 values = data.catset_values[catset]
                 cerb_rule = (cerb_rule_key, values)
-                used_fields = ["catSetID"]
-                attr_schema = pt.init_attr_schema(cerb_rule, row, used_fields)
+                meta = data.catset_meta[catset]
+                attr_schema = pt.init_attr_schema(cerb_rule, row, meta)
                 table_schema = pt.init_table_schema(table, attr_schema)
                 utils.deep_update(table_schema, schema)
         return schema
