@@ -131,12 +131,13 @@ def init_table_schema(name, attr_schema):
     }
 
 
-def init_attr_schema(attr: str, cerb_rule: tuple):
+def init_attr_schema(cerb_rule: tuple, attr_row: Row,
+                     used_fields: List[str] = []):
+    attr = get_partID(attr_row)
+    used_fields.append("partID")
     return {
         attr: {
             cerb_rule[0]: cerb_rule[1],
-            # "meta": {
-            #     "partID": attr,
-            # }
+            "meta": {key: attr_row[key] for key in used_fields},
         }
     }
