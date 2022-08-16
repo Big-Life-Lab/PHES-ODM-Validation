@@ -44,11 +44,11 @@ def invalid_category():
     def gen_schema(data: pt.PartData):
         schema = {}
         for table in data.tables:
-            for row in data.table_cat_attr_rows[table]:
+            for row in data.table_catset_attr_rows[table]:
                 attr = row["partID"]
-                cat = row["catSetID"]
-                cat_values = data.cat_values[cat]
-                cerb_rule = (cerb_rule_key, cat_values)
+                catset = row["catSetID"]
+                values = data.catset_values[catset]
+                cerb_rule = (cerb_rule_key, values)
                 attr_schema = pt.init_attr_schema(attr, cerb_rule)
                 table_schema = pt.init_table_schema(table, attr_schema)
                 utils.deep_update(table_schema, schema)
