@@ -142,11 +142,17 @@ def init_table_schema(name, attr_schema):
     }
 
 
-def init_attr_schema(cerb_rule: tuple, attr_row: Row, meta: List[dict] = []):
+def init_attr_schema(rule_id: str, cerb_rule: tuple, attr_row: Row,
+                     meta: List[dict] = []):
     attr = get_partID(attr_row)
     return {
         attr: {
             cerb_rule[0]: cerb_rule[1],
-            "meta": [{"partID": attr}] + meta
+            "meta": [
+                {
+                    "ruleID": rule_id,
+                    "meta": [{"partID": attr}] + meta,
+                }
+            ]
         }
     }

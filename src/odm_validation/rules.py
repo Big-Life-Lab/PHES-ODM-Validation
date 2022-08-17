@@ -16,6 +16,7 @@ class Rule:
 
 
 def missing_mandatory_column():
+    id = missing_mandatory_column.__name__
     cerb_rule = ("required", True)
 
     def gen_schema(data: pt.PartData):
@@ -26,7 +27,7 @@ def missing_mandatory_column():
                 if attr_row.get(odm_rule[0], "").capitalize() != odm_rule[1]:
                     continue
                 meta = [{odm_rule[0]: odm_rule[1]}]
-                attr_schema = pt.init_attr_schema(cerb_rule, attr_row, meta)
+                attr_schema = pt.init_attr_schema(id, cerb_rule, attr_row, meta)
                 table_schema = pt.init_table_schema(table, attr_schema)
                 utils.deep_update(table_schema, schema)
         return schema
@@ -39,6 +40,7 @@ def missing_mandatory_column():
 
 
 def invalid_category():
+    id = invalid_category.__name__
     cerb_rule_key = "allowed"
 
     def gen_schema(data: pt.PartData):
@@ -49,7 +51,7 @@ def invalid_category():
                 values = data.catset_values[catset]
                 cerb_rule = (cerb_rule_key, values)
                 meta = data.catset_meta[catset]
-                attr_schema = pt.init_attr_schema(cerb_rule, row, meta)
+                attr_schema = pt.init_attr_schema(id, cerb_rule, row, meta)
                 table_schema = pt.init_table_schema(table, attr_schema)
                 utils.deep_update(table_schema, schema)
         return schema
