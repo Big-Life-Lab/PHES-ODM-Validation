@@ -6,18 +6,24 @@ import requests
 from xlsx2csv import Xlsx2csv
 
 
-def deep_update(original, update):
+def deep_update(src: dict, dst: dict):
     """
     Recursively update a dict.
     Subdict's won't be overwritten but also updated.
-    https://stackoverflow.com/a/8310229
+    List values will be joined, but not recursed.
+
+    Originally from: https://stackoverflow.com/a/8310229
     """
-    for key, value in original.items():
-        if key not in update:
-            update[key] = value
+    for key, value in src.items():
+        if key not in dst:
+            dst[key] = value
         elif isinstance(value, dict):
-            deep_update(value, update[key])
-    return update
+            deep_update(value, dst[key])
+        elif isinstance(value, list):
+            src_list = value
+            if len(src_list) > 0:
+                dst_list = dst[key]
+                dst_list += src_list
 
 
 def convertXlsx2Csv(xlsxFile, sheetName, csvFile: str):
