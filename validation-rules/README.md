@@ -98,3 +98,126 @@ The corresponding cerberus high level object would be,
     }
 }
 ```
+
+### Version 1
+
+The following columns are used to backport from version 2 of the ODM to version 1,
+
+* **version1Location**: Where in version 1 the part belongs to. The possible values are `tables`, `variables`, or `variableCategories`.
+* **version1Table**: The name of the table in version 1
+* **version1Variable**: The name of the table variable in version 1
+* **version1Category**: The name of the variable category in version 1
+
+As mentioned above, the table name is encoded in the `version1Table` column. If a table part has a version 1 equivalent, then this column will have a value, otherwise it will be empty. For example, consider the ODM snippet below,
+
+```python
+{
+    "parts": [
+        {
+            "partID": "addresses",
+            "partType": "table",
+            "version1Table": "addresses",
+            "version1Location": "tables"
+        },
+        {
+            "partID": "contacts",
+            "partType": "table",
+            "version1Table": "",
+            "version1Location": "tables"
+        },
+        {
+            "partID": "measures",
+            "partType": "table",
+            "version1Table": "",
+            "version1Location": "WWMeasure;SiteMeasure;CovidPublicHealthData"
+        }
+    ]
+}
+```
+
+The corresponding cerberus schema for version 1 of the ODM would be,
+
+```python
+{
+    "addresses": {
+        "type": "list",
+        "schema": {
+            "type": "dict",
+            # The remaining schema fields are filled using the rest of the dictionary
+        },
+        "meta": {
+            "partID": "addresses",
+            "partType": "table",
+            "version1Table": "addresses",
+            "version1Location": "tables"
+        }
+    },
+    "WWMeasure": {
+        "type": "list",
+        "schema": {
+            "type": "dict",
+            # The remaining schema fields are filled using the rest of the dictionary
+        },
+        "meta": {
+            "partID": "measures",
+            "partType": "table",
+            "version1Table": "",
+            "version1Location": "WWMeasure; SiteMeasure;CovidPublicHealthData"
+        }
+    },
+    "SiteMeasure": {
+        "type": "list",
+        "schema": {
+            "type": "dict",
+            # The remaining schema fields are filled using the rest of the dictionary
+        },
+        "meta": {
+            "partID": "measures",
+            "partType": "table",
+            "version1Table": "",
+            "version1Location": "WWMeasure; SiteMeasure;CovidPublicHealthData"
+        }
+    },
+    "CovidPublicHealthData": {
+        "type": "list",
+        "schema": {
+            "type": "dict",
+            # The remaining schema fields are filled using the rest of the dictionary
+        },
+        "meta": {
+            "partID": "measures",
+            "partType": "table",
+            "version1Table": "",
+            "version1Location": "WWMeasure; SiteMeasure;CovidPublicHealthData"
+        }
+    }
+}
+```
+
+Notice how the last part in the list corresponds to three tables in version 1, this will need to be taken into account.
+
+To find the columns that are part of a table in version 1, we can use the `version1Location`, `version1Table`, and `version1Variable` columns. For example,
+
+```python
+{
+    "parts": [
+        {
+            "partID": "instruments",
+            "partType": "table",
+            "version1Table": "Instrument",
+            "version1Location": "tables",
+            "version1Variable": ""
+        },
+        {
+            "partID": "model",
+            "partType": "attribute",
+            "version1Table": "Instrument",
+            "version1Location": "variables",
+            "version1Variable": "model"
+        }
+    ]
+}
+```
+
+implies that the version 1 table `Instrument` has a column called `model` in it.
+

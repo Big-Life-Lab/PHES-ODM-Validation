@@ -112,6 +112,10 @@ Generates the cerberus schema containing the validation rules to be used with th
     }
     ```
 
+2. `version`: The version of the ODM dictionary the cerberus schema is for
+
+    `type`: Number representing the version. Currently supported version are 1 and 2.
+
 ## Return
 
 Return a dictionary that is a valid cerberus schema object. In addition, values from the ODM data dictionary will also be added to the `meta` field for debugging purposes. 
@@ -142,11 +146,19 @@ Example
 }
 ```
 
-## Validation rules based on dictionary version
+## Logic
 
-Validation rules are applied only to parts and lists with the 'status' property is 'active'.
+### Working with the `version` parameter
 
-Example of two parts from dictionary Version 2.
+The cerberus schema for a part should be added only if it is active for the provided `version` argument. To see whether a part is valid for a version, the `status`, `firstReleased`, and `lastUpdated` fields are used.
+
+* The `status` field can take one of two values, `active` or `deprecitate`. `active` says that a part is currently being actively used while `deprecitate` says the opposite.
+* The `firstReleased` and `lastUpdated` fields has the version of the ODM when the part was first added and last changed respectively.
+* The `changes` field is used to describe the changes made from one version to another.
+
+The validation metadata for a part should only be used if it was active for the version in the `version` argument.
+
+Example of two parts from dictionary version 2.
 
 ```python
 {
@@ -171,28 +183,13 @@ Example of two parts from dictionary Version 2.
             "status": "deprecitate",
             "changes": "Use grab with collection number (collectNum) = 3",
             "firstReleased": "1",
-            "lastUpdated": "1"
+            "lastUpdated": "2"
         }
     ]
 }
 ```
 
-Include `addresses` in validation rules for Version 2.
-Exclude `comp3` in valation rules for Version 2, but include this part for validation rules in version 1.
+* The addresses part is currently active (status = 'active') and should only be included in version 2 since it was first released (firstReleased = '2') then.
+* The `comp3` part was deprecitated in version 2 (status = 'deprecitate' and lastUpdated = '2') and should only be included in version 1 (firstReleased = '1')
 
-The example above shows the four parts and lists properties to support versioning:
-
-- `status` - The status of the part or list. 'active' means the part is used in the dictionary version. 'depreciated' means the part has been retired and not longer used in the version.
-- `firstReleased` - he version that the the part or set was first released.
-- `lastUpdated` - The date that the part was last updated.
-- `changes` - A description of the changes to the part of list from the previous version.
-
-### Validating rules prior to version 1
-
-The ODM validator was developed for Version 2, but with the ability to validate ODM Version 1.1 data. There are several properties in Version 2.0 parts to assist the development of Version 1 rules. These include:
-
-- `version1Table` - The version 1 report table where values for the part were recorded. In Version 1, `variables` and `variableCategories` were moved to `parts`.
-- `version1Location` - The table which the part appears in Version 1. There are three tables in Version 1: `variables`, `variableCategories` and `tables`. Thes parts within these tables were all moved to `parts` in Version 2. In Version 2, `variables` are identified as `partType = measure, meathod, or attribute`. Tables`are identified as`partType = table`.
-- `version1Variable` - The variable identifier in Version 1. A Version 1 variable is the equivalent of a `partType = method, measure, or attribute` in Version 2.
-- `version1Category` = The category identifier in Version 1. A Version 1 category is the equivalent a Version 2 part with `partType = category`.
-- `version1to2Changes` = A descript of changes from Version 1 to Version 2.
+Version 2 of the dictionary renamed certain part pieces, for example, the `WWMeasures` table was renamed to `measures` in version 2. To be backcompatible with version 1, columns were added to the parts list to document their version 1 equivalents. These columns are documented where necessary in the spec.
