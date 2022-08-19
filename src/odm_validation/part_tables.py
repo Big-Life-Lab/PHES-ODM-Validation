@@ -4,6 +4,7 @@ from dataclasses import dataclass
 from typing import Dict, List
 
 
+# type aliases
 Row = dict
 Dataset = List[Row]
 Schema = dict  # A Cerberus validation schema
@@ -24,17 +25,40 @@ class PartData:
     table_names: List[str]
 
 
-# constants
+# The following constants are not enums because they would be a pain to use.
+# even with a `__str__` overload to avoid writing `.value` all the time,
+# we would still have to explicitly call the `str` function.
+# Ex: str(PartType.ATTRIBUTE.value) vs ATTRIBUTE
+
+# field constants
+CATSET_ID = "catSetID"
+PART_ID = "partID"
+PART_TYPE = "partType"
+
+# partType constants
+ATTRIBUTE = "attribute"
+CATEGORY = "category"
+TABLE = "table"
+
+# other value constants
 MANDATORY = "Mandatory"
 NA = {"", "NA", "Not applicable"}
 
 
+def table_required_field(table_name):
+    return table_name + "Required"
+
+
+def has_catset(p):
+    return p.get(CATSET_ID) is not None
+
+
 def is_table(p):
-    return p.get("partType") == "table"
+    return p.get(PART_TYPE) == TABLE
 
 
 def is_attr(p):
-    return p.get("partType") == "attribute"
+    return p.get(PART_TYPE) == ATTRIBUTE
 
 
 def is_catset_attr(p):
@@ -42,7 +66,7 @@ def is_catset_attr(p):
     A Category-set attribute is the name of a collection of values.
     This is analogous to an 'enum' type.
     """
-    return is_attr(p) and p.get("catSetID")
+    return is_attr(p) and has_catset(p)
 
 
 def is_cat(p):
@@ -52,11 +76,11 @@ def is_cat(p):
 
     Categories without a catSetID are invalid and ignored.
     """
-    return p.get("partType") == "category" and p.get("catSetID")
+    return p.get(PART_TYPE) == CATEGORY and has_catset(p)
 
 
 def get_partID(p):
-    return p["partID"]
+    return p[PART_ID]
 
 
 def get_table_attr(table_names, attributes) -> dict:
@@ -80,7 +104,7 @@ def strip(parts):
 
 def get_catset_meta(row):
     """Returns metadata for category-sets and its categories/values."""
-    fields = ["partID", "partType", "catSetID"]
+    fields = [PART_ID, PART_TYPE, CATSET_ID]
     return {key: row[key] for key in fields}
 
 
@@ -99,8 +123,8 @@ def gen_partdata(parts) -> PartData:
     catset_values = {}
     catset_meta = {}
     for cs in catsets:
-        id = cs["catSetID"]
-        cats = [c for c in categories if c["catSetID"] == id]
+        id = cs[CATSET_ID]
+        cats = [c for c in categories if c[CATSET_ID] == id]
         values = list(map(get_partID, cats))
         catset_values[id] = values
         used_rows = [cs] + cats
@@ -142,7 +166,7 @@ def init_attr_schema(rule_id: str, cerb_rule: tuple, attr: Row,
             "meta": [
                 {
                     "ruleID": rule_id,
-                    "meta": [{"partID": attr_id}] + meta,
+                    "meta": [{PART_ID: attr_id}] + meta,
                 }
             ]
         }

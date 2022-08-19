@@ -23,7 +23,7 @@ def missing_mandatory_column():
         schema = {}
         for table in data.table_names:
             for attr in data.table_attr[table]:
-                odm_rule = (table + "Required", pt.MANDATORY)
+                odm_rule = (pt.table_required_field(table), pt.MANDATORY)
                 if attr.get(odm_rule[0], "").capitalize() != odm_rule[1]:
                     continue
                 meta = [{odm_rule[0]: odm_rule[1]}]
