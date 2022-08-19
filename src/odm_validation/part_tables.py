@@ -15,17 +15,13 @@ class PartData:
     An immutable cache of all datasets derived from the 'parts' dataset.
     The parts-list is stripped of empty values before generating this.
     """
-    all_rows: Dataset  # all parts
-    attr_rows: Dataset  # is_attr
-    cat_rows: Dataset  # is_cat
+    all_parts: Dataset
+    attributes: Dataset
     catset_values: Dict[str, List[str]]  # Ex: ["collection"] = ["flowPr", ...]
     catset_meta: Dict[str, list]  # meta, by catset name
-    catset_cat_rows: Dict[str, Dataset]  # is_cat, by catset name
-    catset_attr_rows: Dataset  # is_catset_attr
-    table_catset_attr_rows: Dict[str, Dataset]  # is_catset_attr, by table name
-    table_attr_rows: Dict[str, Dataset]  # is_attr, by table name
-    table_rows: Dataset  # is_table
-    tables: List[str]  # table names
+    table_catset_attr: Dict[str, Dataset]  # is_catset_attr, by tbl name
+    table_attr: Dict[str, Dataset]  # is_attr, by table name
+    table_names: List[str]
 
 
 # constants
@@ -43,8 +39,8 @@ def is_attr(p):
 
 def is_catset_attr(p):
     """
-    A Category-set attribute contains a category from its category-set.
-    This is analogous to a field with an 'enum' type.
+    A Category-set attribute is the name of a collection of values.
+    This is analogous to an 'enum' type.
     """
     return is_attr(p) and p.get("catSetID")
 
@@ -54,7 +50,7 @@ def is_cat(p):
     Categories are the actual values of a category-set.
     This is analogous to the values of 'enum' types.
 
-    Categories without a catSetID are ignored.
+    Categories without a catSetID are invalid and ignored.
     """
     return p.get("partType") == "category" and p.get("catSetID")
 
@@ -63,15 +59,15 @@ def get_partID(p):
     return p["partID"]
 
 
-def get_table_attr_rows(tables, attr_rows) -> dict:
+def get_table_attr(table_names, attributes) -> dict:
     """Returns dict of table names and their attribute parts."""
     result = {}
-    for t in tables:
+    for t in table_names:
         result[t] = []
-    for attr_row in attr_rows:
-        for t in tables:
-            if attr_row.get(t):
-                result[t].append(attr_row)
+    for attr in attributes:
+        for t in table_names:
+            if attr.get(t):
+                result[t].append(attr)
     return result
 
 
@@ -82,8 +78,8 @@ def strip(parts):
     return result
 
 
-def get_cat_meta(row):
-    """Returns metadata for both category-sets and categories."""
+def get_catset_meta(row):
+    """Returns metadata for category-sets and its categories/values."""
     fields = ["partID", "partType", "catSetID"]
     return {key: row[key] for key in fields}
 
@@ -93,40 +89,35 @@ def gen_partdata(parts) -> PartData:
     # and simplicity of implementation
     parts = strip(parts)
 
-    table_rows = [x for x in parts if is_table(x)]
-    tables = [row["partID"] for row in table_rows]
-    attr_rows = [x for x in parts if is_attr(x)]
-    table_attr_rows = get_table_attr_rows(tables, attr_rows)
-    cat_rows = list(filter(is_cat, parts))
+    tables = list(filter(is_table, parts))
+    table_names = list(map(get_partID, tables))
+    attributes = list(filter(is_attr, parts))
+    table_attr = get_table_attr(table_names, attributes)
+    categories = list(filter(is_cat, parts))
+    catsets = list(filter(is_catset_attr, parts))
 
     catset_values = {}
     catset_meta = {}
-    catset_attr_rows = list(filter(is_catset_attr, parts))
-    for catset_row in catset_attr_rows:
-        catset = catset_row["catSetID"]
-        catset_cat_rows = [x for x in cat_rows if x["catSetID"] == catset]
-        values = list(map(get_partID, catset_cat_rows))
-        catset_values[catset] = values
-        meta_rows = [catset_row] + catset_cat_rows
-        catset_meta[catset] = list(map(get_cat_meta, meta_rows))
+    for cs in catsets:
+        id = cs["catSetID"]
+        cats = [c for c in categories if c["catSetID"] == id]
+        values = list(map(get_partID, cats))
+        catset_values[id] = values
+        used_rows = [cs] + cats
+        catset_meta[id] = list(map(get_catset_meta, used_rows))
 
-    table_catset_attr_rows = {}
-    for table in tables:
-        table_catset_attr_rows[table] = [
-            x for x in catset_attr_rows if x.get(table)]
+    table_catset_attr = {}
+    for t in table_names:
+        table_catset_attr[t] = [cs for cs in catsets if cs.get(t)]
 
     return PartData(
-        all_rows=parts,
-        attr_rows=attr_rows,
-        cat_rows=cat_rows,
-        catset_meta=catset_meta,
+        all_parts=parts,
+        attributes=attributes,
         catset_values=catset_values,
-        catset_attr_rows=catset_attr_rows,
-        catset_cat_rows=catset_cat_rows,
-        table_attr_rows=table_attr_rows,
-        table_catset_attr_rows=table_catset_attr_rows,
-        table_rows=table_rows,
-        tables=tables
+        catset_meta=catset_meta,
+        table_attr=table_attr,
+        table_catset_attr=table_catset_attr,
+        table_names=table_names
     )
 
 
@@ -142,16 +133,16 @@ def init_table_schema(name, attr_schema):
     }
 
 
-def init_attr_schema(rule_id: str, cerb_rule: tuple, attr_row: Row,
+def init_attr_schema(rule_id: str, cerb_rule: tuple, attr: Row,
                      meta: List[dict] = []):
-    attr = get_partID(attr_row)
+    attr_id = get_partID(attr)
     return {
-        attr: {
+        attr_id: {
             cerb_rule[0]: cerb_rule[1],
             "meta": [
                 {
                     "ruleID": rule_id,
-                    "meta": [{"partID": attr}] + meta,
+                    "meta": [{"partID": attr_id}] + meta,
                 }
             ]
         }
