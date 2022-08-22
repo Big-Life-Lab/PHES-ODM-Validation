@@ -1,4 +1,4 @@
-# InvalidCategory
+# invalid_category
 
 This rule checks if the rows of a categorical column in a table have the right values. A right value is one in the set of allowable values for the categorical column. For example, the `collection` column in the `samples` table is a categorical column whose set of allowable values or categories are `comp3h`, `comp8h`, `flowPr` etc. The following samples table row would fail validation,
 
@@ -20,7 +20,7 @@ The following samples table row would pass validation,
 
 The error report will have the following fields
 
-* **errorType**: InvalidCategory
+* **errorType**: invalid_category
 * **tableName**: The name of the table whose row has the invalid category
 * **columnName** The name of the column with the invalid category
 * **rowNumber**: The index of the table row with the error
@@ -34,7 +34,7 @@ Example
 ```python
 [
     {
-        "errorType": "InvalidCategory",
+        "errorType": "invalid_category",
         "tableName": "samples",
         "columnName": "collection",
         "rowNumber": 1,
@@ -145,7 +145,7 @@ The generated cerberus object for the example above is shown below,
                     "allowed": ["comp3h", "comp8h", "flowPr"],
                     "meta": [
                         {
-                            "ruleId": "InvalidCategory",
+                            "ruleId": "invalid_category",
                             "meta": [
                                 {
                                     "partID": "samples",
