@@ -25,9 +25,9 @@ The error report will have the following fields
 * **columnName** The name of the column with the invalid category
 * **rowNumber**: The index of the table row with the error
 * **row** The row in the data that failed this validation rule
-* **invalidCategoryValue**: The invalid category value
+* **invalidValue**: The invalid category value
 * **validationRuleFields**: The ODM data dictionary rule fields violated by this row
-* **message**: Invalid category <invalidCategoryValue> found in row <rowIndex> for column <columnName> in table <tableName>
+* **message**: Invalid category <invalidValue> found in row <rowIndex> for column <columnName> in table <tableName>
 
 Example
 
@@ -41,7 +41,7 @@ Example
         "row": {
             "collection": "flow"
         },
-        "invalidCategoryValue": "flow",
+        "invalidValue": "flow",
         "validationRuleFields": [
             {
                 "partID": "samples",
@@ -81,7 +81,7 @@ Example
 
 All the metadata for this rule is contained in the parts sheet in the data dictionary. The metadata is used to identify the following two pieces:
 
-1. The categorical columns in a table. These are identified using the `partID`, `dataType`, and `<table_name>` columns. 
+1. The categorical columns in a table. These are identified using the `partID`, `dataType`, and `<table_name>` columns.
     * **partID**: Contains the name of a possible column
     * **<table_name>**: Whether the part is associated with a table. Look for values of **PK**, **FK**, or **header** to indicate that the part is the name of a column in the table.
     * **dataType**: A value of `categorical` is used to indicate that the part is categorical
