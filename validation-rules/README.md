@@ -2,7 +2,7 @@
 
 Validation rules are the set of rules that the ODM validation module uses to assess wehther data confirms to the ODM dictionary. The module uses Python [functions](../module-functions.md). The full list of validation rules natively supported by the ODM can be seen in the validation rules list CSV file in [metadata/validation-rules-list.csv](../../metadata/validation-rules-list.csv).
 
-Each rule in the validation-rules-list.csv has an `ruleID`. There is a corresponding markdown document for each validataion rule that can be found in [/validation-rules/](../../valiation-rules/). For example, the ruleID = `MissingMandatoryColumn` has a file `MissingMandatoryColumn.md`. The markdown document for each rule includes:
+Each rule in the validation-rules-list.csv has an `ruleID`. There is a corresponding markdown document for each validataion rule that can be found in [/validation-rules/](../../valiation-rules/). For example, the ruleID = `missing_mandatory_column` has a file `missing_mandatory_column.md`. The markdown document for each rule includes:
 
 1. A description of the rule.
 2. One or more examples of the rule.
@@ -26,7 +26,7 @@ The steps to request or generate a new rule are:
 
 2. Add a new file at a new row at the bottom of [metadata/validation-rules-list.csv](../../metadata/validation-rules-list.csv) folder containing details about your new rule. These details should include:
 
-   2.1. `ruleId`: The unique identifier for your rule. The identifier should encode why validation would fail. For example, when validating whether a mandatory column is present in a table the rule ID should be "MissingMandatoryColumn" rather than "NoMissingMandatoryColumns"
+   2.1. `ruleId`: The unique identifier for your rule. The identifier should encode why validation would fail. For example, when validating whether a mandatory column is present in a table the rule ID should be "missing_mandatory_column" rather than "no_missing_mandatory_columns"
    2.2. `label`: A short description
    2.3. `description`: A long description
    2.4. `messageType`: Whether this rule generates an error or a warning. The valid values are `error` and `warning`
@@ -43,7 +43,7 @@ The steps to request or generate a new rule are:
    3.1. If rule is uses metadata from the ODM dictionary - include the include the parts of the ODM data dictionary that contains the metadata for your rules along with the logic for converting them to a cerberus schema. See information about the Cerberus schema below.
    3.2. If your rule contains other metadata - generate a Cerberus schema (see below) with the metadata or review and copy existing rules that have similar metadata as your rule. If you need help, make a GH issue or make at post on discussion board if you cannot file a similar rule (use tag...)
 
-4. Describe the validation process. The simplest method is to create a copy and modify [validation-rules/MissingMandatoryColumn.md](MissingMandatoryColumn.md).
+4. Describe the validation process. The simplest method is to create a copy and modify [validation-rules/missing_mandatory_column.md](missing_mandatory_column.md).
 
 5. Add a Cerberus schema, if possible. Generating a Cerberus schema can be challenging if you have not previously created one. The ODM development team will help, but team needs a clear description and examples in your 'MyAwesomeRule.md' file. Further,
    5.1. You do not need to add Cerberus schema if your rule uses only data from the `partscsv`. The ODM development team will genereate a schema for your rule.

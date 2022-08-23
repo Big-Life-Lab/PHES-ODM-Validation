@@ -1,4 +1,4 @@
-# MissingMandatoryColumn
+# missing_mandatory_column
 
 This rule checks if the rows of each table contains its mandatory columns. For example, the `addressID` column is mandatory for the `addresses` table. The following address table row,
 
@@ -21,7 +21,7 @@ would fail validation. The following address table row would pass validation,
 
 The error report will have the following fields
 
-* **errorType**: MissingMandatoryColumn
+* **errorType**: missing_mandatory_column
 * **tableName**: The name of the table containing the missing column
 * **columnName** The name of the missing column
 * **rowNumber**: The index of the table row with the error
@@ -34,7 +34,7 @@ Example
 ```python
 [
     {
-        "errorType": "MissingMandatoryColumn",
+        "errorType": "missing_mandatory_column",
         "tableName": "addresses",
         "columnName": "addressID",
         "rowNumber": 1,
@@ -134,7 +134,7 @@ The generated cerberus object for the example above is shown below,
                     "required" True,
                     "meta": [
                         {
-                            "ruleId": "MissingMandatoryColumn",
+                            "ruleId": "missing_mandatory_column",
                             "meta": [
                                 {
                                     "partID": "addressID",
@@ -162,7 +162,7 @@ The generated cerberus object for the example above is shown below,
                     "required": True,
                     "meta": [
                         {
-                            "ruleId": "MissingMandatoryColumn",
+                            "ruleId": "missing_mandatory_column",
                             "meta": [
                                 {
                                     "partID": "contactID",
