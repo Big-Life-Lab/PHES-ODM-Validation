@@ -46,7 +46,7 @@ def _gen_report_entry(e, row) -> str:
     extra = {}
     if e.value:
         extra["invalidValue"] = e.value
-    return _gen_rule_error(rule.name, table, column, row_index, row, extra)
+    return _gen_rule_error(rule.id, table, column, row_index, row, extra)
 
 
 def generate_cerberus_schema(parts) -> pt.Schema:
