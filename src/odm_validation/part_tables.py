@@ -11,6 +11,13 @@ Schema = dict  # A Cerberus validation schema
 
 
 @dataclass(frozen=True)
+class TableData:
+    """Data for each table."""
+    attributes: Dict[str, Dataset]
+    catset_attr: Dict[str, Dataset]
+
+
+@dataclass(frozen=True)
 class PartData:
     """
     An immutable cache of all datasets derived from the 'parts' dataset.
@@ -20,9 +27,7 @@ class PartData:
     attributes: Dataset
     catset_values: Dict[str, List[str]]  # Ex: ["collection"] = ["flowPr", ...]
     catset_meta: Dict[str, list]  # meta, by catset name
-    table_catset_attr: Dict[str, Dataset]  # is_catset_attr, by tbl name
-    table_attr: Dict[str, Dataset]  # is_attr, by table name
-    table_names: List[str]
+    table_data: Dict[str, TableData]  # table-specific data, by table name
 
 
 # The following constants are not enums because they would be a pain to use.
@@ -134,14 +139,19 @@ def gen_partdata(parts) -> PartData:
     for t in table_names:
         table_catset_attr[t] = [cs for cs in catsets if cs.get(t)]
 
+    table_data = {}
+    for id in table_names:
+        table_data[id] = TableData(
+            attributes=table_attr[id],
+            catset_attr=table_catset_attr[id],
+        )
+
     return PartData(
         all_parts=parts,
         attributes=attributes,
         catset_values=catset_values,
         catset_meta=catset_meta,
-        table_attr=table_attr,
-        table_catset_attr=table_catset_attr,
-        table_names=table_names
+        table_data=table_data,
     )
 
 

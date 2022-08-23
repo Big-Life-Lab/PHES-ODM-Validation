@@ -16,48 +16,48 @@ class Rule:
 
 
 def missing_mandatory_column():
-    id = missing_mandatory_column.__name__
+    rule_id = missing_mandatory_column.__name__
     cerb_rule = ("required", True)
 
     def gen_schema(data: pt.PartData):
         schema = {}
-        for table in data.table_names:
-            for attr in data.table_attr[table]:
-                odm_rule = (pt.table_required_field(table), pt.MANDATORY)
+        for table_id in data.table_data.keys():
+            for attr in data.table_data[table_id].attributes:
+                odm_rule = (pt.table_required_field(table_id), pt.MANDATORY)
                 if attr.get(odm_rule[0], "").capitalize() != odm_rule[1]:
                     continue
                 meta = [{odm_rule[0]: odm_rule[1]}]
-                attr_schema = pt.init_attr_schema(id, cerb_rule, attr, meta)
-                table_schema = pt.init_table_schema(table, attr_schema)
+                attr_schema = pt.init_attr_schema(rule_id, cerb_rule, attr, meta)
+                table_schema = pt.init_table_schema(table_id, attr_schema)
                 utils.deep_update(table_schema, schema)
         return schema
 
     return Rule(
-        id=id,
+        id=rule_id,
         key=cerb_rule[0],
         gen_schema=gen_schema,
     )
 
 
 def invalid_category():
-    id = invalid_category.__name__
+    rule_id = invalid_category.__name__
     cerb_rule_key = "allowed"
 
     def gen_schema(data: pt.PartData):
         schema = {}
-        for table in data.table_names:
-            for cs in data.table_catset_attr[table]:
+        for table_id in data.table_data.keys():
+            for cs in data.table_data[table_id].catset_attr:
                 cs_id = cs["catSetID"]
                 values = data.catset_values[cs_id]
                 cerb_rule = (cerb_rule_key, values)
                 meta = data.catset_meta[cs_id]
-                attr_schema = pt.init_attr_schema(id, cerb_rule, cs, meta)
-                table_schema = pt.init_table_schema(table, attr_schema)
+                attr_schema = pt.init_attr_schema(rule_id, cerb_rule, cs, meta)
+                table_schema = pt.init_table_schema(table_id, attr_schema)
                 utils.deep_update(table_schema, schema)
         return schema
 
     return Rule(
-        id=id,
+        id=rule_id,
         key=cerb_rule_key,
         gen_schema=gen_schema
     )
