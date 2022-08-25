@@ -27,16 +27,37 @@ The steps to request or generate a new rule are:
 2. Add a new file at a new row at the bottom of [metadata/validation-rules-list.csv](../../metadata/validation-rules-list.csv) folder containing details about your new rule. These details should include:
 
    2.1. `ruleId`: The unique identifier for your rule
+
    2.2. `label`: A short description
+
    2.3. `description`: A long description
+
    2.4. `messageType`: Whether this rule generates an error or a warning. The valid values are `error` and `warning`
+
    2.5. `messageText`: The error message to display. Placeholders can be placed by using <> for example <table_name>
+
    2.6. `status`: Whether this rule is active. Valid values are `active` and `inactive`
+
    2.7. `firstReleased`: Version of the validation module when this rule will be added. Uses semver versioning.
+
    2.8. `added`: The date when it was created
+
    2.9. `lastUpdated`: The date when it was updated
-   2.10. `changes`: The list of changes
-   2.11. `notes`
+
+   2.10. `odmVersions`: The list of ODM versions supported by this rule. Can have one of the following values:
+   
+    * **all**: Supports all versions of the ODM
+    * **Range of supported ODM versions**: This is a semi-colon (;) list of seperated ODM versions supported by the rule. For example, **[1.0.0,1.1];[2.1,2.2);3.0**, means that the rule supports:
+
+        * ODM versions 1.0.0 to 1.1 inclusive of the endpoints
+        * ODM versions 2.1 to 2.2, exclusive of 2.2
+        * And finally ODM version 3.0
+
+    The first two items, follows the [mathematical interval notation](https://en.wikipedia.org/wiki/Interval_(mathematics))
+
+   2.11. `changes`: The list of changes
+
+   2.12. `notes`
 
 3. Identify metadata required for the rule.
 
