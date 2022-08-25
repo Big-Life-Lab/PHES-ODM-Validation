@@ -65,11 +65,3 @@ Many rules are defined in the ODM parts and sets tables. For example, the parts 
 The _odmvalidator_ is the main workhorse within the toolkit. This program code accepts a ODM data and a schema and returns a validation report. We created _odmvalidator_ as an open-source python package that can be incorporated into a full range of information systems (i.e. ArgGIS, Microsoft 365, custom laboratory management information systems or data repositories). As a python package, data can be easily validated when it is stored a range of formats (CSV, Excel, SQL database).
 
 Underdevelopment is a publicly available web application that implements the toolkit, including the odmvalidator.
-
-## Adding a new rule
-
-New validation rules can be requested by anyone ODM user. Instructions on how to add a new rule is found in [/validation-rules/README.md](validation-rules/validation-rules/README.md). The validation rules README.md is a good source of additional information about how rules work.
-
-## Contributing
-
-The PHES-ODM validation tool kit is an open source and community-driven. You can make suggestions for new validation rules or comment on existing rules on the PHES-ODM [discussion board](https://odm.discourse.group) or GitHub [Issues](https://github.com/Big-Life-Lab/PHES-ODM-Validation/issues).

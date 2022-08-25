@@ -1,4 +1,4 @@
-# InvalidCategory
+# invalid_category
 
 This rule checks if the rows of a categorical column in a table have the right values. A right value is one in the set of allowable values for the categorical column. For example, the `collection` column in the `samples` table is a categorical column whose set of allowable values or categories are `comp3h`, `comp8h`, `flowPr` etc. The following samples table row would fail validation,
 
@@ -20,28 +20,28 @@ The following samples table row would pass validation,
 
 The error report will have the following fields
 
-* **errorType**: InvalidCategory
+* **errorType**: invalid_category
 * **tableName**: The name of the table whose row has the invalid category
 * **columnName** The name of the column with the invalid category
 * **rowNumber**: The index of the table row with the error
 * **row** The row in the data that failed this validation rule
-* **invalidCategoryValue**: The invalid category value
+* **invalidValue**: The invalid category value
 * **validationRuleFields**: The ODM data dictionary rule fields violated by this row
-* **message**: Invalid category <invalidCategoryValue> found in row <rowIndex> for column <columnName> in table <tableName>
+* **message**: Invalid category <invalidValue> found in row <rowIndex> for column <columnName> in table <tableName>
 
 Example
 
 ```python
 [
     {
-        "errorType": "InvalidCategory",
+        "errorType": "invalid_category",
         "tableName": "samples",
         "columnName": "collection",
         "rowNumber": 1,
         "row": {
             "collection": "flow"
         },
-        "invalidCategoryValue": "flow",
+        "invalidValue": "flow",
         "validationRuleFields": [
             {
                 "partID": "samples",
@@ -81,7 +81,7 @@ Example
 
 All the metadata for this rule is contained in the parts sheet in the data dictionary. The metadata is used to identify the following two pieces:
 
-1. The categorical columns in a table. These are identified using the `partID`, `dataType`, and `<table_name>` columns. 
+1. The categorical columns in a table. These are identified using the `partID`, `dataType`, and `<table_name>` columns.
     * **partID**: Contains the name of a possible column
     * **<table_name>**: Whether the part is associated with a table. Look for values of **PK**, **FK**, or **header** to indicate that the part is the name of a column in the table.
     * **dataType**: A value of `categorical` is used to indicate that the part is categorical
@@ -145,7 +145,7 @@ The generated cerberus object for the example above is shown below,
                     "allowed": ["comp3h", "comp8h", "flowPr"],
                     "meta": [
                         {
-                            "ruleId": "InvalidCategory",
+                            "ruleId": "invalid_category",
                             "meta": [
                                 {
                                     "partID": "samples",
