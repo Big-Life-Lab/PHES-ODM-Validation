@@ -3,6 +3,8 @@
 from dataclasses import dataclass
 from typing import Dict, List, Set
 
+import utils
+
 
 # type aliases
 Row = dict
@@ -180,7 +182,7 @@ def init_table_schema(name, attr_schema):
     }
 
 
-def init_attr_schema(rule_id: str, cerb_rule: tuple, attr_id: str,
+def init_attr_schema(attr_id: str, rule_id: str, cerb_rule: tuple,
                      meta: List[dict] = []):
     return {
         attr_id: {
@@ -193,3 +195,9 @@ def init_attr_schema(rule_id: str, cerb_rule: tuple, attr_id: str,
             ]
         }
     }
+
+
+def update_schema(schema, table_id, attr_id, rule_id, cerb_rule, meta):
+    attr_schema = init_attr_schema(attr_id, rule_id, cerb_rule, meta)
+    table_schema = init_table_schema(table_id, attr_schema)
+    utils.deep_update(table_schema, schema)
