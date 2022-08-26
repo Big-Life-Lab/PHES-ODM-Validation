@@ -26,8 +26,10 @@ def missing_mandatory_column():
                 odm_rule = (pt.table_required_field(table_id), pt.MANDATORY)
                 if attr.get(odm_rule[0], "").capitalize() != odm_rule[1]:
                     continue
+                attr_id = pt.get_partID(attr)
                 meta = [{odm_rule[0]: odm_rule[1]}]
-                attr_schema = pt.init_attr_schema(rule_id, cerb_rule, attr, meta)
+                attr_schema = pt.init_attr_schema(rule_id, cerb_rule, attr_id,
+                                                  meta)
                 table_schema = pt.init_table_schema(table_id, attr_schema)
                 utils.deep_update(table_schema, schema)
         return schema
@@ -46,12 +48,12 @@ def invalid_category():
     def gen_schema(data: pt.PartData):
         schema = {}
         for table_id in data.table_data.keys():
-            for cs in data.table_data[table_id].catset_attr:
-                cs_id = cs["catSetID"]
-                values = data.catset_values[cs_id]
-                cerb_rule = (cerb_rule_key, values)
-                meta = data.catset_meta[cs_id]
-                attr_schema = pt.init_attr_schema(rule_id, cerb_rule, cs, meta)
+            for cs_id, cs_data in data.catset_data.items():
+                if table_id not in cs_data.tables:
+                    continue
+                cerb_rule = (cerb_rule_key, cs_data.values)
+                attr_schema = pt.init_attr_schema(rule_id, cerb_rule, cs_id,
+                                                  cs_data.meta)
                 table_schema = pt.init_table_schema(table_id, attr_schema)
                 utils.deep_update(table_schema, schema)
         return schema
