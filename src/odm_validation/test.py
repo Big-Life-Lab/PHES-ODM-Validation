@@ -1,6 +1,6 @@
 def badCase():
-  print(1)
+    print(1)
 
+    
 def justOneNewline():
-  pass
-
+    pass
