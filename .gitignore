@@ -1,4 +1,10 @@
 __pycache__
+.venv/
 
 # Mac Files
 .DS_Store
+
+# R Files
+.Rproj.user
+.Rhistory
+*.Rproj
