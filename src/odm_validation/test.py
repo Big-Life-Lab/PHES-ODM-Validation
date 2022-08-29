@@ -4,6 +4,3 @@ def badCase():
 def justOneNewline():
   pass
 
-
-def doesntcompile:
-  pass
