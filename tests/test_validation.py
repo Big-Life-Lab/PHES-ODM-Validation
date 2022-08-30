@@ -121,7 +121,7 @@ class TestValiation(unittest.TestCase):
         self.assertIsNotNone(errors)
         self.assertEqual(len(errors), 1)
         e = errors[0]
-        self.assertEqual(e["errorType"], "Missing mandatory column")
+        self.assertEqual(e["errorType"], "missing_mandatory_column")
         self.assertEqual(e["columnName"], "addressID")
 
     def test_invalid_category(self):
@@ -131,9 +131,9 @@ class TestValiation(unittest.TestCase):
         self.assertIsNotNone(errors)
         self.assertEqual(len(errors), 1)
         e = errors[0]
-        self.assertEqual(e["errorType"], "Invalid category")
+        self.assertEqual(e["errorType"], "invalid_category")
         self.assertEqual(e["columnName"], "collection")
-        self.assertEqual(e["value"], "flow")
+        self.assertEqual(e["invalidValue"], "flow")
 
 
 if __name__ == '__main__':

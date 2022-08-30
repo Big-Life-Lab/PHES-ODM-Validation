@@ -1,13 +1,29 @@
 """Part-table definitions."""
 
 from dataclasses import dataclass
-from typing import Dict, List
+from typing import Dict, List, Set
+
+import utils
 
 
 # type aliases
 Row = dict
 Dataset = List[Row]
 Schema = dict  # A Cerberus validation schema
+
+
+@dataclass(frozen=True)
+class CatsetData:
+    """Data for each category set."""
+    meta: list
+    tables: Set[str]  # tables in which this catset is used
+    values: List[str]  # Ex: ["collection"] = ["flowPr", ...]
+
+
+@dataclass(frozen=True)
+class TableData:
+    """Data for each table."""
+    attributes: Dict[str, Dataset]
 
 
 @dataclass(frozen=True)
@@ -18,11 +34,8 @@ class PartData:
     """
     all_parts: Dataset
     attributes: Dataset
-    catset_values: Dict[str, List[str]]  # Ex: ["collection"] = ["flowPr", ...]
-    catset_meta: Dict[str, list]  # meta, by catset name
-    table_catset_attr: Dict[str, Dataset]  # is_catset_attr, by tbl name
-    table_attr: Dict[str, Dataset]  # is_attr, by table name
-    table_names: List[str]
+    catset_data: Dict[str, CatsetData]  # category-set data, by attr name
+    table_data: Dict[str, TableData]  # table data, by table name
 
 
 # The following constants are not enums because they would be a pain to use.
@@ -108,6 +121,14 @@ def get_catset_meta(row):
     return {key: row[key] for key in fields}
 
 
+def get_catset_tables(row: Row, table_names: List[str]) -> List[str]:
+    result = []
+    for table in table_names:
+        if row.get(table):
+            result.append(table)
+    return result
+
+
 def gen_partdata(parts) -> PartData:
     # `parts` are stripped before processing. This is important for performance
     # and simplicity of implementation
@@ -120,28 +141,32 @@ def gen_partdata(parts) -> PartData:
     categories = list(filter(is_cat, parts))
     catsets = list(filter(is_catset_attr, parts))
 
-    catset_values = {}
-    catset_meta = {}
+    catset_data = {}
     for cs in catsets:
-        id = cs[CATSET_ID]
-        cats = [c for c in categories if c[CATSET_ID] == id]
-        values = list(map(get_partID, cats))
-        catset_values[id] = values
+        attr_id = cs[PART_ID]
+        cs_id = cs[CATSET_ID]
+        cats = [c for c in categories if c[CATSET_ID] == cs_id]
         used_rows = [cs] + cats
-        catset_meta[id] = list(map(get_catset_meta, used_rows))
+        meta = list(map(get_catset_meta, used_rows))
+        tables = set(get_catset_tables(cs, table_names))
+        values = list(map(get_partID, cats))
+        catset_data[attr_id] = CatsetData(
+            meta=meta,
+            tables=tables,
+            values=values,
+        )
 
-    table_catset_attr = {}
-    for t in table_names:
-        table_catset_attr[t] = [cs for cs in catsets if cs.get(t)]
+    table_data = {}
+    for id in table_names:
+        table_data[id] = TableData(
+            attributes=table_attr[id],
+        )
 
     return PartData(
         all_parts=parts,
         attributes=attributes,
-        catset_values=catset_values,
-        catset_meta=catset_meta,
-        table_attr=table_attr,
-        table_catset_attr=table_catset_attr,
-        table_names=table_names
+        catset_data=catset_data,
+        table_data=table_data,
     )
 
 
@@ -157,9 +182,8 @@ def init_table_schema(name, attr_schema):
     }
 
 
-def init_attr_schema(rule_id: str, cerb_rule: tuple, attr: Row,
+def init_attr_schema(attr_id: str, rule_id: str, cerb_rule: tuple,
                      meta: List[dict] = []):
-    attr_id = get_partID(attr)
     return {
         attr_id: {
             cerb_rule[0]: cerb_rule[1],
@@ -171,3 +195,9 @@ def init_attr_schema(rule_id: str, cerb_rule: tuple, attr: Row,
             ]
         }
     }
+
+
+def update_schema(schema, table_id, attr_id, rule_id, cerb_rule, meta):
+    attr_schema = init_attr_schema(attr_id, rule_id, cerb_rule, meta)
+    table_schema = init_table_schema(table_id, attr_schema)
+    utils.deep_update(table_schema, schema)
