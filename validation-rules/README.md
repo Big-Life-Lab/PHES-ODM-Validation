@@ -39,11 +39,9 @@ The steps to request or generate a new rule are:
 
    2.7. `firstReleased`: Version of the validation module when this rule will be added. Uses semver versioning.
 
-   2.8. `added`: The date when it was created
+   2.8. `lastUpdated`: The date when it was updated
 
-   2.9. `lastUpdated`: The date when it was updated
-
-   2.10. `odmVersions`: The list of ODM versions supported by this rule. Can have one of the following values:
+   2.9. `odmVersions`: The list of ODM versions supported by this rule. Can have one of the following values:
    
     * **all**: Supports all versions of the ODM
     * **Range of supported ODM versions**: This is a semi-colon (;) list of seperated ODM versions supported by the rule. For example, **[1.0.0,1.1];[2.1,2.2);3.0**, means that the rule supports:
@@ -54,9 +52,9 @@ The steps to request or generate a new rule are:
 
     The first two items, follows the [mathematical interval notation](https://en.wikipedia.org/wiki/Interval_(mathematics))
 
-   2.11. `changes`: The list of changes
+   2.10. `changes`: The list of changes
 
-   2.12. `notes`
+   2.11. `notes`
 
 3. Identify metadata required for the rule.
 

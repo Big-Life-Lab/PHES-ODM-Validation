@@ -19,7 +19,7 @@ The validation rules CSV sheet encodes metadata for all the active and inactive 
 
 When a new validation rule is added, we need to decide which versions of the ODM the rule is compatible with. The [ODMVersion](../validation-rules//README.md/#adding-a-new-rule) field in the CSV file outlines which ODM versions the rule supported. 
 
-The addition of a new rule should be followed by a major version update of the validation package as well as an update to all supported validation schema files. The version of the validation schema files remains the same.
+The addition of a new rule should be followed by a minor version update of the validation package as well as an update to all supported validation schema files. The version of the validation schema files remains the same.
 
 If a validation rule is updated, the version of the new release depends on if it is a breaking change or not. For example, changing the ID of a rule should result in a minor version change.
 
