@@ -1,9 +1,6 @@
 from typing import List
 
 import csv
-import requests
-
-from xlsx2csv import Xlsx2csv
 
 
 def deep_update(src: dict, dst: dict):
@@ -26,12 +23,6 @@ def deep_update(src: dict, dst: dict):
                 dst_list += src_list
 
 
-def convertXlsx2Csv(xlsxFile, sheetName, csvFile: str):
-    wb = Xlsx2csv(xlsxFile, outputencoding="utf-8")
-    ws = wb.getSheetIdByName(sheetName)
-    wb.convert(csvFile, ws)
-
-
 def importCsvFile(fileName: str) -> List[dict]:
     """Returns a list of dicts"""
     result = []
@@ -39,10 +30,3 @@ def importCsvFile(fileName: str) -> List[dict]:
         for row in csv.DictReader(f):
             result.append(row)
     return result
-
-
-def downloadFile(url, dst: str):
-    print(f"downloading {dst}...", flush=True)
-    r = requests.get(url)
-    with open(dst, "wb") as f:
-        f.write(r.content)
