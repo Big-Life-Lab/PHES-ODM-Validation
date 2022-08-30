@@ -1,6 +1,7 @@
 from typing import List
 
 import csv
+import yaml
 
 
 def deep_update(src: dict, dst: dict):
@@ -30,3 +31,13 @@ def import_dataset(fileName: str) -> List[dict]:
         for row in csv.DictReader(f):
             result.append(row)
     return result
+
+
+def import_schema(path: str) -> dict:
+    with open(path, "r") as f:
+        return yaml.load(f.read(), Loader=yaml.Loader)
+
+
+def export_schema(schema: dict, path: str):
+    with open(path, "w") as f:
+        return f.write(yaml.dump(schema))
