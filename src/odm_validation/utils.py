@@ -23,8 +23,8 @@ def deep_update(src: dict, dst: dict):
                 dst_list += src_list
 
 
-def importCsvFile(fileName: str) -> List[dict]:
-    """Returns a list of dicts"""
+def import_dataset(fileName: str) -> List[dict]:
+    """File must be CSV. Returns a list of dicts"""
     result = []
     with open(fileName, newline='') as f:
         for row in csv.DictReader(f):
