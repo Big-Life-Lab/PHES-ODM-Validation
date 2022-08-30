@@ -187,3 +187,54 @@ The data dictionary columns that should be included in the `meta` field are:
 * partID
 * <table_name>
 * <table_name>Required
+
+## Version 1
+
+We need three pieces of information to make the cerberus schema for version 1:
+
+1. The columns that are part of the version 1 table
+2. The version 2 equivalent for each column
+2. The version 2 equivalent for the table
+
+Details for the above points can be found [here](./README.md/#version-1)
+
+We then check if the version 2 equivalent column is mandatory in the version 2 equivalent table, if it is, then it should be mandatory in version 1. For example,
+
+```python
+{
+    "parts": [
+        {
+            "partID": "instruments",
+            "partType": "table",
+            "version1Table": "Instrument",
+            "version1Location": "tables",
+            "version1Variable": "",
+            "instrumentsRequired": "NA"
+        },
+        {
+            "partID": "model",
+            "partType": "attribute",
+            "version1Table": "Instrument",
+            "version1Location": "variables",
+            "version1Variable": "model",
+            "instrumentsRequired": "Required"
+        }
+    ]
+}
+```
+
+The `model` partID has a version 1 equivalent which is also named `model`. The version 1 column is present in the `Instrument` table in version 1. The version 2 column is mandatory in the `instruments` table, which is the version 2 equivalent for the `Instrument` table in version 1. Hence, the `model` column is also mandatory in version 1. 
+
+The `meta` field for version 1 should include the parts row with the `Required` keyword. For example, the `meta` field for the example would be,
+
+```python
+{
+    "partID": "model",
+    "partType": "attribute",
+    "version1Table": "Instrument",
+    "version1Location": "variables",
+    "version1Variable": "model",
+    "instrumentsRequired": "Required"
+}
+```
+
