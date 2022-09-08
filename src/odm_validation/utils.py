@@ -1,6 +1,7 @@
 from typing import List
 
 import csv
+import yaml
 
 
 def deep_update(src: dict, dst: dict):
@@ -23,10 +24,20 @@ def deep_update(src: dict, dst: dict):
                 dst_list += src_list
 
 
-def importCsvFile(fileName: str) -> List[dict]:
-    """Returns a list of dicts"""
+def import_dataset(fileName: str) -> List[dict]:
+    """File must be CSV. Returns a list of dicts"""
     result = []
     with open(fileName, newline='') as f:
         for row in csv.DictReader(f):
             result.append(row)
     return result
+
+
+def import_schema(path: str) -> dict:
+    with open(path, "r") as f:
+        return yaml.load(f.read(), Loader=yaml.Loader)
+
+
+def export_schema(schema: dict, path: str):
+    with open(path, "w") as f:
+        return f.write(yaml.dump(schema))
