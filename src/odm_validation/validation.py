@@ -24,7 +24,7 @@ def _error_msg(rule, table, column, row_num):
     return f"{rule} in {table}.{column} in row number {row_num}."
 
 
-def _gen_rule_error(rule, table, column, row_index, row, extra):
+def _gen_rule_error(rule, table, column, row_index, row, value):
     row_num = row_index + 1
     error = {
         "errorType": rule,
@@ -33,8 +33,8 @@ def _gen_rule_error(rule, table, column, row_index, row, extra):
         "rowNumber": row_num,
         "row": row,
         "message": _error_msg(rule, table, column, row_num),
+        "invalidValue": value,
     }
-    error.update(extra)
     return error
 
 
@@ -43,10 +43,7 @@ def _gen_report_entry(e, row) -> str:
     rule = _KEY_RULES.get(rule_key)
     assert rule, f"missing rule for constraint '{rule_key}'"
     (table, row_index, column) = e.document_path
-    extra = {}
-    if e.value:
-        extra["invalidValue"] = e.value
-    return _gen_rule_error(rule.id, table, column, row_index, row, extra)
+    return _gen_rule_error(rule.id, table, column, row_index, row, e.value)
 
 
 def generate_cerberus_schema(parts) -> pt.Schema:
