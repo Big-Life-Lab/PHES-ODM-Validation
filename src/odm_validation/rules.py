@@ -8,15 +8,25 @@ import part_tables as pt
 
 @dataclass(frozen=True)
 class Rule:
-    """An immutable validation rule."""
+    """An immutable validation rule.
+
+    `error_template` may use the following placeholders (in curly brackets):
+    - column_id
+    - row_num
+    - rule_name
+    - table_id
+    - value
+    """
     id: str
     key: str  # The Cerberus error key identifying the Rule
+    error_template: str  # The template used to build the error message
     gen_schema: Callable[pt.PartData, pt.Schema]  # Cerberus schema gen. func.
 
 
 def missing_mandatory_column():
     rule_id = missing_mandatory_column.__name__
     cerb_rule = ("required", True)
+    err = "{rule_name} {column_id} in table {table_id} in row number {row_num}"
 
     def gen_schema(data: pt.PartData):
         schema = {}
@@ -34,6 +44,7 @@ def missing_mandatory_column():
     return Rule(
         id=rule_id,
         key=cerb_rule[0],
+        error_template=err,
         gen_schema=gen_schema,
     )
 
@@ -41,6 +52,8 @@ def missing_mandatory_column():
 def invalid_category():
     rule_id = invalid_category.__name__
     cerb_rule_key = "allowed"
+    err = ("{rule_name} {value} found in row {row_num} "
+           "for column {column_id} in table {table_id}")
 
     def gen_schema(data: pt.PartData):
         schema = {}
@@ -56,6 +69,7 @@ def invalid_category():
     return Rule(
         id=rule_id,
         key=cerb_rule_key,
+        error_template=err,
         gen_schema=gen_schema
     )
 

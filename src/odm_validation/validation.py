@@ -20,19 +20,29 @@ ErrorList = List[str]
 _KEY_RULES = {r.key: r for r in ruleset}
 
 
-def _error_msg(rule, table, column, row_num):
-    return f"{rule} in {table}.{column} in row number {row_num}."
+def _rule_name(rule_id):
+    return rule_id.replace("_", " ").capitalize()
+
+
+def _error_msg(rule, table_id, column_id, row_num, value):
+    return rule.error_template.format(
+        rule_name=_rule_name(rule.id),
+        table_id=table_id,
+        column_id=column_id,
+        row_num=row_num,
+        value=value,
+    )
 
 
 def _gen_rule_error(rule, table, column, row_index, row, value):
     row_num = row_index + 1
     error = {
-        "errorType": rule,
+        "errorType": rule.id,
         "tableName": table,
         "columnName": column,
         "rowNumber": row_num,
         "row": row,
-        "message": _error_msg(rule, table, column, row_num),
+        "message": _error_msg(rule, table, column, row_num, value),
         "invalidValue": value,
     }
     return error
@@ -43,7 +53,7 @@ def _gen_report_entry(e, row) -> str:
     rule = _KEY_RULES.get(rule_key)
     assert rule, f"missing rule for constraint '{rule_key}'"
     (table, row_index, column) = e.document_path
-    return _gen_rule_error(rule.id, table, column, row_index, row, e.value)
+    return _gen_rule_error(rule, table, column, row_index, row, e.value)
 
 
 def generate_cerberus_schema(parts) -> pt.Schema:
