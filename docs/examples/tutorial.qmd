@@ -28,7 +28,7 @@ import logging
 import sys
 
 # specify the package path
-sys.path.append("../src")
+sys.path.append("../../src")
 
 # prevent warnings
 logging.disable(logging.WARNING)
@@ -43,7 +43,7 @@ import odm_validation.utils as utils
 from odm_validation.validation import generate_validation_schema, validate_data
 
 # our asset directory
-ASSET_DIR = "../assets/"
+ASSET_DIR = "../../assets/"
 ```
 
 
