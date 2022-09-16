@@ -17,7 +17,7 @@ class CatsetData:
     """Data for each category set."""
     meta: list
     tables: Set[str]  # tables in which this catset is used
-    values: List[str]  # Ex: ["collection"] = ["flowPr", ...]
+    values: List[str]  # Ex: ['collection'] = ['flowPr', ...]
 
 
 @dataclass(frozen=True)
@@ -44,22 +44,22 @@ class PartData:
 # Ex: str(PartType.ATTRIBUTE.value) vs ATTRIBUTE
 
 # field constants
-CATSET_ID = "catSetID"
-PART_ID = "partID"
-PART_TYPE = "partType"
+CATSET_ID = 'catSetID'
+PART_ID = 'partID'
+PART_TYPE = 'partType'
 
 # partType constants
-ATTRIBUTE = "attribute"
-CATEGORY = "category"
-TABLE = "table"
+ATTRIBUTE = 'attribute'
+CATEGORY = 'category'
+TABLE = 'table'
 
 # other value constants
-MANDATORY = "Mandatory"
-NA = {"", "NA", "Not applicable"}
+MANDATORY = 'Mandatory'
+NA = {'', 'NA', 'Not applicable'}
 
 
 def table_required_field(table_name):
-    return table_name + "Required"
+    return table_name + 'Required'
 
 
 def has_catset(p):
@@ -173,10 +173,10 @@ def gen_partdata(parts) -> PartData:
 def init_table_schema(name, attr_schema):
     return {
         name: {
-            "type": "list",  # each table has a list of rows
-            "schema": {
-                "type": "dict",  # each row is a dict
-                "schema": attr_schema,
+            'type': 'list',  # each table has a list of rows
+            'schema': {
+                'type': 'dict',  # each row is a dict
+                'schema': attr_schema,
             },
         }
     }
@@ -187,10 +187,10 @@ def init_attr_schema(attr_id: str, rule_id: str, cerb_rule: tuple,
     return {
         attr_id: {
             cerb_rule[0]: cerb_rule[1],
-            "meta": [
+            'meta': [
                 {
-                    "ruleID": rule_id,
-                    "meta": [{PART_ID: attr_id}] + meta,
+                    'ruleID': rule_id,
+                    'meta': [{PART_ID: attr_id}] + meta,
                 }
             ]
         }
