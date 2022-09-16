@@ -38,7 +38,7 @@ import odm_validation.utils as utils
 from odm_validation.validation import generate_cerberus_schema, validate_data
 
 # our asset directory
-ASSET_DIR = "../assets/v2"
+ASSET_DIR = "../assets/"
 ```
 
 
@@ -52,7 +52,7 @@ In this example we'll validate a table of samples with the default schema. The
 sample-data in a dictionary with the table-name as the key.
 
 ```{python}
-schema = utils.import_schema(join(ASSET_DIR, "schema.yml"))
+schema = utils.import_schema(join(ASSET_DIR, "validation-schemas/schema-v2.yml"))
 samples = utils.import_dataset("samples.csv")
 data = {"samples": samples}
 errors = validate_data(schema, data)
