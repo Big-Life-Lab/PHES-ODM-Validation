@@ -1,0 +1,2 @@
+CerberusSchema = dict
+Schema = dict

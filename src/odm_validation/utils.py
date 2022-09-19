@@ -3,6 +3,8 @@ from typing import List
 import csv
 import yaml
 
+from schemas import Schema
+
 
 def deep_update(src: dict, dst: dict):
     """
@@ -33,11 +35,11 @@ def import_dataset(fileName: str) -> List[dict]:
     return result
 
 
-def import_schema(path: str) -> dict:
+def import_schema(path: str) -> Schema:
     with open(path, "r") as f:
         return yaml.load(f.read(), Loader=yaml.Loader)
 
 
-def export_schema(schema: dict, path: str):
+def export_schema(schema: Schema, path: str):
     with open(path, "w") as f:
         return f.write(yaml.dump(schema))
