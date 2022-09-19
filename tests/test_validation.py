@@ -4,7 +4,7 @@ import unittest
 import context
 
 from part_tables import Schema
-from validation import generate_cerberus_schema, validate_data
+from validation import generate_validation_schema, validate_data
 
 context.unused_import_dummy = 1
 
@@ -108,7 +108,7 @@ invalid_category_fail = {
 class TestValiation(unittest.TestCase):
     def setUp(self):
         self.pp = pprint.PrettyPrinter(width=80, compact=True)
-        self.schema = generate_cerberus_schema(parts)
+        self.schema = generate_validation_schema(parts)
 
     def test_schema(self):
         self.assertIsInstance(self.schema, Schema)

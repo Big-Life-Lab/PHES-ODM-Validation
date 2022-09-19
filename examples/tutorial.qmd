@@ -35,7 +35,7 @@ from os.path import join  # for constructing file paths
 
 # odm-validation
 import odm_validation.utils as utils
-from odm_validation.validation import generate_cerberus_schema, validate_data
+from odm_validation.validation import generate_validation_schema, validate_data
 
 # our asset directory
 ASSET_DIR = "../assets/"
@@ -95,7 +95,7 @@ The resulting schema can then be used for validation.
 
 ```{python}
 parts = utils.import_dataset(join(ASSET_DIR, "parts.csv"))
-schema = generate_cerberus_schema(parts)
+schema = generate_validation_schema(parts)
 ```
 
 The resulting schema can also be exported to a YAML file for future use.
