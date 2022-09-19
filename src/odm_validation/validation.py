@@ -10,6 +10,7 @@ from cerberus import Validator
 import utils
 import part_tables as pt
 from rules import ruleset
+from schemas import CerberusSchema, Schema
 
 
 # types
@@ -56,24 +57,27 @@ def _gen_report_entry(e, row) -> str:
     return _gen_rule_error(rule, table, column, row_index, row, e.value)
 
 
-def generate_validation_schema(parts) -> pt.Schema:
-    schema = {}
+def generate_validation_schema(parts, odm_version: str) -> Schema:
+    cerb_schema = {}
     data = pt.gen_partdata(parts)
     for r in ruleset:
         s = r.gen_schema(data)
         assert s is not None
-        utils.deep_update(s, schema)
-    return schema
+        utils.deep_update(s, cerb_schema)
+    return {
+        "schemaVersion": odm_version,
+        "schema": cerb_schema,
+    }
 
 
-def validate_data(schema, data) -> Optional[ErrorList]:
+def validate_data(schema: Schema, data) -> Optional[ErrorList]:
     """
     Validates data with schema, using Cerberus.
     Returns list of errors or None on success.
     """
     # Unknown fields must be allowed because we're only generating a schema
     # for the requirements, not the optional data.
-    v = Validator(schema)
+    v = Validator(schema["schema"])
     v.allow_unknown = True
     if v.validate(data):
         return
