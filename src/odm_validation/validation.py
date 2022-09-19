@@ -56,7 +56,7 @@ def _gen_report_entry(e, row) -> str:
     return _gen_rule_error(rule, table, column, row_index, row, e.value)
 
 
-def generate_cerberus_schema(parts) -> pt.Schema:
+def generate_validation_schema(parts) -> pt.Schema:
     schema = {}
     data = pt.gen_partdata(parts)
     for r in ruleset:

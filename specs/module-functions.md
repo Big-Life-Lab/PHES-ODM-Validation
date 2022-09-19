@@ -39,7 +39,7 @@ Validates an ODM dataset.
         }
         ```
 
-2. `validation_rules`: The rules to validate the data against. This is a [cerberus](https://docs.python-cerberus.org/en/stable/) schema object which should ideally be generated using the `generate_cerberus_schema` function. 
+2. `validation_rules`: The rules to validate the data against. This is a [cerberus](https://docs.python-cerberus.org/en/stable/) schema object which should ideally be generated using the `generate_validation_schema` function.
 
     `type`: A Python dictionary with the following fields
 
@@ -91,9 +91,9 @@ When validation fails it returns a dictionary containing an error report list an
     * `validationPackageVersion`: string consisting of the version of the validation package used
     * `errors`: A list of Python dictionaries describing each error. For more information refer to the files in the [validation-rules](../validation-rules/) folder
 
-# generate_cerberus_schema
+# generate_validation_schema
 
-Generates the cerberus schema containing the validation rules to be used with the `validate_data` function. 
+Generates the cerberus schema containing the validation rules to be used with the `validate_data` function.
 
 ## Arguments
 
@@ -147,7 +147,7 @@ Generates the cerberus schema containing the validation rules to be used with th
 
 ## Return
 
-Return a dictionary that is a valid cerberus schema object. In addition, values from the ODM data dictionary will also be added to the `meta` field for debugging purposes. 
+Return a dictionary that contains a valid cerberus schema object. In addition, values from the ODM data dictionary will also be added to the `meta` field for debugging purposes.
 
 Example
 
