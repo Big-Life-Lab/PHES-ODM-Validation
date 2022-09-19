@@ -130,30 +130,33 @@ Generates the cerberus schema containing the validation rules to be used with th
 
 ## Return
 
-Return a dictionary that contains a valid cerberus schema object. In addition, values from the ODM data dictionary will also be added to the `meta` field for debugging purposes.
+Return a dictionary that contains a valid cerberus schema object, as well as the odm-version it's based on. Values from the ODM data dictionary will also be added to the `meta` field for debugging purposes.
 
 Example
 
 ```python
 {
-    "addresses": {
-        "type": "list",
-        "schema": {
-            "type": "dict",
-            "schema": {
-                "addressID": {
-                    "required": True,
-                    "meta": {
-                        "partID": "addressID",
-                        "addresses": "pK",
-                        "addressesRequired": "mandatory"
-                    }
-                }
-            }
-        },
-        "meta": {
-            "partID": "addresses"
-        }
+    "schemaVersion": "1.2.3",
+    "schema": {
+	"addresses": {
+	    "type": "list",
+	    "schema": {
+		"type": "dict",
+		"schema": {
+		    "addressID": {
+			"required": True,
+			"meta": {
+			    "partID": "addressID",
+			    "addresses": "pK",
+			    "addressesRequired": "mandatory"
+			}
+		    }
+		}
+	    },
+	    "meta": {
+		"partID": "addresses"
+	    }
+	}
     }
 }
 ```
