@@ -51,23 +51,27 @@ def _coerce(version: str) -> Tuple[Version, Optional[str]]:
     return ver, rest
 
 
-def parse_version(version: str) -> Version:
+def parse_version(version: str, id='') -> Version:
+    """Returns 1.0.0 when `version` is empty."""
+    if version is None or version == '':
+        warning(f'corrected version 0.0.0 --> 1.0.0 for "{id}"')
+        return Version(major=1)
     try:
         return Version.parse(version)
     except ValueError:
         (result, _) = _coerce(version)
-        warning(f'corrected version {version} -> {result}')
+        warning(f'corrected version {version} --> {result} for "{id}"')
         return result
 
 
-def validate_version(row, version):
+def validate_version(row, version, id=''):
     # v < first --> False
     # first < v < last --> True
     # last <= v --> active
 
-    first: Version = parse_version(row['firstReleased'])
-    last: Version = parse_version(row['lastUpdated'])
-    active: bool = row['status'] == 'active'
+    first: Version = parse_version(row.get('firstReleased'), id)
+    last: Version = parse_version(row.get('lastUpdated'), id)
+    active: bool = row.get('status') == 'active'
 
     v = parse_version(version)
     if v.compare(first) < 0:

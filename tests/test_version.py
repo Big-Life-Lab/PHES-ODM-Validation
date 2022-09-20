@@ -16,6 +16,9 @@ def get_row(first: str, last: str, active: bool):
 
 
 class TestParseVersion(unittest.TestCase):
+    def test_default(self):
+        self.assertEqual(parse_version(''), '1.0.0')
+
     def test_incomplete(self):
         self.assertEqual(parse_version('1'), '1.0.0')
         self.assertEqual(parse_version('2.0'), '2.0.0')
