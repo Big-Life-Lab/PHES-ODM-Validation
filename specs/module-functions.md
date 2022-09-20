@@ -184,7 +184,7 @@ Example
 
 The cerberus schema for a part should be added only if it is active for the provided `version` argument. To see whether a part is valid for a version, the `status`, `firstReleased`, and `lastUpdated` fields are used.
 
-* The `status` field can take one of two values, `active` or `deprecitate`. `active` says that a part is currently being actively used while `deprecitate` says the opposite.
+* The `status` field can take one of two values, `active` or `depreciated`. `active` says that a part is currently being actively used while `depreciated` says the opposite.
 * The `firstReleased` and `lastUpdated` fields has the version of the ODM when the part was first added and last changed respectively.
 * The `changes` field is used to describe the changes made from one version to another.
 
@@ -212,7 +212,7 @@ Example of two parts from dictionary version 2.
             "partType": "category",
             "addresses": "NA",
             "addressesRequired": "NA",
-            "status": "deprecitate",
+            "status": "depreciated",
             "changes": "Use grab with collection number (collectNum) = 3",
             "firstReleased": "1",
             "lastUpdated": "2"
@@ -222,7 +222,7 @@ Example of two parts from dictionary version 2.
 ```
 
 * The addresses part is currently active (status = 'active') and should only be included in version 2 since it was first released (firstReleased = '2') then.
-* The `comp3` part was deprecitated in version 2 (status = 'deprecitate' and lastUpdated = '2') and should only be included in version 1 (firstReleased = '1')
+* The `comp3` part was depreciated in version 2 (status = 'depreciated' and lastUpdated = '2') and should only be included in version 1 (firstReleased = '1')
 
 Version 2 of the dictionary renamed certain part pieces, for example, the `WWMeasures` table was renamed to `measures` in version 2. To be backcompatible with version 1, columns were added to the parts list to document their version 1 equivalents. These columns are documented where necessary in the spec.
 
