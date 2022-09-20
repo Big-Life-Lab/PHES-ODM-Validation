@@ -3,8 +3,8 @@ The `_coerce` function is taken from:
 https://python-semver.readthedocs.io/en/3.0.0-dev.3/usage.html?highlight=coerce#dealing-with-invalid-versions
 """
 
-from logging import warning
 import re
+from logging import warning
 from semver import Version
 from typing import Optional, Tuple
 
@@ -51,26 +51,30 @@ def _coerce(version: str) -> Tuple[Version, Optional[str]]:
     return ver, rest
 
 
-def parse_version(version: str, id='') -> Version:
+def parse_version(version: str, id='', label='') -> Version:
     """Returns 1.0.0 when `version` is empty."""
     if version is None or version == '':
-        warning(f'corrected version 0.0.0 --> 1.0.0 for "{id}"')
+        warning(f'missing version defaulted to 1.0.0 for "{id}.{label}"')
         return Version(major=1)
     try:
         return Version.parse(version)
     except ValueError:
         (result, _) = _coerce(version)
-        warning(f'corrected version {version} --> {result} for "{id}"')
+        warning(f'corrected version {version} --> {result} for "{id}.{label}"')
         return result
 
 
-def validate_version(row, version, id=''):
+def parse_row_version(row, field):
+    return parse_version(row.get(field), row.get('partID'), field)
+
+
+def validate_version(row, version):
     # v < first --> False
     # first < v < last --> True
     # last <= v --> active
 
-    first: Version = parse_version(row.get('firstReleased'), id)
-    last: Version = parse_version(row.get('lastUpdated'), id)
+    first: Version = parse_row_version(row, 'firstReleased')
+    last: Version = parse_row_version(row, 'lastUpdated')
     active: bool = row.get('status') == 'active'
 
     v = parse_version(version)
