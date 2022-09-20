@@ -1,9 +1,11 @@
 """Part-table definitions."""
 
 from dataclasses import dataclass
+from logging import debug
 from typing import Dict, List, Set
 
 import utils
+from versions import validate_version
 
 
 # type aliases
@@ -108,9 +110,13 @@ def get_table_attr(table_names, attributes) -> dict:
     return result
 
 
-def strip(parts):
+def strip(parts: dict, version: str):
+    """Removes NA fields and filters by `version`."""
     result = []
     for row in parts:
+        if not validate_version(row, version):
+            debug(f'skipping incompatible part: {get_partID(row)}')
+            continue
         result.append({k: v for k, v in row.items() if v not in NA})
     return result
 
@@ -129,10 +135,10 @@ def get_catset_tables(row: Row, table_names: List[str]) -> List[str]:
     return result
 
 
-def gen_partdata(parts) -> PartData:
+def gen_partdata(parts, version) -> PartData:
     # `parts` are stripped before processing. This is important for performance
     # and simplicity of implementation
-    parts = strip(parts)
+    parts = strip(parts, version)
 
     tables = list(filter(is_table, parts))
     table_names = list(map(get_partID, tables))
