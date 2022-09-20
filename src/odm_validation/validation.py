@@ -71,7 +71,7 @@ def _gen_error_entry(e, row) -> str:
 
 def generate_validation_schema(parts, odm_version=ODM_LATEST) -> Schema:
     cerb_schema = {}
-    data = pt.gen_partdata(parts)
+    data = pt.gen_partdata(parts, odm_version)
     for r in ruleset:
         s = r.gen_schema(data)
         assert s is not None
