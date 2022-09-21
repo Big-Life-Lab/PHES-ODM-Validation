@@ -25,15 +25,15 @@ class Rule:
 
 def missing_mandatory_column():
     rule_id = missing_mandatory_column.__name__
-    cerb_rule = ("required", True)
-    err = "{rule_name} {column_id} in table {table_id} in row number {row_num}"
+    cerb_rule = ('required', True)
+    err = '{rule_name} {column_id} in table {table_id} in row number {row_num}'
 
     def gen_schema(data: pt.PartData):
         schema = {}
         for table_id in data.table_data.keys():
             for attr in data.table_data[table_id].attributes:
                 odm_rule = (pt.table_required_field(table_id), pt.MANDATORY)
-                if attr.get(odm_rule[0], "").capitalize() != odm_rule[1]:
+                if attr.get(odm_rule[0], '').capitalize() != odm_rule[1]:
                     continue
                 attr_id = pt.get_partID(attr)
                 meta = [{odm_rule[0]: odm_rule[1]}]
@@ -51,9 +51,9 @@ def missing_mandatory_column():
 
 def invalid_category():
     rule_id = invalid_category.__name__
-    cerb_rule_key = "allowed"
-    err = ("{rule_name} {value} found in row {row_num} "
-           "for column {column_id} in table {table_id}")
+    cerb_rule_key = 'allowed'
+    err = ('{rule_name} {value} found in row {row_num} '
+           'for column {column_id} in table {table_id}')
 
     def gen_schema(data: pt.PartData):
         schema = {}
