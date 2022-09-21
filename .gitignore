@@ -1,5 +1,7 @@
-__pycache__
 .venv/
+__pycache__
+
+*.log
 
 # Mac Files
 .DS_Store
