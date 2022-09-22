@@ -1,114 +1,58 @@
-import pprint
+import os
 import unittest
+from copy import deepcopy
+from os.path import join
 
 import context
 
+import utils
 from part_tables import Schema
-from validation import generate_validation_schema, validate_data
+from validation import validate_data
 
 context.unused_import_dummy = 1
-
-parts = [
-    # missing_mandatory_column parts
-    {
-        'partID': 'addresses',
-        'partType': 'table',
-    },
-    {
-        'partID': 'contacts',
-        'partType': 'table',
-    },
-    {
-        'partID': 'addressID',
-        'partType': 'attribute',
-        'addresses': 'PK',
-        'addressesRequired': 'mandatory',
-    },
-    {
-        'partID': 'addL2',
-        'partType': 'attribute',
-        'addresses': 'header',
-        'addressesRequired': 'optional',
-    },
-    {
-        'partID': 'contactID',
-        'partType': 'attribute',
-        'contacts': 'PK',
-    },
-
-    # invalid_category parts
-    {
-        'partID': 'samples',
-        'partType': 'table',
-    },
-    {
-        'partID': 'collection',
-        'partType': 'attribute',
-        'samples': 'header',
-        'dataType': 'categorical',
-        'catSetID': 'collectCat'
-    },
-    {
-        'partID': 'comp3h',
-        'partType': 'category',
-        'samples': 'input',
-        'dataType': 'varchar',
-        'catSetID': 'collectCat'
-    },
-    {
-        'partID': 'comp8h',
-        'partType': 'category',
-        'samples': 'input',
-        'dataType': 'varchar',
-        'catSetID': 'collectCat'
-    },
-    {
-        'partID': 'flowPr',
-        'partType': 'category',
-        'samples': 'input',
-        'dataType': 'varchar',
-        'catSetID': 'collectCat'
-    }
-]
 
 missing_mandatory_column_pass = {
     'addresses': [
         {
-            'addressID': '1',
-            'addL2': '123 Doe Street'
+            'addID': '1',
+            'addL1': 'my street',
+            'city': 'my city',
+            'country': 'my country',
+            'dataID': '1',
+            'stateProvReg': 'x',
         }
     ]
 }
 
-missing_mandatory_column_fail = {
-    'addresses': [
-        {
-            'addL2': '123 Doe Street'
-        }
-    ]
-}
+missing_mandatory_column_fail = deepcopy(missing_mandatory_column_pass)
+missing_mandatory_column_fail['addresses'][0].pop('addID')
 
 invalid_category_pass = {
     'samples': [
         {
-            'collection': 'flowPr'
+            'coll': 'flowPr',
+            'cDT': 'x',
+            'saMaterial': 'afu',
+            'sampID': '1',
+            'siteID': '1',
+            'parSampID': '1',
+            'dataID': '1',
+            'contID': '1',
+            'collPer': 'x',
+            'collNum': 'x',
         }
     ]
 }
 
-invalid_category_fail = {
-    'samples': [
-        {
-            'collection': 'flow'
-        }
-    ]
-}
+invalid_category_fail = deepcopy(invalid_category_pass)
+invalid_category_fail['samples'][0]['coll'] = 'flow'
 
 
 class TestValiation(unittest.TestCase):
     def setUp(self):
-        self.pp = pprint.PrettyPrinter(width=80, compact=True)
-        self.schema = generate_validation_schema(parts)
+        dir = os.path.dirname(os.path.realpath(__file__))
+        path = join(dir, '../assets/validation-schemas/schema-v2.0.0-rc.1.yml')
+        self.schema = utils.import_schema(path)
 
     def test_schema(self):
         self.assertIsInstance(self.schema, Schema)
@@ -124,7 +68,7 @@ class TestValiation(unittest.TestCase):
         self.assertEqual(len(report.errors), 1)
         e = report.errors[0]
         self.assertEqual(e['errorType'], 'missing_mandatory_column')
-        self.assertEqual(e['columnName'], 'addressID')
+        self.assertEqual(e['columnName'], 'addID')
 
     def test_invalid_category(self):
         report = validate_data(self.schema, invalid_category_pass)
@@ -135,7 +79,7 @@ class TestValiation(unittest.TestCase):
         self.assertEqual(len(report.errors), 1)
         e = report.errors[0]
         self.assertEqual(e['errorType'], 'invalid_category')
-        self.assertEqual(e['columnName'], 'collection')
+        self.assertEqual(e['columnName'], 'coll')
         self.assertEqual(e['invalidValue'], 'flow')
 
 
