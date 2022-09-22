@@ -115,22 +115,25 @@ class TestValiation(unittest.TestCase):
         self.assertNotEqual(self.schema, {})
 
     def test_missing_mandatory_column(self):
-        errors = validate_data(self.schema, missing_mandatory_column_pass)
-        self.assertIsNone(errors)
-        errors = validate_data(self.schema, missing_mandatory_column_fail)
-        self.assertIsNotNone(errors)
-        self.assertEqual(len(errors), 1)
-        e = errors[0]
+        report = validate_data(self.schema, missing_mandatory_column_pass)
+        self.assertTrue(report.valid())
+        self.assertEqual(len(report.errors), 0)
+
+        report = validate_data(self.schema, missing_mandatory_column_fail)
+        self.assertFalse(report.valid())
+        self.assertEqual(len(report.errors), 1)
+        e = report.errors[0]
         self.assertEqual(e['errorType'], 'missing_mandatory_column')
         self.assertEqual(e['columnName'], 'addressID')
 
     def test_invalid_category(self):
-        errors = validate_data(self.schema, invalid_category_pass)
-        self.assertIsNone(errors)
-        errors = validate_data(self.schema, invalid_category_fail)
-        self.assertIsNotNone(errors)
-        self.assertEqual(len(errors), 1)
-        e = errors[0]
+        report = validate_data(self.schema, invalid_category_pass)
+        self.assertTrue(report.valid())
+
+        report = validate_data(self.schema, invalid_category_fail)
+        self.assertFalse(report.valid())
+        self.assertEqual(len(report.errors), 1)
+        e = report.errors[0]
         self.assertEqual(e['errorType'], 'invalid_category')
         self.assertEqual(e['columnName'], 'collection')
         self.assertEqual(e['invalidValue'], 'flow')
