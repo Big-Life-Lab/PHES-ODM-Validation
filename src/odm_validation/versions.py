@@ -3,10 +3,26 @@ The `_coerce` function is taken from:
 https://python-semver.readthedocs.io/en/3.0.0-dev.3/usage.html?highlight=coerce#dealing-with-invalid-versions
 """
 
+import os
 import re
+import toml
+from importlib import metadata
 from logging import warning
+from os import path
 from semver import Version
 from typing import Optional, Tuple
+
+
+def _get_package_version():
+    try:
+        return metadata.version("odm_validation")
+    except metadata.PackageNotFoundError:
+        dir = os.path.abspath(os.path.dirname(__file__))
+        proj = path.join(dir, '../../pyproject.toml')
+        return toml.load(proj)['project']['version']
+
+
+__version__ = _get_package_version()
 
 BASEVERSION = re.compile(
     r"""[vV]?
