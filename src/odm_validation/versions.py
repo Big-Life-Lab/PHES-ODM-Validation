@@ -94,7 +94,7 @@ def validate_version(row, version):
     # last <= v --> active
 
     first: Version = parse_row_version(row, 'firstReleased')
-    last: Version = parse_row_version(row, 'lastUpdated')
+    last: Version = parse_row_version(row, 'lastUpdated', default=first)
     active: bool = row.get('status') == 'active'
 
     v = parse_version(version)
