@@ -3,7 +3,12 @@ This is the main module of the package. It contains functions for schema
 generation and data validation.
 """
 
+import os
+import re
+import sys
 from dataclasses import dataclass
+from os.path import join, normpath
+from pathlib import Path
 from typing import List
 
 from cerberus import Validator
@@ -12,7 +17,7 @@ import utils
 import part_tables as pt
 from rules import ruleset
 from schemas import Schema
-from versions import __version__
+from versions import __version__, parse_version
 
 
 @dataclass(frozen=True)
@@ -26,8 +31,25 @@ class ValidationReport:
         return len(self.errors) == 0
 
 
+def _get_latest_odm_version() -> str:
+    file_path = normpath(os.path.realpath(__file__))
+    root_dir = join(os.path.dirname(file_path), '../..')
+    dict_dir = join(root_dir, 'assets/dictionary')
+    versions = []
+    for dir_path in Path(dict_dir).glob('v*'):
+        dir_name = os.path.basename(dir_path)
+        if not (match := re.search('v(.+)', dir_name)):
+            continue
+        v = parse_version(match.group(1))
+        versions.append(str(v))
+    if len(versions) == 0:
+        sys.exit("failed to get latest ODM version")
+    versions.sort()
+    return versions[-1]
+
+
 # public globals
-ODM_LATEST = "2.0.0"
+ODM_LATEST = _get_latest_odm_version()
 
 # private globals
 _KEY_RULES = {r.key: r for r in ruleset}
