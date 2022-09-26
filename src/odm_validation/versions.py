@@ -1,8 +1,3 @@
-"""
-The `_coerce` function is taken from:
-https://python-semver.readthedocs.io/en/3.0.0-dev.3/usage.html?highlight=coerce#dealing-with-invalid-versions
-"""
-
 import os
 import re
 import toml
@@ -52,6 +47,9 @@ def _coerce(version: str) -> Tuple[Version, Optional[str]]:
         if it's not a version) and the rest of the string which doesn't
         belong to a basic version.
     :rtype: tuple(:class:`Version` | None, str)
+
+    This function is taken from:
+    https://python-semver.readthedocs.io/en/3.0.0-dev.3/usage.html?highlight=coerce#dealing-with-invalid-versions
     """
 
     match = BASEVERSION.search(version)
