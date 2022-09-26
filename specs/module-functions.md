@@ -161,17 +161,25 @@ Example
                 "type": "dict",
                 "schema": {
                     "addressID": {
-                        "required": True,
-                        "meta": {
-                            "partID": "addressID",
-                            "addresses": "pK",
-                            "addressesRequired": "mandatory"
-                        }
-                    }
+                        "required" True,
+                        "meta": [
+                            {
+                                "ruleId": "missing_mandatory_column",
+                                "meta": [
+                                    {
+                                        "partID": "addressID",
+                                        "addresses": "PK",
+                                        "addressesRequired": "mandatory",
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                },
+                "meta": {
+                    "partID": "addresses",
+                    "partType": "table"
                 }
-            },
-            "meta": {
-                "partID": "addresses"
             }
         }
     }
