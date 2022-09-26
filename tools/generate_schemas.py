@@ -14,6 +14,7 @@ import odm_validation.utils as utils  # noqa:E402
 from odm_validation.validation import generate_validation_schema  # noqa:E402
 from odm_validation.versions import parse_version  # noqa:E402
 
+PARTS_FILENAME = 'parts.csv'
 
 # setup default logger (to file)
 log_dir = normpath(join(root_dir, 'logs'))
@@ -44,17 +45,17 @@ def main():
 
     info(f'looking for parts in {dataset_dir}')
     p = Path(dataset_dir)
-    sources = list(p.glob('v*/parts.csv'))
+    sources = list(p.glob(f'v*/{PARTS_FILENAME}'))
     if len(sources) == 0:
         warning('no files found')
     info(f'writing schemas to {schema_dir}')
 
     for parts_file in sources:
         parts_filename = os.path.basename(parts_file)
-        if not (match := re.search('.+/v(.+)/parts.csv', str(parts_file))):
+        version_regex = f'.+/v(.+)/{PARTS_FILENAME}'
+        if not (match := re.search(version_regex, str(parts_file))):
             continue
-        v = match.group(1)
-        version = str(parse_version(v))
+        version = str(parse_version(match.group(1)))
         schema_filename = f'schema-v{version}.yml'
         info(f'converting {parts_filename} --> {schema_filename}')
         parts = utils.import_dataset(parts_file)
