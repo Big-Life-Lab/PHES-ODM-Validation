@@ -155,25 +155,25 @@ Example
 {
     "schemaVersion": "1.2.3",
     "schema": {
-	"addresses": {
-	    "type": "list",
-	    "schema": {
-		"type": "dict",
-		"schema": {
-		    "addressID": {
-			"required": True,
-			"meta": {
-			    "partID": "addressID",
-			    "addresses": "pK",
-			    "addressesRequired": "mandatory"
-			}
-		    }
-		}
-	    },
-	    "meta": {
-		"partID": "addresses"
-	    }
-	}
+        "addresses": {
+            "type": "list",
+            "schema": {
+                "type": "dict",
+                "schema": {
+                    "addressID": {
+                        "required": True,
+                        "meta": {
+                            "partID": "addressID",
+                            "addresses": "pK",
+                            "addressesRequired": "mandatory"
+                        }
+                    }
+                }
+            },
+            "meta": {
+                "partID": "addresses"
+            }
+        }
     }
 }
 ```
