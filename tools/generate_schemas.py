@@ -6,14 +6,16 @@ import re
 import sys
 from os.path import join, normpath
 from pathlib import Path
-sys.path.append(join(os.path.dirname(os.path.realpath(__file__)), '../src'))
+
+root_dir = join(os.path.dirname(os.path.realpath(__file__)), '..')
+sys.path.append(join(root_dir, 'src'))
 
 import odm_validation.utils as utils  # noqa:E402
 from odm_validation.validation import generate_validation_schema  # noqa:E402
 from odm_validation.versions import parse_version  # noqa:E402
 
-
-LOG_FILE = 'generate_schemas.log'
+log_dir = join(root_dir, 'logs')
+log_file = join(log_dir, 'generate_schemas.log')
 
 
 def setup_logging():
@@ -22,8 +24,9 @@ def setup_logging():
     logger = logging.getLogger('my_logger')
     logger.setLevel(logging.DEBUG)
 
-    print(f'logging to {LOG_FILE}')
-    fh = logging.FileHandler(LOG_FILE)
+    print(f'logging to {log_file}')
+    os.makedirs(log_dir, exist_ok=True)
+    fh = logging.FileHandler(log_file)
     fh.setLevel(logging.DEBUG)
     logger.addHandler(fh)
 
