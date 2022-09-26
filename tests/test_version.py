@@ -1,7 +1,8 @@
 import unittest
 
-import context
+from semver import Version
 
+import context
 from versions import parse_version, validate_version
 
 context.unused_import_dummy = 1
@@ -17,7 +18,10 @@ def get_row(first: str, last: str, active: bool):
 
 class TestParseVersion(unittest.TestCase):
     def test_default(self):
-        self.assertEqual(parse_version(''), '1.0.0')
+        default = Version(major=123)
+        self.assertEqual(parse_version('', default=default), default)
+        with self.assertRaises(ValueError):
+            parse_version('')
 
     def test_incomplete(self):
         self.assertEqual(parse_version('1'), '1.0.0')

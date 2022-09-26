@@ -67,21 +67,25 @@ def _coerce(version: str) -> Tuple[Version, Optional[str]]:
     return ver, rest
 
 
-def parse_version(version: str, id='', label='') -> Version:
+def parse_version(version: str, id='', label='', default: Version = None
+                  ) -> Version:
     """Returns 1.0.0 when `version` is empty."""
+    origin = '' if id == '' and label == '' else f'for "{id}.{label}"'
     if version is None or version == '':
-        warning(f'missing version defaulted to 1.0.0 for "{id}.{label}"')
-        return Version(major=1)
+        if not default:
+            raise ValueError(f'missing version {origin}')
+        warning(f'missing version defaulted to "{str(default)}" {origin}')
+        return default
     try:
         return Version.parse(version)
     except ValueError:
         (result, _) = _coerce(version)
-        warning(f'corrected version {version} --> {result} for "{id}.{label}"')
+        warning(f'corrected version {version} --> {result} {origin}')
         return result
 
 
-def parse_row_version(row, field):
-    return parse_version(row.get(field), row.get('partID'), field)
+def parse_row_version(row, field, default=None):
+    return parse_version(row.get(field), row.get('partID'), field, default)
 
 
 def validate_version(row, version):
