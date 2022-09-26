@@ -8,8 +8,9 @@ from os.path import join, normpath
 from pathlib import Path
 sys.path.append(join(os.path.dirname(os.path.realpath(__file__)), '../src'))
 
-from odm_validation.validation import generate_validation_schema  # noqa:E402
 import odm_validation.utils as utils  # noqa:E402
+from odm_validation.validation import generate_validation_schema  # noqa:E402
+from odm_validation.versions import parse_version  # noqa:E402
 
 
 LOG_FILE = 'generate_schemas.log'
@@ -33,20 +34,21 @@ def main():
     dir = os.path.dirname(os.path.realpath(__file__))
     asset_dir = join(dir, '../assets')
     schema_dir = normpath(join(asset_dir, 'validation-schemas'))
-    dataset_dir = normpath(join(asset_dir, 'datasets'))
+    dataset_dir = normpath(join(asset_dir, 'dictionary'))
 
     print(f'looking for parts in {dataset_dir}')
     p = Path(dataset_dir)
-    sources = list(p.glob('parts-v*.csv'))
+    sources = list(p.glob('v*/parts.csv'))
     if len(sources) == 0:
         print('no files found')
     print(f'writing schemas to {schema_dir}')
 
     for parts_file in sources:
         parts_filename = os.path.basename(parts_file)
-        if not (match := re.search('parts-v(.+).csv', parts_filename)):
+        if not (match := re.search('.+/v(.+)/parts.csv', str(parts_file))):
             continue
-        version = match.group(1)
+        v = match.group(1)
+        version = str(parse_version(v))
         schema_filename = f'schema-v{version}.yml'
         print(f'converting {parts_filename} --> {schema_filename}')
         parts = utils.import_dataset(parts_file)

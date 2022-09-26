@@ -120,7 +120,7 @@ an argument to `generate_validation_schema` must match the version of the parts
 table.
 
 ```{python}
-parts_file = join(ASSET_DIR, "datasets/parts-v2.0.0-rc.1.csv")
+parts_file = join(ASSET_DIR, "dictionary/v2/parts.csv")
 parts = utils.import_dataset(parts_file)
 schema = generate_validation_schema(parts, '2.0.0-rc.1')
 ```
