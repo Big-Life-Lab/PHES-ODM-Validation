@@ -204,37 +204,133 @@ We then check if the version 2 equivalent column is mandatory in the version 2 e
 {
     "parts": [
         {
-            "partID": "instruments",
+            "partID": "addresses",
             "partType": "table",
-            "version1Table": "Instrument",
+            "addresses": "NA",
+            "addressesRequired": "NA",
+            "contacts": "NA",
+            "contactsRequired": "NA",
             "version1Location": "tables",
-            "version1Variable": "",
-            "instrumentsRequired": "NA"
+            "verion1Table": "Address",
+            "version1Variable": "NA"
         },
         {
-            "partID": "model",
+            "partID": "contacts",
+            "partType": "table",
+            "addresses": "NA",
+            "addressesTable": "NA",
+            "contacts": "NA",
+            "contactsRequired": "NA",
+            "version1Location": "tables",
+            "verion1Table": "Contact",
+            "version1Variable": "NA"
+        }
+        {
+            "partID": "addressID",
             "partType": "attribute",
-            "version1Table": "Instrument",
+            "addresses": "PK",
+            "addressesRequired": "mandatory",
+            "contacts": "NA",
+            "contactsRequired": "NA",
             "version1Location": "variables",
-            "version1Variable": "model",
-            "instrumentsRequired": "Required"
+            "verion1Table": "Address",
+            "version1Variable": "AddressId"
+        },
+        {
+            "partID": "addL2",
+            "partType": "attribute",
+            "addresses": "header",
+            "addressesRequired": "optional",
+            "contacts": "NA",
+            "contactsRequired": "NA",
+            "version1Location": "variables",
+            "verion1Table": "Address",
+            "version1Variable": "addressLineTwo"
+        },
+        {
+            "partID": "contactID",
+            "partType": "attribute",
+            "addresses": "NA",
+            "addressesRequired": "NA",
+            "contacts": "PK",
+            "contactsRequired": "NA",
+            "version1Location": "variables",
+            "verion1Table": "Contact",
+            "version1Variable": "ContactId"
         }
     ]
 }
 ```
 
-The `model` partID has a version 1 equivalent which is also named `model`. The version 1 column is present in the `Instrument` table in version 1. The version 2 column is mandatory in the `instruments` table, which is the version 2 equivalent for the `Instrument` table in version 1. Hence, the `model` column is also mandatory in version 1. 
-
-The `meta` field for version 1 should include the parts row with the `Required` keyword. For example, the `meta` field for the example would be,
+The corresponding version 1 cerberus schema is shown below,
 
 ```python
 {
-    "partID": "model",
-    "partType": "attribute",
-    "version1Table": "Instrument",
-    "version1Location": "variables",
-    "version1Variable": "model",
-    "instrumentsRequired": "Required"
+    "Address": {
+        "type": "list",
+        "schema": {
+            "type": "dict",
+            "schema": {
+                "AddressId": {
+                    "required" True,
+                    "meta": [
+                        {
+                            "ruleId": "missing_mandatory_column",
+                            "meta": [
+                                {
+                                    "partID": "addressID",
+                                    "addressesRequired": "mandatory",
+                                    "version1Location": "variables",
+                                    "verion1Table": "Address",
+                                    "version1Variable": "AddressId"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                "addL2": {}
+            },
+            "meta": {
+                "partID": "addresses",
+                "partType": "table",
+                "version1Location": "tables",
+                "verion1Table": "Address"
+            }
+        }
+    },
+    "Contact": {
+        "type": "list",
+        "schema": {
+            "type": "dict",
+            "schema": {
+                "ContactId": {
+                    "required": True,
+                    "meta": [
+                        {
+                            "ruleId": "missing_mandatory_column",
+                            "meta": [
+                                {
+                                    "partID": "contactID",
+                                    "contactsRequired": "mandatory",
+                                    "version1Location": "variables",
+                                    "verion1Table": "Contact",
+                                    "version1Variable": "ContactId"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            }
+        },
+        "meta": {
+            "partID": "contacts",
+            "partType": "table",
+            "version1Location": "tables",
+            "verion1Table": "Contact"
+        }
+    }
 }
 ```
+
+The `meta` field for version 1 validation schemas for this rule should include the rows for version 2 along with the `version1Location`, `version1Table`, and `version1Variable` column.
 
