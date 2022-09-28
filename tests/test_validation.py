@@ -25,7 +25,7 @@ schema_v1 = {
             "schema": {
                 "type": "dict",
                 "schema": {
-                    "AddressId": {
+                    "addressID": {
                         "required": True,
                     },
                     "addL2": {}
@@ -37,7 +37,7 @@ schema_v1 = {
             "schema": {
                 "type": "dict",
                 "schema": {
-                    "ContactId": {
+                    "contactID": {
                         "required": True,
                     }
                 }
@@ -48,9 +48,9 @@ schema_v1 = {
             "schema": {
                 "type": "dict",
                 "schema": {
-                    "Collection": {
+                    "collection": {
                         "type": "string",
-                        "allowed": ["Comp3h", "Comp8h", "FlowPR", "flowRatePr"],
+                        "allowed": ["comp3h", "comp8h", "flowPR", "flowRatePr"],
                     }
                 }
             }
@@ -61,8 +61,8 @@ schema_v1 = {
 missing_mandatory_column_pass_v1 = {
     'Address': [
         {
-            'AddressId': '1',
-            'AddL2': 'my street',
+            'addressID': '1',
+            'addL2': 'my street',
         }
     ]
 }
@@ -81,7 +81,7 @@ missing_mandatory_column_pass_v2 = {
 }
 
 missing_mandatory_column_fail_v1 = deepcopy(missing_mandatory_column_pass_v1)
-missing_mandatory_column_fail_v1['Address'][0].pop('AddressId')
+missing_mandatory_column_fail_v1['Address'][0].pop('addressID')
 
 missing_mandatory_column_fail_v2 = deepcopy(missing_mandatory_column_pass_v2)
 missing_mandatory_column_fail_v2['addresses'][0].pop('addID')
@@ -89,7 +89,7 @@ missing_mandatory_column_fail_v2['addresses'][0].pop('addID')
 invalid_category_pass_v1 = {
     'Sample': [
         {
-            'Collection': 'FlowPR',
+            'collection': 'flowPR',
         }
     ]
 }
@@ -112,7 +112,7 @@ invalid_category_pass_v2 = {
 }
 
 invalid_category_fail_v1 = deepcopy(invalid_category_pass_v1)
-invalid_category_fail_v1['Sample'][0]['Collection'] = 'flow'
+invalid_category_fail_v1['Sample'][0]['collection'] = 'flow'
 
 invalid_category_fail_v2 = deepcopy(invalid_category_pass_v2)
 invalid_category_fail_v2['samples'][0]['coll'] = 'flow'
@@ -143,7 +143,7 @@ class TestValiation(unittest.TestCase):
         self.assertEqual(e['columnName'], column)
 
     def test_missing_mandatory_column_v1(self):
-        self.missing_mandatory_column_impl(self.schemas['v1'], 'AddressId',
+        self.missing_mandatory_column_impl(self.schemas['v1'], 'addressID',
                                            missing_mandatory_column_pass_v1,
                                            missing_mandatory_column_fail_v1)
 
@@ -165,8 +165,8 @@ class TestValiation(unittest.TestCase):
         self.assertEqual(e['columnName'], column)
         self.assertEqual(e['invalidValue'], value)
 
-    def test_invalid_category_v1(self):
-        self.invalid_category_impl(self.schemas['v1'], 'Collection', 'flow',
+    def test_invalid_catecory_v1(self):
+        self.invalid_category_impl(self.schemas['v1'], 'collection', 'flow',
                                    invalid_category_pass_v1,
                                    invalid_category_fail_v1)
 
