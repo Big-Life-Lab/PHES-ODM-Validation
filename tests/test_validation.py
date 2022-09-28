@@ -27,29 +27,9 @@ schema_v1 = {
                 "schema": {
                     "AddressId": {
                         "required": True,
-                        "meta": [
-                            {
-                                "ruleId": "missing_mandatory_column",
-                                "meta": [
-                                    {
-                                        "partID": "addressID",
-                                        "addressesRequired": "mandatory",
-                                        "version1Location": "variables",
-                                        "verion1Table": "Address",
-                                        "version1Variable": "AddressId"
-                                    }
-                                ]
-                            }
-                        ]
                     },
                     "addL2": {}
                 },
-                "meta": {
-                    "partID": "addresses",
-                    "partType": "table",
-                    "version1Location": "tables",
-                    "verion1Table": "Address"
-                }
             }
         },
         "Contact": {
@@ -59,29 +39,9 @@ schema_v1 = {
                 "schema": {
                     "ContactId": {
                         "required": True,
-                        "meta": [
-                            {
-                                "ruleId": "missing_mandatory_column",
-                                "meta": [
-                                    {
-                                        "partID": "contactID",
-                                        "contactsRequired": "mandatory",
-                                        "version1Location": "variables",
-                                        "verion1Table": "Contact",
-                                        "version1Variable": "ContactId"
-                                    }
-                                ]
-                            }
-                        ]
                     }
                 }
             },
-            "meta": {
-                "partID": "contacts",
-                "partType": "table",
-                "version1Location": "tables",
-                "verion1Table": "Contact"
-            }
         },
         "Sample": {
             "type": "list",
@@ -91,49 +51,6 @@ schema_v1 = {
                     "Collection": {
                         "type": "string",
                         "allowed": ["Comp3h", "Comp8h", "FlowPR", "flowRatePr"],
-                        "meta": [
-                            {
-                                "ruleId": "invalid_category",
-                                "meta": [
-                                    {
-                                        "partID": "collection",
-                                        "samples": "header",
-                                        "dataType": "categorical",
-                                        "catSetID": "collectCat",
-                                        "version1Location": "variables",
-                                        "version1Table": "Sample",
-                                        "version1Variable": "Collection"
-                                    },
-                                    {
-                                        "partID": "comp3h",
-                                        "partType": "category",
-                                        "catSetID": "collectCat",
-                                        "version1Location": "variableCategories",
-                                        "version1Table": "Sample",
-                                        "version1Variable": "Collection",
-                                        "version1Category": "Comp3h"
-                                    },
-                                    {
-                                        "partID": "comp8h",
-                                        "partType": "category",
-                                        "catSetID": "collectCat",
-                                        "version1Location": "variableCategories",
-                                        "version1Table": "Sample",
-                                        "version1Variable": "Collection",
-                                        "version1Category": "Comp8h"
-                                    },
-                                    {
-                                        "partID": "flowPr",
-                                        "partType": "category",
-                                        "catSetID": "collectCat",
-                                        "version1Location": "variableCategories",
-                                        "version1Table": "Sample",
-                                        "version1Variable": "Collection",
-                                        "version1Category": "FlowPR; flowRatePr"
-                                    }
-                                ]
-                            }
-                        ]
                     }
                 }
             }
