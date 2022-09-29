@@ -118,7 +118,7 @@ invalid_category_fail_v2 = deepcopy(invalid_category_pass_v2)
 invalid_category_fail_v2['samples'][0]['coll'] = 'flow'
 
 
-class TestValiation(unittest.TestCase):
+class TestValidateData(unittest.TestCase):
     def setUp(self):
         # # the info log from validate_data shows current schema version
         # logging.getLogger().level = logging.INFO
