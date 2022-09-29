@@ -67,7 +67,6 @@ def _coerce(version: str) -> Tuple[Version, Optional[str]]:
 
 def parse_version(version: str, id='', label='', default: Version = None
                   ) -> Version:
-    """Returns 1.0.0 when `version` is empty."""
     origin = '' if id == '' and label == '' else f'for "{id}.{label}"'
     if version is None or version == '':
         if not default:
