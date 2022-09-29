@@ -93,13 +93,14 @@ def _gen_error_entry(e, row) -> str:
 
 def generate_validation_schema(parts, schema_version=ODM_LATEST) -> Schema:
     cerb_schema = {}
-    data = pt.gen_partdata(parts, schema_version)
+    version = parse_version(schema_version)
+    data = pt.gen_partdata(parts, version)
     for r in ruleset:
         s = r.gen_schema(data)
         assert s is not None
         utils.deep_update(s, cerb_schema)
     return {
-        "schemaVersion": schema_version,
+        "schemaVersion": str(version),
         "schema": cerb_schema,
     }
 
