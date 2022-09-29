@@ -1,7 +1,8 @@
 """Part-table definitions."""
 
 from dataclasses import dataclass
-from logging import debug
+from logging import debug, error
+from semver import Version
 from typing import Dict, List, Set
 
 import utils
@@ -110,7 +111,7 @@ def get_table_attr(table_names, attributes) -> dict:
     return result
 
 
-def strip(parts: dict, version: str):
+def strip(parts: Dataset, version: str):
     """Removes NA fields and filters by `version`."""
     result = []
     for row in parts:
@@ -118,6 +119,62 @@ def strip(parts: dict, version: str):
             debug(f'skipping incompatible part: {get_partID(row)}')
             continue
         result.append({k: v for k, v in row.items() if v not in NA})
+    return result
+
+
+V1_FIELD_PREFIX = 'version1'
+
+
+def _get_part_table_id(part: dict) -> str:
+    req = list(filter(lambda k: k.endswith('Required'), part.keys()))[0]
+    return req[:req.find('Required')]
+
+
+# print(_get_part_table_id({'addressesRequired': 'mandatory'}))
+# quit()
+
+
+def replace_id(p: dict, new_id: str) -> dict:
+    p['partID'] = new_id
+
+
+def replace_table(p: dict, table_v2: str, table_v1: str) -> dict:
+    p[table_v1] = p.pop(table_v2)
+    p[table_required_field(table_v1)] = p.pop(table_required_field(table_v2))
+
+
+def transform_v2_to_v1(parts: Dataset) -> Dataset:
+    """Transforms v2 parts to v1, based on `version1*` fields.
+
+    Should be called after `strip`.
+    """
+    result = []
+    for p0 in parts:
+        id_v1 = p0.get('version1Variable')
+        kind_v1 = p0.get('version1Location')
+        table_v1 = p0.get('version1Table')
+
+        all_v1 = kind_v1 and table_v1 and id_v1
+        any_v1 = kind_v1 or table_v1 or id_v1
+        if not all_v1:
+            if any_v1:
+                id = get_partID(p0)
+                error(f'missing some `version1*` fields in part {id}')
+            p1 = p0
+            continue
+
+        # TODO
+        if kind_v1 != 'variable':
+            error(f'version1Location "{kind_v1}" is not implemented yet')
+            p1 = p0
+            continue
+
+        p1 = p0.copy()
+        table_v2 = _get_part_table_id(p0)
+        replace_id(p1, id_v1)
+        replace_table(p1, table_v2, table_v1)
+
+        result.append(p1)
     return result
 
 
@@ -135,10 +192,13 @@ def get_catset_tables(row: Row, table_names: List[str]) -> List[str]:
     return result
 
 
-def gen_partdata(parts, version) -> PartData:
+def gen_partdata(parts: Dataset, version: Version) -> PartData:
+    # `parts` are assumed to be from ODM v2.
     # `parts` are stripped before processing. This is important for performance
-    # and simplicity of implementation
+    # and simplicity of implementation.
     parts = strip(parts, version)
+    if version.major == 1:
+        parts = transform_v2_to_v1(parts)
 
     tables = list(filter(is_table, parts))
     table_names = list(map(get_partID, tables))
