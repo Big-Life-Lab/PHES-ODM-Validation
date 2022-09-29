@@ -92,8 +92,11 @@ def validate_version(row, version):
     # v < first --> False
     # first < v < last --> True
     # last <= v --> active
+    #
+    # TODO: remove default for `firstReleased` when parts-v2 is complete
 
-    first: Version = parse_row_version(row, 'firstReleased')
+    v1 = Version(major=1)
+    first: Version = parse_row_version(row, 'firstReleased', default=v1)
     last: Version = parse_row_version(row, 'lastUpdated', default=first)
     active: bool = row.get('status') == 'active'
 
