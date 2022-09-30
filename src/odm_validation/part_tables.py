@@ -111,7 +111,7 @@ def get_table_attr(table_names, attributes) -> dict:
     return result
 
 
-def strip(parts: Dataset, version: str):
+def strip(parts: Dataset, version: Version):
     """Removes NA fields and filters by `version`."""
     result = []
     for row in parts:

@@ -88,7 +88,7 @@ def parse_row_version(row, field, default=None):
     return parse_version(row.get(field), row.get('partID'), field, default)
 
 
-def validate_version(row, version):
+def validate_version(row, version: Version):
     # v < first --> False
     # first < v < last --> True
     # last <= v --> active
@@ -100,9 +100,8 @@ def validate_version(row, version):
     last: Version = parse_row_version(row, 'lastUpdated', default=first)
     active: bool = row.get('status') == 'active'
 
-    v = parse_version(version)
-    if v.compare(first) < 0:
+    if version.compare(first) < 0:
         return False
-    if v.compare(last) < 0:
+    if version.compare(last) < 0:
         return True
     return active
