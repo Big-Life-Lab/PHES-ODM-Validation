@@ -109,17 +109,19 @@ def parse_row_version(row, field, default=None):
     return parse_version(row.get(field), row.get('partID'), field, default)
 
 
-def is_compatible(row, version: Version):
+def is_compatible(part: dict, version: Version) -> bool:
     # TODO: remove default for `firstReleased` when parts-v2 is complete
+    row = part
     v1 = Version(major=1)
-    first: Version = parse_row_version(row, 'firstReleased', default=v1)
-    last: Version = parse_row_version(row, 'lastUpdated', default=first)
+    first = parse_row_version(row, 'firstReleased', default=v1)
+    last = parse_row_version(row, 'lastUpdated', default=first)
     active: bool = row.get('status') == 'active'
 
     # not (v < first) and ((v < last) or active)
-    if version.compare(first) < 0:
+    v = version
+    if v.compare(first) < 0:
         return False
-    if version.compare(last) < 0:
+    if v.compare(last) < 0:
         return True
     return active
 
