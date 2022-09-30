@@ -88,7 +88,7 @@ def parse_row_version(row, field, default=None):
     return parse_version(row.get(field), row.get('partID'), field, default)
 
 
-def validate_version(row, version: Version):
+def is_compatible(row, version: Version):
     # v < first --> False
     # first < v < last --> True
     # last <= v --> active

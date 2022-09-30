@@ -6,7 +6,7 @@ from semver import Version
 from typing import Dict, List, Set
 
 import utils
-from versions import validate_version
+from versions import is_compatible
 
 
 # type aliases
@@ -115,7 +115,7 @@ def strip(parts: Dataset, version: Version):
     """Removes NA fields and filters by `version`."""
     result = []
     for row in parts:
-        if not validate_version(row, version):
+        if not is_compatible(row, version):
             debug(f'skipping incompatible part: {get_partID(row)}')
             continue
         result.append({k: v for k, v in row.items() if v not in NA})
