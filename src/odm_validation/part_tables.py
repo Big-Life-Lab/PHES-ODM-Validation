@@ -6,7 +6,7 @@ from semver import Version
 from typing import Dict, List, Set
 
 import utils
-from versions import is_compatible
+from versions import get_mapping, is_compatible, parse_version, MapKind
 
 
 # type aliases
@@ -114,11 +114,12 @@ def get_table_attr(table_names, attributes) -> dict:
 def strip(parts: Dataset, version: Version):
     """Removes NA fields and filters by `version`."""
     result = []
-    for row in parts:
-        if not is_compatible(row, version):
-            debug(f'skipping incompatible part: {get_partID(row)}')
+    for sparse_row in parts:
+        row = {k: v for k, v in sparse_row.items() if v not in NA}
+        if not (get_mapping(row, version) or is_compatible(row, version)):
+            print(f'skipping incompatible part: {get_partID(row)}')
             continue
-        result.append({k: v for k, v in row.items() if v not in NA})
+        result.append(row)
     return result
 
 
@@ -126,21 +127,26 @@ V1_FIELD_PREFIX = 'version1'
 
 
 def _get_part_table_id(part: dict) -> str:
-    req = list(filter(lambda k: k.endswith('Required'), part.keys()))[0]
-    return req[:req.find('Required')]
+    if is_table(part):
+        return get_partID(part)
+    else:
+        req = list(filter(lambda k: k.endswith('Required'), part.keys()))[0]
+        return req[:req.find('Required')]
 
 
 # print(_get_part_table_id({'addressesRequired': 'mandatory'}))
 # quit()
 
 
-def replace_id(p: dict, new_id: str) -> dict:
-    p['partID'] = new_id
+def replace_id(p: dict, id: str) -> dict:
+    p[PART_ID] = id
 
 
-def replace_table(p: dict, table_v2: str, table_v1: str) -> dict:
-    p[table_v1] = p.pop(table_v2)
-    p[table_required_field(table_v1)] = p.pop(table_required_field(table_v2))
+def replace_table_id(part: dict, id0: str, id1: str) -> dict:
+    assert not is_table(part), 'use `replace_id` instead'
+    part[id1] = part.pop(id0)
+    part[table_required_field(id1)] = \
+        part.pop(table_required_field(id0))
 
 
 def transform_v2_to_v1(parts: Dataset) -> Dataset:
@@ -149,30 +155,21 @@ def transform_v2_to_v1(parts: Dataset) -> Dataset:
     Should be called after `strip`.
     """
     result = []
+    version = Version(major=1)
     for p0 in parts:
-        id_v1 = p0.get('version1Variable')
-        kind_v1 = p0.get('version1Location')
-        table_v1 = p0.get('version1Table')
-
-        all_v1 = kind_v1 and table_v1 and id_v1
-        any_v1 = kind_v1 or table_v1 or id_v1
-        if not all_v1:
-            if any_v1:
-                id = get_partID(p0)
-                error(f'missing some `version1*` fields in part {id}')
-            p1 = p0
-            continue
+        mapping = get_mapping(p0, version)
 
         # TODO
-        if kind_v1 != 'variable':
-            error(f'version1Location "{kind_v1}" is not implemented yet')
+        if mapping.kind == MapKind.CATEGORY:
+            error(f'{mapping.kind} is not yet implemented')
             p1 = p0
             continue
 
         p1 = p0.copy()
-        table_v2 = _get_part_table_id(p0)
-        replace_id(p1, id_v1)
-        replace_table(p1, table_v2, table_v1)
+        table0 = _get_part_table_id(p0)
+        replace_id(p1, mapping.id)
+        if not is_table(p1):
+            replace_table_id(p1, table0, mapping.table)
 
         result.append(p1)
     return result

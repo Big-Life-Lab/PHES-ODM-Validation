@@ -100,7 +100,7 @@ def generate_validation_schema(parts, schema_version=ODM_LATEST) -> Schema:
         assert s is not None
         utils.deep_update(s, cerb_schema)
     return {
-        "schemaVersion": str(version),
+        "schemaVersion": schema_version,
         "schema": cerb_schema,
     }
 
