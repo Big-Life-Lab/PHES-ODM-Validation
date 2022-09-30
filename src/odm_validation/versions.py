@@ -89,17 +89,13 @@ def parse_row_version(row, field, default=None):
 
 
 def is_compatible(row, version: Version):
-    # v < first --> False
-    # first < v < last --> True
-    # last <= v --> active
-    #
     # TODO: remove default for `firstReleased` when parts-v2 is complete
-
     v1 = Version(major=1)
     first: Version = parse_row_version(row, 'firstReleased', default=v1)
     last: Version = parse_row_version(row, 'lastUpdated', default=first)
     active: bool = row.get('status') == 'active'
 
+    # not (v < first) and ((v < last) or active)
     if version.compare(first) < 0:
         return False
     if version.compare(last) < 0:
