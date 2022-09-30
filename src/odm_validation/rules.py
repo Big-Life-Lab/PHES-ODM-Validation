@@ -1,9 +1,13 @@
 """This file defines the Rule type along with all the rule implementations."""
 
+import operator
 from dataclasses import dataclass
 from typing import Callable, Tuple
+from functools import reduce
 
 import part_tables as pt
+from part_tables import meta_get
+from schemas import Schema
 
 
 @dataclass(frozen=True)
@@ -20,7 +24,7 @@ class Rule:
     id: str
     key: str  # The Cerberus error key identifying the Rule
     error_template: str  # The template used to build the error message
-    gen_schema: Callable[pt.PartData, pt.Schema]  # Cerberus schema gen. func.
+    gen_schema: Callable[pt.PartData, Schema]
 
 
 def missing_mandatory_column():
@@ -32,13 +36,14 @@ def missing_mandatory_column():
         schema = {}
         for table_id in data.table_data.keys():
             for attr in data.table_data[table_id].attributes:
-                odm_rule = (pt.table_required_field(table_id), pt.MANDATORY)
-                if attr.get(odm_rule[0], '').capitalize() != odm_rule[1]:
+                m: pt.MetaEntry = {}
+                req_key = pt.table_required_field(table_id)
+                req_val = meta_get(m, attr, req_key)
+                if req_val != pt.MANDATORY:
                     continue
-                attr_id = pt.get_partID(attr)
-                meta = [{odm_rule[0]: odm_rule[1]}]
+                attr_id = meta_get(m, attr, pt.PART_ID)
                 pt.update_schema(schema, table_id, attr_id, rule_id, cerb_rule,
-                                 meta)
+                                 data.meta[attr_id] + [m])
         return schema
 
     return Rule(
@@ -62,8 +67,10 @@ def invalid_category():
                 if table_id not in cs_data.tables:
                     continue
                 cerb_rule = (cerb_rule_key, cs_data.values)
+                metas = [data.meta[id] for id in [attr_id] + cs_data.values]
+                meta = reduce(operator.add, metas, [])
                 pt.update_schema(schema, table_id, attr_id, rule_id, cerb_rule,
-                                 cs_data.meta)
+                                 meta)
         return schema
 
     return Rule(

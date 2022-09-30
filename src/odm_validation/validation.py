@@ -6,6 +6,7 @@ generation and data validation.
 import os
 import re
 import sys
+from collections import defaultdict
 from dataclasses import dataclass
 from os.path import join, normpath
 from pathlib import Path
@@ -92,15 +93,32 @@ def _gen_error_entry(e, row) -> str:
 
 
 def generate_validation_schema(parts, schema_version=ODM_LATEST) -> Schema:
+    # `parts` must be stripped before further processing. This is important for
+    # performance and simplicity of implementation.
     cerb_schema = {}
+    meta: pt.MetaMap = defaultdict(list)
+
     version = parse_version(schema_version)
-    data = pt.gen_partdata(parts, version)
+    parts = pt.strip(parts)
+    parts = pt.filter_compatible(parts, version)
+    if version.major == 1:
+        (parts, meta) = pt.transform_v2_to_v1(parts, meta)
+
+    data = pt.gen_partdata(parts, meta)
+
+    # gen table meta from data
+    for table_id in data.table_data.keys():
+        table_meta = data.meta[table_id]
+        s = pt.init_table_schema_meta(table_id, table_meta)
+        utils.deep_update(s, cerb_schema)
+
     for r in ruleset:
         s = r.gen_schema(data)
         assert s is not None
         utils.deep_update(s, cerb_schema)
+
     return {
-        "schemaVersion": str(version),
+        "schemaVersion": schema_version,
         "schema": cerb_schema,
     }
 

@@ -1,8 +1,8 @@
+import logging
 import os
 import re
 import toml
 from importlib import metadata
-from logging import warning
 from os import path
 from semver import Version
 from typing import Optional, Tuple
@@ -65,44 +65,23 @@ def _coerce(version: str) -> Tuple[Version, Optional[str]]:
     return ver, rest
 
 
-def parse_version(version: str, id='', label='', default: Version = None
-                  ) -> Version:
+def parse_version(version: str, id='', label='', default: Version = None,
+                  verbose=True) -> Version:
     origin = '' if id == '' and label == '' else f'for "{id}.{label}"'
-    correctionMsg = 'corrected version 0 --> {} ' + origin
+
+    def log_correction(new):
+        if verbose:
+            logging.warning(f'corrected version {version} --> {new} ' + origin)
 
     if version is None or version == '':
         if not default:
             raise ValueError(f'missing version {origin}')
-        warning(correctionMsg.format(default))
+        log_correction(default)
         return default
 
     try:
         return Version.parse(version)
     except ValueError:
         (result, _) = _coerce(version)
-        warning(correctionMsg.format(result))
+        log_correction(result)
         return result
-
-
-def parse_row_version(row, field, default=None):
-    return parse_version(row.get(field), row.get('partID'), field, default)
-
-
-def validate_version(row, version):
-    # v < first --> False
-    # first < v < last --> True
-    # last <= v --> active
-    #
-    # TODO: remove default for `firstReleased` when parts-v2 is complete
-
-    v1 = Version(major=1)
-    first: Version = parse_row_version(row, 'firstReleased', default=v1)
-    last: Version = parse_row_version(row, 'lastUpdated', default=first)
-    active: bool = row.get('status') == 'active'
-
-    v = parse_version(version)
-    if v.compare(first) < 0:
-        return False
-    if v.compare(last) < 0:
-        return True
-    return active
