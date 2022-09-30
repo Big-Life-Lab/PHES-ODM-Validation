@@ -1,11 +1,26 @@
 import os
 import re
 import toml
+from dataclasses import dataclass
+from enum import Enum
 from importlib import metadata
 from logging import warning
 from os import path
 from semver import Version
 from typing import Optional, Tuple
+
+
+class MapKind(Enum):
+    TABLE = 0
+    ATTRIBUTE = 1
+    CATEGORY = 2
+
+
+@dataclass(frozen=True)
+class Mapping:
+    kind: MapKind
+    id: str
+    table: str
 
 
 def _get_package_version():
@@ -31,6 +46,12 @@ BASEVERSION = re.compile(
     """,
     re.VERBOSE,
 )
+
+V1_KIND_MAP = {
+    'tables': MapKind.TABLE,
+    'variables': MapKind.ATTRIBUTE,
+    'variableCategories': MapKind.CATEGORY,
+}
 
 
 def _coerce(version: str) -> Tuple[Version, Optional[str]]:
@@ -101,3 +122,18 @@ def is_compatible(row, version: Version):
     if version.compare(last) < 0:
         return True
     return active
+
+
+def get_mapping(part: dict, version: Version) -> Mapping:
+    """Returns `None` when no mapping exists."""
+    if version.major != 1:
+        return
+    id = part.get('version1Variable')
+    table = part.get('version1Table')
+    v1_kind = part.get('version1Location')
+    kind = V1_KIND_MAP.get(v1_kind)
+    if kind == MapKind.TABLE:
+        id = table
+    if not (kind and table and id):
+        return
+    return Mapping(kind=kind, id=id, table=table)
