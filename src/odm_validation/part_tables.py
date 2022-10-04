@@ -59,6 +59,9 @@ PART_ID_ORIGINAL = 'partID_original'
 TABLE_ID_ORIGINAL = 'tableID_original'
 TABLE_REQUIRED_ORIGINAL = 'tableRequired_original'
 
+_ORIGINAL_KEY = '_original_key'
+_ORIGINAL_VAL = '_original_val'
+
 # partType constants
 ATTRIBUTE = 'attribute'
 CATEGORY = 'category'
@@ -155,6 +158,7 @@ def strip(parts: Dataset):
 
 
 def replace_id(part: dict, part_id0: str, part_id1: str) -> dict:
+    part[PART_ID + _ORIGINAL_VAL] = part_id0
     part[PART_ID] = part_id1
     # inv[part_id1] = part_id0
 
@@ -166,6 +170,7 @@ def replace_table_id(part: dict, table_id0: str, table_id1: str, meta
     # replace <table> field
     column_kind = meta_pop(meta, part, table_id0)
     part[table_id1] = column_kind
+    part[table_id1 + _ORIGINAL_KEY] = table_id0
     # inv[table_id1] = {table_id0: column_kind}
 
     # replace <table>Required field
@@ -173,6 +178,8 @@ def replace_table_id(part: dict, table_id0: str, table_id1: str, meta
     req_val0 = meta_pop(meta, part, req_key0)
     req_key1 = table_required_field(table_id1)
     part[req_key1] = req_val0
+    part[req_key1 + _ORIGINAL_KEY] = req_key0
+    part[req_key1 + _ORIGINAL_VAL] = req_val0
     # inv[req_key1] = {req_key0: req_val0}
 
 
