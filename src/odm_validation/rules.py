@@ -4,7 +4,7 @@ from dataclasses import dataclass
 from typing import Callable, Tuple
 
 import part_tables as pt
-from utils import meta_get
+from part_tables import meta_get
 
 
 @dataclass(frozen=True)

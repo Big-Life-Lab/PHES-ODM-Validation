@@ -9,17 +9,15 @@ import sys
 from dataclasses import dataclass
 from os.path import join, normpath
 from pathlib import Path
-from typing import Dict, List
-from pprint import pprint
+from typing import List
 
 from cerberus import Validator
 
 import utils
 import part_tables as pt
-from part_tables import Dataset
 from rules import ruleset
-from schemas import CerberusSchema, Schema
-from versions import __version__, MapKind, Version, is_compatible, parse_version
+from schemas import Schema
+from versions import __version__, parse_version
 
 
 @dataclass(frozen=True)
