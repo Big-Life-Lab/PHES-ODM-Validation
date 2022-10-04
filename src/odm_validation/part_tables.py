@@ -1,15 +1,12 @@
 """Part-table definitions."""
 
-from pprint import pprint
-
 from dataclasses import dataclass
-from logging import debug, error
 from semver import Version
 from typing import Dict, List, Set
 
 import utils
 from utils import meta_get, meta_mark, meta_pop
-from versions import MapKind, get_mapping, has_mapping, is_compatible, parse_version
+from versions import MapKind, get_mapping, has_mapping, is_compatible
 
 
 # type aliases
@@ -123,9 +120,6 @@ def get_table_attr(table_names, attributes) -> dict:
     return result
 
 
-V1_FIELD_PREFIX = 'version1'
-
-
 def get_catset_meta(row):
     """Returns metadata for category-sets and its categories/values."""
     fields = [PART_ID, PART_TYPE, CATSET_ID]
@@ -172,7 +166,6 @@ def filter_compatible(parts: Dataset, version: Version) -> Dataset:
 def replace_id(part: dict, part_id0: str, part_id1: str) -> dict:
     part[PART_ID + _ORIGINAL_VAL] = part_id0
     part[PART_ID] = part_id1
-    # inv[part_id1] = part_id0
 
 
 def replace_table_id(part: dict, table_id0: str, table_id1: str, meta
@@ -183,7 +176,6 @@ def replace_table_id(part: dict, table_id0: str, table_id1: str, meta
     column_kind = meta_pop(meta, part, table_id0)
     part[table_id1] = column_kind
     part[table_id1 + _ORIGINAL_KEY] = table_id0
-    # inv[table_id1] = {table_id0: column_kind}
 
     # replace <table>Required field
     req_key0 = table_required_field(table_id0)
@@ -192,7 +184,6 @@ def replace_table_id(part: dict, table_id0: str, table_id1: str, meta
     part[req_key1] = req_val0
     part[req_key1 + _ORIGINAL_KEY] = req_key0
     part[req_key1 + _ORIGINAL_VAL] = req_val0
-    # inv[req_key1] = {req_key0: req_val0}
 
 
 def transform_v2_to_v1(parts0: Dataset) -> (Dataset, dict):
@@ -203,7 +194,6 @@ def transform_v2_to_v1(parts0: Dataset) -> (Dataset, dict):
     Returns (new_parts, parts_meta).
     """
     parts1 = []
-    # inverse = {}
     version = Version(major=1)
     meta = {}
     for p0 in parts0:
@@ -230,21 +220,10 @@ def transform_v2_to_v1(parts0: Dataset) -> (Dataset, dict):
     return (parts1, meta)
 
 
-def get_table_meta(table: Row) -> dict:
-    fields = [
-        'partID',
-        'partType',
-    ]
-
-
 def gen_partdata(parts: Dataset, meta) -> PartData:
     """
     :parts: From v2. Must be stripped.
     """
-
-    # `parts` are assumed to be from ODM v2.
-    # `parts` must be stripped.
-
     tables = list(filter(is_table, parts))
     table_names = list(map(get_partID, tables))
     attributes = list(filter(is_attr, parts))
@@ -272,8 +251,6 @@ def gen_partdata(parts: Dataset, meta) -> PartData:
         table_data[id] = TableData(
             attributes=table_attr[id]
         )
-
-    # meta = {p[PART_ID]: p['meta'] for p in parts}
 
     return PartData(
         all_parts=parts,

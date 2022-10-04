@@ -16,7 +16,6 @@ from cerberus import Validator
 
 import utils
 import part_tables as pt
-# from logging import error
 from part_tables import Dataset
 from rules import ruleset
 from schemas import CerberusSchema, Schema
@@ -94,26 +93,6 @@ def _gen_error_entry(e, row) -> str:
     return _gen_rule_error(rule, table, column, row_index, row, e.value)
 
 
-# def _revert_to_original_meta_fields(cerb_schema, inv_map) -> CerberusSchema:
-#     def impl(x, inv_map):
-#         if not isinstance(x, dict):
-#             return
-#         meta = x.get('meta')
-#         if not meta:
-#             impl(x, inv_map)
-#             return
-#         for key1 in meta.keys():
-#             # val1 = inv_map.get(key1)
-#             # if val1:
-#             if key1 in inv_map:
-#                 ( = inv_map
-#                 meta[key1] = val0
-#         meta
-#     result = cerb_schema.deepcopy()
-#     impl(result, inv_map)
-#     return result
-
-
 def generate_validation_schema(parts, schema_version=ODM_LATEST) -> Schema:
     # `parts` must be stripped before further processing. This is important for
     # performance and simplicity of implementation.
@@ -138,9 +117,6 @@ def generate_validation_schema(parts, schema_version=ODM_LATEST) -> Schema:
         s = r.gen_schema(data)
         assert s is not None
         utils.deep_update(s, cerb_schema)
-
-    # if version.major == 1:
-    #     _revert_to_original_meta_fields(cerb_schema, inv_map)
 
     return {
         "schemaVersion": schema_version,

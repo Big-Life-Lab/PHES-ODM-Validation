@@ -2,7 +2,6 @@
 
 from dataclasses import dataclass
 from typing import Callable, Tuple
-from pprint import pprint
 
 import part_tables as pt
 from utils import meta_get
