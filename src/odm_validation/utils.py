@@ -42,7 +42,7 @@ def _get_original_key_val(part, key, val=None):
 def meta_mark(meta, part, key, val=None):
     (key, val) = _get_original_key_val(part, key)
     meta[key] = val
-    print(f'meta marked ({key}, {val})')
+    # print(f'meta marked ({key}, {val})')
 
 
 def meta_get(meta, part, key):

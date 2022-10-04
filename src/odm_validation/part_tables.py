@@ -9,7 +9,7 @@ from typing import Dict, List, Set
 
 import utils
 from utils import meta_get, meta_mark, meta_pop
-from versions import MapKind, get_mapping, is_compatible, parse_version
+from versions import MapKind, get_mapping, has_mapping, is_compatible, parse_version
 
 
 # type aliases
@@ -42,7 +42,7 @@ class PartData:
     attributes: Dataset
     catset_data: Dict[str, CatsetData]  # category-set data, by attr name
     table_data: Dict[str, TableData]  # table data, by table name
-    # meta: Dict[str, dict]  # meta data, by part id
+    meta: Dict[str, dict]  # meta data, by part id
 
 
 # The following constants are not enums because they would be a pain to use.
@@ -161,7 +161,7 @@ def filter_compatible(parts: Dataset, version: Version) -> Dataset:
     """Filters `parts` by `version`."""
     result = []
     for row in parts:
-        if not (get_mapping(row, version) or is_compatible(row, version)):
+        if not (is_compatible(row, version) or has_mapping(row, version)):
             print(f'skipping incompatible part: {get_partID(row)}')
             continue
         result.append(row)
@@ -203,8 +203,8 @@ def transform_v2_to_v1(parts0: Dataset) -> (Dataset, dict):
     """
     parts1 = []
     # inverse = {}
-    meta = {}
     version = Version(major=1)
+    meta = {}
     for p0 in parts0:
         mapping = get_mapping(p0, version)
 
@@ -215,19 +215,21 @@ def transform_v2_to_v1(parts0: Dataset) -> (Dataset, dict):
             continue
 
         p1 = p0.copy()
+        part_meta = mapping.meta.copy()
         pid0 = p0[PART_ID]
         pid1 = mapping.id
         replace_id(p1, pid0, pid1)
         if not is_table(p1):
-            table0 = get_table_id(p0, meta)
+            table0 = get_table_id(p0, part_meta)
             table1 = mapping.table
-            replace_table_id(p1, table0, table1, meta)
+            replace_table_id(p1, table0, table1, part_meta)
 
         parts1.append(p1)
+        meta[pid1] = part_meta
     return (parts1, meta)
 
 
-def gen_partdata(parts: Dataset) -> PartData:
+def gen_partdata(parts: Dataset, meta) -> PartData:
     """
     :parts: From v2. Must be stripped.
     """
@@ -248,11 +250,11 @@ def gen_partdata(parts: Dataset) -> PartData:
         cs_id = cs[CATSET_ID]
         cats = [c for c in categories if c[CATSET_ID] == cs_id]
         used_rows = [cs] + cats
-        meta = list(map(get_catset_meta, used_rows))
+        catset_meta = list(map(get_catset_meta, used_rows))
         tables = set(get_catset_tables(cs, table_names))
         values = list(map(get_partID, cats))
         catset_data[attr_id] = CatsetData(
-            meta=meta,
+            meta=catset_meta,
             tables=tables,
             values=values,
         )
@@ -270,7 +272,7 @@ def gen_partdata(parts: Dataset) -> PartData:
         attributes=attributes,
         catset_data=catset_data,
         table_data=table_data,
-        # meta=meta,
+        meta=meta,
     )
 
 
@@ -295,7 +297,14 @@ def init_attr_schema(attr_id: str, rule_id: str, cerb_rule: tuple,
                 {
                     'ruleID': rule_id,
                     'meta': meta,
-                }
+                },
+                # {
+                #     'ruleID': another_rule_using_this_attr,
+                #     'meta': [
+                #         meta_for_attr_used_with_this_attr_rule,
+                #         meta_for_another_attr_used_with_this_attr_rule,
+                #     ]
+                # }
             ]
         }
     }

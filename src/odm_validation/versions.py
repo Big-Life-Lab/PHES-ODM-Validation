@@ -154,3 +154,7 @@ def get_mapping(part: dict, version: Version) -> Mapping:
     if not (kind and table and id):
         return
     return Mapping(kind=kind, id=id, table=table, meta=meta)
+
+
+def has_mapping(part: dict, version: Version) -> bool:
+    return get_mapping(part, version) is not None

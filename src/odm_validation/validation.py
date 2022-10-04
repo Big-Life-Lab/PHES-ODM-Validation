@@ -20,8 +20,7 @@ import part_tables as pt
 from part_tables import Dataset
 from rules import ruleset
 from schemas import CerberusSchema, Schema
-from versions import __version__, MapKind, Version, get_mapping, \
-                     is_compatible, parse_version
+from versions import __version__, MapKind, Version, is_compatible, parse_version
 
 
 @dataclass(frozen=True)
@@ -127,7 +126,7 @@ def generate_validation_schema(parts, schema_version=ODM_LATEST) -> Schema:
     if version.major == 1:
         (parts, meta) = pt.transform_v2_to_v1(parts)
 
-    data = pt.gen_partdata(parts)
+    data = pt.gen_partdata(parts, meta)
     for r in ruleset:
         s = r.gen_schema(data)
         assert s is not None

@@ -41,7 +41,7 @@ def missing_mandatory_column():
                     continue
                 attr_id = meta_get(meta, attr, pt.PART_ID)
                 pt.update_schema(schema, table_id, attr_id, rule_id, cerb_rule,
-                                 meta)
+                                 [meta | data.meta[attr_id]])
         return schema
 
     return Rule(
