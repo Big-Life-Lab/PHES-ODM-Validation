@@ -95,16 +95,6 @@ def _gen_error_entry(e, row) -> str:
     return _gen_rule_error(rule, table, column, row_index, row, e.value)
 
 
-def _filter_compatible(parts: Dataset, version: Version) -> Dataset:
-    """Filters `parts` by `version`."""
-    result = []
-    for row in parts:
-        if not (get_mapping(row, version) or is_compatible(row, version)):
-            print(f'skipping incompatible part: {pt.get_partID(row)}')
-            continue
-        result.append(row)
-    return result
-
 # def _revert_to_original_meta_fields(cerb_schema, inv_map) -> CerberusSchema:
 #     def impl(x, inv_map):
 #         if not isinstance(x, dict):
@@ -133,10 +123,11 @@ def generate_validation_schema(parts, schema_version=ODM_LATEST) -> Schema:
 
     version = parse_version(schema_version)
     parts = pt.strip(parts)
+    parts = pt.filter_compatible(parts, version)
     if version.major == 1:
         (parts, meta) = pt.transform_v2_to_v1(parts)
-    data = pt.gen_partdata(parts)
 
+    data = pt.gen_partdata(parts)
     for r in ruleset:
         s = r.gen_schema(data)
         assert s is not None

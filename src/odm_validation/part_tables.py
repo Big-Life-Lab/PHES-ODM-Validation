@@ -157,6 +157,17 @@ def strip(parts: Dataset):
     return result
 
 
+def filter_compatible(parts: Dataset, version: Version) -> Dataset:
+    """Filters `parts` by `version`."""
+    result = []
+    for row in parts:
+        if not (get_mapping(row, version) or is_compatible(row, version)):
+            print(f'skipping incompatible part: {get_partID(row)}')
+            continue
+        result.append(row)
+    return result
+
+
 def replace_id(part: dict, part_id0: str, part_id1: str) -> dict:
     part[PART_ID + _ORIGINAL_VAL] = part_id0
     part[PART_ID] = part_id1
