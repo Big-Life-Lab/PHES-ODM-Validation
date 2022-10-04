@@ -30,6 +30,7 @@ class CatsetData:
 class TableData:
     """Data for each table."""
     attributes: Dict[str, Dataset]
+    # meta: dict
 
 
 @dataclass(frozen=True)
@@ -141,7 +142,7 @@ def get_catset_tables(row: Row, table_names: List[str]) -> List[str]:
 
 def get_table_id(part: dict, meta) -> str:
     if is_table(part):
-        return meta_get(part, PART_ID)
+        return meta_get(meta, part, PART_ID)
     else:
         req = list(filter(lambda k: k.endswith('Required'), part.keys()))[0]
         meta_mark(meta, part, req)
@@ -216,7 +217,7 @@ def transform_v2_to_v1(parts0: Dataset) -> (Dataset, dict):
 
         p1 = p0.copy()
         part_meta = mapping.meta.copy()
-        pid0 = p0[PART_ID]
+        pid0 = meta_get(part_meta, p0, PART_ID)
         pid1 = mapping.id
         replace_id(p1, pid0, pid1)
         if not is_table(p1):
@@ -227,6 +228,13 @@ def transform_v2_to_v1(parts0: Dataset) -> (Dataset, dict):
         parts1.append(p1)
         meta[pid1] = part_meta
     return (parts1, meta)
+
+
+def get_table_meta(table: Row) -> dict:
+    fields = [
+        'partID',
+        'partType',
+    ]
 
 
 def gen_partdata(parts: Dataset, meta) -> PartData:
@@ -262,7 +270,7 @@ def gen_partdata(parts: Dataset, meta) -> PartData:
     table_data = {}
     for id in table_names:
         table_data[id] = TableData(
-            attributes=table_attr[id],
+            attributes=table_attr[id]
         )
 
     # meta = {p[PART_ID]: p['meta'] for p in parts}
@@ -283,6 +291,16 @@ def init_table_schema(name, attr_schema):
             'schema': {
                 'type': 'dict',  # each row is a dict
                 'schema': attr_schema,
+            },
+        }
+    }
+
+
+def init_table_schema_meta(name, meta):
+    return {
+        name: {
+            'schema': {
+                'meta': meta
             },
         }
     }

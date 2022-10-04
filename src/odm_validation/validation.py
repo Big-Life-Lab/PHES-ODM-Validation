@@ -127,6 +127,13 @@ def generate_validation_schema(parts, schema_version=ODM_LATEST) -> Schema:
         (parts, meta) = pt.transform_v2_to_v1(parts)
 
     data = pt.gen_partdata(parts, meta)
+
+    # gen table meta from data
+    for table_id in data.table_data.keys():
+        table_meta = data.meta[table_id]
+        s = pt.init_table_schema_meta(table_id, table_meta)
+        utils.deep_update(s, cerb_schema)
+
     for r in ruleset:
         s = r.gen_schema(data)
         assert s is not None
