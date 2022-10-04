@@ -9,15 +9,19 @@ import sys
 from dataclasses import dataclass
 from os.path import join, normpath
 from pathlib import Path
-from typing import List
+from typing import Dict, List
+from pprint import pprint
 
 from cerberus import Validator
 
 import utils
 import part_tables as pt
+# from logging import error
+from part_tables import Dataset
 from rules import ruleset
-from schemas import Schema
-from versions import __version__, parse_version
+from schemas import CerberusSchema, Schema
+from versions import __version__, MapKind, Version, get_mapping, \
+                     is_compatible, parse_version
 
 
 @dataclass(frozen=True)
@@ -91,14 +95,56 @@ def _gen_error_entry(e, row) -> str:
     return _gen_rule_error(rule, table, column, row_index, row, e.value)
 
 
+def _filter_compatible(parts: Dataset, version: Version) -> Dataset:
+    """Filters `parts` by `version`."""
+    result = []
+    for row in parts:
+        if not (get_mapping(row, version) or is_compatible(row, version)):
+            print(f'skipping incompatible part: {pt.get_partID(row)}')
+            continue
+        result.append(row)
+    return result
+
+# def _revert_to_original_meta_fields(cerb_schema, inv_map) -> CerberusSchema:
+#     def impl(x, inv_map):
+#         if not isinstance(x, dict):
+#             return
+#         meta = x.get('meta')
+#         if not meta:
+#             impl(x, inv_map)
+#             return
+#         for key1 in meta.keys():
+#             # val1 = inv_map.get(key1)
+#             # if val1:
+#             if key1 in inv_map:
+#                 ( = inv_map
+#                 meta[key1] = val0
+#         meta
+#     result = cerb_schema.deepcopy()
+#     impl(result, inv_map)
+#     return result
+
+
 def generate_validation_schema(parts, schema_version=ODM_LATEST) -> Schema:
+    # `parts` must be stripped before further processing. This is important for
+    # performance and simplicity of implementation.
     cerb_schema = {}
+    meta = {}
+
     version = parse_version(schema_version)
-    data = pt.gen_partdata(parts, version)
+    parts = pt.strip(parts)
+    if version.major == 1:
+        (parts, meta) = pt.transform_v2_to_v1(parts)
+    data = pt.gen_partdata(parts)
+
     for r in ruleset:
         s = r.gen_schema(data)
         assert s is not None
         utils.deep_update(s, cerb_schema)
+
+    # if version.major == 1:
+    #     _revert_to_original_meta_fields(cerb_schema, inv_map)
+
     return {
         "schemaVersion": schema_version,
         "schema": cerb_schema,

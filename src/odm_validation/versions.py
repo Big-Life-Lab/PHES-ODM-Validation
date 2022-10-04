@@ -9,6 +9,17 @@ from os import path
 from semver import Version
 from typing import Optional, Tuple
 
+from utils import meta_get
+
+
+# __all__ = [
+#     '__version__',
+#     'Version',
+#     'get_mapping',
+#     'is_compatible',
+#     'parse_version',
+# ]
+
 
 class MapKind(Enum):
     TABLE = 0
@@ -16,11 +27,13 @@ class MapKind(Enum):
     CATEGORY = 2
 
 
+# TODO: rename id to part_id?
 @dataclass(frozen=True)
 class Mapping:
     kind: MapKind
     id: str
     table: str
+    meta: dict
 
 
 def _get_package_version():
@@ -130,12 +143,14 @@ def get_mapping(part: dict, version: Version) -> Mapping:
     """Returns `None` when no mapping exists."""
     if version.major != 1:
         return
-    id = part.get('version1Variable')
-    table = part.get('version1Table')
-    v1_kind = part.get('version1Location')
-    kind = V1_KIND_MAP.get(v1_kind)
+    meta = {}
+    table = meta_get(meta, part, 'version1Table')
+    loc = meta_get(meta, part, 'version1Location')
+    kind = V1_KIND_MAP.get(loc)
     if kind == MapKind.TABLE:
         id = table
+    else:
+        id = meta_get(meta, part, 'version1Variable')
     if not (kind and table and id):
         return
-    return Mapping(kind=kind, id=id, table=table)
+    return Mapping(kind=kind, id=id, table=table, meta=meta)

@@ -1,12 +1,15 @@
 """Part-table definitions."""
 
+from pprint import pprint
+
 from dataclasses import dataclass
 from logging import debug, error
 from semver import Version
 from typing import Dict, List, Set
 
 import utils
-from versions import get_mapping, is_compatible, parse_version, MapKind
+from utils import meta_get, meta_mark, meta_pop
+from versions import MapKind, get_mapping, is_compatible, parse_version
 
 
 # type aliases
@@ -39,6 +42,7 @@ class PartData:
     attributes: Dataset
     catset_data: Dict[str, CatsetData]  # category-set data, by attr name
     table_data: Dict[str, TableData]  # table data, by table name
+    # meta: Dict[str, dict]  # meta data, by part id
 
 
 # The following constants are not enums because they would be a pain to use.
@@ -51,13 +55,17 @@ CATSET_ID = 'catSetID'
 PART_ID = 'partID'
 PART_TYPE = 'partType'
 
+PART_ID_ORIGINAL = 'partID_original'
+TABLE_ID_ORIGINAL = 'tableID_original'
+TABLE_REQUIRED_ORIGINAL = 'tableRequired_original'
+
 # partType constants
 ATTRIBUTE = 'attribute'
 CATEGORY = 'category'
 TABLE = 'table'
 
 # other value constants
-MANDATORY = 'Mandatory'
+MANDATORY = 'mandatory'
 NA = {'', 'NA', 'Not applicable'}
 
 
@@ -111,68 +119,7 @@ def get_table_attr(table_names, attributes) -> dict:
     return result
 
 
-def strip(parts: Dataset, version: Version):
-    """Removes NA fields and filters by `version`."""
-    result = []
-    for sparse_row in parts:
-        row = {k: v for k, v in sparse_row.items() if v not in NA}
-        if not (get_mapping(row, version) or is_compatible(row, version)):
-            print(f'skipping incompatible part: {get_partID(row)}')
-            continue
-        result.append(row)
-    return result
-
-
 V1_FIELD_PREFIX = 'version1'
-
-
-def _get_part_table_id(part: dict) -> str:
-    if is_table(part):
-        return get_partID(part)
-    else:
-        req = list(filter(lambda k: k.endswith('Required'), part.keys()))[0]
-        return req[:req.find('Required')]
-
-
-# print(_get_part_table_id({'addressesRequired': 'mandatory'}))
-# quit()
-
-
-def replace_id(p: dict, id: str) -> dict:
-    p[PART_ID] = id
-
-
-def replace_table_id(part: dict, id0: str, id1: str) -> dict:
-    assert not is_table(part), 'use `replace_id` instead'
-    part[id1] = part.pop(id0)
-    part[table_required_field(id1)] = \
-        part.pop(table_required_field(id0))
-
-
-def transform_v2_to_v1(parts: Dataset) -> Dataset:
-    """Transforms v2 parts to v1, based on `version1*` fields.
-
-    Should be called after `strip`.
-    """
-    result = []
-    version = Version(major=1)
-    for p0 in parts:
-        mapping = get_mapping(p0, version)
-
-        # TODO
-        if mapping.kind == MapKind.CATEGORY:
-            error(f'{mapping.kind} is not yet implemented')
-            p1 = p0
-            continue
-
-        p1 = p0.copy()
-        table0 = _get_part_table_id(p0)
-        replace_id(p1, mapping.id)
-        if not is_table(p1):
-            replace_table_id(p1, table0, mapping.table)
-
-        result.append(p1)
-    return result
 
 
 def get_catset_meta(row):
@@ -189,13 +136,86 @@ def get_catset_tables(row: Row, table_names: List[str]) -> List[str]:
     return result
 
 
-def gen_partdata(parts: Dataset, version: Version) -> PartData:
+def get_table_id(part: dict, meta) -> str:
+    if is_table(part):
+        return meta_get(part, PART_ID)
+    else:
+        req = list(filter(lambda k: k.endswith('Required'), part.keys()))[0]
+        meta_mark(meta, part, req)
+        return req[:req.find('Required')]
+
+
+def strip(parts: Dataset):
+    """Removes NA fields."""
+    result = []
+    for sparse_row in parts:
+        row = {k: v for k, v in sparse_row.items() if v not in NA}
+        result.append(row)
+    return result
+
+
+def replace_id(part: dict, part_id0: str, part_id1: str) -> dict:
+    part[PART_ID] = part_id1
+    # inv[part_id1] = part_id0
+
+
+def replace_table_id(part: dict, table_id0: str, table_id1: str, meta
+                     ) -> dict:
+    assert not is_table(part), 'use `replace_table_id` instead'
+
+    # replace <table> field
+    column_kind = meta_pop(meta, part, table_id0)
+    part[table_id1] = column_kind
+    # inv[table_id1] = {table_id0: column_kind}
+
+    # replace <table>Required field
+    req_key0 = table_required_field(table_id0)
+    req_val0 = meta_pop(meta, part, req_key0)
+    req_key1 = table_required_field(table_id1)
+    part[req_key1] = req_val0
+    # inv[req_key1] = {req_key0: req_val0}
+
+
+def transform_v2_to_v1(parts0: Dataset) -> (Dataset, dict):
+    """Transforms v2 parts to v1, based on `version1*` fields.
+
+    :parts0: stripped parts
+
+    Returns (new_parts, parts_meta).
+    """
+    parts1 = []
+    # inverse = {}
+    meta = {}
+    version = Version(major=1)
+    for p0 in parts0:
+        mapping = get_mapping(p0, version)
+
+        # TODO
+        if mapping.kind == MapKind.CATEGORY:
+            error(f'{mapping.kind} is not yet implemented')
+            p1 = p0
+            continue
+
+        p1 = p0.copy()
+        pid0 = p0[PART_ID]
+        pid1 = mapping.id
+        replace_id(p1, pid0, pid1)
+        if not is_table(p1):
+            table0 = get_table_id(p0, meta)
+            table1 = mapping.table
+            replace_table_id(p1, table0, table1, meta)
+
+        parts1.append(p1)
+    return (parts1, meta)
+
+
+def gen_partdata(parts: Dataset) -> PartData:
+    """
+    :parts: From v2. Must be stripped.
+    """
+
     # `parts` are assumed to be from ODM v2.
-    # `parts` are stripped before processing. This is important for performance
-    # and simplicity of implementation.
-    parts = strip(parts, version)
-    if version.major == 1:
-        parts = transform_v2_to_v1(parts)
+    # `parts` must be stripped.
 
     tables = list(filter(is_table, parts))
     table_names = list(map(get_partID, tables))
@@ -225,11 +245,14 @@ def gen_partdata(parts: Dataset, version: Version) -> PartData:
             attributes=table_attr[id],
         )
 
+    # meta = {p[PART_ID]: p['meta'] for p in parts}
+
     return PartData(
         all_parts=parts,
         attributes=attributes,
         catset_data=catset_data,
         table_data=table_data,
+        # meta=meta,
     )
 
 
@@ -253,7 +276,7 @@ def init_attr_schema(attr_id: str, rule_id: str, cerb_rule: tuple,
             'meta': [
                 {
                     'ruleID': rule_id,
-                    'meta': [{PART_ID: attr_id}] + meta,
+                    'meta': meta,
                 }
             ]
         }

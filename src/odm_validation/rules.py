@@ -2,8 +2,10 @@
 
 from dataclasses import dataclass
 from typing import Callable, Tuple
+from pprint import pprint
 
 import part_tables as pt
+from utils import meta_get
 
 
 @dataclass(frozen=True)
@@ -32,11 +34,12 @@ def missing_mandatory_column():
         schema = {}
         for table_id in data.table_data.keys():
             for attr in data.table_data[table_id].attributes:
-                odm_rule = (pt.table_required_field(table_id), pt.MANDATORY)
-                if attr.get(odm_rule[0], '').capitalize() != odm_rule[1]:
+                meta = {}
+                req_key = pt.table_required_field(table_id)
+                req_val = meta_get(meta, attr, req_key)
+                if req_val.lower() != pt.MANDATORY:
                     continue
-                attr_id = pt.get_partID(attr)
-                meta = [{odm_rule[0]: odm_rule[1]}]
+                attr_id = meta_get(meta, attr, pt.PART_ID)
                 pt.update_schema(schema, table_id, attr_id, rule_id, cerb_rule,
                                  meta)
         return schema
@@ -77,6 +80,6 @@ def invalid_category():
 # This is the collection of all validation rules.
 # A tuple is used for immutability.
 ruleset: Tuple[Rule] = (
-    invalid_category(),
+    # invalid_category(),
     missing_mandatory_column(),
 )
