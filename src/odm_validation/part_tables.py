@@ -344,10 +344,11 @@ def transform_v2_to_v1(parts0: Dataset) -> (Dataset, dict):
         pid0 = meta_get(part_meta, p0, PART_ID)
         pid1 = mapping.id
         replace_id(p1, pid0, pid1)
-        if not is_table(p1):
+        if is_attr(p1):
             table0 = get_table_id(p0, part_meta)
             table1 = mapping.table
             replace_table_id(p1, table0, table1, part_meta)
+        # elif is_cat(p1):
 
         parts1.append(p1)
         meta[pid1] = part_meta

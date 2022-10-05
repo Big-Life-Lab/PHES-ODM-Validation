@@ -14,6 +14,7 @@ from validation import generate_validation_schema
 context.unused_import_dummy = 1
 
 parts_v2 = [
+    # missing_mandatory_column
     {
         "partID": "addresses",
         "partType": "table",
@@ -52,10 +53,62 @@ parts_v2 = [
         "version1Location": "variables",
         "version1Table": "Contact",
         "version1Variable": "contactID"
+    },
+
+    # invalid_category
+    {
+        "partID": "samples",
+        "partType": "table",
+        "version1Location": "tables",
+        "version1Table": "Sample",
+    },
+    {
+        "partID": "coll",
+        "partType": "attribute",
+        "samples": "header",
+        "dataType": "categorical",
+        "catSetID": "collectCat",
+        "version1Location": "variables",
+        "version1Table": "Sample",
+        "version1Variable": "collection",
+    },
+    {
+        "partID": "comp3h",
+        "partType": "category",
+        "samples": "input",
+        "dataType": "varchar",
+        "catSetID": "collectCat",
+        "version1Location": "variableCategories",
+        "version1Table": "Sample",
+        "version1Variable": "collection",
+        "version1Category": "comp3h"
+    },
+    {
+        "partID": "comp8h",
+        "partType": "category",
+        "samples": "input",
+        "dataType": "varchar",
+        "catSetID": "collectCat",
+        "version1Location": "variableCategories",
+        "version1Table": "Sample",
+        "version1Variable": "collection",
+        "version1Category": "comp8h"
+    },
+    {
+        "partID": "flowPr",
+        "partType": "category",
+        "samples": "input",
+        "dataType": "varchar",
+        "catSetID": "collectCat",
+        "version1Location": "variableCategories",
+        "version1Table": "Sample",
+        "version1Variable": "collection",
+        "version1Category": "flowPr; flowRatePr"
     }
 ]
 
 expected_cerb_schema_v1 = {
+    # missing_mandatory_column
     "Address": {
         "type": "list",
         "schema": {
@@ -119,6 +172,69 @@ expected_cerb_schema_v1 = {
                 "version1Location": "tables",
             }
         },
+    },
+
+    # invalid_category
+    "Sample": {
+        "type": "list",
+        "schema": {
+            "type": "dict",
+            "schema": {
+                "collection": {
+                    "type": "string",
+                    "allowed": ["comp3h", "comp8h", "flowPR", "flowRatePr"],
+                    "meta": [
+                        {
+                            "ruleID": "invalid_category",
+                            "meta": [
+                                {
+                                    "partID": "collection",
+                                    "samples": "header",
+                                    "dataType": "categorical",
+                                    "catSetID": "collectCat",
+                                    "version1Location": "variables",
+                                    "version1Table": "Sample",
+                                    "version1Variable": "collection"
+                                },
+                                {
+                                    "partID": "comp3h",
+                                    "partType": "category",
+                                    "catSetID": "collectCat",
+                                    "version1Location": "variableCategories",
+                                    "version1Table": "Sample",
+                                    "version1Variable": "collection",
+                                    "version1Category": "comp3h"
+                                },
+                                {
+                                    "partID": "comp8h",
+                                    "partType": "category",
+                                    "catSetID": "collectCat",
+                                    "version1Location": "variableCategories",
+                                    "version1Table": "Sample",
+                                    "version1Variable": "collection",
+                                    "version1Category": "comp8h"
+                                },
+                                {
+                                    "partID": "flowPr",
+                                    "partType": "category",
+                                    "catSetID": "collectCat",
+                                    "version1Location": "variableCategories",
+                                    "version1Table": "Sample",
+                                    "version1Variable": "collection",
+                                    "version1Category": "flowPr; flowRatePr"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            },
+            "meta": {
+                "partID": "samples",
+                "partType": "table",
+                "version1Location": "tables",
+                "verion1Table": "Sample"
+            }
+        }
     }
 }
 
