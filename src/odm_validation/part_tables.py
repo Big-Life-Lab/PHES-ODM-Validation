@@ -22,6 +22,13 @@ class MapKind(Enum):
     CATEGORY = 2
 
 
+class ColumnKind(Enum):
+    PK = "pK"
+    FK = "fK"
+    HEADER = "header"
+    INPUT = "input"
+
+
 # TODO: rename id to part_id?
 @dataclass(frozen=True)
 class Mapping:
@@ -43,7 +50,6 @@ class CatsetData:
 class TableData:
     """Data for each table."""
     attributes: Dict[str, Dataset]
-    # meta: dict
 
 
 @dataclass(frozen=True)
@@ -64,6 +70,8 @@ class PartData:
 # we would still have to explicitly call the `str` function.
 # Ex: str(PartType.ATTRIBUTE.value) vs ATTRIBUTE
 
+COLUMN_KINDS = set(list(map(lambda e: e.value, ColumnKind)))
+
 # field constants
 CATSET_ID = 'catSetID'
 PART_ID = 'partID'
@@ -73,8 +81,10 @@ PART_ID_ORIGINAL = 'partID_original'
 TABLE_ID_ORIGINAL = 'tableID_original'
 TABLE_REQUIRED_ORIGINAL = 'tableRequired_original'
 
+# suffixes
 _ORIGINAL_KEY = '_original_key'
 _ORIGINAL_VAL = '_original_val'
+_REQUIRED = 'Required'
 
 # partType constants
 ATTRIBUTE = 'attribute'
@@ -231,13 +241,38 @@ def get_catset_tables(row: Row, table_names: List[str]) -> List[str]:
     return result
 
 
+def get_key(pair):
+    return pair[0]
+
+
+def get_val(pair):
+    return pair[1]
+
+
 def get_table_id(part: dict, meta) -> str:
+    """ Retrieves the table id of `part`.
+
+    The value is looked up in the following order:
+
+    1. partID & partType
+    2. <table>Required
+    3. <table>:<column_kind>
+
+    :raises Exception: when table info is missing.
+    """
     if is_table(part):
         return meta_get(meta, part, PART_ID)
-    else:
-        req = list(filter(lambda k: k.endswith('Required'), part.keys()))[0]
+    req_keys = list(filter(lambda k: k.endswith(_REQUIRED), part.keys()))
+    if len(req_keys) > 0:
+        req = req_keys[0]
         meta_mark(meta, part, req)
-        return req[:req.find('Required')]
+        return req[:req.find(_REQUIRED)]
+    column_keys = list(
+        map(get_key,
+            filter(lambda pair: get_val(pair) in COLUMN_KINDS, part.items())))
+    if len(column_keys) > 0:
+        return column_keys[0]
+    raise Exception(f'part {get_partID(part)} is missing table info')
 
 
 def strip(parts: Dataset):
@@ -255,6 +290,7 @@ def filter_compatible(parts: Dataset, version: Version) -> Dataset:
     for row in parts:
         if not (is_compatible(row, version) or has_mapping(row, version)):
             print(f'skipping incompatible part: {get_partID(row)}')
+            quit()
             continue
         result.append(row)
     return result
@@ -274,13 +310,14 @@ def replace_table_id(part: dict, table_id0: str, table_id1: str, meta
     part[table_id1] = column_kind
     part[table_id1 + _ORIGINAL_KEY] = table_id0
 
-    # replace <table>Required field
+    # replace <table>Required field (optional)
     req_key0 = table_required_field(table_id0)
-    req_val0 = meta_pop(meta, part, req_key0)
-    req_key1 = table_required_field(table_id1)
-    part[req_key1] = req_val0
-    part[req_key1 + _ORIGINAL_KEY] = req_key0
-    part[req_key1 + _ORIGINAL_VAL] = req_val0
+    if part.get(req_key0):
+        req_val0 = meta_pop(meta, part, req_key0)
+        req_key1 = table_required_field(table_id1)
+        part[req_key1] = req_val0
+        part[req_key1 + _ORIGINAL_KEY] = req_key0
+        part[req_key1 + _ORIGINAL_VAL] = req_val0
 
 
 def transform_v2_to_v1(parts0: Dataset) -> (Dataset, dict):

@@ -36,7 +36,7 @@ def missing_mandatory_column():
                 meta = {}
                 req_key = pt.table_required_field(table_id)
                 req_val = meta_get(meta, attr, req_key)
-                if req_val.lower() != pt.MANDATORY:
+                if req_val != pt.MANDATORY:
                     continue
                 attr_id = meta_get(meta, attr, pt.PART_ID)
                 pt.update_schema(schema, table_id, attr_id, rule_id, cerb_rule,
@@ -79,6 +79,6 @@ def invalid_category():
 # This is the collection of all validation rules.
 # A tuple is used for immutability.
 ruleset: Tuple[Rule] = (
-    # invalid_category(),
+    invalid_category(),
     missing_mandatory_column(),
 )

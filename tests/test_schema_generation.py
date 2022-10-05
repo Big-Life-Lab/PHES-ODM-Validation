@@ -4,7 +4,6 @@ import sys
 import unittest
 from copy import deepcopy
 from os.path import join
-from pprint import pprint
 
 import context
 
@@ -21,16 +20,16 @@ parts_v2 = [
         "version1Location": "tables",
         "version1Table": "Address",
     },
-    # {
-    #     "partID": "contacts",
-    #     "partType": "table",
-    #     "version1Location": "tables",
-    #     "verion1Table": "Contact",
-    # },
+    {
+        "partID": "contacts",
+        "partType": "table",
+        "version1Location": "tables",
+        "version1Table": "Contact",
+    },
     {
         "partID": "addID",
         "partType": "attribute",
-        "addresses": "PK",
+        "addresses": "pK",
         "addressesRequired": "mandatory",
         "version1Location": "variables",
         "version1Table": "Address",
@@ -45,14 +44,15 @@ parts_v2 = [
         "version1Table": "Address",
         "version1Variable": "addressLineTwo"
     },
-    # {
-    #     "partID": "contactID",
-    #     "partType": "attribute",
-    #     "contacts": "PK",
-    #     "version1Location": "variables",
-    #     "verion1Table": "Contact",
-    #     "version1Variable": "contactID"
-    # }
+    {
+        "partID": "contID",
+        "partType": "attribute",
+        "contacts": "pK",
+        "contactsRequired": "mandatory",
+        "version1Location": "variables",
+        "version1Table": "Contact",
+        "version1Variable": "contactID"
+    }
 ]
 
 expected_cerb_schema_v1 = {
@@ -68,7 +68,7 @@ expected_cerb_schema_v1 = {
                             "ruleID": "missing_mandatory_column",
                             "meta": [
                                 {
-                                    "addresses": "PK",  # not in spec
+                                    "addresses": "pK",  # not in spec
                                     "addressesRequired": "mandatory",
                                     "partID": "addID",
                                     "version1Table": "Address",
@@ -88,37 +88,38 @@ expected_cerb_schema_v1 = {
             }
         }
     },
-    # "Contact": {
-    #     "type": "list",
-    #     "schema": {
-    #         "type": "dict",
-    #         "schema": {
-    #             "contactID": {
-    #                 "required": True,
-    #                 "meta": [
-    #                     {
-    #                         "ruleId": "missing_mandatory_column",
-    #                         "meta": [
-    #                             {
-    #                                 "partID": "contactID",
-    #                                 "contactsRequired": "mandatory",
-    #                                 "version1Location": "variables",
-    #                                 "verion1Table": "Contact",
-    #                                 "version1Variable": "contactID"
-    #                             }
-    #                         ]
-    #                     }
-    #                 ]
-    #             }
-    #         }
-    #     },
-    #     "meta": {
-    #         "partID": "contacts",
-    #         "partType": "table",
-    #         "version1Location": "tables",
-    #         "verion1Table": "Contact"
-    #     }
-    # }
+    "Contact": {
+        "type": "list",
+        "schema": {
+            "type": "dict",
+            "schema": {
+                "contactID": {
+                    "required": True,
+                    "meta": [
+                        {
+                            "ruleID": "missing_mandatory_column",
+                            "meta": [
+                                {
+                                    "contacts": "pK",  # not in spec
+                                    "contactsRequired": "mandatory",
+                                    "partID": "contID",
+                                    "version1Table": "Contact",
+                                    "version1Location": "variables",
+                                    "version1Variable": "contactID"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            },
+            "meta": {
+                "partID": "contacts",
+                # "partType": "table",  # in spec, but excluded
+                "version1Table": "Contact",
+                "version1Location": "tables",
+            }
+        },
+    }
 }
 
 
@@ -129,7 +130,6 @@ class TestGenerateValidationSchema(unittest.TestCase):
 
     def test_(self):
         schema = generate_validation_schema(parts_v2, schema_version="1")
-        pprint(schema)
         self.assertDictEqual(expected_cerb_schema_v1, schema["schema"])
 
 
