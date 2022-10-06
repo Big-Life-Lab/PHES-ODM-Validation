@@ -458,9 +458,22 @@ def init_attr_schema(attr_id: str, rule_id: str, cerb_rule: tuple, meta: Meta):
     }
 
 
+def deduplicate_meta(meta: Meta) -> Meta:
+    """merges meta entries with the same part id"""
+    id_entry: Dict[str, MetaEntry] = {}
+    for entry in meta:
+        id = entry[PART_ID]
+        if id in id_entry:
+            id_entry[id] |= entry
+        else:
+            id_entry[id] = entry
+    return [val for key, val in id_entry.items()]
+
+
 def update_schema(schema, table_id, attr_id, rule_id, cerb_rule, meta: Meta):
     assert isinstance(meta, list)
     assert isinstance(meta[0], dict)
+    meta = deduplicate_meta(meta)
     attr_schema = init_attr_schema(attr_id, rule_id, cerb_rule, meta)
     table_schema = init_table_schema(table_id, attr_schema)
     utils.deep_update(table_schema, schema)
