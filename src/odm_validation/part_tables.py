@@ -1,18 +1,24 @@
 """Part-table definitions."""
 
 import logging
+from collections import defaultdict
 from dataclasses import dataclass
 from enum import Enum
 from semver import Version
 from typing import Dict, List, Set
+from pprint import pprint
 
 import utils
 from versions import parse_version
 
 
 # type aliases
+PartId = str
 Row = dict
 Dataset = List[Row]
+MetaEntry = Dict[str, str]
+Meta = List[MetaEntry]
+MetaMap = Dict[PartId, Meta]
 Schema = dict  # A Cerberus validation schema
 
 
@@ -35,13 +41,13 @@ class Mapping:
     kind: MapKind
     id: str
     table: str
-    meta: dict
+    meta_entry: MetaEntry
 
 
 @dataclass(frozen=True)
 class CatsetData:
     """Data for each category set."""
-    meta: list
+    # meta: list
     tables: Set[str]  # tables in which this catset is used
     values: List[str]  # Ex: ['collection'] = ['flowPr', ...]
 
@@ -62,7 +68,7 @@ class PartData:
     attributes: Dataset
     catset_data: Dict[str, CatsetData]  # category-set data, by attr name
     table_data: Dict[str, TableData]  # table data, by table name
-    meta: Dict[str, dict]  # meta data, by part id
+    meta: MetaMap
 
 
 # The following constants are not enums because they would be a pain to use.
@@ -136,20 +142,21 @@ def _get_original_key_val(part, key, val=None):
     return (key, val)
 
 
-def meta_mark(meta, part, key, val=None):
+def meta_mark(meta: MetaEntry, part, key, val=None):
     (key, val) = _get_original_key_val(part, key)
     meta[key] = val
     # print(f'meta marked ({key}, {val})')
 
 
-def meta_get(meta, part, key):
+def meta_get(meta: MetaEntry, part, key):
     """returns `part[key]` and records the retrival in `meta`"""
     val = part.get(key)
-    meta_mark(meta, part, key, val)
-    return val
+    if val is not None:
+        meta_mark(meta, part, key, val)
+        return val
 
 
-def meta_pop(meta, part, key):
+def meta_pop(meta: MetaEntry, part, key):
     """same as `meta_get` but also removes `key` from `part`."""
     result = meta_get(meta, part, key)
     del part[key]
@@ -160,17 +167,19 @@ def get_mapping(part: dict, version: Version) -> Mapping:
     """Returns `None` when no mapping exists."""
     if version.major != 1:
         return
-    meta = {}
-    table = meta_get(meta, part, 'version1Table')
-    loc = meta_get(meta, part, 'version1Location')
+    m: MetaEntry = {}
+    table = meta_get(m, part, 'version1Table')
+    loc = meta_get(m, part, 'version1Location')
     kind = V1_KIND_MAP.get(loc)
     if kind == MapKind.TABLE:
         id = table
-    else:
-        id = meta_get(meta, part, 'version1Variable')
+    elif kind == MapKind.ATTRIBUTE:
+        id = meta_get(m, part, 'version1Variable')
+    elif kind == MapKind.CATEGORY:
+        id = meta_get(m, part, 'version1Category')
     if not (kind and table and id):
         return
-    return Mapping(kind=kind, id=id, table=table, meta=meta)
+    return Mapping(kind=kind, id=id, table=table, meta_entry=m)
 
 
 def has_mapping(part: dict, version: Version) -> bool:
@@ -233,10 +242,11 @@ def get_catset_meta(row):
     return {key: row[key] for key in fields}
 
 
-def get_catset_tables(row: Row, table_names: List[str]) -> List[str]:
+def get_catset_tables(row: Row, table_names: List[str], meta: MetaEntry
+                      ) -> List[str]:
     result = []
     for table in table_names:
-        if row.get(table):
+        if meta_get(meta, row, table):
             result.append(table)
     return result
 
@@ -320,7 +330,7 @@ def replace_table_id(part: dict, table_id0: str, table_id1: str, meta
         part[req_key1 + _ORIGINAL_VAL] = req_val0
 
 
-def transform_v2_to_v1(parts0: Dataset) -> (Dataset, dict):
+def transform_v2_to_v1(parts0: Dataset) -> (Dataset, MetaMap):
     """Transforms v2 parts to v1, based on `version1*` fields.
 
     :parts0: stripped parts
@@ -329,35 +339,38 @@ def transform_v2_to_v1(parts0: Dataset) -> (Dataset, dict):
     """
     parts1 = []
     version = Version(major=1)
-    meta = {}
+    meta: MetaMap = defaultdict(list)
     for p0 in parts0:
         mapping = get_mapping(p0, version)
 
-        # TODO
-        if mapping.kind == MapKind.CATEGORY:
-            logging.error(f'{mapping.kind} is not yet implemented')
-            p1 = p0
-            continue
+        # # TODO
+        # if mapping.kind == MapKind.CATEGORY:
+        #     logging.error(f'{mapping.kind} is not yet implemented')
+        #     p1 = p0
+        #     continue
 
         p1 = p0.copy()
-        part_meta = mapping.meta.copy()
-        pid0 = meta_get(part_meta, p0, PART_ID)
+        m: MetaEntry = mapping.meta_entry.copy()
+        pid0 = meta_get(m, p0, PART_ID)
         pid1 = mapping.id
         replace_id(p1, pid0, pid1)
         if is_attr(p1):
-            table0 = get_table_id(p0, part_meta)
+            table0 = get_table_id(p0, m)
             table1 = mapping.table
-            replace_table_id(p1, table0, table1, part_meta)
+            replace_table_id(p1, table0, table1, m)
         # elif is_cat(p1):
+        #     pass
+
 
         parts1.append(p1)
-        meta[pid1] = part_meta
+        meta[pid1].append(m)
     return (parts1, meta)
 
 
-def gen_partdata(parts: Dataset, meta) -> PartData:
+def gen_partdata(parts: Dataset, meta: MetaMap):
     """
     :parts: From v2. Must be stripped.
+    :meta: meta, by attr id
     """
     tables = list(filter(is_table, parts))
     table_names = list(map(get_partID, tables))
@@ -368,18 +381,24 @@ def gen_partdata(parts: Dataset, meta) -> PartData:
 
     catset_data = {}
     for cs in catsets:
-        attr_id = cs[PART_ID]
-        cs_id = cs[CATSET_ID]
-        cats = [c for c in categories if c[CATSET_ID] == cs_id]
-        used_rows = [cs] + cats
-        catset_meta = list(map(get_catset_meta, used_rows))
-        tables = set(get_catset_tables(cs, table_names))
-        values = list(map(get_partID, cats))
+        m: MetaEntry = {}
+        attr_id = meta_get(m, cs, PART_ID)
+        cs_id = meta_get(m, cs, CATSET_ID)
+        cats = [c for c in categories if meta_get(m, c, CATSET_ID) == cs_id]
+        # cats = [c for c in categories if c.get(CATSET_ID) == cs_id]
+        # used_rows = [cs] + cats
+        # catset_meta = list(map(get_catset_meta, used_rows))
+        # pprint(used_rows)
+        tables = set(get_catset_tables(cs, table_names, m))
+        values = list(map(lambda c: meta_get(m, c, PART_ID), cats))
         catset_data[attr_id] = CatsetData(
-            meta=catset_meta,
+            # meta=catset_meta,
             tables=tables,
             values=values,
         )
+        # for c in cats:
+        #     meta_mark(m, c, PART_ID)
+        meta[attr_id].append(m)
 
     table_data = {}
     for id in table_names:
@@ -408,7 +427,7 @@ def init_table_schema(name, attr_schema):
     }
 
 
-def init_table_schema_meta(name, meta):
+def init_table_schema_meta(name, meta: Meta):
     return {
         name: {
             'schema': {
@@ -418,8 +437,7 @@ def init_table_schema_meta(name, meta):
     }
 
 
-def init_attr_schema(attr_id: str, rule_id: str, cerb_rule: tuple,
-                     meta: List[dict] = []):
+def init_attr_schema(attr_id: str, rule_id: str, cerb_rule: tuple, meta: Meta):
     return {
         attr_id: {
             cerb_rule[0]: cerb_rule[1],
@@ -440,7 +458,9 @@ def init_attr_schema(attr_id: str, rule_id: str, cerb_rule: tuple,
     }
 
 
-def update_schema(schema, table_id, attr_id, rule_id, cerb_rule, meta):
+def update_schema(schema, table_id, attr_id, rule_id, cerb_rule, meta: Meta):
+    assert isinstance(meta, list)
+    assert isinstance(meta[0], dict)
     attr_schema = init_attr_schema(attr_id, rule_id, cerb_rule, meta)
     table_schema = init_table_schema(table_id, attr_schema)
     utils.deep_update(table_schema, schema)

@@ -10,6 +10,7 @@ from dataclasses import dataclass
 from os.path import join, normpath
 from pathlib import Path
 from typing import List
+from pprint import pprint
 
 from cerberus import Validator
 
@@ -95,7 +96,7 @@ def generate_validation_schema(parts, schema_version=ODM_LATEST) -> Schema:
     # `parts` must be stripped before further processing. This is important for
     # performance and simplicity of implementation.
     cerb_schema = {}
-    meta = {}
+    meta: pt.MetaMap = {}
 
     version = parse_version(schema_version)
     parts = pt.strip(parts)
