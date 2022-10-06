@@ -230,9 +230,9 @@ expected_cerb_schema_v1 = {
             },
             "meta": {
                 "partID": "samples",
-                "partType": "table",
+                # "partType": "table",  # in spec, but excluded
                 "version1Location": "tables",
-                "verion1Table": "Sample"
+                "version1Table": "Sample"
             }
         }
     }
