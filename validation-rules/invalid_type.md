@@ -149,6 +149,10 @@ This type is handled by the [invalid_category](./invalid_category.md) rule
 
 No validation is currently needed for this type since all the previously mentioned types can be coerced into a varchar.
 
+## see measure
+
+Can be ignored for now.
+
 ## Error report
 
 The error report should have the following fields,
