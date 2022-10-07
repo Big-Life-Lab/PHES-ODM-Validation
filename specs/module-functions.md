@@ -83,13 +83,14 @@ Validates an ODM dataset.
 
 Returns True if the the data had no validation errors.
 
-Returns an error object that describes all the failed validations. The type is shown below:
+When validation fails it returns a dictionary with two fields, `warnings` and `errors`. Whether a validation rule generates a warning or an error is documented in the `messageType` column in the [validation-rules-list.csv](../metadata/validation-rules-list.csv) file. In addition, each validation rule specification also documents this.
 
 * type: A Python dictionary consisting of the following fields
     * `odmDataVersion`: string consisting of the version of the ODM data
     * `validationSchemaVersion`: string consisting of the version of the validation schema used
     * `validationPackageVersion`: string consisting of the version of the validation package used
     * `errors`: A list of Python dictionaries describing each error. For more information refer to the files in the [validation-rules](../validation-rules/) folder
+    * `warnings`: A list of Python dictionaries describing each warning. For more information refer to the files in the [validation-rules](../validation-rules/) folder
 
 # generate_cerberus_schema
 
