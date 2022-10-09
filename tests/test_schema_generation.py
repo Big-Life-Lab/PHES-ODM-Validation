@@ -137,7 +137,7 @@ expected_cerb_schema_v1 = {
             "meta": [
                 {
                     "partID": "addresses",
-                    # "partType": "table",  # in spec, but excluded
+                    # "partType": "table",
                     "version1Location": "tables",
                     "version1Table": "Address"
                 }
@@ -171,7 +171,7 @@ expected_cerb_schema_v1 = {
             "meta": [
                 {
                     "partID": "contacts",
-                    # "partType": "table",  # in spec, but excluded
+                    # "partType": "table",
                     "version1Table": "Contact",
                     "version1Location": "tables",
                 }
@@ -236,7 +236,7 @@ expected_cerb_schema_v1 = {
             "meta": [
                 {
                     "partID": "samples",
-                    # "partType": "table",  # in spec, but excluded
+                    # "partType": "table",
                     "version1Location": "tables",
                     "version1Table": "Sample"
                 }
