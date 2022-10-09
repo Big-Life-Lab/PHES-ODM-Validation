@@ -49,7 +49,6 @@ class Mapping:
 @dataclass(frozen=True)
 class CatsetData:
     """Data for each category set."""
-    # meta: list
     tables: Set[str]  # tables in which this catset is used
     values: List[str]  # Ex: ['collection'] = ['flowPr', ...]
 
@@ -147,10 +146,6 @@ def _get_original_key_val(part, key, val=None):
 def meta_mark(meta: MetaEntry, part, key, val=None):
     (key, val) = _get_original_key_val(part, key, val)
     meta[key] = val
-    # assert key != 'samples' or val is not None, (part, key, val)
-    # print(f'meta marked ({key}, {val})')
-    # print(key, val)
-    # traceback.print_stack(file=sys.stdout)
 
 
 def meta_get(meta: MetaEntry, part, key):
@@ -246,12 +241,6 @@ def get_table_attr(table_names, attributes) -> dict:
             if attr.get(t):
                 result[t].append(attr)
     return result
-
-
-# def get_catset_meta(row):
-#     """Returns metadata for category-sets and its categories/values."""
-#     fields = [PART_ID, PART_TYPE, CATSET_ID]
-#     return {key: row[key] for key in fields}
 
 
 def get_catset_tables(row: Row, table_names: List[str], meta: MetaEntry
@@ -355,12 +344,6 @@ def transform_v2_to_v1(parts0: Dataset) -> (Dataset, MetaMap):
     for p0 in parts0:
         mapping = get_mapping(p0, version)
 
-        # # TODO
-        # if mapping.kind == MapKind.CATEGORY:
-        #     logging.error(f'{mapping.kind} is not yet implemented')
-        #     p1 = p0
-        #     continue
-
         p1 = p0.copy()
         m: MetaEntry = mapping.meta_entry.copy()
         pid0 = meta_get(m, p0, PART_ID)
@@ -370,9 +353,6 @@ def transform_v2_to_v1(parts0: Dataset) -> (Dataset, MetaMap):
             table0 = get_table_id(p0, m)
             table1 = mapping.table
             replace_table_id(p1, table0, table1, m)
-        # elif is_cat(p1):
-        #     pass
-
 
         parts1.append(p1)
         meta[pid1].append(m)
@@ -454,8 +434,8 @@ def init_attr_schema(attr_id: str, rule_id: str, cerb_rule: tuple, meta: Meta):
                 # {
                 #     'ruleID': another_rule_using_this_attr,
                 #     'meta': [
-                #         meta_for_attr_used_with_this_attr_rule,
-                #         meta_for_another_attr_used_with_this_attr_rule,
+                #         meta_for_attr_used_with_this_rule,
+                #         meta_for_another_attr_used_with_this_rule,
                 #     ]
                 # }
             ]
