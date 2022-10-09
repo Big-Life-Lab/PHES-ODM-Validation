@@ -16,45 +16,45 @@ context.unused_import_dummy = 1
 
 parts_v2 = [
     # missing_mandatory_column
-    # {
-    #     "partID": "addresses",
-    #     "partType": "table",
-    #     "version1Location": "tables",
-    #     "version1Table": "Address",
-    # },
-    # {
-    #     "partID": "contacts",
-    #     "partType": "table",
-    #     "version1Location": "tables",
-    #     "version1Table": "Contact",
-    # },
-    # {
-    #     "partID": "addID",
-    #     "partType": "attribute",
-    #     "addresses": "pK",
-    #     "addressesRequired": "mandatory",
-    #     "version1Location": "variables",
-    #     "version1Table": "Address",
-    #     "version1Variable": "addressID"
-    # },
-    # {
-    #     "partID": "addL2",
-    #     "partType": "attribute",
-    #     "addresses": "header",
-    #     "addressesRequired": "optional",
-    #     "version1Location": "variables",
-    #     "version1Table": "Address",
-    #     "version1Variable": "addressLineTwo"
-    # },
-    # {
-    #     "partID": "contID",
-    #     "partType": "attribute",
-    #     "contacts": "pK",
-    #     "contactsRequired": "mandatory",
-    #     "version1Location": "variables",
-    #     "version1Table": "Contact",
-    #     "version1Variable": "contactID"
-    # },
+    {
+        "partID": "addresses",
+        "partType": "table",
+        "version1Location": "tables",
+        "version1Table": "Address",
+    },
+    {
+        "partID": "contacts",
+        "partType": "table",
+        "version1Location": "tables",
+        "version1Table": "Contact",
+    },
+    {
+        "partID": "addID",
+        "partType": "attribute",
+        "addresses": "pK",
+        "addressesRequired": "mandatory",
+        "version1Location": "variables",
+        "version1Table": "Address",
+        "version1Variable": "addressID"
+    },
+    {
+        "partID": "addL2",
+        "partType": "attribute",
+        "addresses": "header",
+        "addressesRequired": "optional",
+        "version1Location": "variables",
+        "version1Table": "Address",
+        "version1Variable": "addressLineTwo"
+    },
+    {
+        "partID": "contID",
+        "partType": "attribute",
+        "contacts": "pK",
+        "contactsRequired": "mandatory",
+        "version1Location": "variables",
+        "version1Table": "Contact",
+        "version1Variable": "contactID"
+    },
 
     # invalid_category
     {
@@ -110,70 +110,74 @@ parts_v2 = [
 
 expected_cerb_schema_v1 = {
     # missing_mandatory_column
-    # "Address": {
-    #     "type": "list",
-    #     "schema": {
-    #         "type": "dict",
-    #         "schema": {
-    #             "addressID": {
-    #                 "required": True,
-    #                 "meta": [
-    #                     {
-    #                         "ruleID": "missing_mandatory_column",
-    #                         "meta": [
-    #                             {
-    #                                 "addresses": "pK",  # not in spec
-    #                                 "addressesRequired": "mandatory",
-    #                                 "partID": "addID",
-    #                                 "version1Table": "Address",
-    #                                 "version1Location": "variables",
-    #                                 "version1Variable": "addressID"
-    #                             }
-    #                         ]
-    #                     }
-    #                 ]
-    #             },
-    #         },
-    #         "meta": {
-    #             "partID": "addresses",
-    #             # "partType": "table",  # in spec, but excluded
-    #             "version1Location": "tables",
-    #             "version1Table": "Address"
-    #         }
-    #     }
-    # },
-    # "Contact": {
-    #     "type": "list",
-    #     "schema": {
-    #         "type": "dict",
-    #         "schema": {
-    #             "contactID": {
-    #                 "required": True,
-    #                 "meta": [
-    #                     {
-    #                         "ruleID": "missing_mandatory_column",
-    #                         "meta": [
-    #                             {
-    #                                 "contacts": "pK",  # not in spec
-    #                                 "contactsRequired": "mandatory",
-    #                                 "partID": "contID",
-    #                                 "version1Table": "Contact",
-    #                                 "version1Location": "variables",
-    #                                 "version1Variable": "contactID"
-    #                             }
-    #                         ]
-    #                     }
-    #                 ]
-    #             }
-    #         },
-    #         "meta": {
-    #             "partID": "contacts",
-    #             # "partType": "table",  # in spec, but excluded
-    #             "version1Table": "Contact",
-    #             "version1Location": "tables",
-    #         }
-    #     },
-    # },
+    "Address": {
+        "type": "list",
+        "schema": {
+            "type": "dict",
+            "schema": {
+                "addressID": {
+                    "required": True,
+                    "meta": [
+                        {
+                            "ruleID": "missing_mandatory_column",
+                            "meta": [
+                                {
+                                    "addresses": "pK",  # not in spec
+                                    "addressesRequired": "mandatory",
+                                    "partID": "addID",
+                                    "version1Table": "Address",
+                                    "version1Location": "variables",
+                                    "version1Variable": "addressID"
+                                }
+                            ]
+                        }
+                    ]
+                },
+            },
+            "meta": [
+                {
+                    "partID": "addresses",
+                    # "partType": "table",  # in spec, but excluded
+                    "version1Location": "tables",
+                    "version1Table": "Address"
+                }
+            ]
+        }
+    },
+    "Contact": {
+        "type": "list",
+        "schema": {
+            "type": "dict",
+            "schema": {
+                "contactID": {
+                    "required": True,
+                    "meta": [
+                        {
+                            "ruleID": "missing_mandatory_column",
+                            "meta": [
+                                {
+                                    "contacts": "pK",  # not in spec
+                                    "contactsRequired": "mandatory",
+                                    "partID": "contID",
+                                    "version1Table": "Contact",
+                                    "version1Location": "variables",
+                                    "version1Variable": "contactID"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            },
+            "meta": [
+                {
+                    "partID": "contacts",
+                    # "partType": "table",  # in spec, but excluded
+                    "version1Table": "Contact",
+                    "version1Location": "tables",
+                }
+            ]
+        },
+    },
 
     # invalid_category
     "Sample": {
@@ -249,7 +253,7 @@ class TestGenerateValidationSchema(unittest.TestCase):
 
     def test_(self):
         schema = generate_validation_schema(parts_v2, schema_version="1")
-        pprint(schema)
+        # pprint(schema)
         self.assertDictEqual(expected_cerb_schema_v1, schema["schema"])
 
 
