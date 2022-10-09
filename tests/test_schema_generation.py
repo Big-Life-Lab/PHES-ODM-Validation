@@ -199,20 +199,20 @@ expected_cerb_schema_v1 = {
                                 },
                                 {
                                     "partID": "comp3h",
-                                    "partType": "category",
+                                    # "partType": "category",
                                     "catSetID": "collectCat",
                                     "version1Location": "variableCategories",
                                     "version1Table": "Sample",
-                                    "version1Variable": "collection",
+                                    # "version1Variable": "collection",
                                     "version1Category": "comp3h"
                                 },
                                 {
                                     "partID": "comp8h",
-                                    "partType": "category",
+                                    # "partType": "category",
                                     "catSetID": "collectCat",
                                     "version1Location": "variableCategories",
                                     "version1Table": "Sample",
-                                    "version1Variable": "collection",
+                                    # "version1Variable": "collection",
                                     "version1Category": "comp8h"
                                 },
                                 # {
@@ -229,12 +229,14 @@ expected_cerb_schema_v1 = {
                     ]
                 }
             },
-            "meta": {
-                "partID": "samples",
-                # "partType": "table",  # in spec, but excluded
-                "version1Location": "tables",
-                "version1Table": "Sample"
-            }
+            "meta": [
+                {
+                    "partID": "samples",
+                    # "partType": "table",  # in spec, but excluded
+                    "version1Location": "tables",
+                    "version1Table": "Sample"
+                }
+            ]
         }
     }
 }

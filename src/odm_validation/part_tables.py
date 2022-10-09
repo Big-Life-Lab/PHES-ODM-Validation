@@ -1,6 +1,8 @@
 """Part-table definitions."""
 
+import sys
 import logging
+import traceback
 from collections import defaultdict
 from dataclasses import dataclass
 from enum import Enum
@@ -146,6 +148,8 @@ def meta_mark(meta: MetaEntry, part, key, val=None):
     (key, val) = _get_original_key_val(part, key)
     meta[key] = val
     # print(f'meta marked ({key}, {val})')
+    # print(key, val)
+    # traceback.print_stack(file=sys.stdout)
 
 
 def meta_get(meta: MetaEntry, part, key):
@@ -161,6 +165,12 @@ def meta_pop(meta: MetaEntry, part, key):
     result = meta_get(meta, part, key)
     del part[key]
     return result
+
+
+# TODO
+# def parse_version1Category(s: str) -> List[str]:
+#     cats = s.split(';')
+#     return list(map(strip, cats))
 
 
 def get_mapping(part: dict, version: Version) -> Mapping:
@@ -385,19 +395,12 @@ def gen_partdata(parts: Dataset, meta: MetaMap):
         attr_id = meta_get(m, cs, PART_ID)
         cs_id = meta_get(m, cs, CATSET_ID)
         cats = [c for c in categories if meta_get(m, c, CATSET_ID) == cs_id]
-        # cats = [c for c in categories if c.get(CATSET_ID) == cs_id]
-        # used_rows = [cs] + cats
-        # catset_meta = list(map(get_catset_meta, used_rows))
-        # pprint(used_rows)
         tables = set(get_catset_tables(cs, table_names, m))
         values = list(map(lambda c: meta_get(m, c, PART_ID), cats))
         catset_data[attr_id] = CatsetData(
-            # meta=catset_meta,
             tables=tables,
             values=values,
         )
-        # for c in cats:
-        #     meta_mark(m, c, PART_ID)
         meta[attr_id].append(m)
 
     table_data = {}
