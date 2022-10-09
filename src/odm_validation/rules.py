@@ -68,14 +68,9 @@ def invalid_category():
                     continue
                 cerb_rule = (cerb_rule_key, cs_data.values)
                 metas = [data.meta[id] for id in [attr_id] + cs_data.values]
-                # metas = [data.meta[id] for id in [attr_id]]
-                # print([attr_id] + cs_data.values)
-                # pprint(data.meta['comp8h'])
                 meta = reduce(operator.add, metas, [])
-                # meta = data.meta[attr_id]
                 pt.update_schema(schema, table_id, attr_id, rule_id, cerb_rule,
                                  meta)
-
         return schema
 
     return Rule(

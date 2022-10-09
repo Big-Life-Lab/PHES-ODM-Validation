@@ -145,8 +145,9 @@ def _get_original_key_val(part, key, val=None):
 
 
 def meta_mark(meta: MetaEntry, part, key, val=None):
-    (key, val) = _get_original_key_val(part, key)
+    (key, val) = _get_original_key_val(part, key, val)
     meta[key] = val
+    # assert key != 'samples' or val is not None, (part, key, val)
     # print(f'meta marked ({key}, {val})')
     # print(key, val)
     # traceback.print_stack(file=sys.stdout)
@@ -156,6 +157,7 @@ def meta_get(meta: MetaEntry, part, key):
     """returns `part[key]` and records the retrival in `meta`"""
     val = part.get(key)
     if val is not None:
+        assert val is not None
         meta_mark(meta, part, key, val)
         return val
 
@@ -401,10 +403,7 @@ def gen_partdata(parts: Dataset, meta: MetaMap):
             tables=tables,
             values=values,
         )
-        # for val_id in values:
-        #     meta[val_id].append(m)
         meta[attr_id].append(m)
-    # print(meta['comp3h'])
 
     table_data = {}
     for id in table_names:
