@@ -246,10 +246,10 @@ def get_table_attr(table_names, attributes) -> dict:
     return result
 
 
-def get_catset_meta(row):
-    """Returns metadata for category-sets and its categories/values."""
-    fields = [PART_ID, PART_TYPE, CATSET_ID]
-    return {key: row[key] for key in fields}
+# def get_catset_meta(row):
+#     """Returns metadata for category-sets and its categories/values."""
+#     fields = [PART_ID, PART_TYPE, CATSET_ID]
+#     return {key: row[key] for key in fields}
 
 
 def get_catset_tables(row: Row, table_names: List[str], meta: MetaEntry
@@ -396,12 +396,15 @@ def gen_partdata(parts: Dataset, meta: MetaMap):
         cs_id = meta_get(m, cs, CATSET_ID)
         cats = [c for c in categories if meta_get(m, c, CATSET_ID) == cs_id]
         tables = set(get_catset_tables(cs, table_names, m))
-        values = list(map(lambda c: meta_get(m, c, PART_ID), cats))
+        values = list(map(get_partID, cats))
         catset_data[attr_id] = CatsetData(
             tables=tables,
             values=values,
         )
+        # for val_id in values:
+        #     meta[val_id].append(m)
         meta[attr_id].append(m)
+    # print(meta['comp3h'])
 
     table_data = {}
     for id in table_names:
@@ -475,7 +478,8 @@ def deduplicate_meta(meta: Meta) -> Meta:
 
 def update_schema(schema, table_id, attr_id, rule_id, cerb_rule, meta: Meta):
     assert isinstance(meta, list)
-    assert isinstance(meta[0], dict)
+    assert len(meta[0]) > 0
+    assert isinstance(meta[0], dict), type(meta[0])
     meta = deduplicate_meta(meta)
     attr_schema = init_attr_schema(attr_id, rule_id, cerb_rule, meta)
     table_schema = init_table_schema(table_id, attr_schema)
