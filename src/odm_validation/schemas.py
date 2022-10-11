@@ -1,2 +1,2 @@
 CerberusSchema = dict
-Schema = dict
+Schema = dict  # {'schemaVersion': str, 'schema': CerberusSchema}

@@ -24,7 +24,7 @@ class Rule:
     id: str
     key: str  # The Cerberus error key identifying the Rule
     error_template: str  # The template used to build the error message
-    gen_schema: Callable[pt.PartData, Schema]  # Cerberus schema gen. func.
+    gen_schema: Callable[pt.PartData, Schema]
 
 
 def missing_mandatory_column():
