@@ -20,7 +20,6 @@ Dataset = List[Row]
 MetaEntry = Dict[str, str]
 Meta = List[MetaEntry]
 MetaMap = DefaultDict[PartId, Meta]
-Schema = dict  # A Cerberus validation schema
 
 
 class MapKind(Enum):

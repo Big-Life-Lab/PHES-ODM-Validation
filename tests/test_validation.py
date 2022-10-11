@@ -1,6 +1,4 @@
-import logging
 import os
-import sys
 import unittest
 from copy import deepcopy
 from os.path import join
@@ -8,7 +6,7 @@ from os.path import join
 import context
 
 import utils
-from part_tables import Schema
+from schemas import Schema
 from validation import validate_data
 
 context.unused_import_dummy = 1

@@ -7,6 +7,7 @@ from functools import reduce
 
 import part_tables as pt
 from part_tables import meta_get
+from schemas import Schema
 
 
 @dataclass(frozen=True)
@@ -23,7 +24,7 @@ class Rule:
     id: str
     key: str  # The Cerberus error key identifying the Rule
     error_template: str  # The template used to build the error message
-    gen_schema: Callable[pt.PartData, pt.Schema]  # Cerberus schema gen. func.
+    gen_schema: Callable[pt.PartData, Schema]  # Cerberus schema gen. func.
 
 
 def missing_mandatory_column():
