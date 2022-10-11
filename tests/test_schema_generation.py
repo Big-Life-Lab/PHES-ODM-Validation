@@ -245,7 +245,7 @@ class TestGenerateValidationSchema(unittest.TestCase):
         logging.basicConfig(level=logging.DEBUG)
         self.maxDiff = None  # disable assert diff length limitation
 
-    def test_(self):
+    def test(self):
         schema = generate_validation_schema(parts_v2, schema_version="1")
         self.assertDictEqual(expected_cerb_schema_v1, schema["schema"])
 
