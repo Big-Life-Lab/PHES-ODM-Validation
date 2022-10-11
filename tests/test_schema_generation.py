@@ -14,6 +14,7 @@ from validation import generate_validation_schema
 
 context.unused_import_dummy = 1
 
+# v1 variable names may not be accurate, they are only for testing purposes
 parts_v2 = [
     # missing_mandatory_column
     {
@@ -35,7 +36,7 @@ parts_v2 = [
         "addressesRequired": "mandatory",
         "version1Location": "variables",
         "version1Table": "Address",
-        "version1Variable": "addressID"
+        "version1Variable": "AddressID"
     },
     {
         "partID": "addL2",
@@ -44,7 +45,7 @@ parts_v2 = [
         "addressesRequired": "optional",
         "version1Location": "variables",
         "version1Table": "Address",
-        "version1Variable": "addressLineTwo"
+        "version1Variable": "AddressLineTwo"
     },
     {
         "partID": "contID",
@@ -53,7 +54,7 @@ parts_v2 = [
         "contactsRequired": "mandatory",
         "version1Location": "variables",
         "version1Table": "Contact",
-        "version1Variable": "contactID"
+        "version1Variable": "ContactID"
     },
 
     # invalid_category
@@ -71,7 +72,7 @@ parts_v2 = [
         "catSetID": "collectCat",
         "version1Location": "variables",
         "version1Table": "Sample",
-        "version1Variable": "collection",
+        "version1Variable": "Collection",
     },
     {
         "partID": "comp3h",
@@ -81,8 +82,8 @@ parts_v2 = [
         "catSetID": "collectCat",
         "version1Location": "variableCategories",
         "version1Table": "Sample",
-        "version1Variable": "collection",
-        "version1Category": "comp3h"
+        "version1Variable": "Collection",
+        "version1Category": "Comp3h"
     },
     {
         "partID": "comp8h",
@@ -92,8 +93,8 @@ parts_v2 = [
         "catSetID": "collectCat",
         "version1Location": "variableCategories",
         "version1Table": "Sample",
-        "version1Variable": "collection",
-        "version1Category": "comp8h"
+        "version1Variable": "Collection",
+        "version1Category": "Comp8h"
     },
     {
         "partID": "flowPr",
@@ -103,8 +104,8 @@ parts_v2 = [
         "catSetID": "collectCat",
         "version1Location": "variableCategories",
         "version1Table": "Sample",
-        "version1Variable": "collection",
-        "version1Category": "flowPr; flowRatePr"
+        "version1Variable": "Collection",
+        "version1Category": "FlowPr; FlowRatePr"
     }
 ]
 
@@ -115,7 +116,7 @@ expected_cerb_schema_v1 = {
         "schema": {
             "type": "dict",
             "schema": {
-                "addressID": {
+                "AddressID": {
                     "required": True,
                     "meta": [
                         {
@@ -127,7 +128,7 @@ expected_cerb_schema_v1 = {
                                     "partID": "addID",
                                     "version1Table": "Address",
                                     "version1Location": "variables",
-                                    "version1Variable": "addressID"
+                                    "version1Variable": "AddressID"
                                 }
                             ]
                         }
@@ -149,7 +150,7 @@ expected_cerb_schema_v1 = {
         "schema": {
             "type": "dict",
             "schema": {
-                "contactID": {
+                "ContactID": {
                     "required": True,
                     "meta": [
                         {
@@ -161,7 +162,7 @@ expected_cerb_schema_v1 = {
                                     "partID": "contID",
                                     "version1Table": "Contact",
                                     "version1Location": "variables",
-                                    "version1Variable": "contactID"
+                                    "version1Variable": "ContactID"
                                 }
                             ]
                         }
@@ -185,9 +186,9 @@ expected_cerb_schema_v1 = {
         "schema": {
             "type": "dict",
             "schema": {
-                "collection": {
+                "Collection": {
                     # "type": "string",
-                    "allowed": ["comp3h", "comp8h", "flowPr", "flowRatePr"],
+                    "allowed": ["Comp3h", "Comp8h", "FlowPr", "FlowRatePr"],
                     "meta": [
                         {
                             "ruleID": "invalid_category",
@@ -199,7 +200,7 @@ expected_cerb_schema_v1 = {
                                     "catSetID": "collectCat",
                                     "version1Location": "variables",
                                     "version1Table": "Sample",
-                                    "version1Variable": "collection"
+                                    "version1Variable": "Collection"
                                 },
                                 {
                                     "partID": "comp3h",
@@ -207,8 +208,8 @@ expected_cerb_schema_v1 = {
                                     # "catSetID": "collectCat",
                                     "version1Location": "variableCategories",
                                     "version1Table": "Sample",
-                                    # "version1Variable": "collection",
-                                    "version1Category": "comp3h"
+                                    # "version1Variable": "Collection",
+                                    "version1Category": "Comp3h"
                                 },
                                 {
                                     "partID": "comp8h",
@@ -216,8 +217,8 @@ expected_cerb_schema_v1 = {
                                     # "catSetID": "collectCat",
                                     "version1Location": "variableCategories",
                                     "version1Table": "Sample",
-                                    # "version1Variable": "collection",
-                                    "version1Category": "comp8h"
+                                    # "version1Variable": "Collection",
+                                    "version1Category": "Comp8h"
                                 },
                                 {
                                     "partID": "flowPr",
@@ -225,8 +226,8 @@ expected_cerb_schema_v1 = {
                                     # "catSetID": "collectCat",
                                     "version1Location": "variableCategories",
                                     "version1Table": "Sample",
-                                    # "version1Variable": "collection",
-                                    "version1Category": "flowPr; flowRatePr"
+                                    # "version1Variable": "Collection",
+                                    "version1Category": "FlowPr; FlowRatePr"
                                 },
                             ]
                         }
