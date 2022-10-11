@@ -3,7 +3,6 @@
 import operator
 from dataclasses import dataclass
 from typing import Callable, Tuple
-from pprint import pprint
 from functools import reduce
 
 import part_tables as pt
