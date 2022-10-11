@@ -11,7 +11,6 @@ from dataclasses import dataclass
 from os.path import join, normpath
 from pathlib import Path
 from typing import List
-from pprint import pprint
 
 from cerberus import Validator
 
