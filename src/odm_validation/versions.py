@@ -32,6 +32,7 @@ BASEVERSION = re.compile(
     re.VERBOSE,
 )
 
+
 def _coerce(version: str) -> Tuple[Version, Optional[str]]:
     """
     Convert an incomplete version string into a semver-compatible Version
