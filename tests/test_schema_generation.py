@@ -1,15 +1,7 @@
 import logging
-import os
-import sys
 import unittest
-from copy import deepcopy
-from os.path import join
-from pprint import pprint
 
 import context
-
-import utils
-from part_tables import Schema
 from validation import generate_validation_schema
 
 context.unused_import_dummy = 1

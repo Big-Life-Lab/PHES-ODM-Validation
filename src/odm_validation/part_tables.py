@@ -1,14 +1,10 @@
 """Part-table definitions."""
 
-import sys
-import traceback
-from collections import defaultdict
 from dataclasses import dataclass
 from enum import Enum
 from functools import partial
 from logging import warning
 from operator import is_not
-from pprint import pprint
 from semver import Version
 from typing import DefaultDict, Dict, List, Set
 
