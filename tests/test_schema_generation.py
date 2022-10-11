@@ -201,7 +201,7 @@ expected_cerb_schema_v1 = {
                                     # "catSetID": "collectCat",
                                     "version1Location": "variableCategories",
                                     "version1Table": "Sample",
-                                    # "version1Variable": "Collection",
+                                    "version1Variable": "Collection",
                                     "version1Category": "Comp3h"
                                 },
                                 {
@@ -210,7 +210,7 @@ expected_cerb_schema_v1 = {
                                     # "catSetID": "collectCat",
                                     "version1Location": "variableCategories",
                                     "version1Table": "Sample",
-                                    # "version1Variable": "Collection",
+                                    "version1Variable": "Collection",
                                     "version1Category": "Comp8h"
                                 },
                                 {
@@ -219,7 +219,7 @@ expected_cerb_schema_v1 = {
                                     # "catSetID": "collectCat",
                                     "version1Location": "variableCategories",
                                     "version1Table": "Sample",
-                                    # "version1Variable": "Collection",
+                                    "version1Variable": "Collection",
                                     "version1Category": "FlowPr; FlowRatePr"
                                 },
                             ]

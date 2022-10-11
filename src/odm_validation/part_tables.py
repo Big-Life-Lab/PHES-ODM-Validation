@@ -182,6 +182,7 @@ def get_mappings(part: dict, version: Version) -> List[Mapping]:
         ids = [meta_get(m, part, 'version1Variable')]
     elif kind == MapKind.CATEGORY:
         ids = parse_version1Category(meta_get(m, part, 'version1Category'))
+        meta_mark(m, part, 'version1Variable')
     for id in filter(partial(is_not, None), ids):
         result.append(Mapping(kind=kind, id=id, table=table, meta_entry=m))
     return result
