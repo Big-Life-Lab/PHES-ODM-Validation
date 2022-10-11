@@ -1,16 +1,16 @@
 """Part-table definitions."""
 
 import sys
-import logging
 import traceback
 from collections import defaultdict
 from dataclasses import dataclass
 from enum import Enum
 from functools import partial
+from logging import warning
 from operator import is_not
 from pprint import pprint
 from semver import Version
-from typing import Dict, List, Set
+from typing import DefaultDict, Dict, List, Set
 
 import utils
 from versions import parse_version
@@ -22,7 +22,7 @@ Row = dict
 Dataset = List[Row]
 MetaEntry = Dict[str, str]
 Meta = List[MetaEntry]
-MetaMap = Dict[PartId, Meta]
+MetaMap = DefaultDict[PartId, Meta]
 Schema = dict  # A Cerberus validation schema
 
 
@@ -303,8 +303,7 @@ def filter_compatible(parts: Dataset, version: Version) -> Dataset:
     result = []
     for row in parts:
         if not (is_compatible(row, version) or has_mapping(row, version)):
-            print(f'skipping incompatible part: {get_partID(row)}')
-            quit()
+            warning(f'skipping incompatible part: {get_partID(row)}')
             continue
         result.append(row)
     return result
@@ -334,7 +333,7 @@ def replace_table_id(part: dict, table_id0: str, table_id1: str, meta
         part[req_key1 + _ORIGINAL_VAL] = req_val0
 
 
-def transform_v2_to_v1(parts0: Dataset) -> (Dataset, MetaMap):
+def transform_v2_to_v1(parts0: Dataset, meta: MetaMap) -> (Dataset, MetaMap):
     """Transforms v2 parts to v1, based on `version1*` fields.
 
     :parts0: stripped parts
@@ -343,7 +342,6 @@ def transform_v2_to_v1(parts0: Dataset) -> (Dataset, MetaMap):
     """
     parts1 = []
     version = Version(major=1)
-    meta: MetaMap = defaultdict(list)
     for p0 in parts0:
         for mapping in get_mappings(p0, version):
             p1 = p0.copy()
@@ -358,6 +356,14 @@ def transform_v2_to_v1(parts0: Dataset) -> (Dataset, MetaMap):
             parts1.append(p1)
             meta[pid1].append(m)
     return (parts1, meta)
+
+
+# def get_or_put(d: dict, key, default_val):
+#     val = d.get(key)
+#     if val is None:
+#         val = default_val
+#         d[key] = val
+#     return val
 
 
 def gen_partdata(parts: Dataset, meta: MetaMap):

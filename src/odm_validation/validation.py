@@ -6,6 +6,7 @@ generation and data validation.
 import os
 import re
 import sys
+from collections import defaultdict
 from dataclasses import dataclass
 from os.path import join, normpath
 from pathlib import Path
@@ -96,7 +97,7 @@ def generate_validation_schema(parts, schema_version=ODM_LATEST) -> Schema:
     # `parts` must be stripped before further processing. This is important for
     # performance and simplicity of implementation.
     cerb_schema = {}
-    meta: pt.MetaMap = {}
+    meta: pt.MetaMap = defaultdict(list)
 
     version = parse_version(schema_version)
     parts = pt.strip(parts)
