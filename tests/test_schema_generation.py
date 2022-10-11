@@ -198,7 +198,7 @@ expected_cerb_schema_v1 = {
                                 {
                                     "partID": "comp3h",
                                     # "partType": "category",
-                                    # "catSetID": "collectCat",
+                                    "catSetID": "collectCat",
                                     "version1Location": "variableCategories",
                                     "version1Table": "Sample",
                                     "version1Variable": "Collection",
@@ -207,7 +207,7 @@ expected_cerb_schema_v1 = {
                                 {
                                     "partID": "comp8h",
                                     # "partType": "category",
-                                    # "catSetID": "collectCat",
+                                    "catSetID": "collectCat",
                                     "version1Location": "variableCategories",
                                     "version1Table": "Sample",
                                     "version1Variable": "Collection",
@@ -216,7 +216,7 @@ expected_cerb_schema_v1 = {
                                 {
                                     "partID": "flowPr",
                                     # "partType": "category",
-                                    # "catSetID": "collectCat",
+                                    "catSetID": "collectCat",
                                     "version1Location": "variableCategories",
                                     "version1Table": "Sample",
                                     "version1Variable": "Collection",
