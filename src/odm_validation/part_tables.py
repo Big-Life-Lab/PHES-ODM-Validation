@@ -356,14 +356,6 @@ def transform_v2_to_v1(parts0: Dataset, meta0: MetaMap) -> (Dataset, MetaMap):
     return (parts1, meta1)
 
 
-# def get_or_put(d: dict, key, default_val):
-#     val = d.get(key)
-#     if val is None:
-#         val = default_val
-#         d[key] = val
-#     return val
-
-
 def gen_partdata(parts: Dataset, meta: MetaMap):
     """
     :parts: From v2. Must be stripped.
