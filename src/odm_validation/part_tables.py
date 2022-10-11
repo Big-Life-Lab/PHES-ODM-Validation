@@ -1,5 +1,6 @@
 """Part-table definitions."""
 
+from copy import deepcopy
 from dataclasses import dataclass
 from enum import Enum
 from functools import partial
@@ -329,7 +330,7 @@ def replace_table_id(part: dict, table_id0: str, table_id1: str, meta
         part[req_key1 + _ORIGINAL_VAL] = req_val0
 
 
-def transform_v2_to_v1(parts0: Dataset, meta: MetaMap) -> (Dataset, MetaMap):
+def transform_v2_to_v1(parts0: Dataset, meta0: MetaMap) -> (Dataset, MetaMap):
     """Transforms v2 parts to v1, based on `version1*` fields.
 
     :parts0: stripped parts
@@ -337,6 +338,7 @@ def transform_v2_to_v1(parts0: Dataset, meta: MetaMap) -> (Dataset, MetaMap):
     Returns (new_parts, parts_meta).
     """
     parts1 = []
+    meta1 = deepcopy(meta0)
     version = Version(major=1)
     for p0 in parts0:
         for mapping in get_mappings(p0, version):
@@ -350,8 +352,8 @@ def transform_v2_to_v1(parts0: Dataset, meta: MetaMap) -> (Dataset, MetaMap):
                 table1 = mapping.table
                 replace_table_id(p1, table0, table1, m)
             parts1.append(p1)
-            meta[pid1].append(m)
-    return (parts1, meta)
+            meta1[pid1].append(m)
+    return (parts1, meta1)
 
 
 # def get_or_put(d: dict, key, default_val):

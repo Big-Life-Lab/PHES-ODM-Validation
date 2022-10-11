@@ -103,7 +103,7 @@ def generate_validation_schema(parts, schema_version=ODM_LATEST) -> Schema:
     parts = pt.strip(parts)
     parts = pt.filter_compatible(parts, version)
     if version.major == 1:
-        (parts, meta) = pt.transform_v2_to_v1(parts)
+        (parts, meta) = pt.transform_v2_to_v1(parts, meta)
 
     data = pt.gen_partdata(parts, meta)
 
