@@ -6,9 +6,11 @@ import traceback
 from collections import defaultdict
 from dataclasses import dataclass
 from enum import Enum
+from functools import partial
+from operator import is_not
+from pprint import pprint
 from semver import Version
 from typing import Dict, List, Set
-from pprint import pprint
 
 import utils
 from versions import parse_version
@@ -164,14 +166,14 @@ def meta_pop(meta: MetaEntry, part, key):
     return result
 
 
-# TODO
-# def parse_version1Category(s: str) -> List[str]:
-#     cats = s.split(';')
-#     return list(map(strip, cats))
+def parse_version1Category(s: str) -> List[str]:
+    cats = s.split(';')
+    return list(map(str.strip, cats))
 
 
-def get_mapping(part: dict, version: Version) -> Mapping:
+def get_mappings(part: dict, version: Version) -> List[Mapping]:
     """Returns `None` when no mapping exists."""
+    result = []
     if version.major != 1:
         return
     m: MetaEntry = {}
@@ -179,18 +181,19 @@ def get_mapping(part: dict, version: Version) -> Mapping:
     loc = meta_get(m, part, 'version1Location')
     kind = V1_KIND_MAP.get(loc)
     if kind == MapKind.TABLE:
-        id = table
+        ids = [table]
     elif kind == MapKind.ATTRIBUTE:
-        id = meta_get(m, part, 'version1Variable')
+        ids = [meta_get(m, part, 'version1Variable')]
     elif kind == MapKind.CATEGORY:
-        id = meta_get(m, part, 'version1Category')
-    if not (kind and table and id):
-        return
-    return Mapping(kind=kind, id=id, table=table, meta_entry=m)
+        ids = parse_version1Category(meta_get(m, part, 'version1Category'))
+    for id in filter(partial(is_not, None), ids):
+        result.append(Mapping(kind=kind, id=id, table=table, meta_entry=m))
+    return result
 
 
 def has_mapping(part: dict, version: Version) -> bool:
-    return get_mapping(part, version) is not None
+    ms = get_mappings(part, version)
+    return ms and len(ms) > 0
 
 
 def table_required_field(table_name):
@@ -342,20 +345,18 @@ def transform_v2_to_v1(parts0: Dataset) -> (Dataset, MetaMap):
     version = Version(major=1)
     meta: MetaMap = defaultdict(list)
     for p0 in parts0:
-        mapping = get_mapping(p0, version)
-
-        p1 = p0.copy()
-        m: MetaEntry = mapping.meta_entry.copy()
-        pid0 = meta_get(m, p0, PART_ID)
-        pid1 = mapping.id
-        replace_id(p1, pid0, pid1)
-        if is_attr(p1):
-            table0 = get_table_id(p0, m)
-            table1 = mapping.table
-            replace_table_id(p1, table0, table1, m)
-
-        parts1.append(p1)
-        meta[pid1].append(m)
+        for mapping in get_mappings(p0, version):
+            p1 = p0.copy()
+            m: MetaEntry = mapping.meta_entry.copy()
+            pid0 = meta_get(m, p0, PART_ID)
+            pid1 = mapping.id
+            replace_id(p1, pid0, pid1)
+            if is_attr(p1):
+                table0 = get_table_id(p0, m)
+                table1 = mapping.table
+                replace_table_id(p1, table0, table1, m)
+            parts1.append(p1)
+            meta[pid1].append(m)
     return (parts1, meta)
 
 

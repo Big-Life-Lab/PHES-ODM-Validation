@@ -95,17 +95,17 @@ parts_v2 = [
         "version1Variable": "collection",
         "version1Category": "comp8h"
     },
-    # {
-    #     "partID": "flowPr",
-    #     "partType": "category",
-    #     "samples": "input",
-    #     "dataType": "varchar",
-    #     "catSetID": "collectCat",
-    #     "version1Location": "variableCategories",
-    #     "version1Table": "Sample",
-    #     "version1Variable": "collection",
-    #     "version1Category": "flowPr; flowRatePr"
-    # }
+    {
+        "partID": "flowPr",
+        "partType": "category",
+        "samples": "input",
+        "dataType": "varchar",
+        "catSetID": "collectCat",
+        "version1Location": "variableCategories",
+        "version1Table": "Sample",
+        "version1Variable": "collection",
+        "version1Category": "flowPr; flowRatePr"
+    }
 ]
 
 expected_cerb_schema_v1 = {
@@ -187,7 +187,7 @@ expected_cerb_schema_v1 = {
             "schema": {
                 "collection": {
                     # "type": "string",
-                    "allowed": ["comp3h", "comp8h"],  # , "flowPR", "flowRatePr"],
+                    "allowed": ["comp3h", "comp8h", "flowPr", "flowRatePr"],
                     "meta": [
                         {
                             "ruleID": "invalid_category",
@@ -219,15 +219,15 @@ expected_cerb_schema_v1 = {
                                     # "version1Variable": "collection",
                                     "version1Category": "comp8h"
                                 },
-                                # {
-                                #     "partID": "flowPr",
-                                #     "partType": "category",
-                                #     "catSetID": "collectCat",
-                                #     "version1Location": "variableCategories",
-                                #     "version1Table": "Sample",
-                                #     "version1Variable": "collection",
-                                #     "version1Category": "flowPr;flowRatePr"
-                                # }
+                                {
+                                    "partID": "flowPr",
+                                    # "partType": "category",
+                                    # "catSetID": "collectCat",
+                                    "version1Location": "variableCategories",
+                                    "version1Table": "Sample",
+                                    # "version1Variable": "collection",
+                                    "version1Category": "flowPr; flowRatePr"
+                                },
                             ]
                         }
                     ]
