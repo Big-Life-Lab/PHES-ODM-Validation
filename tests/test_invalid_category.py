@@ -185,7 +185,7 @@ class TestInvalidCategory(unittest.TestCase):
         self.assertEqual(e['columnName'], invalid_value_column)
         self.assertEqual(e['invalidValue'], invalid_value)
 
-    def test_invalid_catecory_v1(self):
+    def test_invalid_category_v1(self):
         self.invalid_category_impl(schema_v1, 'Collection', 'flow',
                                    invalid_category_pass_v1,
                                    invalid_category_fail_v1)
