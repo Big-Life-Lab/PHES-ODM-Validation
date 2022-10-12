@@ -5,8 +5,6 @@ import common
 
 from validation import validate_data
 
-schema_v2 = common.import_schema_v2()
-
 schema_v1 = {
     'schemaVersion': '1',
     'schema': {
@@ -35,6 +33,8 @@ schema_v1 = {
         },
     }
 }
+
+schema_v2 = common.import_schema_v2()
 
 missing_mandatory_column_pass_v1 = {
     'Address': [

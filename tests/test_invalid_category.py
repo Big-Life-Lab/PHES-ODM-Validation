@@ -61,8 +61,6 @@ parts_v2 = [
     }
 ]
 
-schema_v2 = common.import_schema_v2()
-
 schema_v1 = {
     'schemaVersion': '1.0.0',
     'schema': {
@@ -132,9 +130,8 @@ schema_v1 = {
     }
 }
 
-dir = os.path.dirname(os.path.realpath(__file__))
-path = join(dir, '../assets/validation-schemas/schema-v2.0.0-rc.1.yml')
-schema_v2 = utils.import_schema(path)
+schema_v2 = common.import_schema_v2()
+
 
 invalid_category_pass_v1 = {
     'Sample': [
