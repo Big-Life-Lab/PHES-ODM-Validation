@@ -1,13 +1,9 @@
-import os
 import unittest
 from copy import deepcopy
-from os.path import join
 
 import common
 
-import utils
 from validation import generate_validation_schema, validate_data
-
 
 parts_v2 = [
     {
@@ -131,7 +127,6 @@ schema_v1 = {
 }
 
 schema_v2 = common.import_schema_v2()
-
 
 invalid_category_pass_v1 = {
     'Sample': [
