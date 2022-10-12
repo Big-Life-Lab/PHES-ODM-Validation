@@ -1,10 +1,10 @@
 import unittest
 
-import context
+import common
 from part_tables import is_compatible
 from versions import parse_version
 
-context.unused_import_dummy = 1
+common.unused_import_dummy = 1
 
 
 def get_row(first: str, last: str, active: bool):

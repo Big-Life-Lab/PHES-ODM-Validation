@@ -2,10 +2,10 @@ import unittest
 
 from semver import Version
 
-import context
+import common
 from versions import parse_version
 
-context.unused_import_dummy = 1
+common.unused_import_dummy = 1
 
 
 class TestParseVersion(unittest.TestCase):
