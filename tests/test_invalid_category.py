@@ -11,120 +11,120 @@ from validation import generate_validation_schema, validate_data
 
 parts_v2 = [
     {
-        "partID": "samples",
-        "partType": "table",
-        "version1Location": "tables",
-        "version1Table": "Sample",
+        'partID': 'samples',
+        'partType': 'table',
+        'version1Location': 'tables',
+        'version1Table': 'Sample',
     },
     {
-        "partID": "coll",
-        "partType": "attribute",
-        "samples": "header",
-        "dataType": "categorical",
-        "catSetID": "collectCat",
-        "version1Location": "variables",
-        "version1Table": "Sample",
-        "version1Variable": "Collection",
+        'partID': 'coll',
+        'partType': 'attribute',
+        'samples': 'header',
+        'dataType': 'categorical',
+        'catSetID': 'collectCat',
+        'version1Location': 'variables',
+        'version1Table': 'Sample',
+        'version1Variable': 'Collection',
     },
     {
-        "partID": "comp3h",
-        "partType": "category",
-        "samples": "input",
-        "dataType": "varchar",
-        "catSetID": "collectCat",
-        "version1Location": "variableCategories",
-        "version1Table": "Sample",
-        "version1Variable": "Collection",
-        "version1Category": "Comp3h"
+        'partID': 'comp3h',
+        'partType': 'category',
+        'samples': 'input',
+        'dataType': 'varchar',
+        'catSetID': 'collectCat',
+        'version1Location': 'variableCategories',
+        'version1Table': 'Sample',
+        'version1Variable': 'Collection',
+        'version1Category': 'Comp3h'
     },
     {
-        "partID": "comp8h",
-        "partType": "category",
-        "samples": "input",
-        "dataType": "varchar",
-        "catSetID": "collectCat",
-        "version1Location": "variableCategories",
-        "version1Table": "Sample",
-        "version1Variable": "Collection",
-        "version1Category": "Comp8h"
+        'partID': 'comp8h',
+        'partType': 'category',
+        'samples': 'input',
+        'dataType': 'varchar',
+        'catSetID': 'collectCat',
+        'version1Location': 'variableCategories',
+        'version1Table': 'Sample',
+        'version1Variable': 'Collection',
+        'version1Category': 'Comp8h'
     },
     {
-        "partID": "flowPr",
-        "partType": "category",
-        "samples": "input",
-        "dataType": "varchar",
-        "catSetID": "collectCat",
-        "version1Location": "variableCategories",
-        "version1Table": "Sample",
-        "version1Variable": "Collection",
-        "version1Category": "FlowPr; FlowRatePr"
+        'partID': 'flowPr',
+        'partType': 'category',
+        'samples': 'input',
+        'dataType': 'varchar',
+        'catSetID': 'collectCat',
+        'version1Location': 'variableCategories',
+        'version1Table': 'Sample',
+        'version1Variable': 'Collection',
+        'version1Category': 'FlowPr; FlowRatePr'
     }
 ]
 
 schema_v2 = common.import_schema_v2()
 
 schema_v1 = {
-    "schemaVersion": "1.0.0",
-    "schema": {
-        "Sample": {
-            "type": "list",
-            "schema": {
-                "type": "dict",
-                "schema": {
-                    "Collection": {
-                        # "type": "string",
-                        "allowed": ["Comp3h", "Comp8h", "FlowPr", "FlowRatePr"],
-                        "meta": [
+    'schemaVersion': '1.0.0',
+    'schema': {
+        'Sample': {
+            'type': 'list',
+            'schema': {
+                'type': 'dict',
+                'schema': {
+                    'Collection': {
+                        # 'type': 'string',
+                        'allowed': ['Comp3h', 'Comp8h', 'FlowPr', 'FlowRatePr'],
+                        'meta': [
                             {
-                                "ruleID": "invalid_category",
-                                "meta": [
+                                'ruleID': 'invalid_category',
+                                'meta': [
                                     {
-                                        "partID": "coll",
-                                        "samples": "header",
-                                        # "dataType": "categorical",
-                                        "catSetID": "collectCat",
-                                        "version1Location": "variables",
-                                        "version1Table": "Sample",
-                                        "version1Variable": "Collection"
+                                        'partID': 'coll',
+                                        'samples': 'header',
+                                        # 'dataType': 'categorical',
+                                        'catSetID': 'collectCat',
+                                        'version1Location': 'variables',
+                                        'version1Table': 'Sample',
+                                        'version1Variable': 'Collection'
                                     },
                                     {
-                                        "partID": "comp3h",
-                                        # "partType": "category",
-                                        "catSetID": "collectCat",
-                                        "version1Location": "variableCategories",
-                                        "version1Table": "Sample",
-                                        "version1Variable": "Collection",
-                                        "version1Category": "Comp3h"
+                                        'partID': 'comp3h',
+                                        # 'partType': 'category',
+                                        'catSetID': 'collectCat',
+                                        'version1Location': 'variableCategories',
+                                        'version1Table': 'Sample',
+                                        'version1Variable': 'Collection',
+                                        'version1Category': 'Comp3h'
                                     },
                                     {
-                                        "partID": "comp8h",
-                                        # "partType": "category",
-                                        "catSetID": "collectCat",
-                                        "version1Location": "variableCategories",
-                                        "version1Table": "Sample",
-                                        "version1Variable": "Collection",
-                                        "version1Category": "Comp8h"
+                                        'partID': 'comp8h',
+                                        # 'partType': 'category',
+                                        'catSetID': 'collectCat',
+                                        'version1Location': 'variableCategories',
+                                        'version1Table': 'Sample',
+                                        'version1Variable': 'Collection',
+                                        'version1Category': 'Comp8h'
                                     },
                                     {
-                                        "partID": "flowPr",
-                                        # "partType": "category",
-                                        "catSetID": "collectCat",
-                                        "version1Location": "variableCategories",
-                                        "version1Table": "Sample",
-                                        "version1Variable": "Collection",
-                                        "version1Category": "FlowPr; FlowRatePr"
+                                        'partID': 'flowPr',
+                                        # 'partType': 'category',
+                                        'catSetID': 'collectCat',
+                                        'version1Location': 'variableCategories',
+                                        'version1Table': 'Sample',
+                                        'version1Variable': 'Collection',
+                                        'version1Category': 'FlowPr; FlowRatePr'
                                     },
                                 ]
                             }
                         ]
                     }
                 },
-                "meta": [
+                'meta': [
                     {
-                        "partID": "samples",
-                        # "partType": "table",
-                        "version1Location": "tables",
-                        "version1Table": "Sample"
+                        'partID': 'samples',
+                        # 'partType': 'table',
+                        'version1Location': 'tables',
+                        'version1Table': 'Sample'
                     }
                 ]
             }
@@ -170,7 +170,7 @@ invalid_category_fail_v2['samples'][0]['coll'] = 'flow'
 
 class TestInvalidCategory(unittest.TestCase):
     def test_schema_generation_v1(self):
-        result = generate_validation_schema(parts_v2, schema_version="1.0.0")
+        result = generate_validation_schema(parts_v2, schema_version='1.0.0')
         self.assertDictEqual(schema_v1, result)
 
     def invalid_category_impl(self, schema, invalid_value_column,

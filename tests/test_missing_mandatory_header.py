@@ -8,27 +8,27 @@ from validation import validate_data
 schema_v2 = common.import_schema_v2()
 
 schema_v1 = {
-    "schemaVersion": "1",
-    "schema": {
-        "Address": {
-            "type": "list",
-            "schema": {
-                "type": "dict",
-                "schema": {
-                    "addressID": {
-                        "required": True,
+    'schemaVersion': '1',
+    'schema': {
+        'Address': {
+            'type': 'list',
+            'schema': {
+                'type': 'dict',
+                'schema': {
+                    'addressID': {
+                        'required': True,
                     },
-                    "addL2": {}
+                    'addL2': {}
                 },
             }
         },
-        "Contact": {
-            "type": "list",
-            "schema": {
-                "type": "dict",
-                "schema": {
-                    "contactID": {
-                        "required": True,
+        'Contact': {
+            'type': 'list',
+            'schema': {
+                'type': 'dict',
+                'schema': {
+                    'contactID': {
+                        'required': True,
                     }
                 }
             },
