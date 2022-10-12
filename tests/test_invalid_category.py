@@ -67,7 +67,7 @@ schema_v1 = {
                 'schema': {
                     'Collection': {
                         # 'type': 'string',
-                        'allowed': ['Comp3h', 'Comp8h', 'FlowPr', 'FlowRatePr'],
+                        'allowed': ['Comp3h', 'Comp8h', 'FlowPr', 'FlowRatePr'],  # noqa:E501
                         'meta': [
                             {
                                 'ruleID': 'invalid_category',
@@ -85,7 +85,7 @@ schema_v1 = {
                                         'partID': 'comp3h',
                                         # 'partType': 'category',
                                         'catSetID': 'collectCat',
-                                        'version1Location': 'variableCategories',
+                                        'version1Location': 'variableCategories',  # noqa:E501
                                         'version1Table': 'Sample',
                                         'version1Variable': 'Collection',
                                         'version1Category': 'Comp3h'
@@ -94,7 +94,7 @@ schema_v1 = {
                                         'partID': 'comp8h',
                                         # 'partType': 'category',
                                         'catSetID': 'collectCat',
-                                        'version1Location': 'variableCategories',
+                                        'version1Location': 'variableCategories',  # noqa:E501
                                         'version1Table': 'Sample',
                                         'version1Variable': 'Collection',
                                         'version1Category': 'Comp8h'
@@ -103,10 +103,10 @@ schema_v1 = {
                                         'partID': 'flowPr',
                                         # 'partType': 'category',
                                         'catSetID': 'collectCat',
-                                        'version1Location': 'variableCategories',
+                                        'version1Location': 'variableCategories',  # noqa:E501
                                         'version1Table': 'Sample',
                                         'version1Variable': 'Collection',
-                                        'version1Category': 'FlowPr; FlowRatePr'
+                                        'version1Category': 'FlowPr; FlowRatePr'  # noqa:E501
                                     },
                                 ]
                             }
