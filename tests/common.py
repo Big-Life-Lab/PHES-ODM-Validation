@@ -21,10 +21,11 @@ def setup_import_path():
     pkg_dir = join(src_dir, 'odm_validation')
     sys.path.append(pkg_dir)
 
+
 setup_import_path()
 
-import utils
-from schemas import Schema
+import utils  # noqa:E402
+from schemas import Schema  # noqa:E402
 
 
 def import_schema_v2() -> Schema:
