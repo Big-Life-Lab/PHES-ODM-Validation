@@ -1,8 +1,8 @@
+import logging
 import os
 import re
 import toml
 from importlib import metadata
-from logging import warning
 from os import path
 from semver import Version
 from typing import Optional, Tuple
@@ -65,20 +65,23 @@ def _coerce(version: str) -> Tuple[Version, Optional[str]]:
     return ver, rest
 
 
-def parse_version(version: str, id='', label='', default: Version = None
-                  ) -> Version:
+def parse_version(version: str, id='', label='', default: Version = None,
+                  verbose=True) -> Version:
     origin = '' if id == '' and label == '' else f'for "{id}.{label}"'
-    correctionMsg = 'corrected version {} --> {} ' + origin
+
+    def log_correction(new):
+        if verbose:
+            logging.warning(f'corrected version {version} --> {new} ' + origin)
 
     if version is None or version == '':
         if not default:
             raise ValueError(f'missing version {origin}')
-        warning(correctionMsg.format(version, default))
+        log_correction(default)
         return default
 
     try:
         return Version.parse(version)
     except ValueError:
         (result, _) = _coerce(version)
-        warning(correctionMsg.format(version, result))
+        log_correction(result)
         return result
