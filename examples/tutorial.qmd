@@ -114,10 +114,9 @@ print(report.data_version)
 
 # Schema generation
 
-You can generate your own schema from a CSV file of the parts table.
-The resulting schema can then be used for validation. The version specified as
-an argument to `generate_validation_schema` must match the version of the parts
-table.
+You can generate your own validation schema from a CSV file of the parts table,
+using the `generate_validation_schema` function. The version parameter
+determines which version of the ODM the schema will be compatible with.
 
 ```{python}
 parts_file = join(ASSET_DIR, "dictionary/v2/parts.csv")
