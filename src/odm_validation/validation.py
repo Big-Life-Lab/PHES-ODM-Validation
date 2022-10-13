@@ -41,7 +41,7 @@ def _get_latest_odm_version() -> str:
         dir_name = os.path.basename(dir_path)
         if not (match := re.search('v(.+)', dir_name)):
             continue
-        v = parse_version(match.group(1))
+        v = parse_version(match.group(1), verbose=False)
         versions.append(str(v))
     if len(versions) == 0:
         sys.exit("failed to get latest ODM version")
