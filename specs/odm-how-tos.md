@@ -173,3 +173,12 @@ For example in the ODM snippet below,
 ```
 
 The `geoLat` and `geoLong` columns in the sites table are mandatory and optional required while the `measureID` column is not present in the sites table.
+
+# Getting the data type for a column
+
+Once we have the [columns for a table](#how-to-get-the-columns-names-for-a-table), we can get its data type by using the `dataType` column in the parts sheet. The column has one of the following values:
+
+* **varchar**
+* **integer**
+* **float**
+
