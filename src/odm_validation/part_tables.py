@@ -384,7 +384,8 @@ def gen_partdata(parts: Dataset, meta: MetaMap):
 
         # XXX: hack for setting meta['catSetID'] on category parts
         for val_id in values:
-            meta[val_id][0][CATSET_ID] = cs_id
+            if val_id in meta:
+                meta[val_id][0][CATSET_ID] = cs_id
 
     table_data = {}
     for id in table_names:
