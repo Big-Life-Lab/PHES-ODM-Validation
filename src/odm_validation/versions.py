@@ -68,17 +68,17 @@ def _coerce(version: str) -> Tuple[Version, Optional[str]]:
 def parse_version(version: str, id='', label='', default: Version = None
                   ) -> Version:
     origin = '' if id == '' and label == '' else f'for "{id}.{label}"'
-    correctionMsg = 'corrected version 0 --> {} ' + origin
+    correctionMsg = 'corrected version {} --> {} ' + origin
 
     if version is None or version == '':
         if not default:
             raise ValueError(f'missing version {origin}')
-        warning(correctionMsg.format(default))
+        warning(correctionMsg.format(version, default))
         return default
 
     try:
         return Version.parse(version)
     except ValueError:
         (result, _) = _coerce(version)
-        warning(correctionMsg.format(result))
+        warning(correctionMsg.format(version, result))
         return result
