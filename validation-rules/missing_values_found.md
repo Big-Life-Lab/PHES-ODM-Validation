@@ -1,25 +1,57 @@
 # missing_values_found
 
-This rule checks if mandatory columns contain any missing values. The ODM dictionary contains parts to define what is considered a missing value using the part type value of `missingness`. 
+This rule checks if a mandatory column contain any missing values. A value is considered missing if it contains an empty string or if it contains one of the values considered as missing by the ODM dictionary.
 
-An example snippet dataset that would fail this rule is shown below. Assume in the following examples that values of **na** are considered missing.
+Consider a mandatory column named `geoLat` in a `sites` table. The following ODM dataset snippet would fail validation due to the first row having an empty string for the `geoLat` column value. 
 
 ```python
 {
     "sites": [
         {
             "siteID": "1",
-            "geoLat": "na"
+            "geoLat": ""
         },
         {
             "siteID": "2",
-            "geoLat": 1
+            "geoLat": "1"
         }
     ]
 }
 ```
 
-The above dataset snippet would fail validation since the `geoLat` column is mandatory in the `sites` table and has a missing value in the first row.
+In addition, column values that are an empty string when trimmed should also fail this validation rule. For example, the following ODM data snippet would also fail validation,
+
+```python
+{
+    "sites": [
+        {
+            "siteID": "1",
+            "geoLat": "  "
+        },
+        {
+            "siteID": "2",
+            "geoLat": "1"
+        }
+    ]
+}
+```
+
+Finally, if the ODM dictionary considers values of `NA` to be missing, the following would fail validation,
+
+```python
+{
+    "sites": [
+        {
+            "siteID": "1",
+            "geoLat": "NA"
+        },
+        {
+            "siteID": "2",
+            "geoLat": "1"
+        }
+    ]
+}
+```
 
 The following dataset snippet would pass validation
 
@@ -28,19 +60,19 @@ The following dataset snippet would pass validation
     "sites": [
         {
             "siteID": "1",
-            "geoLat": 2
+            "geoLat": "2"
         },
         {
             "siteID": "2",
-            "geoLat": 1
+            "geoLat": "1"
         }
     ]
 }
 ```
 
-## Error report
+## Warning report
 
-The error report should have the following fields
+A value that is invalid due to this rule should generate a **warning** and **not** an error. The warning report should have the following fields
 
 * **errorType**: missing_values_found
 * **tableName**: The name of the table containing the missing values
@@ -48,9 +80,11 @@ The error report should have the following fields
 * **rowNumber**: The index of the table row with the error
 * **row**: The dictionary containing the row
 * **validationRuleFields**: The ODM data dictionary rows used to generate this rule
-* **message**: Mandatory column <column_name> in table <table_name> contains missing value <invalid_value> in row index <row_index>
+* **message**: Mandatory column <column_name> in table <table_name> has a missing value in row <row_index>
 
-The error report object for the example invalid row above,
+The warning report object for the example ODM datasets in the previous section are shown below.
+
+Example 1 warning report,
 
 ```python
 [
@@ -61,19 +95,63 @@ The error report object for the example invalid row above,
         "rowNumber": 1,
         "row": {
             "siteID": "1",
-            "geoLat": "na"
+            "geoLat": ""
         },
         "validationRuleFields": [
-            {
-                "partID": "na",
-                "partType": "missingness"
-            },
             {
                 "partID": "geoLat",
                 "sitesRequired": "mandatory"
             }
         ],
-        "message": "Mandatory column geoLat in table sites contains missing value na in row index 1"
+        "message": "Mandatory column geoLat in table sites has a missing value in row 1"
+    }
+]
+```
+
+Example 2 warning report,
+
+```python
+[
+    {
+        "errorType": "missing_values_found",
+        "tableName": "sites",
+        "columnName": "geoLat",
+        "rowNumber": 1,
+        "row": {
+            "siteID": "1",
+            "geoLat": "  "
+        },
+        "validationRuleFields": [
+            {
+                "partID": "geoLat",
+                "sitesRequired": "mandatory"
+            }
+        ],
+        "message": "Mandatory column geoLat in table sites has a missing value in row 1"
+    }
+]
+```
+
+Example 3 warning report,
+
+```python
+[
+    {
+        "errorType": "missing_values_found",
+        "tableName": "sites",
+        "columnName": "geoLat",
+        "rowNumber": 1,
+        "row": {
+            "siteID": "1",
+            "geoLat": "NA"
+        },
+        "validationRuleFields": [
+            {
+                "partID": "geoLat",
+                "sitesRequired": "mandatory"
+            }
+        ],
+        "message": "Mandatory column geoLat in table sites has a missing value in row 1"
     }
 ]
 ```
@@ -84,44 +162,35 @@ All the metadata for this rule is contained in the parts sheet in the data dicti
 
 1. Get all values that represent missing from the parts sheet
     1. Filter the parts to only include those whose `partType` column is `missingness`
-    2. [Filter the rows to only include those parts valid for the needed version of the ODM](../specs/module-functions.md#working-with-the-version-parameter)
-    2. The `partID` column has the missing value
+    2. The `partID` column has the missing value 
+1. [Get the table names from the dictionary](../specs/odm-how-tos.md#how-to-get-the-names-of-tables-that-are-part-of-the-odm)
 2. [Get all mandatory columns for each table](../specs/odm-how-tos.md#checking-if-a-column-is-mandatory-for-a-table)
 3. Add this rule for each mandatory column
 
-For example in the ODM snippet below,
+For example the ODM snippet below will be used to generate the validation schema for the examples above,
 
 ```python
 [
     {
-        "partID": "na",
-        "partType": "missingness",
-        "firstReleased": "2.0",
-        "status": "active",
-        "sites": "NA",
-        "sitesRequired": "NA"
-    },
-    {
-        "partID": "nan",
-        "partType": "missingness",
-        "firstReleased": "2.0",
-        "status": "active",
-        "sites": "NA",
-        "sitesRequired": "NA"
-    },
-    {
         "partID": "NA",
         "partType": "missingness",
         "firstReleased": "1.0",
-        "lastUpdated": "2.0",
-        "status": "depreciated",
+        "status": "active",
+        "sites": "NA",
+        "sitesRequired": "NA"
+    }
+    {
+        "partID": "sites",
+        "partType": "table",
+        "firstReleased": "1.0",
+        "status": "active",
         "sites": "NA",
         "sitesRequired": "NA"
     },
     {
         "partID": "geoLat",
         "partType": "attribute",
-        "firstReleased": "2.0",
+        "firstReleased": "1.0",
         "status": "active",
         "sites": "header",
         "sitesRequired": "mandatory"
@@ -129,7 +198,7 @@ For example in the ODM snippet below,
     {
         "partID": "geoLong",
         "partType": "attribute",
-        "firstReleased": "2.0",
+        "firstReleased": "1.0",
         "status": "active",
         "sites": "header",
         "sitesRequired": "optional"
@@ -137,11 +206,16 @@ For example in the ODM snippet below,
 ]
 ```
 
-if we're generating the schema for version 2.0 datasets and above, the missing values would be **na** and **nan**. The **NA** missing value described in the third part is only valid for datasets below 2.0. The validation rule would only be applied to the `geoLat` column in the `sites` table and not the `geoLong` column.
+we would add this rule only to the `geoLat` column in the `sites` table. This rule would **not** be added to the `geoLong` column in the same table.
 
 ## Cerberus Schema
 
-Although the cerberus library has a `nullable` rule, it does not allow customization of the null values. Instead, we will use the forbidden rule. For the example above the generated cerberus schema would be,
+We will need to use two rules from cerberus for this validation rule:
+
+1. A [forbidden](https://docs.python-cerberus.org/en/stable/validation-rules.html#forbidden) rule which includes all the `missingness` values from the dictionary
+2. A custom rule called `trimEmpty` for empty values which also handles trimming. Although the cerberus library has an `empty` rule, the rule allows values that are "empty" once trimmed.
+
+The cerberus schema for the ODM dictionary snippet above is shown below,
 
 ```python
 {
@@ -151,24 +225,21 @@ Although the cerberus library has a `nullable` rule, it does not allow customiza
             "type": "dict",
             "schema": {
                 "geoLat": {
-                    "forbidden": ["na", "nan"],
+                    "trimEmpty": False,
+                    "forbidden": ["NA"]
                     "meta": [
                         {
                             "ruleId": "missing_values_found",
                             "meta": [
-                                    {
-                                        "partID": "na",
-                                        "partType": "missingness"
-                                    },
-                                    {
-                                        "partID": "nan",
-                                        "partType": "missingness"
-                                    },
-                                    {
-                                        "partID": "geoLat",
-                                        "sitesRequired": "mandatory"
-                                    }
-                                ]
+                                {
+                                    "partID": "NA",
+                                    "partType": "missingness"
+                                },
+                                {
+                                    "partID": "geoLat",
+                                    "sitesRequired": "mandatory"
+                                }
+                            ]
                         }
                     ]
                 }
@@ -178,60 +249,56 @@ Although the cerberus library has a `nullable` rule, it does not allow customiza
 }
 ```
 
-The `meta` field for this rule should include:
+The `meta` field for this rule should have multiple entries,
 
-1. The parts sheet rows for the missing values. These dictionaries should include the `partID` and `partType` columns
-2. The parts sheet row for the mandatory column. This dictionary should include the `partID` and `<table_name>Required` columns
+* An entry per missing value from the dictionary. This entry should include the `partID` and `partType` column
+* and the row from the parts sheet for the mandatory column. The entry should include the `partID` and the `<table_name>Required` fields.
 
 ## ODM Version 1
 
-For version 1 we use the same steps as above with the following caveats,
-
-1. Get the missing values that are only valid for version 1
-2. Apply the rule to only those version 2 mandatory columns that have a [version 1 equivalent](../specs/odm-how-tos.md#getting-the-version-1-equivalent-for-a-part)
+For version 1 validation schemas, we add this rule to only those version 2 columns which have a [version 1 equivalent part](../specs/odm-how-tos.md#getting-the-version-1-equivalent-for-a-part).
 
 For the ODM snippet below,
 
 ```python
 [
     {
-        "partID": "na",
-        "partType": "missingness",
-        "firstReleased": "2.0",
-        "status": "active",
-        "sites": "NA",
-        "sitesRequired": "NA",
-        "version1Location": "NA",
-        "version1Table": "NA",
-        "version1Variable": "NA"
-    },
-    {
-        "partID": "nan",
-        "partType": "missingness",
-        "firstReleased": "2.0",
-        "status": "active",
-        "sites": "NA",
-        "sitesRequired": "NA",
-        "version1Location": "NA",
-        "version1Table": "NA",
-        "version1Variable": "NA"
-    },
-    {
         "partID": "NA",
         "partType": "missingness",
-        "firstReleased": "1.0",
-        "lastUpdated": "2.0",
-        "status": "depreciated",
+        "firstReleased": "2.0",
+        "status": "active",
         "sites": "NA",
         "sitesRequired": "NA",
         "version1Location": "NA",
         "version1Table": "NA",
+        "version1Variable": "NA"
+    },
+    {
+        "partID": "NA_missing",
+        "partType": "missingness",
+        "firstReleased": "1.0",
+        "status": "active",
+        "sites": "NA",
+        "sitesRequired": "NA",
+        "version1Location": "NA",
+        "version1Table": "NA",
+        "version1Variable": "NA"
+    },
+    {
+        "partID": "sites",
+        "partType": "table",
+        "firstReleased": "1.0",
+        "status": "active",
+        "sites": "NA",
+        "sitesRequired": "NA",
+        "version1Location": "tables",
+        "version1Table": "sites",
         "version1Variable": "NA"
     },
     {
         "partID": "geoLat",
         "partType": "attribute",
-        "firstReleased": "2.0",
+        "firstReleased": "1.0",
         "status": "active",
         "sites": "header",
         "sitesRequired": "mandatory",
@@ -242,7 +309,7 @@ For the ODM snippet below,
     {
         "partID": "geoLong",
         "partType": "attribute",
-        "firstReleased": "2.0",
+        "firstReleased": "1.0",
         "status": "active",
         "sites": "header",
         "sitesRequired": "optional",
@@ -263,23 +330,24 @@ The corresponding cerberus schema would be,
             "type": "dict",
             "schema": {
                 "latitude": {
-                    "forbidden": ["NA"],
+                    "trimEmpty": False,
+                    "forbidden": ["NA_missing"]
                     "meta": [
                         {
                             "ruleId": "missing_values_found",
                             "meta": [
-                                    {
-                                        "partID": "NA",
-                                        "partType": "missingness"
-                                    },
-                                    {
-                                        "partID": "geoLat",
-                                        "sitesRequired": "mandatory",
-                                        "version1Location": "variables",
-                                        "version1Table": "Site",
-                                        "version1Variable": "latitude"
-                                    },
-                                ]
+                                {
+                                    "partID": "NA_missing",
+                                    "partType": "missingness"
+                                },
+                                {
+                                    "partID": "geoLat",
+                                    "sitesRequired": "mandatory",
+                                    "version1Location": "variables",
+                                    "version1Table": "Site",
+                                    "version1Variable": "latitude"
+                                },
+                            ]
                         }
                     ]
                 }
@@ -289,8 +357,8 @@ The corresponding cerberus schema would be,
 }
 ```
 
-The meta field should include the same parts sheet rows as for version 2 along with the following additional columns for the column part,
+The meta field for version 1 includes everything in version 2 but should also include the following columns for the entry for the mandatory column,
 
-* **version1Location**
-* **version1Table**
-* **version1Variable**
+* `version1Location`
+* `version1Table`
+* `version1Variable`

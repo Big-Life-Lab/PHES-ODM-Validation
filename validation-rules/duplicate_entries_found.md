@@ -1,6 +1,6 @@
 # duplicate_entries_found
 
-This rule checks that if two or more entries in a table have the same primary key value, they have been validly updated. The rational has been described [here](https://odm.discourse.group/t/duplicate-entries-and-lastedited-field/55). In brief, the ODM wants to keep a papertrail of updates made to an entry by allowing users to update entries by: 1. Not deleting the old entry 2. Adding a new row for the updated entry and 3. Updating the `lastUpdated` field for the updated entry.
+This rule identifies when there are two identical entries with the same primary key. The rational has been described [here](https://odm.discourse.group/t/duplicate-entries-and-lastedited-field/55). In brief, the ODM can provide a papertrail of updates made to an entry by allowing users to update entries by: 1. Not deleting the old entry 2. Adding a new row for the updated entry and 3. Updating the `lastUpdated` field for the updated entry.
 
 For validation, this rule would be violated if two rows have the same primary key values but non-unique `lastUpdated` values. For example, the following ODM data snippet would fail validation.
 
@@ -146,7 +146,7 @@ In addition, a seperate error report object should be generated for each set of 
 ]
 ```
 
-two error report objects should be generated, one for rows 2 and 3 and one for rows 5 and 6.
+Two error report objects should be generated, one for rows 2 and 3 and one for rows 5 and 6.
 
 ## Rule metadata
 

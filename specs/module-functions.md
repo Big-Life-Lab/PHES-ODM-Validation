@@ -83,7 +83,7 @@ Validates an ODM dataset.
 
 Returns True if the the data had no validation errors.
 
-Returns an error object that describes all the failed validations. The type is shown below:
+When validation fails it returns a dictionary containing an error report list and other fields for backtracing. The error report for each validation rule is documented in the [specification for each validation rule](../validation-rules/).
 
 * type: A Python dictionary consisting of the following fields
     * `odmDataVersion`: string consisting of the version of the ODM data

@@ -11,95 +11,95 @@ context.unused_import_dummy = 1
 parts = [
     # missing_mandatory_column parts
     {
-        "partID": "addresses",
-        "partType": "table",
+        'partID': 'addresses',
+        'partType': 'table',
     },
     {
-        "partID": "contacts",
-        "partType": "table",
+        'partID': 'contacts',
+        'partType': 'table',
     },
     {
-        "partID": "addressID",
-        "partType": "attribute",
-        "addresses": "PK",
-        "addressesRequired": "mandatory",
+        'partID': 'addressID',
+        'partType': 'attribute',
+        'addresses': 'PK',
+        'addressesRequired': 'mandatory',
     },
     {
-        "partID": "addL2",
-        "partType": "attribute",
-        "addresses": "header",
-        "addressesRequired": "optional",
+        'partID': 'addL2',
+        'partType': 'attribute',
+        'addresses': 'header',
+        'addressesRequired': 'optional',
     },
     {
-        "partID": "contactID",
-        "partType": "attribute",
-        "contacts": "PK",
+        'partID': 'contactID',
+        'partType': 'attribute',
+        'contacts': 'PK',
     },
 
     # invalid_category parts
     {
-        "partID": "samples",
-        "partType": "table",
+        'partID': 'samples',
+        'partType': 'table',
     },
     {
-        "partID": "collection",
-        "partType": "attribute",
-        "samples": "header",
-        "dataType": "categorical",
-        "catSetID": "collectCat"
+        'partID': 'collection',
+        'partType': 'attribute',
+        'samples': 'header',
+        'dataType': 'categorical',
+        'catSetID': 'collectCat'
     },
     {
-        "partID": "comp3h",
-        "partType": "category",
-        "samples": "input",
-        "dataType": "varchar",
-        "catSetID": "collectCat"
+        'partID': 'comp3h',
+        'partType': 'category',
+        'samples': 'input',
+        'dataType': 'varchar',
+        'catSetID': 'collectCat'
     },
     {
-        "partID": "comp8h",
-        "partType": "category",
-        "samples": "input",
-        "dataType": "varchar",
-        "catSetID": "collectCat"
+        'partID': 'comp8h',
+        'partType': 'category',
+        'samples': 'input',
+        'dataType': 'varchar',
+        'catSetID': 'collectCat'
     },
     {
-        "partID": "flowPr",
-        "partType": "category",
-        "samples": "input",
-        "dataType": "varchar",
-        "catSetID": "collectCat"
+        'partID': 'flowPr',
+        'partType': 'category',
+        'samples': 'input',
+        'dataType': 'varchar',
+        'catSetID': 'collectCat'
     }
 ]
 
 missing_mandatory_column_pass = {
-    "addresses": [
+    'addresses': [
         {
-            "addressID": "1",
-            "addL2": "123 Doe Street"
+            'addressID': '1',
+            'addL2': '123 Doe Street'
         }
     ]
 }
 
 missing_mandatory_column_fail = {
-    "addresses": [
+    'addresses': [
         {
-            "addL2": "123 Doe Street"
+            'addL2': '123 Doe Street'
         }
     ]
 }
 
 invalid_category_pass = {
-    "samples": [
+    'samples': [
         {
-            "collection": "flowPr"
+            'collection': 'flowPr'
         }
     ]
 }
 
 invalid_category_fail = {
-    "samples": [
+    'samples': [
         {
-            "collection": "flow"
+            'collection': 'flow'
         }
     ]
 }
@@ -121,8 +121,8 @@ class TestValiation(unittest.TestCase):
         self.assertIsNotNone(errors)
         self.assertEqual(len(errors), 1)
         e = errors[0]
-        self.assertEqual(e["errorType"], "missing_mandatory_column")
-        self.assertEqual(e["columnName"], "addressID")
+        self.assertEqual(e['errorType'], 'missing_mandatory_column')
+        self.assertEqual(e['columnName'], 'addressID')
 
     def test_invalid_category(self):
         errors = validate_data(self.schema, invalid_category_pass)
@@ -131,9 +131,9 @@ class TestValiation(unittest.TestCase):
         self.assertIsNotNone(errors)
         self.assertEqual(len(errors), 1)
         e = errors[0]
-        self.assertEqual(e["errorType"], "invalid_category")
-        self.assertEqual(e["columnName"], "collection")
-        self.assertEqual(e["invalidValue"], "flow")
+        self.assertEqual(e['errorType'], 'invalid_category')
+        self.assertEqual(e['columnName'], 'collection')
+        self.assertEqual(e['invalidValue'], 'flow')
 
 
 if __name__ == '__main__':

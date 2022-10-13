@@ -26,6 +26,36 @@ whereas the following dataset snippet would pass validation,
 }
 ```
 
+If the value to be validated is a string, then it should be coerced into a number and then validated. Values that cannot be coerced should be ignored and a warning logged. For example the following snippet should fail validation,
+
+```python
+{
+    "sites": [
+        {
+            "siteID": "1",
+            "geoLat": "-91"
+        }
+    ]
+}
+```
+
+whereas in the following snippet, the first row should be ignored and a warning logged informing the user that it was ignored and why.
+
+```python
+{
+    "sites": [
+        {
+            "siteID": "1",
+            "geoLat": "a"
+        },
+        {
+            "siteID": "1",
+            "geoLat": "-91"
+        }
+    ]
+}
+```
+
 The ODM dictionary is currently written so that the defined maximum values are inclusive i.e. only values greater than the maximum values are invalid. All other values should pass this rule. For example, for the `geoLat` column, a value of 90 would be valid.
 
 ## Error report
