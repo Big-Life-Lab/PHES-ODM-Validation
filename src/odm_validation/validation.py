@@ -70,7 +70,7 @@ def _error_msg(rule, table_id, column_id, row_num, value):
     )
 
 
-def _gen_rule_error(rule, table, column, row_index, row, value):
+def _gen_rule_error(rule, table, column, row_index, row, value, meta):
     row_num = row_index + 1
     error = {
         'errorType': rule.id,
@@ -78,18 +78,27 @@ def _gen_rule_error(rule, table, column, row_index, row, value):
         'columnName': column,
         'rowNumber': row_num,
         'row': row,
+        'validationRuleFields': meta,
         'message': _error_msg(rule, table, column, row_num, value),
         'invalidValue': value,
     }
     return error
 
 
-def _gen_error_entry(e, row) -> str:
+def _gen_error_entry(e, row, schema: Schema) -> str:
     rule_key = e.schema_path[-1]
     rule = _KEY_RULES.get(rule_key)
     assert rule, f'missing rule for constraint "{rule_key}"'
-    (table, row_index, column) = e.document_path
-    return _gen_rule_error(rule, table, column, row_index, row, e.value)
+    (table_id, row_index, column_id) = e.document_path
+    column = schema['schema'][table_id]['schema']['schema'][column_id]
+    column_meta = column.get('meta', [])
+    meta = list(
+        map(lambda x: x['meta'],
+            filter(lambda x: x['ruleID'] == rule.id,
+                   column_meta)))
+
+    return _gen_rule_error(rule, table_id, column_id, row_index, row, e.value,
+                           meta)
 
 
 def generate_validation_schema(parts, schema_version=ODM_LATEST) -> Schema:
@@ -141,7 +150,7 @@ def validate_data(schema: Schema,
                     row = e.value
                     for attr_errors in e.info:
                         for e in attr_errors:
-                            errors.append(_gen_error_entry(e, row))
+                            errors.append(_gen_error_entry(e, row, schema))
 
     return ValidationReport(
         data_version=data_version,
