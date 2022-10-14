@@ -1,0 +1,242 @@
+---
+title: "ODM Validation Tutorial"
+format: html
+jupyter: python3
+---
+
+This document goes along with a presentation made during the weekly ODM development group meeting. It introduces and demoes the ODM validation toolkit.
+
+The demo uses [quarto](https://quarto.org/).
+
+The next chunk includes all the setup code for this demo, importing the validation library, importing some libraries etc.
+
+```{python}
+#| echo: false
+
+import sys
+
+# Import the validation package. In the future you can install it using pip
+sys.path.append("../../src")
+
+# Allows access to all the installed packages on my computer
+sys.path.append("C:/Users/Yulric/AppData/Local/Programs/Python/Python39/Lib/site-packages")
+
+# For pretty printing
+from pprint import pprint
+```
+
+Import the functions from the package. It has two main functions:
+
+1. `validate_data`: which is used to validate an ODM dataset using a provided validation schema
+2. `generate_cerberus_schema`: which is used to generate a validation schema from the ODM dictionary
+
+```{python}
+from odm_validation.validation import validate_data, generate_validation_schema
+```
+
+Lets start by showing how to validate an ODM dataset. We will be working with a subset of the ODM dictionary. The dictionary has a sites table which "contains information about a site; the location where an environmental sample was taken.". The table has a number of columns but we'll be working with the `geoLat` and `geoLong` columns. These columns are mandatory in the table.
+
+The validation schema below specifies the mandatory rule.
+
+```{python}
+validation_schema = {
+    "sites": {
+        "type": "list",
+        "schema": {
+            "type": "dict",
+            "schema": {
+                "geoLat": {
+                    "required": True
+                },
+                "geoLong": {
+                    "required": True
+                }
+            }
+        }
+    }
+}
+```
+
+The above validation schema is actually based on a Python library called [cerberus](https://docs.python-cerberus.org/en/stable/schemas.html). Cerberus does all the validation heavy lifting in the package, the package is more a wrapper around it, making sure that the inputs and outputs to the package integrate well with the ODM. 
+
+The dataset in the next chunk has a `sites` table whose first row is invalid, its missing the `geoLat` column.
+
+```{python}
+invalid_odm_dataset = {
+    "sites": [
+        {
+            "geoLong": 1
+        }, 
+        {
+            "geoLat": 1,
+            "geoLong": 1
+        }
+    ]
+}
+```
+
+Consequentially, when we try to validate the dataset with our constructed validation schema it should not pass. Lets test that in the next chunk.
+
+```{python}
+validation_result = validate_data(
+    validation_schema,
+    invalid_odm_dataset
+)
+```
+
+The validation function needs two pieces of information, a validation schem and the ODM dataset to validate with it. Printing the validation result below, we can see that validation failed due to the absence of a `None` value. A failed validation results in an error report, which is a machine actionable report of all the validation errors in the dataset.
+
+```{python}
+pprint(validation_result)
+```
+
+The validation report consists of versioning metadata to help us debug any package errors but most importantly to ODM users is the `errors` field. This field is the list of validation errors in the dataset.
+
+Each field in the error report object provides metadata to trace where the error came from. The `message` field gives a human readable description of the error. Although most of the fields are self-explanatory, if further clarification is needed, the `errorType` field can be used to dig deeper by finding the specification file for the validation rule it refers. For example the `missing_mandatory_column` specification can be referenced in the [repo](../../validation-rules/missing_mandatory_column.md).
+
+For completeness lets validate a valid dataset which should return `None` signifying no errors were found.
+
+```{python}
+valid_odm_data = {
+    "sites": [
+        {
+            "geoLat": 1,
+            "geoLong": 1
+        }
+    ]
+}
+
+print(
+    validate_data(validation_schema, valid_odm_data)
+)
+```
+
+Creating your own validation schemas can get tedious due to the breadth of information in the dictionary. With the `generate_cerberus_schema function`, we can generate a validation schema using the dictionary files. The next chunk has a snippet from the parts sheet in the dictionary.
+
+```{python}
+parts_sheet = [
+    {
+        "partID": "sites",
+        "partType": "table",
+
+        "firstReleased": "1.0.0",
+        "lastUpdated": "2.0.0",
+        "status": "active"
+    },
+    {
+        "partID": "geoLat",
+        "partType": "attribute",
+        "sites": "header",
+        "sitesRequired": "mandatory",
+
+        "firstReleased": "1.0.0",
+        "lastUpdated": "2.0.0",
+        "status": "active"
+    },
+    {
+        "partID": "geoLong",
+        "partType": "attribute",
+        "sites": "header",
+        "sitesRequired": "mandatory",
+
+        "firstReleased": "1.0.0",
+        "lastUpdated": "2.0.0",
+        "status": "active"
+    }
+]
+```
+
+The above parts sheet describes,
+
+* A table called `sites`
+* and two mandatory columns in the `sites` table called `geoLat` and `geoLong`
+
+The next chunk will generate a validation schema from the above parts sheet,
+
+```{python}
+validation_schema_2 = generate_validation_schema(parts_sheet, "2.0.0")
+
+pprint(validation_schema_2)
+```
+
+This generates an identical validation schema as the one we manually created, with one small difference, it includes a meta field used to trace back to the row(s) in the parts sheet used to generate the validation rule. 
+
+Validating our invalid dataset using the new validation schema returns the same error report as above, except for a new `validationRuleFields`, which is just a copy of the meta field. We can see that by running the next chunk.
+
+```{python}
+pprint(validate_data(validation_schema_2, invalid_odm_dataset))
+```
+
+We can also generate validation for version 1 of the ODM dictionary. The next chunk showcases this,
+
+```{python}
+parts_sheet_v1 = [
+    {
+        "partID": "sites",
+        "partType": "table",
+        "firstReleased": "v1.0.0",
+        "version1Location": "tables",
+        "version1Table": "Site",
+
+        "firstReleased": "1.0.0",
+        "lastUpdated": "2.0.0",
+        "status": "active"
+    },
+    {
+        "partID": "geoLat",
+        "partType": "attribute",
+        "firstReleased": "v1.0.0",
+        "sites": "header",
+        "sitesRequired": "mandatory",
+        "version1Location": "variables",
+        "version1Table": "Site",
+        "version1Variable": "Latitude",
+
+        "firstReleased": "1.0.0",
+        "lastUpdated": "2.0.0",
+        "status": "active"
+    },
+    {
+        "partID": "geoLong",
+        "partType": "attribute",
+        "firstReleased": "v1.0.0",
+        "sites": "header",
+        "sitesRequired": "mandatory",
+        "version1Location": "variables",
+        "version1Table": "Site",
+        "version1Variable": "Longitude",
+
+        "firstReleased": "1.0.0",
+        "lastUpdated": "2.0.0",
+        "status": "active"
+    }
+]
+
+validation_schema_2_v1 = generate_validation_schema(parts_sheet_v1, "1.0.0")
+
+pprint(validation_schema_2_v1)
+```
+
+The printed validation schema is once again identical to the previous one except, the table and column names have been replaced with their version 1 equivalents.
+
+And we can use it to validate version 1 ODM datasets.
+
+```{python}
+version_one_invalid_odm_data = {
+    "Site": [
+        {
+            "Longitude": 1
+        }
+    ]
+}
+
+pprint(validate_data(validation_schema_2_v1, version_one_invalid_odm_data))
+```
+
+That's the end!
+
+Some final points, 
+
+The validation repo will come with validation schemas for every version of the ODM dictionary.
+
+The [validation-rules](../../validation-rules/) folder contains specifications for all the validation rules the library currently supports. 
