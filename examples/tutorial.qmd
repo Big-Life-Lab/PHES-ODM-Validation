@@ -24,9 +24,14 @@ pip install -r requirements.txt
 ```{python}
 #| echo: false
 
-# specify the package path
+import logging
 import sys
+
+# specify the package path
 sys.path.append("../src")
+
+# prevent warnings
+logging.disable(logging.WARNING)
 ```
 
 ```{python}
@@ -52,30 +57,32 @@ In this example we'll validate a table of samples with the default schema. The
 sample-data in a dictionary with the table-name as the key.
 
 ```{python}
-schema = utils.import_schema(join(ASSET_DIR, "validation-schemas/schema-v2.yml"))
+schema_file = join(ASSET_DIR, "validation-schemas/schema-v2.0.0-rc.1.yml")
+schema = utils.import_schema(schema_file)
 samples = utils.import_dataset("samples.csv")
 data = {"samples": samples}
-errors = validate_data(schema, data)
-print("number of errors: ", len(errors) if errors else 0)
+report = validate_data(schema, data)
+print("number of errors: ", 0 if report.valid() else len(report.errors))
 ```
 
 Our sample dataset has been validated successfully with no errors.
 
 Now let's see what happens when validating invalid data. We'll use the same
-schema, but replace the previous dataset with the invalid variant.
+schema, but replace the previous dataset with an invalid one.
 
 ```{python}
 samples = utils.import_dataset("samples-invalid.csv")
 data = {"samples": samples}
-errors = validate_data(schema, data)
+report = validate_data(schema, data)
 ```
 
-The error list contains one entry for every instance of a broken rule. Every
-error-entry is a dictionary with information of what went wrong and where. The
-message-field has the most useful human-readable information.
+The validation report contains a list of errors from all instances of broken
+rules. Each error is a dictionary with information of what went wrong
+and where. The message-field has a human-readable summary.
 
 ```{python}
-for e in errors:
+assert not report.valid()
+for e in report.errors:
     print("- " + e["message"])
 ```
 
@@ -88,14 +95,34 @@ the
 [validation-rules](https://github.com/Big-Life-Lab/PHES-ODM-Validation/tree/6-jupyter-example/validation-rules)
 directory.
 
-# Schema generation
+## Versioning
 
-You can generate your own schema from a `parts.csv` file.
-The resulting schema can then be used for validation.
+ODM version information is an important part of the validation report.
+Consecutive validations by different people may give different results
+depending on their validation-package version, schema version, etc. This may be
+avoided by looking at the versions included in the report. If two reports from
+the same data have differing versions, then the errors reported may differ too.
+
+The package version is set automatically, but the schema and data versions
+should be specified. The latest version is used by default when not specified.
 
 ```{python}
-parts = utils.import_dataset(join(ASSET_DIR, "parts.csv"))
-schema = generate_validation_schema(parts)
+print(report.package_version)
+print(report.schema_version)
+print(report.data_version)
+```
+
+# Schema generation
+
+You can generate your own schema from a CSV file of the parts table.
+The resulting schema can then be used for validation. The version specified as
+an argument to `generate_validation_schema` must match the version of the parts
+table.
+
+```{python}
+parts_file = join(ASSET_DIR, "dictionary/v2/parts.csv")
+parts = utils.import_dataset(parts_file)
+schema = generate_validation_schema(parts, '2.0.0-rc.1')
 ```
 
 The resulting schema can also be exported to a YAML file for future use.
