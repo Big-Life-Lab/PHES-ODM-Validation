@@ -3,21 +3,85 @@ from copy import deepcopy
 
 import common
 
-from validation import validate_data
+from validation import generate_validation_schema, validate_data
+
+parts_v2 = [
+    {
+        'partID': 'addresses',
+        'partType': 'table',
+        'version1Location': 'tables',
+        'version1Table': 'Address',
+    },
+    {
+        'partID': 'contacts',
+        'partType': 'table',
+        'version1Location': 'tables',
+        'version1Table': 'Contact',
+    },
+    {
+        'partID': 'addID',
+        'partType': 'attribute',
+        'addresses': 'pK',
+        'addressesRequired': 'mandatory',
+        'version1Location': 'variables',
+        'version1Table': 'Address',
+        'version1Variable': 'AddressID'
+    },
+    {
+        'partID': 'addL2',
+        'partType': 'attribute',
+        'addresses': 'header',
+        'addressesRequired': 'optional',
+        'version1Location': 'variables',
+        'version1Table': 'Address',
+        'version1Variable': 'AddressLineTwo'
+    },
+    {
+        'partID': 'contID',
+        'partType': 'attribute',
+        'contacts': 'pK',
+        'contactsRequired': 'mandatory',
+        'version1Location': 'variables',
+        'version1Table': 'Contact',
+        'version1Variable': 'ContactID'
+    },
+]
 
 schema_v1 = {
-    'schemaVersion': '1',
+    'schemaVersion': '1.0.0',
     'schema': {
         'Address': {
             'type': 'list',
             'schema': {
                 'type': 'dict',
                 'schema': {
-                    'addressID': {
+                    'AddressID': {
                         'required': True,
+                        'meta': [
+                            {
+                                'ruleID': 'missing_mandatory_column',
+                                'meta': [
+                                    {
+                                        'partID': 'addID',
+                                        'addresses': 'pK',
+                                        'addressesRequired': 'mandatory',
+                                        'version1Location': 'variables',
+                                        'version1Table': 'Address',
+                                        'version1Variable': 'AddressID'
+                                    }
+                                ]
+                            }
+                        ]
                     },
-                    'addL2': {}
                 },
+                'meta': [
+                    {
+                        'partID': 'addresses',
+                        # 'partType': 'table',
+                        'version1Location': 'tables',
+                        'version1Table': 'Address'
+                    }
+                ]
             }
         },
         'Contact': {
@@ -25,10 +89,33 @@ schema_v1 = {
             'schema': {
                 'type': 'dict',
                 'schema': {
-                    'contactID': {
+                    'ContactID': {
                         'required': True,
+                        'meta': [
+                            {
+                                'ruleID': 'missing_mandatory_column',
+                                'meta': [
+                                    {
+                                        'partID': 'contID',
+                                        'contacts': 'pK',
+                                        'contactsRequired': 'mandatory',
+                                        'version1Location': 'variables',
+                                        'version1Table': 'Contact',
+                                        'version1Variable': 'ContactID'
+                                    }
+                                ]
+                            }
+                        ]
                     }
-                }
+                },
+                'meta': [
+                    {
+                        'partID': 'contacts',
+                        # 'partType': 'table',
+                        'version1Location': 'tables',
+                        'version1Table': 'Contact'
+                    }
+                ]
             },
         },
     }
@@ -39,8 +126,8 @@ schema_v2 = common.import_schema_v2()
 missing_mandatory_column_pass_v1 = {
     'Address': [
         {
-            'addressID': '1',
-            'addL2': 'my street',
+            'AddressID': '1',
+            'AddL2': 'my street',
         }
     ]
 }
@@ -59,13 +146,17 @@ missing_mandatory_column_pass_v2 = {
 }
 
 missing_mandatory_column_fail_v1 = deepcopy(missing_mandatory_column_pass_v1)
-missing_mandatory_column_fail_v1['Address'][0].pop('addressID')
+missing_mandatory_column_fail_v1['Address'][0].pop('AddressID')
 
 missing_mandatory_column_fail_v2 = deepcopy(missing_mandatory_column_pass_v2)
 missing_mandatory_column_fail_v2['addresses'][0].pop('addID')
 
 
 class TestValidateData(unittest.TestCase):
+    def test_schema_generation_v1(self):
+        result = generate_validation_schema(parts_v2, schema_version='1.0.0')
+        self.assertDictEqual(schema_v1, result)
+
     def missing_mandatory_column_impl(self, schema, column,
                                       data_pass, data_fail):
         report = validate_data(schema, data_pass)
@@ -79,7 +170,7 @@ class TestValidateData(unittest.TestCase):
         self.assertEqual(e['columnName'], column)
 
     def test_missing_mandatory_column_v1(self):
-        self.missing_mandatory_column_impl(schema_v1, 'addressID',
+        self.missing_mandatory_column_impl(schema_v1, 'AddressID',
                                            missing_mandatory_column_pass_v1,
                                            missing_mandatory_column_fail_v1)
 
