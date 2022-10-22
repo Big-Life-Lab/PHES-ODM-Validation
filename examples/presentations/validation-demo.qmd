@@ -34,22 +34,24 @@ Import the functions from the package. It has two main functions:
 from odm_validation.validation import validate_data, generate_validation_schema
 ```
 
-Lets start by showing how to validate an ODM dataset. We will be working with a subset of the ODM dictionary. The dictionary has a sites table which "contains information about a site; the location where an environmental sample was taken.". The table has a number of columns but we'll be working with the `geoLat` and `geoLong` columns. These columns are mandatory in the table.
+Lets start by showing how to validate an ODM dataset. We will use just the site table that "contains information about a site; the location where an environmental sample was taken.". The table has a number of columns but we will validate just the `geoLat` and `geoLong` columns. These columns are mandatory in the table.
 
 The validation schema below specifies the mandatory rule.
 
 ```{python}
 validation_schema = {
-    "sites": {
-        "type": "list",
-        "schema": {
-            "type": "dict",
+    "schema": {
+        "sites": {
+            "type": "list",
             "schema": {
-                "geoLat": {
-                    "required": True
-                },
-                "geoLong": {
-                    "required": True
+                "type": "dict",
+                "schema": {
+                    "geoLat": {
+                        "required": True
+                    },
+                    "geoLong": {
+                        "required": True
+                    }
                 }
             }
         }
@@ -57,7 +59,7 @@ validation_schema = {
 }
 ```
 
-The above validation schema is actually based on a Python library called [cerberus](https://docs.python-cerberus.org/en/stable/schemas.html). Cerberus does all the validation heavy lifting in the package, the package is more a wrapper around it, making sure that the inputs and outputs to the package integrate well with the ODM. 
+The above validation schema uses Python library called [cerberus](https://docs.python-cerberus.org/en/stable/schemas.html). Cerberus does all the validation heavy lifting. The PHES-ODM validation package wraps around cerberus to integrate the ODM dataset and the ODM schema into cereberus.
 
 The dataset in the next chunk has a `sites` table whose first row is invalid, its missing the `geoLat` column.
 
@@ -84,7 +86,7 @@ validation_result = validate_data(
 )
 ```
 
-The validation function needs two pieces of information, a validation schem and the ODM dataset to validate with it. Printing the validation result below, we can see that validation failed due to the absence of a `None` value. A failed validation results in an error report, which is a machine actionable report of all the validation errors in the dataset.
+The validation function needs two pieces of information, a validation schema and the ODM dataset to validate with it. Printing the validation result below, we can see that validation failed due to the absence of a `None` value. A failed validation results in an error report, which is a machine actionable report of all the validation errors in the dataset.
 
 ```{python}
 pprint(validation_result)
