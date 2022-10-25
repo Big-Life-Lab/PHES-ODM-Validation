@@ -61,7 +61,7 @@ validation_schema = {
 }
 ```
 
-The above validation schema uses Python library called [cerberus](https://docs.python-cerberus.org/en/stable/schemas.html). Cerberus does all the validation heavy lifting. The PHES-ODM validation package wraps around cerberus to integrate the ODM dataset and the ODM schema into cereberus.
+The above validation schema uses a Python library called [cerberus](https://docs.python-cerberus.org/en/stable/schemas.html). Cerberus does all the validation heavy lifting. The PHES-ODM validation package wraps around cerberus to integrate the ODM dataset and the ODM schema into cereberus.
 
 The dataset in the next chunk has a `sites` table whose first row is invalid, its missing the `geoLat` column.
 
