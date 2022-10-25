@@ -8,18 +8,20 @@ This document goes along with a presentation made during the weekly ODM developm
 
 The demo uses [quarto](https://quarto.org/).
 
-The next chunk includes all the setup code for this demo, importing the validation library, importing some libraries etc.
+We will first install all the library dependencies by running the next chunk in the terminal. Make sure you are in the root of the library directory.
+
+```{bash}
+pip install -r requirements.txt
+```
+
+The next chunk includes all the setup code for this demo.
 
 ```{python}
 #| echo: false
 
 import sys
-
 # Import the validation package. In the future you can install it using pip
 sys.path.append("../../src")
-
-# Allows access to all the installed packages on my computer
-sys.path.append("C:/Users/Yulric/AppData/Local/Programs/Python/Python39/Lib/site-packages")
 
 # For pretty printing
 from pprint import pprint
