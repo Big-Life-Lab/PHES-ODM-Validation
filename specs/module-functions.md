@@ -83,7 +83,7 @@ Validates an ODM dataset.
 
 Returns True if the the data had no validation errors.
 
-Returns an error object that describes all the failed validations. The type is shown below:
+When validation fails it returns a dictionary containing an error report list and other fields for backtracing. The error report for each validation rule is documented in the [specification for each validation rule](../validation-rules/).
 
 * type: A Python dictionary consisting of the following fields
     * `odmDataVersion`: string consisting of the version of the ODM data
@@ -127,6 +127,23 @@ Generates the cerberus schema containing the validation rules to be used with th
 2. `version`: The version of the ODM dictionary the cerberus schema is for
 
     * `type`: A string representing the version of the ODM to use
+
+3. `schema_additions`: Optional argument which allows the user to update the cerberus schema with additional validations
+
+    * `type`: A dictionary containing the updates. The shape is shown below,
+
+    ```python
+    {
+        # The name of the table whose validation rules to update
+        "<table_name>": {
+            # The name of the column whose validation rules to update
+            "<column_name>": {
+                # Adds or updates the allowed rule for this column
+                "[allowed]": string[]
+            }
+        }
+    }
+    ```
 
 ## Return
 
@@ -216,3 +233,180 @@ Example of two parts from dictionary version 2.
 * The `comp3` part was depreciated in version 2 (status = 'depreciated' and lastUpdated = '2') and should only be included in version 1 (firstReleased = '1')
 
 Version 2 of the dictionary renamed certain part pieces, for example, the `WWMeasures` table was renamed to `measures` in version 2. To be backcompatible with version 1, columns were added to the parts list to document their version 1 equivalents. These columns are documented where necessary in the spec.
+
+## Working with the schema_additions
+
+Currently, the function only supports updating the following cerberus validation rules,
+
+* [allowed](https://docs.python-cerberus.org/en/stable/validation-rules.html#allowed)
+
+For example, for the following set of arguments to the function,
+
+```python
+odm_data_dictionary = [
+    {
+        "partID": "sites",
+        "partType": "table",
+        "sites": "NA",
+        "sitesRequired": "NA"
+    },
+    {
+        "partID": "siteID",
+        "partType": "attribute",
+        "sites": "pK"
+        "sitesRequired": "mandatory"
+    }
+]
+
+version = "2.0.0"
+
+schema_additions = {
+    "sites": {
+        "siteID": {
+            "allowed": ["Ottawa Site", "Montreal Site"]
+        }
+    }
+}
+```
+
+The corresponding validation schema should be,
+
+```python
+{
+    "schemaVersion": "2.0.0",
+    "schema": {
+        "sites": {
+            "type": "list",
+            "schema": {
+                "type": "dict",
+                "schema": {
+                    "siteID": {
+                        "required" True,
+                        "allowed": ["Ottawa Site", "Montreal Site"],
+                        "meta": [
+                            {
+                                "ruleId": "missing_mandatory_column",
+                                "meta": [
+                                    {
+                                        "partID": "siteID",
+                                        "sitesRequired": "mandatory"
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                }
+            },
+            "meta": {
+                "partID": "sites",
+                "partType": "table",
+            }
+        }
+    }
+}
+```
+
+Care should be taken to perform an update and not an overwrite of the `allowed` field if the schema already contains an `allowed` field for that column. For example for the arguments below,
+
+```python
+odm_data_dictionary = [
+        {
+            "partID": "samples",
+            "partType": "table",
+            "samples": "NA",
+            "dataType": "NA",
+            "catSetID": "NA"
+        },
+        {
+            "partID": "collection",
+            "partType": "attribute",
+            "samples": "header",
+            "dataType": "categorical",
+            "catSetID": "collectCat"
+        },
+        {
+            "partID": "comp3h",
+            "partType": "category",
+            "samples": "input",
+            "dataType": "varchar",
+            "catSetID": "collectCat"
+        },
+        {
+            "partID": "comp8h",
+            "partType": "category",
+            "samples": "input",
+            "dataType": "varchar",
+            "catSetID": "collectCat"
+        },
+        {
+            "partID": "flowPr",
+            "partType": "category",
+            "samples": "input",
+            "dataType": "varchar",
+            "catSetID": "collectCat"
+        }
+]
+
+version = "2.0.0"
+
+schema_additions = {
+    "samples": {
+        "collection": {
+            "allowed": ["comp3", "comp3dep"]
+        }
+    }
+}
+```
+
+The corresponding validation schema would be,
+
+```python
+{
+    "schemaVersion": "2.0.0",
+    "schema": {
+        "samples": {
+            "type": "list",
+            "schema": {
+                "type": "dict",
+                "schema": {
+                    "collection": {
+                        "allowed": ["comp3h", "comp8h", "flowPr", "comp3", "comp3dep"],
+                        "meta": [
+                            {
+                                "ruleId": "invalid_category",
+                                "meta": [
+                                    {
+                                        "partID": "collection",
+                                        "samples": "header",
+                                        "dataType": "categorical",
+                                        "catSetID": "collectCat"
+                                    },
+                                    {
+                                        "partID": "comp3h",
+                                        "partType": "category",
+                                        "catSetID": "collectCat"
+                                    },
+                                    {
+                                        "partID": "comp8h",
+                                        "partType": "category",
+                                        "catSetID": "collectCat"
+                                    },
+                                    {
+                                        "partID": "flowPr",
+                                        "partType": "category",
+                                        "catSetID": "collectCat"
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                }
+            },
+            "meta": {
+                "partID": "samples",
+                "partType": "table",
+            }
+        }
+    }
+}
+```
