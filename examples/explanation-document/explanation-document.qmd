@@ -4,9 +4,9 @@ format: html
 jupyter: python3
 ---
 
-This document goes along with a presentation made during the weekly ODM development group meeting. It introduces and demoes the ODM validation library, part of the validation toolkit.
+This document introduces and demonstartes the ODM validation library, part of the validation toolkit.
 
-The demo uses [quarto](https://quarto.org/).
+The document uses [quarto](https://quarto.org/).
 
 We will first install all the library dependencies by running the next chunk in the terminal. Make sure you are in the root of the library directory.
 
