@@ -148,8 +148,7 @@ The generated cerberus object for the example above is shown below,
                             "ruleId": "invalid_category",
                             "meta": [
                                 {
-                                    "partID": "samples",
-                                    "partType": "table",
+                                    "partID": "collection",
                                     "samples": "header",
                                     "dataType": "categorical",
                                     "catSetID": "collectCat"
@@ -157,22 +156,16 @@ The generated cerberus object for the example above is shown below,
                                 {
                                     "partID": "comp3h",
                                     "partType": "category",
-                                    "samples": "input",
-                                    "dataType": "varchar",
                                     "catSetID": "collectCat"
                                 },
                                 {
                                     "partID": "comp8h",
                                     "partType": "category",
-                                    "samples": "input",
-                                    "dataType": "varchar",
                                     "catSetID": "collectCat"
                                 },
                                 {
                                     "partID": "flowPr",
                                     "partType": "category",
-                                    "samples": "input",
-                                    "dataType": "varchar",
                                     "catSetID": "collectCat"
                                 }
                             ]
@@ -192,7 +185,7 @@ The metadata for this rule should include the following rows from the ODM dictio
 
 ## Version 1
 
-Generating the schema for version requires the following information:
+Generating the cerberus schema for version 1 requires the following information:
 
 1. The columns that are part of the version 1 table
 2. Whether the column is categorical and
@@ -200,28 +193,143 @@ Generating the schema for version requires the following information:
 
 Information on point 1 can be found [here](/README.md/#version-1).
 
-To check whether a version 1 column is categorical, we can use the `version1Category` column. For each row in the parts sheet for a version 1 variable, we check whether the `version1Category` column has a value. If it does then it is categorical. We can then retreive the categories by looking at all the unique `version1Category` values for that variable. Keep in mind, that there can be multiple categories encoded in a cell. For example,
+To check whether a version 1 column is categorical, we can use the `version1Location` column. If the column has a value of `variableCategories` then the part was a category in version 1. We can then look at the value of the `version1Category` column to see the what the category value was in version 1. For example, in the ODM parts snippet below, 
 
 ```python
-[
-    {
-        "version1Variable": "type",
-        "version1Category": "active"
-    },
-    {
-        "version1Variable": "type",
-        "version1Category": "wqCOD;wwCOD"
-    },
-    {
-        "version1Variable": "contact",
-        "version1Category": ""
-    }
-]
+{
+    "parts": [
+        {
+            "partID": "samples",
+            "partType": "table",
+            "samples": "NA",
+            "dataType": "NA",
+            "catSetID": "NA",
+            "version1Location": "tables",
+            "version1Table": "Sample",
+            "version1Variable": "NA",
+            "version1Category": "NA"
+        },
+        {
+            "partID": "collection",
+            "partType": "attribute",
+            "samples": "header",
+            "dataType": "categorical",
+            "catSetID": "collectCat",
+            "version1Location": "variables",
+            "version1Table": "Sample",
+            "version1Variable": "Collection",
+            "version1Category": "NA"
+        },
+        {
+            "partID": "comp3h",
+            "partType": "category",
+            "samples": "input",
+            "dataType": "varchar",
+            "catSetID": "collectCat",
+            "version1Location": "variableCategories",
+            "version1Table": "Sample",
+            "version1Variable": "Collection",
+            "version1Category": "Comp3h"
+        },
+        {
+            "partID": "comp8h",
+            "partType": "category",
+            "samples": "input",
+            "dataType": "varchar",
+            "catSetID": "collectCat",
+            "version1Location": "variableCategories",
+            "version1Table": "Sample",
+            "version1Variable": "Collection",
+            "version1Category": "Comp8h"
+        },
+        {
+            "partID": "flowPr",
+            "partType": "category",
+            "samples": "input",
+            "dataType": "varchar",
+            "catSetID": "collectCat",
+            "version1Location": "variableCategories",
+            "version1Table": "Sample",
+            "version1Variable": "Collection",
+            "version1Category": "FlowPR; flowRatePr"
+        }
+    ]
+}
 ```
 
-The version 1 variable `type` has three categories, `active`, `wqCOD`, and `wwCOD`. The version 1 variable `contact` is not categorical since its `version1Category` columns are empty.
+In the snippet above, for a version 1 variable, we check whether the `version1Category` column has a value. If it does then it is categorical. We can then retreive the categories by looking at all the unique `version1Category` values for that variable. Keep in mind, that there can be multiple categories encoded in a cell, with each value seperated by a semi-colon.
 
-The meta field for the rule should include the following part rows:
+The version 1 variable `Collection` column has four categories, `Comp3h`, `Comp8h`, `FlowPR`, `flowRatePr`.
 
-1. The part definition for the variable
-2. The part definition for each category
+The corresponding cerberus schema for version 1 would be,
+
+```python
+{
+    "Sample": {
+        "type": "list",
+        "schema": {
+            "type": "dict",
+            "schema": {
+                "Collection": {
+                    "type": "string",
+                    "allowed": ["Comp3h", "Comp8h", "FlowPR", "flowRatePr"],
+                    "meta": [
+                        {
+                            "ruleId": "invalid_category",
+                            "meta": [
+                                {
+                                    "partID": "collection",
+                                    "samples": "header",
+                                    "dataType": "categorical",
+                                    "catSetID": "collectCat",
+                                    "version1Location": "variables",
+                                    "version1Table": "Sample",
+                                    "version1Variable": "Collection"
+                                },
+                                {
+                                    "partID": "comp3h",
+                                    "partType": "category",
+                                    "catSetID": "collectCat",
+                                    "version1Location": "variableCategories",
+                                    "version1Table": "Sample",
+                                    "version1Variable": "Collection",
+                                    "version1Category": "Comp3h"
+                                },
+                                {
+                                    "partID": "comp8h",
+                                    "partType": "category",
+                                    "catSetID": "collectCat",
+                                    "version1Location": "variableCategories",
+                                    "version1Table": "Sample",
+                                    "version1Variable": "Collection",
+                                    "version1Category": "Comp8h"
+                                },
+                                {
+                                    "partID": "flowPr",
+                                    "partType": "category",
+                                    "catSetID": "collectCat",
+                                    "version1Location": "variableCategories",
+                                    "version1Table": "Sample",
+                                    "version1Variable": "Collection",
+                                    "version1Category": "FlowPR; flowRatePr"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            },
+            "meta": {
+                "partID": "samples",
+                "partType": "table",
+                "version1Location": "tables",
+                "verion1Table": "Sample"
+            }
+        }
+    }
+}
+```
+
+The meta field for the rule should include the same part rows and fields as version 2 with the following additions,
+
+* The `version1Location`, `version1Table`, and version1Variable` columns added to all the rows
+* The `version1Category` column added to the category parts

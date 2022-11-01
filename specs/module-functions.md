@@ -39,7 +39,7 @@ Validates an ODM dataset.
         }
         ```
 
-2. `validation_rules`: The rules to validate the data against. This is a [cerberus](https://docs.python-cerberus.org/en/stable/) schema object which should ideally be generated using the `generate_cerberus_schema` function. 
+2. `validation_rules`: The rules to validate the data against. This is a dictionary that contains a [cerberus](https://docs.python-cerberus.org/en/stable/) schema object, as well as the odm-version it's based on. The cerberus schema object should ideally be generated using the `generate_validation_schema` function.
 
     `type`: A Python dictionary with the following fields
 
@@ -91,9 +91,9 @@ When validation fails it returns a dictionary containing an error report list an
     * `validationPackageVersion`: string consisting of the version of the validation package used
     * `errors`: A list of Python dictionaries describing each error. For more information refer to the files in the [validation-rules](../validation-rules/) folder
 
-# generate_cerberus_schema
+# generate_validation_schema
 
-Generates the cerberus schema containing the validation rules to be used with the `validate_data` function. 
+Generates the cerberus schema containing the validation rules to be used with the `validate_data` function.
 
 ## Arguments
 
@@ -147,29 +147,40 @@ Generates the cerberus schema containing the validation rules to be used with th
 
 ## Return
 
-Return a dictionary that is a valid cerberus schema object. In addition, values from the ODM data dictionary will also be added to the `meta` field for debugging purposes. 
+Return a dictionary that contains a valid cerberus schema object, as well as the odm-version it's based on. Values from the ODM data dictionary will also be added to the `meta` field for debugging purposes.
 
 Example
 
 ```python
 {
-    "addresses": {
-        "type": "list",
-        "schema": {
-            "type": "dict",
+    "schemaVersion": "1.2.3",
+    "schema": {
+        "addresses": {
+            "type": "list",
             "schema": {
-                "addressID": {
-                    "required": True,
-                    "meta": {
-                        "partID": "addressID",
-                        "addresses": "pK",
-                        "addressesRequired": "mandatory"
-                    }
+                "type": "dict",
+                "schema": {
+                    "addressID": {
+                        "required" True,
+                        "meta": [
+                            {
+                                "ruleId": "missing_mandatory_column",
+                                "meta": [
+                                    {
+                                        "partID": "addressID",
+                                        "addresses": "PK",
+                                        "addressesRequired": "mandatory",
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                },
+                "meta": {
+                    "partID": "addresses",
+                    "partType": "table"
                 }
             }
-        },
-        "meta": {
-            "partID": "addresses"
         }
     }
 }
@@ -181,7 +192,7 @@ Example
 
 The cerberus schema for a part should be added only if it is active for the provided `version` argument. To see whether a part is valid for a version, the `status`, `firstReleased`, and `lastUpdated` fields are used.
 
-* The `status` field can take one of two values, `active` or `deprecitate`. `active` says that a part is currently being actively used while `deprecitate` says the opposite.
+* The `status` field can take one of two values, `active` or `depreciated`. `active` says that a part is currently being actively used while `depreciated` says the opposite.
 * The `firstReleased` and `lastUpdated` fields has the version of the ODM when the part was first added and last changed respectively.
 * The `changes` field is used to describe the changes made from one version to another.
 
@@ -209,7 +220,7 @@ Example of two parts from dictionary version 2.
             "partType": "category",
             "addresses": "NA",
             "addressesRequired": "NA",
-            "status": "deprecitate",
+            "status": "depreciated",
             "changes": "Use grab with collection number (collectNum) = 3",
             "firstReleased": "1",
             "lastUpdated": "2"
@@ -219,7 +230,7 @@ Example of two parts from dictionary version 2.
 ```
 
 * The addresses part is currently active (status = 'active') and should only be included in version 2 since it was first released (firstReleased = '2') then.
-* The `comp3` part was deprecitated in version 2 (status = 'deprecitate' and lastUpdated = '2') and should only be included in version 1 (firstReleased = '1')
+* The `comp3` part was depreciated in version 2 (status = 'depreciated' and lastUpdated = '2') and should only be included in version 1 (firstReleased = '1')
 
 Version 2 of the dictionary renamed certain part pieces, for example, the `WWMeasures` table was renamed to `measures` in version 2. To be backcompatible with version 1, columns were added to the parts list to document their version 1 equivalents. These columns are documented where necessary in the spec.
 
