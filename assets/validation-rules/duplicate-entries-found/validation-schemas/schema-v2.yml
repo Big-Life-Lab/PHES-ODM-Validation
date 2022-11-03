@@ -1,0 +1,15 @@
+addresses:
+  type: list
+  schema:
+    type: dict
+    schema:
+      addId:
+        noDuplicateEntries: True
+        meta:
+          - ruleId: duplicate_entries_found
+            meta:
+              - partID: addId
+                addresses: pk
+  meta:
+    - partID: addresses
+      partType: table
