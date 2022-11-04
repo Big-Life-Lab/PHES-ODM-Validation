@@ -2,30 +2,13 @@
 import sys
 sys.path.append("../src")
 
-import json
-
-# For importing YAML and CSV files
+# Function for importing files
 from odm_validation.utils import import_dataset, import_schema
+from odm_validation.doc_utils import import_json
 
-# Some pretty printing library and code
+# Some pretty printing functions
 from rich.pretty import pprint
-from rich.table import Table
-from rich.console import Console
-def pprintDictList(dictList, title):
-    table = Table(title = title, expand = True)
-
-    dict_keys = dictList[0].keys()
-    for column_name in dict_keys:
-        table.add_column(column_name)
-
-    for current_dict in dictList:
-        row = []
-        for column_name in dict_keys:
-            row.append(current_dict[column_name])
-        table.add_row(*row)
-    
-    console = Console()
-    console.print(table)
+from odm_validation.doc_utils import pprint_dict_list
 
 assets_path = "../assets/validation-rules/duplicate-entries-found"
 ```
@@ -41,7 +24,7 @@ invalid_dataset = {
     "addresses": import_dataset(assets_path + "/datasets/invalid-dataset-1.csv")
 }
 
-pprintDictList(invalid_dataset["addresses"], "Invalid Addresses Table")
+pprint_dict_list(invalid_dataset["addresses"], "Invalid Addresses Table")
 ```
 
 There are two rows (rows 1 and 2) with the same primary key value of `1` but also the same `lastUpdated` value.
@@ -53,7 +36,7 @@ invalid_dataset = {
     "addresses": import_dataset(assets_path + "/datasets/invalid-dataset-2.csv")
 }
 
-pprintDictList(invalid_dataset["addresses"], "Invalid Addresses Table")
+pprint_dict_list(invalid_dataset["addresses"], "Invalid Addresses Table")
 ```
 
 The following dataset would pass validation,
@@ -63,7 +46,7 @@ invalid_dataset = {
     "addresses": import_dataset(assets_path + "/datasets/valid-dataset.csv")
 }
 
-pprintDictList(invalid_dataset["addresses"], "Valid Addresses Table")
+pprint_dict_list(invalid_dataset["addresses"], "Valid Addresses Table")
 ```
 
 ## Error report
@@ -108,7 +91,7 @@ For example,
 
 ```{python}
 parts_v2 = import_dataset(assets_path + "/parts/parts-v2.csv")
-pprintDictList(parts_v2, title = "Parts v2")
+pprint_dict_list(parts_v2, title = "Parts v2")
 ```
 
 Here the `addId` part can be identified as being the primary key for the addresses table and hence should have this rule implemented.
@@ -132,7 +115,7 @@ When generating the schema for version 1, we should add this rule to any version
 
 ```{python}
 parts_v1 = import_dataset(assets_path + "/parts/parts-v1.csv")
-pprintDictList(parts_v1, title = "Parts v1")
+pprint_dict_list(parts_v1, title = "Parts v1")
 ```
 
 The corresponding cerberus schema would be,
