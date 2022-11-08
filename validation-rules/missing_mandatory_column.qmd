@@ -1,0 +1,111 @@
+# missing_mandatory_column
+
+```{python}
+import sys
+sys.path.append("../src")
+
+# Some pretty printing functions
+from odm_validation.doc_utils import (
+    pprint_dict_list, 
+    pprint_csv_file, 
+    pprint_json_file, 
+    pprint_yaml_file,
+)
+
+assets_path = "../assets/validation-rules/missing-mandatory-column"
+```
+
+This rule checks if the rows of each table contains its mandatory columns. For example, the `addressID` column is mandatory for the `addresses` table. The following address table row,
+
+```{python}
+pprint_csv_file(assets_path + "/datasets/invalid-dataset.csv", "Invalid Dataset")
+```
+
+
+would fail validation. The following address table row would pass validation,
+
+```{python}
+pprint_csv_file(assets_path + "/datasets/valid-dataset.csv", "Valid Dataset")
+```
+
+## Error report
+
+The error report will have the following fields
+
+* **errorType**: missing_mandatory_column
+* **tableName**: The name of the table containing the missing column
+* **columnName** The name of the missing column
+* **rowNumber**: The index of the table row with the error
+* **row** The dictionary containing the row
+* **validationRuleFields**: The ODM data dictionary rule fields violated by this row
+* **message**: Missing mandatory column <columnName> in table <tableName> in row number <rowIndex>
+
+Example
+
+```{python}
+pprint_json_file(assets_path + "/error-reports/error-report.json")
+```
+
+## Rule metadata
+
+All the metadata for this rule is contained in the parts sheet in the data dictionary. The relevant columns are:
+
+* **partID**: Contains the name of a part
+* **<table_name>**: Used to indicate whether the part is associated with a table
+    
+    Can have one of the following values:
+    * **PK**: The part is a primary key for the table
+    * **FK**: The part is a foreign key for the table
+    * **header**: The part is the name of a column in the table
+    * **input**
+    * **NA**: The part is not applicable to the table
+* **<table_name>Required**: Used to indicate whether a column is mandatory for a table
+
+    Can have one of the following values:
+    * **mandatory**: The column is mandatory
+    * **optional**: The column is not mandatory
+    * **NA**: The column is not applicable
+
+Example
+
+```{python}
+pprint_csv_file(assets_path + "/parts/parts-v1.csv", "Parts v2")
+```
+
+## Cerberus Schema
+
+The generated cerberus object for the example above is shown below,
+
+```{python}
+pprint_yaml_file(assets_path + "/validation-schemas/schema-v2.yml")
+```
+
+The data dictionary columns that should be included in the `meta` field are:
+* partID
+* <table_name>
+* <table_name>Required
+
+## Version 1
+
+We need three pieces of information to make the cerberus schema for version 1:
+
+1. The columns that are part of the version 1 table
+2. The version 2 equivalent for each column
+2. The version 2 equivalent for the table
+
+Details for the above points can be found [here](./README.md/#version-1)
+
+We then check if the version 2 equivalent column is mandatory in the version 2 equivalent table, if it is, then it should be mandatory in version 1. For example,
+
+```{python}
+pprint_csv_file(assets_path + "/parts/parts-v1.csv", "Parts v1")
+```
+
+The corresponding version 1 cerberus schema is shown below,
+
+```{python}
+pprint_yaml_file(assets_path + "/validation-schemas/schema-v1.yml")
+```
+
+The `meta` field for version 1 validation schemas for this rule should include the rows for version 2 along with the `version1Location`, `version1Table`, and `version1Variable` column.
+
