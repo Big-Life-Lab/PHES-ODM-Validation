@@ -1,0 +1,17 @@
+---
+sites:
+  type: list
+  schema:
+    type: dict
+    schema:
+      geoLat:
+        trimEmpty: true
+        forbidden:
+        - NA
+        meta:
+        - ruleId: missing_values_found
+          meta:
+          - partID: NA
+            partType: missingness
+          - partID: geoLat
+            sitesRequired: mandatory
