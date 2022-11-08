@@ -1,7 +1,10 @@
 from typing import List
-
 from rich.table import Table
 from rich.console import Console
+from utils import import_dataset, import_yaml_file
+import json
+from rich.pretty import pprint
+
 def pprint_dict_list(dict_list: List[dict], title: str):
     """
     Pretty prints a list of dictionaries in the console to look like a table
@@ -24,9 +27,25 @@ def pprint_dict_list(dict_list: List[dict], title: str):
     console = Console()
     console.print(table)
 
-import json
 def import_json(file_path: str) -> dict:
     file = open(file_path)
     json_str = file.read()
     file.close()
     return json.loads(json_str)
+
+def pprint_csv_file(file_path: str, title: str):
+    dataset = import_dataset(file_path)
+    pprint_dict_list(dataset, title)
+
+def pprint_json_file(file_path: str):
+    json_file = open(file_path)
+    json_str = json_file.read()
+    json_file.close()
+
+    pprint(json.loads(json_str), expand_all = True)
+
+def pprint_yaml_file(file_path: str):
+    yaml_file = import_yaml_file(file_path)
+
+    pprint(yaml_file, expand_all = True)
+    
