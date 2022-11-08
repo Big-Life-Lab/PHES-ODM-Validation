@@ -1,59 +1,44 @@
 # greater_than_max_value
 
+```{python}
+import sys
+sys.path.append("../src")
+
+# Some pretty printing functions
+from odm_validation.doc_utils import (
+    pprint_dict_list, 
+    pprint_csv_file, 
+    pprint_json_file, 
+    pprint_yaml_file,
+)
+
+assets_path = "../assets/validation-rules/greater-than-max-value"
+```
+
 This rule ensure that columns values are not greater than a defined maximum value. Currently, this rule only supports columns whose data type is float or integer i.e. numbers. As an example, consider the `geoLat` column in the `sites` table which has a maximum value of 90. The following dataset snippet would fail validation,
 
-```python
-{
-    "sites": [
-        {
-            "siteID": "1",
-            "geoLat": 91
-        }
-    ]
-}
+```{python}
+# Using a yaml file here since in a CSV file every value is by default a string
+pprint_yaml_file(assets_path + "/datasets/invalid-dataset-1.yml")
 ```
 
 whereas the following dataset snippet would pass validation,
 
-```python
-{
-    "sites": [
-        {
-            "siteID": "1",
-            "geoLat": 89
-        }
-    ]
-}
+```{python}
+# Using a yaml file here since in a CSV file every value is by default a string
+pprint_yaml_file(assets_path + "/datasets/valid-dataset.yml")
 ```
 
 If the value to be validated is a string, then it should be coerced into a number and then validated. Values that cannot be coerced should be ignored and a warning logged. For example the following snippet should fail validation,
 
-```python
-{
-    "sites": [
-        {
-            "siteID": "1",
-            "geoLat": "-91"
-        }
-    ]
-}
+```{python}
+pprint_csv_file(assets_path + "/datasets/invalid-dataset-2.csv", "Invalid Dataset")
 ```
 
 whereas in the following snippet, the first row should be ignored and a warning logged informing the user that it was ignored and why.
 
-```python
-{
-    "sites": [
-        {
-            "siteID": "1",
-            "geoLat": "a"
-        },
-        {
-            "siteID": "1",
-            "geoLat": "-91"
-        }
-    ]
-}
+```{python}
+pprint_csv_file(assets_path + "/datasets/invalid-dataset-3.csv", "Invalid Dataset")
 ```
 
 The ODM dictionary is currently written so that the defined maximum values are inclusive i.e. only values greater than the maximum values are invalid. All other values should pass this rule. For example, for the `geoLat` column, a value of 90 would be valid.
@@ -72,24 +57,8 @@ The error report will have the following fields
 
 The error report object for the example invalid row above,
 
-```python
-[
-    {
-        "errorType": "greater_than_max_value",
-        "tableName": "sites",
-        "columnName": "geoLat",
-        "rowNumber": 1,
-        "row": {
-            "siteID": "1",
-            "geoLat": 91
-        },
-        "validationRules": {
-            "partID": "geoLat",
-            "min": "90"
-        },
-        "message": "Value 91 in row 1 in column geoLat in table sites is greater than the allowable maximum value of 90"
-    }
-]
+```{python}
+pprint_json_file(assets_path + "/error-reports/error-report.json")
 ```
 
 ## Rule metadata
@@ -108,21 +77,8 @@ All the metadata for this rule is contained in the parts sheet in the data dicti
 
 For example in the following ODM dictionary snippet,
 
-```python
-[
-    {
-        "partID": "geoLat",
-        "sites": "header",
-        "dataType": "float",
-        "max": "90"
-    },
-    {
-        "partID": "geoEPSG",
-        "sites": "header",
-        "dataType": "float",
-        "max": "NA"
-    }
-]
+```{python}
+pprint_csv_file(assets_path + "/parts/parts-v2.csv", "Parts v2")
 ```
 
 The `geoLat` part which is a column in the `sites` table has a `max` value of 90 and would have this rule set for it. On the other hand, the `geoEPSG` part which is also a column in the `sites` table would not have this rule due its `max` value being `NA`.
@@ -133,31 +89,8 @@ Although the cerberus library supports [maximum value validation](https://docs.p
 
 The generated cerberus object for the example above is shown below,
 
-```python
-{
-    "sites": {
-        "type": "list",
-        "schema": {
-            "type": "dict",
-            "schema": {
-                "geoLat": {
-                    "maxInclusive": True,
-                    "meta": [
-                        {
-                            "ruleId": "greater_than_max_value",
-                            "meta": [
-                                {
-                                    "partID": "geoLat",
-                                    "max": "90"
-                                }
-                            ]
-                        }
-                    ]
-                }
-            }
-        }
-    }
-}
+```{python}
+pprint_yaml_file(assets_path + "/validation-schemas/schema-v2.yml")
 ```
 
 The metadata for this rule should include the row from the ODM for the part with its `partID` and `max` column values.
@@ -166,49 +99,14 @@ The metadata for this rule should include the row from the ODM for the part with
 
 When generating the schema for version 1, we check whether the column has an [equivalent part in version 1](../specs/odm-how-tos.md#getting-the-version-1-equivalent-for-a-part). If it does, then we add it to the cerberus schema. For example,
 
-```python
-[
-    {
-        "partID": "geoLat",
-        "sites": "header",
-        "version1Location": "variables",
-        "version1Table": "Site",
-        "version1Variable": "geoLat"
-    }
-]
+```{python}
+pprint_csv_file(assets_path + "/parts/parts-v1.csv", "Parts v1")
 ```
 
 The corresponding cerberus schema would be,
 
-```python
-{
-    "Site": {
-        "type": "list",
-        "schema": {
-            "type": "dict",
-            "schema": {
-                "geoLat": {
-                    "maxInclusive": True,
-                    "meta": [
-                        {
-                            "ruleId": "greater_than_max_value",
-                            "meta": [
-                                {
-                                    "partID": "geoLat",
-                                    "sites": "header",
-                                    "version1Location": "variables",
-                                    "version1Table": "Site",
-                                    "version1Variable": "geoLat",
-                                    "max": "90"
-                                }
-                            ]
-                        }
-                    ]
-                }
-            }
-        }
-    }
-}
+```{python}
+pprint_yaml_file(assets_path + "/validation-schemas/schema-v2.yml")
 ```
 
 The metadata should include the following columns,

@@ -1,0 +1,3 @@
+partID,sites,dataType,max
+geoLat,header,float,90
+geoEPSG,header,float,NA

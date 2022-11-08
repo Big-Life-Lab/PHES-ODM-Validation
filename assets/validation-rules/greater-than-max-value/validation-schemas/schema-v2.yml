@@ -1,0 +1,12 @@
+sites:
+  type: list
+  schema:
+    type: dict
+    schema:
+      geoLat:
+        maxInclusive: true
+        meta:
+        - ruleId: greater_than_max_value
+          meta:
+          - partID: geoLat
+            max: '90'
