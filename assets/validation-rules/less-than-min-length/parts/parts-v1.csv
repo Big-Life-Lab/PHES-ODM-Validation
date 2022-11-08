@@ -1,0 +1,2 @@
+partID,contacts,minLength,version1Location,version1Table,version1Variable
+phone,header,10,variables,Contact,phoneNumber

@@ -1,33 +1,30 @@
 # less_than_min_length
 
+```{python}
+import sys
+sys.path.append("../src")
+
+# Some pretty printing functions
+from odm_validation.doc_utils import (
+    pprint_dict_list, 
+    pprint_csv_file, 
+    pprint_json_file, 
+    pprint_yaml_file,
+)
+
+assets_path = "../assets/validation-rules/less-than-min-length"
+```
+
 This rule ensures that the number of characters in a string type column is not less than a defined minimum value. As an example, consider the `phone` column in the `contacts` table whose minimum length value is 10. The following dataset snippet would fail validation,
 
-```python
-{
-    "contacts": [
-        {
-            "contactID": "1",
-            "phone": "123-456-1"
-        }
-    ]
-}
+```{python}
+pprint_csv_file(assets_path + "/datasets/invalid-dataset.csv", "Invalid Dataset")
 ```
 
 The `phone` column in the first row has only 9 characters which is less than the minimum length value of 10, whereas the following dataset snippet would pass validation,
 
-```python
-{
-    "contacts": [
-        {
-            "contactID": "1",
-            "phone": "123-456-23"
-        },
-        {
-            "contactID": "2",
-            "phone": "123-456-231"
-        }
-    ]
-}
+```{python}
+pprint_csv_file(assets_path + "/datasets/valid-dataset.csv", "Valid Dataset")
 ```
 
 The `phone` columns in both rows have a number of characters equal to 10 and 11 respectively which is greater than or equal to the minimum length value of 10.
@@ -46,26 +43,8 @@ The error report should have the following fields,
 
 The error report object for the example invalid row above is shown below,
 
-```python
-[
-    {
-        "errorType": "less_than_min_length",
-        "tableName": "contacts",
-        "columnName": "phone",
-        "rowNumber": 1,
-        "row": {
-            "contactID": "1",
-            "phone": "123-456-1"
-        },
-        "validationRuleFields": [
-            {
-                "partID": "phone",
-                "minLength": "10"
-            }
-        ],
-        "message": "Value 123-456-1 in row 1 in column phone in table contacts has length 9 which is less than the min length of 10"
-    }
-]
+```{python}
+pprint_json_file(assets_path + "/error-reports/error-report.json")
 ```
 
 ## Rule metadata
@@ -82,23 +61,8 @@ All the metadata for this rule is contained in the parts sheet in the ODM dictio
 
 For example in the following ODM dictionary snippet,
 
-```python
-[
-    {
-        "partID": "phone",
-        "addresses": "NA",
-        "contacts": "header",
-        "dataType": "varchar",
-        "minLength": "10"
-    },
-    {
-        "partID": "addL2",
-        "addresses": "header",
-        "contacts": "NA",
-        "dataType": "varchar",
-        "minLength": "NA"
-    }
-]
+```{python}
+pprint_csv_file(assets_path + "/parts/parts-v2.csv", "Parts v2")
 ```
 
 The `phone` in the `contacts` table would have this validation rule but the `addL2` column in the `addresses` table would not.
@@ -109,31 +73,8 @@ We can use the [minLength](https://docs.python-cerberus.org/en/stable/validation
 
 The generated cerberus object for the example above is shown below,
 
-```python
-{
-    "contacts": {
-        "type": "list",
-        "schema": {
-            "type": "dict",
-            "schema": {
-                "phone": {
-                    "minLength": 10,
-                    "meta": [
-                        {
-                            "ruleId": "less_than_min_length",
-                            "meta": [
-                                {
-                                    "partID": "phone",
-                                    "minLength": "10"
-                                }
-                            ]
-                        }
-                    ]
-                }
-            }
-        }
-    }
-}
+```{python}
+pprint_yaml_file(assets_path + "/validation-schemas/schema-v2.yml")
 ```
 
 The metadata for this rule should have the row from the ODM parts sheet for the column with its `partID` and `minLength` column values.
@@ -142,50 +83,14 @@ The metadata for this rule should have the row from the ODM parts sheet for the 
 
 When generating the schema for version 1, we check whether the column has an [equivalent part in version 1](../specs/odm-how-tos.md#getting-the-version-1-equivalent-for-a-part). If it does, then we add it to the cerberus schema. For example,
 
-```python
-[
-    {
-        "partID": "phone",
-        "contacts": "header",
-        "minLength": "10",
-        "version1Location": "variables",
-        "version1Table": "Contact",
-        "version1Variable": "phoneNumber"
-    }
-]
+```{python}
+pprint_csv_file(assets_path + "/parts/parts-v1.csv", "Parts v1")
 ```
 
 The corresponding cerberus schema would be,
 
-```python
-{
-    "Contact": {
-        "type": "list",
-        "schema": {
-            "type": "dict",
-            "schema": {
-                "phone": {
-                    "minLength": 10,
-                    "meta": [
-                        {
-                            "ruleId": "less_than_min_value",
-                            "meta": [
-                                {
-                                    "partID": "phone",
-                                    "contacts": "header",
-                                    "minLength": "10",
-                                    "version1Location": "variables",
-                                    "version1Table": "Contact",
-                                    "version1Variable": "phoneNumber"
-                                }
-                            ]
-                        }
-                    ]
-                }
-            }
-        }
-    }
-}
+```{python}
+pprint_yaml_file(assets_path + "/validation-schemas/schema-v1.yml")
 ```
 
 The metadata should include the following columns,

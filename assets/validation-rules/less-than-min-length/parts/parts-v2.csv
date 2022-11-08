@@ -1,0 +1,3 @@
+partID,addresses,contacts,dataTypr,minLength
+phone,NA,header,varchar,10
+addL2,header,NA,varchar,NA
