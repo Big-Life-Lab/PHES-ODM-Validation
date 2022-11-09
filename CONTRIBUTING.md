@@ -14,7 +14,12 @@ Style guide: https://peps.python.org/pep-0008/
 
 ### Additional rules
 
-- Python and Markdown/Quarto files must use snake_case,
-  other files and directories should use kebab-case.
+- Python and Markdown/Quarto files must use snake_case, other files and
+  directories should use kebab-case.
 
-  Rationale: Python modules are already required to be snake_case. Quarto files can also be thought of as code modules, and should be consistent with Python. Markdown files are basically the same as Quarto files, so they should have the same casing. Another (less important) reason is that the validation rules are implemented as Python functions (with snake_case), so it becomes more consistent if the rule specification files also have the same casing.
+  Rationale: Python modules are already required to be snake_case. Quarto files
+  can also be thought of as code modules, and should be consistent with Python.
+  Markdown files are basically the same as Quarto files, so they should have
+  the same casing. Another (less important) reason is that the validation rules
+  are implemented as Python functions (with snake_case), so it becomes more
+  consistent if the rule specification files also have the same casing.
