@@ -1,49 +1,51 @@
 ---
-Sample:
-  type: list
-  schema:
-    type: dict
+schemaVersion: '1.0.0'
+schema:
+  Sample:
+    type: list
     schema:
-      Collection:
-        type: string
-        allowed:
-        - Comp3h
-        - Comp8h
-        - FlowPR
-        - flowRatePr
-        meta:
-        - ruleId: invalid_category
+      type: dict
+      schema:
+        Collection:
+          # type: string
+          allowed:
+          - Comp3h
+          - Comp8h
+          - FlowPr
+          - FlowRatePr
           meta:
-          - partID: collection
-            samples: header
-            dataType: categorical
-            catSetID: collectCat
-            version1Location: variables
-            version1Table: Sample
-            version1Variable: Collection
-          - partID: comp3h
-            partType: category
-            catSetID: collectCat
-            version1Location: variableCategories
-            version1Table: Sample
-            version1Variable: Collection
-            version1Category: Comp3h
-          - partID: comp8h
-            partType: category
-            catSetID: collectCat
-            version1Location: variableCategories
-            version1Table: Sample
-            version1Variable: Collection
-            version1Category: Comp8h
-          - partID: flowPr
-            partType: category
-            catSetID: collectCat
-            version1Location: variableCategories
-            version1Table: Sample
-            version1Variable: Collection
-            version1Category: FlowPR; flowRatePr
-    meta:
-      partID: samples
-      partType: table
-      version1Location: tables
-      verion1Table: Sample
+          - ruleID: invalid_category
+            meta:
+            - partID: coll
+              samples: header
+              dataType: categorical
+              catSetID: collectCat
+              version1Location: variables
+              version1Table: Sample
+              version1Variable: Collection
+            - partID: comp3h
+              partType: category
+              catSetID: collectCat
+              version1Location: variableCategories
+              version1Table: Sample
+              version1Variable: Collection
+              version1Category: Comp3h
+            - partID: comp8h
+              partType: category
+              catSetID: collectCat
+              version1Location: variableCategories
+              version1Table: Sample
+              version1Variable: Collection
+              version1Category: Comp8h
+            - partID: flowPr
+              partType: category
+              catSetID: collectCat
+              version1Location: variableCategories
+              version1Table: Sample
+              version1Variable: Collection
+              version1Category: FlowPr;FlowRatePr
+      meta:
+      - partID: samples
+        partType: table
+        version1Location: tables
+        version1Table: Sample

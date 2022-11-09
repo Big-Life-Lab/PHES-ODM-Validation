@@ -1,34 +1,35 @@
 ---
-addresses:
-  type: list
-  schema:
-    type: dict
+schemaVersion: '2.0.0'
+schema:
+  addresses:
+    type: list
     schema:
-      addressID:
-        required: true
-        meta:
-        - ruleId: missing_mandatory_column
+      type: dict
+      schema:
+        addID:
+          required: true
           meta:
-          - partID: addressID
-            addresses: PK
-            addressesRequired: mandatory
-      addL2: {}
-    meta:
-      partID: addresses
-      partType: table
-contacts:
-  type: list
-  schema:
-    type: dict
+          - ruleID: missing_mandatory_column
+            meta:
+            - partID: addID
+              addresses: pK
+              addressesRequired: mandatory
+      meta:
+      - partID: addresses
+        partType: table
+  contacts:
+    type: list
     schema:
-      contactID:
-        required: true
-        meta:
-        - ruleId: missing_mandatory_column
+      type: dict
+      schema:
+        contID:
+          required: true
           meta:
-          - partID: contactID
-            addresses: PK
-            addressesRequired: mandatory
-  meta:
-    partID: contacts
-    partType: table
+          - ruleID: missing_mandatory_column
+            meta:
+            - partID: contID
+              contacts: pK
+              contactsRequired: mandatory
+      meta:
+      - partID: contacts
+        partType: table
