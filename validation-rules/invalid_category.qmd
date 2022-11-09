@@ -54,7 +54,8 @@ All the metadata for this rule is contained in the parts sheet in the data dicti
 Example
 
 ```{python}
-pprint_csv_file(asset("parts-v2.csv"), "Parts v2")
+pprint_csv_file(asset("parts.csv"), "Parts v2",
+                ignore_prefix="version1")
 ```
 
 Here, the name of the categorical column is `collection` and its the name of a column in the `samples` table. The category set name is `collectCat` which is used to identify the category values which are `comp3h`, `comp8h`, and `flowPr`.
@@ -85,7 +86,7 @@ Information on point 1 can be found [here](/README.md#version-1).
 To check whether a version 1 column is categorical, we can use the `version1Location` column. If the column has a value of `variableCategories` then the part was a category in version 1. We can then look at the value of the `version1Category` column to see the what the category value was in version 1. For example, in the ODM parts snippet below,
 
 ```{python}
-pprint_csv_file(asset("parts-v1.csv"), "Parts v1")
+pprint_csv_file(asset("parts.csv"), "Parts v1")
 ```
 
 In the snippet above, for a version 1 variable, we check whether the `version1Category` column has a value. If it does then it is categorical. We can then retreive the categories by looking at all the unique `version1Category` values for that variable. Keep in mind, that there can be multiple categories encoded in a cell, with each value seperated by a semi-colon.

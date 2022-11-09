@@ -79,7 +79,8 @@ All the metadata for this rule is contained in the parts sheet in the data dicti
 For example the ODM snippet below will be used to generate the validation schema for the examples above,
 
 ```{python}
-pprint_csv_file(asset("parts-v2.csv"), "Parts v2")
+pprint_csv_file(asset("parts.csv"), "Parts v2",
+                ignore_prefix="version1")
 ```
 
 we would add this rule only to the `geoLat` column in the `sites` table. This rule would **not** be added to the `geoLong` column in the same table.
@@ -109,7 +110,7 @@ For version 1 validation schemas, we add this rule to only those version 2 colum
 For the ODM snippet below,
 
 ```{python}
-pprint_csv_file(asset("parts-v1.csv"), "Parts v1")
+pprint_csv_file(asset("parts.csv"), "Parts v1")
 ```
 
 The corresponding cerberus schema would be,

@@ -54,7 +54,8 @@ All the metadata for this rule is contained in the parts sheet in the ODM dictio
 For example in the following ODM dictionary snippet,
 
 ```{python}
-pprint_csv_file(asset("parts-v2.csv"), "Parts v2")
+pprint_csv_file(asset("parts.csv"), "Parts v2",
+                ignore_prefix="version1")
 ```
 
 The `phone` in the `contacts` table would have this validation rule but the `addL2` column in the `addresses` table would not.
@@ -76,7 +77,7 @@ The metadata for this rule should have the row from the ODM parts sheet for the 
 When generating the schema for version 1, we check whether the column has an [equivalent part in version 1](../specs/odm-how-tos.md#getting-the-version-1-equivalent-for-a-part). If it does, then we add it to the cerberus schema. For example,
 
 ```{python}
-pprint_csv_file(asset("parts-v1.csv"), "Parts v1")
+pprint_csv_file(asset("parts.csv"), "Parts v1")
 ```
 
 The corresponding cerberus schema would be,

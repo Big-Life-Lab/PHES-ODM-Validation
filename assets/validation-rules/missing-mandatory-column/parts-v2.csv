@@ -1,6 +1,0 @@
-partID,partType,addresses,addressesRequired,contacts,contactsRequired
-addresses,table,NA,NA,NA,NA
-contacts,table,NA,NA,NA,NA
-addressID,attribute,PK,mandatory,NA,NA
-addL2,attribute,header,optional,NA,NA
-contactID,attribute,NA,NA,PK,NA
