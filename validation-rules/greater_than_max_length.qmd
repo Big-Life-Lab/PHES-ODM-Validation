@@ -4,9 +4,9 @@ sys.path.append("../src")
 
 # Some pretty printing functions
 from odm_validation.doc_utils import (
-    pprint_dict_list, 
-    pprint_csv_file, 
-    pprint_json_file, 
+    pprint_dict_list,
+    pprint_csv_file,
+    pprint_json_file,
     pprint_yaml_file,
 )
 
@@ -18,13 +18,13 @@ assets_path = "../assets/validation-rules/greater-than-max-length"
 This rule ensures that the number of characters in a string type column is not greater than a defined maximum value. As an example, consider the `phone` column in the `contacts` table whose maximum length value is 10. The following dataset snippet would fail validation,
 
 ```{python}
-pprint_csv_file(assets_path + "/datasets/invalid-dataset.csv", "Invalid Dataset")
+pprint_csv_file(assets_path + "/invalid-dataset.csv", "Invalid Dataset")
 ```
 
 The `phone` column in the first row has 11 characters which is greater than the maximum length value of 10, whereas the following dataset snippet would pass validation,
 
 ```{python}
-pprint_csv_file(assets_path + "/datasets/valid-dataset.csv", "Valid Dataset")
+pprint_csv_file(assets_path + "/valid-dataset.csv", "Valid Dataset")
 ```
 
 The `phone` columns in both rows have a number of characters equal to 10 and 9 respectively which is less than or equal to the maximum length value of 10.
@@ -44,7 +44,7 @@ The error report should have the following fields,
 The error report object for the example invalid row above is shown below,
 
 ```{python}
-pprint_json_file(assets_path + "/error-reports/error-report.json")
+pprint_json_file(assets_path + "/error-report.json")
 ```
 
 ## Rule metadata
@@ -62,7 +62,7 @@ All the metadata for this rule is contained in the parts sheet in the ODM dictio
 For example in the following ODM dictionary snippet,
 
 ```{python}
-pprint_csv_file(assets_path + "/parts/parts-v2.csv", "Parts v2")
+pprint_csv_file(assets_path + "/parts-v2.csv", "Parts v2")
 ```
 
 The `phone` column in the `contacts` table would have this validation rule but the `addL2` column in the `addresses` table would not.
@@ -74,7 +74,7 @@ We can use the [maxLength](https://docs.python-cerberus.org/en/stable/validation
 The generated cerberus object for the example above is shown below,
 
 ```{python}
-pprint_yaml_file(assets_path + "/validation-schemas/schema-v2.yml")
+pprint_yaml_file(assets_path + "/schema-v2.yml")
 ```
 
 The metadata for this rule should have the row from the ODM parts sheet for the column with its `partID` and `maxLength` column values.
@@ -84,13 +84,13 @@ The metadata for this rule should have the row from the ODM parts sheet for the 
 When generating the schema for version 1, we check whether the column has an [equivalent part in version 1](../specs/odm-how-tos.md#getting-the-version-1-equivalent-for-a-part). If it does, then we add it to the cerberus schema. For example,
 
 ```{python}
-pprint_csv_file(assets_path + "/parts/parts-v1.csv", "Parts v1")
+pprint_csv_file(assets_path + "/parts-v1.csv", "Parts v1")
 ```
 
 The corresponding cerberus schema would be,
 
 ```{python}
-pprint_yaml_file(assets_path + "/validation-schemas/schema-v1.yml")
+pprint_yaml_file(assets_path + "/schema-v1.yml")
 ```
 
 The metadata should include the following columns,

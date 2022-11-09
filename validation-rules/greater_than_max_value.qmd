@@ -6,9 +6,9 @@ sys.path.append("../src")
 
 # Some pretty printing functions
 from odm_validation.doc_utils import (
-    pprint_dict_list, 
-    pprint_csv_file, 
-    pprint_json_file, 
+    pprint_dict_list,
+    pprint_csv_file,
+    pprint_json_file,
     pprint_yaml_file,
 )
 
@@ -19,26 +19,26 @@ This rule ensure that columns values are not greater than a defined maximum valu
 
 ```{python}
 # Using a yaml file here since in a CSV file every value is by default a string
-pprint_yaml_file(assets_path + "/datasets/invalid-dataset-1.yml")
+pprint_yaml_file(assets_path + "/invalid-dataset-1.yml")
 ```
 
 whereas the following dataset snippet would pass validation,
 
 ```{python}
 # Using a yaml file here since in a CSV file every value is by default a string
-pprint_yaml_file(assets_path + "/datasets/valid-dataset.yml")
+pprint_yaml_file(assets_path + "/valid-dataset.yml")
 ```
 
 If the value to be validated is a string, then it should be coerced into a number and then validated. Values that cannot be coerced should be ignored and a warning logged. For example the following snippet should fail validation,
 
 ```{python}
-pprint_csv_file(assets_path + "/datasets/invalid-dataset-2.csv", "Invalid Dataset")
+pprint_csv_file(assets_path + "/invalid-dataset-2.csv", "Invalid Dataset")
 ```
 
 whereas in the following snippet, the first row should be ignored and a warning logged informing the user that it was ignored and why.
 
 ```{python}
-pprint_csv_file(assets_path + "/datasets/invalid-dataset-3.csv", "Invalid Dataset")
+pprint_csv_file(assets_path + "/invalid-dataset-3.csv", "Invalid Dataset")
 ```
 
 The ODM dictionary is currently written so that the defined maximum values are inclusive i.e. only values greater than the maximum values are invalid. All other values should pass this rule. For example, for the `geoLat` column, a value of 90 would be valid.
@@ -58,7 +58,7 @@ The error report will have the following fields
 The error report object for the example invalid row above,
 
 ```{python}
-pprint_json_file(assets_path + "/error-reports/error-report.json")
+pprint_json_file(assets_path + "/error-report.json")
 ```
 
 ## Rule metadata
@@ -72,13 +72,13 @@ All the metadata for this rule is contained in the parts sheet in the data dicti
     * It has a number of possible values but we're looking for values of `float` or `integer`
 3. Check whether the filtered rows has a maximum value. If it does then add the validation rule for that column.
     * The `maxValue` column contains this metadata
-    * The possible values are a number or `NA`. 
+    * The possible values are a number or `NA`.
         * If the value is `NA` then this column does not have a maximum value.
 
 For example in the following ODM dictionary snippet,
 
 ```{python}
-pprint_csv_file(assets_path + "/parts/parts-v2.csv", "Parts v2")
+pprint_csv_file(assets_path + "/parts-v2.csv", "Parts v2")
 ```
 
 The `geoLat` part which is a column in the `sites` table has a `max` value of 90 and would have this rule set for it. On the other hand, the `geoEPSG` part which is also a column in the `sites` table would not have this rule due its `max` value being `NA`.
@@ -90,7 +90,7 @@ Although the cerberus library supports [maximum value validation](https://docs.p
 The generated cerberus object for the example above is shown below,
 
 ```{python}
-pprint_yaml_file(assets_path + "/validation-schemas/schema-v2.yml")
+pprint_yaml_file(assets_path + "/schema-v2.yml")
 ```
 
 The metadata for this rule should include the row from the ODM for the part with its `partID` and `max` column values.
@@ -100,13 +100,13 @@ The metadata for this rule should include the row from the ODM for the part with
 When generating the schema for version 1, we check whether the column has an [equivalent part in version 1](../specs/odm-how-tos.md#getting-the-version-1-equivalent-for-a-part). If it does, then we add it to the cerberus schema. For example,
 
 ```{python}
-pprint_csv_file(assets_path + "/parts/parts-v1.csv", "Parts v1")
+pprint_csv_file(assets_path + "/parts-v1.csv", "Parts v1")
 ```
 
 The corresponding cerberus schema would be,
 
 ```{python}
-pprint_yaml_file(assets_path + "/validation-schemas/schema-v2.yml")
+pprint_yaml_file(assets_path + "/schema-v2.yml")
 ```
 
 The metadata should include the following columns,
