@@ -1,0 +1,13 @@
+---
+sites:
+  type: list
+  schema:
+    type: dict
+    schema:
+      geoLat:
+        minInclusive: true
+        meta:
+        - ruleId: less_than_min_value
+          meta:
+          - partID: geoLat
+            min: "-90"

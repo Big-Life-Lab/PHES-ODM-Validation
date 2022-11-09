@@ -1,0 +1,34 @@
+---
+addresses:
+  type: list
+  schema:
+    type: dict
+    schema:
+      addressID:
+        required: true
+        meta:
+        - ruleId: missing_mandatory_column
+          meta:
+          - partID: addressID
+            addresses: PK
+            addressesRequired: mandatory
+      addL2: {}
+    meta:
+      partID: addresses
+      partType: table
+contacts:
+  type: list
+  schema:
+    type: dict
+    schema:
+      contactID:
+        required: true
+        meta:
+        - ruleId: missing_mandatory_column
+          meta:
+          - partID: contactID
+            addresses: PK
+            addressesRequired: mandatory
+  meta:
+    partID: contacts
+    partType: table

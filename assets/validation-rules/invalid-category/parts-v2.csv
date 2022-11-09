@@ -1,0 +1,5 @@
+partID,partType,samples,dataType,catSetID
+collection,attribute,header,categorical,collectCat
+comp3h,category,input,varchar,collectCat
+comp8h,category,input,varchar,collectCat,
+flowPr,category,input,varchar,collectCat

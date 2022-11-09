@@ -1,0 +1,13 @@
+---
+contacts:
+  type: list
+  schema:
+    type: dict
+    schema:
+      phone:
+        minLength: 10
+        meta:
+        - ruleId: less_than_min_length
+          meta:
+          - partID: phone
+            minLength: '10'

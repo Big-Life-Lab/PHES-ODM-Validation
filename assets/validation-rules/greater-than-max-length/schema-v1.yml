@@ -1,0 +1,21 @@
+Contact:
+  type: list
+  schema:
+    type: dict
+    schema:
+      phone:
+        maxLength: 10
+        meta:
+        - ruleId: greater_than_max_length
+          meta:
+          - partID: phone
+            contacts: header
+            maxLength: '10'
+            version1Location: variables
+            version1Table: Contact
+            version1Variable: phoneNumber
+  meta:
+    - partID: contacts
+      partType: table
+      version1Location: tables
+      version1Table: Contact

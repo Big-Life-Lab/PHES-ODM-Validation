@@ -1,0 +1,20 @@
+---
+Site:
+  type: list
+  schema:
+    type: dict
+    schema:
+      latitude:
+        trimEmpty: true
+        forbidden:
+        - NA_missing
+        meta:
+        - ruleId: missing_values_found
+          meta:
+          - partID: NA_missing
+            partType: missingness
+          - partID: geoLat
+            sitesRequired: mandatory
+            version1Location: variables
+            version1Table: Site
+            version1Variable: latitude
