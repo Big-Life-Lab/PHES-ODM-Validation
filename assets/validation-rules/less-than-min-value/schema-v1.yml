@@ -4,7 +4,7 @@ Site:
   schema:
     type: dict
     schema:
-      geoLat:
+      Latitude:
         minInclusive: true
         meta:
         - ruleId: less_than_min_value
@@ -13,5 +13,10 @@ Site:
             sites: header
             version1Location: variables
             version1Table: Site
-            version1Variable: geoLat
-            min: "-90"
+            version1Variable: Latitude
+            minValue: "-90"
+  meta:
+    - partID: sites
+      partType: table
+      version1Location: tables
+      version1Table: Site

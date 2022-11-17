@@ -1,20 +1,20 @@
 {
-    "errors": [
+    "errors": [],
+    "warnings": [
         {
-            "errorType": "less_than_min_value",
+            "warningType": "less_than_min_value",
             "tableName": "sites",
             "columnName": "geoLat",
             "rowNumber": 1,
             "row": {
                 "siteID": "1",
-                "geoLat": -91
+                "geoLat": "-89"
             },
             "validationRules": {
                 "partID": "geoLat",
                 "min": "-90"
             },
-            "message": "Value -91 in row 1 in column geoLat in table sites is less than the allowable minimum value of -90"
+            "message": "Value -89 in row 1 in column geoLat in table sites is a string and was coerced into a number"
         }
-    ],
-    "warnings": []
+    ]
 }

@@ -10,4 +10,7 @@ sites:
         - ruleId: less_than_min_value
           meta:
           - partID: geoLat
-            min: "-90"
+            minValue: "-90"
+  meta:
+    - partID: sites
+      partType: tables

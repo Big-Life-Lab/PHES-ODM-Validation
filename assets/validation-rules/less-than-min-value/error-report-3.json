@@ -7,13 +7,13 @@
             "rowNumber": 1,
             "row": {
                 "siteID": "1",
-                "geoLat": -91
+                "geoLat": "a"
             },
             "validationRules": {
                 "partID": "geoLat",
                 "min": "-90"
             },
-            "message": "Value -91 in row 1 in column geoLat in table sites is less than the allowable minimum value of -90"
+            "message": "Value a in row 1 in column geoLat in table sites cannot be coerced into a number"
         }
     ],
     "warnings": []
