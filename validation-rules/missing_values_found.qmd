@@ -45,7 +45,7 @@ pprint_csv_file(assets_path + "/valid-dataset.csv", "Valid Dataset")
 
 A value that is invalid due to this rule should generate a **warning** and **not** an error. The warning report should have the following fields
 
-* **errorType**: missing_values_found
+* **warningType**: missing_values_found
 * **tableName**: The name of the table containing the missing values
 * **columnName**: The name of the mandatory column containing the missing values
 * **rowNumber**: The index of the table row with the error

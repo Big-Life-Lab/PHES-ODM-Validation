@@ -1,16 +1,19 @@
-[
-    {
-        "errorType": "missing_mandatory_column",
-        "tableName": "addresses",
-        "columnName": "addressID",
-        "rowNumber": 1,
-        "row": {
-            "addL2": "123 Doe Street"
-        },
-        "validationRules": {
-            "partID": "addressID",
-            "addressesRequired": "mandatory"
-        },
-        "message": "Missing mandatory column addressID in table addresses in row number 1"
-    }
-]
+{
+    "errors": [
+        {
+            "errorType": "missing_mandatory_column",
+            "tableName": "addresses",
+            "columnName": "addressID",
+            "rowNumber": 1,
+            "row": {
+                "addL2": "123 Doe Street"
+            },
+            "validationRules": {
+                "partID": "addressID",
+                "addressesRequired": "mandatory"
+            },
+            "message": "Missing mandatory column addressID in table addresses in row number 1"
+        }
+    ],
+    "warnings": []
+}
