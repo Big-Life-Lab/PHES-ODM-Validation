@@ -9,4 +9,7 @@ sites:
         - ruleId: greater_than_max_value
           meta:
           - partID: geoLat
-            max: '90'
+            maxValue: '90'
+  meta:
+    - partID: sites
+      partType: table

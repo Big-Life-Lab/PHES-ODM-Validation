@@ -3,7 +3,7 @@ Site:
   schema:
     type: dict
     schema:
-      geoLat:
+      Latitude:
         maxInclusive: true
         meta:
         - ruleId: greater_than_max_value
@@ -12,5 +12,10 @@ Site:
             sites: header
             version1Location: variables
             version1Table: Site
-            version1Variable: geoLat
-            max: '90'
+            version1Variable: Latitude
+            maxValue: '90'
+  meta:
+    - partID: sites
+      partType: table
+      version1Location: tables
+      version1Table: Site

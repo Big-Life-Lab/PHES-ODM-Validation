@@ -1,0 +1,20 @@
+{
+    "errors": [
+        {
+            "errorType": "greater_than_max_value",
+            "tableName": "sites",
+            "columnName": "geoLat",
+            "rowNumber": 1,
+            "row": {
+                "siteID": "1",
+                "geoLat": "a"
+            },
+            "validationRules": {
+                "partID": "geoLat",
+                "min": "90"
+            },
+            "message": "Value a in row 1 in column geoLat in table sites cannot be coerced into a number"
+        }
+    ],
+    "warnings": []
+}
