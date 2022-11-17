@@ -15,3 +15,6 @@ sites:
             partType: missingness
           - partID: geoLat
             sitesRequired: mandatory
+  meta:
+    - partID: sites
+      partType: table

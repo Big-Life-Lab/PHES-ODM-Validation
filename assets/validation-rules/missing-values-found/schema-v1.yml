@@ -18,3 +18,8 @@ Site:
             version1Location: variables
             version1Table: Site
             version1Variable: latitude
+  meta:
+    - partID: sites
+      partType: table
+      version1Location: tables
+      version1Table: Site 
