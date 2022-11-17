@@ -11,3 +11,6 @@ contacts:
           meta:
           - partID: phone
             minLength: '10'
+  meta:
+    - partID: contacts
+      partType: table

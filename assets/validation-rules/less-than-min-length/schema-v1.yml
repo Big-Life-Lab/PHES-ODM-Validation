@@ -4,14 +4,18 @@ Contact:
   schema:
     type: dict
     schema:
-      phone:
+      phoneNumber:
         minLength: 10
         meta:
         - ruleId: less_than_min_value
           meta:
           - partID: phone
-            contacts: header
             minLength: '10'
             version1Location: variables
             version1Table: Contact
             version1Variable: phoneNumber
+  meta:
+    - partID: contacts
+      partType: tables
+      version1Location: tables
+      version1Table: Contact

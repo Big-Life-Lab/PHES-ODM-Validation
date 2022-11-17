@@ -1,3 +1,5 @@
-partID,addresses,contacts,dataTypr,minLength
-phone,NA,header,varchar,10
-addL2,header,NA,varchar,NA
+partID,partType,addresses,contacts,dataType,minLength
+contacts,table,NA,NA,NA,NA
+phone,attribute,NA,header,varchar,10
+addresses,table,NA,NA,NA,NA
+addL2,attribute,header,NA,varchar,NA
