@@ -4,7 +4,7 @@ Site:
     type: dict
     schema:
       Latitude:
-        maxInclusive: true
+        max: 90
         meta:
         - ruleId: greater_than_max_value
           meta:

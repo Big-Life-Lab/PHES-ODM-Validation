@@ -5,7 +5,7 @@ sites:
     type: dict
     schema:
       geoLat:
-        minInclusive: true
+        min: -90
         meta:
         - ruleId: less_than_min_value
           meta:

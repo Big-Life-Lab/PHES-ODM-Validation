@@ -138,7 +138,7 @@ The `geoLat` part which is a column in the `sites` table has a `minValue` value 
 
 ## Cerberus Schema
 
-Although the cerberus library supports [minimum value validation](https://docs.python-cerberus.org/en/stable/validation-rules.html#min-max), it does not support the less than **or** equal to operation. We will need to [extend the cerberus validator](https://docs.python-cerberus.org/en/stable/customize.html) to support this with a new `minExclusive` rule.
+We can use the [minimum value validation](https://docs.python-cerberus.org/en/stable/validation-rules.html#min-max) rule from cerberus to implement this rule.
 
 The generated cerberus object for the example above is shown below,
 

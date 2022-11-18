@@ -138,7 +138,7 @@ The `geoLat` part which is a column in the `sites` table has a `max` value of 90
 
 ## Cerberus Schema
 
-Although the cerberus library supports [maximum value validation](https://docs.python-cerberus.org/en/stable/validation-rules.html#min-max), it does not support the greater than **or** equal to operation. We will need to [extend the cerberus validator](https://docs.python-cerberus.org/en/stable/customize.html) to support this with a new `maxExclusive` rule.
+We can use the [maximum value validation](https://docs.python-cerberus.org/en/stable/validation-rules.html#min-max) rule in cerberus to implement this rule.
 
 The generated cerberus object for the example above is shown below,
 
