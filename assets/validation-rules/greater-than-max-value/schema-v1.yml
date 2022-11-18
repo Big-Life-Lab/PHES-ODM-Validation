@@ -1,21 +1,23 @@
-Site:
-  type: list
-  schema:
-    type: dict
+schemaVersion: 1.0.0
+schema:
+  Site:
+    type: list
     schema:
-      Latitude:
-        max: 90
-        meta:
-        - ruleId: greater_than_max_value
+      type: dict
+      schema:
+        Latitude:
+          max: 90
           meta:
-          - partID: geoLat
-            sites: header
-            version1Location: variables
-            version1Table: Site
-            version1Variable: Latitude
-            maxValue: '90'
-  meta:
-    - partID: sites
-      partType: table
-      version1Location: tables
-      version1Table: Site
+          - ruleId: greater_than_max_value
+            meta:
+            - partID: geoLat
+              sites: header
+              version1Location: variables
+              version1Table: Site
+              version1Variable: Latitude
+              maxValue: '90'
+    meta:
+      - partID: sites
+        partType: table
+        version1Location: tables
+        version1Table: Site
