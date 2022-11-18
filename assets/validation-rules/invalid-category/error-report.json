@@ -2,10 +2,10 @@
     {
         "errorType": "invalid_category",
         "tableName": "samples",
-        "columnName": "collection",
+        "columnName": "coll",
         "rowNumber": 1,
         "row": {
-            "collection": "flow"
+            "coll": "flow"
         },
         "invalidValue": "flow",
         "validationRuleFields": [
@@ -38,6 +38,6 @@
                 "catSetID": "collectCat"
             }
         ],
-        "message": "Invalid category flow found in row 1 for column collection in table samples"
+        "message": "Invalid category flow found in row 1 for column coll in table samples"
     }
 ]

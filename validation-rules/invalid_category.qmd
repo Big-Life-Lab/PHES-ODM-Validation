@@ -91,7 +91,7 @@ pprint_csv_file(asset("parts.csv"), "Parts v1")
 
 In the snippet above, for a version 1 variable, we check whether the `version1Category` column has a value. If it does then it is categorical. We can then retreive the categories by looking at all the unique `version1Category` values for that variable. Keep in mind, that there can be multiple categories encoded in a cell, with each value seperated by a semi-colon.
 
-The version 1 variable `Collection` column has four categories, `Comp3h`, `Comp8h`, `FlowPR`, `flowRatePr`.
+The version 1 variable `Collection` column has four categories, `Comp3h`, `Comp8h`, `FlowPR`, `FlowRatePr`.
 
 The corresponding cerberus schema for version 1 would be,
 
