@@ -7,7 +7,7 @@
 ASSET_DIR = get_rule_asset_dir('invalid_category')
 ```
 
-This rule checks if the rows of a categorical column in a table have the right values. A right value is one in the set of allowable values for the categorical column. For example, the `collection` column in the `samples` table is a categorical column whose set of allowable values or categories are `comp3h`, `comp8h`, `flowPr` etc. The following samples table row would fail validation,
+This rule checks if the rows of a categorical column in a table have the right values. A right value is one in the set of allowable values for the categorical column. For example, the `coll` column in the `samples` table is a categorical column whose set of allowable values or categories are `comp3h`, `comp8h`, `flowPr` etc. The following samples table row would fail validation,
 
 ```{python}
 pprint_csv_file(asset("invalid-dataset.csv"), "Invalid Dataset")
@@ -58,7 +58,7 @@ pprint_csv_file(asset("parts.csv"), "Parts v2",
                 ignore_prefix="version1")
 ```
 
-Here, the name of the categorical column is `collection` and its the name of a column in the `samples` table. The category set name is `collectCat` which is used to identify the category values which are `comp3h`, `comp8h`, and `flowPr`.
+Here, the name of the categorical column is `coll` and its the name of a column in the `samples` table. The category set name is `collectCat` which is used to identify the category values which are `comp3h`, `comp8h`, and `flowPr`.
 
 ## Cerberus Schema
 
