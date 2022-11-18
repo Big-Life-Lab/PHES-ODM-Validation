@@ -1,27 +1,29 @@
-samples:
-  type: list
-  schema:
-    type: dict
+schemaVersion: 2.0.0
+schema:
+  samples:
+    type: list
     schema:
-      collection:
-        type: string
-        allowed:
-        - comp3h
-        - comp8h
-        - flowPr
-        meta:
-        - ruleId: invalid_category
+      type: dict
+      schema:
+        collection:
+          type: string
+          allowed:
+          - comp3h
+          - comp8h
+          - flowPr
           meta:
-          - partID: collection
-            samples: header
-            dataType: categorical
-            catSetID: collectCat
-          - partID: comp3h
-            partType: category
-            catSetID: collectCat
-          - partID: comp8h
-            partType: category
-            catSetID: collectCat
-          - partID: flowPr
-            partType: category
-            catSetID: collectCat
+          - ruleId: invalid_category
+            meta:
+            - partID: collection
+              samples: header
+              dataType: categorical
+              catSetID: collectCat
+            - partID: comp3h
+              partType: category
+              catSetID: collectCat
+            - partID: comp8h
+              partType: category
+              catSetID: collectCat
+            - partID: flowPr
+              partType: category
+              catSetID: collectCat

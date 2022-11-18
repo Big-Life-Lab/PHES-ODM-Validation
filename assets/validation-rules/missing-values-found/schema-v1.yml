@@ -1,25 +1,26 @@
----
-Site:
-  type: list
-  schema:
-    type: dict
+schemaVersion: 1.0.0
+schema:
+  Site:
+    type: list
     schema:
-      latitude:
-        trimEmpty: true
-        forbidden:
-        - NA_missing
-        meta:
-        - ruleId: missing_values_found
+      type: dict
+      schema:
+        latitude:
+          trimEmpty: true
+          forbidden:
+          - NA_missing
           meta:
-          - partID: NA_missing
-            partType: missingness
-          - partID: geoLat
-            sitesRequired: mandatory
-            version1Location: variables
-            version1Table: Site
-            version1Variable: latitude
-  meta:
-    - partID: sites
-      partType: table
-      version1Location: tables
-      version1Table: Site 
+          - ruleId: missing_values_found
+            meta:
+            - partID: NA_missing
+              partType: missingness
+            - partID: geoLat
+              sitesRequired: mandatory
+              version1Location: variables
+              version1Table: Site
+              version1Variable: latitude
+    meta:
+      - partID: sites
+        partType: table
+        version1Location: tables
+        version1Table: Site 
