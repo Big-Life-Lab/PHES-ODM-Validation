@@ -1,9 +1,11 @@
-from typing import List
-from rich.table import Table
-from rich.console import Console
-from utils import import_dataset, import_yaml_file
 import json
+from typing import List
+
+from rich.console import Console
 from rich.pretty import pprint
+from rich.table import Table
+
+from utils import import_dataset, import_yaml_file
 
 
 def pprint_dict_list(dict_list: List[dict], title: str):
