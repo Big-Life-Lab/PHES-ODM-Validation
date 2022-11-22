@@ -1,45 +1,36 @@
 # less_than_min_value
 
+{{< include _setup.qmd >}}
+
 ```{python}
-import sys
-sys.path.append("../src")
-
-# Some pretty printing functions
-from odm_validation.doc_utils import (
-    pprint_dict_list,
-    pprint_csv_file,
-    pprint_json_file,
-    pprint_yaml_file,
-)
-
-assets_path = "../assets/validation-rules/less-than-min-value"
+#| echo: false
+ASSET_DIR = get_rule_asset_dir('less_than_min_value')
 ```
-
 
 This rule ensure that columns values are not less than a defined minimum value. Currently, this rule only supports columns whose data type is float or integer i.e. numbers. As an example, consider the `geoLat` column in the `sites` table which has a minimum value of -90. The following dataset snippet would fail validation,
 
 ```{python}
 # This is using a YAML file since in a CSV file everything is a string by default
-pprint_yaml_file(assets_path + "/invalid-dataset-1.yml")
+pprint_yaml_file(asset("invalid-dataset-1.yml"))
 ```
 
 whereas the following dataset snippet would pass validation,
 
 ```{python}
 # This is using a YAML file since in a CSV file everything is a string by default
-pprint_yaml_file(assets_path + "/valid-dataset-1.yml")
+pprint_yaml_file(asset("valid-dataset-1.yml"))
 ```
 
 If the value to be validated is a string, then it should be coerced into a number and then validated. Values that cannot be coerced should be ignored and a warning logged. For example the following snippet should fail validation,
 
 ```{python}
-pprint_csv_file(assets_path + "/invalid-dataset-2.csv", "Invalid Dataset")
+pprint_csv_file(asset("invalid-dataset-2.csv"), "Invalid Dataset")
 ```
 
 whereas in the following snippet, the first row should be ignored and a warning logged informing the user that it was ignored and why.
 
 ```{python}
-pprint_csv_file(assets_path + "/invalid-dataset-3.csv", "Invalid Dataset")
+pprint_csv_file(asset("invalid-dataset-3.csv"), "Invalid Dataset")
 ```
 
 The ODM dictionary is currently written so that the defined minimum values are inclusive i.e. only values less than the minimum values are invalid. All other values should pass this rule. For example, for the `geoLat` column, a value of -90 would be valid.
@@ -59,7 +50,7 @@ The error report will have the following fields
 The error report object for the example invalid row above,
 
 ```{python}
-pprint_json_file(assets_path + "/error-report-1.json")
+pprint_json_file(asset("error-report-1.json"))
 ```
 
 ## Rule metadata
@@ -79,7 +70,7 @@ All the metadata for this rule is contained in the parts sheet in the data dicti
 For example in the following ODM dictionary snippet,
 
 ```{python}
-pprint_csv_file(assets_path + "/parts-v2.csv", "Parts v2")
+pprint_csv_file(asset("parts-v2.csv"), "Parts v2")
 ```
 
 The `geoLat` part which is a column in the `sites` table has a `min` value of -90 and would have this rule set for it. On the other hand, the `geoEPSG` part which is also a column in the `sites` table would not have this rule due its `min` value being `NA`.
@@ -91,7 +82,7 @@ Although the cerberus library supports [miniumm value validation](https://docs.p
 The generated cerberus object for the example above is shown below,
 
 ```{python}
-pprint_yaml_file(assets_path + "/schema-v2.yml")
+pprint_yaml_file(asset("schema-v2.yml"))
 ```
 
 The metadata for this rule should include the row from the ODM for the part with its `partID` and `min` column values.
@@ -101,13 +92,13 @@ The metadata for this rule should include the row from the ODM for the part with
 When generating the schema for version 1, we check whether the column has an [equivalent part in version 1](../specs/odm-how-tos.md#getting-the-version-1-equivalent-for-a-part). If it does, then we add it to the cerberus schema. For example,
 
 ```{python}
-pprint_csv_file(assets_path + "/parts-v1.csv", "Parts v1")
+pprint_csv_file(asset("parts-v1.csv"), "Parts v1")
 ```
 
 The corresponding cerberus schema would be,
 
 ```{python}
-pprint_yaml_file(assets_path + "/schema-v1.yml")
+pprint_yaml_file(asset("schema-v1.yml"))
 ```
 
 The metadata should include the following columns,

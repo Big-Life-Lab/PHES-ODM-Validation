@@ -1,18 +1,10 @@
 # missing_values_found
 
+{{< include _setup.qmd >}}
+
 ```{python}
-import sys
-sys.path.append("../src")
-
-# Some pretty printing functions
-from odm_validation.doc_utils import (
-    pprint_dict_list,
-    pprint_csv_file,
-    pprint_json_file,
-    pprint_yaml_file,
-)
-
-assets_path = "../assets/validation-rules/missing-values-found"
+#| echo: false
+ASSET_DIR = get_rule_asset_dir('missing_values_found')
 ```
 
 This rule checks if a mandatory column contain any missing values. A value is considered missing if it contains an empty string or if it contains one of the values considered as missing by the ODM dictionary.
@@ -20,25 +12,25 @@ This rule checks if a mandatory column contain any missing values. A value is co
 Consider a mandatory column named `geoLat` in a `sites` table. The following ODM dataset snippet would fail validation due to the first row having an empty string for the `geoLat` column value.
 
 ```{python}
-pprint_csv_file(assets_path + "/invalid-dataset-1.csv", "Invalid Dataset")
+pprint_csv_file(asset("invalid-dataset-1.csv"), "Invalid Dataset")
 ```
 
 In addition, column values that are an empty string when trimmed should also fail this validation rule. For example, the following ODM data snippet would also fail validation,
 
 ```{python}
-pprint_csv_file(assets_path + "/invalid-dataset-2.csv", "Invalid Dataset")
+pprint_csv_file(asset("invalid-dataset-2.csv"), "Invalid Dataset")
 ```
 
 Finally, if the ODM dictionary considers values of `NA` to be missing, the following would fail validation,
 
 ```{python}
-pprint_csv_file(assets_path + "/invalid-dataset-3.csv", "Invalid Dataset")
+pprint_csv_file(asset("invalid-dataset-3.csv"), "Invalid Dataset")
 ```
 
 The following dataset snippet would pass validation
 
 ```{python}
-pprint_csv_file(assets_path + "/valid-dataset.csv", "Valid Dataset")
+pprint_csv_file(asset("valid-dataset.csv"), "Valid Dataset")
 ```
 
 ## Warning report
@@ -58,19 +50,19 @@ The warning report object for the example ODM datasets in the previous section a
 Example 1 warning report,
 
 ```{python}
-pprint_json_file(assets_path + "/error-report-1.json")
+pprint_json_file(asset("error-report-1.json"))
 ```
 
 Example 2 warning report,
 
 ```{python}
-pprint_json_file(assets_path + "/error-report-2.json")
+pprint_json_file(asset("error-report-2.json"))
 ```
 
 Example 3 warning report,
 
 ```{python}
-pprint_json_file(assets_path + "/error-report-3.json")
+pprint_json_file(asset("error-report-3.json"))
 ```
 
 ## Rule metadata
@@ -87,7 +79,7 @@ All the metadata for this rule is contained in the parts sheet in the data dicti
 For example the ODM snippet below will be used to generate the validation schema for the examples above,
 
 ```{python}
-pprint_csv_file(assets_path + "/parts-v2.csv", "Parts v2")
+pprint_csv_file(asset("parts-v2.csv"), "Parts v2")
 ```
 
 we would add this rule only to the `geoLat` column in the `sites` table. This rule would **not** be added to the `geoLong` column in the same table.
@@ -102,7 +94,7 @@ We will need to use two rules from cerberus for this validation rule:
 The cerberus schema for the ODM dictionary snippet above is shown below,
 
 ```{python}
-pprint_yaml_file(assets_path + "/schema-v2.yml")
+pprint_yaml_file(asset("schema-v2.yml"))
 ```
 
 The `meta` field for this rule should have multiple entries,
@@ -117,13 +109,13 @@ For version 1 validation schemas, we add this rule to only those version 2 colum
 For the ODM snippet below,
 
 ```{python}
-pprint_csv_file(assets_path + "/parts-v1.csv", "Parts v1")
+pprint_csv_file(asset("parts-v1.csv"), "Parts v1")
 ```
 
 The corresponding cerberus schema would be,
 
 ```{python}
-pprint_yaml_file(assets_path + "/schema-v1.yml")
+pprint_yaml_file(asset("schema-v1.yml"))
 ```
 
 The meta field for version 1 includes everything in version 2 but should also include the following columns for the entry for the mandatory column,
