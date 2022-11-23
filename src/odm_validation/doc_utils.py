@@ -1,9 +1,11 @@
-from typing import List
-from rich.table import Table
-from rich.console import Console
-from utils import import_dataset, import_yaml_file
 import json
+from typing import List
+
+from rich.console import Console
 from rich.pretty import pprint
+from rich.table import Table
+
+from utils import import_dataset, import_yaml_file
 
 
 def pprint_dict_list(dict_list: List[dict], title: str):
@@ -53,3 +55,8 @@ def pprint_yaml_file(file_path: str):
     yaml_file = import_yaml_file(file_path)
 
     pprint(yaml_file, expand_all=True)
+
+
+def get_rule_asset_dir(rule_id: str):
+    kebab_rule = rule_id.replace('_', '-')
+    return f'../assets/validation-rules/{kebab_rule}'

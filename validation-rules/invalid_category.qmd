@@ -1,30 +1,22 @@
 # invalid_category
 
+{{< include _setup.qmd >}}
+
 ```{python}
-import sys
-sys.path.append("../src")
-
-# Some pretty printing functions
-from odm_validation.doc_utils import (
-    pprint_dict_list,
-    pprint_csv_file,
-    pprint_json_file,
-    pprint_yaml_file,
-)
-
-assets_path = "../assets/validation-rules/invalid-category"
+#| echo: false
+ASSET_DIR = get_rule_asset_dir('invalid_category')
 ```
 
 This rule checks if the rows of a categorical column in a table have the right values. A right value is one in the set of allowable values for the categorical column. For example, the `collection` column in the `samples` table is a categorical column whose set of allowable values or categories are `comp3h`, `comp8h`, `flowPr` etc. The following samples table row would fail validation,
 
 ```{python}
-pprint_csv_file(assets_path + "/invalid-dataset.csv", "Invalid Dataset")
+pprint_csv_file(asset("invalid-dataset.csv"), "Invalid Dataset")
 ```
 
 The following samples table row would pass validation,
 
 ```{python}
-pprint_csv_file(assets_path + "/valid-dataset.csv", "Valid Dataset")
+pprint_csv_file(asset("valid-dataset.csv"), "Valid Dataset")
 ```
 
 ## Error report
@@ -43,7 +35,7 @@ The error report will have the following fields
 Example
 
 ```{python}
-pprint_json_file(assets_path + "/error-report.json")
+pprint_json_file(asset("error-report.json"))
 ```
 
 ## Rule metadata
@@ -62,7 +54,7 @@ All the metadata for this rule is contained in the parts sheet in the data dicti
 Example
 
 ```{python}
-pprint_csv_file(assets_path + "/parts-v2.csv", "Parts v2")
+pprint_csv_file(asset("parts-v2.csv"), "Parts v2")
 ```
 
 Here, the name of the categorical column is `collection` and its the name of a column in the `samples` table. The category set name is `collectCat` which is used to identify the category values which are `comp3h`, `comp8h`, and `flowPr`.
@@ -72,7 +64,7 @@ Here, the name of the categorical column is `collection` and its the name of a c
 The generated cerberus object for the example above is shown below,
 
 ```{python}
-pprint_yaml_file(assets_path + "/schema-v2.yml")
+pprint_yaml_file(asset("schema-v2.yml"))
 ```
 
 The metadata for this rule should include the following rows from the ODM dictionary:
@@ -93,7 +85,7 @@ Information on point 1 can be found [here](/README.md/#version-1).
 To check whether a version 1 column is categorical, we can use the `version1Location` column. If the column has a value of `variableCategories` then the part was a category in version 1. We can then look at the value of the `version1Category` column to see the what the category value was in version 1. For example, in the ODM parts snippet below,
 
 ```{python}
-pprint_csv_file(assets_path + "/parts-v1.csv", "Parts v1")
+pprint_csv_file(asset("parts-v1.csv"), "Parts v1")
 ```
 
 In the snippet above, for a version 1 variable, we check whether the `version1Category` column has a value. If it does then it is categorical. We can then retreive the categories by looking at all the unique `version1Category` values for that variable. Keep in mind, that there can be multiple categories encoded in a cell, with each value seperated by a semi-colon.
@@ -103,7 +95,7 @@ The version 1 variable `Collection` column has four categories, `Comp3h`, `Comp8
 The corresponding cerberus schema for version 1 would be,
 
 ```{python}
-pprint_yaml_file(assets_path + "/schema-v1.yml")
+pprint_yaml_file(asset("schema-v1.yml"))
 ```
 
 The meta field for the rule should include the same part rows and fields as version 2 with the following additions,
