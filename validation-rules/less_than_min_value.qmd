@@ -60,9 +60,9 @@ This rule can generate an error and/or a warning.
 
 An error is generated in the following cases:
 
-1. The value is a number and is less than the min value
-2. The value is not a number, can be coerced into one, and is less than the min value
-3. The value is not a number and cannot be coerced into one
+1. The value is a number and is less than the min value.
+2. The value is not a number, can be coerced into one, and is less than the min value.
+3. The value is not a number and cannot be coerced into one.
 
 The error report for the first two cases is shown below,
 
