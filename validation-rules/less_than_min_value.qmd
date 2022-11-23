@@ -29,7 +29,7 @@ whereas the following dataset snippet would pass validation,
 pprint_yaml_file(assets_path + "/valid-dataset-1.yml")
 ```
 
-If the value to be validated is not a number but can be coerced into one, then validation should proceed after coercion. Whether the corced value is valid or not, a warning should reported informing the user of the mismatched type. For example the following dataset would fail validation with an error and a warning,
+If the value to be validated is not a number but can be coerced into one, then a warning is given. Whether the coerced value is valid or not, a warning should reported informing the user of the mismatched type. For example the following dataset would fail validation with an error and a warning,
 
 ```{python}
 pprint_csv_file(assets_path + "/invalid-dataset-2.csv", "Invalid Dataset")
