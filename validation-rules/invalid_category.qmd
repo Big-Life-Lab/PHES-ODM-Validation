@@ -80,7 +80,7 @@ Generating the cerberus schema for version 1 requires the following information:
 2. Whether the column is categorical and
 3. If it is, the list of allowed categories
 
-Information on point 1 can be found [here](/README.md/#version-1).
+Information on point 1 can be found [here](/README.md#version-1).
 
 To check whether a version 1 column is categorical, we can use the `version1Location` column. If the column has a value of `variableCategories` then the part was a category in version 1. We can then look at the value of the `version1Category` column to see the what the category value was in version 1. For example, in the ODM parts snippet below,
 
