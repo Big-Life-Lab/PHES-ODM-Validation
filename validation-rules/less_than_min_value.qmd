@@ -72,11 +72,11 @@ The error report for the first two cases is shown below,
 * **rowNumber**: The index of the row with the invalid value
 * **row**: The dictionary containing the invalid row
 * **validationRuleFields**: The ODM data dictionary rows used to generate this rule
-* **message**: Value <invalid_value> in row <row_index> in column <column_name> in table <table_name> is less than the allowable minimum value of <min_value>
+* **message**: Value \<invalid_value\> in row \<row_index\> in column \<column_name\> in table \<table_name\> is less than the allowable minimum value of \<min_value\>
 
 The error report for the third case is the identical except for the message field which is shown below,
 
-* **message**: Value <invalid_value> in row <row_index> in column <column_name> in table <table_name> cannot be coerced into a number
+* **message**: Value \<invalid_value\> in row \<row_index\> in column \<column_name\> in table \<table_name\> cannot be coerced into a number
 
 A warning is generated when the value is a not a number but is coerced into one before validation. The warning report will have the following fields,
 
@@ -86,7 +86,7 @@ A warning is generated when the value is a not a number but is coerced into one 
 * **rowNumber**: The index of the row with the invalid value
 * **row**: The dictionary containing the invalid row
 * **validationRuleFields**: The ODM data dictionary rows used to generate this rule
-* **message**: Value <invalid_value> in row <row_index> in column <column_name> in table <table_name> is a <invalid_type> and was coerced into a number
+* **message**: Value \<invalid_value\> in row \<row_index\> in column \<column_name\> in table \<table_name\> is a \<invalid_type\> and was coerced into a number
 
 The error reports for each of the invalid datasets above are shown above,
 
