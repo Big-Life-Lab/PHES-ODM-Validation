@@ -14,6 +14,21 @@
                 "min": "90"
             },
             "message": "Value a in row 1 in column geoLat in table sites cannot be coerced into a number"
+        },
+        {
+            "errorType": "greater_than_max_value",
+            "tableName": "sites",
+            "columnName": "geoLong",
+            "rowNumber": 1,
+            "row": {
+                "siteID": "1",
+                "geoLong": "b"
+            },
+            "validationRules": {
+                "partID": "geoLong",
+                "min": "90.15"
+            },
+            "message": "Value b in row 1 in column geoLong in table sites cannot be coerced into a number"
         }
     ],
     "warnings": []

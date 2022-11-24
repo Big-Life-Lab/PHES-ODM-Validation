@@ -15,7 +15,7 @@ from odm_validation.doc_utils import (
 assets_path = "../assets/validation-rules/greater-than-max-value"
 ```
 
-This rule ensure that columns values are not greater than a defined maximum value. Currently, this rule only supports columns whose data type is float or integer i.e. numbers. As an example, consider the `geoLat` column in the `sites` table which has a maximum value of 90. The following dataset snippet would fail validation,
+This rule ensure that columns values are not greater than a defined maximum value. Currently, this rule only supports columns whose data type is float or integer i.e. numbers. As an example, consider the `geoLat` column and `geoLong` column in the `sites` table. For the purpose of explaining this rule we'll assume the `geoLat` column is an `integer` with a maximum value of 90 and the `geoLong` column is a `float` with a maximum value of 90.15. The following dataset snippet would fail validation,
 
 ```{python}
 # Using a yaml file here since in a CSV file every value is by default a string
@@ -41,13 +41,13 @@ and the following dataset should pass validation with a warning,
 pprint_csv_file(assets_path + "/valid-dataset-2.csv", "Valid Dataset")
 ```
 
-If the value cannot be coerced into a number, then an error should be logged as in the following dataset where "a" cannot be coerced into a number
+If the value cannot be coerced into a number, then an error should be logged as in the following dataset where "a" and "b" cannot be coerced into a number
 
 ```{python}
 pprint_csv_file(assets_path + "/invalid-dataset-3.csv", "Invalid Dataset")
 ```
 
-The ODM dictionary is currently written so that the defined maximum values are inclusive i.e. only values greater than the maximum values are invalid. All other values should pass this rule. For example, for the `geoLat` column, a value of 90 would be valid as in the dataset below,
+The ODM dictionary is currently written so that the defined maximum values are inclusive i.e. only values greater than the maximum values are invalid. All other values should pass this rule. For example, for the `geoLat` column and `geoLong` column, a value of 90 and 90.15 respectively would be considered valid as in the dataset below,
 
 ```{python}
 # Using a yaml file here since in a CSV file every value is by default a string

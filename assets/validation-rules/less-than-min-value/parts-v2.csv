@@ -1,4 +1,5 @@
 partID,partType,sites,dataType,minValue
 sites,table,NA,NA,NA
-geoLat,attribute,header,float,-90
-geoEPSG,attribute,header,float,NA
+geoLat,attribute,header,integer,-90
+geoLong,attribute,header,float,-90.15
+geoEPSG,attribute,header,integer,NA

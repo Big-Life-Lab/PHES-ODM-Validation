@@ -16,6 +16,17 @@ schema:
               version1Table: Site
               version1Variable: Latitude
               maxValue: '90'
+        Longitude:
+          max: 90.15
+          meta:
+          - ruleId: greater_than_max_value
+            meta:
+            - partID: geoLong
+              sites: header
+              version1Location: variables
+              version1Table: Site
+              version1Variable: Longitude
+              maxValue: '90.15'
     meta:
       - partID: sites
         partType: table
