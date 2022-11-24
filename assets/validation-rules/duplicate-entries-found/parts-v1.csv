@@ -1,0 +1,3 @@
+partID,partType,addresses,version1Location,version1Table,version1Variable
+addresses,table,NA,tables,Address,NA
+addId,attribute,pK,variables,Address,AddressId

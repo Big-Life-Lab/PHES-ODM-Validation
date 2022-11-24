@@ -1,0 +1,25 @@
+[
+    {
+        "errorType": "duplicate_entries_found",
+        "tableName": "addresses",
+        "columnName": "addId",
+        "rowNumbers": [1,2],
+        "rows": [
+            {
+                "addId": "1",
+                "lastUpdated": ""
+            },
+            {
+                "addId": "1",
+                "lastUpdated": ""
+            }
+        ],
+        "validationRuleFields": [
+            {
+                "partID": "addId",
+                "addresses": "pK"
+            }
+        ],
+        "message": "Duplicate entries found in rows 1,2 with primary key column addId and primary key value 1 in table addresses"
+    }
+]

@@ -1,0 +1,4 @@
+partID,partType,sites,sitesRequired,version1Location,version1Table,version1Variable,firstReleased,lastUpdated,status
+sites,table,NA,NA,tables,Site,NA,1.0.0,2.0.0,active
+geoLat,attribute,header,mandatory,variables,Site,Latitude,1.0.0,2.0.0,active
+geoLong,attribute,header,mandatory,variables,Site,Longitude,1.0.0,2.0.0,active
