@@ -30,7 +30,7 @@ pprint_csv_file(asset("invalid-dataset-2.csv"), "Invalid Dataset")
 and the following dataset should pass validation with a warning,
 
 ```{python}
-pprint_csv_file(assets_path + "/valid-dataset-2.csv", "Valid Dataset")
+pprint_csv_file(asset("valid-dataset-2.csv"), "Valid Dataset")
 ```
 
 If the value cannot be coerced into a number, then an error should be logged as in the following dataset where "a" and "b" cannot be coerced into a number
@@ -43,7 +43,7 @@ The ODM dictionary is currently written so that the defined minimum values are i
 
 ```{python}
 # Using a yaml file here since in a CSV file every value is by default a string
-pprint_yaml_file(assets_path + "/valid-dataset-3.yml")
+pprint_yaml_file(asset("valid-dataset-3.yml"))
 ```
 
 ## Error report
@@ -91,13 +91,13 @@ pprint_json_file(asset("error-report-1.json"))
 Invalid dataset 2
 
 ```{python}
-pprint_json_file(asset("/error-report-2.json"))
+pprint_json_file(asset("error-report-2.json"))
 ```
 
 Invalid dataset 3
 
 ```{python}
-pprint_json_file(asset("/error-report-3.json"))
+pprint_json_file(asset("error-report-3.json"))
 ```
 
 Finally, for the valid coercable dataset (valid dataset 2) above, the following warning should be generated
