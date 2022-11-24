@@ -1,31 +1,23 @@
 # missing_mandatory_column
 
+{{< include _setup.qmd >}}
+
 ```{python}
-import sys
-sys.path.append("../src")
-
-# Some pretty printing functions
-from odm_validation.doc_utils import (
-    pprint_dict_list,
-    pprint_csv_file,
-    pprint_json_file,
-    pprint_yaml_file,
-)
-
-assets_path = "../assets/validation-rules/missing-mandatory-column"
+#| echo: false
+ASSET_DIR = get_rule_asset_dir('missing_mandatory_column')
 ```
 
 This rule checks if the rows of each table contains its mandatory columns. For example, the `addressID` column is mandatory for the `addresses` table. The following address table row,
 
 ```{python}
-pprint_csv_file(assets_path + "/invalid-dataset.csv", "Invalid Dataset")
+pprint_csv_file(asset("invalid-dataset.csv"), "Invalid Dataset")
 ```
 
 
 would fail validation. The following address table row would pass validation,
 
 ```{python}
-pprint_csv_file(assets_path + "/valid-dataset.csv", "Valid Dataset")
+pprint_csv_file(asset("valid-dataset.csv"), "Valid Dataset")
 ```
 
 ## Error report
@@ -43,7 +35,7 @@ The error report will have the following fields
 Example
 
 ```{python}
-pprint_json_file(assets_path + "/error-report.json")
+pprint_json_file(asset("error-report.json"))
 ```
 
 ## Rule metadata
@@ -69,7 +61,7 @@ All the metadata for this rule is contained in the parts sheet in the data dicti
 Example
 
 ```{python}
-pprint_csv_file(assets_path + "/parts-v1.csv", "Parts v2")
+pprint_csv_file(asset("parts-v1.csv"), "Parts v2")
 ```
 
 ## Cerberus Schema
@@ -77,7 +69,7 @@ pprint_csv_file(assets_path + "/parts-v1.csv", "Parts v2")
 The generated cerberus object for the example above is shown below,
 
 ```{python}
-pprint_yaml_file(assets_path + "/schema-v2.yml")
+pprint_yaml_file(asset("schema-v2.yml"))
 ```
 
 The data dictionary columns that should be included in the `meta` field are:
@@ -98,13 +90,13 @@ Details for the above points can be found [here](./README.md/#version-1)
 We then check if the version 2 equivalent column is mandatory in the version 2 equivalent table, if it is, then it should be mandatory in version 1. For example,
 
 ```{python}
-pprint_csv_file(assets_path + "/parts-v1.csv", "Parts v1")
+pprint_csv_file(asset("parts-v1.csv"), "Parts v1")
 ```
 
 The corresponding version 1 cerberus schema is shown below,
 
 ```{python}
-pprint_yaml_file(assets_path + "/schema-v1.yml")
+pprint_yaml_file(asset("schema-v1.yml"))
 ```
 
 The `meta` field for version 1 validation schemas for this rule should include the rows for version 2 along with the `version1Location`, `version1Table`, and `version1Variable` column.

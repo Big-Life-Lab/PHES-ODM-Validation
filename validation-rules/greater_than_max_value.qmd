@@ -1,38 +1,30 @@
 # greater_than_max_value
 
+{{< include _setup.qmd >}}
+
 ```{python}
-import sys
-sys.path.append("../src")
-
-# Some pretty printing functions
-from odm_validation.doc_utils import (
-    pprint_dict_list,
-    pprint_csv_file,
-    pprint_json_file,
-    pprint_yaml_file,
-)
-
-assets_path = "../assets/validation-rules/greater-than-max-value"
+#| echo: false
+ASSET_DIR = get_rule_asset_dir('greater_than_max_value')
 ```
 
 This rule ensure that columns values are not greater than a defined maximum value. Currently, this rule only supports columns whose data type is float or integer i.e. numbers. As an example, consider the `geoLat` column and `geoLong` column in the `sites` table. For the purpose of explaining this rule we'll assume the `geoLat` column is an `integer` with a maximum value of 90 and the `geoLong` column is a `float` with a maximum value of 90.15. The following dataset snippet would fail validation,
 
 ```{python}
 # Using a yaml file here since in a CSV file every value is by default a string
-pprint_yaml_file(assets_path + "/invalid-dataset-1.yml")
+pprint_yaml_file(asset("invalid-dataset-1.yml"))
 ```
 
 whereas the following dataset snippet would pass validation,
 
 ```{python}
 # Using a yaml file here since in a CSV file every value is by default a string
-pprint_yaml_file(assets_path + "/valid-dataset-1.yml")
+pprint_yaml_file(asset("valid-dataset-1.yml"))
 ```
 
 If the value to be validated is not a number but can be coerced into one, then a warning is given. Whether the coerced value is valid or not, a warning should reported informing the user of the mismatched type. For example the following dataset would fail validation with an error and a warning,
 
 ```{python}
-pprint_csv_file(assets_path + "/invalid-dataset-2.csv", "Invalid Dataset")
+pprint_csv_file(asset("invalid-dataset-2.csv"), "Invalid Dataset")
 ```
 
 and the following dataset should pass validation with a warning,
@@ -44,7 +36,7 @@ pprint_csv_file(assets_path + "/valid-dataset-2.csv", "Valid Dataset")
 If the value cannot be coerced into a number, then an error should be logged as in the following dataset where "a" and "b" cannot be coerced into a number
 
 ```{python}
-pprint_csv_file(assets_path + "/invalid-dataset-3.csv", "Invalid Dataset")
+pprint_csv_file(asset("invalid-dataset-3.csv"), "Invalid Dataset")
 ```
 
 The ODM dictionary is currently written so that the defined maximum values are inclusive i.e. only values greater than the maximum values are invalid. All other values should pass this rule. For example, for the `geoLat` column and `geoLong` column, a value of 90 and 90.15 respectively would be considered valid as in the dataset below,
@@ -93,25 +85,25 @@ The error reports for each of the invalid datasets above are shown above,
 Invalid dataset 1
 
 ```{python}
-pprint_json_file(assets_path + "/error-report-1.json")
+pprint_json_file(asset("error-report-1.json"))
 ```
 
 Invalid dataset 2
 
 ```{python}
-pprint_json_file(assets_path + "/error-report-2.json")
+pprint_json_file(asset("error-report-2.json"))
 ```
 
 Invalid dataset 3
 
 ```{python}
-pprint_json_file(assets_path + "/error-report-3.json")
+pprint_json_file(asset("error-report-3.json"))
 ```
 
 Finally, for the valid coercable dataset (valid dataset 2) above, the following warning should be generated
 
 ```{python}
-pprint_json_file(assets_path + "/error-report-4.json")
+pprint_json_file(asset("error-report-4.json"))
 ```
 
 ## Rule metadata
@@ -131,7 +123,7 @@ All the metadata for this rule is contained in the parts sheet in the data dicti
 For example in the following ODM dictionary snippet,
 
 ```{python}
-pprint_csv_file(assets_path + "/parts-v2.csv", "Parts v2")
+pprint_csv_file(asset("parts-v2.csv"), "Parts v2")
 ```
 
 The `geoLat` part which is a column in the `sites` table has a `max` value of 90 and would have this rule set for it. On the other hand, the `geoEPSG` part which is also a column in the `sites` table would not have this rule due its `max` value being `NA`.
@@ -143,7 +135,7 @@ We can use the [maximum value validation](https://docs.python-cerberus.org/en/st
 The generated cerberus object for the example above is shown below,
 
 ```{python}
-pprint_yaml_file(assets_path + "/schema-v2.yml")
+pprint_yaml_file(asset("schema-v2.yml"))
 ```
 
 The metadata for this rule should include the row from the ODM for the part with its `partID` and `maxValue` column values.
@@ -153,13 +145,13 @@ The metadata for this rule should include the row from the ODM for the part with
 When generating the schema for version 1, we check whether the column has an [equivalent part in version 1](../specs/odm-how-tos.md#getting-the-version-1-equivalent-for-a-part). If it does, then we add it to the cerberus schema. For example,
 
 ```{python}
-pprint_csv_file(assets_path + "/parts-v1.csv", "Parts v1")
+pprint_csv_file(asset("parts-v1.csv"), "Parts v1")
 ```
 
 The corresponding cerberus schema would be,
 
 ```{python}
-pprint_yaml_file(assets_path + "/schema-v1.yml")
+pprint_yaml_file(asset("schema-v1.yml"))
 ```
 
 The metadata should include the following columns,
