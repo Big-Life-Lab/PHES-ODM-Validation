@@ -1,5 +1,0 @@
-partID,partType,firstReleased,status,sites,sitesRequired
-NA,missingness,1.0,active,NA,NA
-sites,table,1.0,active,NA,NA
-geoLat,attribute,1.0,active,header,mandatory
-geoLong,attribute,1.0,active,header,optional

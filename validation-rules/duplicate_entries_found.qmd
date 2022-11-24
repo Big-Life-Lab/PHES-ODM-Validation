@@ -62,7 +62,8 @@ All the metadata for this rule is contained in the parts sheet in the data dicti
 For example,
 
 ```{python}
-pprint_csv_file(asset("parts-v2.csv"), title = "Parts v2")
+pprint_csv_file(asset("parts.csv"), title = "Parts v2",
+                ignore_prefix="version1")
 ```
 
 Here the `addId` part can be identified as being the primary key for the addresses table and hence should have this rule implemented.
@@ -84,7 +85,7 @@ The metadata for this rule should include the row from the ODM that defines the 
 When generating the schema for version 1, we should add this rule to any version 2 primary key columns which have a version 1 equivalent. For example, the parts snippet above with its version 1 columns is shown below
 
 ```{python}
-pprint_csv_file(asset("parts-v1.csv"), title = "Parts v1")
+pprint_csv_file(asset("parts.csv"), title = "Parts v1")
 ```
 
 The corresponding cerberus schema would be,

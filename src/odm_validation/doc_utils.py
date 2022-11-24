@@ -1,5 +1,5 @@
 import json
-from typing import List
+from typing import List, Optional
 
 from rich.console import Console
 from rich.pretty import pprint
@@ -8,7 +8,8 @@ from rich.table import Table
 from utils import import_dataset, import_yaml_file
 
 
-def pprint_dict_list(dict_list: List[dict], title: str):
+def pprint_dict_list(dict_list: List[dict], title: str,
+                     ignore_prefix: Optional[str] = None):
     """
     Pretty prints a list of dictionaries in the console to look like a table
 
@@ -17,7 +18,9 @@ def pprint_dict_list(dict_list: List[dict], title: str):
     """
     table = Table(title=title, expand=True)
 
-    dict_keys = dict_list[0].keys()
+    dict_keys = list(
+        filter(lambda k: not (ignore_prefix and k.startswith(ignore_prefix)),
+               dict_list[0].keys()))
     for column_name in dict_keys:
         table.add_column(column_name)
 
@@ -38,9 +41,9 @@ def import_json(file_path: str) -> dict:
     return json.loads(json_str)
 
 
-def pprint_csv_file(file_path: str, title: str):
+def pprint_csv_file(file_path: str, title: str, ignore_prefix=None):
     dataset = import_dataset(file_path)
-    pprint_dict_list(dataset, title)
+    pprint_dict_list(dataset, title, ignore_prefix)
 
 
 def pprint_json_file(file_path: str):

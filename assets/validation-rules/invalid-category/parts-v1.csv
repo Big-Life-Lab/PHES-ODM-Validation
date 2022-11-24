@@ -1,6 +1,0 @@
-partID,partType,samples,dataType,catSetID,version1Location,version1Table,version1Variable,version1Category
-samples,table,NA,NA,NA,tables,Sample,NA,NA
-collection,attribute,header,categorical,collectCat,variables,Sample,Collection,NA
-comp3h,category,input,varchar,collectCat,variableCategories,Sample,Collection,Comp3h
-comp8h,category,input,varchar,collectCat,variableCategories,Sample,Collection,Comp8h
-flowPr,category,input,varchar,collectCat,variableCategories,Sample,Collection,FlowPR;flowRatePr
