@@ -1,0 +1,41 @@
+{
+    "errors": [
+        {
+            "errorType": "invalid_type",
+            "tableName": "sites",
+            "columnName": "geoLat",
+            "rowNumber": 1,
+            "row": {
+                "siteID": "1",
+                "geoLat": "a"
+            },
+            "validationRuleFields": [
+                {
+                    "partID": "geoLat",
+                    "dataType": "integer",
+                    "sites": "header"
+                }
+            ],
+            "message": "Value a in row 1 in column geoLat in table sites has type varchar but should be of type integer or coercable into a integer"
+        },
+        {
+            "errorType": "invalid_type",
+            "tableName": "sites",
+            "columnName": "geoLat",
+            "rowNumber": 1,
+            "row": {
+                "siteID": "2",
+                "geoLat": 1.01
+            },
+            "validationRuleFields": [
+                {
+                    "partID": "geoLat",
+                    "dataType": "integer",
+                    "sites": "header"
+                }
+            ],
+            "message": "Value 1.01 in row 2 in column geoLat in table sites has type varchar but should be of type integer or coercable into a integer"
+        }
+    ],
+    "warnings": []
+}
