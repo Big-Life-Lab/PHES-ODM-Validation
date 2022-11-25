@@ -181,4 +181,9 @@ Once we have the [columns for a table](#how-to-get-the-columns-names-for-a-table
 * **varchar**
 * **integer**
 * **float**
-
+* **boolean**
+* **categorical**
+* **blob**
+* **datetime**
+* **email**
+* **see measure**: The data type for this part depends on the measure

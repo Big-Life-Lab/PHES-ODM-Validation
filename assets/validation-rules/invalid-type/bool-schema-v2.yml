@@ -1,0 +1,24 @@
+---
+measures:
+  type: list
+  schema:
+    type: dict
+    schema:
+      reportable:
+        type: varchar
+        allowed:
+        - 'true'
+        - 'false'
+        meta:
+        - ruleId: invalid_type
+          meta:
+          - partID: contactEmail
+            dataType: email
+            labs: header
+          - partID: 'true'
+            catSetID: booleanSet
+          - partID: 'false'
+            catSetID: booleanSet
+  meta:
+    partID: measures
+    partType: table
