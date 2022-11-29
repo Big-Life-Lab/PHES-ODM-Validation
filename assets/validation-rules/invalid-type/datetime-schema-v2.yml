@@ -1,0 +1,15 @@
+measures:
+  type: list
+  schema:
+    type: dict
+    schema:
+      reportDate:
+        type: datetime
+        meta:
+          - ruleId: invalid_type
+            meta:
+              - partID: reportDate
+                dataType: datetime
+  meta:
+    - partID: measures
+      partType: table

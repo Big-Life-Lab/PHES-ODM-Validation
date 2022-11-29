@@ -1,0 +1,20 @@
+Measure:
+  type: list
+  schema:
+    type: dict
+    schema:
+      DateReport:
+        type: datetime
+        meta:
+          - ruleId: invalid_type
+            meta:
+              - partID: reportDate
+                dataType: datetime
+                version1Location: variables
+                version1Table: Measure
+                version1Variable: DateReport
+  meta:
+    - partID: measures
+      partType: table
+      version1Location: tables
+      version1Table: Measure
