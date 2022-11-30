@@ -1,20 +1,22 @@
-Address:
-  type: list
-  schema:
-    type: dict
+schemeVersion: 1.0.0
+schema:
+  Address:
+    type: list
     schema:
-      AddressId:
-        noDuplicateEntries: True
-        meta:
-          - ruleId: duplicate_entries_found
-            meta:
-              - partID: addId
-                addresses: pk
-                version1Location: variables
-                version1Table: Address
-                version1Variable: AddressId
-  meta:
-    - partID: addresses
-      partType: table
-      version1Location: tables
-      version1Table: Address
+      type: dict
+      schema:
+        AddressId:
+          noDuplicateEntries: True
+          meta:
+            - ruleId: duplicate_entries_found
+              meta:
+                - partID: addId
+                  addresses: pk
+                  version1Location: variables
+                  version1Table: Address
+                  version1Variable: AddressId
+    meta:
+      - partID: addresses
+        partType: table
+        version1Location: tables
+        version1Table: Address

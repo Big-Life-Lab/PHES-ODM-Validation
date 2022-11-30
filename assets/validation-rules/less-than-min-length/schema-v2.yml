@@ -1,13 +1,17 @@
----
-contacts:
-  type: list
-  schema:
-    type: dict
+schemaVersion: 2.0.0
+schema:
+  contacts:
+    type: list
     schema:
-      phone:
-        minLength: 10
-        meta:
-        - ruleId: less_than_min_length
+      type: dict
+      schema:
+        phone:
+          minLength: 10
           meta:
-          - partID: phone
-            minLength: '10'
+          - ruleId: less_than_min_length
+            meta:
+            - partID: phone
+              minLength: '10'
+    meta:
+      - partID: contacts
+        partType: table

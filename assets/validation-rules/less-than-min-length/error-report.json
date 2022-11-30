@@ -1,19 +1,22 @@
-[
-    {
-        "errorType": "less_than_min_length",
-        "tableName": "contacts",
-        "columnName": "phone",
-        "rowNumber": 1,
-        "row": {
-            "contactID": "1",
-            "phone": "123-456-1"
-        },
-        "validationRuleFields": [
-            {
-                "partID": "phone",
-                "minLength": "10"
-            }
-        ],
-        "message": "Value 123-456-1 in row 1 in column phone in table contacts has length 9 which is less than the min length of 10"
-    }
-]
+{
+    "errors": [
+        {
+            "errorType": "less_than_min_length",
+            "tableName": "contacts",
+            "columnName": "phone",
+            "rowNumber": 1,
+            "row": {
+                "contactID": "1",
+                "phone": "123-456-1"
+            },
+            "validationRuleFields": [
+                {
+                    "partID": "phone",
+                    "minLength": "10"
+                }
+            ],
+            "message": "Value 123-456-1 in row 1 in column phone in table contacts has length 9 which is less than the min length of 10"
+        }
+    ],
+    "warnings": []
+}

@@ -1,19 +1,22 @@
-[
-    {
-        "errorType": "missing_values_found",
-        "tableName": "sites",
-        "columnName": "geoLat",
-        "rowNumber": 1,
-        "row": {
-            "siteID": "1",
-            "geoLat": "  "
-        },
-        "validationRuleFields": [
-            {
-                "partID": "geoLat",
-                "sitesRequired": "mandatory"
-            }
-        ],
-        "message": "Mandatory column geoLat in table sites has a missing value in row 1"
-    }
-]
+{
+    "warnings": [
+        {
+            "warningType": "missing_values_found",
+            "tableName": "sites",
+            "columnName": "geoLat",
+            "rowNumber": 1,
+            "row": {
+                "siteID": "1",
+                "geoLat": "  "
+            },
+            "validationRuleFields": [
+                {
+                    "partID": "geoLat",
+                    "sitesRequired": "mandatory"
+                }
+            ],
+            "message": "Mandatory column geoLat in table sites has a missing value in row 1"
+        }
+    ],
+    "errors": []
+}

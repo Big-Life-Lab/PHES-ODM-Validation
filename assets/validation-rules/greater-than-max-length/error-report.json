@@ -1,19 +1,22 @@
-[
-    {
-        "errorType": "greater_than_max_length",
-        "tableName": "contacts",
-        "columnName": "phone",
-        "rowNumber": 1,
-        "row": {
-            "contactID": "1",
-            "phone": "123-456-111"
-        },
-        "validationRuleFields": [
-            {
-                "partID": "phone",
-                "maxLength": "10"
-            }
-        ],
-        "message": "Value 123-456-111 in row 1 in column phone in table contacts has length 11 which is greater than the max length of 10"
-    }
-]
+{
+    "errors": [
+        {
+            "errorType": "greater_than_max_length",
+            "tableName": "contacts",
+            "columnName": "phone",
+            "rowNumber": 1,
+            "row": {
+                "contactID": "1",
+                "phone": "123-456-111"
+            },
+            "validationRuleFields": [
+                {
+                    "partID": "phone",
+                    "maxLength": "10"
+                }
+            ],
+            "message": "Value 123-456-111 in row 1 in column phone in table contacts has length 11 which is greater than the max length of 10"
+        }
+    ],
+    "warnings": []
+}
