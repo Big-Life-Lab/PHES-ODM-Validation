@@ -9,14 +9,15 @@ from os.path import join
 
 unused_import_dummy = 0
 
+_dir = os.path.dirname(os.path.realpath(__file__))
+root_dir = join(_dir, '..')
+
 
 def setup_import_path():
     global __package__
     if __package__ not in {None, ''}:
         return
     __package__ = 'tests'
-    dir = os.path.dirname(os.path.realpath(__file__))
-    root_dir = join(dir, '..')
     src_dir = join(root_dir, 'src')
     pkg_dir = join(src_dir, 'odm_validation')
     sys.path.append(pkg_dir)

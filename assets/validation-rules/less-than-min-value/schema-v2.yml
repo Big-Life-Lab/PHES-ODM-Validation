@@ -1,16 +1,24 @@
----
-sites:
-  type: list
-  schema:
-    type: dict
+schemaVersion: 2.0.0
+schema:
+  sites:
+    type: list
     schema:
-      geoLat:
-        minInclusive: true
-        meta:
-        - ruleId: less_than_min_value
+      type: dict
+      schema:
+        geoLat:
+          min: -90
           meta:
-          - partID: geoLat
-            minValue: "-90"
-  meta:
-    - partID: sites
-      partType: tables
+          - ruleId: less_than_min_value
+            meta:
+            - partID: geoLat
+              minValue: "-90"
+        geoLong:
+          min: -90.15
+          meta:
+          - ruleId: less_than_min_value
+            meta:
+              - partID: geoLong
+                minValue: "-90.15"
+    meta:
+      - partID: sites
+        partType: tables

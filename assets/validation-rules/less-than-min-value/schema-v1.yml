@@ -1,22 +1,34 @@
----
-Site:
-  type: list
-  schema:
-    type: dict
+schemaVersion: 1.0.0
+schema:
+  Site:
+    type: list
     schema:
-      Latitude:
-        minInclusive: true
-        meta:
-        - ruleId: less_than_min_value
+      type: dict
+      schema:
+        Latitude:
+          min: -90
           meta:
-          - partID: geoLat
-            sites: header
-            version1Location: variables
-            version1Table: Site
-            version1Variable: Latitude
-            minValue: "-90"
-  meta:
-    - partID: sites
-      partType: table
-      version1Location: tables
-      version1Table: Site
+          - ruleId: less_than_min_value
+            meta:
+            - partID: geoLat
+              sites: header
+              version1Location: variables
+              version1Table: Site
+              version1Variable: Latitude
+              minValue: "-90"
+        Longitude:
+          min: -90.15
+          meta:
+          - ruleId: less_than_min_value
+            meta:
+            - partID: geoLong
+              sites: header
+              version1Location: variables
+              version1Table: Site
+              version1Variable: Longitude
+              minValue: "-90.15"
+    meta:
+      - partID: sites
+        partType: table
+        version1Location: tables
+        version1Table: Site

@@ -40,7 +40,7 @@ class CatsetData:
     part: Part
     table_ids: Set[str]  # tables in which this catset is used
     cat_parts: List[Part]  # the parts belonging to this catset
-    cat_values: List[str]  # Ex: catset `collection` has ['flowPr', ...]
+    cat_values: List[str]  # Ex: category set `coll` has ['flowPr', ...]
 
 
 @dataclass(frozen=True)

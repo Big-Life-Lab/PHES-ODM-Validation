@@ -1,0 +1,18 @@
+---
+sites:
+  type: list
+  schema:
+    type: dict
+    schema:
+      geoLat:
+        type: float
+        coerce: float
+        meta:
+        - ruleId: invalid_type
+          meta:
+          - partID: geoLat
+            dataType: float
+            sites: header
+  meta:
+    partID: sites
+    partType: table

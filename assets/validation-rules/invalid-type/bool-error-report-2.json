@@ -1,0 +1,31 @@
+{
+    "errors": [
+        {
+            "errorType": "invalid_type",
+            "tableName": "measures",
+            "columnName": "reportable",
+            "rowNumber": 1,
+            "row": {
+                "measureID": "1",
+                "reportable": "True"
+            },
+            "validationRuleFields": [
+                {
+                    "partID": "reportable",
+                    "dataType": "boolean",
+                    "measures": "header"
+                },
+                {
+                    "partID": "true",
+                    "catSetID": "booleanSet"
+                },
+                {
+                    "partID": "false",
+                    "catSetID": "booleanSet"
+                }
+            ],
+            "message": "Row 1 in column reportable in table measures is a boolean but has value True. Allowed values are true/false"
+        }
+    ],
+    "warnings": []
+}

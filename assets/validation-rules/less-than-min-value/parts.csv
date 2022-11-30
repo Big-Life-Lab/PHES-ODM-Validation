@@ -1,0 +1,5 @@
+partID,partType,sites,dataType,minValue,version1Location,version1Table,version1Variable
+sites,table,NA,NA,NA,tables,Site,NA
+geoLat,attribute,header,integer,-90,variables,Site,Latitude
+geoLong,attribute,header,float,-90.15,variables,Site,Longitude
+geoEPSG,attribute,header,integer,NA,variables,Site,LatitudeEPSG

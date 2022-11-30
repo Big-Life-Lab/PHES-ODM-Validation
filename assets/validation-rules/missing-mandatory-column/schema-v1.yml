@@ -1,4 +1,5 @@
-schemaVersion: 1.0.0
+---
+schemaVersion: '1.0.0'
 schema:
   Address:
     type: list
@@ -8,19 +9,19 @@ schema:
         AddressId:
           required: true
           meta:
-          - ruleId: missing_mandatory_column
+          - ruleID: missing_mandatory_column
             meta:
-            - partID: addressID
+            - partID: addID
+              addresses: pK
               addressesRequired: mandatory
               version1Location: variables
-              verion1Table: Address
+              version1Table: Address
               version1Variable: AddressId
-        addL2: {}
       meta:
-        partID: addresses
+      - partID: addresses
         partType: table
         version1Location: tables
-        verion1Table: Address
+        version1Table: Address
   Contact:
     type: list
     schema:
@@ -29,15 +30,16 @@ schema:
         ContactId:
           required: true
           meta:
-          - ruleId: missing_mandatory_column
+          - ruleID: missing_mandatory_column
             meta:
-            - partID: contactID
+            - partID: contID
+              contacts: pK
               contactsRequired: mandatory
               version1Location: variables
-              verion1Table: Contact
+              version1Table: Contact
               version1Variable: ContactId
-    meta:
-      partID: contacts
-      partType: table
-      version1Location: tables
-      verion1Table: Contact
+      meta:
+      - partID: contacts
+        partType: table
+        version1Location: tables
+        version1Table: Contact

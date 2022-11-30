@@ -1,0 +1,23 @@
+{
+    "errors": [
+        {
+            "errorType": "invalid_type",
+            "tableName": "sites",
+            "columnName": "geoLat",
+            "rowNumber": 1,
+            "row": {
+                "siteID": "1",
+                "geoLat": 1.23
+            },
+            "validationRuleFields": [
+                {
+                    "partID": "geoLat",
+                    "dataType": "integer",
+                    "sites": "header"
+                }
+            ],
+            "message": "Value 1.23 in row 1 in column geoLat in table sites has type float but should be of type integer or coercable into a integer"
+        }
+    ],
+    "warnings": []
+}

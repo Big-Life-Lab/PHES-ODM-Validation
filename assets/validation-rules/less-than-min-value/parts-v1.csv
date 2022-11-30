@@ -1,4 +1,0 @@
-partID,partType,sites,dataType,minValue,version1Location,version1Table,version1Variable
-sites,table,NA,NA,NA,tables,Site,NA
-geoLat,attribute,header,float,-90,variables,Site,Latitude
-geoEPSG,attribute,header,float,NA,variables,Site,LatitudeEPSG

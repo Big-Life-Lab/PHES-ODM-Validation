@@ -14,6 +14,21 @@
                 "min": "90"
             },
             "message": "Value 91 in row 1 in column geoLat in table sites is greater than the allowable maximum value of 90"
+        },
+        {
+            "errorType": "greater_than_max_value",
+            "tableName": "sites",
+            "columnName": "geoLong",
+            "rowNumber": 1,
+            "row": {
+                "siteID": "1",
+                "geoLat": "90.2"
+            },
+            "validationRules": {
+                "partID": "geoLong",
+                "min": "90.15"
+            },
+            "message": "Value 90.2 in row 1 in column geoLong in table sites is greater than the allowable maximum value of 90.15"
         }
     ],
     "warnings": [
@@ -27,10 +42,25 @@
                 "geoLat": "91"
             },
             "validationRules": {
-                "partID": "geoLat",
+                "partID": "geoLong",
                 "min": "90"
             },
             "message": "Value 91 in row 1 in column geoLat in table sites is a string and was coerced into a number"
+        },
+        {
+            "warningType": "greater_than_max_value",
+            "tableName": "sites",
+            "columnName": "geoLong",
+            "rowNumber": 1,
+            "row": {
+                "siteID": "1",
+                "geoLong": "90.2"
+            },
+            "validationRules": {
+                "partID": "geoLong",
+                "min": "90.15"
+            },
+            "message": "Value 90.2 in row 1 in column geoLong in table sites is a string and was coerced into a number"
         }
     ]
 }

@@ -1,4 +1,0 @@
-partID,partType,sites,dataType,minValue
-sites,table,NA,NA,NA
-geoLat,attribute,header,float,-90
-geoEPSG,attribute,header,float,NA

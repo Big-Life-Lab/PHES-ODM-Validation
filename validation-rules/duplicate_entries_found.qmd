@@ -1,29 +1,18 @@
-```{python}
-import sys
-sys.path.append("../src")
-
-# Some pretty printing functions
-from odm_validation.doc_utils import (
-    pprint_dict_list,
-    pprint_csv_file,
-    pprint_json_file,
-    pprint_yaml_file,
-)
-
-assets_path = "../assets/validation-rules/duplicate-entries-found"
-```
-
 # duplicate_entries_found
+
+{{< include _setup.qmd >}}
+
+```{python}
+#| echo: false
+ASSET_DIR = get_rule_asset_dir('duplicate_entries_found')
+```
 
 This rule identifies when there are two identical entries with the same primary key. The rational has been described [here](https://odm.discourse.group/t/duplicate-entries-and-lastedited-field/55). In brief, the ODM can provide a papertrail of updates made to an entry by allowing users to update entries by: 1. Not deleting the old entry 2. Adding a new row for the updated entry and 3. Updating the `lastUpdated` field for the updated entry.
 
 For validation, this rule would be violated if two rows have the same primary key values but non-unique `lastUpdated` values. For example, the following ODM data snippet would fail validation.
 
 ```{python}
-pprint_csv_file(
-    assets_path + "/invalid-dataset-1.csv",
-    "Invalid Addresses Table"
-)
+pprint_csv_file(asset("invalid-dataset-1.csv"), "Invalid Addresses Table")
 ```
 
 There are two rows (rows 1 and 2) with the same primary key value of `1` but also the same `lastUpdated` value.
@@ -31,19 +20,13 @@ There are two rows (rows 1 and 2) with the same primary key value of `1` but als
 The following dataset would also fail validation,
 
 ```{python}
-pprint_csv_file(
-    assets_path + "/invalid-dataset-2.csv",
-    "Invalid Addresses Table"
-)
+pprint_csv_file(asset("invalid-dataset-2.csv"), "Invalid Addresses Table")
 ```
 
 The following dataset would pass validation,
 
 ```{python}
-pprint_csv_file(
-    assets_path + "/valid-dataset.csv",
-    "Valid Addresses Table"
-)
+pprint_csv_file(asset("valid-dataset.csv"), "Valid Addresses Table")
 ```
 
 ## Error report
@@ -61,13 +44,13 @@ The error report will have the following fields
 The error report for the first invalid dataset is shown below,
 
 ```{python}
-pprint_json_file(assets_path + "/error-report-1.json")
+pprint_json_file(asset("error-report-1.json"))
 ```
 
 In addition, a seperate error report object should be generated for each set of duplicate values found. For example the error report for the second invalid dataset above is shown below,
 
 ```{python}
-pprint_json_file(assets_path + "/error-report-2.json")
+pprint_json_file(asset("error-report-2.json"))
 ```
 
 Two error report objects should be generated, one for rows 2 and 3 and, one for rows 5 and 6.
@@ -79,7 +62,8 @@ All the metadata for this rule is contained in the parts sheet in the data dicti
 For example,
 
 ```{python}
-pprint_csv_file(assets_path + "/parts-v2.csv", title = "Parts v2")
+pprint_csv_file(asset("parts.csv"), title = "Parts v2",
+                ignore_prefix="version1")
 ```
 
 Here the `addId` part can be identified as being the primary key for the addresses table and hence should have this rule implemented.
@@ -91,7 +75,7 @@ Cerberus currently does not have support for this rule. We will need to [extend 
 The generated cerberus object for the example above is shown below,
 
 ```{python}
-pprint_yaml_file(assets_path + "/schema-v2.yml")
+pprint_yaml_file(asset("schema-v2.yml"))
 ```
 
 The metadata for this rule should include the row from the ODM that defines the primary key column for the table.
@@ -101,13 +85,13 @@ The metadata for this rule should include the row from the ODM that defines the 
 When generating the schema for version 1, we should add this rule to any version 2 primary key columns which have a version 1 equivalent. For example, the parts snippet above with its version 1 columns is shown below
 
 ```{python}
-pprint_csv_file(assets_path + "/parts-v1.csv", title = "Parts v1")
+pprint_csv_file(asset("parts.csv"), title = "Parts v1")
 ```
 
 The corresponding cerberus schema would be,
 
 ```{python}
-pprint_yaml_file(assets_path + "/schema-v1.yml")
+pprint_yaml_file(asset("schema-v1.yml"))
 ```
 
 The metadata should include the following columns,

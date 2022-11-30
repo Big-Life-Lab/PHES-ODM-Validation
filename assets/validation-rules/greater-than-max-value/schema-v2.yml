@@ -1,15 +1,24 @@
-sites:
-  type: list
-  schema:
-    type: dict
+schemaVersion: 2.0.0
+schema:
+  sites:
+    type: list
     schema:
-      geoLat:
-        maxInclusive: true
-        meta:
-        - ruleId: greater_than_max_value
+      type: dict
+      schema:
+        geoLat:
+          max: 90
           meta:
-          - partID: geoLat
-            maxValue: '90'
-  meta:
-    - partID: sites
-      partType: table
+          - ruleId: greater_than_max_value
+            meta:
+            - partID: geoLat
+              maxValue: '90'
+        geoLong:
+          max: 90.15
+          meta:
+            - ruleId: greater_than_max_value
+              meta:
+                - partID: geoLong
+                  maxValue: '90.15'
+    meta:
+      - partID: sites
+        partType: table

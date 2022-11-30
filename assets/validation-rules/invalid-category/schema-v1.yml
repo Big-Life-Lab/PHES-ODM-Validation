@@ -1,4 +1,5 @@
-schemaVersion: 1.0.0
+---
+schemaVersion: '1.0.0'
 schema:
   Sample:
     type: list
@@ -6,16 +7,16 @@ schema:
       type: dict
       schema:
         Collection:
-          type: string
+          # type: string
           allowed:
           - Comp3h
           - Comp8h
-          - FlowPR
-          - flowRatePr
+          - FlowPr
+          - FlowRatePr
           meta:
-          - ruleId: invalid_category
+          - ruleID: invalid_category
             meta:
-            - partID: collection
+            - partID: coll
               samples: header
               dataType: categorical
               catSetID: collectCat
@@ -42,9 +43,9 @@ schema:
               version1Location: variableCategories
               version1Table: Sample
               version1Variable: Collection
-              version1Category: FlowPR; flowRatePr
+              version1Category: FlowPr;FlowRatePr
       meta:
-        partID: samples
+      - partID: samples
         partType: table
         version1Location: tables
-        verion1Table: Sample
+        version1Table: Sample
