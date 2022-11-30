@@ -1,5 +1,4 @@
 import unittest
-from copy import deepcopy
 from os.path import join
 
 import common
@@ -22,28 +21,16 @@ invalid_category_pass_v1 = {
     ]
 }
 
-invalid_category_pass_v2 = {
-    'samples': [
-        {
-            'coll': 'flowPr',
-            'cDT': 'x',
-            'saMaterial': 'afu',
-            'sampID': '1',
-            'siteID': '1',
-            'parSampID': '1',
-            'dataID': '1',
-            'contID': '1',
-            'collPer': 'x',
-            'collNum': 'x',
-        }
-    ]
-}
-
 invalid_category_fail_v1 = deepcopy(invalid_category_pass_v1)
 invalid_category_fail_v1['Sample'][0]['Collection'] = 'flow'
 
-invalid_category_fail_v2 = deepcopy(invalid_category_pass_v2)
-invalid_category_fail_v2['samples'][0]['coll'] = 'flow'
+invalid_category_pass_v2 = {
+    'samples': utils.import_dataset(join(asset_dir, 'valid-dataset.csv')),
+}
+
+invalid_category_fail_v2 = {
+    'samples': utils.import_dataset(join(asset_dir, 'invalid-dataset.csv')),
+}
 
 
 class TestInvalidCategory(unittest.TestCase):

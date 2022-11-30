@@ -1,5 +1,4 @@
 import unittest
-from copy import deepcopy
 from os.path import join
 
 import common
@@ -22,24 +21,16 @@ missing_mandatory_column_pass_v1 = {
     ]
 }
 
-missing_mandatory_column_pass_v2 = {
-    'addresses': [
-        {
-            'addID': '1',
-            'addL1': 'my street',
-            'city': 'my city',
-            'country': 'my country',
-            'dataID': '1',
-            'stateProvReg': 'x',
-        }
-    ]
-}
-
 missing_mandatory_column_fail_v1 = deepcopy(missing_mandatory_column_pass_v1)
 missing_mandatory_column_fail_v1['Address'][0].pop('AddressId')
 
-missing_mandatory_column_fail_v2 = deepcopy(missing_mandatory_column_pass_v2)
-missing_mandatory_column_fail_v2['addresses'][0].pop('addID')
+missing_mandatory_column_pass_v2 = {
+    'addresses': utils.import_dataset(join(asset_dir, 'valid-dataset.csv')),
+}
+
+missing_mandatory_column_fail_v2 = {
+    'addresses': utils.import_dataset(join(asset_dir, 'invalid-dataset.csv')),
+}
 
 
 class TestValidateData(unittest.TestCase):
