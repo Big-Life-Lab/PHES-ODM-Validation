@@ -81,15 +81,16 @@ Validates an ODM dataset.
 
 ## Return
 
-Returns True if the the data had no validation errors.
+Returns a dictionary with the found errors and warnings.
 
-When validation fails it returns a dictionary containing an error report list and other fields for backtracing. The error report for each validation rule is documented in the [specification for each validation rule](../validation-rules/).
+All errors and warnings for each validation rule are documented in the [specification for each validation rule](../validation-rules/).
 
 * type: A Python dictionary consisting of the following fields
     * `odmDataVersion`: string consisting of the version of the ODM data
     * `validationSchemaVersion`: string consisting of the version of the validation schema used
     * `validationPackageVersion`: string consisting of the version of the validation package used
     * `errors`: A list of Python dictionaries describing each error. For more information refer to the files in the [validation-rules](../validation-rules/) folder
+    * `warnings`: A list of Python dictionaries describing each warning.
 
 # generate_validation_schema
 

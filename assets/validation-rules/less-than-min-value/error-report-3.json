@@ -7,13 +7,13 @@
             "rowNumber": 1,
             "row": {
                 "siteID": "1",
-                "geoLat": -91
+                "geoLat": "a"
             },
             "validationRules": {
                 "partID": "geoLat",
                 "min": "-90"
             },
-            "message": "Value -91 in row 1 in column geoLat in table sites is less than the allowable minimum value of -90"
+            "message": "Value a in row 1 in column geoLat in table sites cannot be coerced into a number"
         },
         {
             "errorType": "less_than_min_value",
@@ -22,13 +22,13 @@
             "rowNumber": 1,
             "row": {
                 "siteID": "1",
-                "geoLat": -90.2
+                "geoLat": "b"
             },
             "validationRules": {
                 "partID": "geoLong",
                 "min": "-90.15"
             },
-            "message": "Value -90.2 in row 1 in column geoLong in table sites is less than the allowable minimum value of -90.15"
+            "message": "Value b in row 1 in column geoLong in table sites cannot be coerced into a number"
         }
     ],
     "warnings": []

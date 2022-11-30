@@ -1,0 +1,4 @@
+sites:
+    - siteID: "1"
+      geoLat: 90
+      geoLong: 90.15

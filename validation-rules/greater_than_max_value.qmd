@@ -7,7 +7,7 @@
 ASSET_DIR = get_rule_asset_dir('greater_than_max_value')
 ```
 
-This rule ensure that columns values are not greater than a defined maximum value. Currently, this rule only supports columns whose data type is float or integer i.e. numbers. As an example, consider the `geoLat` column in the `sites` table which has a maximum value of 90. The following dataset snippet would fail validation,
+This rule ensure that columns values are not greater than a defined maximum value. Currently, this rule only supports columns whose data type is float or integer i.e. numbers. As an example, consider the `geoLat` column and `geoLong` column in the `sites` table. For the purpose of explaining this rule we'll assume the `geoLat` column is an `integer` with a maximum value of 90 and the `geoLong` column is a `float` with a maximum value of 90.15. The following dataset snippet would fail validation,
 
 ```{python}
 # Using a yaml file here since in a CSV file every value is by default a string
@@ -18,26 +18,45 @@ whereas the following dataset snippet would pass validation,
 
 ```{python}
 # Using a yaml file here since in a CSV file every value is by default a string
-pprint_yaml_file(asset("valid-dataset.yml"))
+pprint_yaml_file(asset("valid-dataset-1.yml"))
 ```
 
-If the value to be validated is a string, then it should be coerced into a number and then validated. Values that cannot be coerced should be ignored and a warning logged. For example the following snippet should fail validation,
+If the value to be validated is not a number but can be coerced into one, then a warning is given. Whether the coerced value is valid or not, a warning should reported informing the user of the mismatched type. For example the following dataset would fail validation with an error and a warning,
 
 ```{python}
 pprint_csv_file(asset("invalid-dataset-2.csv"), "Invalid Dataset")
 ```
 
-whereas in the following snippet, the first row should be ignored and a warning logged informing the user that it was ignored and why.
+and the following dataset should pass validation with a warning,
+
+```{python}
+pprint_csv_file(asset("valid-dataset-2.csv"), "Valid Dataset")
+```
+
+If the value cannot be coerced into a number, then an error should be logged as in the following dataset where "a" and "b" cannot be coerced into a number
 
 ```{python}
 pprint_csv_file(asset("invalid-dataset-3.csv"), "Invalid Dataset")
 ```
 
-The ODM dictionary is currently written so that the defined maximum values are inclusive i.e. only values greater than the maximum values are invalid. All other values should pass this rule. For example, for the `geoLat` column, a value of 90 would be valid.
+The ODM dictionary is currently written so that the defined maximum values are inclusive i.e. only values greater than the maximum values are invalid. All other values should pass this rule. For example, for the `geoLat` column and `geoLong` column, a value of 90 and 90.15 respectively would be considered valid as in the dataset below,
+
+```{python}
+# Using a yaml file here since in a CSV file every value is by default a string
+pprint_yaml_file(asset("valid-dataset-3.yml"))
+```
 
 ## Error report
 
-The error report will have the following fields
+This rule can generate an error and/or a warning. 
+
+An error is generated in the following cases:
+
+1. The value is a number and is greater than the max value.
+2. The value is not a number, can be coerced into one, and is greater than the max value.
+3. The value is not a number and cannot be coerced into one.
+
+The error report for the first two cases is shown below,
 
 * **errorType**: greater_than_max_value
 * **tableName** The name of the table with the invalid value
@@ -45,12 +64,46 @@ The error report will have the following fields
 * **rowNumber**: The index of the row with the invalid value
 * **row**: The dictionary containing the invalid row
 * **validationRuleFields**: The ODM data dictionary rows used to generate this rule
-* **message**: Value <invalid_value> in row <row_index> in column <column_name> in table <table_name> is greater than the allowable maximum value of <max_value>
+* **message**: Value \<invalid_value\> in row \<row_index\> in column \<column_name\> in table \<table_name\> is greater than the allowable maximum value of \<max_value\>
 
-The error report object for the example invalid row above,
+The error report for the third case is the identical except for the message field which is shown below,
+
+* **message**: Value \<invalid_value\> in row \<row_index\> in column \<column_name\> in table \<table_name\> cannot be coerced into a number
+
+A warning is generated when the value is a not a number but is coerced into one before validation. The warning report will have the following fields,
+
+* **warningType**: greater_than_max_value
+* **tableName** The name of the table with the invalid value
+* **columnName**: The name of the column with the invalid value
+* **rowNumber**: The index of the row with the invalid value
+* **row**: The dictionary containing the invalid row
+* **validationRuleFields**: The ODM data dictionary rows used to generate this rule
+* **message**: Value \<invalid_value\> in row \<row_index\> in column \<column_name\> in table \<table_name\> is a \<invalid_type\> and was coerced into a number
+
+The error reports for each of the invalid datasets above are shown above,
+
+Invalid dataset 1
 
 ```{python}
-pprint_json_file(asset("error-report.json"))
+pprint_json_file(asset("error-report-1.json"))
+```
+
+Invalid dataset 2
+
+```{python}
+pprint_json_file(asset("error-report-2.json"))
+```
+
+Invalid dataset 3
+
+```{python}
+pprint_json_file(asset("error-report-3.json"))
+```
+
+Finally, for the valid coercable dataset (valid dataset 2) above, the following warning should be generated
+
+```{python}
+pprint_json_file(asset("error-report-4.json"))
 ```
 
 ## Rule metadata
@@ -78,7 +131,7 @@ The `geoLat` part which is a column in the `sites` table has a `max` value of 90
 
 ## Cerberus Schema
 
-Although the cerberus library supports [maximum value validation](https://docs.python-cerberus.org/en/stable/validation-rules.html#min-max), it does not support the greater than **or** equal to operation. We will need to [extend the cerberus validator](https://docs.python-cerberus.org/en/stable/customize.html) to support this with a new `maxExclusive` rule.
+We can use the [maximum value validation](https://docs.python-cerberus.org/en/stable/validation-rules.html#min-max) rule in cerberus to implement this rule.
 
 The generated cerberus object for the example above is shown below,
 
@@ -86,7 +139,7 @@ The generated cerberus object for the example above is shown below,
 pprint_yaml_file(asset("schema-v2.yml"))
 ```
 
-The metadata for this rule should include the row from the ODM for the part with its `partID` and `max` column values.
+The metadata for this rule should include the row from the ODM for the part with its `partID` and `maxValue` column values.
 
 ## ODM Version 1
 
@@ -99,7 +152,7 @@ pprint_csv_file(asset("parts.csv"), "Parts v1")
 The corresponding cerberus schema would be,
 
 ```{python}
-pprint_yaml_file(asset("schema-v2.yml"))
+pprint_yaml_file(asset("schema-v1.yml"))
 ```
 
 The metadata should include the following columns,
@@ -108,4 +161,4 @@ The metadata should include the following columns,
 * The `version1Location` column value
 * The `version1Table` column value
 * The `version1Variable` column value
-* The `max` column value
+* The `maxValue` column value

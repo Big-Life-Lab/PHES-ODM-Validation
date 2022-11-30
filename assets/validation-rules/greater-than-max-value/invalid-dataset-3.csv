@@ -1,3 +1,2 @@
-siteID,geoLat
-1,a
-1,-91
+siteID,geoLat,geoLong
+1,a,b
