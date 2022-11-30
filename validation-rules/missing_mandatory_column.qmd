@@ -61,7 +61,8 @@ All the metadata for this rule is contained in the parts sheet in the data dicti
 Example
 
 ```{python}
-pprint_csv_file(asset("parts-v1.csv"), "Parts v2")
+pprint_csv_file(asset("parts.csv"), "Parts v2",
+                ignore_prefix="version1")
 ```
 
 ## Cerberus Schema
@@ -85,12 +86,12 @@ We need three pieces of information to make the cerberus schema for version 1:
 2. The version 2 equivalent for each column
 2. The version 2 equivalent for the table
 
-Details for the above points can be found [here](./README.md/#version-1)
+Details for the above points can be found [here](./README.md#version-1)
 
 We then check if the version 2 equivalent column is mandatory in the version 2 equivalent table, if it is, then it should be mandatory in version 1. For example,
 
 ```{python}
-pprint_csv_file(asset("parts-v1.csv"), "Parts v1")
+pprint_csv_file(asset("parts.csv"), "Parts v1")
 ```
 
 The corresponding version 1 cerberus schema is shown below,

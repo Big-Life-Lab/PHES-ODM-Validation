@@ -1,5 +1,0 @@
-partID,partType,addresses,contacts,dataType,maxLength
-addresses,table,NA,NA,NA,NA
-addL2,attribute,header,NA,varchar,NA
-contacts,table,NA,NA,NA,NA
-phone,attribute,NA,header,varchar,10

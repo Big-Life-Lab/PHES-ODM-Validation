@@ -1,6 +1,0 @@
-partID,partType,addresses,addressesRequired,contacts,contactsRequired,version1Location,version1Table,version1Variable
-addresses,table,NA,NA,NA,NA,tables,Address,NA
-contacts,table,NA,NA,NA,NA,tables,Contact,NA
-addressID,attribute,PK,mandatory,NA,NA,variables,Address,AddressId
-addL2,attribute,header,optional,NA,NA,variables,Address,addressLineTwo
-contactID,attribute,NA,NA,PK,NA,variables,Contact,ContactId

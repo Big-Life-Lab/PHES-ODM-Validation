@@ -1,0 +1,31 @@
+---
+Measure:
+  type: list
+  schema:
+    type: dict
+    schema:
+      reported:
+        type: varchar
+        allowed:
+        - 'TRUE'
+        - 'FALSE'
+        meta:
+        - ruleId: invalid_type
+          meta:
+          - partID: reportable
+            dataType: boolean
+            measures: header
+            version1Location: variables
+            version1Table: Measure
+            version1Variable: reported
+          - partID: 'true'
+            catSetID: booleanSet
+            version1Category: 'TRUE'
+          - partID: 'false'
+            catSetID: booleanSet
+            version1Category: 'FALSE'
+  meta:
+    partID: measures
+    partType: table
+    version1Location: tables
+    version1Table: Measure
