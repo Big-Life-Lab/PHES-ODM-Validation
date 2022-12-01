@@ -1,11 +1,10 @@
-import json
 from typing import List, Optional
 
 from rich.console import Console
 from rich.pretty import pprint
 from rich.table import Table
 
-from utils import import_dataset, import_yaml_file
+from utils import import_dataset, import_json_file, import_yaml_file
 
 
 def pprint_dict_list(dict_list: List[dict], title: str,
@@ -34,24 +33,14 @@ def pprint_dict_list(dict_list: List[dict], title: str,
     console.print(table)
 
 
-def import_json(file_path: str) -> dict:
-    file = open(file_path)
-    json_str = file.read()
-    file.close()
-    return json.loads(json_str)
-
-
 def pprint_csv_file(file_path: str, title: str, ignore_prefix=None):
     dataset = import_dataset(file_path)
     pprint_dict_list(dataset, title, ignore_prefix)
 
 
 def pprint_json_file(file_path: str):
-    json_file = open(file_path)
-    json_str = json_file.read()
-    json_file.close()
-
-    pprint(json.loads(json_str), expand_all=True)
+    data = import_json_file(file_path)
+    pprint(data, expand_all=True)
 
 
 def pprint_yaml_file(file_path: str):
