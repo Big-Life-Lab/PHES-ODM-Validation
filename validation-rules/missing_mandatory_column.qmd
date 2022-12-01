@@ -7,7 +7,7 @@
 ASSET_DIR = get_rule_asset_dir('missing_mandatory_column')
 ```
 
-This rule checks if the rows of each table contains its mandatory columns. For example, the `addressID` column is mandatory for the `addresses` table. The following address table row,
+This rule checks if the rows of each table contains its mandatory columns. For example, the `addID` column is mandatory for the `addresses` table. The following address table row,
 
 ```{python}
 pprint_csv_file(asset("invalid-dataset.csv"), "Invalid Dataset")
