@@ -79,8 +79,9 @@ def _gen_rule_error(rule, table, column, row_index, row, value, meta):
         'row': row,
         'validationRuleFields': meta,
         'message': _error_msg(rule, table, column, row_num, value),
-        'invalidValue': value,
     }
+    if value:
+        error['invalidValue'] = value
     return error
 
 
