@@ -1,6 +1,6 @@
 # Validation rules
 
-Validation rules are the set of rules that the ODM validation module uses to assess wehther data confirms to the ODM dictionary. The module uses Python [functions](../module-functions.md). The full list of validation rules natively supported by the ODM can be seen in the validation rules list CSV file in [metadata/validation-rules-list.csv](../../metadata/validation-rules-list.csv).
+Validation rules are the set of rules that the ODM validation module uses to assess wehther data confirms to the ODM dictionary. The module uses Python [functions](../module-functions.md). The full list of validation rules natively supported by the ODM can be seen in the validation rules list CSV file in [validation-rules-list.csv](./validation-rules-list.csv).
 
 Each rule in the validation-rules-list.csv has an `ruleID`. There is a corresponding markdown document for each validataion rule that can be found in [/validation-rules/](../../valiation-rules/). For example, the ruleID = `missing_mandatory_column` has a file `missing_mandatory_column.md`. The markdown document for each rule includes:
 
@@ -24,7 +24,7 @@ The steps to request or generate a new rule are:
 
    1.2. You'll make a PR to the `rules` branch after you generate your rule files and documentation.
 
-2. Add a new file at a new row at the bottom of [metadata/validation-rules-list.csv](../../metadata/validation-rules-list.csv) folder containing details about your new rule. These details should include:
+2. Add a new file at a new row at the bottom of [validation-rules-list.csv](./validation-rules-list.csv) folder containing details about your new rule. These details should include:
 
    2.1. `ruleId`: The unique identifier for your rule. The identifier should encode why validation would fail. For example, when validating whether a mandatory column is present in a table the rule ID should be "missing_mandatory_column" rather than "no_missing_mandatory_columns"
    2.2. `label`: A short description
@@ -42,7 +42,7 @@ The steps to request or generate a new rule are:
    2.8. `lastUpdated`: The date when it was updated
 
    2.9. `odmVersions`: The list of ODM versions supported by this rule. Can have one of the following values:
-   
+
     * **all**: Supports all versions of the ODM
     * **Range of supported ODM versions**: This is a semi-colon (;) list of seperated ODM versions supported by the rule. For example, **[1.0.0,1.1];[2.1,2.2);3.0**, means that the rule supports:
 
@@ -238,4 +238,3 @@ To find the columns that are part of a table in version 1, we can use the `versi
 ```
 
 implies that the version 1 table `Instrument` has a column called `model` in it.
-

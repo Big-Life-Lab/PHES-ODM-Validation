@@ -54,7 +54,7 @@ The emphasis of ODM validation is on providing guidance and support. When you va
 
 The ODM validation toolkit is comprised of:
 
-1. **rule list** (metadata/validationRuleList.csv) - A list and description of all rules, along with additional metadata such as the warning or error message.
+1. **rule list** (assets/validation-rule/validationRuleList.csv) - A list and description of all rules, along with additional metadata such as the warning or error message.
 2. **rule documentation** (/validation-rules/) - Details and examples of the rules.
 3. **rule validation module** (odmvalidator) - a python package that contains functions to validate ODM data.
 4. **rule schema**: These are the files that encode the validation rules executed by the Python code. All files are stored in the **assets/validation-schemas** folder with each file corresponding to a version of the ODM. The contents of the file has the version of the schema being used as well as the actual schema.
