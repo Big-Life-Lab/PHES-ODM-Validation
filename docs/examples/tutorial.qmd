@@ -1,25 +1,21 @@
----
-title: "ODM Validation Tutorial"
-format: html
-jupyter: python3
----
+# Tutorial 1
 
 The goal of the ODM-validation library is to provide an easy way of checking
 that your data is ODM-compliant, by validating it against a rule-based schema.
 
 Let's take a look at how you might use this library to validate your data.
 
-# Dependencies
+## Dependencies
 
 After checking out the repository you can setup the package dependencies with
 the following commands:
 
-```{bash}
+```
 cd <repo-dir>
 pip install -r requirements.txt
 ```
 
-# Code setup
+## Code setup
 
 ```{python}
 #| echo: false
@@ -28,7 +24,7 @@ import logging
 import sys
 
 # specify the package path
-sys.path.append("../src")
+sys.path.append("../../src")
 
 # prevent warnings
 logging.disable(logging.WARNING)
@@ -43,11 +39,11 @@ import odm_validation.utils as utils
 from odm_validation.validation import generate_validation_schema, validate_data
 
 # our asset directory
-ASSET_DIR = "../assets/"
+ASSET_DIR = "../../assets/"
 ```
 
 
-# Validation
+## Validation
 
 To run the validation you will need your own dataset as a CSV-file, and a
 validation schema specific to the version of the ODM you're using.
@@ -112,7 +108,7 @@ print(report.schema_version)
 print(report.data_version)
 ```
 
-# Schema generation
+## Schema generation
 
 You can generate your own validation schema from a CSV file of the parts table,
 using the `generate_validation_schema` function. The version parameter

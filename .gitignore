@@ -1,19 +1,20 @@
-.venv/
-__pycache__
-
-*.html
-*.ipynb
+# temporary
+__pycache__/
 *.log
 
-# Mac Files
+# python `venv`
+.venv/
+
+# python `pyenv`
+.python-version
+
+# Mac
 .DS_Store
 
-# R Files
+# R
 .Rproj.user
 .Rhistory
 *.Rproj
 
 # VSCode
 .vscode
-
-.python-version

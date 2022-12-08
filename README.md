@@ -65,3 +65,11 @@ Many rules are defined in the ODM parts and sets tables. For example, the parts 
 The _odmvalidator_ is the main workhorse within the toolkit. This program code accepts a ODM data and a schema and returns a validation report. We created _odmvalidator_ as an open-source python package that can be incorporated into a full range of information systems (i.e. ArgGIS, Microsoft 365, custom laboratory management information systems or data repositories). As a python package, data can be easily validated when it is stored a range of formats (CSV, Excel, SQL database).
 
 Underdevelopment is a publicly available web application that implements the toolkit, including the odmvalidator.
+
+## Installation
+
+```
+git clone https://github.com/Big-Life-Lab/PHES-ODM-Validation.git odm-validation
+cd odm-validation
+pip install src/odm-validation
+```

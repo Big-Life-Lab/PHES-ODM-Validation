@@ -4,13 +4,15 @@ The PHES-ODM validation tool kit is an open source and community-driven. You can
 
 ## Adding a new rule
 
-New validation rules can be requested by anyone ODM user. Instructions on how to add a new rule is found in [/validation-rules/README.md](validation-rules/validation-rules/README.md). The validation rules README.md is a good source of additional information about how rules work.
+New validation rules can be requested by anyone ODM user. Instructions on how to add a new rule is found in [/docs/validation-rules/README.md](/docs/validation-rules/README.md). The validation rules README.md is a good source of additional information about how rules work.
 
 ## Code style
 
-File structure: https://packaging.python.org/en/latest/tutorials/packaging-projects/
+File structure:
+[packaging.python.org/en/latest/tutorials/packaging-projects/](https://packaging.python.org/en/latest/tutorials/packaging-projects/)
 
-Style guide: https://peps.python.org/pep-0008/
+Style guide:
+[peps.python.org/pep-0008](https://peps.python.org/pep-0008/)
 
 ### Additional rules
 

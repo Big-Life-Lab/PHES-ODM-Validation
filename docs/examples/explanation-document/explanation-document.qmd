@@ -1,8 +1,4 @@
----
-title: "ODM Validation Tutorial"
-format: html
-jupyter: python3
----
+# Tutorial 2
 
 This document introduces and demonstartes the ODM validation library, part of the validation toolkit.
 
@@ -10,9 +6,7 @@ The document uses [quarto](https://quarto.org/).
 
 We will first install all the library dependencies by running the next chunk in the terminal. Make sure you are in the root of the library directory.
 
-```{bash}
-pip install -r requirements.txt
-```
+`pip install -r requirements.txt`
 
 The next chunk includes all the setup code for this demo. It requires the [rich](https://github.com/Textualize/rich) library which can be installed by running the command `python -m pip install rich` in the terminal.
 
@@ -21,7 +15,7 @@ The next chunk includes all the setup code for this demo. It requires the [rich]
 
 import sys
 # Import the validation package. In the future you can install it using pip
-sys.path.append("../../src")
+sys.path.append("../../../src")
 
 # For importing YAML and CSV files
 from odm_validation.utils import import_schema, import_dataset
@@ -42,7 +36,7 @@ def pprintDictList(dictList, title):
         for column_name in dict_keys:
             row.append(current_dict[column_name])
         table.add_row(*row)
-    
+
     console = Console()
     console.print(table)
 ```
@@ -84,7 +78,7 @@ invalid_odm_dataset = {
 pprintDictList(invalid_odm_dataset["sites"], "Invalid ODM Dataset")
 ```
 
-Consequentially, when we try to validate the dataset with our constructed validation schema it should give us errors. 
+Consequentially, when we try to validate the dataset with our constructed validation schema it should give us errors.
 
 The `validate_data` function needs two pieces of information, a validation schema and the ODM dataset to validate with it. It returns a validation report for our inputted dataset. The next chunk validates our invalid ODM dataset and prints the report.
 
@@ -149,7 +143,7 @@ validation_schema_2 = generate_validation_schema(parts_sheet, "2.0.0")
 pprint(validation_schema_2)
 ```
 
-As we can see, this generates an identical validation schema as the one we manually created, with one main difference, it includes a `meta` field used to trace back to the row(s) in the parts sheet used to generate the validation rule. 
+As we can see, this generates an identical validation schema as the one we manually created, with one main difference, it includes a `meta` field used to trace back to the row(s) in the parts sheet used to generate the validation rule.
 
 Validating our invalid dataset using the new validation schema returns the same error report as above, except for a new `validationRuleFields`, which is just a copy of the meta field. We can see that by running the next chunk.
 
@@ -189,8 +183,8 @@ pprint(validate_data(validation_schema_2_v1, version_one_invalid_odm_data))
 
 That's the end!
 
-Some final points, 
+Some final points,
 
 The validation repo will come with validation schemas for every version of the ODM dictionary.
 
-The [validation-rules](../../validation-rules/) folder contains specifications for all the validation rules the library currently supports. 
+The [validation-rules](../../validation-rules/) folder contains specifications for all the validation rules the library currently supports.
