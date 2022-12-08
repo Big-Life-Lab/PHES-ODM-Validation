@@ -1,0 +1,26 @@
+PHES-ODM Validation Documentation
+=================================
+
+.. include:: index-content.md
+   :parser: myst_parser.sphinx_
+
+Table of Contents
+-----------------
+
+.. toctree::
+   :maxdepth: 2
+
+   examples/tutorial.md
+   examples/explanation-document/explanation-document.md
+   api
+   rules
+   links/contributing_link
+   links/code_of_conduct_link
+   links/license_link
+
+Indices and search
+------------------
+
+* :ref:`genindex`
+* :ref:`modindex`
+* :ref:`search`

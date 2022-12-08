@@ -1,0 +1,1043 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>invalid_type &#8212; PHES-ODM Validation  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="less_than_min_length" href="less_than_min_length.html" />
+    <link rel="prev" title="invalid_category" href="invalid_category.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="invalid-type">
+<h1>invalid_type<a class="headerlink" href="#invalid-type" title="Permalink to this heading">¶</a></h1>
+<p>This rule checks that the type of a value matches with a defined type or
+can be coerced into the defined type. There are a number of types in the
+ODM that this validation rule will need to handle, we’ll go over each of
+them in the following sections.</p>
+<section id="integer">
+<h2>integer<a class="headerlink" href="#integer" title="Permalink to this heading">¶</a></h2>
+<p>An integer is defined as a number without a decimal point. Imagine a
+column <code class="docutils literal notranslate"><span class="pre">geoLat</span></code> in the sites table which is defined to be an integer.
+The following ODM data snippet would fail validation,</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># This is a YAML file since in a CSV file all the numbers would be included as a string</span>
+<span class="n">pprint_yaml_file</span><span class="p">(</span><span class="n">asset</span><span class="p">(</span><span class="s2">&quot;invalid-integer-dataset-1.yml&quot;</span><span class="p">))</span>
+</pre></div>
+</div>
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="color: #008000; text-decoration-color: #008000">'sites'</span>: <span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="color: #008000; text-decoration-color: #008000">'siteID'</span>: <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">1</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="color: #008000; text-decoration-color: #008000">'geoLat'</span>: <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">1.23</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="font-weight: bold">}</span>
+<span style="font-weight: bold">}</span>
+</pre>
+<p>whereas the following would pass validation</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># This is a YAML file since in a CSV file all the numbers would be included as a string</span>
+<span class="n">pprint_yaml_file</span><span class="p">(</span><span class="n">asset</span><span class="p">(</span><span class="s2">&quot;valid-integer-dataset-1.yml&quot;</span><span class="p">))</span>
+</pre></div>
+</div>
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="color: #008000; text-decoration-color: #008000">'sites'</span>: <span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="color: #008000; text-decoration-color: #008000">'siteID'</span>: <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">1</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="color: #008000; text-decoration-color: #008000">'geoLat'</span>: <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">1</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="font-weight: bold">}</span>
+<span style="font-weight: bold">}</span>
+</pre>
+<p>Values that are not explicitly integers but can be coerced into integers
+should pass validation. For example, the following should pass
+validation,</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pprint_csv_file</span><span class="p">(</span><span class="n">asset</span><span class="p">(</span><span class="s2">&quot;valid-integer-dataset-2.csv&quot;</span><span class="p">),</span> <span class="s2">&quot;Valid integer dataset&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="font-style: italic">                                               Valid integer dataset                                               </span>
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃<span style="font-weight: bold"> siteID                                                 </span>┃<span style="font-weight: bold"> geoLat                                                 </span>┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│ 1                                                      │ 1                                                      │
+│ 2                                                      │ 1.00                                                   │
+└────────────────────────────────────────────────────────┴────────────────────────────────────────────────────────┘
+</pre>
+<p>A floating point number can be coerced into an integer if the coercion
+does not result in a value change. In above example, coercing 1.00 to
+its integer value of 1 does not change its value.</p>
+<p>The snippet below should fail validation since they cannot be coerced to
+integers.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pprint_csv_file</span><span class="p">(</span><span class="n">asset</span><span class="p">(</span><span class="s2">&quot;invalid-integer-dataset-2.csv&quot;</span><span class="p">),</span> <span class="s2">&quot;Invalid integer dataset&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="font-style: italic">                                              Invalid integer dataset                                              </span>
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃<span style="font-weight: bold"> siteID                                                 </span>┃<span style="font-weight: bold"> geoLat                                                 </span>┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│ 1                                                      │ a                                                      │
+│ 2                                                      │ 1.01                                                   │
+└────────────────────────────────────────────────────────┴────────────────────────────────────────────────────────┘
+</pre>
+</section>
+<section id="float">
+<h2>float<a class="headerlink" href="#float" title="Permalink to this heading">¶</a></h2>
+<p>A float is a decimal number. Imagine the same <code class="docutils literal notranslate"><span class="pre">geoLat</span></code> column but its
+defined type is now a float. The following dataset snippet would fail
+validation,</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pprint_csv_file</span><span class="p">(</span><span class="n">asset</span><span class="p">(</span><span class="s2">&quot;invalid-float-dataset-1.csv&quot;</span><span class="p">),</span> <span class="s2">&quot;Invalid float dataset&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="font-style: italic">                                               Invalid float dataset                                               </span>
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃<span style="font-weight: bold"> siteID                                                 </span>┃<span style="font-weight: bold"> geoLat                                                 </span>┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│ 1                                                      │ a                                                      │
+└────────────────────────────────────────────────────────┴────────────────────────────────────────────────────────┘
+</pre>
+<p>whereas the following would pass validation</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pprint_yaml_file</span><span class="p">(</span><span class="n">asset</span><span class="p">(</span><span class="s2">&quot;valid-float-dataset-1.yml&quot;</span><span class="p">))</span>
+</pre></div>
+</div>
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="color: #008000; text-decoration-color: #008000">'sites'</span>: <span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="color: #008000; text-decoration-color: #008000">'siteID'</span>: <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">1</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="color: #008000; text-decoration-color: #008000">'geoLat'</span>: <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">1.23</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="font-weight: bold">}</span>
+<span style="font-weight: bold">}</span>
+</pre>
+<p>Once again, values that can be coerced into floats should pass
+validation. All integers and certain strings can be coerced into floats.
+For example, the following snippet below should pass validation,</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pprint_csv_file</span><span class="p">(</span><span class="n">asset</span><span class="p">(</span><span class="s2">&quot;valid-float-dataset-2.csv&quot;</span><span class="p">),</span> <span class="s2">&quot;Valid float dataset&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="font-style: italic">                                                Valid float dataset                                                </span>
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃<span style="font-weight: bold"> siteID                                                 </span>┃<span style="font-weight: bold"> geoLat                                                 </span>┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│ 1                                                      │ 1.0                                                    │
+└────────────────────────────────────────────────────────┴────────────────────────────────────────────────────────┘
+</pre>
+</section>
+<section id="email">
+<h2>email<a class="headerlink" href="#email" title="Permalink to this heading">¶</a></h2>
+<p>An email address. As an example, imagine a part with id <code class="docutils literal notranslate"><span class="pre">contactEmail</span></code>
+which is a header in a <code class="docutils literal notranslate"><span class="pre">labs</span></code> table and has its defined type to be
+<code class="docutils literal notranslate"><span class="pre">email</span></code>. The following ODM snippet would fail validation,</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s2">&quot;labs&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;labID&quot;</span><span class="p">:</span> <span class="s2">&quot;1&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;email&quot;</span><span class="p">:</span> <span class="s2">&quot;john.doe&quot;</span>
+        <span class="p">}</span>
+    <span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>whereas the following should pass validation</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s2">&quot;labs&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;labID&quot;</span><span class="p">:</span> <span class="s2">&quot;1&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;email&quot;</span><span class="p">:</span> <span class="s2">&quot;john.doe@email.com&quot;</span>
+        <span class="p">}</span>
+    <span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="boolean">
+<h2>boolean<a class="headerlink" href="#boolean" title="Permalink to this heading">¶</a></h2>
+<p>A column that can have one of two values, representing Yes/No. The
+category values representing Yes/No are encoded in the dictionary. For
+example, consider the <code class="docutils literal notranslate"><span class="pre">reportable</span></code> column in the <code class="docutils literal notranslate"><span class="pre">measures</span></code> table whose
+data type is boolean. Also, assume that <code class="docutils literal notranslate"><span class="pre">true</span></code> and <code class="docutils literal notranslate"><span class="pre">false</span></code> are the
+allowed boolean category values`. The following dataset snippet would
+fail validation,</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pprint_csv_file</span><span class="p">(</span><span class="n">asset</span><span class="p">(</span><span class="s2">&quot;invalid-bool-dataset-1.csv&quot;</span><span class="p">),</span> <span class="s2">&quot;Invalid bool dataset&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="font-style: italic">                                               Invalid bool dataset                                                </span>
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃<span style="font-weight: bold"> measureID                                            </span>┃<span style="font-weight: bold"> reportable                                               </span>┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│ 1                                                    │ Yes                                                      │
+└──────────────────────────────────────────────────────┴──────────────────────────────────────────────────────────┘
+</pre>
+<p>whereas the following the would pass validation,</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pprint_csv_file</span><span class="p">(</span><span class="n">asset</span><span class="p">(</span><span class="s2">&quot;valid-bool-dataset-1.csv&quot;</span><span class="p">),</span> <span class="s2">&quot;Valid bool dataset&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="font-style: italic">                                                Valid bool dataset                                                 </span>
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃<span style="font-weight: bold"> measureID                                            </span>┃<span style="font-weight: bold"> reportable                                               </span>┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│ 1                                                    │ true                                                     │
+└──────────────────────────────────────────────────────┴──────────────────────────────────────────────────────────┘
+</pre>
+<p>The category values are case-sensitive i.e. the boolean column value
+case should match the one in the category values. For example, the
+following would fail validation,</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pprint_csv_file</span><span class="p">(</span><span class="n">asset</span><span class="p">(</span><span class="s2">&quot;invalid-bool-dataset-2.csv&quot;</span><span class="p">),</span> <span class="s2">&quot;Invalid bool dataset&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="font-style: italic">                                               Invalid bool dataset                                                </span>
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃<span style="font-weight: bold"> measureID                                            </span>┃<span style="font-weight: bold"> reportable                                               </span>┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│ 1                                                    │ True                                                     │
+└──────────────────────────────────────────────────────┴──────────────────────────────────────────────────────────┘
+</pre>
+</section>
+<section id="categorical">
+<h2>categorical<a class="headerlink" href="#categorical" title="Permalink to this heading">¶</a></h2>
+<p>This type is handled by the <a class="reference internal" href="invalid_category.html"><span class="doc">invalid_category</span></a>
+rule</p>
+</section>
+<section id="varchar">
+<h2>varchar<a class="headerlink" href="#varchar" title="Permalink to this heading">¶</a></h2>
+<p>No validation is currently needed for this type since all the previously
+mentioned types can be coerced into a varchar.</p>
+</section>
+<section id="see-measure">
+<h2>see measure<a class="headerlink" href="#see-measure" title="Permalink to this heading">¶</a></h2>
+<p>Can be ignored for now.</p>
+</section>
+<section id="error-report">
+<h2>Error report<a class="headerlink" href="#error-report" title="Permalink to this heading">¶</a></h2>
+<p>The error report should have the following fields,</p>
+<ul class="simple">
+<li><p><strong>errorType</strong>: invalid_type</p></li>
+<li><p><strong>tableName</strong>: The name of the table with the invalid value</p></li>
+<li><p><strong>columnName</strong>: The name of the column with the invalid value</p></li>
+<li><p><strong>rowNumber</strong>: The index of the row with the invalid value</p></li>
+<li><p><strong>row</strong>: The dictionary containing the invalid row</p></li>
+<li><p><strong>validationRuleFields</strong>: The ODM data dictionary rows used to
+generate this rule</p></li>
+<li><p><strong>message</strong>: Value &lt;invalid_value&gt; in row &lt;row_index&gt; in column
+&lt;column_name&gt; in table &lt;table_name&gt; has type &lt;invalid_value_type&gt; but
+should be of type &lt;valid_type&gt; or coercable into a &lt;valid_type&gt;.</p></li>
+</ul>
+<p>For a boolean data type, the message is shown below,</p>
+<ul class="simple">
+<li><p><strong>message</strong>: Row &lt;row_index&gt; in column &lt;column_name&gt; in table
+&lt;table_name&gt; is a boolean but has value &lt;invalid_value&gt;. Allowed
+values are &lt;boolean_categories&gt;.</p></li>
+</ul>
+<p>The error report objects for the invalid examples above can be seen
+below,</p>
+<p>integer</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pprint_json_file</span><span class="p">(</span><span class="n">asset</span><span class="p">(</span><span class="s2">&quot;integer-error-report-1.json&quot;</span><span class="p">))</span>
+</pre></div>
+</div>
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="color: #008000; text-decoration-color: #008000">'errors'</span>: <span style="font-weight: bold">[</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'errorType'</span>: <span style="color: #008000; text-decoration-color: #008000">'invalid_type'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'tableName'</span>: <span style="color: #008000; text-decoration-color: #008000">'sites'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'columnName'</span>: <span style="color: #008000; text-decoration-color: #008000">'geoLat'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'rowNumber'</span>: <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">1</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'row'</span>: <span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'siteID'</span>: <span style="color: #008000; text-decoration-color: #008000">'1'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'geoLat'</span>: <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">1.23</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="font-weight: bold">}</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'validationRuleFields'</span>: <span style="font-weight: bold">[</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partID'</span>: <span style="color: #008000; text-decoration-color: #008000">'geoLat'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'dataType'</span>: <span style="color: #008000; text-decoration-color: #008000">'integer'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'sites'</span>: <span style="color: #008000; text-decoration-color: #008000">'header'</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="font-weight: bold">}</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="font-weight: bold">]</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'message'</span>: <span style="color: #008000; text-decoration-color: #008000">'Value 1.23 in row 1 in column geoLat in table sites has type float but should be of type integer or coercable into a integer'</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="font-weight: bold">}</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="font-weight: bold">]</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="color: #008000; text-decoration-color: #008000">'warnings'</span>: <span style="font-weight: bold">[]</span>
+<span style="font-weight: bold">}</span>
+</pre>
+<p>integer</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pprint_json_file</span><span class="p">(</span><span class="n">asset</span><span class="p">(</span><span class="s2">&quot;integer-error-report-2.json&quot;</span><span class="p">))</span>
+</pre></div>
+</div>
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="color: #008000; text-decoration-color: #008000">'errors'</span>: <span style="font-weight: bold">[</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'errorType'</span>: <span style="color: #008000; text-decoration-color: #008000">'invalid_type'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'tableName'</span>: <span style="color: #008000; text-decoration-color: #008000">'sites'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'columnName'</span>: <span style="color: #008000; text-decoration-color: #008000">'geoLat'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'rowNumber'</span>: <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">1</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'row'</span>: <span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'siteID'</span>: <span style="color: #008000; text-decoration-color: #008000">'1'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'geoLat'</span>: <span style="color: #008000; text-decoration-color: #008000">'a'</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="font-weight: bold">}</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'validationRuleFields'</span>: <span style="font-weight: bold">[</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partID'</span>: <span style="color: #008000; text-decoration-color: #008000">'geoLat'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'dataType'</span>: <span style="color: #008000; text-decoration-color: #008000">'integer'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'sites'</span>: <span style="color: #008000; text-decoration-color: #008000">'header'</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="font-weight: bold">}</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="font-weight: bold">]</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'message'</span>: <span style="color: #008000; text-decoration-color: #008000">'Value a in row 1 in column geoLat in table sites has type varchar but should be of type integer or coercable into a integer'</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="font-weight: bold">}</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'errorType'</span>: <span style="color: #008000; text-decoration-color: #008000">'invalid_type'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'tableName'</span>: <span style="color: #008000; text-decoration-color: #008000">'sites'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'columnName'</span>: <span style="color: #008000; text-decoration-color: #008000">'geoLat'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'rowNumber'</span>: <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">1</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'row'</span>: <span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'siteID'</span>: <span style="color: #008000; text-decoration-color: #008000">'2'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'geoLat'</span>: <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">1.01</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="font-weight: bold">}</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'validationRuleFields'</span>: <span style="font-weight: bold">[</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partID'</span>: <span style="color: #008000; text-decoration-color: #008000">'geoLat'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'dataType'</span>: <span style="color: #008000; text-decoration-color: #008000">'integer'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'sites'</span>: <span style="color: #008000; text-decoration-color: #008000">'header'</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="font-weight: bold">}</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="font-weight: bold">]</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'message'</span>: <span style="color: #008000; text-decoration-color: #008000">'Value 1.01 in row 2 in column geoLat in table sites has type varchar but should be of type integer or coercable into a integer'</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="font-weight: bold">}</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="font-weight: bold">]</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="color: #008000; text-decoration-color: #008000">'warnings'</span>: <span style="font-weight: bold">[]</span>
+<span style="font-weight: bold">}</span>
+</pre>
+<p>float</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pprint_json_file</span><span class="p">(</span><span class="n">asset</span><span class="p">(</span><span class="s2">&quot;float-error-report-1.json&quot;</span><span class="p">))</span>
+</pre></div>
+</div>
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="color: #008000; text-decoration-color: #008000">'errors'</span>: <span style="font-weight: bold">[</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'errorType'</span>: <span style="color: #008000; text-decoration-color: #008000">'invalid_type'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'tableName'</span>: <span style="color: #008000; text-decoration-color: #008000">'sites'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'columnName'</span>: <span style="color: #008000; text-decoration-color: #008000">'geoLat'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'rowNumber'</span>: <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">1</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'row'</span>: <span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'siteID'</span>: <span style="color: #008000; text-decoration-color: #008000">'1'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'geoLat'</span>: <span style="color: #008000; text-decoration-color: #008000">'a'</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="font-weight: bold">}</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'validationRuleFields'</span>: <span style="font-weight: bold">[</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partID'</span>: <span style="color: #008000; text-decoration-color: #008000">'geoLat'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'dataType'</span>: <span style="color: #008000; text-decoration-color: #008000">'float'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'sites'</span>: <span style="color: #008000; text-decoration-color: #008000">'header'</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="font-weight: bold">}</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="font-weight: bold">]</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'message'</span>: <span style="color: #008000; text-decoration-color: #008000">'Value a in row 1 in column geoLat in table sites has type varchar but should be of type float or coercable into a float'</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="font-weight: bold">}</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="font-weight: bold">]</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="color: #008000; text-decoration-color: #008000">'warnings'</span>: <span style="font-weight: bold">[]</span>
+<span style="font-weight: bold">}</span>
+</pre>
+<p>email</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">[</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;errorType&quot;</span><span class="p">:</span> <span class="s2">&quot;invalid_type&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;tableName&quot;</span><span class="p">:</span> <span class="s2">&quot;labs&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;columnName&quot;</span><span class="p">:</span> <span class="s2">&quot;contactEmail&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;rowNumber&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="s2">&quot;row&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;labID&quot;</span><span class="p">:</span> <span class="s2">&quot;1&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;contactEmail&quot;</span><span class="p">:</span> <span class="s2">&quot;john.doe&quot;</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;validationRuleFields&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="p">{</span>
+                <span class="s2">&quot;partID&quot;</span><span class="p">:</span> <span class="s2">&quot;john.doe&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;dataType&quot;</span><span class="p">:</span> <span class="s2">&quot;email&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;labs&quot;</span><span class="p">:</span> <span class="s2">&quot;header&quot;</span>
+            <span class="p">}</span>
+        <span class="p">],</span>
+        <span class="s2">&quot;message&quot;</span><span class="p">:</span> <span class="s2">&quot;Value a in row 1 in column contactEmail in table labs has type varchar but should be of type email or coercable into an email&quot;</span>
+    <span class="p">}</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+<p>boolean 1</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pprint_json_file</span><span class="p">(</span><span class="n">asset</span><span class="p">(</span><span class="s2">&quot;bool-error-report-1.json&quot;</span><span class="p">))</span>
+</pre></div>
+</div>
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="color: #008000; text-decoration-color: #008000">'errors'</span>: <span style="font-weight: bold">[</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'errorType'</span>: <span style="color: #008000; text-decoration-color: #008000">'invalid_type'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'tableName'</span>: <span style="color: #008000; text-decoration-color: #008000">'measures'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'columnName'</span>: <span style="color: #008000; text-decoration-color: #008000">'reportable'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'rowNumber'</span>: <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">1</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'row'</span>: <span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'measureID'</span>: <span style="color: #008000; text-decoration-color: #008000">'1'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'reportable'</span>: <span style="color: #008000; text-decoration-color: #008000">'Yes'</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="font-weight: bold">}</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'validationRuleFields'</span>: <span style="font-weight: bold">[</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partID'</span>: <span style="color: #008000; text-decoration-color: #008000">'reportable'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'dataType'</span>: <span style="color: #008000; text-decoration-color: #008000">'boolean'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'measures'</span>: <span style="color: #008000; text-decoration-color: #008000">'header'</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="font-weight: bold">}</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partID'</span>: <span style="color: #008000; text-decoration-color: #008000">'true'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'catSetID'</span>: <span style="color: #008000; text-decoration-color: #008000">'booleanSet'</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="font-weight: bold">}</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partID'</span>: <span style="color: #008000; text-decoration-color: #008000">'false'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'catSetID'</span>: <span style="color: #008000; text-decoration-color: #008000">'booleanSet'</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="font-weight: bold">}</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="font-weight: bold">]</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'message'</span>: <span style="color: #008000; text-decoration-color: #008000">'Row 1 in column reportable in table measures is a boolean but has value Yes. Allowed values are true/false'</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="font-weight: bold">}</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="font-weight: bold">]</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="color: #008000; text-decoration-color: #008000">'warnings'</span>: <span style="font-weight: bold">[]</span>
+<span style="font-weight: bold">}</span>
+</pre>
+<p>boolean 2</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pprint_json_file</span><span class="p">(</span><span class="n">asset</span><span class="p">(</span><span class="s2">&quot;bool-error-report-2.json&quot;</span><span class="p">))</span>
+</pre></div>
+</div>
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="color: #008000; text-decoration-color: #008000">'errors'</span>: <span style="font-weight: bold">[</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'errorType'</span>: <span style="color: #008000; text-decoration-color: #008000">'invalid_type'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'tableName'</span>: <span style="color: #008000; text-decoration-color: #008000">'measures'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'columnName'</span>: <span style="color: #008000; text-decoration-color: #008000">'reportable'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'rowNumber'</span>: <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">1</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'row'</span>: <span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'measureID'</span>: <span style="color: #008000; text-decoration-color: #008000">'1'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'reportable'</span>: <span style="color: #008000; text-decoration-color: #008000">'True'</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="font-weight: bold">}</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'validationRuleFields'</span>: <span style="font-weight: bold">[</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partID'</span>: <span style="color: #008000; text-decoration-color: #008000">'reportable'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'dataType'</span>: <span style="color: #008000; text-decoration-color: #008000">'boolean'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'measures'</span>: <span style="color: #008000; text-decoration-color: #008000">'header'</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="font-weight: bold">}</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partID'</span>: <span style="color: #008000; text-decoration-color: #008000">'true'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'catSetID'</span>: <span style="color: #008000; text-decoration-color: #008000">'booleanSet'</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="font-weight: bold">}</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partID'</span>: <span style="color: #008000; text-decoration-color: #008000">'false'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'catSetID'</span>: <span style="color: #008000; text-decoration-color: #008000">'booleanSet'</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="font-weight: bold">}</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="font-weight: bold">]</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'message'</span>: <span style="color: #008000; text-decoration-color: #008000">'Row 1 in column reportable in table measures is a boolean but has value True. Allowed values are true/false'</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="font-weight: bold">}</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="font-weight: bold">]</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="color: #008000; text-decoration-color: #008000">'warnings'</span>: <span style="font-weight: bold">[]</span>
+<span style="font-weight: bold">}</span>
+</pre>
+</section>
+<section id="rule-metadata">
+<h2>Rule metadata<a class="headerlink" href="#rule-metadata" title="Permalink to this heading">¶</a></h2>
+<p>All the metadata for this rule is contained in the parts sheet in the
+ODM dictionary. The steps to retreive the metadata are:</p>
+<ol class="arabic simple">
+<li><p><a class="reference internal" href="../specs/odm-how-tos.html#how-to-get-the-names-of-tables-that-are-part-of-the-odm"><span class="std std-ref">Get the table names in the
+dictionary</span></a></p></li>
+<li><p><a class="reference internal" href="../specs/odm-how-tos.html#how-to-get-the-names-of-tables-that-are-part-of-the-odm"><span class="std std-ref">Get all the columns for each
+table</span></a></p></li>
+<li><p><a class="reference internal" href="../specs/odm-how-tos.html#getting-the-data-type-for-a-column"><span class="std std-ref">Get the defined data type for each
+column</span></a>.
+If the data type is a boolean then retreive the category values by:</p>
+<ol class="arabic simple">
+<li><p>Filtering out all rows except for the ones whose <code class="docutils literal notranslate"><span class="pre">catSetID</span></code> is
+<code class="docutils literal notranslate"><span class="pre">booleanSet</span></code></p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">partID</span></code> columns in the filtered rows contains the category
+values</p></li>
+</ol>
+</li>
+<li><p>Add this validation rule if the data type is supported by this
+validation rule. Currently, only <code class="docutils literal notranslate"><span class="pre">blob</span></code> and <code class="docutils literal notranslate"><span class="pre">datetime</span></code> are not
+supported and we don’t need to add a rule for the <code class="docutils literal notranslate"><span class="pre">varchar</span></code> column.</p></li>
+</ol>
+<p>For example, the parts sheet snippets for the examples above can be seen
+below,</p>
+<p>For an integer <code class="docutils literal notranslate"><span class="pre">geoLat</span></code> column in a sites table</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pprint_csv_file</span><span class="p">(</span><span class="n">asset</span><span class="p">(</span><span class="s2">&quot;integer-parts-v2.csv&quot;</span><span class="p">),</span> <span class="s2">&quot;Integer parts v2&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="font-style: italic">                                                 Integer parts v2                                                  </span>
+┏━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃<span style="font-weight: bold"> partID                 </span>┃<span style="font-weight: bold"> partType                        </span>┃<span style="font-weight: bold"> sites                  </span>┃<span style="font-weight: bold"> dataType                    </span>┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│ sites                  │ tables                          │ NA                     │ NA                          │
+│ geoLat                 │ attribute                       │ header                 │ integer                     │
+└────────────────────────┴─────────────────────────────────┴────────────────────────┴─────────────────────────────┘
+</pre>
+<p>For a float <code class="docutils literal notranslate"><span class="pre">geoLat</span></code> column in a sites table</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pprint_csv_file</span><span class="p">(</span><span class="n">asset</span><span class="p">(</span><span class="s2">&quot;float-parts-v2.csv&quot;</span><span class="p">),</span> <span class="s2">&quot;Float parts v2&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="font-style: italic">                                                  Float parts v2                                                   </span>
+┏━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃<span style="font-weight: bold"> partID                 </span>┃<span style="font-weight: bold"> partType                        </span>┃<span style="font-weight: bold"> sites                  </span>┃<span style="font-weight: bold"> dataType                    </span>┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│ sites                  │ tables                          │ NA                     │ NA                          │
+│ geoLat                 │ attribute                       │ header                 │ float                       │
+└────────────────────────┴─────────────────────────────────┴────────────────────────┴─────────────────────────────┘
+</pre>
+<p>For the email <code class="docutils literal notranslate"><span class="pre">contactEmail</span></code> column in the labs table</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s2">&quot;parts&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;partID&quot;</span><span class="p">:</span> <span class="s2">&quot;labs&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;partType&quot;</span><span class="p">:</span> <span class="s2">&quot;tables&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;labs&quot;</span><span class="p">:</span> <span class="s2">&quot;NA&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;dataType&quot;</span><span class="p">:</span> <span class="s2">&quot;NA&quot;</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;partID&quot;</span><span class="p">:</span> <span class="s2">&quot;contactEmail&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;partType&quot;</span><span class="p">:</span> <span class="s2">&quot;attribute&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;labs&quot;</span><span class="p">:</span> <span class="s2">&quot;header&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;dataType&quot;</span><span class="p">:</span> <span class="s2">&quot;email&quot;</span>
+        <span class="p">}</span>
+    <span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>For the boolean <code class="docutils literal notranslate"><span class="pre">reportable</span></code> column in the <code class="docutils literal notranslate"><span class="pre">measures</span></code> table,</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pprint_csv_file</span><span class="p">(</span><span class="n">asset</span><span class="p">(</span><span class="s2">&quot;bool-parts-v2.csv&quot;</span><span class="p">),</span> <span class="s2">&quot;Bool parts v2&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="font-style: italic">                                                   Bool parts v2                                                   </span>
+┏━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━┓
+┃<span style="font-weight: bold"> partID                 </span>┃<span style="font-weight: bold"> partType             </span>┃<span style="font-weight: bold"> measures           </span>┃<span style="font-weight: bold"> dataType           </span>┃<span style="font-weight: bold"> catSetID              </span>┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━┩
+│ measures               │ table                │ NA                 │ NA                 │ NA                    │
+│ reportable             │ attribute            │ header             │ boolean            │ NA                    │
+│ true                   │ category             │ NA                 │ varchar            │ booleanSet            │
+│ false                  │ category             │ NA                 │ varchar            │ booleanSet            │
+└────────────────────────┴──────────────────────┴────────────────────┴────────────────────┴───────────────────────┘
+</pre>
+</section>
+<section id="cerberus-schema">
+<h2>Cerberus schema<a class="headerlink" href="#cerberus-schema" title="Permalink to this heading">¶</a></h2>
+<p>We can use the
+<a class="reference external" href="https://docs.python-cerberus.org/en/stable/validation-rules.html#type">type</a>
+rule in cerberus to perform this validation. Cerberus by default does
+not coerce the data before validating, we will need to explicitly tell
+it to do so by using the
+<a class="reference external" href="https://docs.python-cerberus.org/en/stable/normalization-rules.html#value-coercion">coerce</a>
+field.</p>
+<p>For an <code class="docutils literal notranslate"><span class="pre">email</span></code> type we will need to create a <a class="reference external" href="https://docs.python-cerberus.org/en/stable/customize.html#new-types">custom
+type</a>
+in cerberus.</p>
+<p>For a <code class="docutils literal notranslate"><span class="pre">boolean</span></code> type we will need to use the
+<a class="reference external" href="https://docs.python-cerberus.org/en/stable/validation-rules.html#allowed">allowed</a>
+rule in cerberus.</p>
+<p>The generated cerberus objects for the examples above are shown below,</p>
+<p>integer</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pprint_yaml_file</span><span class="p">(</span><span class="n">asset</span><span class="p">(</span><span class="s2">&quot;integer-schema-v2.yml&quot;</span><span class="p">))</span>
+</pre></div>
+</div>
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="color: #008000; text-decoration-color: #008000">'sites'</span>: <span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="color: #008000; text-decoration-color: #008000">'type'</span>: <span style="color: #008000; text-decoration-color: #008000">'list'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="color: #008000; text-decoration-color: #008000">'schema'</span>: <span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'type'</span>: <span style="color: #008000; text-decoration-color: #008000">'dict'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'schema'</span>: <span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'geoLat'</span>: <span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'type'</span>: <span style="color: #008000; text-decoration-color: #008000">'integer'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'coerce'</span>: <span style="color: #008000; text-decoration-color: #008000">'int'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'meta'</span>: <span style="font-weight: bold">[</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   </span><span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'ruleId'</span>: <span style="color: #008000; text-decoration-color: #008000">'invalid_type'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'meta'</span>: <span style="font-weight: bold">[</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   </span><span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partID'</span>: <span style="color: #008000; text-decoration-color: #008000">'geoLat'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'dataType'</span>: <span style="color: #008000; text-decoration-color: #008000">'integer'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'sites'</span>: <span style="color: #008000; text-decoration-color: #008000">'header'</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   </span><span style="font-weight: bold">}</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   </span><span style="font-weight: bold">]</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   </span><span style="font-weight: bold">}</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="font-weight: bold">]</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="font-weight: bold">}</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="font-weight: bold">}</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="font-weight: bold">}</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="color: #008000; text-decoration-color: #008000">'meta'</span>: <span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partID'</span>: <span style="color: #008000; text-decoration-color: #008000">'sites'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partType'</span>: <span style="color: #008000; text-decoration-color: #008000">'table'</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="font-weight: bold">}</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="font-weight: bold">}</span>
+<span style="font-weight: bold">}</span>
+</pre>
+<p>float</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pprint_yaml_file</span><span class="p">(</span><span class="n">asset</span><span class="p">(</span><span class="s2">&quot;float-schema-v2.yml&quot;</span><span class="p">))</span>
+</pre></div>
+</div>
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="color: #008000; text-decoration-color: #008000">'sites'</span>: <span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="color: #008000; text-decoration-color: #008000">'type'</span>: <span style="color: #008000; text-decoration-color: #008000">'list'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="color: #008000; text-decoration-color: #008000">'schema'</span>: <span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'type'</span>: <span style="color: #008000; text-decoration-color: #008000">'dict'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'schema'</span>: <span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'geoLat'</span>: <span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'type'</span>: <span style="color: #008000; text-decoration-color: #008000">'float'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'coerce'</span>: <span style="color: #008000; text-decoration-color: #008000">'float'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'meta'</span>: <span style="font-weight: bold">[</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   </span><span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'ruleId'</span>: <span style="color: #008000; text-decoration-color: #008000">'invalid_type'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'meta'</span>: <span style="font-weight: bold">[</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   </span><span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partID'</span>: <span style="color: #008000; text-decoration-color: #008000">'geoLat'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'dataType'</span>: <span style="color: #008000; text-decoration-color: #008000">'float'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'sites'</span>: <span style="color: #008000; text-decoration-color: #008000">'header'</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   </span><span style="font-weight: bold">}</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   </span><span style="font-weight: bold">]</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   </span><span style="font-weight: bold">}</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="font-weight: bold">]</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="font-weight: bold">}</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="font-weight: bold">}</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="font-weight: bold">}</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="color: #008000; text-decoration-color: #008000">'meta'</span>: <span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partID'</span>: <span style="color: #008000; text-decoration-color: #008000">'sites'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partType'</span>: <span style="color: #008000; text-decoration-color: #008000">'table'</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="font-weight: bold">}</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="font-weight: bold">}</span>
+<span style="font-weight: bold">}</span>
+</pre>
+<p>email</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s2">&quot;labs&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;list&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;schema&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;dict&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;schema&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;contactEmail&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;email&quot;</span>
+                    <span class="s2">&quot;meta&quot;</span><span class="p">:</span> <span class="p">[</span>
+                        <span class="p">{</span>
+                            <span class="s2">&quot;ruleId&quot;</span><span class="p">:</span> <span class="s2">&quot;invalid_type&quot;</span><span class="p">,</span>
+                            <span class="s2">&quot;meta&quot;</span><span class="p">:</span> <span class="p">[</span>
+                                <span class="p">{</span>
+                                    <span class="s2">&quot;partID&quot;</span><span class="p">:</span> <span class="s2">&quot;contactEmail&quot;</span><span class="p">,</span>
+                                    <span class="s2">&quot;dataType&quot;</span><span class="p">:</span> <span class="s2">&quot;email&quot;</span><span class="p">,</span>
+                                    <span class="s2">&quot;labs&quot;</span><span class="p">:</span> <span class="s2">&quot;header&quot;</span>
+                                <span class="p">}</span>
+                            <span class="p">]</span>
+                        <span class="p">}</span>
+                    <span class="p">]</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;meta&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;partID&quot;</span><span class="p">:</span> <span class="s2">&quot;labs&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;partType&quot;</span><span class="p">:</span> <span class="s2">&quot;table&quot;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>boolean</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pprint_yaml_file</span><span class="p">(</span><span class="n">asset</span><span class="p">(</span><span class="s2">&quot;bool-schema-v2.yml&quot;</span><span class="p">))</span>
+</pre></div>
+</div>
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="color: #008000; text-decoration-color: #008000">'measures'</span>: <span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="color: #008000; text-decoration-color: #008000">'type'</span>: <span style="color: #008000; text-decoration-color: #008000">'list'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="color: #008000; text-decoration-color: #008000">'schema'</span>: <span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'type'</span>: <span style="color: #008000; text-decoration-color: #008000">'dict'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'schema'</span>: <span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'reportable'</span>: <span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'type'</span>: <span style="color: #008000; text-decoration-color: #008000">'varchar'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'allowed'</span>: <span style="font-weight: bold">[</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'true'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'false'</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="font-weight: bold">]</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'meta'</span>: <span style="font-weight: bold">[</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   </span><span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'ruleId'</span>: <span style="color: #008000; text-decoration-color: #008000">'invalid_type'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'meta'</span>: <span style="font-weight: bold">[</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   </span><span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partID'</span>: <span style="color: #008000; text-decoration-color: #008000">'contactEmail'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'dataType'</span>: <span style="color: #008000; text-decoration-color: #008000">'email'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'labs'</span>: <span style="color: #008000; text-decoration-color: #008000">'header'</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   </span><span style="font-weight: bold">}</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   </span><span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partID'</span>: <span style="color: #008000; text-decoration-color: #008000">'true'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'catSetID'</span>: <span style="color: #008000; text-decoration-color: #008000">'booleanSet'</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   </span><span style="font-weight: bold">}</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   </span><span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partID'</span>: <span style="color: #008000; text-decoration-color: #008000">'false'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'catSetID'</span>: <span style="color: #008000; text-decoration-color: #008000">'booleanSet'</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   </span><span style="font-weight: bold">}</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   </span><span style="font-weight: bold">]</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   </span><span style="font-weight: bold">}</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="font-weight: bold">]</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="font-weight: bold">}</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="font-weight: bold">}</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="font-weight: bold">}</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="color: #008000; text-decoration-color: #008000">'meta'</span>: <span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partID'</span>: <span style="color: #008000; text-decoration-color: #008000">'measures'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partType'</span>: <span style="color: #008000; text-decoration-color: #008000">'table'</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="font-weight: bold">}</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="font-weight: bold">}</span>
+<span style="font-weight: bold">}</span>
+</pre>
+<p>The meta for this rule should include the <code class="docutils literal notranslate"><span class="pre">partID</span></code>, <code class="docutils literal notranslate"><span class="pre">&lt;table_name&gt;</span></code>, and
+<code class="docutils literal notranslate"><span class="pre">dataType</span></code>.</p>
+<p>For a boolean data type, it should also include the rows that contain
+the category values. The <code class="docutils literal notranslate"><span class="pre">partID</span></code> and <code class="docutils literal notranslate"><span class="pre">catSetID</span></code> from each row should be
+included in the category value rows.</p>
+</section>
+<section id="odm-version-1">
+<h2>ODM Version 1<a class="headerlink" href="#odm-version-1" title="Permalink to this heading">¶</a></h2>
+<p>When generating the schema for version 1, we check whether the column
+has an <a class="reference internal" href="../specs/odm-how-tos.html#getting-the-version-1-equivalent-for-a-part"><span class="std std-ref">equivalent part in version
+1</span></a>.
+If it does, then we add this validaton rule to it. For example, the v1
+parts snippets for each of examples above are shown below,</p>
+<p>integer</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pprint_csv_file</span><span class="p">(</span><span class="n">asset</span><span class="p">(</span><span class="s2">&quot;integer-parts-v1.csv&quot;</span><span class="p">),</span> <span class="s2">&quot;Integer parts v1&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="font-style: italic">                                                 Integer parts v1                                                  </span>
+┏━━━━━━━━━━┳━━━━━━━━━━━━━━┳━━━━━━━━━━┳━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━┓
+┃<span style="font-weight: bold"> partID   </span>┃<span style="font-weight: bold"> partType     </span>┃<span style="font-weight: bold"> sites    </span>┃<span style="font-weight: bold"> dataType   </span>┃<span style="font-weight: bold"> version1Location     </span>┃<span style="font-weight: bold"> version1Table    </span>┃<span style="font-weight: bold"> version1Variable    </span>┃
+┡━━━━━━━━━━╇━━━━━━━━━━━━━━╇━━━━━━━━━━╇━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━┩
+│ sites    │ tables       │ NA       │ NA         │ tables               │ Site             │ NA                  │
+│ geoLat   │ attribute    │ header   │ integer    │ variables            │ Site             │ Latitude            │
+└──────────┴──────────────┴──────────┴────────────┴──────────────────────┴──────────────────┴─────────────────────┘
+</pre>
+<p>float</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pprint_csv_file</span><span class="p">(</span><span class="n">asset</span><span class="p">(</span><span class="s2">&quot;float-parts-v1.csv&quot;</span><span class="p">),</span> <span class="s2">&quot;Float parts v1&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="font-style: italic">                                                  Float parts v1                                                   </span>
+┏━━━━━━━━━━┳━━━━━━━━━━━━━━┳━━━━━━━━━━┳━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━┓
+┃<span style="font-weight: bold"> partID   </span>┃<span style="font-weight: bold"> partType     </span>┃<span style="font-weight: bold"> sites    </span>┃<span style="font-weight: bold"> dataType   </span>┃<span style="font-weight: bold"> version1Location     </span>┃<span style="font-weight: bold"> version1Table    </span>┃<span style="font-weight: bold"> version1Variable    </span>┃
+┡━━━━━━━━━━╇━━━━━━━━━━━━━━╇━━━━━━━━━━╇━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━┩
+│ sites    │ tables       │ NA       │ NA         │ tables               │ Site             │ NA                  │
+│ geoLat   │ attribute    │ header   │ float      │ tables               │ Site             │ Latitude            │
+└──────────┴──────────────┴──────────┴────────────┴──────────────────────┴──────────────────┴─────────────────────┘
+</pre>
+<p>email</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s2">&quot;parts&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;partID&quot;</span><span class="p">:</span> <span class="s2">&quot;labs&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;partType&quot;</span><span class="p">:</span> <span class="s2">&quot;tables&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;labs&quot;</span><span class="p">:</span> <span class="s2">&quot;NA&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;dataType&quot;</span><span class="p">:</span> <span class="s2">&quot;NA&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;version1Location&quot;</span><span class="p">:</span> <span class="s2">&quot;tables&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;version1Table&quot;</span><span class="p">:</span> <span class="s2">&quot;Lab&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;version1Variable&quot;</span><span class="p">:</span> <span class="s2">&quot;NA&quot;</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;partID&quot;</span><span class="p">:</span> <span class="s2">&quot;contactEmail&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;partType&quot;</span><span class="p">:</span> <span class="s2">&quot;attribute&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;labs&quot;</span><span class="p">:</span> <span class="s2">&quot;header&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;dataType&quot;</span><span class="p">:</span> <span class="s2">&quot;email&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;version1Location&quot;</span><span class="p">:</span> <span class="s2">&quot;variables&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;version1Table&quot;</span><span class="p">:</span> <span class="s2">&quot;Lab&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;version1Variable&quot;</span><span class="p">:</span> <span class="s2">&quot;email&quot;</span>
+        <span class="p">}</span>
+    <span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>boolean</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pprint_csv_file</span><span class="p">(</span><span class="n">asset</span><span class="p">(</span><span class="s2">&quot;bool-parts-v1.csv&quot;</span><span class="p">),</span> <span class="s2">&quot;Bool parts v1&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="font-style: italic">                                                   Bool parts v1                                                   </span>
+┏━━━━━━━━━━━━┳━━━━━━━━━━━┳━━━━━━━━━━┳━━━━━━━━━━┳━━━━━━━━━━━━┳━━━━━━━━━━━━━┳━━━━━━━━━━━━┳━━━━━━━━━━━━━┳━━━━━━━━━━━━┓
+┃<span style="font-weight: bold"> partID     </span>┃<span style="font-weight: bold"> partType  </span>┃<span style="font-weight: bold"> measures </span>┃<span style="font-weight: bold"> dataType </span>┃<span style="font-weight: bold"> catSetID   </span>┃<span style="font-weight: bold"> version1Lo… </span>┃<span style="font-weight: bold"> version1T… </span>┃<span style="font-weight: bold"> version1Va… </span>┃<span style="font-weight: bold"> version1C… </span>┃
+┡━━━━━━━━━━━━╇━━━━━━━━━━━╇━━━━━━━━━━╇━━━━━━━━━━╇━━━━━━━━━━━━╇━━━━━━━━━━━━━╇━━━━━━━━━━━━╇━━━━━━━━━━━━━╇━━━━━━━━━━━━┩
+│ measures   │ table     │ NA       │ NA       │ NA         │ tables      │ Measure    │ NA          │ NA         │
+│ reportable │ attribute │ header   │ boolean  │ NA         │ variables   │ Measure    │ reported    │ NA         │
+│ true       │ category  │ NA       │ varchar  │ booleanSet │ NA          │ NA         │ NA          │ TRUE       │
+│ false      │ category  │ NA       │ varchar  │ booleanSet │ tables      │ Site       │ NA          │ FALSE      │
+└────────────┴───────────┴──────────┴──────────┴────────────┴─────────────┴────────────┴─────────────┴────────────┘
+</pre>
+<p>The corresponding v1 cerberus schemas are shown below,</p>
+<p>integer</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pprint_yaml_file</span><span class="p">(</span><span class="n">asset</span><span class="p">(</span><span class="s2">&quot;integer-schema-v1.yml&quot;</span><span class="p">))</span>
+</pre></div>
+</div>
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="color: #008000; text-decoration-color: #008000">'Site'</span>: <span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="color: #008000; text-decoration-color: #008000">'type'</span>: <span style="color: #008000; text-decoration-color: #008000">'list'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="color: #008000; text-decoration-color: #008000">'schema'</span>: <span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'type'</span>: <span style="color: #008000; text-decoration-color: #008000">'dict'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'schema'</span>: <span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'Latitude'</span>: <span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'type'</span>: <span style="color: #008000; text-decoration-color: #008000">'integer'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'coerce'</span>: <span style="color: #008000; text-decoration-color: #008000">'int'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'meta'</span>: <span style="font-weight: bold">[</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   </span><span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'ruleId'</span>: <span style="color: #008000; text-decoration-color: #008000">'invalid_type'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'meta'</span>: <span style="font-weight: bold">[</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   </span><span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partID'</span>: <span style="color: #008000; text-decoration-color: #008000">'geoLat'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'dataType'</span>: <span style="color: #008000; text-decoration-color: #008000">'integer'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'sites'</span>: <span style="color: #008000; text-decoration-color: #008000">'header'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'version1Location'</span>: <span style="color: #008000; text-decoration-color: #008000">'variables'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'version1Table'</span>: <span style="color: #008000; text-decoration-color: #008000">'Site'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'version1Variable'</span>: <span style="color: #008000; text-decoration-color: #008000">'Latitude'</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   </span><span style="font-weight: bold">}</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   </span><span style="font-weight: bold">]</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   </span><span style="font-weight: bold">}</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="font-weight: bold">]</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="font-weight: bold">}</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="font-weight: bold">}</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="font-weight: bold">}</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="color: #008000; text-decoration-color: #008000">'meta'</span>: <span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partID'</span>: <span style="color: #008000; text-decoration-color: #008000">'sites'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partType'</span>: <span style="color: #008000; text-decoration-color: #008000">'table'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'version1Location'</span>: <span style="color: #008000; text-decoration-color: #008000">'tables'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'version1Table'</span>: <span style="color: #008000; text-decoration-color: #008000">'Site'</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="font-weight: bold">}</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="font-weight: bold">}</span>
+<span style="font-weight: bold">}</span>
+</pre>
+<p>float</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pprint_yaml_file</span><span class="p">(</span><span class="n">asset</span><span class="p">(</span><span class="s2">&quot;float-schema-v1.yml&quot;</span><span class="p">))</span>
+</pre></div>
+</div>
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="color: #008000; text-decoration-color: #008000">'Site'</span>: <span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="color: #008000; text-decoration-color: #008000">'type'</span>: <span style="color: #008000; text-decoration-color: #008000">'list'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="color: #008000; text-decoration-color: #008000">'schema'</span>: <span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'type'</span>: <span style="color: #008000; text-decoration-color: #008000">'dict'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'schema'</span>: <span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'Latitude'</span>: <span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'type'</span>: <span style="color: #008000; text-decoration-color: #008000">'float'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'coerce'</span>: <span style="color: #008000; text-decoration-color: #008000">'float'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'meta'</span>: <span style="font-weight: bold">[</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   </span><span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'ruleId'</span>: <span style="color: #008000; text-decoration-color: #008000">'invalid_type'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'meta'</span>: <span style="font-weight: bold">[</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   </span><span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partID'</span>: <span style="color: #008000; text-decoration-color: #008000">'geoLat'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'dataType'</span>: <span style="color: #008000; text-decoration-color: #008000">'float'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'sites'</span>: <span style="color: #008000; text-decoration-color: #008000">'header'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'version1Location'</span>: <span style="color: #008000; text-decoration-color: #008000">'variables'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'version1Table'</span>: <span style="color: #008000; text-decoration-color: #008000">'Site'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'version1Variable'</span>: <span style="color: #008000; text-decoration-color: #008000">'Latitude'</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   </span><span style="font-weight: bold">}</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   </span><span style="font-weight: bold">]</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   </span><span style="font-weight: bold">}</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="font-weight: bold">]</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="font-weight: bold">}</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="font-weight: bold">}</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="font-weight: bold">}</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="color: #008000; text-decoration-color: #008000">'meta'</span>: <span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partID'</span>: <span style="color: #008000; text-decoration-color: #008000">'sites'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partType'</span>: <span style="color: #008000; text-decoration-color: #008000">'table'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'version1Location'</span>: <span style="color: #008000; text-decoration-color: #008000">'tables'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'version1Table'</span>: <span style="color: #008000; text-decoration-color: #008000">'Site'</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="font-weight: bold">}</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="font-weight: bold">}</span>
+<span style="font-weight: bold">}</span>
+</pre>
+<p>email</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s2">&quot;Lab&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;list&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;schema&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;dict&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;schema&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;email&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;email&quot;</span>
+                    <span class="s2">&quot;meta&quot;</span><span class="p">:</span> <span class="p">[</span>
+                        <span class="p">{</span>
+                            <span class="s2">&quot;ruleId&quot;</span><span class="p">:</span> <span class="s2">&quot;invalid_type&quot;</span><span class="p">,</span>
+                            <span class="s2">&quot;meta&quot;</span><span class="p">:</span> <span class="p">[</span>
+                                <span class="p">{</span>
+                                    <span class="s2">&quot;partID&quot;</span><span class="p">:</span> <span class="s2">&quot;contactEmail&quot;</span><span class="p">,</span>
+                                    <span class="s2">&quot;dataType&quot;</span><span class="p">:</span> <span class="s2">&quot;email&quot;</span><span class="p">,</span>
+                                    <span class="s2">&quot;labs&quot;</span><span class="p">:</span> <span class="s2">&quot;header&quot;</span><span class="p">,</span>
+                                    <span class="s2">&quot;version1Location&quot;</span><span class="p">:</span> <span class="s2">&quot;variables&quot;</span><span class="p">,</span>
+                                    <span class="s2">&quot;version1Table&quot;</span><span class="p">:</span> <span class="s2">&quot;Lab&quot;</span><span class="p">,</span>
+                                    <span class="s2">&quot;version1Variable&quot;</span><span class="p">:</span> <span class="s2">&quot;email&quot;</span>
+                                <span class="p">}</span>
+                            <span class="p">]</span>
+                        <span class="p">}</span>
+                    <span class="p">]</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;meta&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;partID&quot;</span><span class="p">:</span> <span class="s2">&quot;labs&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;partType&quot;</span><span class="p">:</span> <span class="s2">&quot;table&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;version1Location&quot;</span><span class="p">:</span> <span class="s2">&quot;tables&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;version1Table&quot;</span><span class="p">:</span> <span class="s2">&quot;Lab&quot;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>boolean</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pprint_yaml_file</span><span class="p">(</span><span class="n">asset</span><span class="p">(</span><span class="s2">&quot;bool-schema-v1.yml&quot;</span><span class="p">))</span>
+</pre></div>
+</div>
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="color: #008000; text-decoration-color: #008000">'Measure'</span>: <span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="color: #008000; text-decoration-color: #008000">'type'</span>: <span style="color: #008000; text-decoration-color: #008000">'list'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="color: #008000; text-decoration-color: #008000">'schema'</span>: <span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'type'</span>: <span style="color: #008000; text-decoration-color: #008000">'dict'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'schema'</span>: <span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'reported'</span>: <span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'type'</span>: <span style="color: #008000; text-decoration-color: #008000">'varchar'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'allowed'</span>: <span style="font-weight: bold">[</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'TRUE'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'FALSE'</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="font-weight: bold">]</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'meta'</span>: <span style="font-weight: bold">[</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   </span><span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'ruleId'</span>: <span style="color: #008000; text-decoration-color: #008000">'invalid_type'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'meta'</span>: <span style="font-weight: bold">[</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   </span><span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partID'</span>: <span style="color: #008000; text-decoration-color: #008000">'reportable'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'dataType'</span>: <span style="color: #008000; text-decoration-color: #008000">'boolean'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'measures'</span>: <span style="color: #008000; text-decoration-color: #008000">'header'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'version1Location'</span>: <span style="color: #008000; text-decoration-color: #008000">'variables'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'version1Table'</span>: <span style="color: #008000; text-decoration-color: #008000">'Measure'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'version1Variable'</span>: <span style="color: #008000; text-decoration-color: #008000">'reported'</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   </span><span style="font-weight: bold">}</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   </span><span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partID'</span>: <span style="color: #008000; text-decoration-color: #008000">'true'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'catSetID'</span>: <span style="color: #008000; text-decoration-color: #008000">'booleanSet'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'version1Category'</span>: <span style="color: #008000; text-decoration-color: #008000">'TRUE'</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   </span><span style="font-weight: bold">}</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   </span><span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partID'</span>: <span style="color: #008000; text-decoration-color: #008000">'false'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'catSetID'</span>: <span style="color: #008000; text-decoration-color: #008000">'booleanSet'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'version1Category'</span>: <span style="color: #008000; text-decoration-color: #008000">'FALSE'</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   </span><span style="font-weight: bold">}</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   </span><span style="font-weight: bold">]</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   </span><span style="font-weight: bold">}</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="font-weight: bold">]</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="font-weight: bold">}</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="font-weight: bold">}</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="font-weight: bold">}</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="color: #008000; text-decoration-color: #008000">'meta'</span>: <span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partID'</span>: <span style="color: #008000; text-decoration-color: #008000">'measures'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partType'</span>: <span style="color: #008000; text-decoration-color: #008000">'table'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'version1Location'</span>: <span style="color: #008000; text-decoration-color: #008000">'tables'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'version1Table'</span>: <span style="color: #008000; text-decoration-color: #008000">'Measure'</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="font-weight: bold">}</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="font-weight: bold">}</span>
+<span style="font-weight: bold">}</span>
+</pre>
+<p>The metadata should include the meta columns for version 2 as well as
+the <code class="docutils literal notranslate"><span class="pre">version1Location</span></code>, <code class="docutils literal notranslate"><span class="pre">version1Table</span></code>, and the <code class="docutils literal notranslate"><span class="pre">version1Variable</span></code>
+columns.</p>
+<p>For a boolean data type, only the <code class="docutils literal notranslate"><span class="pre">version1Category</span></code> column should be
+added on for the boolean category values.</p>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/ODM-logo.png" alt="Logo"/>
+            </a></p>
+<h1 class="logo"><a href="../index.html">PHES-ODM Validation</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../examples/tutorial.html">Tutorial 1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/explanation-document/explanation-document.html">Tutorial 2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api.html">API Documentation</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../rules.html">Validation rules</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="README.html">Validation rule guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="duplicate_entries_found.html">duplicate_entries_found</a></li>
+<li class="toctree-l2"><a class="reference internal" href="greater_than_max_length.html">greater_than_max_length</a></li>
+<li class="toctree-l2"><a class="reference internal" href="greater_than_max_value.html">greater_than_max_value</a></li>
+<li class="toctree-l2"><a class="reference internal" href="invalid_category.html">invalid_category</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">invalid_type</a></li>
+<li class="toctree-l2"><a class="reference internal" href="less_than_min_length.html">less_than_min_length</a></li>
+<li class="toctree-l2"><a class="reference internal" href="less_than_min_value.html">less_than_min_value</a></li>
+<li class="toctree-l2"><a class="reference internal" href="missing_mandatory_column.html">missing_mandatory_column</a></li>
+<li class="toctree-l2"><a class="reference internal" href="missing_values_found.html">missing_values_found</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../rules.html#validation-rule-guide">Validation rule guide</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../links/contributing_link.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../links/code_of_conduct_link.html">Code of Conduct</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../links/license_link.html">License</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="../rules.html">Validation rules</a><ul>
+      <li>Previous: <a href="invalid_category.html" title="previous chapter">invalid_category</a></li>
+      <li>Next: <a href="less_than_min_length.html" title="next chapter">less_than_min_length</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2022, OHRI.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 5.3.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/validation-rules/invalid_type.md.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

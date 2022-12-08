@@ -1,0 +1,306 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>ODM How-to’s &#8212; PHES-ODM Validation  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Versioning" href="versioning.html" />
+    <link rel="prev" title="validate_data" href="module-functions.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="odm-how-to-s">
+<h1>ODM How-to’s<a class="headerlink" href="#odm-how-to-s" title="Permalink to this heading">¶</a></h1>
+<p>This file specifies methods for navigating the ODM data dictionary that can be referenced by different specification files in this repo.</p>
+<section id="how-to-get-the-names-of-tables-that-are-part-of-the-odm">
+<h2>How to get the names of tables that are part of the ODM<a class="headerlink" href="#how-to-get-the-names-of-tables-that-are-part-of-the-odm" title="Permalink to this heading">¶</a></h2>
+<p>We can use the <code class="docutils literal notranslate"><span class="pre">partID</span></code> and <code class="docutils literal notranslate"><span class="pre">partType</span></code> columns for this. Any part ID whose <code class="docutils literal notranslate"><span class="pre">partType</span></code> is table is considered to be a table. For example in the following dictionary,</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">[</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;partID&quot;</span><span class="p">:</span> <span class="s2">&quot;addresses&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;partType&quot;</span><span class="p">:</span> <span class="s2">&quot;table&quot;</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;partID&quot;</span><span class="p">:</span> <span class="s2">&quot;measures&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;partType&quot;</span><span class="p">:</span> <span class="s2">&quot;table&quot;</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;partID&quot;</span><span class="p">:</span> <span class="s2">&quot;addId&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;partType&quot;</span><span class="p">:</span> <span class="s2">&quot;attribute&quot;</span>
+    <span class="p">}</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">addresses</span></code> and <code class="docutils literal notranslate"><span class="pre">measures</span></code> are table names.</p>
+</section>
+<section id="how-to-get-the-columns-names-for-a-table">
+<h2>How to get the columns names for a table<a class="headerlink" href="#how-to-get-the-columns-names-for-a-table" title="Permalink to this heading">¶</a></h2>
+<p>Once we have the <a class="reference external" href="#how-to-get-the-columns-names-for-a-table">table names part of the dictionary</a>, the dictionary has columns that match with these table names giving information on whether a part is a column for it. For example in the dictionary snippet below,</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">[</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;partID&quot;</span><span class="p">:</span> <span class="s2">&quot;addresses&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;partType&quot;</span><span class="p">:</span> <span class="s2">&quot;table&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;addresses: &quot;</span><span class="n">NA</span><span class="s2">&quot;,</span>
+        <span class="s2">&quot;contacts&quot;</span><span class="p">:</span> <span class="s2">&quot;NA&quot;</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;partID&quot;</span><span class="p">:</span> <span class="s2">&quot;addId&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;partType&quot;</span><span class="p">:</span> <span class="s2">&quot;attribute&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;addresses: &quot;</span><span class="n">pK</span><span class="s2">&quot;,</span>
+        <span class="s2">&quot;contacts&quot;</span><span class="p">:</span> <span class="s2">&quot;NA&quot;</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;partID&quot;</span><span class="p">:</span> <span class="s2">&quot;addId&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;partType&quot;</span><span class="p">:</span> <span class="s2">&quot;attribute&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;addresses: &quot;</span><span class="n">addL1</span><span class="s2">&quot;,</span>
+        <span class="s2">&quot;contacts&quot;</span><span class="p">:</span> <span class="s2">&quot;NA&quot;</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;partID&quot;</span><span class="p">:</span> <span class="s2">&quot;contacts&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;partType&quot;</span><span class="p">:</span> <span class="s2">&quot;table&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;addresses: &quot;</span><span class="n">addL1</span><span class="s2">&quot;,</span>
+        <span class="s2">&quot;contacts&quot;</span><span class="p">:</span> <span class="s2">&quot;NA&quot;</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;partID&quot;</span><span class="p">:</span> <span class="s2">&quot;contID&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;partType&quot;</span><span class="p">:</span> <span class="s2">&quot;attribute&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;addresses: &quot;</span><span class="n">NA</span><span class="s2">&quot;,</span>
+        <span class="s2">&quot;contacts: &quot;</span><span class="n">pK</span><span class="s2">&quot;</span>
+    <span class="p">},</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+<p>The tables are <code class="docutils literal notranslate"><span class="pre">addresses</span></code> and <code class="docutils literal notranslate"><span class="pre">contacts</span></code> and the <code class="docutils literal notranslate"><span class="pre">addresses</span></code> and <code class="docutils literal notranslate"><span class="pre">contacts</span></code> give information on which parts are their columns. Here, <code class="docutils literal notranslate"><span class="pre">addId</span></code> and <code class="docutils literal notranslate"><span class="pre">addL1</span></code> are columns in the addresses table and <code class="docutils literal notranslate"><span class="pre">contID</span></code> is a column in the contacts table. A part is a column in a table if it does not have a value of <code class="docutils literal notranslate"><span class="pre">NA</span></code> or <code class="docutils literal notranslate"><span class="pre">input</span></code> in the table column. In addition, the table column has additional possible values to describe the role a column plays in the table. All the possible values are,</p>
+<ul class="simple">
+<li><p><strong>pK</strong>: The column is the primary key for the table</p></li>
+<li><p><strong>fK</strong> The column is the foreign referencing a row in another table</p></li>
+<li><p><strong>header</strong>: No special role</p></li>
+<li><p><strong>input</strong>:</p></li>
+<li><p><strong>NA</strong>: The part is a not a column in the table</p></li>
+</ul>
+</section>
+<section id="getting-the-version-1-equivalent-for-a-part">
+<h2>Getting the version 1 equivalent for a part<a class="headerlink" href="#getting-the-version-1-equivalent-for-a-part" title="Permalink to this heading">¶</a></h2>
+<p>The parts sheet in the ODM dictionary has columns that indicate whether a part has a ODM version 1 equivalent. These columns can indicate whether a part was a table, column, or category in version 1 or if it does not have an equivalent in version 1. The column names and their metadata are shown below,</p>
+<ul class="simple">
+<li><p><strong>version1Location</strong>: Whether this part was a table, column, or category in version 1 or NA if it does not have a version 1 equivalent. The possible values are:</p>
+<ul>
+<li><p><strong>tables</strong>: This part was a table in version 1</p></li>
+<li><p><strong>variables</strong>: This part was a column in version 1</p></li>
+<li><p><strong>variableCategories</strong>: This was was a variable category in version 1</p></li>
+</ul>
+</li>
+<li><p><strong>version1Table</strong>: The name of the version 1 table or NA. If <code class="docutils literal notranslate"><span class="pre">version1Location</span></code> is tables then this contains the version 1 table name for this part otherwise its the name of the table that the version 1 column or variable category belongs to.</p></li>
+<li><p><strong>version1Variable</strong>: The name of the version 1 column or NA. If <code class="docutils literal notranslate"><span class="pre">version1Location</span></code> is variables then this contains the version 1 column name for this part otherwise its the name of the column that the version 1 variable category belongs to.</p></li>
+<li><p><strong>version1Category</strong>: The name of the version 1 category or NA.</p></li>
+</ul>
+<p>A part can have multiple version 1 equivalents each of which are seperated by a semi-colon (;) for example <code class="docutils literal notranslate"><span class="pre">Site;WWMeasure</span></code>.</p>
+<p>Examples are given below.</p>
+<p>The <strong>instruments</strong> part in version 2 is a table in version 1 called <strong>Instrument</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">[</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;partID&quot;</span><span class="p">:</span> <span class="s2">&quot;instruments&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;version1Location&quot;</span><span class="p">:</span> <span class="s2">&quot;tables&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;version1Table&quot;</span><span class="p">:</span> <span class="s2">&quot;Instrument&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;version1Variable&quot;</span><span class="p">:</span> <span class="s2">&quot;NA&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;version1Category&quot;</span><span class="p">:</span> <span class="s2">&quot;NA&quot;</span>
+    <span class="p">}</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+<p>The <strong>measRepID</strong> part in version 2 is a column in version 1 called <strong>uWwMeasureID</strong> in the <strong>WWMeasure</strong> version 1 table</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">[</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;partID&quot;</span><span class="p">:</span> <span class="s2">&quot;measRepID&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;version1Location&quot;</span><span class="p">:</span> <span class="s2">&quot;variables&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;version1Table&quot;</span><span class="p">:</span> <span class="s2">&quot;WWMeasure&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;version1Variable&quot;</span><span class="p">:</span> <span class="s2">&quot;uWwMeasureID&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;version1Category&quot;</span><span class="p">:</span> <span class="s2">&quot;NA&quot;</span>
+    <span class="p">}</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+<p>The <strong>refLink</strong> part in version 2 is a column in version 1 called <strong>referenceLink</strong> in the <strong>AssayMethod</strong> and <strong>Instrument</strong> version 1 tables</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">[</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;partID&quot;</span><span class="p">:</span> <span class="s2">&quot;refLink&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;version1Location&quot;</span><span class="p">:</span> <span class="s2">&quot;variables&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;version1Table&quot;</span><span class="p">:</span> <span class="s2">&quot;AssayMethod;Instrument&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;version1Variable&quot;</span><span class="p">:</span> <span class="s2">&quot;refLink&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;version1Category&quot;</span><span class="p">:</span> <span class="s2">&quot;NA&quot;</span>
+    <span class="p">}</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+<p>Finally, the <strong>airTemp</strong> part in version 2 is a category in version 1 called <strong>envTemp</strong> in the <strong>SiteMeasure</strong> version 1 table for the <strong>type</strong> column.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">[</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;partID&quot;</span><span class="p">:</span> <span class="s2">&quot;airTemp&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;version1Location&quot;</span><span class="p">:</span> <span class="s2">&quot;variableCategories&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;version1Table&quot;</span><span class="p">:</span> <span class="s2">&quot;SiteMeasure&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;version1Variable&quot;</span><span class="p">:</span> <span class="s2">&quot;type&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;version1Category&quot;</span><span class="p">:</span> <span class="s2">&quot;envTemp&quot;</span>
+    <span class="p">}</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+</section>
+<section id="checking-if-a-column-is-mandatory-for-a-table">
+<h2>Checking if a column is mandatory for a table<a class="headerlink" href="#checking-if-a-column-is-mandatory-for-a-table" title="Permalink to this heading">¶</a></h2>
+<p>This can be done by looking at the <code class="docutils literal notranslate"><span class="pre">&lt;table_name&gt;Required</span></code> columns in the parts sheet. <a class="reference external" href="#how-to-get-the-names-of-tables-that-are-part-of-the-odm">The table names will need to be retreived</a> first to identify these columns. The possible values for the <code class="docutils literal notranslate"><span class="pre">&lt;table_name&gt;Required</span></code> columns are:</p>
+<ul class="simple">
+<li><p><strong>mandatory</strong>: This column is mandatory</p></li>
+<li><p><strong>optional</strong>: This column is optional</p></li>
+<li><p><strong>NA</strong>: This column is not valid for this table</p></li>
+</ul>
+<p>For example in the ODM snippet below,</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">[</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;partID&quot;</span><span class="p">:</span> <span class="s2">&quot;geoLat&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;sites&quot;</span><span class="p">:</span> <span class="s2">&quot;header&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;sitesRequired&quot;</span><span class="p">:</span> <span class="s2">&quot;mandatory&quot;</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;partID&quot;</span><span class="p">:</span> <span class="s2">&quot;geoLong&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;sites&quot;</span><span class="p">:</span> <span class="s2">&quot;header&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;sitesRequired&quot;</span><span class="p">:</span> <span class="s2">&quot;optional&quot;</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;partID&quot;</span><span class="p">:</span> <span class="s2">&quot;measureID&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;sites&quot;</span><span class="p">:</span> <span class="s2">&quot;NA&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;sitesRequired&quot;</span><span class="p">:</span> <span class="s2">&quot;NA&quot;</span>
+    <span class="p">}</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">geoLat</span></code> and <code class="docutils literal notranslate"><span class="pre">geoLong</span></code> columns in the sites table are mandatory and optional required while the <code class="docutils literal notranslate"><span class="pre">measureID</span></code> column is not present in the sites table.</p>
+</section>
+<section id="getting-the-data-type-for-a-column">
+<h2>Getting the data type for a column<a class="headerlink" href="#getting-the-data-type-for-a-column" title="Permalink to this heading">¶</a></h2>
+<p>Once we have the <a class="reference external" href="#how-to-get-the-columns-names-for-a-table">columns for a table</a>, we can get its data type by using the <code class="docutils literal notranslate"><span class="pre">dataType</span></code> column in the parts sheet. The column has one of the following values:</p>
+<ul class="simple">
+<li><p><strong>varchar</strong></p></li>
+<li><p><strong>integer</strong></p></li>
+<li><p><strong>float</strong></p></li>
+<li><p><strong>boolean</strong></p></li>
+<li><p><strong>categorical</strong></p></li>
+<li><p><strong>blob</strong></p></li>
+<li><p><strong>datetime</strong></p></li>
+<li><p><strong>email</strong></p></li>
+<li><p><strong>see measure</strong>: The data type for this part depends on the measure</p></li>
+</ul>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/ODM-logo.png" alt="Logo"/>
+            </a></p>
+<h1 class="logo"><a href="../index.html">PHES-ODM Validation</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../examples/tutorial.html">Tutorial 1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/explanation-document/explanation-document.html">Tutorial 2</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../api.html">API Documentation</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../api.html#module-odm_validation.validation">Validation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#module-odm_validation.utils">Utils</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../api.html#specification">Specification</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../rules.html">Validation rules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../links/contributing_link.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../links/code_of_conduct_link.html">Code of Conduct</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../links/license_link.html">License</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="../api.html">API Documentation</a><ul>
+      <li>Previous: <a href="module-functions.html" title="previous chapter">validate_data</a></li>
+      <li>Next: <a href="versioning.html" title="next chapter">Versioning</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2022, OHRI.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 5.3.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/specs/odm-how-tos.md.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

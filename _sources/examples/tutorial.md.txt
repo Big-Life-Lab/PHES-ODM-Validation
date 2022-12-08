@@ -1,0 +1,127 @@
+
+# Tutorial 1
+
+The goal of the ODM-validation library is to provide an easy way of
+checking that your data is ODM-compliant, by validating it against a
+rule-based schema.
+
+Let’s take a look at how you might use this library to validate your
+data.
+
+## Dependencies
+
+After checking out the repository you can setup the package dependencies
+with the following commands:
+
+    cd <repo-dir>
+    pip install -r requirements.txt
+
+## Code setup
+
+``` python
+# stdlib
+from os.path import join  # for constructing file paths
+
+# odm-validation
+import odm_validation.utils as utils
+from odm_validation.validation import generate_validation_schema, validate_data
+
+# our asset directory
+ASSET_DIR = "../../assets/"
+```
+
+## Validation
+
+To run the validation you will need your own dataset as a CSV-file, and
+a validation schema specific to the version of the ODM you’re using.
+
+In this example we’ll validate a table of samples with the default
+schema. The `validate_data` can take multiple tables at once, so we need
+to wrap our sample-data in a dictionary with the table-name as the key.
+
+``` python
+schema_file = join(ASSET_DIR, "validation-schemas/schema-v2.0.0-rc.1.yml")
+schema = utils.import_schema(schema_file)
+samples = utils.import_dataset("samples.csv")
+data = {"samples": samples}
+report = validate_data(schema, data)
+print("number of errors: ", 0 if report.valid() else len(report.errors))
+```
+
+    number of errors:  0
+
+Our sample dataset has been validated successfully with no errors.
+
+Now let’s see what happens when validating invalid data. We’ll use the
+same schema, but replace the previous dataset with an invalid one.
+
+``` python
+samples = utils.import_dataset("samples-invalid.csv")
+data = {"samples": samples}
+report = validate_data(schema, data)
+```
+
+The validation report contains a list of errors from all instances of
+broken rules. Each error is a dictionary with information of what went
+wrong and where. The message-field has a human-readable summary.
+
+``` python
+assert not report.valid()
+for e in report.errors:
+    print("- " + e["message"])
+```
+
+    - Invalid category flowPr1 found in row 1 for column coll in table samples
+
+The error message starts with the name of the rule that has been broken,
+followed by the table name, field name, and row number. The actual
+format of the message varies from rule to rule, but the general idea is
+the same.
+
+To find out the requirements for each rule, you can read the
+specifications in the
+[validation-rules](https://github.com/Big-Life-Lab/PHES-ODM-Validation/tree/6-jupyter-example/validation-rules)
+directory.
+
+## Versioning
+
+ODM version information is an important part of the validation report.
+Consecutive validations by different people may give different results
+depending on their validation-package version, schema version, etc. This
+may be avoided by looking at the versions included in the report. If two
+reports from the same data have differing versions, then the errors
+reported may differ too.
+
+The package version is set automatically, but the schema and data
+versions should be specified. The latest version is used by default when
+not specified.
+
+``` python
+print(report.package_version)
+print(report.schema_version)
+print(report.data_version)
+```
+
+    0.1.0
+    2.0.0-rc.1
+    2.0.0-rc.1
+
+## Schema generation
+
+You can generate your own validation schema from a CSV file of the parts
+table, using the `generate_validation_schema` function. The version
+parameter determines which version of the ODM the schema will be
+compatible with.
+
+``` python
+version = '2.0.0-rc.1'
+parts_file = join(ASSET_DIR, f"dictionary/v{version}/parts.csv")
+parts = utils.import_dataset(parts_file)
+schema = generate_validation_schema(parts, version)
+```
+
+The resulting schema can also be exported to a YAML file for future use.
+
+``` python
+utils.export_schema(schema, "my_schema.yml")
+```
