@@ -1,8 +1,8 @@
 # Validation rules
 
-Validation rules are the set of rules that the ODM validation module uses to assess whether data confirms to the ODM dictionary. The module uses Python [functions](../module-functions.md). The full list of validation rules natively supported by the ODM can be seen in [validation-rules-list.csv](validation-rules-list.csv).
+Validation rules are the set of rules that the ODM validation module uses to assess wehther data confirms to the ODM dictionary. The module uses Python [functions](../module-functions.md). The full list of validation rules natively supported by the ODM can be seen in the validation rules list CSV file in [validation-rules-list.csv](./validation-rules-list.csv).
 
-Each rule in the validation-rules-list.csv has a `ruleID`. There is a corresponding Quarto/markdown document for each validation rule that can be found in [this directory](../validation-rules/) as well. For example, the ruleID = `missing_mandatory_column` has a corresponding file missing_mandatory_column.qmd. The markdown document for each rule includes:
+Each rule in the validation-rules-list.csv has an `ruleID`. There is a corresponding markdown document for each validataion rule that can be found in [/validation-rules/](../../valiation-rules/). For example, the ruleID = `missing_mandatory_column` has a file `missing_mandatory_column.md`. The markdown document for each rule includes:
 
 1. A description of the rule.
 2. One or more examples of the rule.
@@ -61,7 +61,7 @@ The steps to request or generate a new rule are:
    3.1. If rule is uses metadata from the ODM dictionary - include the include the parts of the ODM data dictionary that contains the metadata for your rules along with the logic for converting them to a cerberus schema. See information about the Cerberus schema below.
    3.2. If your rule contains other metadata - generate a Cerberus schema (see below) with the metadata or review and copy existing rules that have similar metadata as your rule. If you need help, make a GH issue or make at post on discussion board if you cannot file a similar rule (use tag...)
 
-4. Describes the validation process. The simplest method is to create a copy and modify [missing_mandatory_column.md](missing_mandatory_column.md).
+4. Describe the validation process. The simplest method is to create a copy and modify [validation-rules/missing_mandatory_column.md](missing_mandatory_column.md).
 
 5. Add a Cerberus schema, if possible. Generating a Cerberus schema can be challenging if you have not previously created one. The ODM development team will help, but team needs a clear description and examples in your 'MyAwesomeRule.md' file. Further,
    5.1. You do not need to add Cerberus schema if your rule uses only data from the `partscsv`. The ODM development team will genereate a schema for your rule.
