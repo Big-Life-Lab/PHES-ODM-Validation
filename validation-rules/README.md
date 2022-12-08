@@ -1,6 +1,6 @@
 # Validation rules
 
-Validation rules are the set of rules that the ODM validation module uses to assess wehther data confirms to the ODM dictionary. The module uses Python [functions](../module-functions.md). The full list of validation rules natively supported by the ODM can be seen in the validation rules list CSV file in [validation-rules-list.csv](./validation-rules-list.csv).
+Validation rules are the set of rules that the ODM validation module uses to assess wehther data confirms to the ODM dictionary. The module uses Python [functions](../module-functions.md). The full list of validation rules natively supported by the ODM can be seen in the validation rules list CSV file in [validation-rules-list.csv](../assets/validation-rules/validation-rules-list.csv).
 
 Each rule in the validation-rules-list.csv has an `ruleID`. There is a corresponding markdown document for each validataion rule that can be found in [/validation-rules/](../../valiation-rules/). For example, the ruleID = `missing_mandatory_column` has a file `missing_mandatory_column.md`. The markdown document for each rule includes:
 
@@ -24,7 +24,7 @@ The steps to request or generate a new rule are:
 
    1.2. You'll make a PR to the `rules` branch after you generate your rule files and documentation.
 
-2. Add a new file at a new row at the bottom of [validation-rules-list.csv](./validation-rules-list.csv) folder containing details about your new rule. These details should include:
+2. Add a new file at a new row at the bottom of [validation-rules-list.csv](../assets/validation-rules/validation-rules-list.csv) folder containing details about your new rule. These details should include:
 
    2.1. `ruleId`: The unique identifier for your rule. The identifier should encode why validation would fail. For example, when validating whether a mandatory column is present in a table the rule ID should be "missing_mandatory_column" rather than "no_missing_mandatory_columns"
    2.2. `label`: A short description
