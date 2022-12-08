@@ -1,0 +1,22 @@
+schemaVersion: '1.0.0'
+schema:
+  Site:
+    type: list
+    schema:
+      type: dict
+      contactEmail:
+        is_email: true
+        meta:
+          - ruleID: invalid_email
+            meta:
+              - partID: email
+                partType: attributes
+                contacts: header
+                version1Location: variables
+                version1Table: Site
+                version1Variable: contactEmail
+    meta:
+      - partID: sites
+        partType: tables
+        version1Location: tables
+        version1Table: Site

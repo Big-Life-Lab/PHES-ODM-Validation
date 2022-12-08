@@ -79,36 +79,6 @@ following snippet below should pass validation,
 pprint_csv_file(asset("float-valid-dataset-2.csv"), "Valid float dataset")
 ```
 
-## email
-
-An email address. As an example, imagine a part with id `contactEmail` which is
-a header in a `labs` table and has its defined type to be `email`. The
-following ODM snippet would fail validation,
-
-```python
-{
-    "labs": [
-        {
-            "labID": "1",
-            "email": "john.doe"
-        }
-    ]
-}
-```
-
-whereas the following should pass validation
-
-```python
-{
-    "labs": [
-        {
-            "labID": "1",
-            "email": "john.doe@email.com"
-        }
-    ]
-}
-```
-
 ## boolean
 
 A column that can have one of two values, representing Yes/No. The category
@@ -232,34 +202,6 @@ float
 pprint_json_file(asset("float-error-report-1.json"))
 ```
 
-email
-
-```python
-[
-    {
-        "errorType": "invalid_type",
-        "tableName": "labs",
-        "columnName": "contactEmail",
-        "rowNumber": 1,
-        "row": {
-            "labID": "1",
-            "contactEmail": "john.doe"
-        },
-        "invalidValue": "john.doe",
-        "validationRuleFields": [
-            {
-                "partID": "contactEmail",
-                "dataType": "email",
-                "labs": "header"
-            }
-        ],
-        "message": "Value john.doe in row 1 in column contactEmail in table
-                    labs has type varchar but should be of type email or
-                    coercable into an email"
-    }
-]
-```
-
 boolean 1
 
 ```{python}
@@ -314,27 +256,6 @@ pprint_csv_file(asset("float-parts.csv"), "Float parts v2",
                 ignore_prefix="version1")
 ```
 
-For the email `contactEmail` column in the labs table
-
-```python
-{
-    "parts": [
-        {
-            "partID": "labs",
-            "partType": "tables",
-            "labs": "NA",
-            "dataType": "NA"
-        },
-        {
-            "partID": "contactEmail",
-            "partType": "attribute",
-            "labs": "header",
-            "dataType": "email"
-        }
-    ]
-}
-```
-
 For the boolean `reportable` column in the `measures` table,
 
 the part sheet is below,
@@ -368,9 +289,6 @@ by using the
 [coerce](https://docs.python-cerberus.org/en/stable/normalization-rules.html#value-coercion)
 field.
 
-For an `email` type we will need to create a [custom type](https://docs.python-cerberus.org/en/stable/customize.html#new-types)
-in cerberus.
-
 For a `boolean` type we will need to use the [allowed](https://docs.python-cerberus.org/en/stable/validation-rules.html#allowed)
 rule in cerberus.
 
@@ -391,40 +309,6 @@ float
 ```{python}
 #| echo: false
 pprint_yaml_file(asset("float-schema-v2.yml"))
-```
-
-email
-
-```python
-{
-    "labs": {
-        "type": "list",
-        "schema": {
-            "type": "dict",
-            "schema": {
-                "contactEmail": {
-                    "type": "email"
-                    "meta": [
-                        {
-                            "ruleId": "invalid_type",
-                            "meta": [
-                                {
-                                    "partID": "contactEmail",
-                                    "dataType": "email",
-                                    "labs": "header"
-                                }
-                            ]
-                        }
-                    ]
-                }
-            }
-        },
-        "meta": {
-            "partID": "labs",
-            "partType": "table"
-        }
-    }
-}
 ```
 
 boolean
@@ -470,33 +354,6 @@ pprint_csv_file(asset("float-parts.csv"), "Float parts v1",
                 ignore_prefix="version1")
 ```
 
-email
-
-```python
-{
-    "parts": [
-        {
-            "partID": "labs",
-            "partType": "tables",
-            "labs": "NA",
-            "dataType": "NA",
-            "version1Location": "tables",
-            "version1Table": "Lab",
-            "version1Variable": "NA"
-        },
-        {
-            "partID": "contactEmail",
-            "partType": "attribute",
-            "labs": "header",
-            "dataType": "email",
-            "version1Location": "variables",
-            "version1Table": "Lab",
-            "version1Variable": "email"
-        }
-    ]
-}
-```
-
 boolean
 
 ```{python}
@@ -526,45 +383,6 @@ float
 ```{python}
 #| echo: false
 pprint_yaml_file(asset("float-schema-v1.yml"))
-```
-
-email
-
-```python
-{
-    "Lab": {
-        "type": "list",
-        "schema": {
-            "type": "dict",
-            "schema": {
-                "email": {
-                    "type": "email"
-                    "meta": [
-                        {
-                            "ruleId": "invalid_type",
-                            "meta": [
-                                {
-                                    "partID": "contactEmail",
-                                    "dataType": "email",
-                                    "labs": "header",
-                                    "version1Location": "variables",
-                                    "version1Table": "Lab",
-                                    "version1Variable": "email"
-                                }
-                            ]
-                        }
-                    ]
-                }
-            }
-        },
-        "meta": {
-            "partID": "labs",
-            "partType": "table",
-            "version1Location": "tables",
-            "version1Table": "Lab"
-        }
-    }
-}
 ```
 
 boolean
