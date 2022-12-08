@@ -1,8 +1,8 @@
-# Validation rules
+# Validation rule guide
 
-Validation rules are the set of rules that the ODM validation module uses to assess wehther data confirms to the ODM dictionary. The module uses Python [functions](../module-functions.md). The full list of validation rules natively supported by the ODM can be seen in the validation rules list CSV file in [validation-rules-list.csv](../../assets/validation-rules/validation-rules-list.csv).
+Validation rules are the set of rules that the ODM validation module uses to assess wehther data confirms to the ODM dictionary. The module uses Python [functions](../specs/module-functions.md). The full list of validation rules natively supported by the ODM can be seen in the validation rules list CSV file in [validation-rules-list.csv](../../assets/validation-rules/validation-rules-list.csv).
 
-Each rule in the validation-rules-list.csv has an `ruleID`. There is a corresponding markdown document for each validataion rule that can be found in [/validation-rules/](../../valiation-rules/). For example, the ruleID = `missing_mandatory_column` has a file `missing_mandatory_column.md`. The markdown document for each rule includes:
+Each rule in the validation-rules-list.csv has an `ruleID`. There is a corresponding markdown document for each validataion rule that can be found in [/docs/validation-rules/](). For example, the ruleID = `missing_mandatory_column` has a file `missing_mandatory_column.md`. The markdown document for each rule includes:
 
 1. A description of the rule.
 2. One or more examples of the rule.
