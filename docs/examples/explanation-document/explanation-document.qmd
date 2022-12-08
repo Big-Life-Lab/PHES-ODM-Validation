@@ -1,8 +1,4 @@
----
-title: "ODM Validation Tutorial"
-format: html
-jupyter: python3
----
+# Tutorial 2
 
 This document introduces and demonstartes the ODM validation library, part of the validation toolkit.
 
@@ -10,9 +6,7 @@ The document uses [quarto](https://quarto.org/).
 
 We will first install all the library dependencies by running the next chunk in the terminal. Make sure you are in the root of the library directory.
 
-```{bash}
-pip install -r requirements.txt
-```
+`pip install -r requirements.txt`
 
 The next chunk includes all the setup code for this demo. It requires the [rich](https://github.com/Textualize/rich) library which can be installed by running the command `python -m pip install rich` in the terminal.
 

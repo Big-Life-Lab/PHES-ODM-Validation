@@ -1,0 +1,9 @@
+# intermediary quarto files
+*.md
+!/validation-rule/README.md
+
+# intermediary files from running `quarto preview`
+*_files/
+
+# intermediary sphinx files
+/build/

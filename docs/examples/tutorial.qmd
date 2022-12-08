@@ -1,8 +1,4 @@
----
-title: "ODM Validation Tutorial"
-format: html
-jupyter: python3
----
+# Tutorial 1
 
 The goal of the ODM-validation library is to provide an easy way of checking
 that your data is ODM-compliant, by validating it against a rule-based schema.
