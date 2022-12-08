@@ -9,7 +9,7 @@ from schemas import Schema
 
 def import_csv_file(path: str) -> List[dict]:
     result = []
-    with open(path, newline='') as f:
+    with open(path, newline='', encoding='utf8') as f:
         for row in csv.DictReader(f):
             result.append(row)
     return result
