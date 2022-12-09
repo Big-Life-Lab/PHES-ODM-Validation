@@ -130,22 +130,26 @@ def parse_version1Category(s: str) -> List[str]:
     return list(map(str.strip, cats))
 
 
-def get_mappings(part: dict, version: Version) -> List[PartId]:
-    result = []
+def get_mappings(part: dict, version: Version) -> Optional[List[PartId]]:
+    """Returns a list of part ids from `version` corresponding to `part`,
+    or None if there is no mapping."""
     if version.major != 1:
         return
-    table = part[V1_TABLE]
-    loc = part[V1_LOCATION]
-    kind = V1_KIND_MAP.get(loc)
-    if kind == MapKind.TABLE:
-        ids = [table]
-    elif kind == MapKind.ATTRIBUTE:
-        ids = [part[V1_VARIABLE]]
-    elif kind == MapKind.CATEGORY:
-        ids = parse_version1Category(part[V1_CATEGORY])
-    for id in ids:
-        result.append(id)
-    return result
+    ids = []
+    try:
+        loc = part[V1_LOCATION]
+        kind = V1_KIND_MAP[loc]
+        if kind == MapKind.TABLE:
+            ids = [part[V1_TABLE]]
+        elif kind == MapKind.ATTRIBUTE:
+            ids = [part[V1_VARIABLE]]
+        elif kind == MapKind.CATEGORY:
+            ids = parse_version1Category(part[V1_CATEGORY])
+    except KeyError:
+        return
+    if len(ids) == 0 or None in ids or '' in ids:
+        return
+    return ids
 
 
 def has_mapping(part: dict, version: Version) -> bool:
@@ -247,8 +251,12 @@ def filter_compatible(parts: Dataset, version: Version) -> Dataset:
     """Filters `parts` by `version`."""
     result = []
     for row in parts:
-        if not (is_compatible(row, version) or has_mapping(row, version)):
-            warning(f'skipping incompatible part: {get_partID(row)}')
+        pid = get_partID(row)
+        if not (is_compatible(row, version)):
+            warning(f'skipping incompatible part: {pid}')
+            continue
+        if version.major == 1 and not has_mapping(row, version):
+            error(f'skipping part with missing version1 fields: {pid}')
             continue
         result.append(row)
     return result
@@ -297,6 +305,7 @@ def gen_partdata(parts_v2: Dataset, version: Version):
         )
 
     mappings = {get_partID(p): get_mappings(p, version) for p in parts_v2}
+    assert None not in mappings
 
     return PartData(
         table_data=table_data,

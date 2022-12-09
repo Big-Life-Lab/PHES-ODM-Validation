@@ -1,8 +1,8 @@
 import unittest
 
 import common
-from part_tables import is_compatible
-from versions import parse_version
+from part_tables import get_mappings, is_compatible
+from versions import Version, parse_version
 
 common.unused_import_dummy = 1
 
@@ -31,6 +31,42 @@ class TestVersionCompat(unittest.TestCase):
     def test_incomplete(self):
         row = get_row('2', '2.0', True)
         self.assertTrue(is_compatible(row, parse_version('2.0.')))
+
+
+class TestVersion1FieldsExist(unittest.TestCase):
+    parts_pass = [
+        {
+            'version1Location': 'tables',
+            'version1Table': 'a',
+        },
+        {
+            'version1Location': 'variables',
+            'version1Variable': 'b',
+        },
+        {
+            'version1Location': 'variableCategories',
+            'version1Category': 'c;d',
+        }
+    ]
+    parts_fail = [
+        {
+            'version1Table': 'a',
+        },
+        {
+            'version1Location': 'variables',
+        },
+        {
+            'version1Location': 'variableCategories',
+            'version1Category': '',
+        }
+    ]
+
+    def test(self):
+        v = Version(major = 1)
+        id_list_pass = [get_mappings(p, v) for p in self.parts_pass]
+        id_list_fail = [get_mappings(p, v) for p in self.parts_fail]
+        self.assertEqual(id_list_pass, [['a'], ['b'], ['c', 'd']])
+        self.assertEqual(id_list_fail, [None, None, None])
 
 
 if __name__ == '__main__':
