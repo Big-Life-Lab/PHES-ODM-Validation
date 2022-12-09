@@ -3,7 +3,7 @@
 from collections import defaultdict
 from dataclasses import dataclass
 from enum import Enum
-from logging import warning
+from logging import error, warning
 from semver import Version
 from typing import DefaultDict, Dict, List, Optional, Set
 
