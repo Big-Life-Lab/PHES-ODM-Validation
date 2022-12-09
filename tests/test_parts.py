@@ -62,7 +62,7 @@ class TestVersion1FieldsExist(unittest.TestCase):
     ]
 
     def test(self):
-        v = Version(major = 1)
+        v = Version(major=1)
         id_list_pass = [get_mappings(p, v) for p in self.parts_pass]
         id_list_fail = [get_mappings(p, v) for p in self.parts_fail]
         self.assertEqual(id_list_pass, [['a'], ['b'], ['c', 'd']])
