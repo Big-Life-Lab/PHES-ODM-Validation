@@ -10,12 +10,14 @@ ASSET_DIR = get_rule_asset_dir('greater_than_max_length')
 This rule ensures that the number of characters in a string type column is not greater than a defined maximum value. As an example, consider the `phone` column in the `contacts` table whose maximum length value is 10. The following dataset snippet would fail validation,
 
 ```{python}
+#| echo: false
 pprint_csv_file(asset("invalid-dataset.csv"), "Invalid Dataset")
 ```
 
 The `phone` column in the first row has 11 characters which is greater than the maximum length value of 10, whereas the following dataset snippet would pass validation,
 
 ```{python}
+#| echo: false
 pprint_csv_file(asset("valid-dataset.csv"), "Valid Dataset")
 ```
 
@@ -36,6 +38,7 @@ The error report should have the following fields,
 The error report object for the example invalid row above is shown below,
 
 ```{python}
+#| echo: false
 pprint_json_file(asset("error-report.json"))
 ```
 
@@ -54,6 +57,7 @@ All the metadata for this rule is contained in the parts sheet in the ODM dictio
 For example in the following ODM dictionary snippet,
 
 ```{python}
+#| echo: false
 pprint_csv_file(asset("parts.csv"), "Parts v2",
                 ignore_prefix="version1")
 ```
@@ -67,6 +71,7 @@ We can use the [maxLength](https://docs.python-cerberus.org/en/stable/validation
 The generated cerberus object for the example above is shown below,
 
 ```{python}
+#| echo: false
 pprint_yaml_file(asset("schema-v2.yml"))
 ```
 
@@ -77,12 +82,14 @@ The metadata for this rule should have the row from the ODM parts sheet for the 
 When generating the schema for version 1, we check whether the column has an [equivalent part in version 1](../specs/odm-how-tos.md#getting-the-version-1-equivalent-for-a-part). If it does, then we add it to the cerberus schema. For example,
 
 ```{python}
+#| echo: false
 pprint_csv_file(asset("parts.csv"), "Parts v1")
 ```
 
 The corresponding cerberus schema would be,
 
 ```{python}
+#| echo: false
 pprint_yaml_file(asset("schema-v1.yml"))
 ```
 
