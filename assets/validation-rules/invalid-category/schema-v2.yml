@@ -6,7 +6,7 @@ schema:
       type: dict
       schema:
         coll:
-          # type: string
+          type: string
           allowed:
           - comp3h
           - comp8h

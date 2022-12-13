@@ -48,7 +48,8 @@ def missing_mandatory_column():
                     continue
                 attr_meta = get_attr_meta(attr, table_id0, ver)
                 update_schema(schema, table_id1, attr_id1, rule_id,
-                              cerb_rule, table_meta, attr_meta)
+                              cerb_rule, attr.get(pt.DATA_TYPE),
+                              table_meta, attr_meta)
         return schema
 
     return Rule(
@@ -80,7 +81,8 @@ def invalid_category():
                 cerb_rule = (cerb_rule_key, cat_ids1)
                 attr_meta = get_catset_meta(table_id0, cs, categories, ver)
                 update_schema(schema, table_id1, attr_id1, rule_id,
-                              cerb_rule, table_meta, attr_meta)
+                              cerb_rule, attr.get(pt.DATA_TYPE),
+                              table_meta, attr_meta)
         return schema
 
     return Rule(
