@@ -46,7 +46,7 @@ def init_attr_schema(attr_id: str, rule_id: str, cerb_rule: tuple,
     return result
 
 
-def parse_odm_datatype(part_id, odm_datatype) -> Optional[str]:
+def parse_odm_datatype(odm_datatype) -> Optional[str]:
     """returns the cerberus-equivalent type"""
     t = odm_datatype
     if not t:
@@ -55,12 +55,12 @@ def parse_odm_datatype(part_id, odm_datatype) -> Optional[str]:
         return 'string'
     if t in ['integer', 'float']:
         return t
-    warning(f'part {part_id}: type {odm_datatype} is not implemented')
+    warning(f'odm datatype {odm_datatype} is not implemented')
 
 
 def update_schema(schema, table_id, attr_id, rule_id, cerb_rule,
                   odm_datatype: str, table_meta: Meta, attr_meta: Meta):
-    cerb_type = parse_odm_datatype(attr_id, odm_datatype)
+    cerb_type = parse_odm_datatype(odm_datatype)
     attr_schema = init_attr_schema(attr_id, rule_id, cerb_rule, cerb_type,
                                    attr_meta)
     table_schema = init_table_schema(table_id, table_meta, attr_schema)
