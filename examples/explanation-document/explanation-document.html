@@ -160,7 +160,8 @@ invalid ODM dataset and prints the report.</p>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'validationRuleFields'</span>: <span style="font-weight: bold">[]</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'message'</span>: <span style="color: #008000; text-decoration-color: #008000">'Missing mandatory column geoLat in table sites in row number 2'</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="font-weight: bold">}</span>
-<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="font-weight: bold">]</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="font-weight: bold">]</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="color: #808000; text-decoration-color: #808000">warnings</span>=<span style="font-weight: bold">[]</span>
 <span style="font-weight: bold">)</span>
 </pre>
 <p>Take a look at the <code class="docutils literal notranslate"><span class="pre">errors</span></code> field in the report. It contains the list of
@@ -202,7 +203,13 @@ dataset</a> in the next two chunks.</p>
 <span class="p">)</span>
 </pre></div>
 </div>
-<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="color: #800080; text-decoration-color: #800080; font-weight: bold">ValidationReport</span><span style="font-weight: bold">(</span><span style="color: #808000; text-decoration-color: #808000">data_version</span>=<span style="color: #008000; text-decoration-color: #008000">'2.0.0-rc.1'</span>, <span style="color: #808000; text-decoration-color: #808000">schema_version</span>=<span style="color: #008000; text-decoration-color: #008000">'2.0.0'</span>, <span style="color: #808000; text-decoration-color: #808000">package_version</span>=<span style="color: #008000; text-decoration-color: #008000">'0.1.0'</span>, <span style="color: #808000; text-decoration-color: #808000">errors</span>=<span style="font-weight: bold">[])</span>
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="color: #800080; text-decoration-color: #800080; font-weight: bold">ValidationReport</span><span style="font-weight: bold">(</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="color: #808000; text-decoration-color: #808000">data_version</span>=<span style="color: #008000; text-decoration-color: #008000">'2.0.0-rc.1'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="color: #808000; text-decoration-color: #808000">schema_version</span>=<span style="color: #008000; text-decoration-color: #008000">'2.0.0'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="color: #808000; text-decoration-color: #808000">package_version</span>=<span style="color: #008000; text-decoration-color: #008000">'0.1.0'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="color: #808000; text-decoration-color: #808000">errors</span>=<span style="font-weight: bold">[]</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="color: #808000; text-decoration-color: #808000">warnings</span>=<span style="font-weight: bold">[]</span>
+<span style="font-weight: bold">)</span>
 </pre>
 <p>As we can see, the error list is empty.</p>
 <p>Creating your own validation schemas can get tedious due to the breadth
@@ -311,7 +318,8 @@ next chunk.</p>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'validationRuleFields'</span>: <span style="font-weight: bold">[[{</span><span style="color: #008000; text-decoration-color: #008000">'partID'</span>: <span style="color: #008000; text-decoration-color: #008000">'geoLat'</span>, <span style="color: #008000; text-decoration-color: #008000">'sites'</span>: <span style="color: #008000; text-decoration-color: #008000">'header'</span>, <span style="color: #008000; text-decoration-color: #008000">'sitesRequired'</span>: <span style="color: #008000; text-decoration-color: #008000">'mandatory'</span><span style="font-weight: bold">}]]</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'message'</span>: <span style="color: #008000; text-decoration-color: #008000">'Missing mandatory column geoLat in table sites in row number 2'</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="font-weight: bold">}</span>
-<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="font-weight: bold">]</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="font-weight: bold">]</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="color: #808000; text-decoration-color: #808000">warnings</span>=<span style="font-weight: bold">[]</span>
 <span style="font-weight: bold">)</span>
 </pre>
 <p>We can also generate validation schemas for version 1 of the ODM
@@ -449,7 +457,8 @@ using our version 1 validation schema.</p>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="font-weight: bold">]</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'message'</span>: <span style="color: #008000; text-decoration-color: #008000">'Missing mandatory column Latitude in table Site in row number 1'</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="font-weight: bold">}</span>
-<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="font-weight: bold">]</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="font-weight: bold">]</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="color: #808000; text-decoration-color: #808000">warnings</span>=<span style="font-weight: bold">[]</span>
 <span style="font-weight: bold">)</span>
 </pre>
 <p>That’s the end!</p>
