@@ -251,12 +251,12 @@ def filter_compatible(parts: Dataset, version: Version) -> Dataset:
     """Filters `parts` by `version`."""
     result = []
     for row in parts:
-        pid = get_partID(row)
+        part_id = get_partID(row)
         if not (is_compatible(row, version)):
-            warning(f'skipping incompatible part: {pid}')
+            warning(f'skipping incompatible part: {part_id}')
             continue
         if version.major == 1 and not has_mapping(row, version):
-            error(f'skipping part with missing version1 fields: {pid}')
+            error(f'skipping part with missing version1 fields: {part_id}')
             continue
         result.append(row)
     return result
