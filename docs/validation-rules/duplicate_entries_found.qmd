@@ -12,6 +12,7 @@ This rule identifies when there are two identical entries with the same primary 
 For validation, this rule would be violated if two rows have the same primary key values but non-unique `lastUpdated` values. For example, the following ODM data snippet would fail validation.
 
 ```{python}
+#| echo: false
 pprint_csv_file(asset("invalid-dataset-1.csv"), "Invalid Addresses Table")
 ```
 
@@ -20,12 +21,14 @@ There are two rows (rows 1 and 2) with the same primary key value of `1` but als
 The following dataset would also fail validation,
 
 ```{python}
+#| echo: false
 pprint_csv_file(asset("invalid-dataset-2.csv"), "Invalid Addresses Table")
 ```
 
 The following dataset would pass validation,
 
 ```{python}
+#| echo: false
 pprint_csv_file(asset("valid-dataset.csv"), "Valid Addresses Table")
 ```
 
@@ -44,12 +47,14 @@ The error report will have the following fields
 The error report for the first invalid dataset is shown below,
 
 ```{python}
+#| echo: false
 pprint_json_file(asset("error-report-1.json"))
 ```
 
 In addition, a seperate error report object should be generated for each set of duplicate values found. For example the error report for the second invalid dataset above is shown below,
 
 ```{python}
+#| echo: false
 pprint_json_file(asset("error-report-2.json"))
 ```
 
@@ -62,6 +67,7 @@ All the metadata for this rule is contained in the parts sheet in the data dicti
 For example,
 
 ```{python}
+#| echo: false
 pprint_csv_file(asset("parts.csv"), title = "Parts v2",
                 ignore_prefix="version1")
 ```
@@ -75,6 +81,7 @@ Cerberus currently does not have support for this rule. We will need to [extend 
 The generated cerberus object for the example above is shown below,
 
 ```{python}
+#| echo: false
 pprint_yaml_file(asset("schema-v2.yml"))
 ```
 
@@ -85,12 +92,14 @@ The metadata for this rule should include the row from the ODM that defines the 
 When generating the schema for version 1, we should add this rule to any version 2 primary key columns which have a version 1 equivalent. For example, the parts snippet above with its version 1 columns is shown below
 
 ```{python}
+#| echo: false
 pprint_csv_file(asset("parts.csv"), title = "Parts v1")
 ```
 
 The corresponding cerberus schema would be,
 
 ```{python}
+#| echo: false
 pprint_yaml_file(asset("schema-v1.yml"))
 ```
 

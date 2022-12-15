@@ -28,6 +28,7 @@ pprint_yaml_file(asset("valid-integer-dataset-1.yml"))
 Values that are not explicitly integers but can be coerced into integers should pass validation. For example, the following should pass validation,
 
 ```{python}
+#| echo: false
 pprint_csv_file(asset("valid-integer-dataset-2.csv"), "Valid integer dataset")
 ```
 
@@ -36,6 +37,7 @@ A floating point number can be coerced into an integer if the coercion does not 
 The snippet below should fail validation since they cannot be coerced to integers.
 
 ```{python}
+#| echo: false
 pprint_csv_file(asset("invalid-integer-dataset-2.csv"), "Invalid integer dataset")
 ```
 
@@ -44,18 +46,21 @@ pprint_csv_file(asset("invalid-integer-dataset-2.csv"), "Invalid integer dataset
 A float is a decimal number. Imagine the same `geoLat` column but its defined type is now a float. The following dataset snippet would fail validation,
 
 ```{python}
+#| echo: false
 pprint_csv_file(asset("invalid-float-dataset-1.csv"), "Invalid float dataset")
 ```
 
 whereas the following would pass validation
 
 ```{python}
+#| echo: false
 pprint_yaml_file(asset("valid-float-dataset-1.yml"))
 ```
 
 Once again, values that can be coerced into floats should pass validation. All integers and certain strings can be coerced into floats. For example, the following snippet below should pass validation,
 
 ```{python}
+#| echo: false
 pprint_csv_file(asset("valid-float-dataset-2.csv"), "Valid float dataset")
 ```
 
@@ -92,18 +97,21 @@ whereas the following should pass validation
 A column that can have one of two values, representing Yes/No. The category values representing Yes/No are encoded in the dictionary. For example, consider the `reportable` column in the `measures` table whose data type is boolean. Also, assume that `true` and `false` are the allowed boolean category values`. The following dataset snippet would fail validation,
 
 ```{python}
+#| echo: false
 pprint_csv_file(asset("invalid-bool-dataset-1.csv"), "Invalid bool dataset")
 ```
 
 whereas the following the would pass validation,
 
 ```{python}
+#| echo: false
 pprint_csv_file(asset("valid-bool-dataset-1.csv"), "Valid bool dataset")
 ```
 
 The category values are case-sensitive i.e. the boolean column value case should match the one in the category values. For example, the following would fail validation,
 
 ```{python}
+#| echo: false
 pprint_csv_file(asset("invalid-bool-dataset-2.csv"), "Invalid bool dataset")
 ```
 
@@ -140,18 +148,21 @@ The error report objects for the invalid examples above can be seen below,
 integer
 
 ```{python}
+#| echo: false
 pprint_json_file(asset("integer-error-report-1.json"))
 ```
 
 integer
 
 ```{python}
+#| echo: false
 pprint_json_file(asset("integer-error-report-2.json"))
 ```
 
 float
 
 ```{python}
+#| echo: false
 pprint_json_file(asset("float-error-report-1.json"))
 ```
 
@@ -183,12 +194,14 @@ email
 boolean 1
 
 ```{python}
+#| echo: false
 pprint_json_file(asset("bool-error-report-1.json"))
 ```
 
 boolean 2
 
 ```{python}
+#| echo: false
 pprint_json_file(asset("bool-error-report-2.json"))
 ```
 
@@ -208,12 +221,14 @@ For example, the parts sheet snippets for the examples above can be seen below,
 For an integer `geoLat` column in a sites table
 
 ```{python}
+#| echo: false
 pprint_csv_file(asset("integer-parts-v2.csv"), "Integer parts v2")
 ```
 
 For a float `geoLat` column in a sites table
 
 ```{python}
+#| echo: false
 pprint_csv_file(asset("float-parts-v2.csv"), "Float parts v2")
 ```
 
@@ -241,6 +256,7 @@ For the email `contactEmail` column in the labs table
 For the boolean `reportable` column in the `measures` table,
 
 ```{python}
+#| echo: false
 pprint_csv_file(asset("bool-parts-v2.csv"), "Bool parts v2")
 ```
 
@@ -257,12 +273,14 @@ The generated cerberus objects for the examples above are shown below,
 integer
 
 ```{python}
+#| echo: false
 pprint_yaml_file(asset("integer-schema-v2.yml"))
 ```
 
 float
 
 ```{python}
+#| echo: false
 pprint_yaml_file(asset("float-schema-v2.yml"))
 ```
 
@@ -303,6 +321,7 @@ email
 boolean
 
 ```{python}
+#| echo: false
 pprint_yaml_file(asset("bool-schema-v2.yml"))
 ```
 
@@ -317,12 +336,14 @@ When generating the schema for version 1, we check whether the column has an [eq
 integer
 
 ```{python}
+#| echo: false
 pprint_csv_file(asset("integer-parts-v1.csv"), "Integer parts v1")
 ```
 
 float
 
 ```{python}
+#| echo: false
 pprint_csv_file(asset("float-parts-v1.csv"), "Float parts v1")
 ```
 
@@ -356,6 +377,7 @@ email
 boolean
 
 ```{python}
+#| echo: false
 pprint_csv_file(asset("bool-parts-v1.csv"), "Bool parts v1")
 ```
 
@@ -364,12 +386,14 @@ The corresponding v1 cerberus schemas are shown below,
 integer
 
 ```{python}
+#| echo: false
 pprint_yaml_file(asset("integer-schema-v1.yml"))
 ```
 
 float
 
 ```{python}
+#| echo: false
 pprint_yaml_file(asset("float-schema-v1.yml"))
 ```
 
@@ -415,6 +439,7 @@ email
 boolean
 
 ```{python}
+#| echo: false
 pprint_yaml_file(asset("bool-schema-v1.yml"))
 ```
 

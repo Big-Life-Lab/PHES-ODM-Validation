@@ -10,6 +10,7 @@ ASSET_DIR = get_rule_asset_dir('missing_mandatory_column')
 This rule checks if the rows of each table contains its mandatory columns. For example, the `addID` column is mandatory for the `addresses` table. The following address table row,
 
 ```{python}
+#| echo: false
 pprint_csv_file(asset("invalid-dataset.csv"), "Invalid Dataset")
 ```
 
@@ -17,6 +18,7 @@ pprint_csv_file(asset("invalid-dataset.csv"), "Invalid Dataset")
 would fail validation. The following address table row would pass validation,
 
 ```{python}
+#| echo: false
 pprint_csv_file(asset("valid-dataset.csv"), "Valid Dataset")
 ```
 
@@ -35,6 +37,7 @@ The error report will have the following fields
 Example
 
 ```{python}
+#| echo: false
 pprint_json_file(asset("error-report.json"))
 ```
 
@@ -61,6 +64,7 @@ All the metadata for this rule is contained in the parts sheet in the data dicti
 Example
 
 ```{python}
+#| echo: false
 pprint_csv_file(asset("parts.csv"), "Parts v2",
                 ignore_prefix="version1")
 ```
@@ -70,6 +74,7 @@ pprint_csv_file(asset("parts.csv"), "Parts v2",
 The generated cerberus object for the example above is shown below,
 
 ```{python}
+#| echo: false
 pprint_yaml_file(asset("schema-v2.yml"))
 ```
 
@@ -91,12 +96,14 @@ Details for the above points can be found [here](./README.md#version-1)
 We then check if the version 2 equivalent column is mandatory in the version 2 equivalent table, if it is, then it should be mandatory in version 1. For example,
 
 ```{python}
+#| echo: false
 pprint_csv_file(asset("parts.csv"), "Parts v1")
 ```
 
 The corresponding version 1 cerberus schema is shown below,
 
 ```{python}
+#| echo: false
 pprint_yaml_file(asset("schema-v1.yml"))
 ```
 

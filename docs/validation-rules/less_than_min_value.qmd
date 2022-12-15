@@ -24,18 +24,21 @@ pprint_yaml_file(asset("valid-dataset-1.yml"))
 If the value to be validated is not a number but can be coerced into one, then a warning is given. Whether the coerced value is valid or not, a warning should reported informing the user of the mismatched type. For example the following dataset would fail validation with an error and a warning,
 
 ```{python}
+#| echo: false
 pprint_csv_file(asset("invalid-dataset-2.csv"), "Invalid Dataset")
 ```
 
 and the following dataset should pass validation with a warning,
 
 ```{python}
+#| echo: false
 pprint_csv_file(asset("valid-dataset-2.csv"), "Valid Dataset")
 ```
 
 If the value cannot be coerced into a number, then an error should be logged as in the following dataset where "a" and "b" cannot be coerced into a number
 
 ```{python}
+#| echo: false
 pprint_csv_file(asset("invalid-dataset-3.csv"), "Invalid Dataset")
 ```
 
@@ -48,7 +51,7 @@ pprint_yaml_file(asset("valid-dataset-3.yml"))
 
 ## Error report
 
-This rule can generate an error and/or a warning. 
+This rule can generate an error and/or a warning.
 
 An error is generated in the following cases:
 
@@ -85,24 +88,28 @@ The error reports for each of the invalid datasets above are shown above,
 Invalid dataset 1
 
 ```{python}
+#| echo: false
 pprint_json_file(asset("error-report-1.json"))
 ```
 
 Invalid dataset 2
 
 ```{python}
+#| echo: false
 pprint_json_file(asset("error-report-2.json"))
 ```
 
 Invalid dataset 3
 
 ```{python}
+#| echo: false
 pprint_json_file(asset("error-report-3.json"))
 ```
 
 Finally, for the valid coercable dataset (valid dataset 2) above, the following warning should be generated
 
 ```{python}
+#| echo: false
 pprint_json_file(asset("error-report-4.json"))
 ```
 
@@ -123,6 +130,7 @@ All the metadata for this rule is contained in the parts sheet in the data dicti
 For example in the following ODM dictionary snippet,
 
 ```{python}
+#| echo: false
 pprint_csv_file(asset("parts.csv"), "Parts v2",
                 ignore_prefix="version1")
 ```
@@ -136,6 +144,7 @@ We can use the [minimum value validation](https://docs.python-cerberus.org/en/st
 The generated cerberus object for the example above is shown below,
 
 ```{python}
+#| echo: false
 pprint_yaml_file(asset("schema-v2.yml"))
 ```
 
@@ -146,12 +155,14 @@ The metadata for this rule should include the row from the ODM for the part with
 When generating the schema for version 1, we check whether the column has an [equivalent part in version 1](../specs/odm-how-tos.md#getting-the-version-1-equivalent-for-a-part). If it does, then we add it to the cerberus schema. For example,
 
 ```{python}
+#| echo: false
 pprint_csv_file(asset("parts.csv"), "Parts v1")
 ```
 
 The corresponding cerberus schema would be,
 
 ```{python}
+#| echo: false
 pprint_yaml_file(asset("schema-v1.yml"))
 ```
 
