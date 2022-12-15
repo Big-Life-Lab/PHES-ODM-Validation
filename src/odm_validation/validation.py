@@ -26,6 +26,7 @@ class ValidationReport:
     schema_version: str
     package_version: str
     errors: List[str]
+    warnings: List[str]
 
     def valid(self) -> bool:
         return len(self.errors) == 0
@@ -146,4 +147,5 @@ def validate_data(schema: Schema,
         schema_version=schema["schemaVersion"],
         package_version=__version__,
         errors=errors,
+        warnings=[],
     )
