@@ -50,10 +50,6 @@ a warning should reported informing the user of the mismatched type. For
 example the following dataset would fail validation with an error and a
 warning,
 
-``` python
-pprint_csv_file(asset("invalid-dataset-2.csv"), "Invalid Dataset")
-```
-
 <pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="font-style: italic">                                                  Invalid Dataset                                                  </span>
 ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
 ┃<span style="font-weight: bold"> siteID                             </span>┃<span style="font-weight: bold"> geoLat                             </span>┃<span style="font-weight: bold"> geoLong                               </span>┃
@@ -63,10 +59,6 @@ pprint_csv_file(asset("invalid-dataset-2.csv"), "Invalid Dataset")
 </pre>
 
 and the following dataset should pass validation with a warning,
-
-``` python
-pprint_csv_file(asset("valid-dataset-2.csv"), "Valid Dataset")
-```
 
 <pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="font-style: italic">                                                   Valid Dataset                                                   </span>
 ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
@@ -79,10 +71,6 @@ pprint_csv_file(asset("valid-dataset-2.csv"), "Valid Dataset")
 If the value cannot be coerced into a number, then an error should be
 logged as in the following dataset where “a” and “b” cannot be coerced
 into a number
-
-``` python
-pprint_csv_file(asset("invalid-dataset-3.csv"), "Invalid Dataset")
-```
 
 <pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="font-style: italic">                                                  Invalid Dataset                                                  </span>
 ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
@@ -165,10 +153,6 @@ above,
 
 Invalid dataset 1
 
-``` python
-pprint_json_file(asset("error-report-1.json"))
-```
-
 <pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="font-weight: bold">{</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="color: #008000; text-decoration-color: #008000">'errors'</span>: <span style="font-weight: bold">[</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="font-weight: bold">{</span>
@@ -207,10 +191,6 @@ pprint_json_file(asset("error-report-1.json"))
 </pre>
 
 Invalid dataset 2
-
-``` python
-pprint_json_file(asset("error-report-2.json"))
-```
 
 <pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="font-weight: bold">{</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="color: #008000; text-decoration-color: #008000">'errors'</span>: <span style="font-weight: bold">[</span>
@@ -282,10 +262,6 @@ pprint_json_file(asset("error-report-2.json"))
 
 Invalid dataset 3
 
-``` python
-pprint_json_file(asset("error-report-3.json"))
-```
-
 <pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="font-weight: bold">{</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="color: #008000; text-decoration-color: #008000">'errors'</span>: <span style="font-weight: bold">[</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="font-weight: bold">{</span>
@@ -325,10 +301,6 @@ pprint_json_file(asset("error-report-3.json"))
 
 Finally, for the valid coercable dataset (valid dataset 2) above, the
 following warning should be generated
-
-``` python
-pprint_json_file(asset("error-report-4.json"))
-```
 
 <pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="font-weight: bold">{</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="color: #008000; text-decoration-color: #008000">'errors'</span>: <span style="font-weight: bold">[]</span>,
@@ -390,11 +362,6 @@ data dictionary. The steps involved are:
 
 For example in the following ODM dictionary snippet,
 
-``` python
-pprint_csv_file(asset("parts.csv"), "Parts v2",
-                ignore_prefix="version1")
-```
-
 <pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="font-style: italic">                                                     Parts v2                                                      </span>
 ┏━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━┓
 ┃<span style="font-weight: bold"> partID              </span>┃<span style="font-weight: bold"> partType                </span>┃<span style="font-weight: bold"> sites            </span>┃<span style="font-weight: bold"> dataType              </span>┃<span style="font-weight: bold"> maxValue             </span>┃
@@ -418,10 +385,6 @@ validation](https://docs.python-cerberus.org/en/stable/validation-rules.html#min
 rule in cerberus to implement this rule.
 
 The generated cerberus object for the example above is shown below,
-
-``` python
-pprint_yaml_file(asset("schema-v2.yml"))
-```
 
 <pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="font-weight: bold">{</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="color: #008000; text-decoration-color: #008000">'schemaVersion'</span>: <span style="color: #008000; text-decoration-color: #008000">'2.0.0'</span>,
@@ -482,10 +445,6 @@ has an [equivalent part in version
 1](../specs/odm-how-tos.md#getting-the-version-1-equivalent-for-a-part).
 If it does, then we add it to the cerberus schema. For example,
 
-``` python
-pprint_csv_file(asset("parts.csv"), "Parts v1")
-```
-
 <pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="font-style: italic">                                                     Parts v1                                                      </span>
 ┏━━━━━━━━━━┳━━━━━━━━━━━━┳━━━━━━━━━┳━━━━━━━━━━━┳━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━┓
 ┃<span style="font-weight: bold"> partID   </span>┃<span style="font-weight: bold"> partType   </span>┃<span style="font-weight: bold"> sites   </span>┃<span style="font-weight: bold"> dataType  </span>┃<span style="font-weight: bold"> maxValue  </span>┃<span style="font-weight: bold"> version1Location  </span>┃<span style="font-weight: bold"> version1Table  </span>┃<span style="font-weight: bold"> version1Variable </span>┃
@@ -498,10 +457,6 @@ pprint_csv_file(asset("parts.csv"), "Parts v1")
 </pre>
 
 The corresponding cerberus schema would be,
-
-``` python
-pprint_yaml_file(asset("schema-v1.yml"))
-```
 
 <pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="font-weight: bold">{</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="color: #008000; text-decoration-color: #008000">'schemaVersion'</span>: <span style="color: #008000; text-decoration-color: #008000">'1.0.0'</span>,

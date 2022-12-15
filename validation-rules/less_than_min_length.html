@@ -42,9 +42,6 @@
 is not less than a defined minimum value. As an example, consider the
 <code class="docutils literal notranslate"><span class="pre">phone</span></code> column in the <code class="docutils literal notranslate"><span class="pre">contacts</span></code> table whose minimum length value is 10.
 The following dataset snippet would fail validation,</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pprint_csv_file</span><span class="p">(</span><span class="n">asset</span><span class="p">(</span><span class="s2">&quot;invalid-dataset.csv&quot;</span><span class="p">),</span> <span class="s2">&quot;Invalid Dataset&quot;</span><span class="p">)</span>
-</pre></div>
-</div>
 <pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="font-style: italic">                                                  Invalid Dataset                                                  </span>
 ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
 ┃<span style="font-weight: bold"> contactID                                              </span>┃<span style="font-weight: bold"> phone                                                  </span>┃
@@ -55,9 +52,6 @@ The following dataset snippet would fail validation,</p>
 <p>The <code class="docutils literal notranslate"><span class="pre">phone</span></code> column in the first row has only 9 characters which is less
 than the minimum length value of 10, whereas the following dataset
 snippet would pass validation,</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pprint_csv_file</span><span class="p">(</span><span class="n">asset</span><span class="p">(</span><span class="s2">&quot;valid-dataset.csv&quot;</span><span class="p">),</span> <span class="s2">&quot;Valid Dataset&quot;</span><span class="p">)</span>
-</pre></div>
-</div>
 <pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="font-style: italic">                                                   Valid Dataset                                                   </span>
 ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
 ┃<span style="font-weight: bold"> contactID                                          </span>┃<span style="font-weight: bold"> phone                                                      </span>┃
@@ -86,9 +80,6 @@ is less than the min length of &lt;min_length&gt;</p></li>
 </ul>
 <p>The error report object for the example invalid row above is shown
 below,</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pprint_json_file</span><span class="p">(</span><span class="n">asset</span><span class="p">(</span><span class="s2">&quot;error-report.json&quot;</span><span class="p">))</span>
-</pre></div>
-</div>
 <pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="font-weight: bold">{</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="color: #008000; text-decoration-color: #008000">'errors'</span>: <span style="font-weight: bold">[</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="font-weight: bold">{</span>
@@ -139,10 +130,6 @@ length value</p></li>
 </li>
 </ol>
 <p>For example in the following ODM dictionary snippet,</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pprint_csv_file</span><span class="p">(</span><span class="n">asset</span><span class="p">(</span><span class="s2">&quot;parts.csv&quot;</span><span class="p">),</span> <span class="s2">&quot;Parts v2&quot;</span><span class="p">,</span>
-                <span class="n">ignore_prefix</span><span class="o">=</span><span class="s2">&quot;version1&quot;</span><span class="p">)</span>
-</pre></div>
-</div>
 <pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="font-style: italic">                                                     Parts v2                                                      </span>
 ┏━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━┓
 ┃<span style="font-weight: bold"> partID            </span>┃<span style="font-weight: bold"> partType          </span>┃<span style="font-weight: bold"> addresses         </span>┃<span style="font-weight: bold"> contacts        </span>┃<span style="font-weight: bold"> dataType        </span>┃<span style="font-weight: bold"> minLength       </span>┃
@@ -162,9 +149,6 @@ the <code class="docutils literal notranslate"><span class="pre">addL2</span></c
 <a class="reference external" href="https://docs.python-cerberus.org/en/stable/validation-rules.html#minlength-maxlength">minLength</a>
 validation rule in the cerberus library to implement this.</p>
 <p>The generated cerberus object for the example above is shown below,</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pprint_yaml_file</span><span class="p">(</span><span class="n">asset</span><span class="p">(</span><span class="s2">&quot;schema-v2.yml&quot;</span><span class="p">))</span>
-</pre></div>
-</div>
 <pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="font-weight: bold">{</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="color: #008000; text-decoration-color: #008000">'schemaVersion'</span>: <span style="color: #008000; text-decoration-color: #008000">'2.0.0'</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="color: #008000; text-decoration-color: #008000">'schema'</span>: <span style="font-weight: bold">{</span>
@@ -208,9 +192,6 @@ for the column with its <code class="docutils literal notranslate"><span class="
 has an <a class="reference internal" href="../specs/odm-how-tos.html#getting-the-version-1-equivalent-for-a-part"><span class="std std-ref">equivalent part in version
 1</span></a>.
 If it does, then we add it to the cerberus schema. For example,</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pprint_csv_file</span><span class="p">(</span><span class="n">asset</span><span class="p">(</span><span class="s2">&quot;parts.csv&quot;</span><span class="p">),</span> <span class="s2">&quot;Parts v1&quot;</span><span class="p">)</span>
-</pre></div>
-</div>
 <pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="font-style: italic">                                                     Parts v1                                                      </span>
 ┏━━━━━━━━━━━┳━━━━━━━━━━━┳━━━━━━━━━━━┳━━━━━━━━━━┳━━━━━━━━━━┳━━━━━━━━━━━┳━━━━━━━━━━━━━━┳━━━━━━━━━━━━━┳━━━━━━━━━━━━━━┓
 ┃<span style="font-weight: bold"> partID    </span>┃<span style="font-weight: bold"> partType  </span>┃<span style="font-weight: bold"> addresses </span>┃<span style="font-weight: bold"> contacts </span>┃<span style="font-weight: bold"> dataType </span>┃<span style="font-weight: bold"> minLength </span>┃<span style="font-weight: bold"> version1Loc… </span>┃<span style="font-weight: bold"> version1Ta… </span>┃<span style="font-weight: bold"> version1Var… </span>┃
@@ -222,9 +203,6 @@ If it does, then we add it to the cerberus schema. For example,</p>
 └───────────┴───────────┴───────────┴──────────┴──────────┴───────────┴──────────────┴─────────────┴──────────────┘
 </pre>
 <p>The corresponding cerberus schema would be,</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pprint_yaml_file</span><span class="p">(</span><span class="n">asset</span><span class="p">(</span><span class="s2">&quot;schema-v1.yml&quot;</span><span class="p">))</span>
-</pre></div>
-</div>
 <pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="font-weight: bold">{</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="color: #008000; text-decoration-color: #008000">'schemaVersion'</span>: <span style="color: #008000; text-decoration-color: #008000">'1.0.0'</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="color: #008000; text-decoration-color: #008000">'schema'</span>: <span style="font-weight: bold">{</span>
