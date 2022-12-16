@@ -1,0 +1,16 @@
+{
+    "warnings": [
+        {
+            "warningType": "missing-version-1-fields",
+            "row": {
+                "partID": "measures",
+                "version1Location": "tables",
+                "version1Table": "",
+                "version1Variable": "NA",
+                "version1Category": "NA"
+            },
+            "rowNumber": 1,
+            "message": "Skipping row 1 when generating a version 1 schema. Version 1 value not found for column version1Table"
+        }
+    ]
+}

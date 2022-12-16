@@ -1,0 +1,17 @@
+{
+    "warnings": [
+        {
+            "warningType": "missing-version-1-fields",
+            "row": {
+                "partID": "aDate",
+                "partType": "attribute",
+                "version1Location": "variables",
+                "version1Table": "",
+                "version1Variable": "analysisDate",
+                "version1Category": "NA"
+            },
+            "rowNumber": 2,
+            "message": "Skipping row 2 when generating a version 1 schema. Version 1 value not found for column version1Table"
+        }
+    ]
+}

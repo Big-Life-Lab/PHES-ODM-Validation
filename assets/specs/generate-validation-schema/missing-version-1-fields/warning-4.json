@@ -1,0 +1,16 @@
+{
+    "warnings": [
+        {
+            "warningType": "missing-version-1-fields",
+            "row": {
+                "partID": "aDate",
+                "version1Location": "",
+                "version1Table": "WWMeasure",
+                "version1Variable": "analysisDate",
+                "version1Category": "NA"
+            },
+            "rowNumber": 2,
+            "message": "Skipping row 2 when generating a version 1 schema. Invalid value for version 1 column version1Location. Allowed values are \"tables\", \"variables\", or \"categories\""
+        }
+    ]
+}
