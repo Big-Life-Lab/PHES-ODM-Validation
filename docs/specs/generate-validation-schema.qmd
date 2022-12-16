@@ -11,9 +11,9 @@ This document provides the specifications for programmatically generating a vali
 
 ## Context
 
-The PHES-ODM data structure is complex. Trying to manually create the validation schema for the `[validate_data](./module-functions.md#validate_data)` function can be an error prone and laborious process, especially if the user tries to encode all the validation rules. However, programmatic generation of a validation schema is possible due to the efforts of the PHES-ODM team in creating a machine-redable data dictionary for the data. 
+The PHES-ODM data structure is complex. Trying to manually create the validation schema for the `[validate_data](./module-functions.md#validate_data)` function can be an error prone and laborious process, especially if the user tries to encode all the validation rules. However, programmatic generation of a validation schema is possible due to the efforts of the PHES-ODM team in creating a machine-redable data dictionary for the data.
 
-In brief, the data dictionary is a CSV/Excel file that encodes all the pieces of the data, how they're related to each other, as well as validation metadata. Using this data dictionary file, the `generate_validation_schema` function can automatically generate a validation schema for different ODM data versions. 
+In brief, the data dictionary is a CSV/Excel file that encodes all the pieces of the data, how they're related to each other, as well as validation metadata. Using this data dictionary file, the `generate_validation_schema` function can automatically generate a validation schema for different ODM data versions.
 
 ## Features
 
@@ -37,75 +37,76 @@ pprint_csv_file(ASSET_DIR + "/parts-1.csv", "Invalid Parts Table")
 This warning should be generated in the following cases:
 
 1. When parsing a version 1 table, it should be generated when:
-    1. The `version1Location` value is not `tables`, for example,
+   1. The `version1Location` value is not `tables`, for example,
 
-    ```{python}
-    #| echo: false
-    pprint_csv_file(ASSET_DIR + "/parts-2.csv", "")
-    ```
+   ```{python}
+   #| echo: false
+   pprint_csv_file(ASSET_DIR + "/parts-2.csv", "")
+   ```
 
-    2. The `version1Table` value is missing, for example,
+   2. The `version1Table` value is missing, for example,
 
-    ```{python}
-    #| echo: false
-    pprint_csv_file(ASSET_DIR + "/parts-3.csv", "")
-    ```
+   ```{python}
+   #| echo: false
+   pprint_csv_file(ASSET_DIR + "/parts-3.csv", "")
+   ```
 2. When parsing a version 1 column, it should be generated when:
-    1. The `version1Location` value is not `variables`, for example,
+   1. The `version1Location` value is not `variables`, for example,
 
-    ```{python}
-    #| echo: false
-    pprint_csv_file(ASSET_DIR + "/parts-4.csv", "")
-    ```
+   ```{python}
+   #| echo: false
+   pprint_csv_file(ASSET_DIR + "/parts-4.csv", "")
+   ```
 
-    2. The `version1Table` value is missing, for example,
+   2. The `version1Table` value is missing, for example,
 
-    ```{python}
-    #| echo: false
-    pprint_csv_file(ASSET_DIR + "/parts-5.csv", "")
-    ```
+   ```{python}
+   #| echo: false
+   pprint_csv_file(ASSET_DIR + "/parts-5.csv", "")
+   ```
 
-    3. The `version1Variable` value is missing, for example,
+   3. The `version1Variable` value is missing, for example,
 
-    ```{python}
-    #| echo: false
-    pprint_csv_file(ASSET_DIR + "/parts-6.csv", "")
-    ```
+   ```{python}
+   #| echo: false
+   pprint_csv_file(ASSET_DIR + "/parts-6.csv", "")
+   ```
+
 3. When parsing a version 1 category, it should be generated when:
-    1. The `version1Location` value is not `categories`, for example,
+   1. The `version1Location` value is not `categories`, for example,
 
-    ```{python}
-    #| echo: false
-    pprint_csv_file(ASSET_DIR + "/parts-7.csv", "")
-    ```
+   ```{python}
+   #| echo: false
+   pprint_csv_file(ASSET_DIR + "/parts-7.csv", "")
+   ```
 
-    2. The `version1Table` value is missing, for example,
+   2. The `version1Table` value is missing, for example,
 
-    ```{python}
-    #| echo: false
-    pprint_csv_file(ASSET_DIR + "/parts-8.csv", "")
-    ```
+   ```{python}
+   #| echo: false
+   pprint_csv_file(ASSET_DIR + "/parts-8.csv", "")
+   ```
 
-    3. The `version1Variable` value is missing, for example,
+   3. The `version1Variable` value is missing, for example,
 
-    ```{python}
-    #| echo: false
-    pprint_csv_file(ASSET_DIR + "/parts-9.csv", "")
-    ```
+   ```{python}
+   #| echo: false
+   pprint_csv_file(ASSET_DIR + "/parts-9.csv", "")
+   ```
 
-    4. The `version1Category` value is missing, for example,
+   4. The `version1Category` value is missing, for example,
 
-    ```{python}
-    #| echo: false
-    pprint_csv_file(ASSET_DIR + "/parts-10.csv", "")
-    ```
+   ```{python}
+   #| echo: false
+   pprint_csv_file(ASSET_DIR + "/parts-10.csv", "")
+   ```
 
 The returned warning object should consist of the following fields:
 
 * warningType: The warning type. Should be set to `missing-version-1-fields`.
 * row: An object containing the row that generated the warning. The row object should only include the `partID`, `version1Location`, `version1Table`, `version1Variable`, and `version1Category` columns.
 * rowNumber: The row number in the dictionary that generated the warning
-* message: A string with a human readable version of the warning. The message value depends on the column that generated the warning. 
+* message: A string with a human readable version of the warning. The message value depends on the column that generated the warning.
     * If the warning was generated due to the `version1Location` column then the message should be, 'Skipping row <row_index> when generating a version 1 schema. Invalid value for version 1 column version1Location. Allowed values are "tables", "variables", or "categories"'
     * If the warning was generated due to the `version1Table`, `version1Variable`, or `version1Category` columns, then the message should be, "Skipping row <row_index> when generating a version 1 schema. Version 1 value not found for column <invalid_column_name>"
 
