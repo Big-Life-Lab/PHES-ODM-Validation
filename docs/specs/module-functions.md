@@ -148,7 +148,12 @@ Generates the cerberus schema containing the validation rules to be used with th
 
 ## Return
 
-Return a dictionary that contains a valid cerberus schema object, as well as the odm-version it's based on. Values from the ODM data dictionary will also be added to the `meta` field for debugging purposes.
+Return a dictionary that contains:
+ 1. A valid cerberus schema object
+ 2. The ODM dataset version the schema is for and
+ 3. A list of warnings generated during the generation process.
+ 
+ Values from the ODM data dictionary will also be added to the `meta` field for debugging purposes.
 
 Example
 
@@ -183,7 +188,8 @@ Example
                 }
             }
         }
-    }
+    },
+    "warnings": []
 }
 ```
 
