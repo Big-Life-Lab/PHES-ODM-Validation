@@ -11,7 +11,12 @@ This document provides the specifications for programmatically generating a vali
 
 ## Context
 
-The PHES-ODM data structure is complex. Trying to manually create the validation schema for the [validate_data](./module-functions.md#validate_data) function can be an error prone and laborious process, especially if the user tries to encode all the validation rules. However, programmatic generation of a validation schema is possible due to the efforts of the PHES-ODM team in creating a machine-redable data dictionary for the data.
+The PHES-ODM data structure is complex. Trying to manually create the
+validation schema for the [validate_data](./module-functions.md#validate_data)
+function can be an error prone and laborious process, especially if the user
+tries to encode all the validation rules. However, programmatic generation of a
+validation schema is possible due to the efforts of the PHES-ODM team in
+creating a machine-readable data dictionary for the data.
 
 In brief, the data dictionary is a CSV/Excel file that encodes all the pieces of the data, how they're related to each other, as well as validation metadata. Using this data dictionary file, the `generate_validation_schema` function can automatically generate a validation schema for different ODM data versions.
 
