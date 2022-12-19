@@ -2,7 +2,7 @@
 
 ```{python}
 #| echo: false
-ASSET_DIR = f'../../assets/specs/generate-validation-schema/missing-version-1-fields'
+ASSET_DIR = f'../../assets/specs/generate-validation-schema/missing-version1-fields'
 ```
 
 # generate_validation_schema
@@ -23,9 +23,12 @@ At its core, the `generate_validation_schema` function creates a Python dictiona
 
 During the process of generating a validation schema there may be non-fatal issues that come up when parsing a row. A non-fatal issue is one which should not stop the function execution. Instead, whenever such an issue is encountered the row should be skipped and a warning presented to the user. The goal of these warnings is to not only inform the user of issue but to also provide them with enough information to fix the issue. The function return will consist of the list of warnings encountered, with each warning encoded as an object. The remaining sections in this group will go over each warning, providing examples that generate it.
 
-#### missing-version-1-fields
+#### missing_version1_fields
 
-This warning is reported when generating the schema for a version 1 dataset. The data dictionary contains columns that backports version 2 parts to their version 1 equivalent, this process is described [elsewhere](./odm-how-tos.md#getting-the-version-1-equivalent-for-a-part). When this backport fails during the generation process, for example due to an invalid `version1Location` value, a warning should be reported.
+This warning is reported when generating the schema for a version 1 dataset.
+The data dictionary contains columns that backports version 2 parts to their
+version 1 equivalent, this process is described
+[elsewhere](./odm-how-tos.md#getting-the-version-1-equivalent-for-a-part). When this backport fails during the generation process, for example due to an invalid `version1Location` value, a warning should be reported.
 
 For example, the following parts snippet should generate this warning for the `aDate` row since its missing a value for the `version1Table` column.
 
@@ -103,7 +106,7 @@ This warning should be generated in the following cases:
 
 The returned warning object should consist of the following fields:
 
-* warningType: The warning type. Should be set to `missing-version-1-fields`.
+* warningType: The warning type. Should be set to `missing_version1_fields`.
 * row: An object containing the row that generated the warning. The row object should only include the `partID`, `version1Location`, `version1Table`, `version1Variable`, and `version1Category` columns.
 * rowNumber: The row number in the dictionary that generated the warning
 * message: A string with a human readable version of the warning. The message value depends on the column that generated the warning.

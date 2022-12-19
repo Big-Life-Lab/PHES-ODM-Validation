@@ -1,7 +1,7 @@
 {
     "warnings": [
         {
-            "warningType": "missing-version-1-fields",
+            "warningType": "missing_version1_fields",
             "row": {
                 "partID": "aDate",
                 "partType": "attribute",
