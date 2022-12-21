@@ -1,6 +1,6 @@
 name: Test documentation generation
 on:
-  push:
+  pull_request:
     branches-ignore:
     - main
 jobs:
