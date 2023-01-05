@@ -10,9 +10,6 @@
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/alabaster.css" />
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-    <script src="../_static/jquery.js"></script>
-    <script src="../_static/underscore.js"></script>
-    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../_static/doctools.js"></script>
     <script src="../_static/sphinx_highlight.js"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -187,6 +184,48 @@ following would fail validation,</p>
 └──────────────────────────────────────────────────────┴──────────────────────────────────────────────────────────┘
 </pre>
 </section>
+<section id="datetime">
+<h2>datetime<a class="headerlink" href="#datetime" title="Permalink to this heading">¶</a></h2>
+<p>A type that allows columns to have a string that holds a date and time
+value. The date component is mandatory whereas the time component is
+optional. Regardless of what’s included in the column value, the string
+should be formatted using the <a class="reference external" href="https://en.wikipedia.org/wiki/ISO_8601">ISO
+8601</a> standard. Although the
+standard specifies a number of ways to represent datetime, for the
+purposes of the ODM only the following formats will be supported.</p>
+<ol class="arabic simple">
+<li><p>date</p></li>
+<li><p>datetime and</p></li>
+<li><p>datetime with timezone</p></li>
+</ol>
+<p>For example, consider the <code class="docutils literal notranslate"><span class="pre">reportDate</span></code> column in the <code class="docutils literal notranslate"><span class="pre">measures</span></code> table
+whose type is <code class="docutils literal notranslate"><span class="pre">datetime</span></code>. The following dataset snippet should pass
+validation,</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pprint_csv_file</span><span class="p">(</span><span class="n">asset</span><span class="p">(</span><span class="s2">&quot;valid-datetime-dataset-1.csv&quot;</span><span class="p">),</span> <span class="s2">&quot;Valid datetime dataset&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="font-style: italic">                                              Valid datetime dataset                                               </span>
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃<span style="font-weight: bold"> measureID                       </span>┃<span style="font-weight: bold"> reportDate                                                                    </span>┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│ 1                               │ 2022-01-01                                                                    │
+│ 2                               │ 2022-01-01T06:11:54                                                           │
+│ 3                               │ 2022-01-01T06:11:54+13:30                                                     │
+└─────────────────────────────────┴───────────────────────────────────────────────────────────────────────────────┘
+</pre>
+<p>whereas the following dataset should fail validation,</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pprint_csv_file</span><span class="p">(</span><span class="n">asset</span><span class="p">(</span><span class="s2">&quot;datetime-invalid-dataset-1.csv&quot;</span><span class="p">),</span> <span class="s2">&quot;Invalid datetime dataset&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="font-style: italic">                                             Invalid datetime dataset                                              </span>
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃<span style="font-weight: bold"> measureID                                            </span>┃<span style="font-weight: bold"> reportDate                                               </span>┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│ 1                                                    │ a                                                        │
+│ 2                                                    │ 2022                                                     │
+└──────────────────────────────────────────────────────┴──────────────────────────────────────────────────────────┘
+</pre>
+</section>
 <section id="categorical">
 <h2>categorical<a class="headerlink" href="#categorical" title="Permalink to this heading">¶</a></h2>
 <p>This type is handled by the <a class="reference internal" href="invalid_category.html"><span class="doc">invalid_category</span></a>
@@ -221,6 +260,13 @@ should be of type &lt;valid_type&gt; or coercable into a &lt;valid_type&gt;.</p>
 <li><p><strong>message</strong>: Row &lt;row_index&gt; in column &lt;column_name&gt; in table
 &lt;table_name&gt; is a boolean but has value &lt;invalid_value&gt;. Allowed
 values are &lt;boolean_categories&gt;.</p></li>
+</ul>
+<p>For a datetime data type, the message is shown belowm,</p>
+<ul class="simple">
+<li><p><strong>message</strong>: Row &lt;row_index&gt; in column &lt;column_name&gt; in table
+&lt;table_name&gt; is a datetime with value &lt;invalid_value&gt; that has an
+unsupported datetime format. Allowed values are ISO 8601 standard full
+dates, full dates and times, or full dates and times with timezone.</p></li>
 </ul>
 <p>The error report objects for the invalid examples above can be seen
 below,</p>
@@ -406,6 +452,48 @@ below,</p>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="color: #008000; text-decoration-color: #008000">'warnings'</span>: <span style="font-weight: bold">[]</span>
 <span style="font-weight: bold">}</span>
 </pre>
+<p>datetime</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pprint_json_file</span><span class="p">(</span><span class="n">asset</span><span class="p">(</span><span class="s2">&quot;datetime-error-report-1.json&quot;</span><span class="p">))</span>
+</pre></div>
+</div>
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="color: #008000; text-decoration-color: #008000">'errors'</span>: <span style="font-weight: bold">[</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'errorType'</span>: <span style="color: #008000; text-decoration-color: #008000">'invalid_type'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'tableName'</span>: <span style="color: #008000; text-decoration-color: #008000">'measures'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'columnName'</span>: <span style="color: #008000; text-decoration-color: #008000">'reportDate'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'row'</span>: <span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'measureID'</span>: <span style="color: #008000; text-decoration-color: #008000">'1'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'reportDate'</span>: <span style="color: #008000; text-decoration-color: #008000">'a'</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="font-weight: bold">}</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'validationRuleFields'</span>: <span style="font-weight: bold">[</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partID'</span>: <span style="color: #008000; text-decoration-color: #008000">'reportDate'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'dataType'</span>: <span style="color: #008000; text-decoration-color: #008000">'datetime'</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="font-weight: bold">}</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="font-weight: bold">]</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'message'</span>: <span style="color: #008000; text-decoration-color: #008000">'Row 1 in column reportDate in table measures is a datetime with value a that has a unsupported datetime format. Allowed values are ISO 8601 standard full dates, full dates and times, or full dates and times with timezone.'</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="font-weight: bold">}</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'errorType'</span>: <span style="color: #008000; text-decoration-color: #008000">'invalid_type'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'tableName'</span>: <span style="color: #008000; text-decoration-color: #008000">'measures'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'columnName'</span>: <span style="color: #008000; text-decoration-color: #008000">'reportDate'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'row'</span>: <span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'measureID'</span>: <span style="color: #008000; text-decoration-color: #008000">'2'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'reportDate'</span>: <span style="color: #008000; text-decoration-color: #008000">'2022'</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="font-weight: bold">}</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'validationRuleFields'</span>: <span style="font-weight: bold">[</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partID'</span>: <span style="color: #008000; text-decoration-color: #008000">'reportDate'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'dataType'</span>: <span style="color: #008000; text-decoration-color: #008000">'datetime'</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="font-weight: bold">}</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="font-weight: bold">]</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'message'</span>: <span style="color: #008000; text-decoration-color: #008000">'Row 1 in column reportDate in table measures is a datetime with value 2022 that has a unsupported datetime format. Allowed values are ISO 8601 standard full dates, full dates and times, or full dates and times with timezone.'</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="font-weight: bold">}</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="font-weight: bold">]</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="color: #008000; text-decoration-color: #008000">'warnings'</span>: <span style="font-weight: bold">[]</span>
+<span style="font-weight: bold">}</span>
+</pre>
 </section>
 <section id="rule-metadata">
 <h2>Rule metadata<a class="headerlink" href="#rule-metadata" title="Permalink to this heading">¶</a></h2>
@@ -427,8 +515,8 @@ values</p></li>
 </ol>
 </li>
 <li><p>Add this validation rule if the data type is supported by this
-validation rule. Currently, only <code class="docutils literal notranslate"><span class="pre">blob</span></code> and <code class="docutils literal notranslate"><span class="pre">datetime</span></code> are not
-supported and we don’t need to add a rule for the <code class="docutils literal notranslate"><span class="pre">varchar</span></code> column.</p></li>
+validation rule. Currently, only the <code class="docutils literal notranslate"><span class="pre">blob</span></code> is not supported and we
+don’t need to add a rule for the <code class="docutils literal notranslate"><span class="pre">varchar</span></code> column.</p></li>
 </ol>
 <p>For example, the parts sheet snippets for the examples above can be seen
 below,</p>
@@ -480,6 +568,18 @@ below,</p>
 │ false                  │ category             │ NA                 │ varchar            │ booleanSet            │
 └────────────────────────┴──────────────────────┴────────────────────┴────────────────────┴───────────────────────┘
 </pre>
+<p>For the datetime <code class="docutils literal notranslate"><span class="pre">reportDate</span></code> column in the <code class="docutils literal notranslate"><span class="pre">measures</span></code> table,</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pprint_csv_file</span><span class="p">(</span><span class="n">asset</span><span class="p">(</span><span class="s2">&quot;datetime-parts-v2.csv&quot;</span><span class="p">),</span> <span class="s2">&quot;Datetime parts v2&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="font-style: italic">                                                 Datetime parts v2                                                 </span>
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃<span style="font-weight: bold"> partID                        </span>┃<span style="font-weight: bold"> partType                    </span>┃<span style="font-weight: bold"> measures                </span>┃<span style="font-weight: bold"> dataType                </span>┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│ measures                      │ table                       │ NA                      │ NA                      │
+│ reportDate                    │ attribute                   │ header                  │ datetime                │
+└───────────────────────────────┴─────────────────────────────┴─────────────────────────┴─────────────────────────┘
+</pre>
 </section>
 <section id="cerberus-schema">
 <h2>Cerberus schema<a class="headerlink" href="#cerberus-schema" title="Permalink to this heading">¶</a></h2>
@@ -496,6 +596,9 @@ in cerberus.</p>
 <p>For a <code class="docutils literal notranslate"><span class="pre">boolean</span></code> type we will need to use the
 <a class="reference external" href="https://docs.python-cerberus.org/en/stable/validation-rules.html#allowed">allowed</a>
 rule in cerberus.</p>
+<p>For a <code class="docutils literal notranslate"><span class="pre">datetime</span></code> type we will need to
+<a class="reference external" href="https://docs.python-cerberus.org/en/stable/customize.html#custom-data-types">extend</a>
+cerberus and add a new datetime type.</p>
 <p>The generated cerberus objects for the examples above are shown below,</p>
 <p>integer</p>
 <pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="font-weight: bold">{</span>
@@ -636,6 +739,41 @@ rule in cerberus.</p>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="font-weight: bold">}</span>
 <span style="font-weight: bold">}</span>
 </pre>
+<p>datetime</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pprint_yaml_file</span><span class="p">(</span><span class="n">asset</span><span class="p">(</span><span class="s2">&quot;datetime-schema-v2.yml&quot;</span><span class="p">))</span>
+</pre></div>
+</div>
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="color: #008000; text-decoration-color: #008000">'measures'</span>: <span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="color: #008000; text-decoration-color: #008000">'type'</span>: <span style="color: #008000; text-decoration-color: #008000">'list'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="color: #008000; text-decoration-color: #008000">'schema'</span>: <span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'type'</span>: <span style="color: #008000; text-decoration-color: #008000">'dict'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'schema'</span>: <span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'reportDate'</span>: <span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'type'</span>: <span style="color: #008000; text-decoration-color: #008000">'datetime'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'meta'</span>: <span style="font-weight: bold">[</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   </span><span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'ruleId'</span>: <span style="color: #008000; text-decoration-color: #008000">'invalid_type'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'meta'</span>: <span style="font-weight: bold">[</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   </span><span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partID'</span>: <span style="color: #008000; text-decoration-color: #008000">'reportDate'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'dataType'</span>: <span style="color: #008000; text-decoration-color: #008000">'datetime'</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   </span><span style="font-weight: bold">}</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   </span><span style="font-weight: bold">]</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   </span><span style="font-weight: bold">}</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="font-weight: bold">]</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="font-weight: bold">}</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="font-weight: bold">}</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="font-weight: bold">}</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="color: #008000; text-decoration-color: #008000">'meta'</span>: <span style="font-weight: bold">[</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partID'</span>: <span style="color: #008000; text-decoration-color: #008000">'measures'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partType'</span>: <span style="color: #008000; text-decoration-color: #008000">'table'</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="font-weight: bold">}</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="font-weight: bold">]</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="font-weight: bold">}</span>
+<span style="font-weight: bold">}</span>
+</pre>
 <p>The meta for this rule should include the <code class="docutils literal notranslate"><span class="pre">partID</span></code>, <code class="docutils literal notranslate"><span class="pre">&lt;table_name&gt;</span></code>, and
 <code class="docutils literal notranslate"><span class="pre">dataType</span></code>.</p>
 <p>For a boolean data type, it should also include the rows that contain
@@ -702,6 +840,18 @@ parts snippets for each of examples above are shown below,</p>
 │ true       │ category  │ NA       │ varchar  │ booleanSet │ NA          │ NA         │ NA          │ TRUE       │
 │ false      │ category  │ NA       │ varchar  │ booleanSet │ tables      │ Site       │ NA          │ FALSE      │
 └────────────┴───────────┴──────────┴──────────┴────────────┴─────────────┴────────────┴─────────────┴────────────┘
+</pre>
+<p>datetime</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pprint_csv_file</span><span class="p">(</span><span class="n">asset</span><span class="p">(</span><span class="s2">&quot;datetime-parts-v1.csv&quot;</span><span class="p">),</span> <span class="s2">&quot;Datetime parts v1&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="font-style: italic">                                                 Datetime parts v1                                                 </span>
+┏━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━┳━━━━━━━━━━━┳━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━┓
+┃<span style="font-weight: bold"> partIDpartID   </span>┃<span style="font-weight: bold"> partType    </span>┃<span style="font-weight: bold"> measures  </span>┃<span style="font-weight: bold"> dataType  </span>┃<span style="font-weight: bold"> version1Location   </span>┃<span style="font-weight: bold"> version1Table   </span>┃<span style="font-weight: bold"> version1Variable  </span>┃
+┡━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━╇━━━━━━━━━━━╇━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━┩
+│ measures       │ table       │ NA        │ NA        │ tables             │ Measure         │ NA                │
+│ reportDate     │ attribute   │ header    │ datetime  │ variables          │ Measure         │ DateReport        │
+└────────────────┴─────────────┴───────────┴───────────┴────────────────────┴─────────────────┴───────────────────┘
 </pre>
 <p>The corresponding v1 cerberus schemas are shown below,</p>
 <p>integer</p>
@@ -865,6 +1015,46 @@ parts snippets for each of examples above are shown below,</p>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="font-weight: bold">}</span>
 <span style="font-weight: bold">}</span>
 </pre>
+<p>datetime</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pprint_yaml_file</span><span class="p">(</span><span class="n">asset</span><span class="p">(</span><span class="s2">&quot;datetime-schema-v1.yml&quot;</span><span class="p">))</span>
+</pre></div>
+</div>
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="color: #008000; text-decoration-color: #008000">'Measure'</span>: <span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="color: #008000; text-decoration-color: #008000">'type'</span>: <span style="color: #008000; text-decoration-color: #008000">'list'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="color: #008000; text-decoration-color: #008000">'schema'</span>: <span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'type'</span>: <span style="color: #008000; text-decoration-color: #008000">'dict'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'schema'</span>: <span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'DateReport'</span>: <span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'type'</span>: <span style="color: #008000; text-decoration-color: #008000">'datetime'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'meta'</span>: <span style="font-weight: bold">[</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   </span><span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'ruleId'</span>: <span style="color: #008000; text-decoration-color: #008000">'invalid_type'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'meta'</span>: <span style="font-weight: bold">[</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   </span><span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partID'</span>: <span style="color: #008000; text-decoration-color: #008000">'reportDate'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'dataType'</span>: <span style="color: #008000; text-decoration-color: #008000">'datetime'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'version1Location'</span>: <span style="color: #008000; text-decoration-color: #008000">'variables'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'version1Table'</span>: <span style="color: #008000; text-decoration-color: #008000">'Measure'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'version1Variable'</span>: <span style="color: #008000; text-decoration-color: #008000">'DateReport'</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   </span><span style="font-weight: bold">}</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   </span><span style="font-weight: bold">]</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   </span><span style="font-weight: bold">}</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="font-weight: bold">]</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="font-weight: bold">}</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="font-weight: bold">}</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="font-weight: bold">}</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="color: #008000; text-decoration-color: #008000">'meta'</span>: <span style="font-weight: bold">[</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partID'</span>: <span style="color: #008000; text-decoration-color: #008000">'measures'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partType'</span>: <span style="color: #008000; text-decoration-color: #008000">'table'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'version1Location'</span>: <span style="color: #008000; text-decoration-color: #008000">'tables'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'version1Table'</span>: <span style="color: #008000; text-decoration-color: #008000">'Measure'</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="font-weight: bold">}</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="font-weight: bold">]</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="font-weight: bold">}</span>
+<span style="font-weight: bold">}</span>
+</pre>
 <p>The metadata should include the meta columns for version 2 as well as
 the <code class="docutils literal notranslate"><span class="pre">version1Location</span></code>, <code class="docutils literal notranslate"><span class="pre">version1Table</span></code>, and the <code class="docutils literal notranslate"><span class="pre">version1Variable</span></code>
 columns.</p>
@@ -953,7 +1143,7 @@ added on for the boolean category values.</p>
       &copy;2022, OHRI.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 5.3.0</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 6.1.0</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |
