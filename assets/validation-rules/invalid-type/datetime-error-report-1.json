@@ -1,0 +1,37 @@
+{
+    "errors": [
+        {
+            "errorType": "invalid_type",
+            "tableName": "measures",
+            "columnName": "reportDate",
+            "row": {
+                "measureID": "1",
+                "reportDate": "a"
+            },
+            "validationRuleFields": [
+                {
+                    "partID": "reportDate",
+                    "dataType": "datetime"
+                }
+            ],
+            "message": "Row 1 in column reportDate in table measures is a datetime with value a that has a unsupported datetime format. Allowed values are ISO 8601 standard full dates, full dates and times, or full dates and times with timezone."
+        },
+        {
+            "errorType": "invalid_type",
+            "tableName": "measures",
+            "columnName": "reportDate",
+            "row": {
+                "measureID": "2",
+                "reportDate": "2022"
+            },
+            "validationRuleFields": [
+                {
+                    "partID": "reportDate",
+                    "dataType": "datetime"
+                }
+            ],
+            "message": "Row 1 in column reportDate in table measures is a datetime with value 2022 that has a unsupported datetime format. Allowed values are ISO 8601 standard full dates, full dates and times, or full dates and times with timezone."
+        }
+    ],
+    "warnings": []
+}
