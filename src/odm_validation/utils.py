@@ -1,6 +1,7 @@
 from typing import List
 
 import csv
+import json
 import yaml
 
 from schemas import Schema
@@ -8,10 +9,15 @@ from schemas import Schema
 
 def import_csv_file(path: str) -> List[dict]:
     result = []
-    with open(path, newline='') as f:
+    with open(path, newline='', encoding='utf8') as f:
         for row in csv.DictReader(f):
             result.append(row)
     return result
+
+
+def import_json_file(path: str) -> dict:
+    with open(path, 'r') as f:
+        return json.loads(f.read())
 
 
 def import_yaml_file(path: str) -> dict:

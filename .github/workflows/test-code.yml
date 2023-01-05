@@ -1,0 +1,16 @@
+name: Test code
+
+on: [pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    name: Test
+    steps:
+    - uses: actions/checkout@v3
+    - uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+        cache: 'pip' # caching pip dependencies
+    - run: pip install -r requirements.txt
+    - run: python -m unittest discover tests

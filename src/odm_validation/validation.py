@@ -26,6 +26,7 @@ class ValidationReport:
     schema_version: str
     package_version: str
     errors: List[str]
+    warnings: List[str]
 
     def valid(self) -> bool:
         return len(self.errors) == 0
@@ -79,8 +80,9 @@ def _gen_rule_error(rule, table, column, row_index, row, value, meta):
         'row': row,
         'validationRuleFields': meta,
         'message': _error_msg(rule, table, column, row_num, value),
-        'invalidValue': value,
     }
+    if value:
+        error['invalidValue'] = value
     return error
 
 
@@ -145,4 +147,5 @@ def validate_data(schema: Schema,
         schema_version=schema["schemaVersion"],
         package_version=__version__,
         errors=errors,
+        warnings=[],
     )

@@ -54,7 +54,7 @@ The emphasis of ODM validation is on providing guidance and support. When you va
 
 The ODM validation toolkit is comprised of:
 
-1. **rule list** (metadata/validationRuleList.csv) - A list and description of all rules, along with additional metadata such as the warning or error message.
+1. **rule list** (/assets/validation-rules/validation-rules-list.csv) - A list and description of all rules, along with additional metadata such as the warning or error message.
 2. **rule documentation** (/validation-rules/) - Details and examples of the rules.
 3. **rule validation module** (odmvalidator) - a python package that contains functions to validate ODM data.
 4. **rule schema**: These are the files that encode the validation rules executed by the Python code. All files are stored in the **assets/validation-schemas** folder with each file corresponding to a version of the ODM. The contents of the file has the version of the schema being used as well as the actual schema.
@@ -65,3 +65,11 @@ Many rules are defined in the ODM parts and sets tables. For example, the parts 
 The _odmvalidator_ is the main workhorse within the toolkit. This program code accepts a ODM data and a schema and returns a validation report. We created _odmvalidator_ as an open-source python package that can be incorporated into a full range of information systems (i.e. ArgGIS, Microsoft 365, custom laboratory management information systems or data repositories). As a python package, data can be easily validated when it is stored a range of formats (CSV, Excel, SQL database).
 
 Underdevelopment is a publicly available web application that implements the toolkit, including the odmvalidator.
+
+## Installation
+
+```
+git clone https://github.com/Big-Life-Lab/PHES-ODM-Validation.git odm-validation
+cd odm-validation
+pip install src/odm-validation
+```

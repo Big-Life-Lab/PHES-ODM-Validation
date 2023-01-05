@@ -1,0 +1,27 @@
+```{python}
+#| echo: false
+import os
+import sys
+sys.path.append("../../src")
+
+from odm_validation.doc_utils import (
+    pprint_csv_file,
+    pprint_dict_list,
+    pprint_json_file,
+    pprint_yaml_file,
+)
+
+
+def asset(filename):
+    """Returns the path to `ASSET_DIR`/`filename`."""
+    # This function is defined here because it must be defined in each Quarto
+    # file to access `ASSET_DIR`.
+    return os.path.join(ASSET_DIR, filename)
+
+
+def get_rule_asset_dir(rule_id: str):
+    # This function is defined here because it is specific to the
+    # validation-rule docs and contains a hardcoded relative path.
+    kebab_rule = rule_id.replace('_', '-')
+    return f'../../assets/validation-rules/{kebab_rule}'
+```

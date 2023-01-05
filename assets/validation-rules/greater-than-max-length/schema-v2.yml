@@ -1,15 +1,17 @@
-contacts:
-  type: list
-  schema:
-    type: dict
+schemaVersion: 2.0.0
+schema:
+  contacts:
+    type: list
     schema:
-      phone:
-        maxLength: 10
-        meta:
-        - ruleId: greater_than_max_length
+      type: dict
+      schema:
+        phone:
+          maxLength: 10
           meta:
-          - partID: phone
-            maxLength: '10'
-  meta:
-    - partID: contacts
-      partType: table
+          - ruleId: greater_than_max_length
+            meta:
+            - partID: phone
+              maxLength: '10'
+    meta:
+      - partID: contacts
+        partType: table

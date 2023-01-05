@@ -1,5 +1,4 @@
 import unittest
-from copy import deepcopy
 from os.path import join
 
 import common
@@ -14,36 +13,13 @@ schema_v1 = utils.import_schema(join(asset_dir, 'schema-v1.yml'))
 schema_v2 = utils.import_schema(join(asset_dir, 'schema-v2.yml'))
 
 
-invalid_category_pass_v1 = {
-    'Sample': [
-        {
-            'Collection': 'FlowPr',
-        }
-    ]
-}
-
 invalid_category_pass_v2 = {
-    'samples': [
-        {
-            'coll': 'flowPr',
-            'cDT': 'x',
-            'saMaterial': 'afu',
-            'sampID': '1',
-            'siteID': '1',
-            'parSampID': '1',
-            'dataID': '1',
-            'contID': '1',
-            'collPer': 'x',
-            'collNum': 'x',
-        }
-    ]
+    'samples': utils.import_dataset(join(asset_dir, 'valid-dataset.csv')),
 }
 
-invalid_category_fail_v1 = deepcopy(invalid_category_pass_v1)
-invalid_category_fail_v1['Sample'][0]['Collection'] = 'flow'
-
-invalid_category_fail_v2 = deepcopy(invalid_category_pass_v2)
-invalid_category_fail_v2['samples'][0]['coll'] = 'flow'
+invalid_category_fail_v2 = {
+    'samples': utils.import_dataset(join(asset_dir, 'invalid-dataset.csv')),
+}
 
 
 class TestInvalidCategory(unittest.TestCase):
@@ -60,27 +36,12 @@ class TestInvalidCategory(unittest.TestCase):
         expected = schema_v2['schema']['samples']
         self.assertDictEqual(expected, got)
 
-    def invalid_category_impl(self, schema, invalid_value_column,
-                              invalid_value, data_pass, data_fail):
-        report = validate_data(schema, data_pass)
-        self.assertTrue(report.valid())
-        report = validate_data(schema, data_fail)
-        self.assertFalse(report.valid(), report.errors)
-        self.assertEqual(len(report.errors), 1)
-        e = report.errors[0]
-        self.assertEqual(e['errorType'], 'invalid_category')
-        self.assertEqual(e['columnName'], invalid_value_column)
-        self.assertEqual(e['invalidValue'], invalid_value)
-
-    def test_invalid_category_v1(self):
-        self.invalid_category_impl(schema_v1, 'Collection', 'flow',
-                                   invalid_category_pass_v1,
-                                   invalid_category_fail_v1)
-
     def test_invalid_category_v2(self):
-        self.invalid_category_impl(schema_v2, 'coll', 'flow',
-                                   invalid_category_pass_v2,
-                                   invalid_category_fail_v2)
+        report = validate_data(schema_v2, invalid_category_pass_v2)
+        self.assertTrue(report.valid())
+        report = validate_data(schema_v2, invalid_category_fail_v2)
+        expected = utils.import_json_file(join(asset_dir, 'error-report.json'))
+        self.assertEqual(report.errors, expected['errors'])
 
 
 if __name__ == '__main__':
