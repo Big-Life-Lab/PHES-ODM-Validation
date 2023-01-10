@@ -32,6 +32,15 @@ class Rule:
     gen_schema: Dict[str, Callable[pt.PartData, Schema]]
 
 
+def init_rule(rule_id, cerb_key, error, gen_schema):
+    return Rule(
+        id=rule_id,
+        key=cerb_key,
+        error_template=error,
+        gen_schema=gen_schema,
+    )
+
+
 def missing_mandatory_column():
     rule_id = missing_mandatory_column.__name__
     cerb_rule = ('required', True)
@@ -51,12 +60,7 @@ def missing_mandatory_column():
                               cerb_rule, table_meta, attr_meta)
         return schema
 
-    return Rule(
-        id=rule_id,
-        key=cerb_rule[0],
-        error_template=err,
-        gen_schema=gen_schema,
-    )
+    return init_rule(rule_id, cerb_rule[0], err, gen_schema)
 
 
 def invalid_category():
@@ -83,12 +87,7 @@ def invalid_category():
                               cerb_rule, table_meta, attr_meta)
         return schema
 
-    return Rule(
-        id=rule_id,
-        key=cerb_rule_key,
-        error_template=err,
-        gen_schema=gen_schema,
-    )
+    return init_rule(rule_id, cerb_rule_key, err, gen_schema)
 
 
 # This is the collection of all validation rules.
