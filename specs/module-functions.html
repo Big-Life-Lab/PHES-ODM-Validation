@@ -16,7 +16,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="ODM How-to’s" href="odm-how-tos.html" />
-    <link rel="prev" title="API Documentation" href="../api.html" />
+    <link rel="prev" title="generate_validation_schema" href="generate-validation-schema.html" />
    
   <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
   
@@ -191,7 +191,13 @@
 </section>
 <section id="id2">
 <h2>Return<a class="headerlink" href="#id2" title="Permalink to this heading">¶</a></h2>
-<p>Return a dictionary that contains a valid cerberus schema object, as well as the odm-version it’s based on. Values from the ODM data dictionary will also be added to the <code class="docutils literal notranslate"><span class="pre">meta</span></code> field for debugging purposes.</p>
+<p>Return a dictionary that contains:</p>
+<ol class="arabic simple">
+<li><p>A valid cerberus schema object</p></li>
+<li><p>The ODM dataset version the schema is for and</p></li>
+<li><p>A list of warnings generated during the generation process.</p></li>
+</ol>
+<p>Values from the ODM data dictionary will also be added to the <code class="docutils literal notranslate"><span class="pre">meta</span></code> field for debugging purposes.</p>
 <p>Example</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
     <span class="s2">&quot;schemaVersion&quot;</span><span class="p">:</span> <span class="s2">&quot;1.2.3&quot;</span><span class="p">,</span>
@@ -223,7 +229,8 @@
                 <span class="p">}</span>
             <span class="p">}</span>
         <span class="p">}</span>
-    <span class="p">}</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;warnings&quot;</span><span class="p">:</span> <span class="p">[]</span>
 <span class="p">}</span>
 </pre></div>
 </div>
@@ -487,7 +494,7 @@
 <ul>
   <li><a href="../index.html">Documentation overview</a><ul>
   <li><a href="../api.html">API Documentation</a><ul>
-      <li>Previous: <a href="../api.html" title="previous chapter">API Documentation</a></li>
+      <li>Previous: <a href="generate-validation-schema.html" title="previous chapter">generate_validation_schema</a></li>
       <li>Next: <a href="odm-how-tos.html" title="next chapter">ODM How-to’s</a></li>
   </ul></li>
   </ul></li>
@@ -519,7 +526,7 @@
       &copy;2022, OHRI.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 6.1.2</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 6.1.3</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

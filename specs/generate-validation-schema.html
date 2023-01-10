@@ -1,0 +1,492 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>generate_validation_schema &#8212; PHES-ODM Validation  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="validate_data" href="module-functions.html" />
+    <link rel="prev" title="API Documentation" href="../api.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="generate-validation-schema">
+<h1>generate_validation_schema<a class="headerlink" href="#generate-validation-schema" title="Permalink to this heading">¶</a></h1>
+<p>This document provides the specifications for programmatically
+generating a validation schema for PHES-ODM data. The program is exposed
+as a function called <code class="docutils literal notranslate"><span class="pre">generate_validation_schema</span></code> within the
+<code class="docutils literal notranslate"><span class="pre">PHES-ODM-Validaion</span></code> Python package.</p>
+<section id="context">
+<h2>Context<a class="headerlink" href="#context" title="Permalink to this heading">¶</a></h2>
+<p>The PHES-ODM data structure is complex. Trying to manually create the
+validation schema for the
+validate_data function can be an
+error prone and laborious process, especially if the user tries to
+encode all the validation rules. However, programmatic generation of a
+validation schema is possible due to the efforts of the PHES-ODM team in
+creating a machine-readable data dictionary for the data.</p>
+<p>In brief, the data dictionary is a CSV/Excel file that encodes all the
+pieces of the data, how they’re related to each other, as well as
+validation metadata. Using this data dictionary file, the
+<code class="docutils literal notranslate"><span class="pre">generate_validation_schema</span></code> function can automatically generate a
+validation schema for different ODM data versions.</p>
+</section>
+<section id="features">
+<h2>Features<a class="headerlink" href="#features" title="Permalink to this heading">¶</a></h2>
+<p>At its core, the <code class="docutils literal notranslate"><span class="pre">generate_validation_schema</span></code> function creates a Python
+dictionary that is actionable by the <code class="docutils literal notranslate"><span class="pre">generate_validate_data</span></code> function.
+The details regarding the dictionary creation and the fields that go
+into it can be seen in the <a class="reference external" href="../validation-rules/">validation-rules</a>
+folder. This document will go over the function features that are
+agnostic to each validation rule.</p>
+<section id="warnings">
+<h3>Warnings<a class="headerlink" href="#warnings" title="Permalink to this heading">¶</a></h3>
+<p>During the process of generating a validation schema there may be
+non-fatal issues that come up when parsing a row. A non-fatal issue is
+one which should not stop the function execution. Instead, whenever such
+an issue is encountered the row should be skipped and a warning
+presented to the user. The goal of these warnings is to not only inform
+the user of issue but to also provide them with enough information to
+fix the issue. The function return will consist of the list of warnings
+encountered, with each warning encoded as an object. The remaining
+sections in this group will go over each warning, providing examples
+that generate it.</p>
+<section id="missing-version1-fields">
+<h4>missing_version1_fields<a class="headerlink" href="#missing-version1-fields" title="Permalink to this heading">¶</a></h4>
+<p>This warning is reported when generating the schema for a version 1
+dataset. The data dictionary contains columns that backports version 2
+parts to their version 1 equivalent, this process is described
+<a class="reference internal" href="odm-how-tos.html#getting-the-version-1-equivalent-for-a-part"><span class="std std-ref">elsewhere</span></a>.
+When this backport fails during the generation process, for example due
+to an invalid <code class="docutils literal notranslate"><span class="pre">version1Location</span></code> value, a warning should be reported.</p>
+<p>For example, the following parts snippet should generate this warning
+for the <code class="docutils literal notranslate"><span class="pre">aDate</span></code> row since its missing a value for the <code class="docutils literal notranslate"><span class="pre">version1Table</span></code>
+column.</p>
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="font-style: italic">                                                Invalid Parts Table                                                </span>
+┏━━━━━━━━━━━━┳━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━┓
+┃<span style="font-weight: bold"> partID     </span>┃<span style="font-weight: bold"> partType     </span>┃<span style="font-weight: bold"> version1Location     </span>┃<span style="font-weight: bold"> version1Table    </span>┃<span style="font-weight: bold"> version1Variable    </span>┃<span style="font-weight: bold"> version1Category    </span>┃
+┡━━━━━━━━━━━━╇━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━┩
+│ measures   │ table        │ tables               │ WWMeasure        │ NA                  │ NA                  │
+│ aDate      │ attribute    │ variables            │                  │ analysisDate        │ NA                  │
+└────────────┴──────────────┴──────────────────────┴──────────────────┴─────────────────────┴─────────────────────┘
+</pre>
+<p>This warning should be generated in the following cases:</p>
+<ol class="arabic">
+<li><p>When parsing a version 1 table, it should be generated when:</p>
+<ol class="arabic simple">
+<li><p>The <code class="docutils literal notranslate"><span class="pre">version1Location</span></code> value is not <code class="docutils literal notranslate"><span class="pre">tables</span></code>, for example,</p></li>
+</ol>
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">┏━━━━━━━━━━━━━┳━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━┓
+┃<span style="font-weight: bold"> partID      </span>┃<span style="font-weight: bold"> partType    </span>┃<span style="font-weight: bold"> version1Location     </span>┃<span style="font-weight: bold"> version1Table    </span>┃<span style="font-weight: bold"> version1Variable    </span>┃<span style="font-weight: bold"> version1Category    </span>┃
+┡━━━━━━━━━━━━━╇━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━┩
+│ measures    │ table       │                      │ WWMeasure        │ NA                  │ NA                  │
+└─────────────┴─────────────┴──────────────────────┴──────────────────┴─────────────────────┴─────────────────────┘
+</pre>
+<ol class="arabic simple" start="2">
+<li><p>The <code class="docutils literal notranslate"><span class="pre">version1Table</span></code> value is missing, for example,</p></li>
+</ol>
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">┏━━━━━━━━━━━━━┳━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━┓
+┃<span style="font-weight: bold"> partID      </span>┃<span style="font-weight: bold"> partType    </span>┃<span style="font-weight: bold"> version1Location     </span>┃<span style="font-weight: bold"> version1Table    </span>┃<span style="font-weight: bold"> version1Variable    </span>┃<span style="font-weight: bold"> version1Category    </span>┃
+┡━━━━━━━━━━━━━╇━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━┩
+│ measures    │ table       │ tables               │                  │ NA                  │ NA                  │
+└─────────────┴─────────────┴──────────────────────┴──────────────────┴─────────────────────┴─────────────────────┘
+</pre>
+</li>
+<li><p>When parsing a version 1 column, it should be generated when:</p>
+<ol class="arabic simple">
+<li><p>The <code class="docutils literal notranslate"><span class="pre">version1Location</span></code> value is not <code class="docutils literal notranslate"><span class="pre">variables</span></code>, for example,</p></li>
+</ol>
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">┏━━━━━━━━━━━┳━━━━━━━━━━━━┳━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━┓
+┃<span style="font-weight: bold"> partID    </span>┃<span style="font-weight: bold"> partType   </span>┃<span style="font-weight: bold"> measures  </span>┃<span style="font-weight: bold"> version1Location   </span>┃<span style="font-weight: bold"> version1Table  </span>┃<span style="font-weight: bold"> version1Variable  </span>┃<span style="font-weight: bold"> version1Category </span>┃
+┡━━━━━━━━━━━╇━━━━━━━━━━━━╇━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━┩
+│ measures  │ table      │ NA        │ tables             │ WWMeasure      │ NA                │ NA               │
+│ aDate     │ attribute  │ header    │                    │ WWMeasure      │ analysisDate      │ NA               │
+└───────────┴────────────┴───────────┴────────────────────┴────────────────┴───────────────────┴──────────────────┘
+</pre>
+<ol class="arabic simple" start="2">
+<li><p>The <code class="docutils literal notranslate"><span class="pre">version1Table</span></code> value is missing, for example,</p></li>
+</ol>
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">┏━━━━━━━━━━━┳━━━━━━━━━━━━┳━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━┓
+┃<span style="font-weight: bold"> partID    </span>┃<span style="font-weight: bold"> partType   </span>┃<span style="font-weight: bold"> measures  </span>┃<span style="font-weight: bold"> version1Location   </span>┃<span style="font-weight: bold"> version1Table  </span>┃<span style="font-weight: bold"> version1Variable  </span>┃<span style="font-weight: bold"> version1Category </span>┃
+┡━━━━━━━━━━━╇━━━━━━━━━━━━╇━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━┩
+│ measures  │ table      │ NA        │ tables             │ WWMeasure      │ NA                │ NA               │
+│ aDate     │ attribute  │ header    │ variables          │                │ analysisDate      │ NA               │
+└───────────┴────────────┴───────────┴────────────────────┴────────────────┴───────────────────┴──────────────────┘
+</pre>
+<ol class="arabic simple" start="3">
+<li><p>The <code class="docutils literal notranslate"><span class="pre">version1Variable</span></code> value is missing, for example,</p></li>
+</ol>
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">┏━━━━━━━━━━━┳━━━━━━━━━━━━┳━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━┓
+┃<span style="font-weight: bold"> partID    </span>┃<span style="font-weight: bold"> partType   </span>┃<span style="font-weight: bold"> measures  </span>┃<span style="font-weight: bold"> version1Location   </span>┃<span style="font-weight: bold"> version1Table  </span>┃<span style="font-weight: bold"> version1Variable  </span>┃<span style="font-weight: bold"> version1Category </span>┃
+┡━━━━━━━━━━━╇━━━━━━━━━━━━╇━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━┩
+│ measures  │ table      │ NA        │ tables             │ WWMeasure      │ NA                │ NA               │
+│ aDate     │ attribute  │ header    │ variables          │ WWMeasure      │                   │ NA               │
+└───────────┴────────────┴───────────┴────────────────────┴────────────────┴───────────────────┴──────────────────┘
+</pre>
+</li>
+<li><p>When parsing a version 1 category, it should be generated when:</p>
+<ol class="arabic simple">
+<li><p>The <code class="docutils literal notranslate"><span class="pre">version1Location</span></code> value is not <code class="docutils literal notranslate"><span class="pre">categories</span></code>, for example,</p></li>
+</ol>
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">┏━━━━━━━━━━┳━━━━━━━━━━━┳━━━━━━━━━┳━━━━━━━━━━━━━┳━━━━━━━━━━━━┳━━━━━━━━━━━━━┳━━━━━━━━━━━━┳━━━━━━━━━━━━━┳━━━━━━━━━━━━┓
+┃<span style="font-weight: bold"> partID   </span>┃<span style="font-weight: bold"> partType  </span>┃<span style="font-weight: bold"> samples </span>┃<span style="font-weight: bold"> dataType    </span>┃<span style="font-weight: bold"> catSetID   </span>┃<span style="font-weight: bold"> version1Lo… </span>┃<span style="font-weight: bold"> version1T… </span>┃<span style="font-weight: bold"> version1Va… </span>┃<span style="font-weight: bold"> version1C… </span>┃
+┡━━━━━━━━━━╇━━━━━━━━━━━╇━━━━━━━━━╇━━━━━━━━━━━━━╇━━━━━━━━━━━━╇━━━━━━━━━━━━━╇━━━━━━━━━━━━╇━━━━━━━━━━━━━╇━━━━━━━━━━━━┩
+│ samples  │ table     │ NA      │ NA          │ NA         │ tables      │ WWSample   │ NA          │ NA         │
+│ collType │ attribute │ header  │ categorical │ collectCa… │ variables   │ WWSample   │ collection  │ NA         │
+│ comp3    │ category  │ NA      │ varchar     │ collectCa… │             │ WWSample   │ collection  │ grbCp3     │
+└──────────┴───────────┴─────────┴─────────────┴────────────┴─────────────┴────────────┴─────────────┴────────────┘
+</pre>
+<ol class="arabic simple" start="2">
+<li><p>The <code class="docutils literal notranslate"><span class="pre">version1Table</span></code> value is missing, for example,</p></li>
+</ol>
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">┏━━━━━━━━━━┳━━━━━━━━━━━┳━━━━━━━━━┳━━━━━━━━━━━━━┳━━━━━━━━━━━━┳━━━━━━━━━━━━━┳━━━━━━━━━━━━┳━━━━━━━━━━━━━┳━━━━━━━━━━━━┓
+┃<span style="font-weight: bold"> partID   </span>┃<span style="font-weight: bold"> partType  </span>┃<span style="font-weight: bold"> samples </span>┃<span style="font-weight: bold"> dataType    </span>┃<span style="font-weight: bold"> catSetID   </span>┃<span style="font-weight: bold"> version1Lo… </span>┃<span style="font-weight: bold"> version1T… </span>┃<span style="font-weight: bold"> version1Va… </span>┃<span style="font-weight: bold"> version1C… </span>┃
+┡━━━━━━━━━━╇━━━━━━━━━━━╇━━━━━━━━━╇━━━━━━━━━━━━━╇━━━━━━━━━━━━╇━━━━━━━━━━━━━╇━━━━━━━━━━━━╇━━━━━━━━━━━━━╇━━━━━━━━━━━━┩
+│ samples  │ table     │ NA      │ NA          │ NA         │ tables      │ WWSample   │ NA          │ NA         │
+│ collType │ attribute │ header  │ categorical │ collectCa… │ variables   │ WWSample   │ collection  │ NA         │
+│ comp3    │ category  │ NA      │ varchar     │ collectCa… │ categories  │            │ collection  │ grbCp3     │
+└──────────┴───────────┴─────────┴─────────────┴────────────┴─────────────┴────────────┴─────────────┴────────────┘
+</pre>
+<ol class="arabic simple" start="3">
+<li><p>The <code class="docutils literal notranslate"><span class="pre">version1Variable</span></code> value is missing, for example,</p></li>
+</ol>
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">┏━━━━━━━━━━┳━━━━━━━━━━━┳━━━━━━━━━┳━━━━━━━━━━━━┳━━━━━━━━━━━━┳━━━━━━━━━━━━┳━━━━━━━━━━━━┳━━━━━━━━━━━━┳━━━━━━━━━━━━┳━━┓
+┃<span style="font-weight: bold"> partID   </span>┃<span style="font-weight: bold"> partType  </span>┃<span style="font-weight: bold"> samples </span>┃<span style="font-weight: bold"> dataType   </span>┃<span style="font-weight: bold"> catSetID   </span>┃<span style="font-weight: bold"> version1L… </span>┃<span style="font-weight: bold"> version1T… </span>┃<span style="font-weight: bold"> version1V… </span>┃<span style="font-weight: bold"> version1C… </span>┃<span style="font-weight: bold">  </span>┃
+┡━━━━━━━━━━╇━━━━━━━━━━━╇━━━━━━━━━╇━━━━━━━━━━━━╇━━━━━━━━━━━━╇━━━━━━━━━━━━╇━━━━━━━━━━━━╇━━━━━━━━━━━━╇━━━━━━━━━━━━╇━━┩
+│ samples  │ table     │ NA      │ NA         │ NA         │ tables     │ WWSample   │ NA         │ NA         │  │
+│ collType │ attribute │ header  │ categoric… │ collectCa… │ variables  │ WWSample   │ collection │ NA         │  │
+│ comp3    │ category  │ NA      │ varchar    │ collectCa… │ categories │ WWSample   │            │ grbCp3     │  │
+└──────────┴───────────┴─────────┴────────────┴────────────┴────────────┴────────────┴────────────┴────────────┴──┘
+</pre>
+<ol class="arabic simple" start="4">
+<li><p>The <code class="docutils literal notranslate"><span class="pre">version1Category</span></code> value is missing, for example,</p></li>
+</ol>
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">┏━━━━━━━━━━┳━━━━━━━━━━━┳━━━━━━━━━┳━━━━━━━━━━━━━┳━━━━━━━━━━━━┳━━━━━━━━━━━━━┳━━━━━━━━━━━━┳━━━━━━━━━━━━━┳━━━━━━━━━━━━┓
+┃<span style="font-weight: bold"> partID   </span>┃<span style="font-weight: bold"> partType  </span>┃<span style="font-weight: bold"> samples </span>┃<span style="font-weight: bold"> dataType    </span>┃<span style="font-weight: bold"> catSetID   </span>┃<span style="font-weight: bold"> version1Lo… </span>┃<span style="font-weight: bold"> version1T… </span>┃<span style="font-weight: bold"> version1Va… </span>┃<span style="font-weight: bold"> version1C… </span>┃
+┡━━━━━━━━━━╇━━━━━━━━━━━╇━━━━━━━━━╇━━━━━━━━━━━━━╇━━━━━━━━━━━━╇━━━━━━━━━━━━━╇━━━━━━━━━━━━╇━━━━━━━━━━━━━╇━━━━━━━━━━━━┩
+│ samples  │ table     │ NA      │ NA          │ NA         │ tables      │ WWSample   │ NA          │ NA         │
+│ collType │ attribute │ header  │ categorical │ collectCa… │ variables   │ WWSample   │ collection  │ NA         │
+│ comp3    │ category  │ NA      │ varchar     │ collectCa… │ categories  │ WWSample   │ collection  │            │
+└──────────┴───────────┴─────────┴─────────────┴────────────┴─────────────┴────────────┴─────────────┴────────────┘
+</pre>
+</li>
+</ol>
+<p>The returned warning object should consist of the following fields:</p>
+<ul class="simple">
+<li><p>warningType: The warning type. Should be set to
+<code class="docutils literal notranslate"><span class="pre">missing_version1_fields</span></code>.</p></li>
+<li><p>row: An object containing the row that generated the warning. The row
+object should only include the <code class="docutils literal notranslate"><span class="pre">partID</span></code>, <code class="docutils literal notranslate"><span class="pre">version1Location</span></code>,
+<code class="docutils literal notranslate"><span class="pre">version1Table</span></code>, <code class="docutils literal notranslate"><span class="pre">version1Variable</span></code>, and <code class="docutils literal notranslate"><span class="pre">version1Category</span></code> columns.</p></li>
+<li><p>rowNumber: The row number in the dictionary that generated the warning</p></li>
+<li><p>message: A string with a human readable version of the warning. The
+message value depends on the column that generated the warning.</p>
+<ul>
+<li><p>If the warning was generated due to the <code class="docutils literal notranslate"><span class="pre">version1Location</span></code> column
+then the message should be, ‘Skipping row &lt;row_index&gt; when
+generating a version 1 schema. Invalid value for version 1 column
+version1Location. Allowed values are “tables”, “variables”, or
+“categories”’</p></li>
+<li><p>If the warning was generated due to the <code class="docutils literal notranslate"><span class="pre">version1Table</span></code>,
+<code class="docutils literal notranslate"><span class="pre">version1Variable</span></code>, or <code class="docutils literal notranslate"><span class="pre">version1Category</span></code> columns, then the message
+should be, “Skipping row &lt;row_index&gt; when generating a version 1
+schema. Version 1 value not found for column &lt;invalid_column_name&gt;”</p></li>
+</ul>
+</li>
+</ul>
+<p>For example, the warning object for each of the parts snippets shown
+above are:</p>
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="color: #008000; text-decoration-color: #008000">'warnings'</span>: <span style="font-weight: bold">[</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'warningType'</span>: <span style="color: #008000; text-decoration-color: #008000">'missing_version1_fields'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'row'</span>: <span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partID'</span>: <span style="color: #008000; text-decoration-color: #008000">'aDate'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partType'</span>: <span style="color: #008000; text-decoration-color: #008000">'attribute'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'version1Location'</span>: <span style="color: #008000; text-decoration-color: #008000">'variables'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'version1Table'</span>: <span style="color: #008000; text-decoration-color: #008000">''</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'version1Variable'</span>: <span style="color: #008000; text-decoration-color: #008000">'analysisDate'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'version1Category'</span>: <span style="color: #008000; text-decoration-color: #008000">'NA'</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="font-weight: bold">}</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'rowNumber'</span>: <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">2</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'message'</span>: <span style="color: #008000; text-decoration-color: #008000">'Skipping row 2 when generating a version 1 schema. Version 1 value not found for column version1Table'</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="font-weight: bold">}</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="font-weight: bold">]</span>
+<span style="font-weight: bold">}</span>
+</pre>
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="color: #008000; text-decoration-color: #008000">'warnings'</span>: <span style="font-weight: bold">[</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'warningType'</span>: <span style="color: #008000; text-decoration-color: #008000">'missing_version1_fields'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'row'</span>: <span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partID'</span>: <span style="color: #008000; text-decoration-color: #008000">'measures'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'version1Location'</span>: <span style="color: #008000; text-decoration-color: #008000">''</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'version1Table'</span>: <span style="color: #008000; text-decoration-color: #008000">'WWMeasure'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'version1Variable'</span>: <span style="color: #008000; text-decoration-color: #008000">'NA'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'version1Category'</span>: <span style="color: #008000; text-decoration-color: #008000">'NA'</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="font-weight: bold">}</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'rowNumber'</span>: <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">1</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'message'</span>: <span style="color: #008000; text-decoration-color: #008000">'Skipping row 1 when generating a version 1 schema. Invalid value for version 1 column version1Location. Allowed values are "tables", "variables", or "categories"'</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="font-weight: bold">}</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="font-weight: bold">]</span>
+<span style="font-weight: bold">}</span>
+</pre>
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="color: #008000; text-decoration-color: #008000">'warnings'</span>: <span style="font-weight: bold">[</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'warningType'</span>: <span style="color: #008000; text-decoration-color: #008000">'missing_version1_fields'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'row'</span>: <span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partID'</span>: <span style="color: #008000; text-decoration-color: #008000">'measures'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'version1Location'</span>: <span style="color: #008000; text-decoration-color: #008000">'tables'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'version1Table'</span>: <span style="color: #008000; text-decoration-color: #008000">''</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'version1Variable'</span>: <span style="color: #008000; text-decoration-color: #008000">'NA'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'version1Category'</span>: <span style="color: #008000; text-decoration-color: #008000">'NA'</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="font-weight: bold">}</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'rowNumber'</span>: <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">1</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'message'</span>: <span style="color: #008000; text-decoration-color: #008000">'Skipping row 1 when generating a version 1 schema. Version 1 value not found for column version1Table'</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="font-weight: bold">}</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="font-weight: bold">]</span>
+<span style="font-weight: bold">}</span>
+</pre>
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="color: #008000; text-decoration-color: #008000">'warnings'</span>: <span style="font-weight: bold">[</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'warningType'</span>: <span style="color: #008000; text-decoration-color: #008000">'missing_version1_fields'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'row'</span>: <span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partID'</span>: <span style="color: #008000; text-decoration-color: #008000">'aDate'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'version1Location'</span>: <span style="color: #008000; text-decoration-color: #008000">''</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'version1Table'</span>: <span style="color: #008000; text-decoration-color: #008000">'WWMeasure'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'version1Variable'</span>: <span style="color: #008000; text-decoration-color: #008000">'analysisDate'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'version1Category'</span>: <span style="color: #008000; text-decoration-color: #008000">'NA'</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="font-weight: bold">}</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'rowNumber'</span>: <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">2</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'message'</span>: <span style="color: #008000; text-decoration-color: #008000">'Skipping row 2 when generating a version 1 schema. Invalid value for version 1 column version1Location. Allowed values are "tables", "variables", or "categories"'</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="font-weight: bold">}</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="font-weight: bold">]</span>
+<span style="font-weight: bold">}</span>
+</pre>
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="color: #008000; text-decoration-color: #008000">'warnings'</span>: <span style="font-weight: bold">[</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'warningType'</span>: <span style="color: #008000; text-decoration-color: #008000">'missing_version1_fields'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'row'</span>: <span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partID'</span>: <span style="color: #008000; text-decoration-color: #008000">'aDate'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'version1Location'</span>: <span style="color: #008000; text-decoration-color: #008000">'variables'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'version1Table'</span>: <span style="color: #008000; text-decoration-color: #008000">''</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'version1Variable'</span>: <span style="color: #008000; text-decoration-color: #008000">'analysisDate'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'version1Category'</span>: <span style="color: #008000; text-decoration-color: #008000">'NA'</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="font-weight: bold">}</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'rowNumber'</span>: <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">2</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'message'</span>: <span style="color: #008000; text-decoration-color: #008000">'Skipping row 2 when generating a version 1 schema. Version 1 value not found for column version1Table'</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="font-weight: bold">}</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="font-weight: bold">]</span>
+<span style="font-weight: bold">}</span>
+</pre>
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="color: #008000; text-decoration-color: #008000">'warnings'</span>: <span style="font-weight: bold">[</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'warningType'</span>: <span style="color: #008000; text-decoration-color: #008000">'missing_version1_fields'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'row'</span>: <span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partID'</span>: <span style="color: #008000; text-decoration-color: #008000">'aDate'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'version1Location'</span>: <span style="color: #008000; text-decoration-color: #008000">'variables'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'version1Table'</span>: <span style="color: #008000; text-decoration-color: #008000">'WWMeasure'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'version1Variable'</span>: <span style="color: #008000; text-decoration-color: #008000">''</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'version1Category'</span>: <span style="color: #008000; text-decoration-color: #008000">'NA'</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="font-weight: bold">}</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'rowNumber'</span>: <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">2</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'message'</span>: <span style="color: #008000; text-decoration-color: #008000">'Skipping row 2 when generating a version 1 schema. Version 1 value not found for column version1Variable'</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="font-weight: bold">}</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="font-weight: bold">]</span>
+<span style="font-weight: bold">}</span>
+</pre>
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="color: #008000; text-decoration-color: #008000">'warnings'</span>: <span style="font-weight: bold">[</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'warningType'</span>: <span style="color: #008000; text-decoration-color: #008000">'missing_version1_fields'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'row'</span>: <span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partID'</span>: <span style="color: #008000; text-decoration-color: #008000">'comp3'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'version1Location'</span>: <span style="color: #008000; text-decoration-color: #008000">''</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'version1Table'</span>: <span style="color: #008000; text-decoration-color: #008000">'WWSample'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'version1Variable'</span>: <span style="color: #008000; text-decoration-color: #008000">'collection'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'version1Category'</span>: <span style="color: #008000; text-decoration-color: #008000">'grbCp3'</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="font-weight: bold">}</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'rowNumber'</span>: <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">3</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'message'</span>: <span style="color: #008000; text-decoration-color: #008000">'Skipping row 3 when generating a version 1 schema. Invalid value for version 1 column version1Location. Allowed values are "tables", "variables", or "categories"'</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="font-weight: bold">}</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="font-weight: bold">]</span>
+<span style="font-weight: bold">}</span>
+</pre>
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="color: #008000; text-decoration-color: #008000">'warnings'</span>: <span style="font-weight: bold">[</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'warningType'</span>: <span style="color: #008000; text-decoration-color: #008000">'missing_version1_fields'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'row'</span>: <span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partID'</span>: <span style="color: #008000; text-decoration-color: #008000">'comp3'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'version1Location'</span>: <span style="color: #008000; text-decoration-color: #008000">'categories'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'version1Table'</span>: <span style="color: #008000; text-decoration-color: #008000">''</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'version1Variable'</span>: <span style="color: #008000; text-decoration-color: #008000">'collection'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'version1Category'</span>: <span style="color: #008000; text-decoration-color: #008000">'grbCp3'</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="font-weight: bold">}</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'rowNumber'</span>: <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">3</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'message'</span>: <span style="color: #008000; text-decoration-color: #008000">'Skipping row 3 when generating a version 1 schema. Version 1 value not found for column version1Table'</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="font-weight: bold">}</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="font-weight: bold">]</span>
+<span style="font-weight: bold">}</span>
+</pre>
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="color: #008000; text-decoration-color: #008000">'warnings'</span>: <span style="font-weight: bold">[</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'warningType'</span>: <span style="color: #008000; text-decoration-color: #008000">'missing_version1_fields'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'row'</span>: <span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partID'</span>: <span style="color: #008000; text-decoration-color: #008000">'comp3'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'version1Location'</span>: <span style="color: #008000; text-decoration-color: #008000">'categories'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'version1Table'</span>: <span style="color: #008000; text-decoration-color: #008000">'WWSample'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'version1Variable'</span>: <span style="color: #008000; text-decoration-color: #008000">''</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'version1Category'</span>: <span style="color: #008000; text-decoration-color: #008000">'grbCp3'</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="font-weight: bold">}</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'rowNumber'</span>: <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">3</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'message'</span>: <span style="color: #008000; text-decoration-color: #008000">'Skipping row 3 when generating a version 1 schema. Version 1 value not found for column version1Variable'</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="font-weight: bold">}</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="font-weight: bold">]</span>
+<span style="font-weight: bold">}</span>
+</pre>
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="color: #008000; text-decoration-color: #008000">'warnings'</span>: <span style="font-weight: bold">[</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'warningType'</span>: <span style="color: #008000; text-decoration-color: #008000">'missing_version1_fields'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'row'</span>: <span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partID'</span>: <span style="color: #008000; text-decoration-color: #008000">'comp3'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'version1Location'</span>: <span style="color: #008000; text-decoration-color: #008000">'categories'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'version1Table'</span>: <span style="color: #008000; text-decoration-color: #008000">'WWSample'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'version1Variable'</span>: <span style="color: #008000; text-decoration-color: #008000">'WWSample'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'version1Category'</span>: <span style="color: #008000; text-decoration-color: #008000">''</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="font-weight: bold">}</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'rowNumber'</span>: <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">3</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'message'</span>: <span style="color: #008000; text-decoration-color: #008000">'Skipping row 3 when generating a version 1 schema. Version 1 value not found for column version1Category'</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="font-weight: bold">}</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="font-weight: bold">]</span>
+<span style="font-weight: bold">}</span>
+</pre>
+<p>Finally, the following parts snippet should not have any warnings when
+generating a version 1 schema.</p>
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">┏━━━━━━━━━━┳━━━━━━━━━━━┳━━━━━━━━━┳━━━━━━━━━━━━━┳━━━━━━━━━━━━┳━━━━━━━━━━━━━┳━━━━━━━━━━━━┳━━━━━━━━━━━━━┳━━━━━━━━━━━━┓
+┃<span style="font-weight: bold"> partID   </span>┃<span style="font-weight: bold"> partType  </span>┃<span style="font-weight: bold"> samples </span>┃<span style="font-weight: bold"> dataType    </span>┃<span style="font-weight: bold"> catSetID   </span>┃<span style="font-weight: bold"> version1Lo… </span>┃<span style="font-weight: bold"> version1T… </span>┃<span style="font-weight: bold"> version1Va… </span>┃<span style="font-weight: bold"> version1C… </span>┃
+┡━━━━━━━━━━╇━━━━━━━━━━━╇━━━━━━━━━╇━━━━━━━━━━━━━╇━━━━━━━━━━━━╇━━━━━━━━━━━━━╇━━━━━━━━━━━━╇━━━━━━━━━━━━━╇━━━━━━━━━━━━┩
+│ samples  │ table     │ NA      │ NA          │ NA         │ tables      │ WWSample   │ NA          │ NA         │
+│ collType │ attribute │ header  │ categorical │ collectCa… │ variables   │ WWSample   │ collection  │ NA         │
+│ comp3    │ category  │ NA      │ varchar     │ collectCa… │ categories  │ WWSample   │ collection  │ gbCp3      │
+└──────────┴───────────┴─────────┴─────────────┴────────────┴─────────────┴────────────┴─────────────┴────────────┘
+</pre>
+</section>
+</section>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/ODM-logo.png" alt="Logo"/>
+            </a></p>
+<h1 class="logo"><a href="../index.html">PHES-ODM Validation</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../examples/tutorial.html">Tutorial 1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/explanation-document/explanation-document.html">Tutorial 2</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../api.html">API Documentation</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../api.html#module-odm_validation.validation">Validation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#module-odm_validation.utils">Utils</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../api.html#specification">Specification</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../rules.html">Validation rules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../links/contributing_link.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../links/code_of_conduct_link.html">Code of Conduct</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../links/license_link.html">License</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="../api.html">API Documentation</a><ul>
+      <li>Previous: <a href="../api.html" title="previous chapter">API Documentation</a></li>
+      <li>Next: <a href="module-functions.html" title="next chapter">validate_data</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2022, OHRI.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 6.1.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/specs/generate-validation-schema.md.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
