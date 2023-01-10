@@ -1,0 +1,16 @@
+{
+    "warnings": [
+        {
+            "warningType": "missing_version1_fields",
+            "row": {
+                "partID": "comp3",
+                "version1Location": "",
+                "version1Table": "WWSample",
+                "version1Variable": "collection",
+                "version1Category": "grbCp3"
+            },
+            "rowNumber": 3,
+            "message": "Skipping row 3 when generating a version 1 schema. Invalid value for version 1 column version1Location. Allowed values are \"tables\", \"variables\", or \"categories\""
+        }
+    ]
+}

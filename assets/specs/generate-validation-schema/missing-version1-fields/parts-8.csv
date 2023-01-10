@@ -1,0 +1,4 @@
+partID,partType,samples,dataType,catSetID,version1Location,version1Table,version1Variable,version1Category
+samples,table,NA,NA,NA,tables,WWSample,NA,NA
+collType,attribute,header,categorical,collectCatSet,variables,WWSample,collection,NA
+comp3,category,NA,varchar,collectCatSet,categories,,collection,grbCp3

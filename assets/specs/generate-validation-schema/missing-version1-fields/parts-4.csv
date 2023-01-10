@@ -1,0 +1,3 @@
+partID,partType,measures,version1Location,version1Table,version1Variable,version1Category
+measures,table,NA,tables,WWMeasure,NA,NA
+aDate,attribute,header,,WWMeasure,analysisDate,NA
