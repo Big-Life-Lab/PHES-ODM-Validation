@@ -36,7 +36,8 @@ def init_attr_schema(attr_id: str, rule_id: str, cerb_rule: tuple,
     }
     if cerb_type:
         inner['type'] = cerb_type
-        inner['coerce'] = cerb_type
+        if cerb_type != 'string':
+            inner['coerce'] = cerb_type
     return {attr_id: inner}
 
 
