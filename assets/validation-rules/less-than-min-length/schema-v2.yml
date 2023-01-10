@@ -6,12 +6,13 @@ schema:
       type: dict
       schema:
         phone:
-          minLength: 10
+          minlength: 10
           meta:
-          - ruleId: less_than_min_length
+          - ruleID: less_than_min_length
             meta:
             - partID: phone
               minLength: '10'
-    meta:
-      - partID: contacts
-        partType: table
+              contacts: header
+      meta:
+        - partID: contacts
+          partType: table
