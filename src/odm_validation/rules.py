@@ -56,7 +56,7 @@ def greater_than_max_value():
            '{constraint}')
 
     def gen_schema(data: pt.PartData, ver):
-        return gen_simple_schema(data, ver, rule_id, odm_key, cerb_key)
+        return gen_simple_schema(data, ver, rule_id, odm_key, cerb_key, float)
 
     return init_rule(rule_id, cerb_key, err, gen_schema)
 
@@ -92,7 +92,7 @@ def less_than_min_value():
            '{constraint}')
 
     def gen_schema(data: pt.PartData, ver):
-        return gen_simple_schema(data, ver, rule_id, odm_key, cerb_key)
+        return gen_simple_schema(data, ver, rule_id, odm_key, cerb_key, float)
 
     return init_rule(rule_id, cerb_key, err, gen_schema)
 

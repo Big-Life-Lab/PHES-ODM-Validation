@@ -138,7 +138,8 @@ def set_attr_schema(table_schema, data, table, attr, rule_id, odm_key,
     deep_update(attr_schema, table_schema[table_id1]['schema']['schema'])
 
 
-def gen_simple_schema(data: pt.PartData, ver, rule_id, odm_key, cerb_key):
+def gen_simple_schema(data: pt.PartData, ver, rule_id, odm_key, cerb_key,
+                      value_type_class):
     """Provides a simple way to generate a simple schema. This should be
     prefered to iterating over part-data directly in the rule-functions.
 
@@ -150,7 +151,8 @@ def gen_simple_schema(data: pt.PartData, ver, rule_id, odm_key, cerb_key):
         table_id0 = pt.get_partID(table)
         table_schema = init_table_schema2(schema, data, table, ver)
         for attr in attr_items2(data, table_id0, odm_key):
-            cerb_rule = (cerb_key, float(attr[odm_key]))
+            cerb_val = value_type_class(attr[odm_key])
+            cerb_rule = (cerb_key, cerb_val)
             set_attr_schema(table_schema, data, table, attr, rule_id,
                             odm_key, cerb_rule, ver, typed)
         deep_update(table_schema, schema)
