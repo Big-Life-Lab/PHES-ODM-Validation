@@ -17,7 +17,7 @@ from cerberusext import OdmValidator
 import part_tables as pt
 from rules import Rule, ruleset
 from schemas import Schema
-from stdext import deep_update, deduplicate_dict_list
+from stdext import deep_update, deduplicate_dict_list, get_len
 from versions import __version__, parse_version
 
 
@@ -80,6 +80,7 @@ def _error_msg(ctx: ErrorContext):
         column_id=ctx.column_id,
         row_num=ctx.row_num,
         value=ctx.value,
+        value_len=get_len(ctx.value),
         constraint=ctx.constraint,
     )
 

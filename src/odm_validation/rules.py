@@ -29,6 +29,7 @@ class Rule:
     - rule_name
     - table_id
     - value
+    - value_len
     - constraint
     """
     id: str
