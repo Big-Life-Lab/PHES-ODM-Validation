@@ -1,41 +1,39 @@
 {
     "errors": [
-	{
-	    "errorType": "invalid_category",
-	    "tableName": "samples",
-	    "columnName": "coll",
-	    "rowNumber": 1,
-	    "row": {
-		"coll": "flow"
-	    },
-	    "invalidValue": "flow",
-	    "validationRuleFields": [
-		[
-		    {
-			"partID": "coll",
-			"samples": "header",
-			"dataType": "categorical",
-			"catSetID": "collectCat"
-		    },
-		    {
-			"partID": "comp3h",
-			"partType": "category",
-			"catSetID": "collectCat"
-		    },
-		    {
-			"partID": "comp8h",
-			"partType": "category",
-			"catSetID": "collectCat"
-		    },
-		    {
-			"partID": "flowPr",
-			"partType": "category",
-			"catSetID": "collectCat"
-		    }
-		]
-	    ],
-	    "message": "Invalid category flow found in row 1 for column coll in table samples"
-	}
+        {
+            "errorType": "invalid_category",
+            "tableName": "samples",
+            "columnName": "coll",
+            "rowNumber": 1,
+            "row": {
+                "coll": "flow"
+            },
+            "invalidValue": "flow",
+            "validationRuleFields": [
+                {
+                    "partID": "coll",
+                    "samples": "header",
+                    "dataType": "categorical",
+                    "catSetID": "collectCat"
+                },
+                {
+                    "partID": "comp3h",
+                    "partType": "category",
+                    "catSetID": "collectCat"
+                },
+                {
+                    "partID": "comp8h",
+                    "partType": "category",
+                    "catSetID": "collectCat"
+                },
+                {
+                    "partID": "flowPr",
+                    "partType": "category",
+                    "catSetID": "collectCat"
+                }
+            ],
+            "message": "Invalid category flow found in row 1 for column coll in table samples"
+        }
     ],
     "warnings": []
 }

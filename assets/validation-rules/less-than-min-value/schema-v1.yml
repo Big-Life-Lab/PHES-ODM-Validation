@@ -6,9 +6,11 @@ schema:
       type: dict
       schema:
         Latitude:
+          type: integer
+          coerce: integer
           min: -90
           meta:
-          - ruleId: less_than_min_value
+          - ruleID: less_than_min_value
             meta:
             - partID: geoLat
               sites: header
@@ -17,9 +19,11 @@ schema:
               version1Variable: Latitude
               minValue: "-90"
         Longitude:
+          type: float
+          coerce: float
           min: -90.15
           meta:
-          - ruleId: less_than_min_value
+          - ruleID: less_than_min_value
             meta:
             - partID: geoLong
               sites: header
@@ -27,8 +31,8 @@ schema:
               version1Table: Site
               version1Variable: Longitude
               minValue: "-90.15"
-    meta:
-      - partID: sites
-        partType: table
-        version1Location: tables
-        version1Table: Site
+      meta:
+        - partID: sites
+          partType: table
+          version1Location: tables
+          version1Table: Site
