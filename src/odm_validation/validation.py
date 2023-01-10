@@ -126,8 +126,11 @@ def generate_validation_schema(parts, schema_version=ODM_LATEST) -> Schema:
     # `deep_update` is used to join all the table-schemas together,
     # however it will cause duplicates in the meta list. This is especially a
     # problem for the table-meta, so we'll need to deduplicate it here.
-    for table in cerb_schema:
+    for table in list(cerb_schema):
         table_schema = cerb_schema[table]['schema']
+        if table_schema['schema'] == {}:
+            del cerb_schema[table]
+            continue
         table_schema['meta'] = deduplicate_dict_list(table_schema['meta'])
 
     return {
