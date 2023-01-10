@@ -1,3 +1,6 @@
+from logging import warning
+from typing import Optional
+
 from part_tables import Meta
 from stdext import deep_update
 
@@ -19,29 +22,39 @@ def init_table_schema(table_id, table_meta, attr_schema):
 
 
 def init_attr_schema(attr_id: str, rule_id: str, cerb_rule: tuple,
-                     meta: Meta):
-    return {
-        attr_id: {
-            cerb_rule[0]: cerb_rule[1],
-            'meta': [
-                {
-                    'ruleID': rule_id,
-                    'meta': meta,
-                },
-                # {
-                #     'ruleID': another_rule_using_this_attr,
-                #     'meta': [
-                #         meta_for_attr_used_with_this_rule,
-                #         meta_for_another_attr_used_with_this_rule,
-                #     ]
-                # }
-            ]
-        }
+                     cerb_type: Optional[str], meta: Meta):
+    # ['meta'] is a list with one entry per rule.
+    # ['meta']['meta'] is a `Meta` with one `MetaEntry` per part.
+    inner = {
+        cerb_rule[0]: cerb_rule[1],
+        'meta': [
+            {
+                'ruleID': rule_id,
+                'meta': meta,
+            }
+        ]
     }
+    if cerb_type:
+        inner['type'] = cerb_type
+        inner['coerce'] = cerb_type
+    return {attr_id: inner}
+
+
+def parse_odm_datatype(odm_datatype) -> Optional[str]:
+    """returns the cerberus-equivalent type"""
+    t = odm_datatype
+    if not t:
+        return
+    if t in ['categorical', 'varchar']:
+        return 'string'
+    if t in ['integer', 'float']:
+        return t
+    warning(f'odm datatype {odm_datatype} is not implemented')
 
 
 def update_schema(schema, table_id, attr_id, rule_id, cerb_rule,
                   table_meta: Meta, attr_meta: Meta):
-    attr_schema = init_attr_schema(attr_id, rule_id, cerb_rule, attr_meta)
+    attr_schema = init_attr_schema(attr_id, rule_id, cerb_rule, None,
+                                   attr_meta)
     table_schema = init_table_schema(table_id, table_meta, attr_schema)
     deep_update(table_schema, schema)

@@ -9,14 +9,15 @@ import sys
 from dataclasses import dataclass
 from os.path import join, normpath
 from pathlib import Path
-from typing import List
+# from pprint import pprint
+from typing import List, Optional
 
-from cerberus import Validator
+from cerberusext import OdmValidator
 
 import part_tables as pt
 from rules import ruleset
 from schemas import Schema
-from stdext import deep_update
+from stdext import deep_update, deduplicate_dict_list
 from versions import __version__, parse_version
 
 
@@ -60,17 +61,19 @@ def _rule_name(rule_id):
     return rule_id.replace('_', ' ').capitalize()
 
 
-def _error_msg(rule, table_id, column_id, row_num, value):
+def _error_msg(rule, table_id, column_id, row_num, value, constraint):
     return rule.error_template.format(
         rule_name=_rule_name(rule.id),
         table_id=table_id,
         column_id=column_id,
         row_num=row_num,
         value=value,
+        constraint=constraint,
     )
 
 
-def _gen_rule_error(rule, table, column, row_index, row, value, meta):
+def _gen_rule_error(rule, table, column, row_index, row, value, constraint,
+                    rule_fields):
     row_num = row_index + 1
     error = {
         'errorType': rule.id,
@@ -78,28 +81,32 @@ def _gen_rule_error(rule, table, column, row_index, row, value, meta):
         'columnName': column,
         'rowNumber': row_num,
         'row': row,
-        'validationRuleFields': meta,
-        'message': _error_msg(rule, table, column, row_num, value),
+        'validationRuleFields': rule_fields,
+        'message': _error_msg(rule, table, column, row_num, value, constraint),
     }
     if value:
         error['invalidValue'] = value
     return error
 
 
-def _gen_error_entry(e, row, schema: Schema) -> str:
+def _gen_error_entry(e, row, schema: Schema) -> Optional[dict]:
+    # We are currently using the 'type' rule without having a rule-handler for
+    # it. This means that we'll get a type error from Cerberus if something
+    # wasn't coerced properly, which in turn causes an invalid validation
+    # result. The current workaround for this is to check for the type error
+    # and ignore it.
     rule_key = e.schema_path[-1]
     rule = _KEY_RULES.get(rule_key)
-    assert rule, f'missing rule for constraint "{rule_key}"'
+    if not rule and rule_key == 'type':
+        return
+    assert rule, f'missing handler for cerberus rule "{rule_key}"'
     (table_id, row_index, column_id) = e.document_path
     column = schema['schema'][table_id]['schema']['schema'][column_id]
     column_meta = column.get('meta', [])
-    meta = list(
-        map(lambda x: x['meta'],
-            filter(lambda x: x['ruleID'] == rule.id,
-                   column_meta)))
+    rule_fields = pt.get_validation_rule_fields(column_meta, [rule.id])
 
     return _gen_rule_error(rule, table_id, column_id, row_index, row, e.value,
-                           meta)
+                           e.constraint, rule_fields)
 
 
 def generate_validation_schema(parts, schema_version=ODM_LATEST) -> Schema:
@@ -116,6 +123,13 @@ def generate_validation_schema(parts, schema_version=ODM_LATEST) -> Schema:
         assert s is not None
         deep_update(s, cerb_schema)
 
+    # `deep_update` is used to join all the table-schemas together,
+    # however it will cause duplicates in the meta list. This is especially a
+    # problem for the table-meta, so we'll need to deduplicate it here.
+    for table in cerb_schema:
+        table_schema = cerb_schema[table]['schema']
+        table_schema['meta'] = deduplicate_dict_list(table_schema['meta'])
+
     return {
         "schemaVersion": schema_version,
         "schema": cerb_schema,
@@ -124,28 +138,35 @@ def generate_validation_schema(parts, schema_version=ODM_LATEST) -> Schema:
 
 def validate_data(schema: Schema,
                   data: dict,
-                  data_version=ODM_LATEST
+                  data_version=ODM_LATEST,
                   ) -> ValidationReport:
     """Validates `data` with `schema`, using Cerberus."""
-    # Unknown fields must be allowed because we're only generating a schema
-    # for the requirements, not the optional data.
-    v = Validator(schema["schema"])
-    v.allow_unknown = True
-
     errors = []
-    if not v.validate(data):
+    warnings = []
+    coercion_warnings = []
+    coercion_errors = []
+    cerb_schema = schema["schema"]
+    v = OdmValidator(coercion_warnings=coercion_warnings,
+                     coercion_errors=coercion_errors)
+    assert isinstance(cerb_schema, dict)
+    if not v.validate(data, cerb_schema):
         for table_error in v._errors:
             for row_errors in table_error.info:
                 for e in row_errors:
                     row = e.value
                     for attr_errors in e.info:
                         for e in attr_errors:
-                            errors.append(_gen_error_entry(e, row, schema))
+                            entry = _gen_error_entry(e, row, schema)
+                            if not entry:
+                                continue
+                            errors.append(entry)
+    errors += coercion_errors
+    warnings += coercion_warnings
 
     return ValidationReport(
         data_version=data_version,
         schema_version=schema["schemaVersion"],
         package_version=__version__,
         errors=errors,
-        warnings=[],
+        warnings=warnings,
     )
