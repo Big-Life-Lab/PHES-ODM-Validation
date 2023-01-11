@@ -4,7 +4,7 @@ from os.path import join
 
 from parameterized import parameterized, parameterized_class
 
-import common
+from common import root_dir, param_range
 from utils import (
     import_dataset,
     import_json_file,
@@ -14,14 +14,10 @@ from utils import (
 from validation import generate_validation_schema, validate_data
 
 
-def _param_range(start, stop):
-    return list(map(lambda i: (i, ), range(start, stop)))
-
-
 class Assets():
     def __init__(self, ruleId: str):
         rule_dirname = ruleId.replace('_', '-')
-        asset_dir = join(common.root_dir,
+        asset_dir = join(root_dir,
                          f'assets/validation-rules/{rule_dirname}')
 
         def asset(filename: str) -> str:
@@ -70,7 +66,7 @@ class TestMinMaxValue(unittest.TestCase):
         self.maxDiff = None
         self.assets = Assets(self.ruleId)
 
-    @parameterized.expand(_param_range(1, 3))
+    @parameterized.expand(param_range(1, 3))
     def test_schema_generation(self, major_ver):
         result = generate_validation_schema(self.assets.parts_v2,
                                             schema_version=f'{major_ver}.0.0')
@@ -80,14 +76,14 @@ class TestMinMaxValue(unittest.TestCase):
         self.assertEqual(report.errors, expected['errors'])
         self.assertEqual(report.warnings, expected['warnings'])
 
-    @parameterized.expand(_param_range(0, 3))
+    @parameterized.expand(param_range(0, 3))
     def test_passing_datasets(self, ix):
         report = validate_data(self.assets.schemas[2],
                                self.assets.data_pass_v2[ix])
         expected = self.assets.error_report_pass[ix]
         self._assertEqual(report, expected)
 
-    @parameterized.expand(_param_range(0, 3))
+    @parameterized.expand(param_range(0, 3))
     def test_failing_datasets(self, ix):
         report = validate_data(self.assets.schemas[2],
                                self.assets.data_fail_v2[ix])

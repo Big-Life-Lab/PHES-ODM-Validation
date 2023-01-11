@@ -33,3 +33,7 @@ def import_schema_v2() -> Schema:
     dir = os.path.dirname(os.path.realpath(__file__))
     path = join(dir, '../assets/validation-schemas/schema-v2.0.0-rc.1.yml')
     return utils.import_schema(path)
+
+
+def param_range(start, stop):
+    return list(map(lambda i: (i, ), range(start, stop)))
