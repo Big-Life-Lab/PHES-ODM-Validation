@@ -28,7 +28,8 @@ If the value to be validated is not a number but can be coerced into one, then a
 pprint_csv_file(asset("invalid-dataset-2.csv"), "Invalid Dataset")
 ```
 
-and the following dataset should pass validation with a warning,
+and the following dataset should pass validation with a warning (since by
+default all CSV values are parsed as strings in Python),
 
 ```{python}
 #| echo: false
@@ -66,6 +67,7 @@ The error report for the first two cases is shown below,
 * **columnName**: The name of the column with the invalid value
 * **rowNumber**: The index of the row with the invalid value
 * **row**: The dictionary containing the invalid row
+* **invalidValue**: The invalid value
 * **validationRuleFields**: The ODM data dictionary rows used to generate this rule
 * **message**: Value \<invalid_value\> in row \<row_index\> in column \<column_name\> in table \<table_name\> is less than the allowable minimum value of \<min_value\>
 
@@ -75,11 +77,13 @@ The error report for the third case is the identical except for the message fiel
 
 A warning is generated when the value is a not a number but is coerced into one before validation. The warning report will have the following fields,
 
-* **warningType**: less_than_min_value
-* **tableName** The name of the table with the invalid value
+* **warningType**: _coercion
+* **coercionRules**: The list of validation rules that required this coercion
+* **tableName**: The name of the table with the invalid value
 * **columnName**: The name of the column with the invalid value
 * **rowNumber**: The index of the row with the invalid value
 * **row**: The dictionary containing the invalid row
+* **invalidValue**: The invalid value
 * **validationRuleFields**: The ODM data dictionary rows used to generate this rule
 * **message**: Value \<invalid_value\> in row \<row_index\> in column \<column_name\> in table \<table_name\> is a \<invalid_type\> and was coerced into a number
 
@@ -139,7 +143,14 @@ The `geoLat` part which is a column in the `sites` table has a `minValue` value 
 
 ## Cerberus Schema
 
-We can use the [minimum value validation](https://docs.python-cerberus.org/en/stable/validation-rules.html#min-max) rule from cerberus to implement this rule.
+We can use the [minimum value
+validation](https://docs.python-cerberus.org/en/stable/validation-rules.html#min-max)
+rule from cerberus to implement this rule. Cerberus also needs to know the data
+type when performing this validation, so we need to set
+[type](https://docs.python-cerberus.org/en/stable/validation-rules.html#type)
+and
+[coerce](https://docs.python-cerberus.org/en/stable/validation-rules.html#type)
+as well.
 
 The generated cerberus object for the example above is shown below,
 

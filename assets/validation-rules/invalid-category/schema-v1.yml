@@ -7,7 +7,6 @@ schema:
       type: dict
       schema:
         Collection:
-          # type: string
           allowed:
           - Comp3h
           - Comp8h

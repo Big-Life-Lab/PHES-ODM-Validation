@@ -6,19 +6,25 @@ schema:
       type: dict
       schema:
         geoLat:
+          type: integer
+          coerce: integer
           max: 90
           meta:
-          - ruleId: greater_than_max_value
+          - ruleID: greater_than_max_value
             meta:
             - partID: geoLat
               maxValue: '90'
+              sites: header
         geoLong:
+          type: float
+          coerce: float
           max: 90.15
           meta:
-            - ruleId: greater_than_max_value
+            - ruleID: greater_than_max_value
               meta:
                 - partID: geoLong
                   maxValue: '90.15'
-    meta:
-      - partID: sites
-        partType: table
+                  sites: header
+      meta:
+        - partID: sites
+          partType: table

@@ -9,13 +9,11 @@
                 "addL2": "123 Doe Street"
             },
             "validationRuleFields": [
-                [
-                    {
-                        "addresses": "pK",
-                        "partID": "addID",
-                        "addressesRequired": "mandatory"
-                    }
-                ]
+                {
+                    "addresses": "pK",
+                    "partID": "addID",
+                    "addressesRequired": "mandatory"
+                }
             ],
             "message": "Missing mandatory column addID in table addresses in row number 1"
         }

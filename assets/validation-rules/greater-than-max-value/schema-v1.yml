@@ -6,9 +6,11 @@ schema:
       type: dict
       schema:
         Latitude:
+          type: integer
+          coerce: integer
           max: 90
           meta:
-          - ruleId: greater_than_max_value
+          - ruleID: greater_than_max_value
             meta:
             - partID: geoLat
               sites: header
@@ -17,9 +19,11 @@ schema:
               version1Variable: Latitude
               maxValue: '90'
         Longitude:
+          type: float
+          coerce: float
           max: 90.15
           meta:
-          - ruleId: greater_than_max_value
+          - ruleID: greater_than_max_value
             meta:
             - partID: geoLong
               sites: header
@@ -27,8 +31,8 @@ schema:
               version1Table: Site
               version1Variable: Longitude
               maxValue: '90.15'
-    meta:
-      - partID: sites
-        partType: table
-        version1Location: tables
-        version1Table: Site
+      meta:
+        - partID: sites
+          partType: table
+          version1Location: tables
+          version1Table: Site

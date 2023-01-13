@@ -7,6 +7,7 @@ from logging import error, warning
 from semver import Version
 from typing import DefaultDict, Dict, List, Optional, Set
 
+from stdext import flatten
 from versions import parse_version
 
 
@@ -102,6 +103,18 @@ V1_KIND_MAP = {
     'variables': MapKind.ATTRIBUTE,
     'variableCategories': MapKind.CATEGORY,
 }
+
+
+def get_validation_rule_fields(column_meta, rule_ids: List[str]):
+    if not column_meta:
+        return []
+    assert isinstance(column_meta, list)
+    assert isinstance(column_meta[0], dict)
+    assert isinstance(column_meta[0]['meta'], list)
+    return flatten(list(
+        map(lambda x: x['meta'],
+            filter(lambda x: x['ruleID'] in rule_ids,
+                   column_meta))))
 
 
 def parse_row_version(row, field, default=None):
