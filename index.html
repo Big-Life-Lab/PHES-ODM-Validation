@@ -34,6 +34,21 @@
             
   <section id="phes-odm-validation-documentation">
 <h1>PHES-ODM Validation Documentation<a class="headerlink" href="#phes-odm-validation-documentation" title="Permalink to this heading">¶</a></h1>
+<p>The PHES-ODM validation toolkit allows users to check whether their data meets the ODM dictionary format.</p>
+<section id="at-a-glance">
+<h2>At a glance<a class="headerlink" href="#at-a-glance" title="Permalink to this heading">¶</a></h2>
+<p>Validation is performed based on a set of rules defined in a schema. The <code class="docutils literal notranslate"><span class="pre">validate_data</span></code> function is used to perform the validation on <code class="docutils literal notranslate"><span class="pre">data</span></code> with the <code class="docutils literal notranslate"><span class="pre">schema</span></code> specified.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">schema</span> <span class="o">=</span> <span class="n">import_schema</span><span class="p">(</span><span class="s2">&quot;schema.yml&quot;</span><span class="p">)</span>
+<span class="n">errors</span> <span class="o">=</span> <span class="n">validate_data</span><span class="p">(</span><span class="n">schema</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The schema can also be generated directly from the ODM parts table.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">parts</span> <span class="o">=</span> <span class="n">import_dataset</span><span class="p">(</span><span class="s2">&quot;parts.csv&quot;</span><span class="p">)</span>
+<span class="n">schema</span> <span class="o">=</span> <span class="n">generate_cerberus_schema</span><span class="p">(</span><span class="n">parts</span><span class="p">)</span>
+<span class="n">errors</span> <span class="o">=</span> <span class="n">validate_data</span><span class="p">(</span><span class="n">schema</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
 <section id="table-of-contents">
 <h2>Table of Contents<a class="headerlink" href="#table-of-contents" title="Permalink to this heading">¶</a></h2>
 <div class="toctree-wrapper compound">
