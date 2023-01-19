@@ -1,0 +1,4 @@
+partID,partType,sites,sitesRequired,lastUpdated,status,datatype
+sites,table,NA,NA,2.0.0,active,string
+siteID,attribute,header,mandatory,2.0.0,active,string
+healthReg,attribute,header,optional,2.0.0,active,string
