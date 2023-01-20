@@ -21,7 +21,7 @@ missing_mandatory_column_fail_v2 = {
 }
 
 
-class TestValidateData(unittest.TestCase):
+class TestValidateData(common.OdmTestCase):
     def setUp(self):
         self.maxDiff = None
 

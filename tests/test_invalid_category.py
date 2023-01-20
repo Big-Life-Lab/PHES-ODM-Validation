@@ -3,7 +3,7 @@ from os.path import join
 
 import common
 import utils
-from validation import generate_validation_schema, validate_data
+from validation import _generate_validation_schema_ext, validate_data
 
 asset_dir = join(common.root_dir,
                  'assets/validation-rules/invalid-category')
@@ -22,16 +22,24 @@ invalid_category_fail_v2 = {
 }
 
 
-class TestInvalidCategory(unittest.TestCase):
-    def setUp(self):
-        self.maxDiff = None
+class TestInvalidCategory(common.OdmTestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.maxDiff = None
+        cls.whitelist = ['invalid_category']
 
     def test_schema_generation_v1(self):
-        result = generate_validation_schema(parts_v2, schema_version='1.0.0')
+        result = _generate_validation_schema_ext(
+            parts=parts_v2,
+            schema_version='1.0.0',
+            rule_whitelist=self.whitelist)
         self.assertDictEqual(schema_v1, result)
 
     def test_schema_generation_v2(self):
-        result = generate_validation_schema(parts_v2, schema_version='2.0.0')
+        result = _generate_validation_schema_ext(
+            parts=parts_v2,
+            schema_version='2.0.0',
+            rule_whitelist=self.whitelist)
         got = result['schema']['samples']
         expected = schema_v2['schema']['samples']
         self.assertDictEqual(expected, got)

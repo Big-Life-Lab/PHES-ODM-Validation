@@ -6,7 +6,7 @@ from stdext import deduplicate_dict_list, try_parse_int
 common.unused_import_dummy = 1
 
 
-class TestStdExt(unittest.TestCase):
+class TestStdExt(common.OdmTestCase):
     def setUp(self):
         self.maxDiff = None
 

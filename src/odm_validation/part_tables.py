@@ -3,22 +3,27 @@
 from collections import defaultdict
 from dataclasses import dataclass
 from enum import Enum
+from itertools import islice
 from logging import error, warning
 from semver import Version
-from typing import DefaultDict, Dict, List, Optional, Set
+from typing import DefaultDict, Dict, List, Optional, Set, Tuple
 
 from stdext import flatten
 from versions import parse_version
 
 
-# type aliases
+# type aliases (primitive)
+Part = dict
 PartId = str
 Row = dict
-Dataset = List[Row]
+
+# type aliases (meta)
 MetaEntry = Dict[str, str]
 Meta = List[MetaEntry]
 MetaMap = DefaultDict[PartId, Meta]
-Part = dict
+
+# type aliases (other)
+Dataset = List[Row]
 PartMap = Dict[PartId, Part]
 
 
@@ -146,12 +151,13 @@ def parse_version1Category(s: str) -> List[str]:
 def get_mappings(part: dict, version: Version) -> Optional[List[PartId]]:
     """Returns a list of part ids from `version` corresponding to `part`,
     or None if there is no mapping."""
+    # XXX: Parts may be missing version1 fields.
     if version.major != 1:
         return
     ids = []
+    loc = part.get(V1_LOCATION)
+    kind = V1_KIND_MAP.get(loc)
     try:
-        loc = part[V1_LOCATION]
-        kind = V1_KIND_MAP[loc]
         if kind == MapKind.TABLE:
             ids = [part[V1_TABLE]]
         elif kind == MapKind.ATTRIBUTE:
@@ -160,7 +166,7 @@ def get_mappings(part: dict, version: Version) -> Optional[List[PartId]]:
             ids = parse_version1Category(part[V1_CATEGORY])
     except KeyError:
         return
-    if len(ids) == 0 or None in ids or '' in ids:
+    if len(list(filter(lambda id: id and id != '', ids))) == 0:
         return
     return ids
 
@@ -206,6 +212,7 @@ def is_cat(p):
 
 def get_partID(p):
     # TODO: rename to get_partid or get_id?
+    assert PART_ID in p, str(p)
     return p[PART_ID]
 
 

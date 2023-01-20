@@ -103,7 +103,7 @@ expected_coercion_warnings = [
 ]
 
 
-class TestCoercion(unittest.TestCase):
+class TestCoercion(common.OdmTestCase):
     def setUp(self):
         self.maxDiff = None
 

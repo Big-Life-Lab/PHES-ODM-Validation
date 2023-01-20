@@ -4,23 +4,21 @@ from os.path import join
 
 from parameterized import parameterized, parameterized_class
 
-from common import root_dir, param_range
+import common
+from common import asset, root_dir, param_range
 from utils import (
     import_dataset,
     import_json_file,
     import_schema,
 )
-from validation import generate_validation_schema, validate_data
+from validation import _generate_validation_schema_ext, validate_data
 
 
 class Assets():
     def __init__(self, ruleId: str):
         rule_dirname = ruleId.replace('_', '-')
-        asset_dir = join(root_dir,
-                         f'assets/validation-rules/{rule_dirname}')
-
-        def asset(filename: str) -> str:
-            return join(asset_dir, filename)
+        common.ASSET_DIR = join(root_dir,
+                                f'assets/validation-rules/{rule_dirname}')
 
         self.parts_v2 = import_dataset(asset('parts.csv'))
         self.schemas = {
@@ -43,22 +41,26 @@ class Assets():
    {'ruleId': 'less_than_min_length'},
    {'ruleId': 'greater_than_max_length'},
 ])
-class TestMinMaxLength(unittest.TestCase):
+class TestMinMaxLength(common.OdmTestCase):
     ruleId: str
 
-    def setUp(self):
-        self.maxDiff = None
-        self.assets = Assets(self.ruleId)
+    @classmethod
+    def setUpClass(cls):
+        cls.maxDiff = None
+        cls.assets = Assets(cls.ruleId)
+        cls.whitelist = [cls.ruleId]
 
     @parameterized.expand(param_range(1, 3))
     def test_schema_generation(self, major_ver):
-        result = generate_validation_schema(self.assets.parts_v2,
-                                            schema_version=f'{major_ver}.0.0')
+        result = _generate_validation_schema_ext(
+            parts=self.assets.parts_v2,
+            schema_version=f'{major_ver}.0.0',
+            rule_whitelist=self.whitelist)
         self.assertDictEqual(self.assets.schemas[major_ver], result)
 
-    def _assertEqual(self, report, expected):
-        self.assertEqual(report.errors, expected['errors'])
-        self.assertEqual(report.warnings, expected['warnings'])
+    def _assertEqual(self, expected, report):
+        self.assertEqual(expected['errors'], report.errors)
+        self.assertEqual(expected['warnings'], report.warnings)
 
     def test_pass(self):
         report = validate_data(self.assets.schemas[2],
@@ -68,7 +70,7 @@ class TestMinMaxLength(unittest.TestCase):
     def test_fail(self):
         report = validate_data(self.assets.schemas[2],
                                self.assets.data_fail_v2)
-        self._assertEqual(report, self.assets.error_report)
+        self._assertEqual(self.assets.error_report, report)
 
 
 if __name__ == '__main__':
