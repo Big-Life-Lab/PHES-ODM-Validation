@@ -4,6 +4,11 @@ from functools import reduce
 from typing import Any, List
 
 
+def get_len(x: Any) -> int:
+    """Returns len if possible, otherwise zero."""
+    return len(x) if getattr(x, '__len__', None) else 0
+
+
 # TODO: swap src and dst to make the first arg the mutable one
 def deep_update(src: dict, dst: dict):
     """

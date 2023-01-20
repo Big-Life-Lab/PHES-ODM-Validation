@@ -29,6 +29,7 @@ class Rule:
     - rule_name
     - table_id
     - value
+    - value_len
     - constraint
     """
     id: str
@@ -46,6 +47,20 @@ def init_rule(rule_id, cerb_key, error, gen_schema):
     )
 
 
+def greater_than_max_length():
+    rule_id = greater_than_max_length.__name__
+    odm_key = 'maxLength'
+    cerb_key = 'maxlength'
+    err = ('Value {value} in row {row_num} in column {column_id} in table '
+           '{table_id} has length {value_len} which is greater than the max '
+           'length of {constraint}')
+
+    def gen_schema(data: pt.PartData, ver):
+        return gen_simple_schema(data, ver, rule_id, odm_key, cerb_key, int)
+
+    return init_rule(rule_id, cerb_key, err, gen_schema)
+
+
 def greater_than_max_value():
     rule_id = greater_than_max_value.__name__
     odm_key = 'maxValue'
@@ -55,7 +70,7 @@ def greater_than_max_value():
            '{constraint}')
 
     def gen_schema(data: pt.PartData, ver):
-        return gen_simple_schema(data, ver, rule_id, odm_key, cerb_key)
+        return gen_simple_schema(data, ver, rule_id, odm_key, cerb_key, float)
 
     return init_rule(rule_id, cerb_key, err, gen_schema)
 
@@ -82,6 +97,20 @@ def missing_mandatory_column():
     return init_rule(rule_id, cerb_rule[0], err, gen_schema)
 
 
+def less_than_min_length():
+    rule_id = less_than_min_length.__name__
+    odm_key = 'minLength'
+    cerb_key = 'minlength'
+    err = ('Value {value} in row {row_num} in column {column_id} in table '
+           '{table_id} has length {value_len} which is less than the min '
+           'length of {constraint}')
+
+    def gen_schema(data: pt.PartData, ver):
+        return gen_simple_schema(data, ver, rule_id, odm_key, cerb_key, int)
+
+    return init_rule(rule_id, cerb_key, err, gen_schema)
+
+
 def less_than_min_value():
     rule_id = less_than_min_value.__name__
     odm_key = 'minValue'
@@ -91,7 +120,7 @@ def less_than_min_value():
            '{constraint}')
 
     def gen_schema(data: pt.PartData, ver):
-        return gen_simple_schema(data, ver, rule_id, odm_key, cerb_key)
+        return gen_simple_schema(data, ver, rule_id, odm_key, cerb_key, float)
 
     return init_rule(rule_id, cerb_key, err, gen_schema)
 
@@ -126,8 +155,10 @@ def invalid_category():
 # This is the collection of all validation rules.
 # A tuple is used for immutability.
 ruleset: Tuple[Rule] = (
+    greater_than_max_length(),
     greater_than_max_value(),
     invalid_category(),
+    less_than_min_length(),
     less_than_min_value(),
     missing_mandatory_column(),
 )

@@ -9,16 +9,28 @@ import sys
 from dataclasses import dataclass
 from os.path import join, normpath
 from pathlib import Path
+from typing import Any, List, Optional
 # from pprint import pprint
-from typing import List, Optional
 
 from cerberusext import OdmValidator
 
 import part_tables as pt
-from rules import ruleset
+from rules import Rule, ruleset
 from schemas import Schema
-from stdext import deep_update, deduplicate_dict_list
+from stdext import deep_update, deduplicate_dict_list, get_len
 from versions import __version__, parse_version
+
+
+@dataclass
+class ErrorContext:
+    column_id: str
+    constraint: Any
+    row: dict
+    row_num: int
+    rule: Rule
+    rule_fields: list
+    table_id: str
+    value: Any
 
 
 @dataclass(frozen=True)
@@ -57,35 +69,34 @@ ODM_LATEST = _get_latest_odm_version()
 _KEY_RULES = {r.key: r for r in ruleset}
 
 
-def _rule_name(rule_id):
-    return rule_id.replace('_', ' ').capitalize()
+def _prettify_rule_name(rule: Rule):
+    return rule.id.replace('_', ' ').capitalize()
 
 
-def _error_msg(rule, table_id, column_id, row_num, value, constraint):
-    return rule.error_template.format(
-        rule_name=_rule_name(rule.id),
-        table_id=table_id,
-        column_id=column_id,
-        row_num=row_num,
-        value=value,
-        constraint=constraint,
+def _error_msg(ctx: ErrorContext):
+    return ctx.rule.error_template.format(
+        rule_name=_prettify_rule_name(ctx.rule),
+        table_id=ctx.table_id,
+        column_id=ctx.column_id,
+        row_num=ctx.row_num,
+        value=ctx.value,
+        value_len=get_len(ctx.value),
+        constraint=ctx.constraint,
     )
 
 
-def _gen_rule_error(rule, table, column, row_index, row, value, constraint,
-                    rule_fields):
-    row_num = row_index + 1
+def _gen_rule_error(ctx: ErrorContext):
     error = {
-        'errorType': rule.id,
-        'tableName': table,
-        'columnName': column,
-        'rowNumber': row_num,
-        'row': row,
-        'validationRuleFields': rule_fields,
-        'message': _error_msg(rule, table, column, row_num, value, constraint),
+        'errorType': ctx.rule.id,
+        'tableName': ctx.table_id,
+        'columnName': ctx.column_id,
+        'rowNumber': ctx.row_num,
+        'row': ctx.row,
+        'validationRuleFields': ctx.rule_fields,
+        'message': _error_msg(ctx),
     }
-    if value:
-        error['invalidValue'] = value
+    if ctx.value:
+        error['invalidValue'] = ctx.value
     return error
 
 
@@ -104,9 +115,10 @@ def _gen_error_entry(e, row, schema: Schema) -> Optional[dict]:
     column = schema['schema'][table_id]['schema']['schema'][column_id]
     column_meta = column.get('meta', [])
     rule_fields = pt.get_validation_rule_fields(column_meta, [rule.id])
-
-    return _gen_rule_error(rule, table_id, column_id, row_index, row, e.value,
-                           e.constraint, rule_fields)
+    error_ctx = ErrorContext(rule=rule, table_id=table_id, column_id=column_id,
+                             row_num=row_index+1, row=row, value=e.value,
+                             constraint=e.constraint, rule_fields=rule_fields)
+    return _gen_rule_error(error_ctx)
 
 
 def generate_validation_schema(parts, schema_version=ODM_LATEST) -> Schema:
@@ -126,8 +138,11 @@ def generate_validation_schema(parts, schema_version=ODM_LATEST) -> Schema:
     # `deep_update` is used to join all the table-schemas together,
     # however it will cause duplicates in the meta list. This is especially a
     # problem for the table-meta, so we'll need to deduplicate it here.
-    for table in cerb_schema:
+    for table in list(cerb_schema):
         table_schema = cerb_schema[table]['schema']
+        if table_schema['schema'] == {}:
+            del cerb_schema[table]
+            continue
         table_schema['meta'] = deduplicate_dict_list(table_schema['meta'])
 
     return {

@@ -9,7 +9,6 @@ from utils import (
     import_dataset,
     import_json_file,
     import_schema,
-    import_yaml_file
 )
 from validation import generate_validation_schema, validate_data
 
@@ -29,37 +28,22 @@ class Assets():
             2: import_schema(asset('schema-v2.yml')),
         }
 
-        self.data_pass_v2 = [
-            {'sites': import_dataset(asset('valid-dataset-1.yml'))},
-            {'sites': import_dataset(asset('valid-dataset-2.csv'))},
-            {'sites': import_dataset(asset('valid-dataset-3.yml'))},
-        ]
+        self.data_pass_v2 = {
+            'contacts': import_dataset(asset('valid-dataset.csv')),
+        }
 
-        self.data_fail_v2 = [
-            {'sites': import_yaml_file(asset('invalid-dataset-1.yml'))},
-            {'sites': import_dataset(asset('invalid-dataset-2.csv'))},
-            {'sites': import_dataset(asset('invalid-dataset-3.csv'))},
-        ]
+        self.data_fail_v2 = {
+            'contacts': import_dataset(asset('invalid-dataset.csv'))
+        }
 
-        self.error_report_fail = [
-            import_json_file(asset('error-report-1.json')),
-            import_json_file(asset('error-report-2.json')),
-            import_json_file(asset('error-report-3.json')),
-        ]
-
-        empty_report = {'errors': [], 'warnings': []}
-        self.error_report_pass = [
-            empty_report,
-            import_json_file(asset('error-report-4.json')),
-            empty_report,
-        ]
+        self.error_report = import_json_file(asset('error-report.json'))
 
 
 @parameterized_class([
-   {'ruleId': 'less_than_min_value'},
-   {'ruleId': 'greater_than_max_value'},
+   {'ruleId': 'less_than_min_length'},
+   {'ruleId': 'greater_than_max_length'},
 ])
-class TestMinMaxValue(unittest.TestCase):
+class TestMinMaxLength(unittest.TestCase):
     ruleId: str
 
     def setUp(self):
@@ -76,19 +60,15 @@ class TestMinMaxValue(unittest.TestCase):
         self.assertEqual(report.errors, expected['errors'])
         self.assertEqual(report.warnings, expected['warnings'])
 
-    @parameterized.expand(param_range(0, 3))
-    def test_passing_datasets(self, ix):
+    def test_pass(self):
         report = validate_data(self.assets.schemas[2],
-                               self.assets.data_pass_v2[ix])
-        expected = self.assets.error_report_pass[ix]
-        self._assertEqual(report, expected)
+                               self.assets.data_pass_v2)
+        self.assertTrue(report.valid())
 
-    @parameterized.expand(param_range(0, 3))
-    def test_failing_datasets(self, ix):
+    def test_fail(self):
         report = validate_data(self.assets.schemas[2],
-                               self.assets.data_fail_v2[ix])
-        expected = self.assets.error_report_fail[ix]
-        self._assertEqual(report, expected)
+                               self.assets.data_fail_v2)
+        self._assertEqual(report, self.assets.error_report)
 
 
 if __name__ == '__main__':

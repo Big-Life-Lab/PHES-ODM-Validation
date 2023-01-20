@@ -6,12 +6,13 @@ schema:
       type: dict
       schema:
         phone:
-          maxLength: 10
+          maxlength: 10
           meta:
-          - ruleId: greater_than_max_length
+          - ruleID: greater_than_max_length
             meta:
             - partID: phone
               maxLength: '10'
-    meta:
-      - partID: contacts
-        partType: table
+              contacts: header
+      meta:
+        - partID: contacts
+          partType: table
