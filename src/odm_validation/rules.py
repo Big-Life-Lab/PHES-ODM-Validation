@@ -189,12 +189,49 @@ def invalid_category():
     return init_rule(rule_id, err, gen_cerb_rules, gen_schema)
 
 
+def invalid_type():
+    rule_id = invalid_type.__name__
+    odm_key = 'dataType'
+    err_default = ('Value {value} in row {row_num} in column {column_id} in '
+                   'table {table_id} has type {value_type} but should be of '
+                   'type {constraint} or coercable into a {constraint}')
+    err_bool = ('Column {column_id} in row {row_num} in table {table_id} is a '
+                'boolean but has value {value}. '
+                'Allowed values are {allowed_values}.')
+    err_date = ('Column {column_id} in row {row_num} in table {table_id} is a '
+                'datetime with value {value} that has an unsupported datetime '
+                'format. '
+                'Allowed values are ISO 8601 standard full dates, full dates '
+                'and times, or full dates and times with timezone.')
+
+    def get_error_template(odm_value: Any, odm_datatype: str):
+        val = odm_value
+        kind = odm_datatype
+        assert kind
+        if kind == pt.BOOLEAN:
+            assert isinstance(val, str)
+            return err_bool
+        elif kind == pt.DATETIME:
+            return err_date
+        else:
+            return err_default
+
+    def gen_cerb_rules(val_ctx: OdmValueCtx):
+        return gen_cerb_rules_for_type(val_ctx)
+
+    def gen_schema(data: pt.PartData, ver):
+        return gen_simple_schema(data, ver, rule_id, odm_key, gen_cerb_rules)
+
+    return init_rule(rule_id, get_error_template, gen_cerb_rules, gen_schema)
+
+
 # This is the collection of all validation rules.
 # A tuple is used for immutability.
 ruleset: Tuple[Rule] = (
     greater_than_max_length(),
     greater_than_max_value(),
     invalid_category(),
+    invalid_type(),
     less_than_min_length(),
     less_than_min_value(),
     missing_mandatory_column(),
