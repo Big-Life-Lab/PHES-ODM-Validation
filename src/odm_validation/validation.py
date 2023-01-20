@@ -184,6 +184,52 @@ def _gen_error_entry(e, row, schema: Schema, rule_whitelist: List[str]
     return _gen_rule_error(error_ctx)
 
 
+def _get_table_name(x):
+    return x['tableName']
+
+
+def _get_row_num(x):
+    return x['rowNumber']
+
+
+def _get_column_name(x):
+    return x['columnName']
+
+
+def _get_rule_id(x):
+    assert 'errorType' in x, x
+    return x['errorType']
+
+
+def _get_table_rownum_column(x):
+    return (_get_table_name(x), _get_row_num(x), _get_column_name(x))
+
+
+def _sort_errors(errors):
+    """Sorts errors by table, row-num, column."""
+    return sorted(errors, key=_get_table_rownum_column)
+
+
+def _filter_errors(errors):
+    """Removes redundant errors."""
+    # - invalid_type produces redundant _coercion errors
+    result = []
+    target_rule_ids = {rules._COERCION}
+    sorted_errors = _sort_errors(errors)
+    for tableName, table_errors in groupby(sorted_errors, _get_table_name):
+        for rowNum, row_errors in groupby(table_errors, _get_row_num):
+            for columnName, col_errors in groupby(row_errors,
+                                                  _get_column_name):
+                value_errors = list(col_errors)
+                rule_ids = list(map(_get_rule_id, value_errors))
+                if rules.invalid_type.__name__ in rule_ids:
+                    for id in set(rule_ids).intersection(target_rule_ids):
+                        ix = rule_ids.index(id)
+                        del value_errors[ix]
+                result += value_errors
+    return result
+
+
 def _generate_validation_schema_ext(parts, schema_version,
                                     rule_whitelist=[]
                                     ) -> Schema:
@@ -258,6 +304,8 @@ def _validate_data_ext(schema: Schema,
                                 errors.append(entry)
     errors += coercion_errors
     warnings += coercion_warnings
+
+    errors = _filter_errors(errors)
 
     return ValidationReport(
         data_version=data_version,
