@@ -118,6 +118,33 @@ def _gen_rule_error(ctx: ErrorContext):
     return error
 
 
+def _get_ruleId(x):
+    return x['ruleID']
+
+
+def _get_dataType(x):
+    return x[pt.DATA_TYPE]
+
+
+def _is_invalid_type_rule(rule):
+    return rule.id == rules.invalid_type.__name__
+
+
+def _transform_rule(rule: Rule, column_meta) -> Rule:
+    """Returns a new rule, depending on `column_meta`. Currently only returns
+    invalid_type if rule-key is 'allowed' and dataType is bool."""
+    # XXX: dependency on meta value (which is only supposed to aid debug)
+    if rule.key == 'allowed':
+        rule_ids = list(map(_get_ruleId, column_meta))
+        new_rule = next(filter(_is_invalid_type_rule, ruleset), None)
+        if not new_rule or new_rule.id not in rule_ids:
+            return rule
+        ix = rule_ids.index(new_rule.id)
+        if pt.BOOLEAN in map(_get_dataType, column_meta[ix]['meta']):
+            return new_rule
+    return rule
+
+
 def _get_allowed_values(cerb_rules: Dict[str, Any]) -> Set[str]:
     return set(cerb_rules.get('allowed', []))
 
@@ -128,15 +155,19 @@ def _extract_datatype(column_meta: list) -> Optional[str]:
     return next(datatype_metas, {}).get(pt.DATA_TYPE)
 
 
+def _get_rule_for_cerb_key(key: str, column_meta) -> Rule:
+    rule = _KEY_RULES.get(key)
+    assert rule, f'missing handler for cerberus rule "{key}"'
+    return _transform_rule(rule, column_meta)
+
+
 def _gen_error_entry(e, row, schema: Schema, rule_whitelist: List[str]
                      ) -> Optional[dict]:
     rule_key = e.schema_path[-1]
-    rule = _KEY_RULES.get(rule_key)
-    assert rule, f'missing handler for cerberus rule "{rule_key}"'
-
     (table_id, row_index, column_id) = e.document_path
     column = schema['schema'][table_id]['schema']['schema'][column_id]
     column_meta = column.get('meta', [])
+    rule = _get_rule_for_cerb_key(rule_key, column_meta)
 
     if len(rule_whitelist) > 0 and rule.id not in rule_whitelist:
         return
