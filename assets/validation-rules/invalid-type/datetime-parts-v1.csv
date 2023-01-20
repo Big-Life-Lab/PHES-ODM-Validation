@@ -1,3 +1,0 @@
-partIDpartID,partType,measures,dataType,version1Location,version1Table,version1Variable
-measures,table,NA,NA,tables,Measure,NA
-reportDate,attribute,header,datetime,variables,Measure,DateReport
