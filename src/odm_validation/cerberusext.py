@@ -1,5 +1,6 @@
 import logging
 from dataclasses import dataclass
+from datetime import datetime
 from enum import Enum
 from typing import List, Optional
 from copy import deepcopy
@@ -10,6 +11,7 @@ from cerberus import Validator
 import part_tables as pt
 import rules as validation_rules
 from stdext import (
+    parse_datetime,
     parse_int,
     strip_dict_key,
     type_name,
@@ -81,6 +83,8 @@ def _gen_coercion_log_entry(log_lvl, ctx):
 def _convert_value(orig_value, type_class) -> int:
     if type_class is int:
         return parse_int(orig_value)
+    elif type_class is datetime:
+        return parse_datetime(orig_value)
     else:
         return type_class(orig_value)
 
@@ -175,6 +179,8 @@ class ContextualCoercer(Validator):
             value = orig_value
             self._log_coercion(LogLevel.ERROR, ctx)
 
+    def _check_with_datetime(self, field, value):
+        self._set_value(field, value, datetime)
 
     def _check_with_float(self, field, value):
         self._set_value(field, value, float)

@@ -184,7 +184,7 @@ def _odm_to_cerb_datatype(odm_datatype: str) -> Optional[str]:
     assert t
     if t in ['boolean', 'categorical', 'varchar']:
         return 'string'
-    if t in ['integer', 'float']:
+    if t in ['datetime', 'integer', 'float']:
         return t
     logging.error(f'odm datatype {t} is not implemented')
 

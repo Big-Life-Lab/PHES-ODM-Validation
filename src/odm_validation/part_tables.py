@@ -97,6 +97,7 @@ TABLE = 'table'
 # other value constants
 BOOLEAN = 'boolean'
 BOOLEAN_SET = 'booleanSet'
+DATETIME = 'datetime'
 MANDATORY = 'mandatory'
 NA = {'', 'NA', 'Not applicable'}
 
