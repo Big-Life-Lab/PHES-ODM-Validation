@@ -6,7 +6,7 @@ from enum import Enum
 from itertools import islice
 from logging import error, warning
 from semver import Version
-from typing import DefaultDict, Dict, List, Optional, Set, Tuple
+from typing import DefaultDict, Dict, List, Optional, Set
 
 from stdext import flatten
 from versions import parse_version

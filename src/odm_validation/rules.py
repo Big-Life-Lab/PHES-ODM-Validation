@@ -4,7 +4,7 @@ Rule functions are ordered alphabetically.
 """
 
 from dataclasses import dataclass
-from typing import Any, Callable, List, Set, Tuple
+from typing import Any, Callable, Tuple
 
 import part_tables as pt
 from schemas import Schema, update_schema

@@ -3,7 +3,7 @@ import json
 import operator
 from datetime import datetime
 from functools import reduce
-from typing import Any, Callable, List, Optional
+from typing import Any, List, Optional
 
 
 def get_len(x: Any) -> int:
