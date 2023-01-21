@@ -15,10 +15,11 @@ class OdmValueCtx:
     """ODM value context."""
     value: str
     datatype: str
+    bool_set: pt.BoolSet
 
     @staticmethod
     def default():
-        return OdmValueCtx(value=None, datatype=None)
+        return OdmValueCtx(value=None, datatype=None, bool_set=None)
 
 
 def get_table_meta(table: Part, version: Version) -> Meta:
@@ -161,13 +162,16 @@ def gen_simple_schema(data: pt.PartData, ver: Version, rule_id: str,
     :gen_cerb_rules: A function returning a dict of Cerberus rules
     """
     schema = {}
+    bool_set0 = data.bool_set
+    bool_set1 = set(map_ids(data.mappings, list(bool_set0), ver))
     for table in table_items2(data):
         table_id0 = pt.get_partID(table)
         table_schema = init_table_schema2(schema, data, table, ver)
         for attr in attr_items2(data, table_id0, odm_key):
             odm_val = attr[odm_key]
             odm_datatype = attr.get(pt.DATA_TYPE)
-            val_ctx = OdmValueCtx(value=odm_val, datatype=odm_datatype)
+            val_ctx = OdmValueCtx(value=odm_val, datatype=odm_datatype,
+                                  bool_set=bool_set1)
             cerb_rules = gen_cerb_rules(val_ctx)
             set_attr_schema(table_schema, data, table, attr, rule_id,
                             odm_key, cerb_rules, ver)
@@ -178,7 +182,7 @@ def gen_simple_schema(data: pt.PartData, ver: Version, rule_id: str,
 def _odm_to_cerb_datatype(odm_datatype: str) -> Optional[str]:
     t = odm_datatype
     assert t
-    if t in ['categorical', 'varchar']:
+    if t in ['boolean', 'categorical', 'varchar']:
         return 'string'
     if t in ['integer', 'float']:
         return t
@@ -191,4 +195,6 @@ def gen_cerb_rules_for_type(val_ctx: OdmValueCtx):
     result = {'type': cerb_type}
     if cerb_type != 'string':
         result['coerce'] = cerb_type
+    if odm_type == 'boolean':
+        result['allowed'] = sorted(val_ctx.bool_set)
     return result
