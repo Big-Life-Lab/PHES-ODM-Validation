@@ -1,9 +1,9 @@
-# Tutorial 1
+# Getting started
 
-The goal of the ODM-validation library is to provide an easy way of checking
-that your data is ODM-compliant, by validating it against a rule-based schema.
+The ODM-validation library provides an easy way of checking
+that your data is ODM-compliant by validating it against a rule-based schema.
 
-Let's take a look at how you might use this library to validate your data.
+Let's walk an example of how to validate your data.
 
 ## Dependencies
 
@@ -45,12 +45,11 @@ ASSET_DIR = "../../assets/"
 
 ## Validation
 
-To run the validation you will need your own dataset as a CSV-file, and a
+To run the validation you will need your own dataset as a CSV file, and a
 validation schema specific to the version of the ODM you're using.
 
 In this example we'll validate a table of samples with the default schema. The
-`validate_data` can take multiple tables at once, so we need to wrap our
-sample-data in a dictionary with the table-name as the key.
+`validate_data` can take multiple tables at once, so we include our sample table in a Python dictionary with the table name as the key. We are validating the `samples` table in this example. 
 
 ```{python}
 schema_file = join(ASSET_DIR, "validation-schemas/schema-v2.0.0-rc.1.yml")
