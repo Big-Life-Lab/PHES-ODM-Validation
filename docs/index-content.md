@@ -11,6 +11,14 @@ errors = validate_data(schema, data)
 
 # Overview
 
+The ODM library has the following features:
+
+- Validate any ODM data table as a CSV file.
+- Generate a report with warning and errors that indicate which data field(s) contain invalid data.
+- Validate any version of the ODM dicionary.
+- Users can add rules for their specific program. For example, you can add a list of valid testing sites for your surveillance program.
+- Users can request additional default validation rules.
+
 There are three parts to the ODM validation toolkit.
 
 1. **Python functions to validate ODM-formatted data**. These functions check ODM data for missing, incomplete, or incompatible data. The functions return a list of errors and warnings.
