@@ -1,6 +1,7 @@
 import logging
 from dataclasses import dataclass
 from typing import Dict, List, Optional
+from logging import warning
 # from pprint import pprint
 
 import part_tables as pt
@@ -168,7 +169,10 @@ def gen_simple_schema(data: pt.PartData, ver: Version, rule_id: str,
         table_id0 = pt.get_partID(table)
         table_schema = init_table_schema2(schema, data, table, ver)
         for attr in attr_items2(data, table_id0, odm_key):
-            odm_val = attr[odm_key]
+            odm_val = attr.get(odm_key)
+            if not odm_val:
+                warning(f'missing value for {pt.get_partID(attr)}.{odm_key}')
+                continue
             odm_datatype = attr.get(pt.DATA_TYPE)
             val_ctx = OdmValueCtx(value=odm_val, datatype=odm_datatype,
                                   bool_set=bool_set1)
