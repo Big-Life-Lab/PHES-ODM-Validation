@@ -2,7 +2,8 @@
 /examples/**/*.md
 /validation-rules/*.md
 
-# intermediary files from running `quarto preview`
+# intermediary files from running quarto
+*.ipynb
 *_files/
 
 # intermediary sphinx files
