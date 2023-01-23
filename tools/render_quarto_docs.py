@@ -15,5 +15,6 @@ print(f'rendering {glob_expr}')
 for path in root_dir.glob(glob_expr):
     cmd = f'quarto render {path} --to gfm'
     print(cmd)
-    os.system(cmd)
+    if os.system(cmd) != 0:
+        quit(1)
 print('done')
