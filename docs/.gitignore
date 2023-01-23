@@ -1,5 +1,6 @@
 # intermediary quarto files
 /examples/**/*.md
+/specs/*.md
 /validation-rules/*.md
 
 # intermediary files from running `quarto preview`
