@@ -27,7 +27,7 @@ There are three parts to the ODM validation toolkit.
 
 # Installation
 
-@zargot please add
+{{< include ../INSTALL >}}
 
 # Usage
 
