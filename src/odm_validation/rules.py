@@ -16,7 +16,7 @@ from rule_primitives import (
     OdmValueCtx,
     attr_items,
     gen_cerb_rules_for_type,
-    gen_simple_schema,
+    gen_value_schema,
     get_attr_meta,
     get_catset_meta,
     get_table_meta,
@@ -77,7 +77,7 @@ def greater_than_max_length():
         return {'maxlength': try_parse_int(val_ctx.value)}
 
     def gen_schema(data: pt.PartData, ver):
-        return gen_simple_schema(data, ver, rule_id, odm_key, gen_cerb_rules)
+        return gen_value_schema(data, ver, rule_id, odm_key, gen_cerb_rules)
 
     return init_rule(rule_id, err, gen_cerb_rules, gen_schema)
 
@@ -95,7 +95,7 @@ def greater_than_max_value():
         } | gen_cerb_rules_for_type(val_ctx)
 
     def gen_schema(data: pt.PartData, ver):
-        return gen_simple_schema(data, ver, rule_id, odm_key, gen_cerb_rules)
+        return gen_value_schema(data, ver, rule_id, odm_key, gen_cerb_rules)
 
     return init_rule(rule_id, err, gen_cerb_rules, gen_schema)
 
@@ -136,7 +136,7 @@ def less_than_min_length():
         return {'minlength': try_parse_int(val_ctx.value)}
 
     def gen_schema(data: pt.PartData, ver):
-        return gen_simple_schema(data, ver, rule_id, odm_key, gen_cerb_rules)
+        return gen_value_schema(data, ver, rule_id, odm_key, gen_cerb_rules)
 
     return init_rule(rule_id, err, gen_cerb_rules, gen_schema)
 
@@ -154,7 +154,7 @@ def less_than_min_value():
         } | gen_cerb_rules_for_type(val_ctx)
 
     def gen_schema(data: pt.PartData, ver):
-        return gen_simple_schema(data, ver, rule_id, odm_key, gen_cerb_rules)
+        return gen_value_schema(data, ver, rule_id, odm_key, gen_cerb_rules)
 
     return init_rule(rule_id, err, gen_cerb_rules, gen_schema)
 
@@ -220,7 +220,7 @@ def invalid_type():
         return gen_cerb_rules_for_type(val_ctx)
 
     def gen_schema(data: pt.PartData, ver):
-        return gen_simple_schema(data, ver, rule_id, odm_key, gen_cerb_rules)
+        return gen_value_schema(data, ver, rule_id, odm_key, gen_cerb_rules)
 
     return init_rule(rule_id, get_error_template, gen_cerb_rules, gen_schema)
 

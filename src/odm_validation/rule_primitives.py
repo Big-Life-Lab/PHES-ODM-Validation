@@ -150,13 +150,13 @@ def set_attr_schema(table_schema, data, table, attr, rule_id, odm_key,
     deep_update(attr_schema, table_schema[table_id1]['schema']['schema'])
 
 
-def gen_simple_schema(data: pt.PartData, ver: Version, rule_id: str,
-                      odm_key: str, gen_cerb_rules):
-    """Provides a simple way to generate a simple schema. This should be
+def gen_value_schema(data: pt.PartData, ver: Version, rule_id: str,
+                     odm_key: str, gen_cerb_rules):
+    """Provides a simple way to generate a value schema. This should be
     prefered to iterating over part-data directly in the rule-functions.
 
-    A simple schema simply means mapping an ODM-attribute to a cerberus schema
-    attribute without any extra fuss. Ex: minValue -> min.
+    A value-schema is a schema that maps an ODM-attribute to a cerberus schema
+    attribute. Ex: minValue -> min.
 
     :odm_key: The ODM rule attribute
     :gen_cerb_rules: A function returning a dict of Cerberus rules
