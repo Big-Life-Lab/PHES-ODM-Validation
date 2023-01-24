@@ -22,7 +22,7 @@ The ODM library has the following features:
 There are three parts to the ODM validation toolkit.
 
 1. **Python functions to validate ODM-formatted data**. These functions check ODM data for missing, incomplete, or incompatible data. The functions return a list of errors and warnings.
-1. **A list of validation rules**. The rules define what are valid ODM data. Examples of rules include [mandatory data feids](insert the link to the missing*mandatory_column rule) and valid data types. For example, every measurent must have a date the mesaurment was preformed, and the [date type](insert the link to data type rule) must follow [ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html) format. Rules are combined together in a \_validation schema*.
+1. **A list of validation rules**. The rules define what are valid ODM data. Examples of rules include [mandatory data fields](validation-rules/missing_mandatory_column.md) and valid data types. For example, every measurent must have a date the measurement was performed, and the [date type](validation-rules/invalid_type.md#datetime) must follow [ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html) format. Rules are combined together in a validation schema.
 1. **A standard schema method**. The validation toolkit extends the [cerebrus](https://docs.python-cerberus.org/en/stable/index.html) validation method to provide a standard approach to defining validation rules that allows the rule list to be easily extended. For example, a wastewater surveillance program can can generate a list of the sample sites within their program; and then use the ODM validation toolkit to ensure all their data include a `siteID` with a valid idenfitication. See [tutorial X]() for how to extend the ODM schema.
 
 # Installation
@@ -55,6 +55,6 @@ errors = validate_data(schema, data)
 
 Get support on the [ODM Discourse community forum](https://odm.discourse.group/c/support). Use the `#validate` in your question. Use the `#faq` and `#validate` to find frequently asked questions.
 
-See [Contributing][link] for how to suggest a new rule.
+See [Contributing](links/contributing_link.md) for how to suggest a new rule.
 
 Error or bugs can be reported on GitHub [Issues](https://github.com/Big-Life-Lab/PHES-ODM-Validation/issues).
