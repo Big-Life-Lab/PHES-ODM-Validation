@@ -48,7 +48,7 @@ def pprintDictList(dictList, title):
     console.print(table)
 ```
 
-Next, install the two main library functions.
+Next, import the two main library functions.
 
 ```{python}
 from odm_validation.validation import validate_data, generate_validation_schema
@@ -73,9 +73,9 @@ The validation schema has two fields:
 * `schemaVersion`: the version of the ODM the validation schema; and,
 * `schema`: which has the validation rules
 
-The structure of the validation rules follows a Python library called [cerberus](https://docs.python-cerberus.org/en/stable/schemas.html) that does all the validation heavy lifting. The PHES-ODM validation package integrates the ODM schema into cereberus and then uses cereberus methods to validate ODM data. 
+The structure of the validation rules follows a Python library called [cerberus](https://docs.python-cerberus.org/en/stable/schemas.html) that does all the validation heavy lifting. The PHES-ODM validation package integrates the ODM schema into cereberus and then uses cereberus methods to validate ODM data.
 
-The dataset in the next code chunk is a very simple `sites` table as a [CSV file](./datasets/invalid-sites-dataset.csv). The dataset has invalid data since it is missing the mandatory `geoLat` column. You can see in the above schema that `geolat` is mandatory by code `'geoLat': {'required': True}`.
+The dataset in the next code chunk is a very simple `sites` table as a [CSV file](./datasets/invalid-sites-dataset.csv). The dataset has invalid data since it is missing the mandatory `geoLat` column. You can see in the above schema that `geoLat` is mandatory by code `'geoLat': {'required': True}`.
 
 ```{python}
 invalid_odm_dataset = {
@@ -90,8 +90,8 @@ Consequentially, we get an error when we try to validate the dataset with our co
 
 The `validate_data` function is used to validate ODM data. The function requires two pieces of information:
  1. a validation schema;
- 1. an ODM dataset to validate. 
- 
+ 1. an ODM dataset to validate.
+
  The function returns a validation report for the data. The following code chunk validates our invalid ODM dataset and prints the report.
 
 ```{python}
@@ -111,7 +111,7 @@ The error report provides metadata to trace which data row had invalid data. The
 
 The validation report also consists of versioning metadata fields to debug any errors in the ODM schema. These are the `data_version`, `schema_version`, and `package_version` fields.
 
-## Example: validating a validate data table
+### Example: validating a valid data table
 
 For completeness let's validate a [valid dataset](./datasets/valid-sites-dataset.csv) in the next two code chunks.
 
@@ -135,7 +135,7 @@ As we can see, the error list is empty.
 
 ### `generate_validation_schema` function
 
-Generally, you don't need to create a validation schema because there are default OMD validation schemas for all ODM versions. However, you can create your own schema with the `generate_validation_schema` function. This function generates a validation schema from the ODM dictionary. The next chunk has a chunk from the [parts sheet](./dictionary/parts-v2.csv) in the dictionary.
+Generally, you don't need to create a validation schema because there are default ODM validation schemas for all ODM versions. However, you can create your own schema with the `generate_validation_schema` function. This function generates a validation schema from the ODM dictionary. The next chunk has a chunk from the [parts sheet](./dictionary/parts-v2.csv) in the dictionary.
 
 ```{python}
 parts_sheet = import_dataset("./dictionary/parts-v2.csv")
