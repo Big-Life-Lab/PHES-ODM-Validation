@@ -6,6 +6,7 @@ generation and data validation.
 import os
 import re
 import sys
+from copy import deepcopy
 from dataclasses import dataclass
 from itertools import groupby
 from os.path import join, normpath
@@ -13,17 +14,18 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional, Set
 # from pprint import pprint
 
-from cerberusext import OdmValidator
+from cerberusext import ContextualCoercer, OdmValidator
 
 import part_tables as pt
 import rules
 from rules import Rule, ruleset
-from schemas import Schema
+from schemas import CerberusSchema, Schema
 from stdext import (
-    deep_update,
     deduplicate_dict_list,
+    deep_update,
     flatten,
     get_len,
+    strip_dict_key,
     type_name,
 )
 from versions import __version__, parse_version
@@ -161,11 +163,11 @@ def _get_rule_for_cerb_key(key: str, column_meta) -> Rule:
     return _transform_rule(rule, column_meta)
 
 
-def _gen_error_entry(e, row, schema: Schema, rule_whitelist: List[str]
+def _gen_error_entry(e, row, schema: CerberusSchema, rule_whitelist: List[str]
                      ) -> Optional[dict]:
     rule_key = e.schema_path[-1]
     (table_id, row_index, column_id) = e.document_path
-    column = schema['schema'][table_id]['schema']['schema'][column_id]
+    column = schema[table_id]['schema']['schema'][column_id]
     column_meta = column.get('meta', [])
     rule = _get_rule_for_cerb_key(rule_key, column_meta)
 
@@ -230,6 +232,30 @@ def _filter_errors(errors):
     return result
 
 
+def _coerce_data(data, schema, warnings, errors):
+    coercer = ContextualCoercer(warnings=warnings, errors=errors)
+    return coercer.coerce(data, schema)
+
+
+def _strip_coerce_rules(cerb_schema):
+    return strip_dict_key(deepcopy(cerb_schema), 'coerce')
+
+
+def _map_errors(cerb_errors, schema, rule_whitelist):
+    errors = []
+    for table_error in cerb_errors:
+        for row_errors in table_error.info:
+            for e in row_errors:
+                row = e.value
+                for attr_errors in e.info:
+                    for e in attr_errors:
+                        entry = _gen_error_entry(e, row, schema,
+                                                 rule_whitelist)
+                        if entry:
+                            errors.append(entry)
+    return errors
+
+
 def _generate_validation_schema_ext(parts, schema_version,
                                     rule_whitelist=[]
                                     ) -> Schema:
@@ -283,33 +309,29 @@ def _validate_data_ext(schema: Schema,
     # `rule_whitelist` determines which rules/errors are triggered during
     # validation. It is needed when testing data validation, to be able to
     # compare error reports in isolation.
+    #
+    # The schema is being put through two steps. First, coercion is done by
+    # looking at the `coerce` rules, then those rules are stripped and
+    # validation is performed on the remaining rules.
+
     errors = []
     warnings = []
-    coercion_warnings = []
-    coercion_errors = []
-    cerb_schema = schema["schema"]
-    v = OdmValidator(coercion_warnings=coercion_warnings,
-                     coercion_errors=coercion_errors)
-    assert isinstance(cerb_schema, dict)
-    if not v.validate(data, cerb_schema):
-        for table_error in v._errors:
-            for row_errors in table_error.info:
-                for e in row_errors:
-                    row = e.value
-                    for attr_errors in e.info:
-                        for e in attr_errors:
-                            entry = _gen_error_entry(e, row, schema,
-                                                     rule_whitelist)
-                            if entry:
-                                errors.append(entry)
-    errors += coercion_errors
-    warnings += coercion_warnings
+    versioned_schema = schema
+    cerb_schema = versioned_schema["schema"]
+    coercion_schema = cerb_schema
+
+    coerced_data = _coerce_data(data, coercion_schema, warnings, errors)
+
+    v = OdmValidator()
+    validation_schema = _strip_coerce_rules(coercion_schema)
+    if not v.validate(coerced_data, validation_schema):
+        errors += _map_errors(v._errors, validation_schema, rule_whitelist)
 
     errors = _filter_errors(errors)
 
     return ValidationReport(
         data_version=data_version,
-        schema_version=schema["schemaVersion"],
+        schema_version=versioned_schema["schemaVersion"],
         package_version=__version__,
         errors=errors,
         warnings=warnings,

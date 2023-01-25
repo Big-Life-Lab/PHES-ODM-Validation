@@ -190,26 +190,11 @@ class ContextualCoercer(Validator):
 
 
 class OdmValidator(Validator):
-    """Must be constructed with `coercion_warnings` and `coercion_errors`
-    parameters set to existing lists."""
-    # This is the main class used for validation. It wraps the
-    # ContextualCoercer class to perform coercion before the validation step.
+    # This is the main class used for validation.
 
     def __init__(self, *args, **kwargs):
-        # Cerberus is filling in `_config` with any extra key-value
-        # parameters, which is how the coercion-warning/error lists are set.
-        #
         # Unknown fields must be allowed because we're only generating a schema
         # for the requirements, not the optional data.
         super().__init__(*args, **kwargs)
         self.allow_unknown = True
 
-    def validate(self, data, schema):
-        warnings = self._config['coercion_warnings']
-        errors = self._config['coercion_errors']
-        coercer = ContextualCoercer(warnings=warnings, errors=errors)
-        coerced_data = coercer.coerce(data, schema)
-
-        validation_schema = strip_dict_key(deepcopy(schema), 'coerce')
-        result = super().validate(coerced_data, validation_schema)
-        return result

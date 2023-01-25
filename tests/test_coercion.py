@@ -2,7 +2,8 @@ import unittest
 # from pprint import pprint
 
 import common
-from cerberusext import ContextualCoercer, OdmValidator
+from cerberusext import ContextualCoercer
+from validation import _validate_data_ext
 
 common.unused_import_dummy = 1
 
@@ -19,26 +20,30 @@ column_meta = [
 
 
 schema = {
-    'mytable': {
-        'type': 'list',
-        'schema': {
-            'type': 'dict',
+    'schemaVersion': '2.0.0',
+    'schema': {
+        'mytable': {
+            'type': 'list',
             'schema': {
-                'amount': {
-                    'type': 'float',
-                    'coerce': 'float',
-                    'meta': column_meta,
-                },
-                'quantity': {
-                    'type': 'integer',
-                    'coerce': 'integer',
-                },
-                'some_missing_field': {
+                'type': 'dict',
+                'schema': {
+                    'amount': {
+                        'type': 'float',
+                        'coerce': 'float',
+                        'meta': column_meta,
+                    },
+                    'quantity': {
+                        'type': 'integer',
+                        'coerce': 'integer',
+                    },
+                    'some_missing_field': {
+                    }
                 }
             }
         }
     }
 }
+cerb_schema = schema['schema']
 
 coercion_schema = {
     'mytable': {
@@ -108,24 +113,19 @@ class TestCoercion(common.OdmTestCase):
         self.maxDiff = None
 
     def test_extract_coercion_schema(self):
-        result = ContextualCoercer._extract_coercion_schema(schema)
+        result = ContextualCoercer._extract_coercion_schema(cerb_schema)
         self.assertEqual(result, coercion_schema)
 
     def test_coerce(self):
         warnings = []
         v = ContextualCoercer(warnings=warnings)
-        result = v.coerce(data, schema)
+        result = v.coerce(data, cerb_schema)
         self.assertEqual(result, coerced_data)
         self.assertEqual(warnings, expected_coercion_warnings)
 
-    def test_coerced_type_validation(self):
-        coercion_errors = []
-        coercion_warnings = []
-        v = OdmValidator(coercion_errors=coercion_errors,
-                         coercion_warnings=coercion_warnings)
-        self.assertTrue(v.validate(data, schema))
-        self.assertEqual(coercion_warnings, expected_coercion_warnings)
-        # TODO: self.assertEqual(coercion_errors, expected_coercion_errors)
+    def test_validation(self):
+        report = _validate_data_ext(schema, data)
+        self.assertTrue(report.valid())
 
 
 if __name__ == '__main__':
