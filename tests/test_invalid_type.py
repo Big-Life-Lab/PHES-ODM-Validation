@@ -11,7 +11,7 @@ from utils import (
     import_json_file,
     import_schema,
 )
-from validation import generate_validation_schema, _validate_data_ext
+from validation import _generate_validation_schema_ext, _validate_data_ext
 
 
 class Assets():
@@ -65,11 +65,14 @@ class TestInvalidType(common.OdmTestCase):
     def setUpClass(cls):
         cls.maxDiff = None
         cls.assets = Assets(cls.rule_id, cls.kind, cls.table)
+        cls.whitelist = [cls.rule_id]
 
     @parameterized.expand(param_range(1, 3))
     def test_schema_generation(self, major_ver):
-        result = generate_validation_schema(self.assets.parts_v2,
-                                            schema_version=f'{major_ver}.0.0')
+        ver = f'{major_ver}.0.0'
+        result = _generate_validation_schema_ext(parts=self.assets.parts_v2,
+                                                 schema_version=ver,
+                                                 rule_whitelist=self.whitelist)
         self.assertDictEqual(self.assets.schemas[major_ver], result)
 
     def _assertEqual(self, expected, report):
