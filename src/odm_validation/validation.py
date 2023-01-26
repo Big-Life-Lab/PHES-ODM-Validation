@@ -37,8 +37,8 @@ class ErrorContext:
     column_id: str
     constraint: Any
     odm_datatype: str
-    row: dict
-    row_num: int
+    rows: List[dict]
+    row_numbers: List[int]
     rule: Rule
     rule_fields: list
     table_id: str
@@ -90,6 +90,13 @@ def _fmt_allowed_values(values: Set[str]) -> str:
     return '/'.join(sorted(values))
 
 
+def _fmt_list(items: list) -> str:
+    if len(items) > 1:
+        return ','.join(map(str, items))
+    else:
+        return str(items[0])
+
+
 def _error_msg(ctx: ErrorContext):
     error_template = ctx.rule.get_error_template(ctx.value, ctx.odm_datatype)
     return error_template.format(
@@ -97,7 +104,7 @@ def _error_msg(ctx: ErrorContext):
         rule_name=_prettify_rule_name(ctx.rule),
         table_id=ctx.table_id,
         column_id=ctx.column_id,
-        row_num=ctx.row_num,
+        row_num=_fmt_list(ctx.row_numbers),
         value=ctx.value,
         value_len=get_len(ctx.value),
         value_type=type_name(type(ctx.value)),
@@ -110,13 +117,26 @@ def _gen_rule_error(ctx: ErrorContext):
         'errorType': ctx.rule.id,
         'tableName': ctx.table_id,
         'columnName': ctx.column_id,
-        'rowNumber': ctx.row_num,
-        'row': ctx.row,
         'validationRuleFields': ctx.rule_fields,
         'message': _error_msg(ctx),
     }
+
+    # row numbers
+    if len(ctx.row_numbers) > 1:
+        error['rowNumbers'] = ctx.row_numbers
+    else:
+        error['rowNumber'] = ctx.row_numbers[0]
+
+    # rows
+    if len(ctx.rows) > 1:
+        error['rows'] = ctx.rows
+    else:
+        error['row'] = ctx.rows[0]
+
+    # value
     if ctx.value:
         error['invalidValue'] = ctx.value
+
     return error
 
 
@@ -163,14 +183,11 @@ def _get_rule_for_cerb_key(key: str, column_meta) -> Rule:
     return _transform_rule(rule, column_meta)
 
 
-def _gen_error_entry(e, row, schema: CerberusSchema, rule_whitelist: List[str]
+def _gen_error_entry(cerb_rule, table_id, column_id, value, row_numbers,
+                     rows, column_meta, rule_whitelist: List[str],
+                     constraint=None, schema_column=None,
                      ) -> Optional[dict]:
-    rule_key = e.schema_path[-1]
-    (table_id, row_index, column_id) = e.document_path
-    column = schema[table_id]['schema']['schema'][column_id]
-    column_meta = column.get('meta', [])
-    rule = _get_rule_for_cerb_key(rule_key, column_meta)
-
+    rule = _get_rule_for_cerb_key(cerb_rule, column_meta)
     if len(rule_whitelist) > 0 and rule.id not in rule_whitelist:
         return
 
@@ -178,12 +195,35 @@ def _gen_error_entry(e, row, schema: CerberusSchema, rule_whitelist: List[str]
     odm_datatype = _extract_datatype(column_meta)
 
     rule_fields = pt.get_validation_rule_fields(column_meta, [rule.id])
+    allowed = _get_allowed_values(schema_column) if schema_column else []
     error_ctx = ErrorContext(rule=rule, table_id=table_id, column_id=column_id,
-                             row_num=row_index+1, row=row, value=e.value,
-                             constraint=e.constraint, rule_fields=rule_fields,
-                             allowed_values=_get_allowed_values(column),
+                             row_numbers=row_numbers, rows=rows, value=value,
+                             constraint=constraint, rule_fields=rule_fields,
+                             allowed_values=allowed,
                              odm_datatype=odm_datatype)
     return _gen_rule_error(error_ctx)
+
+
+def _gen_cerb_error_entry(e, row, schema: CerberusSchema,
+                          rule_whitelist: List[str]) -> Optional[dict]:
+    cerb_rule = e.schema_path[-1]
+    (table_id, row_index, column_id) = e.document_path
+    schema_column = schema[table_id]['schema']['schema'][column_id]
+    column_meta = schema_column.get('meta', [])
+    row_numbers = [row_index + 1]
+    rows = [row]
+    return _gen_error_entry(
+        cerb_rule,
+        table_id,
+        column_id,
+        e.value,
+        row_numbers,
+        rows,
+        column_meta,
+        rule_whitelist,
+        e.constraint,
+        schema_column
+    )
 
 
 def _get_table_name(x):
@@ -191,7 +231,7 @@ def _get_table_name(x):
 
 
 def _get_row_num(x):
-    return x['rowNumber']
+    return x.get('rowNumber') or x.get('rowNumbers')
 
 
 def _get_column_name(x):
@@ -249,8 +289,8 @@ def _map_errors(cerb_errors, schema, rule_whitelist):
                 row = e.value
                 for attr_errors in e.info:
                     for e in attr_errors:
-                        entry = _gen_error_entry(e, row, schema,
-                                                 rule_whitelist)
+                        entry = _gen_cerb_error_entry(e, row, schema,
+                                                      rule_whitelist)
                         if entry:
                             errors.append(entry)
     return errors
