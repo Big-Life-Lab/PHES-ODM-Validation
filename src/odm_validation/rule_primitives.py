@@ -179,6 +179,20 @@ def gen_value_schema(data: pt.PartData, ver: Version, rule_id: str,
     return schema
 
 
+def gen_global_schema(data: pt.PartData, ver: Version, rule_id: str,
+                      gen_cerb_rules):
+    schema = {}
+    cerb_rules = gen_cerb_rules(None)
+    for table in table_items2(data):
+        table_id = pt.get_partID(table)
+        table_schema = init_table_schema2(schema, data, table, ver)
+        for attr in data.table_data[table_id].attributes:
+            set_attr_schema(table_schema, data, table, attr, rule_id,
+                            None, cerb_rules, ver)
+        deep_update(table_schema, schema)
+    return schema
+
+
 def _odm_to_cerb_datatype(odm_datatype: str) -> Optional[str]:
     t = odm_datatype
     assert t

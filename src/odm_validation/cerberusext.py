@@ -1,8 +1,9 @@
 import logging
+from collections import defaultdict
 from dataclasses import dataclass
 from datetime import datetime
 from enum import Enum
-from typing import List, Optional
+from typing import Any, Dict, List, Optional, Set, Tuple
 from copy import deepcopy
 # from pprint import pprint
 
@@ -10,10 +11,11 @@ from cerberus import Validator
 
 import part_tables as pt
 import rules as validation_rules
+from part_tables import Row
 from stdext import (
+    inc,
     parse_datetime,
     parse_int,
-    strip_dict_key,
     type_name,
 )
 
@@ -189,12 +191,99 @@ class ContextualCoercer(Validator):
         self._set_value(field, value, int)
 
 
+DateStr = str
+TableId = str
+PrimaryKey = Tuple[pt.PartId, DateStr]
+TableKey = Tuple[TableId, PrimaryKey]
+Index = int
+
+
+@dataclass
+class AggregatedError:
+    cerb_rule: str
+    table_id: str
+    column_id: str
+    row_numbers: List[int]
+    rows: List[dict]
+    column_meta: List[dict]
+    value: Any
+
+
+class UniqueRuleState:
+    """State for the 'unique' rule."""
+    def __init__(self):
+        self.table_keys: Dict[TableId, Set[PrimaryKey]] = defaultdict(set)
+        self.tablekey_rows: Dict[TableKey, (Index, Row)] = {}
+        self.tablekey_errors: Dict[TableKey, AggregatedError] = \
+            defaultdict(AggregatedError)
+
+
+class ErrorState:
+    def __init__(self):
+        self.aggregated_errors: List[AggregatedError] = []
+
+
 class OdmValidator(Validator):
     # This is the main class used for validation.
+
+    @staticmethod
+    def new():
+        """Constructs this class with initialized state."""
+        # `__init__` can't be used to init state because Cerberus creates
+        # multiple instances of the validator, so the same instance/state won't
+        # be passed to our custom validation methods. The arguments passed in
+        # here are automatically assigned to `Validator._config` by Cerberus.
+        return OdmValidator(
+            unique_state=UniqueRuleState(),
+            error_state=ErrorState(),
+        )
 
     def __init__(self, *args, **kwargs):
         # Unknown fields must be allowed because we're only generating a schema
         # for the requirements, not the optional data.
         super().__init__(*args, **kwargs)
         self.allow_unknown = True
+        self.unique_state = self._config['unique_state']
+        self.error_state = self._config['error_state']
 
+    def _validate_unique(self, constraint, field, value):
+        """{'type': 'boolean'}"""
+        # the primary key (pk) is a compound key of partID and lastUpdated
+        if not constraint:
+            return
+        table_id = self.document_path[0]
+        row_ix = self.document_path[1]
+        row = self.document
+        lastUpdated = row.get('lastUpdated', '') or ''
+        assert isinstance(lastUpdated, str)
+        pk = (value.strip(), lastUpdated.strip())
+        state = self.unique_state
+        primary_keys = state.table_keys[table_id]
+        tablekey = (table_id, pk)
+        if pk in primary_keys:
+            err = state.tablekey_errors.get(tablekey)
+            if not err:
+                (first_ix, first_row) = state.tablekey_rows[tablekey]
+                err = AggregatedError(
+                    cerb_rule='unique',
+                    table_id=table_id,
+                    column_id=field,
+                    row_numbers=[inc(first_ix)],
+                    rows=[first_row],
+                    column_meta=self.schema[field].get('meta'),
+                    value=pk[0]
+                )
+                state.tablekey_errors[tablekey] = err
+            err.row_numbers.append(inc(row_ix))
+            err.rows.append(row)
+        else:
+            state.tablekey_rows[tablekey] = (row_ix, row)
+            primary_keys.add(pk)
+
+    def validate(self, *args, **kwargs) -> bool:
+        self.error_state.aggregated_errors.clear()
+        result = super().validate(*args, **kwargs)
+        self.error_state.aggregated_errors += \
+            self.unique_state.tablekey_errors.values()
+        result = result and len(self.error_state.aggregated_errors) == 0
+        return result

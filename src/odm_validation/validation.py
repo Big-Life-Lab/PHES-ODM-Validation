@@ -226,6 +226,21 @@ def _gen_cerb_error_entry(e, row, schema: CerberusSchema,
     )
 
 
+def _gen_aggregated_error_entry(agg_error,
+                                rule_whitelist: List[str]
+                                ) -> Optional[dict]:
+    return _gen_error_entry(
+        agg_error.cerb_rule,
+        agg_error.table_id,
+        agg_error.column_id,
+        agg_error.value,
+        agg_error.row_numbers,
+        agg_error.rows,
+        agg_error.column_meta,
+        rule_whitelist
+    )
+
+
 def _get_table_name(x):
     return x['tableName']
 
@@ -296,6 +311,15 @@ def _map_errors(cerb_errors, schema, rule_whitelist):
     return errors
 
 
+def _map_aggregated_errors(agg_errors, rule_whitelist):
+    errors = []
+    for ae in agg_errors:
+        entry = _gen_aggregated_error_entry(ae, rule_whitelist)
+        if entry:
+            errors.append(entry)
+    return errors
+
+
 def _generate_validation_schema_ext(parts, schema_version,
                                     rule_whitelist=[]
                                     ) -> Schema:
@@ -362,10 +386,12 @@ def _validate_data_ext(schema: Schema,
 
     coerced_data = _coerce_data(data, coercion_schema, warnings, errors)
 
-    v = OdmValidator()
+    v = OdmValidator.new()
     validation_schema = _strip_coerce_rules(coercion_schema)
     if not v.validate(coerced_data, validation_schema):
         errors += _map_errors(v._errors, validation_schema, rule_whitelist)
+        errors += _map_aggregated_errors(v.error_state.aggregated_errors,
+                                         rule_whitelist)
 
     errors = _filter_errors(errors)
 

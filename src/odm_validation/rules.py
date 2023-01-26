@@ -16,6 +16,7 @@ from rule_primitives import (
     OdmValueCtx,
     attr_items,
     gen_cerb_rules_for_type,
+    gen_global_schema,
     gen_value_schema,
     get_attr_meta,
     get_catset_meta,
@@ -64,6 +65,20 @@ def init_rule(rule_id, error, gen_cerb_rules, gen_schema):
         get_error_template=get_error_template,
         gen_schema=gen_schema,
     )
+
+
+def duplicate_entries_found():
+    rule_id = duplicate_entries_found.__name__
+    err = ('Duplicate entries found in rows {row_num} with primary key column '
+           '{column_id} and primary key value {value} in table {table_id}')
+
+    def gen_cerb_rules(val_ctx: OdmValueCtx):
+        return {'unique': True}
+
+    def gen_schema(data: pt.PartData, ver):
+        return gen_global_schema(data, ver, rule_id, gen_cerb_rules)
+
+    return init_rule(rule_id, err, gen_cerb_rules, gen_schema)
 
 
 def greater_than_max_length():
@@ -228,6 +243,7 @@ def invalid_type():
 # This is the collection of all validation rules.
 # A tuple is used for immutability.
 ruleset: Tuple[Rule] = (
+    duplicate_entries_found(),
     greater_than_max_length(),
     greater_than_max_value(),
     invalid_category(),
