@@ -3,12 +3,14 @@
         "partID": "sites",
         "partType": "table",
         "sites": "NA",
-        "sitesRequired": "NA"
+        "sitesRequired": "NA",
+        "status": "active"
     },
     {
         "partID": "siteID",
         "partType": "attribute",
         "sites": "pK",
-        "sitesRequired": "mandatory"
+        "sitesRequired": "mandatory",
+        "status": "active"
     }
 ]

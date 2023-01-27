@@ -15,6 +15,7 @@ schema:
             meta:
             - partID: siteID
               sitesRequired: mandatory
+              sites: pK
       meta:
       - partID: sites
         partType: table

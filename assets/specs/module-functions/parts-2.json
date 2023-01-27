@@ -1,34 +1,39 @@
 [
     {
         "partID": "samples",
-        "partType": "table"
+        "partType": "table",
+        "status": "active"
     },
     {
         "partID": "collection",
         "partType": "attribute",
         "samples": "header",
         "dataType": "categorical",
-        "catSetID": "collectCat"
+        "catSetID": "collectCat",
+        "status": "active"
     },
     {
         "partID": "comp3h",
         "partType": "category",
         "samples": "input",
         "dataType": "varchar",
-        "catSetID": "collectCat"
+        "catSetID": "collectCat",
+        "status": "active"
     },
     {
         "partID": "comp8h",
         "partType": "category",
         "samples": "input",
         "dataType": "varchar",
-        "catSetID": "collectCat"
+        "catSetID": "collectCat",
+        "status": "active"
     },
     {
         "partID": "flowPr",
         "partType": "category",
         "samples": "input",
         "dataType": "varchar",
-        "catSetID": "collectCat"
+        "catSetID": "collectCat",
+        "status": "active"
     }
 ]
