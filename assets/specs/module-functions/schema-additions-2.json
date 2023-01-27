@@ -1,0 +1,7 @@
+{
+    "samples": {
+        "collection": {
+            "allowed": ["comp3", "comp3dep"]
+        }
+    }
+}

@@ -1,0 +1,34 @@
+[
+    {
+        "partID": "samples",
+        "partType": "table"
+    },
+    {
+        "partID": "collection",
+        "partType": "attribute",
+        "samples": "header",
+        "dataType": "categorical",
+        "catSetID": "collectCat"
+    },
+    {
+        "partID": "comp3h",
+        "partType": "category",
+        "samples": "input",
+        "dataType": "varchar",
+        "catSetID": "collectCat"
+    },
+    {
+        "partID": "comp8h",
+        "partType": "category",
+        "samples": "input",
+        "dataType": "varchar",
+        "catSetID": "collectCat"
+    },
+    {
+        "partID": "flowPr",
+        "partType": "category",
+        "samples": "input",
+        "dataType": "varchar",
+        "catSetID": "collectCat"
+    }
+]
