@@ -43,6 +43,7 @@ class ErrorContext:
     rule_fields: list
     table_id: str
     value: Any
+    is_warning: bool
 
 
 @dataclass(frozen=True)
@@ -114,12 +115,17 @@ def _error_msg(ctx: ErrorContext):
 
 def _gen_rule_error(ctx: ErrorContext):
     error = {
-        'errorType': ctx.rule.id,
         'tableName': ctx.table_id,
         'columnName': ctx.column_id,
         'validationRuleFields': ctx.rule_fields,
         'message': _error_msg(ctx),
     }
+
+    # type
+    if ctx.is_warning:
+        error['warningType'] = ctx.rule.id
+    else:
+        error['errorType'] = ctx.rule.id
 
     # row numbers
     if len(ctx.row_numbers) > 1:
@@ -200,7 +206,8 @@ def _gen_error_entry(cerb_rule, table_id, column_id, value, row_numbers,
                              row_numbers=row_numbers, rows=rows, value=value,
                              constraint=constraint, rule_fields=rule_fields,
                              allowed_values=allowed,
-                             odm_datatype=odm_datatype)
+                             odm_datatype=odm_datatype,
+                             is_warning=rule.is_warning)
     return _gen_rule_error(error_ctx)
 
 
@@ -298,6 +305,7 @@ def _strip_coerce_rules(cerb_schema):
 
 def _map_errors(cerb_errors, schema, rule_whitelist):
     errors = []
+    warnings = []
     for table_error in cerb_errors:
         for row_errors in table_error.info:
             for e in row_errors:
@@ -306,9 +314,13 @@ def _map_errors(cerb_errors, schema, rule_whitelist):
                     for e in attr_errors:
                         entry = _gen_cerb_error_entry(e, row, schema,
                                                       rule_whitelist)
-                        if entry:
+                        if not entry:
+                            continue
+                        if 'warningType' in entry:
+                            warnings.append(entry)
+                        else:
                             errors.append(entry)
-    return errors
+    return errors, warnings
 
 
 def _map_aggregated_errors(agg_errors, rule_whitelist):
@@ -405,7 +417,9 @@ def _validate_data_ext(schema: Schema,
     v = OdmValidator.new()
     validation_schema = _strip_coerce_rules(coercion_schema)
     if not v.validate(coerced_data, validation_schema):
-        errors += _map_errors(v._errors, validation_schema, rule_whitelist)
+        e, w = _map_errors(v._errors, validation_schema, rule_whitelist)
+        warnings += w
+        errors += e
         errors += _map_aggregated_errors(v.error_state.aggregated_errors,
                                          rule_whitelist)
 

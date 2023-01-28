@@ -46,11 +46,12 @@ class Rule:
     """
     id: str
     key: str
+    is_warning: bool
     gen_schema: Callable[pt.PartData, Schema]
     get_error_template: Callable[[Any, str], str]
 
 
-def init_rule(rule_id, error, gen_cerb_rules, gen_schema):
+def init_rule(rule_id, error, gen_cerb_rules, gen_schema, is_warning=False):
     """
     - `error` can either be a string or a function taking a value and returning
       a string.
@@ -62,6 +63,7 @@ def init_rule(rule_id, error, gen_cerb_rules, gen_schema):
     return Rule(
         id=rule_id,
         key=cerb_keys[0],
+        is_warning=is_warning,
         get_error_template=get_error_template,
         gen_schema=gen_schema,
     )
