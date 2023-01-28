@@ -58,10 +58,6 @@ class TestMinMaxLength(common.OdmTestCase):
             rule_whitelist=self.whitelist)
         self.assertDictEqual(self.assets.schemas[major_ver], result)
 
-    def _assertEqual(self, expected, report):
-        self.assertEqual(expected['errors'], report.errors)
-        self.assertEqual(expected['warnings'], report.warnings)
-
     def test_pass(self):
         report = validate_data(self.assets.schemas[2],
                                self.assets.data_pass_v2)
@@ -70,7 +66,7 @@ class TestMinMaxLength(common.OdmTestCase):
     def test_fail(self):
         report = validate_data(self.assets.schemas[2],
                                self.assets.data_fail_v2)
-        self._assertEqual(self.assets.error_report, report)
+        self.assertReportEqual(self.assets.error_report, report)
 
 
 if __name__ == '__main__':

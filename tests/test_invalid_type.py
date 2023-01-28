@@ -75,10 +75,6 @@ class TestInvalidType(common.OdmTestCase):
                                                  rule_whitelist=self.whitelist)
         self.assertDictEqual(self.assets.schemas[major_ver], result)
 
-    def _assertEqual(self, expected, report):
-        self.assertEqual(expected['errors'], report.errors)
-        self.assertEqual(expected['warnings'], report.warnings)
-
     @parameterized.expand(param_range(0, 2))
     def test_passing_datasets(self, i):
         if i < len(self.assets.data_pass):
@@ -92,7 +88,7 @@ class TestInvalidType(common.OdmTestCase):
             report = _validate_data_ext(schema=self.assets.schemas[2],
                                         data=self.assets.data_fail[i])
             expected = self.assets.error_report[i]
-            self._assertEqual(expected, report)
+            self.assertReportEqual(expected, report)
 
 
 if __name__ == '__main__':

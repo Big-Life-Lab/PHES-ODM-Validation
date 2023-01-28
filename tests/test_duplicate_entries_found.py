@@ -58,10 +58,6 @@ class TestDuplicateEntriesFound(common.OdmTestCase):
                                             schema_version=f'{major_ver}.0.0')
         self.assertDictEqual(self.assets.schemas[major_ver], result)
 
-    def _assertEqual(self, expected, report):
-        self.assertEqual(expected['errors'], report.errors)
-        self.assertEqual(expected['warnings'], report.warnings)
-
     def test_passing_datasets(self):
         report = _validate_data_ext(self.assets.schemas[2],
                                     self.assets.data_pass)
@@ -72,7 +68,7 @@ class TestDuplicateEntriesFound(common.OdmTestCase):
         report = _validate_data_ext(schema=self.assets.schemas[2],
                                     data=self.assets.data_fail[i])
         expected = self.assets.error_report[i]
-        self._assertEqual(expected, report)
+        self.assertReportEqual(expected, report)
 
 
 if __name__ == '__main__':
