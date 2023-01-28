@@ -99,7 +99,7 @@ BOOLEAN = 'boolean'
 BOOLEAN_SET = 'booleanSet'
 DATETIME = 'datetime'
 MANDATORY = 'mandatory'
-NA = {'', 'NA', 'Not applicable', 'null'}
+PART_NULL_SET = {'', 'NA', 'Not applicable', 'null'}
 
 V1_VARIABLE = 'version1Variable'
 V1_LOCATION = 'version1Location'
@@ -269,12 +269,13 @@ def get_table_id(part: dict) -> Optional[str]:
 
 def _not_empty(field):
     _, val = field
-    return val not in NA
+    return val not in PART_NULL_SET
 
 
 def strip(parts: Dataset):
-    # TODO: strip version1* fields when not version 1
-    """Removes NA fields, except from partID."""
+    """Removes null fields, except from partID."""
+    # 'partID' may be defining null fields for data, so we can't strip those.
+    # TODO: Strip version1* fields when not version 1.
     result = []
     for sparse_row in parts:
         fields = iter(sparse_row.items())
