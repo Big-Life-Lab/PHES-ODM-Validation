@@ -1,7 +1,7 @@
 import logging
 from dataclasses import dataclass
-from typing import Dict, List, Optional
 from logging import warning
+from typing import Dict, List, Optional, Set
 # from pprint import pprint
 
 import part_tables as pt
@@ -17,10 +17,12 @@ class OdmValueCtx:
     value: str
     datatype: str
     bool_set: pt.BoolSet
+    null_set: Set[str]
 
     @staticmethod
     def default():
-        return OdmValueCtx(value=None, datatype=None, bool_set=None)
+        return OdmValueCtx(value=None, datatype=None, bool_set=None,
+                           null_set={})
 
 
 def get_table_meta(table: Part, version: Version) -> Meta:

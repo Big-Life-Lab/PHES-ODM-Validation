@@ -64,6 +64,7 @@ class PartData:
     The parts-list is stripped of empty values before generating this.
     """
     bool_set: BoolSet
+    null_set: Set[str]
     catset_data: Dict[PartId, CatsetData]  # category-set data, by catset id
     table_data: Dict[PartId, TableData]  # table data, by table id
     mappings: Dict[PartId, List[PartId]]  # v1 mapping, by part id
@@ -99,6 +100,7 @@ BOOLEAN = 'boolean'
 BOOLEAN_SET = 'booleanSet'
 DATETIME = 'datetime'
 MANDATORY = 'mandatory'
+MISSINGNESS = 'missingness'
 PART_NULL_SET = {'', 'NA', 'Not applicable', 'null'}
 
 V1_VARIABLE = 'version1Variable'
@@ -192,6 +194,11 @@ def has_catset(p):
 
 def is_bool_set(part):
     return part.get(CATSET_ID) == BOOLEAN_SET
+
+
+def is_null_set(part):
+    # the ODM doesn't have these values as a catset, but it's a set
+    return part.get(PART_TYPE) == MISSINGNESS
 
 
 def is_table(p):
@@ -317,6 +324,7 @@ def gen_partdata(parts: Dataset, version: Version):
     categories = list(filter(is_cat, parts))
     catsets = partmap(filter(is_catset_attr, parts))
     bool_set = tuple(map(get_partID, islice(filter(is_bool_set, parts), 2)))
+    null_set = set(map(get_partID, filter(is_null_set, parts)))
 
     table_attrs = defaultdict(list)
     for attr in attributes:
@@ -350,6 +358,7 @@ def gen_partdata(parts: Dataset, version: Version):
 
     return PartData(
         bool_set=bool_set,
+        null_set=null_set,
         table_data=table_data,
         catset_data=catset_data,
         mappings=mappings,
