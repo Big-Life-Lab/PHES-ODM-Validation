@@ -145,6 +145,18 @@ def set_attr_schema(table_schema, data, table, attr, rule_id, odm_key,
     deep_update(table_schema[table_id1]['schema']['schema'], attr_schema)
 
 
+def init_val_ctx(data: PartData, attr: Part, odm_key: str
+                 ) -> Optional[OdmValueCtx]:
+    assert odm_key
+    odm_val = attr.get(odm_key)
+    if not odm_val:
+        warning(f'missing value for {pt.get_partID(attr)}.{odm_key}')
+        return
+    odm_datatype = attr.get(pt.DATA_TYPE)
+    return OdmValueCtx(value=odm_val, datatype=odm_datatype,
+                       bool_set=data.bool_set, null_set=data.null_set)
+
+
 def gen_value_schema(data: pt.PartData, ver: Version, rule_id: str,
                      odm_key: str, gen_cerb_rules):
     """Provides a simple way to generate a value schema. This should be
@@ -157,19 +169,13 @@ def gen_value_schema(data: pt.PartData, ver: Version, rule_id: str,
     :gen_cerb_rules: A function returning a dict of Cerberus rules
     """
     schema = {}
-    bool_set0 = data.bool_set
-    bool_set1 = set(map_ids(data.mappings, list(bool_set0), ver))
     for table in table_items2(data):
         table_id0 = pt.get_partID(table)
         table_schema = init_table_schema2(schema, data, table, ver)
         for attr in attr_items2(data, table_id0, odm_key):
-            odm_val = attr.get(odm_key)
-            if not odm_val:
-                warning(f'missing value for {pt.get_partID(attr)}.{odm_key}')
+            val_ctx = init_val_ctx(data, attr, odm_key)
+            if not val_ctx:
                 continue
-            odm_datatype = attr.get(pt.DATA_TYPE)
-            val_ctx = OdmValueCtx(value=odm_val, datatype=odm_datatype,
-                                  bool_set=bool_set1)
             cerb_rules = gen_cerb_rules(val_ctx)
             set_attr_schema(table_schema, data, table, attr, rule_id,
                             odm_key, cerb_rules, ver)

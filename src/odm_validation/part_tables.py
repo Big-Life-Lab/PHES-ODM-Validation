@@ -338,7 +338,7 @@ def gen_partdata(parts: Dataset, version: Version):
     attributes = list(filter(is_attr, parts))
     categories = list(filter(is_cat, parts))
     catsets = partmap(filter(is_catset_attr, parts))
-    bool_set = tuple(map(get_partID, islice(filter(is_bool_set, parts), 2)))
+    bool_set0 = tuple(map(get_partID, islice(filter(is_bool_set, parts), 2)))
     null_set = set(map(get_partID, filter(is_null_set, parts)))
 
     table_attrs = defaultdict(list)
@@ -371,8 +371,11 @@ def gen_partdata(parts: Dataset, version: Version):
     mappings = {get_partID(p): get_mappings(p, version) for p in parts}
     assert None not in mappings
 
+    bool_set1 = set(map_ids(mappings, list(bool_set0), version))
+
+    # TODO: preserve unmapped version of bool_set for bool meta fields
     return PartData(
-        bool_set=bool_set,
+        bool_set=bool_set1,
         null_set=null_set,
         table_data=table_data,
         catset_data=catset_data,
