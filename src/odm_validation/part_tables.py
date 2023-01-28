@@ -267,12 +267,21 @@ def get_table_id(part: dict) -> Optional[str]:
     warning(f'part {get_partID(part)} does not belong to any table')
 
 
+def _not_empty(field):
+    _, val = field
+    return val not in NA
+
+
 def strip(parts: Dataset):
     # TODO: strip version1* fields when not version 1
-    """Removes NA fields."""
+    """Removes NA fields, except from partID."""
     result = []
     for sparse_row in parts:
-        row = {k: v for k, v in sparse_row.items() if v not in NA}
+        fields = iter(sparse_row.items())
+        part_id_pair = next(fields)
+        assert part_id_pair[0] == PART_ID, 'partID must be the first column'
+        row = {k: v for k, v in filter(_not_empty, fields)}
+        row[PART_ID] = part_id_pair[1]
         result.append(row)
     return result
 
