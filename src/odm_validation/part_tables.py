@@ -309,13 +309,13 @@ def partmap(parts) -> PartMap:
     return {get_partID(part): part for part in parts}
 
 
-def gen_partdata(parts_v2: Dataset, version: Version):
-    tables = list(filter(is_table, parts_v2))
+def gen_partdata(parts: Dataset, version: Version):
+    tables = list(filter(is_table, parts))
     table_ids = list(map(get_partID, tables))
-    attributes = list(filter(is_attr, parts_v2))
-    categories = list(filter(is_cat, parts_v2))
-    catsets = partmap(filter(is_catset_attr, parts_v2))
-    bool_set = tuple(map(get_partID, islice(filter(is_bool_set, parts_v2), 2)))
+    attributes = list(filter(is_attr, parts))
+    categories = list(filter(is_cat, parts))
+    catsets = partmap(filter(is_catset_attr, parts))
+    bool_set = tuple(map(get_partID, islice(filter(is_bool_set, parts), 2)))
 
     table_attrs = defaultdict(list)
     for attr in attributes:
@@ -344,7 +344,7 @@ def gen_partdata(parts_v2: Dataset, version: Version):
             table_ids=cs_table_ids,
         )
 
-    mappings = {get_partID(p): get_mappings(p, version) for p in parts_v2}
+    mappings = {get_partID(p): get_mappings(p, version) for p in parts}
     assert None not in mappings
 
     return PartData(
