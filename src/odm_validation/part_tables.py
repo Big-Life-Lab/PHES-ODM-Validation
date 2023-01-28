@@ -133,16 +133,20 @@ def parse_row_version(row, field, default=None):
     return parse_version(row.get(field), row.get('partID'), field, default)
 
 
-def is_compatible(part: dict, version: Version) -> bool:
+def get_version_range(part: dict) -> (Version, Version):
     # TODO: remove default for `firstReleased` when parts-v2 is complete
     row = part
     v1 = Version(major=1)
     first = parse_row_version(row, 'firstReleased', default=v1)
     last = parse_row_version(row, 'lastUpdated', default=first)
-    active: bool = row.get('status') == 'active'
+    return (first, last)
 
+
+def is_compatible(active: bool, first: Version, last: Version,
+                  schema_version: Version) -> bool:
+    """Returns True if part is compatible with `schema_version`."""
     # not (v < first) and ((v < last) or active)
-    v = version
+    v = schema_version
     if v.compare(first) < 0:
         return False
     if v.compare(last) < 0:
@@ -294,17 +298,20 @@ def strip(parts: Dataset):
     return result
 
 
-def filter_compatible(parts: Dataset, version: Version) -> Dataset:
+def filter_compatible(parts: Dataset, schema_version: Version) -> Dataset:
     """Filters `parts` by `version`."""
     result = []
     for row in parts:
         part_id = get_partID(row)
-        if not (is_compatible(row, version)):
+        first, last = get_version_range(row)
+        active: bool = row.get('status') == 'active'
+        if not (is_compatible(active, first, last, schema_version)):
             warning(f'skipping incompatible part: {part_id}')
             continue
-        if version.major == 1 and not has_mapping(row, version):
-            error(f'skipping part with missing version1 fields: {part_id}')
-            continue
+        if last.major > schema_version.major:
+            if not has_mapping(row, schema_version):
+                error(f'skipping part with missing version1 fields: {part_id}')
+                continue
         result.append(row)
     return result
 
