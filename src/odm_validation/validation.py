@@ -31,7 +31,7 @@ from stdext import (
 from versions import __version__, parse_version
 
 
-@dataclass
+@dataclass(frozen=True)
 class ErrorContext:
     allowed_values: Set[str]
     column_id: str
