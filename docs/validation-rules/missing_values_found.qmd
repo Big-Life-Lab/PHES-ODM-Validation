@@ -47,7 +47,7 @@ A value that is invalid due to this rule should generate a **warning** and **not
 * **rowNumber**: The index of the table row with the error
 * **row**: The dictionary containing the row
 * **validationRuleFields**: The ODM data dictionary rows used to generate this rule
-* **message**: Mandatory column <column_name> in table <table_name> has a missing value in row <row_index>
+* **message**: Mandatory column \<column_name\> in table \<table_name\> has a missing value in row \<row_index\>
 
 The warning report object for the example ODM datasets in the previous section are shown below.
 

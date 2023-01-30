@@ -32,7 +32,7 @@ The error report will have the following fields
 * **rowNumber**: The index of the table row with the error
 * **row** The dictionary containing the row
 * **validationRuleFields**: The ODM data dictionary rule fields violated by this row
-* **message**: Missing mandatory column <columnName> in table <tableName> in row number <rowIndex>
+* **message**: Missing mandatory column \<columnName\> in table \<tableName\> in row number \<rowIndex\>
 
 Example
 
@@ -46,7 +46,7 @@ pprint_json_file(asset("error-report.json"))
 All the metadata for this rule is contained in the parts sheet in the data dictionary. The relevant columns are:
 
 * **partID**: Contains the name of a part
-* **<table_name>**: Used to indicate whether the part is associated with a table
+* **\<table_name\>**: Used to indicate whether the part is associated with a table
 
     Can have one of the following values:
     * **PK**: The part is a primary key for the table
@@ -54,7 +54,7 @@ All the metadata for this rule is contained in the parts sheet in the data dicti
     * **header**: The part is the name of a column in the table
     * **input**
     * **NA**: The part is not applicable to the table
-* **<table_name>Required**: Used to indicate whether a column is mandatory for a table
+* **\<table_name\>Required**: Used to indicate whether a column is mandatory for a table
 
     Can have one of the following values:
     * **mandatory**: The column is mandatory
@@ -80,8 +80,8 @@ pprint_yaml_file(asset("schema-v2.yml"))
 
 The data dictionary columns that should be included in the `meta` field are:
 * partID
-* <table_name>
-* <table_name>Required
+* \<table_name\>
+* \<table_name\>Required
 
 ## Version 1
 

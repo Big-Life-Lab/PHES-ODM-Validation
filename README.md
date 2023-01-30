@@ -18,7 +18,7 @@ messageType: "Error"
 messageText: "Missing Required Column: "
 notes: "This rule is used to validate that the rows in a table have all their mandatory
 columns. For each table in the data argument, the metadata for this rule is present
-in the parts sheet in the partID, <table_name>Table, and <table_name>Required column."
+in the parts sheet in the partID, \<table_name\>Table, and \<table_name\>Required column."
 ```
 
 **Example MeasureReport table**

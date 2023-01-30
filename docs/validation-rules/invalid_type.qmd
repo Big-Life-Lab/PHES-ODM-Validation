@@ -157,11 +157,11 @@ The error report should have the following fields,
 * **rowNumber**: The index of the row with the invalid value
 * **row**: The dictionary containing the invalid row
 * **validationRuleFields**: The ODM data dictionary rows used to generate this rule
-* **message**: Value <invalid_value> in row <row_index> in column <column_name> in table <table_name> has type <invalid_value_type> but should be of type <valid_type> or coercable into a <valid_type>.
+* **message**: Value \<invalid_value\> in row \<row_index\> in column \<column_name\> in table \<table_name\> has type \<invalid_value_type\> but should be of type \<valid_type\> or coercable into a \<valid_type\>.
 
 For a boolean data type, the message is shown below,
 
-* **message**: Row <row_index> in column <column_name> in table <table_name> is a boolean but has value <invalid_value>. Allowed values are <boolean_categories>.
+* **message**: Row \<row_index\> in column \<column_name\> in table \<table_name\> is a boolean but has value \<invalid_value\>. Allowed values are \<boolean_categories\>.
 
 For a datetime data type, the message is shown belowm,
 
