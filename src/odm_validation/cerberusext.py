@@ -8,6 +8,7 @@ from copy import deepcopy
 # from pprint import pprint
 
 from cerberus import Validator
+from cerberus.errors import ErrorDefinition
 
 import part_tables as pt
 import rules as validation_rules
@@ -35,6 +36,9 @@ class CoercionCtx:
     row_num: str
     table: str
     value: str
+
+
+EMPTY_TRIMMED_RULE = 0x101
 
 
 def _get_meta_rule_ids(column_meta) -> List[str]:
@@ -245,6 +249,16 @@ class OdmValidator(Validator):
         self.allow_unknown = True
         self.unique_state = self._config['unique_state']
         self.error_state = self._config['error_state']
+
+    def _validate_emptyTrimmed(self, constraint, field, raw_value):
+        """{'type': 'boolean'}"""
+        expect_empty = constraint
+        is_str = isinstance(raw_value, str)
+        value = raw_value.strip() if is_str else raw_value
+        is_empty = not value or (is_str and value == '')
+        if is_empty != expect_empty:
+            err = ErrorDefinition(EMPTY_TRIMMED_RULE, 'emptyTrimmed')
+            self._error(field, err)
 
     def _validate_unique(self, constraint, field, value):
         """{'type': 'boolean'}"""
