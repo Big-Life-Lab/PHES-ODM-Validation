@@ -4,7 +4,7 @@ Rule functions are ordered alphabetically.
 """
 
 from dataclasses import dataclass
-from typing import Any, Callable, Tuple
+from typing import Any, Callable, List, Tuple
 
 import part_tables as pt
 from schemas import Schema, update_schema
@@ -45,13 +45,15 @@ class Rule:
     - value_type
     """
     id: str
-    key: str
+    keys: List[str]
     is_warning: bool
+    match_all_keys: bool
     gen_schema: Callable[pt.PartData, Schema]
     get_error_template: Callable[[Any, str], str]
 
 
-def init_rule(rule_id, error, gen_cerb_rules, gen_schema, is_warning=False):
+def init_rule(rule_id, error, gen_cerb_rules, gen_schema,
+              is_warning=False, match_all_keys=False):
     """
     - `error` can either be a string or a function taking a value and returning
       a string.
@@ -62,8 +64,9 @@ def init_rule(rule_id, error, gen_cerb_rules, gen_schema, is_warning=False):
     cerb_keys = list(gen_cerb_rules(OdmValueCtx.default()).keys())
     return Rule(
         id=rule_id,
-        key=cerb_keys[0],
+        keys=cerb_keys,
         is_warning=is_warning,
+        match_all_keys=match_all_keys,
         get_error_template=get_error_template,
         gen_schema=gen_schema,
     )

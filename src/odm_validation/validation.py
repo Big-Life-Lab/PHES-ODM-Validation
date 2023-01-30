@@ -75,11 +75,22 @@ def _get_latest_odm_version() -> str:
     return versions[-1]
 
 
+def _gen_cerb_rule_map():
+    result = {}
+    for r in ruleset:
+        for key in r.keys:
+            assert key not in result
+            result[key] = r
+            if not r.match_all_keys:
+                break
+    return result
+
+
 # public constants
 ODM_LATEST = _get_latest_odm_version()
 
 # private constants
-_KEY_RULES = {r.key: r for r in ruleset}
+_KEY_RULES = _gen_cerb_rule_map()
 
 
 def _prettify_rule_name(rule: Rule):
@@ -162,7 +173,8 @@ def _transform_rule(rule: Rule, column_meta) -> Rule:
     """Returns a new rule, depending on `column_meta`. Currently only returns
     invalid_type if rule-key is 'allowed' and dataType is bool."""
     # XXX: dependency on meta value (which is only supposed to aid debug)
-    if rule.key == 'allowed':
+    # XXX: does not handle rules with match_all_keys enabled
+    if rule.keys[0] == 'allowed':
         rule_ids = list(map(_get_ruleId, column_meta))
         new_rule = next(filter(_is_invalid_type_rule, ruleset), None)
         if not new_rule or new_rule.id not in rule_ids:
