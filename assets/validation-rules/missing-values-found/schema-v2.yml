@@ -6,16 +6,17 @@ schema:
       type: dict
       schema:
         geoLat:
-          trimEmpty: true
+          emptyTrimmed: false
           forbidden:
           - NA
+          - NA_missing
+          - 'null'
           meta:
-          - ruleId: missing_values_found
+          - ruleID: missing_values_found
             meta:
-            - partID: NA
-              partType: missingness
             - partID: geoLat
+              sites: header
               sitesRequired: mandatory
-    meta:
+      meta:
       - partID: sites
         partType: table
