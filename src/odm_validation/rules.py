@@ -134,6 +134,26 @@ def missing_mandatory_column():
     return init_rule(rule_id, err, gen_cerb_rules, gen_schema)
 
 
+def missing_values_found():
+    # TODO: rename to missing_mandatory_value?
+    rule_id = missing_values_found.__name__
+    err = ('Mandatory column {column_id} in table {table_id} has a missing '
+           'value in row {row_num}')
+
+    def gen_cerb_rules(val_ctx: OdmValueCtx):
+        return {
+            'emptyTrimmed': False,
+            'forbidden': sorted(val_ctx.null_set),
+        }
+
+    def gen_schema(data: pt.PartData, ver):
+        return gen_conditional_schema(data, ver, rule_id, gen_cerb_rules,
+                                      is_mandatory)
+
+    return init_rule(rule_id, err, gen_cerb_rules, gen_schema,
+                     is_warning=True, match_all_keys=True)
+
+
 def less_than_min_length():
     rule_id = less_than_min_length.__name__
     odm_key = 'minLength'
@@ -245,4 +265,5 @@ ruleset: Tuple[Rule] = (
     less_than_min_length(),
     less_than_min_value(),
     missing_mandatory_column(),
+    missing_values_found(),
 )
