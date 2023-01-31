@@ -99,7 +99,7 @@ BOOLEAN = 'boolean'
 BOOLEAN_SET = 'booleanSet'
 DATETIME = 'datetime'
 MANDATORY = 'mandatory'
-NA = {'', 'NA', 'Not applicable'}
+NA = {'', 'NA', 'Not applicable', 'null'}
 
 V1_VARIABLE = 'version1Variable'
 V1_LOCATION = 'version1Location'
