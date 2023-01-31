@@ -1,18 +1,19 @@
----
-sites:
-  type: list
-  schema:
-    type: dict
+schemaVersion: 2.0.0
+schema:
+  sites:
+    type: list
     schema:
-      geoLat:
-        type: float
-        coerce: float
-        meta:
-        - ruleId: invalid_type
+      type: dict
+      schema:
+        geoLat:
+          type: float
+          coerce: float
           meta:
-          - partID: geoLat
-            dataType: float
-            sites: header
-  meta:
-    partID: sites
-    partType: table
+          - ruleID: invalid_type
+            meta:
+            - partID: geoLat
+              dataType: float
+              sites: header
+      meta:
+      - partID: sites
+        partType: table

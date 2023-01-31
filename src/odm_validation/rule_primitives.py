@@ -1,11 +1,25 @@
-from typing import Dict, List
+import logging
+from dataclasses import dataclass
+from typing import Dict, List, Optional
 # from pprint import pprint
 
 import part_tables as pt
 from part_tables import Meta, MetaEntry, Part, PartData, PartId
-from schemas import init_attr_schema, init_table_schema, parse_odm_datatype
+from schemas import init_attr_schema, init_table_schema
 from stdext import deep_update, flatten
 from versions import Version
+
+
+@dataclass(frozen=True)
+class OdmValueCtx:
+    """ODM value context."""
+    value: str
+    datatype: str
+    bool_set: pt.BoolSet
+
+    @staticmethod
+    def default():
+        return OdmValueCtx(value=None, datatype=None, bool_set=None)
 
 
 def get_table_meta(table: Part, version: Version) -> Meta:
@@ -126,20 +140,18 @@ def init_table_schema2(schema, data, table, version):
 
 
 def set_attr_schema(table_schema, data, table, attr, rule_id, odm_key,
-                    cerb_rule, version, typed):
+                    cerb_rules, version):
     table_id0 = pt.get_partID(table)
     table_id1 = list(table_schema.keys())[0]
     attr_id0 = pt.get_partID(attr)
     attr_id1 = get_mapped_attr_id(data, attr_id0, version)
     attr_meta = get_attr_meta(attr, table_id0, version, odm_key)
-    cerb_type = parse_odm_datatype(attr.get(pt.DATA_TYPE)) if typed else None
-    attr_schema = init_attr_schema(attr_id1, rule_id, cerb_rule, cerb_type,
-                                   attr_meta)
+    attr_schema = init_attr_schema(attr_id1, rule_id, cerb_rules, attr_meta)
     deep_update(attr_schema, table_schema[table_id1]['schema']['schema'])
 
 
 def gen_simple_schema(data: pt.PartData, ver: Version, rule_id: str,
-                      odm_key: str, cerb_key: str, value_type_class):
+                      odm_key: str, gen_cerb_rules):
     """Provides a simple way to generate a simple schema. This should be
     prefered to iterating over part-data directly in the rule-functions.
 
@@ -147,19 +159,42 @@ def gen_simple_schema(data: pt.PartData, ver: Version, rule_id: str,
     attribute without any extra fuss. Ex: minValue -> min.
 
     :odm_key: The ODM rule attribute
-    :cerb_key: The Cerberus rule name
-    :value_type_class: the type-class that should be used to convert the ODM
-    value to the Cerberus constraint.
+    :gen_cerb_rules: A function returning a dict of Cerberus rules
     """
     schema = {}
-    typed = cerb_key in {'max', 'min'}
+    bool_set0 = data.bool_set
+    bool_set1 = set(map_ids(data.mappings, list(bool_set0), ver))
     for table in table_items2(data):
         table_id0 = pt.get_partID(table)
         table_schema = init_table_schema2(schema, data, table, ver)
         for attr in attr_items2(data, table_id0, odm_key):
-            cerb_val = value_type_class(attr[odm_key])
-            cerb_rule = (cerb_key, cerb_val)
+            odm_val = attr[odm_key]
+            odm_datatype = attr.get(pt.DATA_TYPE)
+            val_ctx = OdmValueCtx(value=odm_val, datatype=odm_datatype,
+                                  bool_set=bool_set1)
+            cerb_rules = gen_cerb_rules(val_ctx)
             set_attr_schema(table_schema, data, table, attr, rule_id,
-                            odm_key, cerb_rule, ver, typed)
+                            odm_key, cerb_rules, ver)
         deep_update(table_schema, schema)
     return schema
+
+
+def _odm_to_cerb_datatype(odm_datatype: str) -> Optional[str]:
+    t = odm_datatype
+    assert t
+    if t in ['boolean', 'categorical', 'varchar']:
+        return 'string'
+    if t in ['datetime', 'integer', 'float']:
+        return t
+    logging.error(f'odm datatype {t} is not implemented')
+
+
+def gen_cerb_rules_for_type(val_ctx: OdmValueCtx):
+    odm_type = val_ctx.datatype
+    cerb_type = _odm_to_cerb_datatype(odm_type) if odm_type else None
+    result = {'type': cerb_type}
+    if cerb_type != 'string':
+        result['coerce'] = cerb_type
+    if odm_type == 'boolean':
+        result['allowed'] = sorted(val_ctx.bool_set)
+    return result

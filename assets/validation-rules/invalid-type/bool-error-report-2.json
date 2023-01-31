@@ -9,22 +9,15 @@
                 "measureID": "1",
                 "reportable": "True"
             },
+            "invalidValue": "True",
             "validationRuleFields": [
                 {
                     "partID": "reportable",
                     "dataType": "boolean",
                     "measures": "header"
-                },
-                {
-                    "partID": "true",
-                    "catSetID": "booleanSet"
-                },
-                {
-                    "partID": "false",
-                    "catSetID": "booleanSet"
                 }
             ],
-            "message": "Row 1 in column reportable in table measures is a boolean but has value True. Allowed values are true/false"
+            "message": "Column reportable in row 1 in table measures is a boolean but has value True. Allowed values are false/true."
         }
     ],
     "warnings": []

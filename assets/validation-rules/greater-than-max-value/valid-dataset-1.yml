@@ -1,4 +1,3 @@
-sites:
-    - siteID: "1"
-      geoLat: 89
-      geoLong: 90.1
+- siteID: "1"
+  geoLat: 89
+  geoLong: 90.1
