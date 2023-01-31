@@ -1,8 +1,7 @@
 name: Test documentation generation
+
 on:
   pull_request:
-    branches-ignore:
-    - main
 jobs:
   build:
     runs-on: ubuntu-latest
