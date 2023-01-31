@@ -31,20 +31,115 @@
 
           <div class="body" role="main">
             
-  <p>The PHES-ODM validation toolkit allows users to check whether their data meets the ODM dictionary format.</p>
+  <p>The validation toolkit for the <a class="reference external" href="https://github.com/Big-Life-Lab/PHES-ODM">Population Health Environmental
+Surveillance Open Data Model
+(PHES-ODM)</a> ensures your ODM
+data is complete and interoperable. Users can check whether their data
+meets the ODM dictionary format.</p>
 <section id="at-a-glance">
 <h1>At a glance<a class="headerlink" href="#at-a-glance" title="Permalink to this heading">¶</a></h1>
-<p>Validation is performed based on a set of rules defined in a schema. The <code class="docutils literal notranslate"><span class="pre">validate_data</span></code> function is used to perform the validation on <code class="docutils literal notranslate"><span class="pre">data</span></code> with the <code class="docutils literal notranslate"><span class="pre">schema</span></code> specified.</p>
+<p>Validation is performed based on a set of rules defined in a schema. The
+<code class="docutils literal notranslate"><span class="pre">validate_data</span></code> function is used to perform the validation on <code class="docutils literal notranslate"><span class="pre">data</span></code>
+with the <code class="docutils literal notranslate"><span class="pre">schema</span></code> specified.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">schema</span> <span class="o">=</span> <span class="n">import_schema</span><span class="p">(</span><span class="s2">&quot;schema.yml&quot;</span><span class="p">)</span>
 <span class="n">errors</span> <span class="o">=</span> <span class="n">validate_data</span><span class="p">(</span><span class="n">schema</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>The schema can also be generated directly from the ODM parts table.</p>
+</section>
+<section id="overview">
+<h1>Overview<a class="headerlink" href="#overview" title="Permalink to this heading">¶</a></h1>
+<p>The ODM library has the following features:</p>
+<ul class="simple">
+<li><p>Validate any ODM data table as a CSV file.</p></li>
+<li><p>Generate a report with warning and errors that indicate which data
+field(s) contain invalid data.</p></li>
+<li><p>Validate any version of the ODM dicionary.</p></li>
+<li><p>Users can add rules for their specific program. For example, you can
+add a list of valid testing sites for your surveillance program.</p></li>
+<li><p>Users can request additional default validation rules.</p></li>
+</ul>
+<p>There are three parts to the ODM validation toolkit.</p>
+<ol class="arabic simple">
+<li><p><strong>Python functions to validate ODM-formatted data</strong>. These functions
+check ODM data for missing, incomplete, or incompatible data. The
+functions return a list of errors and warnings.</p></li>
+<li><p><strong>A list of validation rules</strong>. The rules define what are valid ODM
+data. Examples of rules include <a class="reference internal" href="validation-rules/missing_mandatory_column.html"><span class="doc">mandatory data
+fields</span></a> and valid data
+types. For example, every measurent must have a date the measurement
+was performed, and the <a class="reference internal" href="validation-rules/invalid_type.html#datetime"><span class="std std-ref">date
+type</span></a> must follow <a class="reference external" href="https://www.iso.org/iso-8601-date-and-time-format.html">ISO
+8601</a>
+format. Rules are combined together in a validation schema.</p></li>
+<li><p><strong>A standard schema method</strong>. The validation toolkit extends the
+<a class="reference external" href="https://docs.python-cerberus.org/en/stable/index.html">cerebrus</a>
+validation method to provide a standard approach to defining
+validation rules that allows the rule list to be easily extended.
+For example, a wastewater surveillance program can can generate a
+list of the sample sites within their program; and then use the ODM
+validation toolkit to ensure all their data include a <code class="docutils literal notranslate"><span class="pre">siteID</span></code> with
+a valid idenfitication. See <a class="reference external" href="#">tutorial X</a> for how to extend the ODM
+schema.</p></li>
+</ol>
+</section>
+<section id="installation">
+<h1>Installation<a class="headerlink" href="#installation" title="Permalink to this heading">¶</a></h1>
+<p>Make sure you have the latest version of Python installed on your system
+before starting. The required version can be found in pyproject.toml.</p>
+<p>If you only want to install the package, you can run the following
+command:</p>
+<p><code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">https://github.com/Big-Life-Lab/PHES-ODM-Validation.git</span></code></p>
+<p>If you want to set up a development environment instead, run the
+following commands:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>git clone https://github.com/Big-Life-Lab/PHES-ODM-Validation.git odm-validation
+cd odm-validation
+pip install -e src/odm_validation
+</pre></div>
+</div>
+<p>Tests can be run with the following commands (after setting up a dev.
+env.):</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>pip install ./tests/requirements.txt
+python -m unittest discover ./tests
+</pre></div>
+</div>
+<p>The package documentation can be generated by following the instructions
+in docs/README.md.</p>
+</section>
+<section id="usage">
+<h1>Usage<a class="headerlink" href="#usage" title="Permalink to this heading">¶</a></h1>
+<p>Quick ‘how to’ - defined as the steps to solve a specific problem. These
+compliment our tutorials that are learning oriented documentation for
+newcommers.</p>
+<section id="validate-a-specific-odm-version">
+<h2>Validate a specific ODM version<a class="headerlink" href="#validate-a-specific-odm-version" title="Permalink to this heading">¶</a></h2>
+</section>
+<section id="validate-with-you-own-schema">
+<h2>Validate with you own schema<a class="headerlink" href="#validate-with-you-own-schema" title="Permalink to this heading">¶</a></h2>
+</section>
+<section id="generate-a-schema-from-the-odm-dictionary">
+<h2>Generate a schema from the ODM dictionary<a class="headerlink" href="#generate-a-schema-from-the-odm-dictionary" title="Permalink to this heading">¶</a></h2>
+<p>You can genereate your own schema directly from the ODM parts table.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">parts</span> <span class="o">=</span> <span class="n">import_dataset</span><span class="p">(</span><span class="s2">&quot;parts.csv&quot;</span><span class="p">)</span>
 <span class="n">schema</span> <span class="o">=</span> <span class="n">generate_cerberus_schema</span><span class="p">(</span><span class="n">parts</span><span class="p">)</span>
 <span class="n">errors</span> <span class="o">=</span> <span class="n">validate_data</span><span class="p">(</span><span class="n">schema</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
 </pre></div>
 </div>
+</section>
+<section id="make-you-own-validation-rule">
+<h2>Make you own validation rule<a class="headerlink" href="#make-you-own-validation-rule" title="Permalink to this heading">¶</a></h2>
+<p>{example of validating a list of siteIDs}</p>
+</section>
+</section>
+<section id="fequently-asked-questions-and-support">
+<h1>Fequently asked questions and support<a class="headerlink" href="#fequently-asked-questions-and-support" title="Permalink to this heading">¶</a></h1>
+<p>Get support on the <a class="reference external" href="https://odm.discourse.group/c/support">ODM Discourse community
+forum</a>. Use the <code class="docutils literal notranslate"><span class="pre">#validate</span></code> in
+your question. Use the <code class="docutils literal notranslate"><span class="pre">#faq</span></code> and <code class="docutils literal notranslate"><span class="pre">#validate</span></code> to find frequently asked
+questions.</p>
+<p>See <a class="reference internal" href="links/contributing_link.html"><span class="doc">Contributing</span></a> for how to suggest a new
+rule.</p>
+<p>Error or bugs can be reported on GitHub
+<a class="reference external" href="https://github.com/Big-Life-Lab/PHES-ODM-Validation/issues">Issues</a>.</p>
 </section>
 
 
@@ -68,8 +163,8 @@
 
 <h3>Navigation</h3>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="examples/tutorial.html">Tutorial 1</a></li>
-<li class="toctree-l1"><a class="reference internal" href="examples/explanation-document/explanation-document.html">Tutorial 2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples/tutorial.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples/explanation-document/explanation-document.html">Getting to know the validation library</a></li>
 <li class="toctree-l1"><a class="reference internal" href="api.html">API Documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="rules.html">Validation rules</a></li>
 <li class="toctree-l1"><a class="reference internal" href="links/contributing_link.html">Contributing</a></li>

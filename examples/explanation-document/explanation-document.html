@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>Tutorial 2 &#8212; PHES-ODM Validation  documentation</title>
+    <title>Getting to know the validation library &#8212; PHES-ODM Validation  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/alabaster.css" />
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
@@ -16,7 +16,7 @@
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="API Documentation" href="../../api.html" />
-    <link rel="prev" title="Tutorial 1" href="../tutorial.html" />
+    <link rel="prev" title="Getting started" href="../tutorial.html" />
    
   <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
   
@@ -33,40 +33,46 @@
 
           <div class="body" role="main">
             
-  <section id="tutorial-2">
-<h1>Tutorial 2<a class="headerlink" href="#tutorial-2" title="Permalink to this heading">¶</a></h1>
-<p>This document introduces and demonstartes the ODM validation library,
-part of the validation toolkit.</p>
-<p>The document uses <a class="reference external" href="https://quarto.org/">quarto</a>.</p>
-<p>We will first install all the library dependencies by running the next
-chunk in the terminal. Make sure you are in the root of the library
-directory.</p>
-<p><code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">-r</span> <span class="pre">requirements.txt</span></code></p>
-<p>The next chunk includes all the setup code for this demo. It requires
-the <a class="reference external" href="https://github.com/Textualize/rich">rich</a> library which can be
-installed by running the command <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">-m</span> <span class="pre">pip</span> <span class="pre">install</span> <span class="pre">rich</span></code> in the
-terminal.</p>
-<p>The library has two main functions described below:</p>
+  <section id="getting-to-know-the-validation-library">
+<h1>Getting to know the validation library<a class="headerlink" href="#getting-to-know-the-validation-library" title="Permalink to this heading">¶</a></h1>
+<p>This document describes and demonstrates the main functions of the
+validation library. The document is a <a class="reference external" href="https://quarto.org/">quarto</a>
+notebook which you can execute yourself.</p>
+<p>The library has two main functions:</p>
 <ol class="arabic simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">validate_data</span></code>: which is used to validate an ODM dataset using a
-validation schema</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">generate_validation_schema</span></code>: which is used to generate a validation
-schema from the ODM dictionary</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">validate_data</span></code>: to validate an ODM dataset using a validation
+schema.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">generate_validation_schema</span></code>: to generate a validation schema from
+the ODM dictionary.</p></li>
 </ol>
-<p>The next chunk will import these functions.</p>
+<section id="setup">
+<h2>Setup<a class="headerlink" href="#setup" title="Permalink to this heading">¶</a></h2>
+<p>We’ll walk through how to use these two functions, but first we will
+install the library dependencies by running the following command in the
+terminal. Make sure you are in the root of the library directory.</p>
+<p><code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">-r</span> <span class="pre">requirements.txt</span></code></p>
+<p>Next, the notebook uses the code to
+<a class="reference external" href="https://github.com/Textualize/rich">rich</a> library to print and display
+tables. <code class="docutils literal notranslate"><span class="pre">rich</span></code> can be installed by running the following command in the
+terminal.</p>
+<p><code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">-m</span> <span class="pre">pip</span> <span class="pre">install</span> <span class="pre">rich</span></code></p>
+<p>Next, import the two main library functions.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">odm_validation.validation</span> <span class="kn">import</span> <span class="n">validate_data</span><span class="p">,</span> <span class="n">generate_validation_schema</span>
 </pre></div>
 </div>
-<p>Lets start by validating an ODM dataset. We will use just the <code class="docutils literal notranslate"><span class="pre">sites</span></code>
+</section>
+<section id="example-validating-a-sites-table-with-missing-data">
+<h2>Example: validating a <code class="docutils literal notranslate"><span class="pre">sites</span></code> table with missing data<a class="headerlink" href="#example-validating-a-sites-table-with-missing-data" title="Permalink to this heading">¶</a></h2>
+<p>Let’s start by validating an ODM dataset. We will use just the <code class="docutils literal notranslate"><span class="pre">sites</span></code>
 table that “contains information about a site; the location where an
-environmental sample was taken.”. The table has a number of columns but
+environmental sample was taken.” The table has a number of columns, but
 we will validate just the <code class="docutils literal notranslate"><span class="pre">geoLat</span></code> and <code class="docutils literal notranslate"><span class="pre">geoLong</span></code> columns. These columns
-are mandatory in the table.</p>
+are mandatory in the <code class="docutils literal notranslate"><span class="pre">sites</span></code> table.</p>
 <p>Validating an ODM dataset requires a validation schema, which contains
-the rules to validate the data with. For the demo we created a <a class="reference external" href="./validation-schemas/sites-schema.yml">YAML
+the rules to validate. For the demo we created a <a class="reference external" href="./validation-schemas/sites-schema.yml">YAML
 file</a> which has the validation
-rules for the sites table. This next chunk will import that file into
-our environment.</p>
+rules for the sites table. The next code chunk will import the
+validation schema.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">validation_schema</span> <span class="o">=</span> <span class="n">import_schema</span><span class="p">(</span><span class="s2">&quot;./validation-schemas/sites-schema.yml&quot;</span><span class="p">)</span>
 
 <span class="n">pprint</span><span class="p">(</span><span class="n">validation_schema</span><span class="p">,</span> <span class="n">expand_all</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -92,20 +98,21 @@ our environment.</p>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="font-weight: bold">}</span>
 <span style="font-weight: bold">}</span>
 </pre>
-<p>The validation schema has two fields,</p>
+<p>The validation schema has two fields:</p>
 <ul class="simple">
-<li><p><strong>schemaVersion</strong> which has the version of the ODM the validation
-schema is for and</p></li>
-<li><p><strong>schema</strong> which has the validation rules</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">schemaVersion</span></code>: the version of the ODM the validation schema; and,</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">schema</span></code>: which has the validation rules</p></li>
 </ul>
 <p>The structure of the validation rules follows a Python library called
-<a class="reference external" href="https://docs.python-cerberus.org/en/stable/schemas.html">cerberus</a>.
-Cerberus does all the validation heavy lifting. The PHES-ODM validation
-package wraps around cerberus to integrate the ODM dataset and the ODM
-schema into cereberus.</p>
-<p>The dataset in the next chunk comes from a <a class="reference external" href="./datasets/invalid-sites-dataset.csv">CSV
-file</a> and represents a <code class="docutils literal notranslate"><span class="pre">sites</span></code>
-table. The dataset is invalid since its missing its <code class="docutils literal notranslate"><span class="pre">geoLat</span></code> column.</p>
+<a class="reference external" href="https://docs.python-cerberus.org/en/stable/schemas.html">cerberus</a> that
+does all the validation heavy lifting. The PHES-ODM validation package
+integrates the ODM schema into cereberus and then uses cereberus methods
+to validate ODM data.</p>
+<p>The dataset in the next code chunk is a very simple <code class="docutils literal notranslate"><span class="pre">sites</span></code> table as a
+<a class="reference external" href="./datasets/invalid-sites-dataset.csv">CSV file</a>. The dataset has
+invalid data since it is missing the mandatory <code class="docutils literal notranslate"><span class="pre">geoLat</span></code> column. You can
+see in the above schema that <code class="docutils literal notranslate"><span class="pre">geoLat</span></code> is mandatory by code
+<code class="docutils literal notranslate"><span class="pre">'geoLat':</span> <span class="pre">{'required':</span> <span class="pre">True}</span></code>.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">invalid_odm_dataset</span> <span class="o">=</span> <span class="p">{</span>
     <span class="s2">&quot;sites&quot;</span><span class="p">:</span> <span class="n">import_dataset</span><span class="p">(</span><span class="s2">&quot;./datasets/invalid-sites-dataset.csv&quot;</span><span class="p">)</span>
 <span class="p">}</span>
@@ -120,12 +127,15 @@ table. The dataset is invalid since its missing its <code class="docutils litera
 │ 2                                                                                                               │
 └─────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
 </pre>
-<p>Consequentially, when we try to validate the dataset with our
-constructed validation schema it should give us errors.</p>
-<p>The <code class="docutils literal notranslate"><span class="pre">validate_data</span></code> function needs two pieces of information, a
-validation schema and the ODM dataset to validate with it. It returns a
-validation report for our inputted dataset. The next chunk validates our
-invalid ODM dataset and prints the report.</p>
+<p>Consequentially, we get an error when we try to validate the dataset
+with our constructed validation schema.</p>
+<section id="validate-data-function">
+<h3><code class="docutils literal notranslate"><span class="pre">validate_data</span></code> function<a class="headerlink" href="#validate-data-function" title="Permalink to this heading">¶</a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">validate_data</span></code> function is used to validate ODM data. The function
+requires two pieces of information: 1. a validation schema; 1. an ODM
+dataset to validate.</p>
+<p>The function returns a validation report for the data. The following
+code chunk validates our invalid ODM dataset and prints the report.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">validation_result</span> <span class="o">=</span> <span class="n">validate_data</span><span class="p">(</span>
     <span class="n">validation_schema</span><span class="p">,</span>
     <span class="n">invalid_odm_dataset</span>
@@ -161,23 +171,28 @@ invalid ODM dataset and prints the report.</p>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="color: #808000; text-decoration-color: #808000">warnings</span>=<span style="font-weight: bold">[]</span>
 <span style="font-weight: bold">)</span>
 </pre>
-<p>Take a look at the <code class="docutils literal notranslate"><span class="pre">errors</span></code> field in the report. It contains the list of
-errors in our dataset, which will be empty for a valid dataset. Here we
-can see there are two errors, each error saying that we’re missing the
-<code class="docutils literal notranslate"><span class="pre">geoLat</span></code> column.</p>
-<p>Each field in the error report object provides metadata to trace where
-the error came from. The <code class="docutils literal notranslate"><span class="pre">message</span></code> field gives a human readable
-description of the error. Although most of the fields are
-self-explanatory, if further clarification is needed, the <code class="docutils literal notranslate"><span class="pre">errorType</span></code>
-field can be used to dig deeper by finding the specification file for
-the validation rule it refers to. For example the
-<code class="docutils literal notranslate"><span class="pre">missing_mandatory_column</span></code> specification can be found in the
+</section>
+<section id="understanding-error-messages">
+<h3>Understanding error messages<a class="headerlink" href="#understanding-error-messages" title="Permalink to this heading">¶</a></h3>
+<p>Take a look at the <code class="docutils literal notranslate"><span class="pre">errors</span></code> field in the report. The report contains the
+list of errors in our dataset. Here we have two errors, each error says
+that we are missing the <code class="docutils literal notranslate"><span class="pre">geoLat</span></code> column.</p>
+<p>The error report provides metadata to trace which data row had invalid
+data. The <code class="docutils literal notranslate"><span class="pre">message</span></code> field is a human-readable description of the error.
+Although most of the fields are self-explanatory, if further
+clarification is needed, the <code class="docutils literal notranslate"><span class="pre">errorType</span></code> field can be used to dig deeper
+by finding the specification file for the validation rule. For example
+the <code class="docutils literal notranslate"><span class="pre">missing_mandatory_column</span></code> specification can be found in the
 <a class="reference internal" href="../../validation-rules/missing_mandatory_column.html"><span class="doc">repo</span></a>.</p>
 <p>The validation report also consists of versioning metadata fields to
-help us debug any package errors. These are the <code class="docutils literal notranslate"><span class="pre">data_version</span></code>,
+debug any errors in the ODM schema. These are the <code class="docutils literal notranslate"><span class="pre">data_version</span></code>,
 <code class="docutils literal notranslate"><span class="pre">schema_version</span></code>, and <code class="docutils literal notranslate"><span class="pre">package_version</span></code> fields.</p>
-<p>For completeness lets validate a <a class="reference external" href="./datasets/valid-sites-dataset.csv">valid
-dataset</a> in the next two chunks.</p>
+</section>
+<section id="example-validating-a-valid-data-table">
+<h3>Example: validating a valid data table<a class="headerlink" href="#example-validating-a-valid-data-table" title="Permalink to this heading">¶</a></h3>
+<p>For completeness let’s validate a <a class="reference external" href="./datasets/valid-sites-dataset.csv">valid
+dataset</a> in the next two code
+chunks.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Import a valid dataset</span>
 <span class="n">valid_odm_data</span> <span class="o">=</span> <span class="p">{</span>
     <span class="s2">&quot;sites&quot;</span><span class="p">:</span> <span class="n">import_dataset</span><span class="p">(</span><span class="s2">&quot;./datasets/valid-sites-dataset.csv&quot;</span><span class="p">)</span>
@@ -209,10 +224,14 @@ dataset</a> in the next two chunks.</p>
 <span style="font-weight: bold">)</span>
 </pre>
 <p>As we can see, the error list is empty.</p>
-<p>Creating your own validation schemas can get tedious due to the breadth
-of information in the dictionary. With the <code class="docutils literal notranslate"><span class="pre">generate_validation_schema</span></code>
-function, we can generate a validation schema from the ODM dictionary.
-The next chunk has a snippet from the <a class="reference external" href="./dictionary/parts-v2.csv">parts
+</section>
+<section id="generate-validation-schema-function">
+<h3><code class="docutils literal notranslate"><span class="pre">generate_validation_schema</span></code> function<a class="headerlink" href="#generate-validation-schema-function" title="Permalink to this heading">¶</a></h3>
+<p>Generally, you don’t need to create a validation schema because there
+are default ODM validation schemas for all ODM versions. However, you
+can create your own schema with the <code class="docutils literal notranslate"><span class="pre">generate_validation_schema</span></code>
+function. This function generates a validation schema from the ODM
+dictionary. The next chunk has a chunk from the <a class="reference external" href="./dictionary/parts-v2.csv">parts
 sheet</a> in the dictionary.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">parts_sheet</span> <span class="o">=</span> <span class="n">import_dataset</span><span class="p">(</span><span class="s2">&quot;./dictionary/parts-v2.csv&quot;</span><span class="p">)</span>
 
@@ -228,21 +247,21 @@ sheet</a> in the dictionary.</p>
 │ geoLong     │ attribute     │ header    │ mandatory          │ 1.0.0              │ 2.0.0            │ active   │
 └─────────────┴───────────────┴───────────┴────────────────────┴────────────────────┴──────────────────┴──────────┘
 </pre>
-<p>The above parts sheet describes,</p>
+<p>The above parts sheet describes:</p>
 <ul class="simple">
-<li><p>A table called <code class="docutils literal notranslate"><span class="pre">sites</span></code></p></li>
-<li><p>and two mandatory columns in the <code class="docutils literal notranslate"><span class="pre">sites</span></code> table called <code class="docutils literal notranslate"><span class="pre">geoLat</span></code> and
-<code class="docutils literal notranslate"><span class="pre">geoLong</span></code></p></li>
+<li><p>A table called <code class="docutils literal notranslate"><span class="pre">sites</span></code>; and,</p></li>
+<li><p>two mandatory columns in the <code class="docutils literal notranslate"><span class="pre">sites</span></code> table called <code class="docutils literal notranslate"><span class="pre">geoLat</span></code> and
+<code class="docutils literal notranslate"><span class="pre">geoLong</span></code>.</p></li>
 </ul>
 <p>We can use the <code class="docutils literal notranslate"><span class="pre">generate_validation_schema</span></code> function to generate a
 validation schema from the above parts sheet. The function takes two
-arguments,</p>
+arguments:</p>
 <ul class="simple">
-<li><p>The parts sheet as a list of Python dictionaries</p></li>
-<li><p>The version of the ODM dictionary we want to generate the schema for</p></li>
+<li><p>the parts sheet as a list of Python dictionaries;</p></li>
+<li><p>the ODM dictionary version we want for our generated schema.</p></li>
 </ul>
-<p>The next chunk will generate a validation schema from the above parts
-sheet for version 2 datasets and prints it.</p>
+<p>The following code chunk generates a validation schema from the above
+parts sheet for version 2.0.0 datasets.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">validation_schema_2</span> <span class="o">=</span> <span class="n">generate_validation_schema</span><span class="p">(</span><span class="n">parts_sheet</span><span class="p">,</span> <span class="s2">&quot;2.0.0&quot;</span><span class="p">)</span>
 
 <span class="n">pprint</span><span class="p">(</span><span class="n">validation_schema_2</span><span class="p">)</span>
@@ -281,14 +300,14 @@ sheet for version 2 datasets and prints it.</p>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="font-weight: bold">}</span>
 <span style="font-weight: bold">}</span>
 </pre>
-<p>As we can see, this generates an identical validation schema as the one
-we manually created, with one main difference, it includes a <code class="docutils literal notranslate"><span class="pre">meta</span></code>
+<p>As we can see, we generated an identical validation schema as the one we
+manually created but with one main difference, it includes a <code class="docutils literal notranslate"><span class="pre">meta</span></code>
 field used to trace back to the row(s) in the parts sheet used to
 generate the validation rule.</p>
 <p>Validating our invalid dataset using the new validation schema returns
 the same error report as above, except for a new <code class="docutils literal notranslate"><span class="pre">validationRuleFields</span></code>,
 which is just a copy of the meta field. We can see that by running the
-next chunk.</p>
+next code.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pprint</span><span class="p">(</span><span class="n">validate_data</span><span class="p">(</span><span class="n">validation_schema_2</span><span class="p">,</span> <span class="n">invalid_odm_dataset</span><span class="p">))</span>
 </pre></div>
 </div>
@@ -319,10 +338,12 @@ next chunk.</p>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="color: #808000; text-decoration-color: #808000">warnings</span>=<span style="font-weight: bold">[]</span>
 <span style="font-weight: bold">)</span>
 </pre>
-<p>We can also generate validation schemas for version 1 of the ODM
-dictionary. The next two chunks imports a <a class="reference external" href="./dictionary/parts-v1.csv">demo version 1 parts
-sheet</a> and creates a validation schema for
-it.</p>
+</section>
+<section id="validating-different-odm-versions">
+<h3>Validating different ODM versions<a class="headerlink" href="#validating-different-odm-versions" title="Permalink to this heading">¶</a></h3>
+<p>We can also generate validation schemas for version 1.0.0 of the ODM
+dictionary. The next two code chunks import a <a class="reference external" href="./dictionary/parts-v1.csv">demo version 1 parts
+sheet</a> and creates a validation schema.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">parts_sheet_v1</span> <span class="o">=</span> <span class="n">import_dataset</span><span class="p">(</span><span class="s2">&quot;./dictionary/parts-v1.csv&quot;</span><span class="p">)</span>
 
 <span class="n">pprintDictList</span><span class="p">(</span><span class="n">parts_sheet_v1</span><span class="p">,</span> <span class="s2">&quot;Version 1 Parts Sheet&quot;</span><span class="p">)</span>
@@ -403,9 +424,9 @@ it.</p>
 <p>The printed validation schema is once again identical to the previous
 one except, the table and column names have been replaced with their
 version 1 equivalents.</p>
-<p>Finally, the next two chunks imports an invalid <a class="reference external" href="./datasets/invalid-sites-dataset-v1.csv">version 1 ODM
-datasets</a> and validates it
-using our version 1 validation schema.</p>
+<p>Finally, the next two code chunks import an invalid <a class="reference external" href="./datasets/invalid-sites-dataset-v1.csv">version 1 ODM
+dataset</a> and validates it using
+our version 1 validation schema.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">version_one_invalid_odm_data</span> <span class="o">=</span> <span class="p">{</span>
     <span class="s2">&quot;Site&quot;</span><span class="p">:</span> <span class="n">import_dataset</span><span class="p">(</span><span class="s2">&quot;./datasets/invalid-sites-dataset-v1.csv&quot;</span><span class="p">)</span>
 <span class="p">}</span>
@@ -450,13 +471,16 @@ using our version 1 validation schema.</p>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="color: #808000; text-decoration-color: #808000">warnings</span>=<span style="font-weight: bold">[]</span>
 <span style="font-weight: bold">)</span>
 </pre>
-<p>That’s the end!</p>
-<p>Some final points,</p>
-<p>The validation repo will come with validation schemas for every version
-of the ODM dictionary.</p>
-<p>The <a class="reference external" href="../../validation-rules/">validation-rules</a> folder contains
-specifications for all the validation rules the library currently
-supports.</p>
+</section>
+</section>
+<section id="final-points">
+<h2>Final points<a class="headerlink" href="#final-points" title="Permalink to this heading">¶</a></h2>
+<p>Just a final point, the <a class="reference external" href="../../validation-rules/">validation-rules</a>
+folder contains specifications for all the currently supported
+validation rules.</p>
+<p>That’s the end! May all your data validation reports contain only empty
+fields!</p>
+</section>
 </section>
 
 
@@ -480,8 +504,13 @@ supports.</p>
 
 <h3>Navigation</h3>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../tutorial.html">Tutorial 1</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Tutorial 2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial.html">Getting started</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Getting to know the validation library</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#setup">Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#example-validating-a-sites-table-with-missing-data">Example: validating a <code class="docutils literal notranslate"><span class="pre">sites</span></code> table with missing data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#final-points">Final points</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="../../api.html">API Documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../rules.html">Validation rules</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../links/contributing_link.html">Contributing</a></li>
@@ -493,7 +522,7 @@ supports.</p>
 <h3>Related Topics</h3>
 <ul>
   <li><a href="../../index.html">Documentation overview</a><ul>
-      <li>Previous: <a href="../tutorial.html" title="previous chapter">Tutorial 1</a></li>
+      <li>Previous: <a href="../tutorial.html" title="previous chapter">Getting started</a></li>
       <li>Next: <a href="../../api.html" title="next chapter">API Documentation</a></li>
   </ul></li>
 </ul>
