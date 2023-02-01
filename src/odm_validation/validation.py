@@ -6,6 +6,7 @@ generation and data validation.
 import os
 import re
 import sys
+from copy import deepcopy
 from dataclasses import dataclass
 from itertools import groupby
 from os.path import join, normpath
@@ -13,17 +14,18 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional, Set
 # from pprint import pprint
 
-from cerberusext import OdmValidator
+from cerberusext import ContextualCoercer, OdmValidator
 
 import part_tables as pt
 import rules
 from rules import Rule, ruleset
-from schemas import Schema
+from schemas import CerberusSchema, Schema
 from stdext import (
-    deep_update,
     deduplicate_dict_list,
+    deep_update,
     flatten,
     get_len,
+    strip_dict_key,
     type_name,
 )
 from versions import __version__, parse_version
@@ -35,8 +37,8 @@ class ErrorContext:
     column_id: str
     constraint: Any
     odm_datatype: str
-    row: dict
-    row_num: int
+    rows: List[dict]
+    row_numbers: List[int]
     rule: Rule
     rule_fields: list
     table_id: str
@@ -88,6 +90,13 @@ def _fmt_allowed_values(values: Set[str]) -> str:
     return '/'.join(sorted(values))
 
 
+def _fmt_list(items: list) -> str:
+    if len(items) > 1:
+        return ','.join(map(str, items))
+    else:
+        return str(items[0])
+
+
 def _error_msg(ctx: ErrorContext):
     error_template = ctx.rule.get_error_template(ctx.value, ctx.odm_datatype)
     return error_template.format(
@@ -95,7 +104,7 @@ def _error_msg(ctx: ErrorContext):
         rule_name=_prettify_rule_name(ctx.rule),
         table_id=ctx.table_id,
         column_id=ctx.column_id,
-        row_num=ctx.row_num,
+        row_num=_fmt_list(ctx.row_numbers),
         value=ctx.value,
         value_len=get_len(ctx.value),
         value_type=type_name(type(ctx.value)),
@@ -108,13 +117,26 @@ def _gen_rule_error(ctx: ErrorContext):
         'errorType': ctx.rule.id,
         'tableName': ctx.table_id,
         'columnName': ctx.column_id,
-        'rowNumber': ctx.row_num,
-        'row': ctx.row,
         'validationRuleFields': ctx.rule_fields,
         'message': _error_msg(ctx),
     }
+
+    # row numbers
+    if len(ctx.row_numbers) > 1:
+        error['rowNumbers'] = ctx.row_numbers
+    else:
+        error['rowNumber'] = ctx.row_numbers[0]
+
+    # rows
+    if len(ctx.rows) > 1:
+        error['rows'] = ctx.rows
+    else:
+        error['row'] = ctx.rows[0]
+
+    # value
     if ctx.value:
         error['invalidValue'] = ctx.value
+
     return error
 
 
@@ -161,14 +183,11 @@ def _get_rule_for_cerb_key(key: str, column_meta) -> Rule:
     return _transform_rule(rule, column_meta)
 
 
-def _gen_error_entry(e, row, schema: Schema, rule_whitelist: List[str]
+def _gen_error_entry(cerb_rule, table_id, column_id, value, row_numbers,
+                     rows, column_meta, rule_whitelist: List[str],
+                     constraint=None, schema_column=None,
                      ) -> Optional[dict]:
-    rule_key = e.schema_path[-1]
-    (table_id, row_index, column_id) = e.document_path
-    column = schema['schema'][table_id]['schema']['schema'][column_id]
-    column_meta = column.get('meta', [])
-    rule = _get_rule_for_cerb_key(rule_key, column_meta)
-
+    rule = _get_rule_for_cerb_key(cerb_rule, column_meta)
     if len(rule_whitelist) > 0 and rule.id not in rule_whitelist:
         return
 
@@ -176,12 +195,50 @@ def _gen_error_entry(e, row, schema: Schema, rule_whitelist: List[str]
     odm_datatype = _extract_datatype(column_meta)
 
     rule_fields = pt.get_validation_rule_fields(column_meta, [rule.id])
+    allowed = _get_allowed_values(schema_column) if schema_column else []
     error_ctx = ErrorContext(rule=rule, table_id=table_id, column_id=column_id,
-                             row_num=row_index+1, row=row, value=e.value,
-                             constraint=e.constraint, rule_fields=rule_fields,
-                             allowed_values=_get_allowed_values(column),
+                             row_numbers=row_numbers, rows=rows, value=value,
+                             constraint=constraint, rule_fields=rule_fields,
+                             allowed_values=allowed,
                              odm_datatype=odm_datatype)
     return _gen_rule_error(error_ctx)
+
+
+def _gen_cerb_error_entry(e, row, schema: CerberusSchema,
+                          rule_whitelist: List[str]) -> Optional[dict]:
+    cerb_rule = e.schema_path[-1]
+    (table_id, row_index, column_id) = e.document_path
+    schema_column = schema[table_id]['schema']['schema'][column_id]
+    column_meta = schema_column.get('meta', [])
+    row_numbers = [row_index + 1]
+    rows = [row]
+    return _gen_error_entry(
+        cerb_rule,
+        table_id,
+        column_id,
+        e.value,
+        row_numbers,
+        rows,
+        column_meta,
+        rule_whitelist,
+        e.constraint,
+        schema_column
+    )
+
+
+def _gen_aggregated_error_entry(agg_error,
+                                rule_whitelist: List[str]
+                                ) -> Optional[dict]:
+    return _gen_error_entry(
+        agg_error.cerb_rule,
+        agg_error.table_id,
+        agg_error.column_id,
+        agg_error.value,
+        agg_error.row_numbers,
+        agg_error.rows,
+        agg_error.column_meta,
+        rule_whitelist
+    )
 
 
 def _get_table_name(x):
@@ -189,7 +246,7 @@ def _get_table_name(x):
 
 
 def _get_row_num(x):
-    return x['rowNumber']
+    return x.get('rowNumber') or x.get('rowNumbers')
 
 
 def _get_column_name(x):
@@ -228,6 +285,39 @@ def _filter_errors(errors):
                         del value_errors[ix]
                 result += value_errors
     return result
+
+
+def _coerce_data(data, schema, warnings, errors):
+    coercer = ContextualCoercer(warnings=warnings, errors=errors)
+    return coercer.coerce(data, schema)
+
+
+def _strip_coerce_rules(cerb_schema):
+    return strip_dict_key(deepcopy(cerb_schema), 'coerce')
+
+
+def _map_errors(cerb_errors, schema, rule_whitelist):
+    errors = []
+    for table_error in cerb_errors:
+        for row_errors in table_error.info:
+            for e in row_errors:
+                row = e.value
+                for attr_errors in e.info:
+                    for e in attr_errors:
+                        entry = _gen_cerb_error_entry(e, row, schema,
+                                                      rule_whitelist)
+                        if entry:
+                            errors.append(entry)
+    return errors
+
+
+def _map_aggregated_errors(agg_errors, rule_whitelist):
+    errors = []
+    for ae in agg_errors:
+        entry = _gen_aggregated_error_entry(ae, rule_whitelist)
+        if entry:
+            errors.append(entry)
+    return errors
 
 
 def _generate_validation_schema_ext(parts, schema_version,
@@ -283,33 +373,31 @@ def _validate_data_ext(schema: Schema,
     # `rule_whitelist` determines which rules/errors are triggered during
     # validation. It is needed when testing data validation, to be able to
     # compare error reports in isolation.
+    #
+    # The schema is being put through two steps. First, coercion is done by
+    # looking at the `coerce` rules, then those rules are stripped and
+    # validation is performed on the remaining rules.
+
     errors = []
     warnings = []
-    coercion_warnings = []
-    coercion_errors = []
-    cerb_schema = schema["schema"]
-    v = OdmValidator(coercion_warnings=coercion_warnings,
-                     coercion_errors=coercion_errors)
-    assert isinstance(cerb_schema, dict)
-    if not v.validate(data, cerb_schema):
-        for table_error in v._errors:
-            for row_errors in table_error.info:
-                for e in row_errors:
-                    row = e.value
-                    for attr_errors in e.info:
-                        for e in attr_errors:
-                            entry = _gen_error_entry(e, row, schema,
-                                                     rule_whitelist)
-                            if entry:
-                                errors.append(entry)
-    errors += coercion_errors
-    warnings += coercion_warnings
+    versioned_schema = schema
+    cerb_schema = versioned_schema["schema"]
+    coercion_schema = cerb_schema
+
+    coerced_data = _coerce_data(data, coercion_schema, warnings, errors)
+
+    v = OdmValidator.new()
+    validation_schema = _strip_coerce_rules(coercion_schema)
+    if not v.validate(coerced_data, validation_schema):
+        errors += _map_errors(v._errors, validation_schema, rule_whitelist)
+        errors += _map_aggregated_errors(v.error_state.aggregated_errors,
+                                         rule_whitelist)
 
     errors = _filter_errors(errors)
 
     return ValidationReport(
         data_version=data_version,
-        schema_version=schema["schemaVersion"],
+        schema_version=versioned_schema["schemaVersion"],
         package_version=__version__,
         errors=errors,
         warnings=warnings,

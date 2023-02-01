@@ -4,6 +4,7 @@
             "errorType": "duplicate_entries_found",
             "tableName": "addresses",
             "columnName": "addId",
+            "invalidValue": "1",
             "rowNumbers": [2,3],
             "rows": [
                 {
@@ -27,6 +28,7 @@
             "errorType": "duplicate_entries_found",
             "tableName": "addresses",
             "columnName": "addId",
+            "invalidValue": "2",
             "rowNumbers": [5,6],
             "rows": [
                 {

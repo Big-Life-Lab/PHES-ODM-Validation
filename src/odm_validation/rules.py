@@ -16,7 +16,8 @@ from rule_primitives import (
     OdmValueCtx,
     attr_items,
     gen_cerb_rules_for_type,
-    gen_simple_schema,
+    gen_global_schema,
+    gen_value_schema,
     get_attr_meta,
     get_catset_meta,
     get_table_meta,
@@ -66,6 +67,20 @@ def init_rule(rule_id, error, gen_cerb_rules, gen_schema):
     )
 
 
+def duplicate_entries_found():
+    rule_id = duplicate_entries_found.__name__
+    err = ('Duplicate entries found in rows {row_num} with primary key column '
+           '{column_id} and primary key value {value} in table {table_id}')
+
+    def gen_cerb_rules(val_ctx: OdmValueCtx):
+        return {'unique': True}
+
+    def gen_schema(data: pt.PartData, ver):
+        return gen_global_schema(data, ver, rule_id, gen_cerb_rules)
+
+    return init_rule(rule_id, err, gen_cerb_rules, gen_schema)
+
+
 def greater_than_max_length():
     rule_id = greater_than_max_length.__name__
     odm_key = 'maxLength'
@@ -77,7 +92,7 @@ def greater_than_max_length():
         return {'maxlength': try_parse_int(val_ctx.value)}
 
     def gen_schema(data: pt.PartData, ver):
-        return gen_simple_schema(data, ver, rule_id, odm_key, gen_cerb_rules)
+        return gen_value_schema(data, ver, rule_id, odm_key, gen_cerb_rules)
 
     return init_rule(rule_id, err, gen_cerb_rules, gen_schema)
 
@@ -95,7 +110,7 @@ def greater_than_max_value():
         } | gen_cerb_rules_for_type(val_ctx)
 
     def gen_schema(data: pt.PartData, ver):
-        return gen_simple_schema(data, ver, rule_id, odm_key, gen_cerb_rules)
+        return gen_value_schema(data, ver, rule_id, odm_key, gen_cerb_rules)
 
     return init_rule(rule_id, err, gen_cerb_rules, gen_schema)
 
@@ -136,7 +151,7 @@ def less_than_min_length():
         return {'minlength': try_parse_int(val_ctx.value)}
 
     def gen_schema(data: pt.PartData, ver):
-        return gen_simple_schema(data, ver, rule_id, odm_key, gen_cerb_rules)
+        return gen_value_schema(data, ver, rule_id, odm_key, gen_cerb_rules)
 
     return init_rule(rule_id, err, gen_cerb_rules, gen_schema)
 
@@ -154,7 +169,7 @@ def less_than_min_value():
         } | gen_cerb_rules_for_type(val_ctx)
 
     def gen_schema(data: pt.PartData, ver):
-        return gen_simple_schema(data, ver, rule_id, odm_key, gen_cerb_rules)
+        return gen_value_schema(data, ver, rule_id, odm_key, gen_cerb_rules)
 
     return init_rule(rule_id, err, gen_cerb_rules, gen_schema)
 
@@ -220,7 +235,7 @@ def invalid_type():
         return gen_cerb_rules_for_type(val_ctx)
 
     def gen_schema(data: pt.PartData, ver):
-        return gen_simple_schema(data, ver, rule_id, odm_key, gen_cerb_rules)
+        return gen_value_schema(data, ver, rule_id, odm_key, gen_cerb_rules)
 
     return init_rule(rule_id, get_error_template, gen_cerb_rules, gen_schema)
 
@@ -228,6 +243,7 @@ def invalid_type():
 # This is the collection of all validation rules.
 # A tuple is used for immutability.
 ruleset: Tuple[Rule] = (
+    duplicate_entries_found(),
     greater_than_max_length(),
     greater_than_max_value(),
     invalid_category(),
