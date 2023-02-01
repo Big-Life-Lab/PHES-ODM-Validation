@@ -1,0 +1,21 @@
+schemaVersion: 2.0.0
+schema:
+  sites:
+    type: list
+    schema:
+      type: dict
+      schema:
+        siteID:
+          required: true
+          allowed:
+          - Ottawa Site
+          - Montreal Site
+          meta:
+          - ruleID: missing_mandatory_column
+            meta:
+            - partID: siteID
+              sitesRequired: mandatory
+              sites: pK
+      meta:
+      - partID: sites
+        partType: table

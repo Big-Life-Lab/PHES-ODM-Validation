@@ -1,0 +1,16 @@
+[
+    {
+        "partID": "sites",
+        "partType": "table",
+        "sites": "NA",
+        "sitesRequired": "NA",
+        "status": "active"
+    },
+    {
+        "partID": "siteID",
+        "partType": "attribute",
+        "sites": "pK",
+        "sitesRequired": "mandatory",
+        "status": "active"
+    }
+]

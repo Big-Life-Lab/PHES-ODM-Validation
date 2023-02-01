@@ -19,7 +19,7 @@ from cerberusext import ContextualCoercer, OdmValidator
 import part_tables as pt
 import rules
 from rules import Rule, ruleset
-from schemas import CerberusSchema, Schema
+from schemas import CerberusSchema, Schema, init_table_schema
 from stdext import (
     deduplicate_dict_list,
     deep_update,
@@ -320,7 +320,19 @@ def _map_aggregated_errors(agg_errors, rule_whitelist):
     return errors
 
 
+def _gen_additions_schema(additions) -> CerberusSchema:
+    # This may work for all rules, but 'allowed' is the only officially
+    # supported one.
+    result = {}
+    for table_id, attributes in additions.items():
+        attr_schema = attributes
+        table_schema = init_table_schema(table_id, [], attr_schema)
+        deep_update(result, table_schema)
+    return result
+
+
 def _generate_validation_schema_ext(parts, schema_version,
+                                    schema_additions={},
                                     rule_whitelist=[]
                                     ) -> Schema:
     # `parts` must be stripped before further processing. This is important for
@@ -342,7 +354,9 @@ def _generate_validation_schema_ext(parts, schema_version,
         assert r.gen_schema, f'missing `gen_schema` in rule {r.id}'
         s = r.gen_schema(data, version)
         assert s is not None
-        deep_update(s, cerb_schema)
+        deep_update(cerb_schema, s)
+    additions_schema = _gen_additions_schema(schema_additions)
+    deep_update(cerb_schema, additions_schema)
 
     # `deep_update` is used to join all the table-schemas together,
     # however it will cause duplicates in the meta list. This is especially a
@@ -360,8 +374,10 @@ def _generate_validation_schema_ext(parts, schema_version,
     }
 
 
-def generate_validation_schema(parts, schema_version=ODM_LATEST) -> Schema:
-    return _generate_validation_schema_ext(parts, schema_version)
+def generate_validation_schema(parts, schema_version=ODM_LATEST,
+                               schema_additions={}) -> Schema:
+    return _generate_validation_schema_ext(parts, schema_version,
+                                           schema_additions)
 
 
 def _validate_data_ext(schema: Schema,

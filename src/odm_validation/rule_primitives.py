@@ -148,7 +148,7 @@ def set_attr_schema(table_schema, data, table, attr, rule_id, odm_key,
     attr_id1 = get_mapped_attr_id(data, attr_id0, version)
     attr_meta = get_attr_meta(attr, table_id0, version, odm_key)
     attr_schema = init_attr_schema(attr_id1, rule_id, cerb_rules, attr_meta)
-    deep_update(attr_schema, table_schema[table_id1]['schema']['schema'])
+    deep_update(table_schema[table_id1]['schema']['schema'], attr_schema)
 
 
 def gen_value_schema(data: pt.PartData, ver: Version, rule_id: str,
@@ -179,7 +179,7 @@ def gen_value_schema(data: pt.PartData, ver: Version, rule_id: str,
             cerb_rules = gen_cerb_rules(val_ctx)
             set_attr_schema(table_schema, data, table, attr, rule_id,
                             odm_key, cerb_rules, ver)
-        deep_update(table_schema, schema)
+        deep_update(schema, table_schema)
     return schema
 
 
@@ -193,7 +193,7 @@ def gen_global_schema(data: pt.PartData, ver: Version, rule_id: str,
         for attr in data.table_data[table_id].attributes:
             set_attr_schema(table_schema, data, table, attr, rule_id,
                             None, cerb_rules, ver)
-        deep_update(table_schema, schema)
+        deep_update(schema, table_schema)
     return schema
 
 

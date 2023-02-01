@@ -1,0 +1,7 @@
+{
+    "sites": {
+        "siteID": {
+            "allowed": ["Ottawa Site", "Montreal Site"]
+        }
+    }
+}

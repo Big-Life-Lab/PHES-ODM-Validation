@@ -1,6 +1,7 @@
 # intermediary quarto files
 /examples/**/*.md
-/index-content.md
+/specs/generate-validation-schema.md
+/specs/module-functions.md
 /validation-rules/*.md
 
 # intermediary files from running quarto
