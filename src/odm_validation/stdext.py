@@ -11,8 +11,7 @@ def get_len(x: Any) -> int:
     return len(x) if getattr(x, '__len__', None) else 0
 
 
-# TODO: swap src and dst to make the first arg the mutable one
-def deep_update(src: dict, dst: dict):
+def deep_update(dst: dict, src: dict):
     """
     Recursively update a dict.
     Subdict's won't be overwritten but also updated.
@@ -26,7 +25,7 @@ def deep_update(src: dict, dst: dict):
         if key not in dst:
             dst[key] = value
         elif isinstance(value, dict):
-            deep_update(value, dst[key])
+            deep_update(dst[key], value)
         elif isinstance(value, list):
             src_list = value
             if len(src_list) > 0:

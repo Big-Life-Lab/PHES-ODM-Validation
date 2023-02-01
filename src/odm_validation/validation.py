@@ -342,7 +342,7 @@ def _generate_validation_schema_ext(parts, schema_version,
         assert r.gen_schema, f'missing `gen_schema` in rule {r.id}'
         s = r.gen_schema(data, version)
         assert s is not None
-        deep_update(s, cerb_schema)
+        deep_update(cerb_schema, s)
 
     # `deep_update` is used to join all the table-schemas together,
     # however it will cause duplicates in the meta list. This is especially a

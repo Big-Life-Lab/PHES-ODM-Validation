@@ -37,4 +37,4 @@ def update_schema(schema, table_id, attr_id, rule_id, cerb_rule,
     cerb_rules = {cerb_rule[0]: cerb_rule[1]}
     attr_schema = init_attr_schema(attr_id, rule_id, cerb_rules, attr_meta)
     table_schema = init_table_schema(table_id, table_meta, attr_schema)
-    deep_update(table_schema, schema)
+    deep_update(schema, table_schema)
