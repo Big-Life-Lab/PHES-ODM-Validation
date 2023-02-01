@@ -7,7 +7,7 @@ from typing import Dict, List, Optional, Set
 import part_tables as pt
 from part_tables import Meta, MetaEntry, Part, PartData, PartId
 from schemas import init_attr_schema, init_table_schema
-from stdext import deep_update, flatten
+from stdext import deep_update
 from versions import Version
 
 
@@ -57,14 +57,6 @@ def get_catset_meta(table_id: PartId, catset: Part, categories: List[Part],
     for cat in categories:
         meta.append({k: cat[k] for k in cat_keys})
     return meta
-
-
-def map_ids(mappings: Dict[PartId, PartId], part_ids: List[PartId],
-            ver: Version) -> List[PartId]:
-    if ver.major == 1:
-        return flatten([mappings[id] for id in part_ids])
-    else:
-        return part_ids
 
 
 def get_part_ids(parts: List[Part]) -> List[PartId]:

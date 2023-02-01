@@ -21,7 +21,6 @@ from rule_primitives import (
     get_attr_meta,
     get_catset_meta,
     get_table_meta,
-    map_ids,
     table_items,
 )
 from versions import Version
@@ -194,7 +193,7 @@ def invalid_category():
                 cs = cs_data.part
                 categories = cs_data.cat_parts
                 cat_ids0 = list(map(pt.get_partID, categories))
-                cat_ids1 = map_ids(data.mappings, cat_ids0, ver)
+                cat_ids1 = pt.map_ids(data.mappings, cat_ids0, ver)
                 cerb_rule = (cerb_rule_key, cat_ids1)
                 attr_meta = get_catset_meta(table_id0, cs, categories, ver)
                 update_schema(schema, table_id1, attr_id1, rule_id,

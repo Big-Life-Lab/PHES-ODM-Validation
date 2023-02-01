@@ -324,6 +324,14 @@ def partmap(parts) -> PartMap:
     return {get_partID(part): part for part in parts}
 
 
+def map_ids(mappings: Dict[PartId, PartId], part_ids: List[PartId],
+            ver: Version) -> List[PartId]:
+    if ver.major == 1:
+        return flatten([mappings[id] for id in part_ids])
+    else:
+        return part_ids
+
+
 def gen_partdata(parts: Dataset, version: Version):
     tables = list(filter(is_table, parts))
     table_ids = list(map(get_partID, tables))
