@@ -16,11 +16,12 @@ from rule_primitives import (
     OdmValueCtx,
     attr_items,
     gen_cerb_rules_for_type,
+    gen_conditional_schema,
     gen_global_schema,
     gen_value_schema,
-    get_attr_meta,
     get_catset_meta,
     get_table_meta,
+    is_mandatory,
     table_items,
 )
 from versions import Version
@@ -116,25 +117,14 @@ def greater_than_max_value():
 
 def missing_mandatory_column():
     rule_id = missing_mandatory_column.__name__
-    cerb_rule = ('required', True)
     err = '{rule_name} {column_id} in table {table_id} in row number {row_num}'
 
     def gen_cerb_rules(val_ctx: OdmValueCtx):
-        return {cerb_rule[0]: cerb_rule[1]}
+        return {'required': True}
 
     def gen_schema(data: pt.PartData, ver):
-        schema = {}
-        for table_id0, table_id1, table in table_items(data, ver):
-            table_meta = get_table_meta(table, ver)
-            for attr_id0, attr_id1, attr in attr_items(data, table_id0, ver):
-                req_key = pt.table_required_field(table_id0)
-                req_val = attr.get(req_key)
-                if req_val != pt.MANDATORY:
-                    continue
-                attr_meta = get_attr_meta(attr, table_id0, ver)
-                update_schema(schema, table_id1, attr_id1, rule_id,
-                              cerb_rule, table_meta, attr_meta)
-        return schema
+        return gen_conditional_schema(data, ver, rule_id, gen_cerb_rules,
+                                      is_mandatory)
 
     return init_rule(rule_id, err, gen_cerb_rules, gen_schema)
 

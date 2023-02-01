@@ -26,6 +26,7 @@ MetaMap = DefaultDict[PartId, Meta]
 # type aliases (other)
 Dataset = List[Row]
 PartMap = Dict[PartId, Part]
+TableId = PartId
 
 
 class MapKind(Enum):

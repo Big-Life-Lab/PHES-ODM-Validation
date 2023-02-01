@@ -1,7 +1,7 @@
 import logging
 from dataclasses import dataclass
 from logging import warning
-from typing import Dict, List, Optional, Set
+from typing import Callable, List, Optional, Set
 # from pprint import pprint
 
 import part_tables as pt
@@ -9,6 +9,8 @@ from part_tables import Meta, MetaEntry, Part, PartData, PartId
 from schemas import init_attr_schema, init_table_schema
 from stdext import deep_update
 from versions import Version
+
+AttrPredicate = Callable[[pt.TableId, Part], bool]
 
 
 @dataclass(frozen=True)
@@ -33,8 +35,8 @@ def get_table_meta(table: Part, version: Version) -> Meta:
     return [m]
 
 
-def get_attr_meta(attr: Part, table_id: PartId, version: Version,
-                  odm_key: str = None):
+def _get_attr_meta(attr: Part, table_id: PartId, version: Version,
+                   odm_key: str = None):
     keys = [pt.PART_ID, table_id, pt.table_required_field(table_id)]
     if version.major == 1:
         keys += [pt.V1_LOCATION, pt.V1_TABLE, pt.V1_VARIABLE]
@@ -122,6 +124,13 @@ def attr_items2(data: PartData, table_id: PartId, key: str):
                   data.table_data[table_id].attributes)
 
 
+def attr_items_pred(data: PartData, table_id: PartId, pred: AttrPredicate):
+    """Iterates over all attribute parts of table `table_id` that fulfills
+    `pred`."""
+    return filter(lambda attr: pred(table_id, attr),
+                  data.table_data[table_id].attributes)
+
+
 def init_table_schema2(schema, data, table, version):
     """This is a helper for creating the table schema, to make it easier to
     write rule-functions. This should be prefered over using
@@ -134,22 +143,21 @@ def init_table_schema2(schema, data, table, version):
     return init_table_schema(table_id1, table_meta, {})
 
 
-def set_attr_schema(table_schema, data, table, attr, rule_id, odm_key,
-                    cerb_rules, version):
+def set_attr_schema(table_schema, data, table, attr, rule_id,
+                    odm_key: Optional[str], cerb_rules, version):
     table_id0 = pt.get_partID(table)
     table_id1 = list(table_schema.keys())[0]
     attr_id0 = pt.get_partID(attr)
     attr_id1 = get_mapped_attr_id(data, attr_id0, version)
-    attr_meta = get_attr_meta(attr, table_id0, version, odm_key)
+    attr_meta = _get_attr_meta(attr, table_id0, version, odm_key)
     attr_schema = init_attr_schema(attr_id1, rule_id, cerb_rules, attr_meta)
     deep_update(table_schema[table_id1]['schema']['schema'], attr_schema)
 
 
-def init_val_ctx(data: PartData, attr: Part, odm_key: str
+def init_val_ctx(data: PartData, attr: Part, odm_key: Optional[str],
                  ) -> Optional[OdmValueCtx]:
-    assert odm_key
     odm_val = attr.get(odm_key)
-    if not odm_val:
+    if odm_key and not odm_val:
         warning(f'missing value for {pt.get_partID(attr)}.{odm_key}')
         return
     odm_datatype = attr.get(pt.DATA_TYPE)
@@ -173,6 +181,30 @@ def gen_value_schema(data: pt.PartData, ver: Version, rule_id: str,
         table_id0 = pt.get_partID(table)
         table_schema = init_table_schema2(schema, data, table, ver)
         for attr in attr_items2(data, table_id0, odm_key):
+            val_ctx = init_val_ctx(data, attr, odm_key)
+            if not val_ctx:
+                continue
+            cerb_rules = gen_cerb_rules(val_ctx)
+            set_attr_schema(table_schema, data, table, attr, rule_id,
+                            odm_key, cerb_rules, ver)
+        deep_update(schema, table_schema)
+    return schema
+
+
+def is_mandatory(table_id: pt.TableId, attr: Part):
+    req_key = pt.table_required_field(table_id)
+    req_val = attr.get(req_key)
+    return req_val == pt.MANDATORY
+
+
+def gen_conditional_schema(data: pt.PartData, ver: Version, rule_id: str,
+                           gen_cerb_rules, pred: AttrPredicate):
+    schema = {}
+    odm_key = None
+    for table in table_items2(data):
+        table_id = pt.get_partID(table)
+        table_schema = init_table_schema2(schema, data, table, ver)
+        for attr in attr_items_pred(data, table_id, pred):
             val_ctx = init_val_ctx(data, attr, odm_key)
             if not val_ctx:
                 continue
