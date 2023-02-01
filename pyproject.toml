@@ -7,7 +7,7 @@ version = "0.1.0"
 description = "Population Health and Envirmental Open Data Model (PHES-ODM) Validation Toolkit"
 readme = "README.md"
 license = { file="LICENSE" }
-requires-python = ">=3.9"
+requires-python = ">=3.10"
 classifiers = [
     "Programming Language :: Python :: 3",
     "Operating System :: OS Independent",

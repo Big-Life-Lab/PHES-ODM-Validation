@@ -8,7 +8,7 @@ from versions import parse_version
 common.unused_import_dummy = 1
 
 
-class TestParseVersion(unittest.TestCase):
+class TestParseVersion(common.OdmTestCase):
     def test_default(self):
         default = Version(major=123)
         self.assertEqual(parse_version('', default=default), default)

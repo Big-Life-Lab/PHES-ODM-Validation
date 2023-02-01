@@ -5,10 +5,10 @@ schema:
     schema:
       type: dict
       schema:
-        phone:
-          maxLength: 10
+        phoneNumber:
+          maxlength: 10
           meta:
-          - ruleId: greater_than_max_length
+          - ruleID: greater_than_max_length
             meta:
             - partID: phone
               contacts: header
@@ -16,8 +16,8 @@ schema:
               version1Location: variables
               version1Table: Contact
               version1Variable: phoneNumber
-    meta:
-      - partID: contacts
-        partType: table
-        version1Location: tables
-        version1Table: Contact
+      meta:
+        - partID: contacts
+          partType: table
+          version1Location: tables
+          version1Table: Contact

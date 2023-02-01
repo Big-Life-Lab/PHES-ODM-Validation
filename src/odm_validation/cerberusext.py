@@ -1,18 +1,40 @@
 import logging
+from collections import defaultdict
+from dataclasses import dataclass
+from datetime import datetime
 from enum import Enum
-from typing import List, Optional
+from typing import Any, Dict, List, Optional, Set, Tuple
 from copy import deepcopy
 # from pprint import pprint
 
 from cerberus import Validator
 
 import part_tables as pt
-from stdext import strip_dict_key
+import rules as validation_rules
+from part_tables import Row
+from stdext import (
+    inc,
+    parse_datetime,
+    parse_int,
+    type_name,
+)
 
 
 class LogLevel(Enum):
     WARNING = 'warning'
     ERROR = 'error'
+
+
+@dataclass(frozen=True)
+class CoercionCtx:
+    """Coercion context."""
+    cerb_type_name: str
+    column: str
+    column_meta: dict
+    row: dict
+    row_num: str
+    table: str
+    value: str
 
 
 def _get_meta_rule_ids(column_meta) -> List[str]:
@@ -21,59 +43,52 @@ def _get_meta_rule_ids(column_meta) -> List[str]:
     return [m['ruleID'] for m in column_meta]
 
 
-def _type_name(x) -> str:
-    result = type(x).__name__
-    if result == 'int':
-        result = 'integer'
-    if result == 'str':
-        result = 'string'
-    return result
+def _generalize_cerb_type_name(name: str) -> str:
+    if name in {'float', 'integer'}:
+        return 'number'
+    else:
+        return name
 
 
-def _gen_coercion_msg(log_lvl, table, column, row_num, value, column_meta):
-    value_type_name = _type_name(value)
-    result = (f'Value {value} in row {row_num} in column {column} '
-              f'in table {table} ')
-    if log_lvl == 'warning':
-        result += f'is a {value_type_name} and was '
-    elif log_lvl == 'error':
+def _gen_coercion_msg(lvl: LogLevel, ctx: CoercionCtx):
+    orig_type_name = type_name(type(ctx.value))
+    coerced_type_alias = _generalize_cerb_type_name(ctx.cerb_type_name)
+    result = (f'Value {ctx.value} in row {ctx.row_num} in column {ctx.column} '
+              f'in table {ctx.table} ')
+    if lvl == LogLevel.WARNING:
+        result += f'is a {orig_type_name} and was '
+    elif lvl == LogLevel.ERROR:
         result += 'cannot be '
     else:
         assert False, "invalid log lvl"
-    result += 'coerced into a number'
+    result += f'coerced into a {coerced_type_alias}'
     return result
 
 
-def _gen_coercion_log_entry(log_lvl, table, column, row_index, row,
-                            orig_value, column_meta):
-    row_num = row_index + 1
-    rule_ids = _get_meta_rule_ids(column_meta)
-    rule_fields = pt.get_validation_rule_fields(column_meta, rule_ids)
-    msg = _gen_coercion_msg(log_lvl, table, column, row_num, orig_value,
-                            column_meta)
+def _gen_coercion_log_entry(log_lvl, ctx):
+    rule_ids = _get_meta_rule_ids(ctx.column_meta)
+    rule_fields = pt.get_validation_rule_fields(ctx.column_meta, rule_ids)
+    msg = _gen_coercion_msg(log_lvl, ctx)
     return {
-        (str(log_lvl) + 'Type'): '_coercion',
+        (log_lvl.value + 'Type'): validation_rules._COERCION,
         'coercionRules': rule_ids,
-        'tableName': table,
-        'columnName': column,
-        'rowNumber': row_num,
-        'row': row,
-        'invalidValue': orig_value,
+        'tableName': ctx.table,
+        'columnName': ctx.column,
+        'rowNumber': ctx.row_num,
+        'row': ctx.row,
+        'invalidValue': ctx.value,
         'validationRuleFields': rule_fields,
         'message': msg
     }
 
 
-def _gen_coercion_warning(table, column, row_index, row, orig_value,
-                          column_meta):
-    return _gen_coercion_log_entry('warning', table, column, row_index, row,
-                                   orig_value, column_meta)
-
-
-def _gen_coercion_error(table, column, row_index, row, orig_value,
-                        column_meta):
-    return _gen_coercion_log_entry('error', table, column, row_index, row,
-                                   orig_value, column_meta)
+def _convert_value(orig_value, type_class) -> int:
+    if type_class is int:
+        return parse_int(orig_value)
+    elif type_class is datetime:
+        return parse_datetime(orig_value)
+    else:
+        return type_class(orig_value)
 
 
 class ContextualCoercer(Validator):
@@ -133,35 +148,41 @@ class ContextualCoercer(Validator):
         self.schema = coercion_schema
         self._config["coerced_document"] = deepcopy(document)
         if not super().validate(document):
-            logging.error(self.errors)
+            logging.error(self.errors, stack_info=True)
         return self._config["coerced_document"]
 
-    def _log_warning(self, table, field, row_ix, row, orig_value, column_meta):
-        warning = _gen_coercion_warning(table, field, row_ix, row, orig_value,
-                                        column_meta)
-        self._config["warnings"].append(warning)
-
-    def _log_error(self, table, field, row_ix, row, orig_value, column_meta):
-        error = _gen_coercion_error(table, field, row_ix, row, orig_value,
-                                    column_meta)
-        self._config["errors"].append(error)
+    def _log_coercion(self, lvl, ctx):
+        entry = _gen_coercion_log_entry(lvl, ctx)
+        self._config[lvl.value + 's'].append(entry)
 
     def _set_value(self, field, orig_value, type_class):
         if isinstance(orig_value, type_class):
+            return
+        if type_class is float and isinstance(orig_value, int):
             return
         table = self.document_path[0]
         row_ix = self.document_path[1]
         row = self.document
         column_meta = self.schema[field].get('meta')
+        ctx = CoercionCtx(
+            cerb_type_name=type_name(type_class),
+            column=field,
+            column_meta=column_meta,
+            row=row,
+            row_num=row_ix+1,
+            table=table,
+            value=orig_value,
+        )
         try:
-            value = type_class(orig_value)
+            value = _convert_value(orig_value, type_class)
             self._config["coerced_document"][table][row_ix][field] = value
-            self._log_warning(table, field, row_ix, row, orig_value,
-                              column_meta)
-        except ValueError:
+            self._log_coercion(LogLevel.WARNING, ctx)
+        except (ArithmeticError, ValueError):
             value = orig_value
-            self._log_error(table, field, row_ix, row, orig_value,
-                            column_meta)
+            self._log_coercion(LogLevel.ERROR, ctx)
+
+    def _check_with_datetime(self, field, value):
+        self._set_value(field, value, datetime)
 
     def _check_with_float(self, field, value):
         self._set_value(field, value, float)
@@ -170,27 +191,99 @@ class ContextualCoercer(Validator):
         self._set_value(field, value, int)
 
 
+DateStr = str
+TableId = str
+PrimaryKey = Tuple[pt.PartId, DateStr]
+TableKey = Tuple[TableId, PrimaryKey]
+Index = int
+
+
+@dataclass
+class AggregatedError:
+    cerb_rule: str
+    table_id: str
+    column_id: str
+    row_numbers: List[int]
+    rows: List[dict]
+    column_meta: List[dict]
+    value: Any
+
+
+class UniqueRuleState:
+    """State for the 'unique' rule."""
+    def __init__(self):
+        self.table_keys: Dict[TableId, Set[PrimaryKey]] = defaultdict(set)
+        self.tablekey_rows: Dict[TableKey, (Index, Row)] = {}
+        self.tablekey_errors: Dict[TableKey, AggregatedError] = \
+            defaultdict(AggregatedError)
+
+
+class ErrorState:
+    def __init__(self):
+        self.aggregated_errors: List[AggregatedError] = []
+
+
 class OdmValidator(Validator):
-    """Must be constructed with `coercion_warnings` and `coercion_errors`
-    parameters set to existing lists."""
-    # This is the main class used for validation. It wraps the
-    # ContextualCoercer class to perform coercion before the validation step.
+    # This is the main class used for validation.
+
+    @staticmethod
+    def new():
+        """Constructs this class with initialized state."""
+        # `__init__` can't be used to init state because Cerberus creates
+        # multiple instances of the validator, so the same instance/state won't
+        # be passed to our custom validation methods. The arguments passed in
+        # here are automatically assigned to `Validator._config` by Cerberus.
+        return OdmValidator(
+            unique_state=UniqueRuleState(),
+            error_state=ErrorState(),
+        )
 
     def __init__(self, *args, **kwargs):
-        # Cerberus is filling in `_config` with any extra key-value
-        # parameters, which is how the coercion-warning/error lists are set.
-        #
         # Unknown fields must be allowed because we're only generating a schema
         # for the requirements, not the optional data.
         super().__init__(*args, **kwargs)
         self.allow_unknown = True
+        self.unique_state = self._config['unique_state']
+        self.error_state = self._config['error_state']
 
-    def validate(self, data, schema):
-        warnings = self._config['coercion_warnings']
-        errors = self._config['coercion_errors']
-        coercer = ContextualCoercer(warnings=warnings, errors=errors)
-        coerced_data = coercer.coerce(data, schema)
+    def _validate_unique(self, constraint, field, value):
+        """{'type': 'boolean'}"""
+        # the primary key (pk) is a compound key of partID and lastUpdated
+        if not constraint:
+            return
+        table_id = self.document_path[0]
+        row_ix = self.document_path[1]
+        row = self.document
+        lastUpdated = row.get('lastUpdated', '') or ''
+        assert isinstance(lastUpdated, str)
+        pk = (value.strip(), lastUpdated.strip())
+        state = self.unique_state
+        primary_keys = state.table_keys[table_id]
+        tablekey = (table_id, pk)
+        if pk in primary_keys:
+            err = state.tablekey_errors.get(tablekey)
+            if not err:
+                (first_ix, first_row) = state.tablekey_rows[tablekey]
+                err = AggregatedError(
+                    cerb_rule='unique',
+                    table_id=table_id,
+                    column_id=field,
+                    row_numbers=[inc(first_ix)],
+                    rows=[first_row],
+                    column_meta=self.schema[field].get('meta'),
+                    value=pk[0]
+                )
+                state.tablekey_errors[tablekey] = err
+            err.row_numbers.append(inc(row_ix))
+            err.rows.append(row)
+        else:
+            state.tablekey_rows[tablekey] = (row_ix, row)
+            primary_keys.add(pk)
 
-        validation_schema = strip_dict_key(deepcopy(schema), 'coerce')
-        result = super().validate(coerced_data, validation_schema)
+    def validate(self, *args, **kwargs) -> bool:
+        self.error_state.aggregated_errors.clear()
+        result = super().validate(*args, **kwargs)
+        self.error_state.aggregated_errors += \
+            self.unique_state.tablekey_errors.values()
+        result = result and len(self.error_state.aggregated_errors) == 0
         return result

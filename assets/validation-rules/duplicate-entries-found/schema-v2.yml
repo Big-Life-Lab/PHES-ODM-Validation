@@ -6,12 +6,12 @@ schema:
       type: dict
       schema:
         addId:
-          noDuplicateEntries: True
+          unique: True
           meta:
-            - ruleId: duplicate_entries_found
-              meta:
-                - partID: addId
-                  addresses: pk
-    meta:
+          - ruleID: duplicate_entries_found
+            meta:
+            - partID: addId
+              addresses: pK
+      meta:
       - partID: addresses
         partType: table

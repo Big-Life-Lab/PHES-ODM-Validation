@@ -9,6 +9,7 @@
                 "siteID": "1",
                 "geoLat": "a"
             },
+            "invalidValue": "a",
             "validationRuleFields": [
                 {
                     "partID": "geoLat",
@@ -16,7 +17,7 @@
                     "sites": "header"
                 }
             ],
-            "message": "Value a in row 1 in column geoLat in table sites has type varchar but should be of type float or coercable into a float"
+            "message": "Value a in row 1 in column geoLat in table sites has type string but should be of type float or coercable into a float"
         }
     ],
     "warnings": []

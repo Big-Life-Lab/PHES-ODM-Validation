@@ -1,15 +1,19 @@
-measures:
-  type: list
-  schema:
-    type: dict
+schemaVersion: 2.0.0
+schema:
+  measures:
+    type: list
     schema:
-      reportDate:
-        type: datetime
-        meta:
-          - ruleId: invalid_type
+      type: dict
+      schema:
+        reportDate:
+          type: datetime
+          coerce: datetime
+          meta:
+          - ruleID: invalid_type
             meta:
-              - partID: reportDate
-                dataType: datetime
-  meta:
-    - partID: measures
-      partType: table
+            - partID: reportDate
+              dataType: datetime
+              measures: header
+      meta:
+      - partID: measures
+        partType: table
