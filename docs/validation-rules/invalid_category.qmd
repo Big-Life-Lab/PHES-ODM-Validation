@@ -32,7 +32,7 @@ The error report will have the following fields
 * **row** The row in the data that failed this validation rule
 * **invalidValue**: The invalid category value
 * **validationRuleFields**: The ODM data dictionary rule fields violated by this row
-* **message**: Invalid category <invalidValue> found in row <rowIndex> for column <columnName> in table <tableName>
+* **message**: Invalid category \<invalidValue\> found in row \<rowIndex\> for column \<columnName\> in table \<tableName\>
 
 Example
 

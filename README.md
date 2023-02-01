@@ -18,7 +18,7 @@ messageType: "Error"
 messageText: "Missing Required Column: "
 notes: "This rule is used to validate that the rows in a table have all their mandatory
 columns. For each table in the data argument, the metadata for this rule is present
-in the parts sheet in the partID, <table_name>Table, and <table_name>Required column."
+in the parts sheet in the partID, \<table_name\>Table, and \<table_name\>Required column."
 ```
 
 **Example MeasureReport table**
@@ -58,7 +58,6 @@ The ODM validation toolkit is comprised of:
 2. **rule documentation** (/validation-rules/) - Details and examples of the rules.
 3. **rule validation module** (odmvalidator) - a python package that contains functions to validate ODM data.
 4. **rule schema**: These are the files that encode the validation rules executed by the Python code. All files are stored in the **assets/validation-schemas** folder with each file corresponding to a version of the ODM. The contents of the file has the version of the schema being used as well as the actual schema.
-5. **reference documents (location?)** - Additional documents describing rules. Examples of validation rules include validating measure data types (e.g. integer, string), ranges (e.g. number between 0 and 100), uniqueness (e.g. sample ID is not repeated).
 
 Many rules are defined in the ODM parts and sets tables. For example, the parts table includes the data type for each measure. The sets tables lists units and aggregations that are allowed for each measure. The parts table also includes what headers are included in the manadtory and optional headers in ODM report tables.
 
