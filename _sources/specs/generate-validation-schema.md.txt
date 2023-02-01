@@ -172,14 +172,15 @@ The returned warning object should consist of the following fields:
 - message: A string with a human readable version of the warning. The
   message value depends on the column that generated the warning.
   - If the warning was generated due to the `version1Location` column
-    then the message should be, ‘Skipping row <row_index> when
+    then the message should be, ‘Skipping row \<row_index\> when
     generating a version 1 schema. Invalid value for version 1 column
     version1Location. Allowed values are “tables”, “variables”, or
     “categories”’
   - If the warning was generated due to the `version1Table`,
     `version1Variable`, or `version1Category` columns, then the message
-    should be, “Skipping row <row_index> when generating a version 1
-    schema. Version 1 value not found for column <invalid_column_name>”
+    should be, “Skipping row \<row_index\> when generating a version 1
+    schema. Version 1 value not found for column
+    \<invalid_column_name\>”
 
 For example, the warning object for each of the parts snippets shown
 above are:

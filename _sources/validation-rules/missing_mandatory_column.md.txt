@@ -35,8 +35,8 @@ The error report will have the following fields
 - **row** The dictionary containing the row
 - **validationRuleFields**: The ODM data dictionary rule fields violated
   by this row
-- **message**: Missing mandatory column <columnName> in table
-  <tableName> in row number <rowIndex>
+- **message**: Missing mandatory column \<columnName\> in table
+  \<tableName\> in row number \<rowIndex\>
 
 Example
 
@@ -71,8 +71,8 @@ data dictionary. The relevant columns are:
 
 - **partID**: Contains the name of a part
 
-- **<table_name>**: Used to indicate whether the part is associated with
-  a table
+- **\<table_name\>**: Used to indicate whether the part is associated
+  with a table
 
   Can have one of the following values:
 
@@ -82,7 +82,7 @@ data dictionary. The relevant columns are:
   - **input**
   - **NA**: The part is not applicable to the table
 
-- **<table_name>Required**: Used to indicate whether a column is
+- **\<table_name\>Required**: Used to indicate whether a column is
   mandatory for a table
 
   Can have one of the following values:
@@ -175,7 +175,7 @@ The generated cerberus object for the example above is shown below,
 </pre>
 
 The data dictionary columns that should be included in the `meta` field
-are: \* partID \* <table_name> \* <table_name>Required
+are: \* partID \* \<table_name\> \* \<table_name\>Required
 
 ## Version 1
 

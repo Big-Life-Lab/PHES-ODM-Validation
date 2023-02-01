@@ -146,7 +146,7 @@ Finally, the **airTemp** part in version 2 is a category in version 1 called **e
 
 ## Checking if a column is mandatory for a table
 
-This can be done by looking at the `<table_name>Required` columns in the parts sheet. [The table names will need to be retreived](#how-to-get-the-names-of-tables-that-are-part-of-the-odm) first to identify these columns. The possible values for the `<table_name>Required` columns are:
+This can be done by looking at the `\<table_name\>Required` columns in the parts sheet. [The table names will need to be retreived](#how-to-get-the-names-of-tables-that-are-part-of-the-odm) first to identify these columns. The possible values for the `\<table_name\>Required` columns are:
 
 * **mandatory**: This column is mandatory
 * **optional**: This column is optional
