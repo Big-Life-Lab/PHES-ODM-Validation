@@ -30,6 +30,10 @@ jobs:
         target_branch: gh-pages
     - name: Set GH-Pages domain name
       run: echo 'validate-docs.phes-odm.org' > ${{ github.workspace }}/CNAME
+    - name: Commit CNAME file
+      run: |
+        git add CNAME
+        git commit -m "Add CNAME"
     - name: Push to GitHub Pages
       uses: ad-m/github-push-action@v0.6.0
       with:
