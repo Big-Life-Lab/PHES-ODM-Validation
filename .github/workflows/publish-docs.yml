@@ -23,13 +23,13 @@ jobs:
         pip install -r docs/requirements.txt
     - name: Render Quarto docs
       run: python tools/render_quarto_docs.py
-    - name: Set GH-Pages domain name
-      run: echo 'validate-docs.phes-odm.org' > CNAME
     - name: Build and Commit
-      uses: sphinx-notes/pages@3 # requires checkout with `fetch-depth: 0`
+      uses: sphinx-notes/pages@2.1 # requires checkout with `fetch-depth: 0`
       with:
         documentation_path: docs
         target_branch: gh-pages
+    - name: Set GH-Pages domain name
+      run: echo 'validate-docs.phes-odm.org' > CNAME
     - name: Push to GitHub Pages
       uses: ad-m/github-push-action@v0.6.0
       with:
