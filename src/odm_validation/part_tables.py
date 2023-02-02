@@ -83,6 +83,7 @@ CATSET_ID = 'catSetID'
 DATA_TYPE = 'dataType'
 PART_ID = 'partID'
 PART_TYPE = 'partType'
+STATUS = 'status'
 
 PART_ID_ORIGINAL = 'partID_original'
 TABLE_ID_ORIGINAL = 'tableID_original'
@@ -97,6 +98,7 @@ CATEGORY = 'category'
 TABLE = 'table'
 
 # other value constants
+ACTIVE = 'active'
 BOOLEAN = 'boolean'
 BOOLEAN_SET = 'booleanSet'
 DATETIME = 'datetime'
@@ -305,7 +307,7 @@ def filter_compatible(parts: Dataset, schema_version: Version) -> Dataset:
     for row in parts:
         part_id = get_partID(row)
         first, last = get_version_range(row)
-        active: bool = row.get('status') == 'active'
+        active: bool = row.get(STATUS) == ACTIVE
         if not (is_compatible(active, first, last, schema_version)):
             warning(f'skipping incompatible part: {part_id}')
             continue

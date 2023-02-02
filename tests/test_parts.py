@@ -12,13 +12,13 @@ def get_row(first: str, last: str, active: bool):
     return {
         'firstReleased': first,
         'lastUpdated': last,
-        'status': 'active' if active else 'depreciated',
+        pt.STATUS: pt.ACTIVE if active else 'depreciated',
     }
 
 
 def part_is_compatible(part: pt.Part, version: Version) -> bool:
     first, last = pt.get_version_range(part)
-    active: bool = part.get('status') == 'active'
+    active: bool = part.get(pt.STATUS) == pt.ACTIVE
     return pt.is_compatible(active, first, last, version)
 
 
