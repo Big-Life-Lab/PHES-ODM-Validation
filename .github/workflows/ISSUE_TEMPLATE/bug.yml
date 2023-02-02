@@ -1,0 +1,34 @@
+name: Bug Report
+description: Report a bug
+title: "[Bug]: "
+labels: ["bug"]
+assignees:
+  - yulric
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for taking the time to report a bug!
+  - type: textarea
+    id: bug-description
+    attributes:
+      label: Bug Description
+      description: Describe in detail what the bug is along with steps on how to reproduce
+      placeholder: ex. missing-mandatory-column
+    validations:
+      required: true
+  - type: input
+    id: os
+    attributes:
+      label: The operating system on which the bug occured
+      description: 
+      placeholder:
+    validations:
+      required: true
+  - type: input
+    id: python-version
+    attributes:
+      label: Python Version
+      description: The version of Python on which the bug occured
+    validations:
+      required: true
