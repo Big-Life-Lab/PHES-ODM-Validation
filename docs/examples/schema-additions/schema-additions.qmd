@@ -118,9 +118,9 @@ We can use it to extend our schema using the code below,
 ```{python}
 #| output: false
 
-parts_file = import_csv_file("./parts.csv")
+parts = import_csv_file("./parts.csv")
 updated_validation_schema = generate_validation_schema(
-    parts_file,
+    parts,
     schema_additions = schema_additions
 )
 ```
