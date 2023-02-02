@@ -151,7 +151,7 @@ def _gen_rule_error(ctx: ErrorContext):
         error['row'] = ctx.rows[0]
 
     # value
-    if ctx.value:
+    if ctx.value is not None:
         error['invalidValue'] = ctx.value
 
     return error
