@@ -15,7 +15,7 @@ def get_row(first: str, last: str, active: bool):
     }
 
 
-class TestVersionCompat(unittest.TestCase):
+class TestVersionCompat(common.OdmTestCase):
     def test_same(self):
         row = get_row('1.0.0', '1.0.0', True)
         self.assertTrue(is_compatible(row, parse_version('1.0.0')))
@@ -33,7 +33,7 @@ class TestVersionCompat(unittest.TestCase):
         self.assertTrue(is_compatible(row, parse_version('2.0.')))
 
 
-class TestVersion1FieldsExist(unittest.TestCase):
+class TestVersion1FieldsExist(common.OdmTestCase):
     parts_pass = [
         {
             'version1Location': 'tables',

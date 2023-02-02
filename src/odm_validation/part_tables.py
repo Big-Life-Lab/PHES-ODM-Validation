@@ -3,6 +3,7 @@
 from collections import defaultdict
 from dataclasses import dataclass
 from enum import Enum
+from itertools import islice
 from logging import error, warning
 from semver import Version
 from typing import DefaultDict, Dict, List, Optional, Set
@@ -11,14 +12,19 @@ from stdext import flatten
 from versions import parse_version
 
 
-# type aliases
+# type aliases (primitive)
+BoolSet = Set[str]  # a set of boolean values
+Part = dict
 PartId = str
 Row = dict
-Dataset = List[Row]
+
+# type aliases (meta)
 MetaEntry = Dict[str, str]
 Meta = List[MetaEntry]
 MetaMap = DefaultDict[PartId, Meta]
-Part = dict
+
+# type aliases (other)
+Dataset = List[Row]
 PartMap = Dict[PartId, Part]
 
 
@@ -57,6 +63,7 @@ class PartData:
     An immutable cache of all datasets derived from the 'parts' dataset.
     The parts-list is stripped of empty values before generating this.
     """
+    bool_set: BoolSet
     catset_data: Dict[PartId, CatsetData]  # category-set data, by catset id
     table_data: Dict[PartId, TableData]  # table data, by table id
     mappings: Dict[PartId, List[PartId]]  # v1 mapping, by part id
@@ -88,8 +95,11 @@ CATEGORY = 'category'
 TABLE = 'table'
 
 # other value constants
+BOOLEAN = 'boolean'
+BOOLEAN_SET = 'booleanSet'
+DATETIME = 'datetime'
 MANDATORY = 'mandatory'
-NA = {'', 'NA', 'Not applicable'}
+NA = {'', 'NA', 'Not applicable', 'null'}
 
 V1_VARIABLE = 'version1Variable'
 V1_LOCATION = 'version1Location'
@@ -146,21 +156,23 @@ def parse_version1Category(s: str) -> List[str]:
 def get_mappings(part: dict, version: Version) -> Optional[List[PartId]]:
     """Returns a list of part ids from `version` corresponding to `part`,
     or None if there is no mapping."""
+    # XXX: Parts may be missing version1 fields.
+    # XXX: The 'booleanSet' is not required to have a version1Location.
     if version.major != 1:
         return
     ids = []
+    loc = part.get(V1_LOCATION)
+    kind = V1_KIND_MAP.get(loc)
     try:
-        loc = part[V1_LOCATION]
-        kind = V1_KIND_MAP[loc]
         if kind == MapKind.TABLE:
             ids = [part[V1_TABLE]]
         elif kind == MapKind.ATTRIBUTE:
             ids = [part[V1_VARIABLE]]
-        elif kind == MapKind.CATEGORY:
+        elif kind == MapKind.CATEGORY or is_bool_set(part):
             ids = parse_version1Category(part[V1_CATEGORY])
     except KeyError:
         return
-    if len(ids) == 0 or None in ids or '' in ids:
+    if len(list(filter(lambda id: id and id != '', ids))) == 0:
         return
     return ids
 
@@ -176,6 +188,10 @@ def table_required_field(table_name):
 
 def has_catset(p):
     return p.get(CATSET_ID) is not None
+
+
+def is_bool_set(part):
+    return part.get(CATSET_ID) == BOOLEAN_SET
 
 
 def is_table(p):
@@ -206,6 +222,7 @@ def is_cat(p):
 
 def get_partID(p):
     # TODO: rename to get_partid or get_id?
+    assert PART_ID in p, str(p)
     return p[PART_ID]
 
 
@@ -289,6 +306,7 @@ def gen_partdata(parts_v2: Dataset, version: Version):
     attributes = list(filter(is_attr, parts_v2))
     categories = list(filter(is_cat, parts_v2))
     catsets = partmap(filter(is_catset_attr, parts_v2))
+    bool_set = tuple(map(get_partID, islice(filter(is_bool_set, parts_v2), 2)))
 
     table_attrs = defaultdict(list)
     for attr in attributes:
@@ -321,6 +339,7 @@ def gen_partdata(parts_v2: Dataset, version: Version):
     assert None not in mappings
 
     return PartData(
+        bool_set=bool_set,
         table_data=table_data,
         catset_data=catset_data,
         mappings=mappings,

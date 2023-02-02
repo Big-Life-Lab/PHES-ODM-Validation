@@ -32,8 +32,9 @@ The error report should have the following fields,
 * **columnName**: The name of the column with the invalid value
 * **rowNumber**: The index of the row with the invalid value
 * **row**: The dictionary containing the invalid row
+* **invalidValue**: The invalid value
 * **validationRuleFields**: The ODM data dictionary rows used to generate this rule
-* **message**: Value <invalid_value> in row <row_index> in column <column_name> in table <table_name> has length <invalid_length> which is greater than the max length of <max_length>
+* **message**: Value \<invalid_value\> in row \<row_index\> in column \<column_name\> in table \<table_name\> has length \<invalid_length\> which is greater than the max length of \<max_length\>
 
 The error report object for the example invalid row above is shown below,
 
@@ -66,7 +67,7 @@ The `phone` column in the `contacts` table would have this validation rule but t
 
 ## Cerberus Schema
 
-We can use the [maxLength](https://docs.python-cerberus.org/en/stable/validation-rules.html#minlength-maxlength) validation rule in the cerberus library to implement this.
+We can use the [maxlength](https://docs.python-cerberus.org/en/stable/validation-rules.html#minlength-maxlength) validation rule in the cerberus library to implement this.
 
 The generated cerberus object for the example above is shown below,
 

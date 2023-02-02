@@ -1,18 +1,19 @@
----
-sites:
-  type: list
-  schema:
-    type: dict
+schemaVersion: 2.0.0
+schema:
+  sites:
+    type: list
     schema:
-      geoLat:
-        type: integer
-        coerce: int
-        meta:
-        - ruleId: invalid_type
+      type: dict
+      schema:
+        geoLat:
+          type: integer
+          coerce: integer
           meta:
-          - partID: geoLat
-            dataType: integer
-            sites: header
-  meta:
-    partID: sites
-    partType: table
+          - ruleID: invalid_type
+            meta:
+            - partID: geoLat
+              dataType: integer
+              sites: header
+      meta:
+        - partID: sites
+          partType: table

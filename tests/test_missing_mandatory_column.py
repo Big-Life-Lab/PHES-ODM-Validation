@@ -3,7 +3,7 @@ from os.path import join
 
 import common
 import utils
-from validation import generate_validation_schema, validate_data
+from validation import _generate_validation_schema_ext, validate_data
 
 asset_dir = join(common.root_dir,
                  'assets/validation-rules/missing-mandatory-column')
@@ -21,16 +21,23 @@ missing_mandatory_column_fail_v2 = {
 }
 
 
-class TestValidateData(unittest.TestCase):
+class TestMissingMandatoryColumn(common.OdmTestCase):
+    rule_id = 'missing_mandatory_column'
+
     def setUp(self):
         self.maxDiff = None
+        self.whitelist = [self.rule_id]
 
     def test_schema_generation_v1(self):
-        result = generate_validation_schema(parts_v2, schema_version='1.0.0')
+        result = _generate_validation_schema_ext(parts=parts_v2,
+                                                 schema_version='1.0.0',
+                                                 rule_whitelist=self.whitelist)
         self.assertDictEqual(schema_v1, result)
 
     def test_schema_generation_v2(self):
-        result = generate_validation_schema(parts_v2, schema_version='2.0.0')
+        result = _generate_validation_schema_ext(parts=parts_v2,
+                                                 schema_version='2.0.0',
+                                                 rule_whitelist=self.whitelist)
         self.assertDictEqual(schema_v2, result)
 
     def test_missing_mandatory_column_v2(self):

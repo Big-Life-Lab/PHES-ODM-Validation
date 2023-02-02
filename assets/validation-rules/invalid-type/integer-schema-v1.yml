@@ -1,23 +1,24 @@
----
-Site:
-  type: list
-  schema:
-    type: dict
+schemaVersion: 1.0.0
+schema:
+  Site:
+    type: list
     schema:
-      Latitude:
-        type: integer
-        coerce: int
-        meta:
-        - ruleId: invalid_type
+      type: dict
+      schema:
+        Latitude:
+          type: integer
+          coerce: integer
           meta:
-          - partID: geoLat
-            dataType: integer
-            sites: header
-            version1Location: variables
-            version1Table: Site
-            version1Variable: Latitude
-  meta:
-    partID: sites
-    partType: table
-    version1Location: tables
-    version1Table: Site
+          - ruleID: invalid_type
+            meta:
+            - partID: geoLat
+              dataType: integer
+              sites: header
+              version1Location: variables
+              version1Table: Site
+              version1Variable: Latitude
+      meta:
+        - partID: sites
+          partType: table
+          version1Location: tables
+          version1Table: Site

@@ -132,7 +132,7 @@ pprint_csv_file(asset("valid-datetime-dataset-1.csv"), "Valid datetime dataset")
 whereas the following dataset should fail validation,
 
 ```{python}
-pprint_csv_file(asset("datetime-invalid-dataset-1.csv"), "Invalid datetime dataset")
+pprint_csv_file(asset("invalid-datetime-dataset-1.csv"), "Invalid datetime dataset")
 ```
 
 ## categorical
@@ -154,18 +154,19 @@ The error report should have the following fields,
 * **errorType**: invalid_type
 * **tableName**: The name of the table with the invalid value
 * **columnName**: The name of the column with the invalid value
-* **rowNumber**: The index of the row with the invalid value
+* **rowNumber**: The 1-based index of the row with the invalid value
 * **row**: The dictionary containing the invalid row
+* **invalidValue**: The invalid value
 * **validationRuleFields**: The ODM data dictionary rows used to generate this rule
-* **message**: Value <invalid_value> in row <row_index> in column <column_name> in table <table_name> has type <invalid_value_type> but should be of type <valid_type> or coercable into a <valid_type>.
+* **message**: Value \<invalid_value\> in row \<row_number\> in column \<column_name\> in table \<table_name\> has type \<invalid_value_type\> but should be of type \<valid_type\> or coercable into a \<valid_type\>.
 
 For a boolean data type, the message is shown below,
 
-* **message**: Row <row_index> in column <column_name> in table <table_name> is a boolean but has value <invalid_value>. Allowed values are <boolean_categories>.
+* **message**: Row \<row_number\> in column \<column_name\> in table \<table_name\> is a boolean but has value \<invalid_value\>. Allowed values are \<boolean_categories\>.
 
 For a datetime data type, the message is shown belowm,
 
-* **message**: Row \<row_index\> in column \<column_name\> in table \<table_name\> is a datetime with value \<invalid_value\> that has an unsupported datetime format. Allowed values are ISO 8601 standard full dates, full dates and times, or full dates and times with timezone.
+* **message**: Row \<row_number\> in column \<column_name\> in table \<table_name\> is a datetime with value \<invalid_value\> that has an unsupported datetime format. Allowed values are ISO 8601 standard full dates, full dates and times, or full dates and times with timezone.
 
 The error report objects for the invalid examples above can be seen below,
 
@@ -203,14 +204,15 @@ email
             "labID": "1",
             "contactEmail": "john.doe"
         },
+        "invalidValue": "john.doe",
         "validationRuleFields": [
             {
-                "partID": "john.doe",
+                "partID": "contactEmail",
                 "dataType": "email",
                 "labs": "header"
             }
         ],
-        "message": "Value a in row 1 in column contactEmail in table labs has type varchar but should be of type email or coercable into an email"
+        "message": "Value john.doe in row 1 in column contactEmail in table labs has type varchar but should be of type email or coercable into an email"
     }
 ]
 ```
@@ -252,14 +254,16 @@ For an integer `geoLat` column in a sites table
 
 ```{python}
 #| echo: false
-pprint_csv_file(asset("integer-parts-v2.csv"), "Integer parts v2")
+pprint_csv_file(asset("integer-parts.csv"), "Integer parts v2",
+                ignore_prefix="version1")
 ```
 
 For a float `geoLat` column in a sites table
 
 ```{python}
 #| echo: false
-pprint_csv_file(asset("float-parts-v2.csv"), "Float parts v2")
+pprint_csv_file(asset("float-parts.csv"), "Float parts v2",
+                ignore_prefix="version1")
 ```
 
 For the email `contactEmail` column in the labs table
@@ -287,13 +291,15 @@ For the boolean `reportable` column in the `measures` table,
 
 ```{python}
 #| echo: false
-pprint_csv_file(asset("bool-parts-v2.csv"), "Bool parts v2")
+pprint_csv_file(asset("bool-parts.csv"), "Bool parts v2",
+                ignore_prefix="version1")
 ```
 
 For the datetime `reportDate` column in the `measures` table,
 
 ```{python}
-pprint_csv_file(asset("datetime-parts-v2.csv"), "Datetime parts v2")
+pprint_csv_file(asset("datetime-parts.csv"), "Datetime parts v2",
+                ignore_prefix="version1")
 ```
 
 ## Cerberus schema
@@ -381,14 +387,16 @@ integer
 
 ```{python}
 #| echo: false
-pprint_csv_file(asset("integer-parts-v1.csv"), "Integer parts v1")
+pprint_csv_file(asset("integer-parts.csv"), "Integer parts v1",
+                ignore_prefix="version1")
 ```
 
 float
 
 ```{python}
 #| echo: false
-pprint_csv_file(asset("float-parts-v1.csv"), "Float parts v1")
+pprint_csv_file(asset("float-parts.csv"), "Float parts v1",
+                ignore_prefix="version1")
 ```
 
 email
@@ -422,13 +430,15 @@ boolean
 
 ```{python}
 #| echo: false
-pprint_csv_file(asset("bool-parts-v1.csv"), "Bool parts v1")
+pprint_csv_file(asset("bool-parts.csv"), "Bool parts v1",
+                ignore_prefix="version1")
 ```
 
 datetime
 
 ```{python}
-pprint_csv_file(asset("datetime-parts-v1.csv"), "Datetime parts v1")
+pprint_csv_file(asset("datetime-parts.csv"), "Datetime parts v1",
+                ignore_prefix="version1")
 ```
 
 The corresponding v1 cerberus schemas are shown below,

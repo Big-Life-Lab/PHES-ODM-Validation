@@ -1,0 +1,82 @@
+/*FONTS *
+-----------------------------------------------*/
+@import url(https://fonts.googleapis.com/css?family=Montserrat:400,600,800);
+/*https://fonts.google.com/specimen/Montserrat*/
+@import url(https://fonts.googleapis.com/css?family=Lora:400,600,800);
+/*https://fonts.google.com/specimen/Lora*/
+
+/*TYPOGRAPHY *
+-----------------------------------------------*/
+h1 {
+  font: 800 40px "Lora";
+  color: #333333;
+}
+
+h2 {
+  font: 800 32px "Lora";
+  color: #333333;
+}
+
+h3 {
+  font: 800 24px "Lora";
+  color: #333333;
+}
+
+h4 {
+  font: 800 20px "Lora";
+  color: #333333;
+}
+
+h5 {
+  font: 600 16px "montserrat";
+  font-variant: small-caps;
+  color: #838c91;
+}
+
+p {
+  font-family: "montserrat";
+  font-weight: 400;
+  color: #333333;
+}
+
+a {
+  color: #2EA6CC;
+}
+
+.big {
+  font-size: 1.25em;
+}
+
+mark {
+  background-color: #FFCB6C;
+  padding: .2rem;
+}
+
+/*LAYOUT *
+-----------------------------------------------*/
+.wrapper {
+  width: 80%;
+  margin: 8rem auto;
+}
+
+.break {
+  height: 5vh;
+}
+
+.section-head {
+  margin: 2em 0;
+  font-family: "HelveticaNeue", "Helvetica", "Arial", sans-serif;
+  font-size: 70%;
+  font-weight: normal;
+  padding: 1em 0;
+  color: #C4C4C4;
+  border-bottom: 1px solid #C4C4C4;
+}
+
+.montserrat {
+  font-family: 'montserrat';
+}
+
+.lora {
+  font-family: 'lora';
+}

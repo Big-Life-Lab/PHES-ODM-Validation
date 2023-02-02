@@ -1,11 +1,17 @@
+import dateutil.parser as dateutil_parser
 import json
 import operator
+from datetime import datetime
 from functools import reduce
-from typing import Any, List
+from typing import Any, List, Optional
 
 
-# TODO: swap src and dst to make the first arg the mutable one
-def deep_update(src: dict, dst: dict):
+def get_len(x: Any) -> int:
+    """Returns len if possible, otherwise zero."""
+    return len(x) if getattr(x, '__len__', None) else 0
+
+
+def deep_update(dst: dict, src: dict):
     """
     Recursively update a dict.
     Subdict's won't be overwritten but also updated.
@@ -19,7 +25,7 @@ def deep_update(src: dict, dst: dict):
         if key not in dst:
             dst[key] = value
         elif isinstance(value, dict):
-            deep_update(value, dst[key])
+            deep_update(dst[key], value)
         elif isinstance(value, list):
             src_list = value
             if len(src_list) > 0:
@@ -29,6 +35,10 @@ def deep_update(src: dict, dst: dict):
 
 def hash_dict(d) -> str:
     json.dumps(d, sort_keys=True)
+
+
+def deduplicate_list(items: List[Any]) -> List[Any]:
+    return list(set(items))
 
 
 def deduplicate_dict_list(dicts: List[dict]) -> List[dict]:
@@ -56,3 +66,52 @@ def strip_dict_key(d: dict, target_key: str):
 
 def flatten(x: List[List[Any]]) -> List[Any]:
     return reduce(operator.iconcat, x, [])
+
+
+def parse_datetime(s: str) -> datetime:
+    if len(s) < len('yyyymmdd'):
+        raise ValueError('datetime string is too short')
+    return dateutil_parser.parse(s)
+
+
+def parse_int(val) -> int:
+    """Returns `val` as an int. A number with only zeroes as decimals also
+    counts as an int. A ValueError is raised otherwise."""
+    float_val = float(val)  # may raise
+    int_val = int(float_val)
+    if int_val == float_val:
+        return int_val
+    else:
+        raise ValueError('not a valid integer')
+
+
+def try_parse_int(val) -> Optional[int]:
+    if not val:
+        return
+    try:
+        return parse_int(val)
+    except ValueError:
+        pass
+
+
+def try_parse_float(val) -> Optional[float]:
+    if not val:
+        return
+    try:
+        return float(val)
+    except ValueError:
+        pass
+
+
+def type_name(type_class) -> str:
+    result = type_class.__name__
+    if result == 'int':
+        result = 'integer'
+    if result == 'str':
+        result = 'string'
+    return result
+
+
+def inc(x):
+    """Increment x by 1, as seen in Pascal."""
+    return x + 1

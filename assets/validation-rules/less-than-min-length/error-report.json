@@ -9,10 +9,12 @@
                 "contactID": "1",
                 "phone": "123-456-1"
             },
+            "invalidValue": "123-456-1",
             "validationRuleFields": [
                 {
                     "partID": "phone",
-                    "minLength": "10"
+                    "minLength": "10",
+                    "contacts": "header"
                 }
             ],
             "message": "Value 123-456-1 in row 1 in column phone in table contacts has length 9 which is less than the min length of 10"

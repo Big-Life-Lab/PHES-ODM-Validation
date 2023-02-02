@@ -1,8 +1,11 @@
 # intermediary quarto files
 /examples/**/*.md
+/specs/generate-validation-schema.md
+/specs/module-functions.md
 /validation-rules/*.md
 
-# intermediary files from running `quarto preview`
+# intermediary files from running quarto
+*.ipynb
 *_files/
 
 # intermediary sphinx files

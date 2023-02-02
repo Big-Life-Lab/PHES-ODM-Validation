@@ -1,3 +1,4 @@
+from os.path import splitext
 from typing import List
 
 import csv
@@ -31,7 +32,16 @@ def export_yaml_file(data: dict, path: str):
 
 
 def import_dataset(path: str) -> Schema:
-    return import_csv_file(path)
+    # print('importing ' + path)
+    _, ext = splitext(path)
+    if ext == '.csv':
+        return import_csv_file(path)
+    elif ext == '.json':
+        return import_json_file(path)
+    elif ext == '.yml':
+        return import_yaml_file(path)
+    else:
+        assert False, f'unknown dataset extension "{ext}"'
 
 
 def import_schema(path: str) -> Schema:

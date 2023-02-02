@@ -54,3 +54,7 @@ html_theme_options = {
 }
 html_static_path = ['_static']
 html_logo = os.path.join(html_static_path[0], 'ODM-logo.png')
+
+html_css_files = [
+    'css/odm-styles.css',
+]

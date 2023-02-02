@@ -39,10 +39,11 @@ The error report will have the following fields
 * **errorType**: duplicate_entries_found
 * **tableName**: The name of the table with duplicate entries
 * **columnName** The name of the primary key column
+* **invalidValue**: The value of the primary key column
 * **rowNumbers**: The indexes of the duplicate entries
 * **rows** The entries in the table that failed this validation rule
 * **validationRuleFields**: The ODM data dictionary rule fields violated by this row
-* **message**: Duplicate entries found in rows <row_indexes> with primary key column <column_name> and primary key value <primary_key_value> in table <table_name>
+* **message**: Duplicate entries found in rows \<row_indexes\> with primary key column \<column_name\> and primary key value \<primary_key_value\> in table \<table_name\>
 
 The error report for the first invalid dataset is shown below,
 
