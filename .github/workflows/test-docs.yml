@@ -1,8 +1,12 @@
 name: Test documentation generation
+
 on:
   pull_request:
-    branches-ignore:
-    - main
+    paths:
+    - '.github/**'
+    - 'assets/**'
+    - 'docs/**'
+
 jobs:
   build:
     runs-on: ubuntu-latest
