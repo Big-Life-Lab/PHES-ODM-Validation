@@ -47,7 +47,7 @@ The validation schema we will be extending in this tutorial is shown below,
 #| echo: false
 
 validation_schema_to_extend = import_yaml_file("./base-validation-schema.yml")
-pprint(validation_schema_to_extend)
+pprint(validation_schema_to_extend, expand_all=True)
 ```
 
 For the sake of brevity this schema only contains a couple out of the numerous columns that are in the `sites` table. The two columns are:
@@ -110,7 +110,7 @@ with its result printed below,
 ```{python}
 #| echo: false
 
-pprint(schema_additions)
+pprint(schema_additions, expand_all=True)
 ```
 
 We can use it to extend our schema using the code below,
