@@ -3,7 +3,7 @@ description: Request a new validation rule
 title: "[New Rule]: "
 labels: ["enhancement", "new rule"]
 assignees:
-  - octocat
+  - yulric
 body:
   - type: markdown
     attributes:
