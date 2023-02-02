@@ -90,6 +90,7 @@ fields</p>
 <li><p><strong>tableName</strong>: The name of the table containing the missing values</p></li>
 <li><p><strong>columnName</strong>: The name of the mandatory column containing the
 missing values</p></li>
+<li><p><strong>invalidValue</strong>: The invalid value</p></li>
 <li><p><strong>rowNumber</strong>: The index of the table row with the error</p></li>
 <li><p><strong>row</strong>: The dictionary containing the row</p></li>
 <li><p><strong>validationRuleFields</strong>: The ODM data dictionary rows used to
@@ -111,9 +112,11 @@ section are shown below.</p>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'siteID'</span>: <span style="color: #008000; text-decoration-color: #008000">'1'</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'geoLat'</span>: <span style="color: #008000; text-decoration-color: #008000">''</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="font-weight: bold">}</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'invalidValue'</span>: <span style="color: #008000; text-decoration-color: #008000">''</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'validationRuleFields'</span>: <span style="font-weight: bold">[</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="font-weight: bold">{</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partID'</span>: <span style="color: #008000; text-decoration-color: #008000">'geoLat'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'sites'</span>: <span style="color: #008000; text-decoration-color: #008000">'header'</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'sitesRequired'</span>: <span style="color: #008000; text-decoration-color: #008000">'mandatory'</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="font-weight: bold">}</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="font-weight: bold">]</span>,
@@ -130,6 +133,7 @@ section are shown below.</p>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'warningType'</span>: <span style="color: #008000; text-decoration-color: #008000">'missing_values_found'</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'tableName'</span>: <span style="color: #008000; text-decoration-color: #008000">'sites'</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'columnName'</span>: <span style="color: #008000; text-decoration-color: #008000">'geoLat'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'invalidValue'</span>: <span style="color: #008000; text-decoration-color: #008000">'  '</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'rowNumber'</span>: <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">1</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'row'</span>: <span style="font-weight: bold">{</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'siteID'</span>: <span style="color: #008000; text-decoration-color: #008000">'1'</span>,
@@ -138,6 +142,7 @@ section are shown below.</p>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'validationRuleFields'</span>: <span style="font-weight: bold">[</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="font-weight: bold">{</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partID'</span>: <span style="color: #008000; text-decoration-color: #008000">'geoLat'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'sites'</span>: <span style="color: #008000; text-decoration-color: #008000">'header'</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'sitesRequired'</span>: <span style="color: #008000; text-decoration-color: #008000">'mandatory'</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="font-weight: bold">}</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="font-weight: bold">]</span>,
@@ -154,6 +159,7 @@ section are shown below.</p>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'warningType'</span>: <span style="color: #008000; text-decoration-color: #008000">'missing_values_found'</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'tableName'</span>: <span style="color: #008000; text-decoration-color: #008000">'sites'</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'columnName'</span>: <span style="color: #008000; text-decoration-color: #008000">'geoLat'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'invalidValue'</span>: <span style="color: #008000; text-decoration-color: #008000">'NA'</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'rowNumber'</span>: <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">1</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'row'</span>: <span style="font-weight: bold">{</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'siteID'</span>: <span style="color: #008000; text-decoration-color: #008000">'1'</span>,
@@ -162,6 +168,7 @@ section are shown below.</p>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'validationRuleFields'</span>: <span style="font-weight: bold">[</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="font-weight: bold">{</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partID'</span>: <span style="color: #008000; text-decoration-color: #008000">'geoLat'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'sites'</span>: <span style="color: #008000; text-decoration-color: #008000">'header'</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'sitesRequired'</span>: <span style="color: #008000; text-decoration-color: #008000">'mandatory'</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="font-weight: bold">}</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="font-weight: bold">]</span>,
@@ -197,6 +204,7 @@ validation schema for the examples above,</p>
 ┃<span style="font-weight: bold"> partID            </span>┃<span style="font-weight: bold"> partType           </span>┃<span style="font-weight: bold"> firstReleased         </span>┃<span style="font-weight: bold"> status     </span>┃<span style="font-weight: bold"> sites      </span>┃<span style="font-weight: bold"> sitesRequired        </span>┃
 ┡━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━╇━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━┩
 │ NA                │ missingness        │ 2.0                   │ active     │ NA         │ NA                   │
+│ null              │ missingness        │ 1.0                   │ active     │ NA         │ NA                   │
 │ NA_missing        │ missingness        │ 1.0                   │ active     │ NA         │ NA                   │
 │ sites             │ table              │ 1.0                   │ active     │ NA         │ NA                   │
 │ geoLat            │ attribute          │ 1.0                   │ active     │ header     │ mandatory            │
@@ -214,9 +222,9 @@ table.</p>
 <li><p>A
 <a class="reference external" href="https://docs.python-cerberus.org/en/stable/validation-rules.html#forbidden">forbidden</a>
 rule which includes all the <code class="docutils literal notranslate"><span class="pre">missingness</span></code> values from the dictionary</p></li>
-<li><p>A custom rule called <code class="docutils literal notranslate"><span class="pre">trimEmpty</span></code> for empty values which also handles
-trimming. Although the cerberus library has an <code class="docutils literal notranslate"><span class="pre">empty</span></code> rule, the
-rule allows values that are “empty” once trimmed.</p></li>
+<li><p>A custom rule called <code class="docutils literal notranslate"><span class="pre">emptyTrimmed</span></code> for empty values which also
+handles trimming. Although the cerberus library has an <code class="docutils literal notranslate"><span class="pre">empty</span></code> rule,
+the rule allows values that are “empty” once trimmed.</p></li>
 </ol>
 <p>The cerberus schema for the ODM dictionary snippet above is shown below,</p>
 <pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="font-weight: bold">{</span>
@@ -228,34 +236,33 @@ rule allows values that are “empty” once trimmed.</p></li>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'type'</span>: <span style="color: #008000; text-decoration-color: #008000">'dict'</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'schema'</span>: <span style="font-weight: bold">{</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'geoLat'</span>: <span style="font-weight: bold">{</span>
-<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'trimEmpty'</span>: <span style="color: #00ff00; text-decoration-color: #00ff00; font-style: italic">True</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'emptyTrimmed'</span>: <span style="color: #ff0000; text-decoration-color: #ff0000; font-style: italic">False</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'forbidden'</span>: <span style="font-weight: bold">[</span>
-<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'NA'</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'NA'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'NA_missing'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'null'</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   </span><span style="font-weight: bold">]</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'meta'</span>: <span style="font-weight: bold">[</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   </span><span style="font-weight: bold">{</span>
-<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'ruleId'</span>: <span style="color: #008000; text-decoration-color: #008000">'missing_values_found'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'ruleID'</span>: <span style="color: #008000; text-decoration-color: #008000">'missing_values_found'</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'meta'</span>: <span style="font-weight: bold">[</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   </span><span style="font-weight: bold">{</span>
-<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partID'</span>: <span style="color: #008000; text-decoration-color: #008000">'NA'</span>,
-<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partType'</span>: <span style="color: #008000; text-decoration-color: #008000">'missingness'</span>
-<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   </span><span style="font-weight: bold">}</span>,
-<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   </span><span style="font-weight: bold">{</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partID'</span>: <span style="color: #008000; text-decoration-color: #008000">'geoLat'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'sites'</span>: <span style="color: #008000; text-decoration-color: #008000">'header'</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'sitesRequired'</span>: <span style="color: #008000; text-decoration-color: #008000">'mandatory'</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   </span><span style="font-weight: bold">}</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   </span><span style="font-weight: bold">]</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   </span><span style="font-weight: bold">}</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   </span><span style="font-weight: bold">]</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="font-weight: bold">}</span>
-<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="font-weight: bold">}</span>
-<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="font-weight: bold">}</span>,
-<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'meta'</span>: <span style="font-weight: bold">[</span>
-<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="font-weight: bold">{</span>
-<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partID'</span>: <span style="color: #008000; text-decoration-color: #008000">'sites'</span>,
-<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partType'</span>: <span style="color: #008000; text-decoration-color: #008000">'table'</span>
-<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="font-weight: bold">}</span>
-<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="font-weight: bold">]</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="font-weight: bold">}</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'meta'</span>: <span style="font-weight: bold">[</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partID'</span>: <span style="color: #008000; text-decoration-color: #008000">'sites'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partType'</span>: <span style="color: #008000; text-decoration-color: #008000">'table'</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="font-weight: bold">}</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="font-weight: bold">]</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="font-weight: bold">}</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="font-weight: bold">}</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="font-weight: bold">}</span>
 <span style="font-weight: bold">}</span>
@@ -279,8 +286,9 @@ part</span></a>.</p>
 ┃<span style="font-weight: bold"> partID     </span>┃<span style="font-weight: bold"> partType    </span>┃<span style="font-weight: bold"> firstRelea… </span>┃<span style="font-weight: bold"> status </span>┃<span style="font-weight: bold"> sites  </span>┃<span style="font-weight: bold"> sitesRequi… </span>┃<span style="font-weight: bold"> version1Lo… </span>┃<span style="font-weight: bold"> version1Ta… </span>┃<span style="font-weight: bold"> version1V… </span>┃
 ┡━━━━━━━━━━━━╇━━━━━━━━━━━━━╇━━━━━━━━━━━━━╇━━━━━━━━╇━━━━━━━━╇━━━━━━━━━━━━━╇━━━━━━━━━━━━━╇━━━━━━━━━━━━━╇━━━━━━━━━━━━┩
 │ NA         │ missingness │ 2.0         │ active │ NA     │ NA          │ NA          │ NA          │ NA         │
+│ null       │ missingness │ 1.0         │ active │ NA     │ NA          │ NA          │ NA          │ NA         │
 │ NA_missing │ missingness │ 1.0         │ active │ NA     │ NA          │ NA          │ NA          │ NA         │
-│ sites      │ table       │ 1.0         │ active │ NA     │ NA          │ tables      │ sites       │ NA         │
+│ sites      │ table       │ 1.0         │ active │ NA     │ NA          │ tables      │ Site        │ NA         │
 │ geoLat     │ attribute   │ 1.0         │ active │ header │ mandatory   │ variables   │ Site        │ latitude   │
 │ geoLong    │ attribute   │ 1.0         │ active │ header │ optional    │ variables   │ Site        │ longitude  │
 └────────────┴─────────────┴─────────────┴────────┴────────┴─────────────┴─────────────┴─────────────┴────────────┘
@@ -295,20 +303,18 @@ part</span></a>.</p>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'type'</span>: <span style="color: #008000; text-decoration-color: #008000">'dict'</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'schema'</span>: <span style="font-weight: bold">{</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'latitude'</span>: <span style="font-weight: bold">{</span>
-<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'trimEmpty'</span>: <span style="color: #00ff00; text-decoration-color: #00ff00; font-style: italic">True</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'emptyTrimmed'</span>: <span style="color: #ff0000; text-decoration-color: #ff0000; font-style: italic">False</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'forbidden'</span>: <span style="font-weight: bold">[</span>
-<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'NA_missing'</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'NA_missing'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'null'</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   </span><span style="font-weight: bold">]</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'meta'</span>: <span style="font-weight: bold">[</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   </span><span style="font-weight: bold">{</span>
-<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'ruleId'</span>: <span style="color: #008000; text-decoration-color: #008000">'missing_values_found'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'ruleID'</span>: <span style="color: #008000; text-decoration-color: #008000">'missing_values_found'</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'meta'</span>: <span style="font-weight: bold">[</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   </span><span style="font-weight: bold">{</span>
-<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partID'</span>: <span style="color: #008000; text-decoration-color: #008000">'NA_missing'</span>,
-<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partType'</span>: <span style="color: #008000; text-decoration-color: #008000">'missingness'</span>
-<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   </span><span style="font-weight: bold">}</span>,
-<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   </span><span style="font-weight: bold">{</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partID'</span>: <span style="color: #008000; text-decoration-color: #008000">'geoLat'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'sites'</span>: <span style="color: #008000; text-decoration-color: #008000">'header'</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'sitesRequired'</span>: <span style="color: #008000; text-decoration-color: #008000">'mandatory'</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'version1Location'</span>: <span style="color: #008000; text-decoration-color: #008000">'variables'</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'version1Table'</span>: <span style="color: #008000; text-decoration-color: #008000">'Site'</span>,
@@ -318,16 +324,16 @@ part</span></a>.</p>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   </span><span style="font-weight: bold">}</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   </span><span style="font-weight: bold">]</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="font-weight: bold">}</span>
-<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="font-weight: bold">}</span>
-<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="font-weight: bold">}</span>,
-<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'meta'</span>: <span style="font-weight: bold">[</span>
-<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="font-weight: bold">{</span>
-<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partID'</span>: <span style="color: #008000; text-decoration-color: #008000">'sites'</span>,
-<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partType'</span>: <span style="color: #008000; text-decoration-color: #008000">'table'</span>,
-<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'version1Location'</span>: <span style="color: #008000; text-decoration-color: #008000">'tables'</span>,
-<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'version1Table'</span>: <span style="color: #008000; text-decoration-color: #008000">'Site'</span>
-<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="font-weight: bold">}</span>
-<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="font-weight: bold">]</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="font-weight: bold">}</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'meta'</span>: <span style="font-weight: bold">[</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partID'</span>: <span style="color: #008000; text-decoration-color: #008000">'sites'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partType'</span>: <span style="color: #008000; text-decoration-color: #008000">'table'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'version1Location'</span>: <span style="color: #008000; text-decoration-color: #008000">'tables'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'version1Table'</span>: <span style="color: #008000; text-decoration-color: #008000">'Site'</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="font-weight: bold">}</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="font-weight: bold">]</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="font-weight: bold">}</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="font-weight: bold">}</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="font-weight: bold">}</span>
 <span style="font-weight: bold">}</span>
