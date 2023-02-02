@@ -25,7 +25,7 @@ from odm_validation.validation import (
 
 ## Context
 
-When using any one of the [validation schemas](../../../assets/validation-schemas/) in the repository, you may find that they do not meet the validation requirements for your data. Currently, the best way to overcome this limitation is create a new validation schema that is an extension of an existing one. In this tutorial we will go over how you can do this using the `schema_additions` parameter in the `generate_validation_schema` function.
+When using any one of the [validation schemas](../../../assets/validation-schemas/) in the repository, you may find that they do not meet the validation requirements for your data. Currently, the best way to overcome this limitation is create a new validation schema that is an extension of an existing one. In this tutorial we will go over how you can do this using the `schema_additions` parameter in the [generate_validation_schema](../../specs/generate-validation-schema.md) function.
 
 ## Extending a validation schema
 
