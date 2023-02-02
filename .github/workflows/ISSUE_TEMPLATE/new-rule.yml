@@ -1,0 +1,39 @@
+name: New Rule Request
+description: Request a new validation rule
+title: "[New Rule]: "
+labels: ["enhancement", "new rule"]
+assignees:
+  - octocat
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for taking the time to suggest a new validation rule
+  - type: input
+    id: rule-id
+    attributes:
+      label: Rule ID
+      description: A unique identifier for the new rule. Instructions for writing a good rule ID can be seen [here](https://github.com/Big-Life-Lab/PHES-ODM-Validation/tree/main/docs/validation-rules#adding-a-new-rule). Rule ID examples can be seen [here](https://github.com/Big-Life-Lab/PHES-ODM-Validation/blob/main/assets/validation-rules/validation-rules-list.csv).
+      placeholder: ex. missing-mandatory-column
+    validations:
+      required: true
+  - type: textarea
+    id: rule-description
+    attributes:
+      label: Describe how this rule will work
+      description: Provide details on why this rule is required along with examples of ODM data that would fail and pass this rule. An example can be seen [here](https://big-life-lab.github.io/PHES-ODM-Validation/validation-rules/missing_mandatory_column.html).
+      placeholder: Rule description
+    validations:
+      required: true
+  - type: dropdown
+    id: odm-versions
+    attributes:
+      label: ODM Versions
+      description: Specify what versions of the ODM this rule should support
+      options:
+        - 1.0
+        - 1.1
+        - 2.0
+      multiple: true
+    validations:
+      required: true
