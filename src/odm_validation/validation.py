@@ -31,7 +31,7 @@ from stdext import (
 from versions import __version__, parse_version
 
 
-@dataclass
+@dataclass(frozen=True)
 class ErrorContext:
     allowed_values: Set[str]
     column_id: str
@@ -43,6 +43,7 @@ class ErrorContext:
     rule_fields: list
     table_id: str
     value: Any
+    is_warning: bool
 
 
 @dataclass(frozen=True)
@@ -74,11 +75,26 @@ def _get_latest_odm_version() -> str:
     return versions[-1]
 
 
+def _gen_cerb_rule_map():
+    # Generates a dictionary that maps a cerberus validation rule to the ODM
+    # rule that uses it.
+    # Assumes that each cerberus validation can be mapped to one ODM validation
+    # rule with no repetations.
+    result = {}
+    for r in ruleset:
+        for key in r.keys:
+            assert key not in result
+            result[key] = r
+            if not r.match_all_keys:
+                break
+    return result
+
+
 # public constants
 ODM_LATEST = _get_latest_odm_version()
 
 # private constants
-_KEY_RULES = {r.key: r for r in ruleset}
+_KEY_RULES = _gen_cerb_rule_map()
 
 
 def _prettify_rule_name(rule: Rule):
@@ -114,12 +130,17 @@ def _error_msg(ctx: ErrorContext):
 
 def _gen_rule_error(ctx: ErrorContext):
     error = {
-        'errorType': ctx.rule.id,
         'tableName': ctx.table_id,
         'columnName': ctx.column_id,
         'validationRuleFields': ctx.rule_fields,
         'message': _error_msg(ctx),
     }
+
+    # type
+    if ctx.is_warning:
+        error['warningType'] = ctx.rule.id
+    else:
+        error['errorType'] = ctx.rule.id
 
     # row numbers
     if len(ctx.row_numbers) > 1:
@@ -134,7 +155,7 @@ def _gen_rule_error(ctx: ErrorContext):
         error['row'] = ctx.rows[0]
 
     # value
-    if ctx.value:
+    if ctx.value is not None:
         error['invalidValue'] = ctx.value
 
     return error
@@ -156,7 +177,8 @@ def _transform_rule(rule: Rule, column_meta) -> Rule:
     """Returns a new rule, depending on `column_meta`. Currently only returns
     invalid_type if rule-key is 'allowed' and dataType is bool."""
     # XXX: dependency on meta value (which is only supposed to aid debug)
-    if rule.key == 'allowed':
+    # XXX: does not handle rules with match_all_keys enabled
+    if rule.keys[0] == 'allowed':
         rule_ids = list(map(_get_ruleId, column_meta))
         new_rule = next(filter(_is_invalid_type_rule, ruleset), None)
         if not new_rule or new_rule.id not in rule_ids:
@@ -200,7 +222,8 @@ def _gen_error_entry(cerb_rule, table_id, column_id, value, row_numbers,
                              row_numbers=row_numbers, rows=rows, value=value,
                              constraint=constraint, rule_fields=rule_fields,
                              allowed_values=allowed,
-                             odm_datatype=odm_datatype)
+                             odm_datatype=odm_datatype,
+                             is_warning=rule.is_warning)
     return _gen_rule_error(error_ctx)
 
 
@@ -298,6 +321,7 @@ def _strip_coerce_rules(cerb_schema):
 
 def _map_errors(cerb_errors, schema, rule_whitelist):
     errors = []
+    warnings = []
     for table_error in cerb_errors:
         for row_errors in table_error.info:
             for e in row_errors:
@@ -306,9 +330,13 @@ def _map_errors(cerb_errors, schema, rule_whitelist):
                     for e in attr_errors:
                         entry = _gen_cerb_error_entry(e, row, schema,
                                                       rule_whitelist)
-                        if entry:
+                        if not entry:
+                            continue
+                        if 'warningType' in entry:
+                            warnings.append(entry)
+                        else:
                             errors.append(entry)
-    return errors
+    return errors, warnings
 
 
 def _map_aggregated_errors(agg_errors, rule_whitelist):
@@ -405,7 +433,9 @@ def _validate_data_ext(schema: Schema,
     v = OdmValidator.new()
     validation_schema = _strip_coerce_rules(coercion_schema)
     if not v.validate(coerced_data, validation_schema):
-        errors += _map_errors(v._errors, validation_schema, rule_whitelist)
+        e, w = _map_errors(v._errors, validation_schema, rule_whitelist)
+        warnings += w
+        errors += e
         errors += _map_aggregated_errors(v.error_state.aggregated_errors,
                                          rule_whitelist)
 

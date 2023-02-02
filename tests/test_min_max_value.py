@@ -74,17 +74,13 @@ class TestMinMaxValue(common.OdmTestCase):
             rule_whitelist=[self.ruleId])
         self.assertDictEqual(self.assets.schemas[major_ver], result)
 
-    def _assertEqual(self, expected, report):
-        self.assertEqual(expected['errors'], report.errors)
-        self.assertEqual(expected['warnings'], report.warnings)
-
     @parameterized.expand(param_range(0, 3))
     def test_passing_datasets(self, ix):
         report = _validate_data_ext(self.assets.schemas[2],
                                     self.assets.data_pass_v2[ix],
                                     rule_whitelist=self.whitelist)
         expected = self.assets.error_report_pass[ix]
-        self._assertEqual(expected, report)
+        self.assertReportEqual(expected, report)
 
     @parameterized.expand(param_range(0, 3))
     def test_failing_datasets(self, ix):
@@ -92,7 +88,7 @@ class TestMinMaxValue(common.OdmTestCase):
                                     self.assets.data_fail_v2[ix],
                                     rule_whitelist=self.whitelist)
         expected = self.assets.error_report_fail[ix]
-        self._assertEqual(expected, report)
+        self.assertReportEqual(expected, report)
 
 
 if __name__ == '__main__':

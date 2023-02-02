@@ -9,9 +9,11 @@
                 "siteID": "1",
                 "geoLat": ""
             },
+            "invalidValue": "",
             "validationRuleFields": [
                 {
                     "partID": "geoLat",
+                    "sites": "header",
                     "sitesRequired": "mandatory"
                 }
             ],

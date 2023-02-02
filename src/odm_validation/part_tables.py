@@ -26,6 +26,7 @@ MetaMap = DefaultDict[PartId, Meta]
 # type aliases (other)
 Dataset = List[Row]
 PartMap = Dict[PartId, Part]
+TableId = PartId
 
 
 class MapKind(Enum):
@@ -64,6 +65,7 @@ class PartData:
     The parts-list is stripped of empty values before generating this.
     """
     bool_set: BoolSet
+    null_set: Set[str]
     catset_data: Dict[PartId, CatsetData]  # category-set data, by catset id
     table_data: Dict[PartId, TableData]  # table data, by table id
     mappings: Dict[PartId, List[PartId]]  # v1 mapping, by part id
@@ -81,6 +83,7 @@ CATSET_ID = 'catSetID'
 DATA_TYPE = 'dataType'
 PART_ID = 'partID'
 PART_TYPE = 'partType'
+STATUS = 'status'
 
 PART_ID_ORIGINAL = 'partID_original'
 TABLE_ID_ORIGINAL = 'tableID_original'
@@ -95,11 +98,13 @@ CATEGORY = 'category'
 TABLE = 'table'
 
 # other value constants
+ACTIVE = 'active'
 BOOLEAN = 'boolean'
 BOOLEAN_SET = 'booleanSet'
 DATETIME = 'datetime'
 MANDATORY = 'mandatory'
-NA = {'', 'NA', 'Not applicable', 'null'}
+MISSINGNESS = 'missingness'
+PART_NULL_SET = {'', 'NA', 'Not applicable', 'null'}
 
 V1_VARIABLE = 'version1Variable'
 V1_LOCATION = 'version1Location'
@@ -131,16 +136,20 @@ def parse_row_version(row, field, default=None):
     return parse_version(row.get(field), row.get('partID'), field, default)
 
 
-def is_compatible(part: dict, version: Version) -> bool:
+def get_version_range(part: dict) -> (Version, Version):
     # TODO: remove default for `firstReleased` when parts-v2 is complete
     row = part
     v1 = Version(major=1)
     first = parse_row_version(row, 'firstReleased', default=v1)
     last = parse_row_version(row, 'lastUpdated', default=first)
-    active: bool = row.get('status') == 'active'
+    return (first, last)
 
+
+def is_compatible(active: bool, first: Version, last: Version,
+                  schema_version: Version) -> bool:
+    """Returns True if part is compatible with `schema_version`."""
     # not (v < first) and ((v < last) or active)
-    v = version
+    v = schema_version
     if v.compare(first) < 0:
         return False
     if v.compare(last) < 0:
@@ -192,6 +201,11 @@ def has_catset(p):
 
 def is_bool_set(part):
     return part.get(CATSET_ID) == BOOLEAN_SET
+
+
+def is_null_set(part):
+    # the ODM doesn't have these values as a catset, but it's a set
+    return part.get(PART_TYPE) == MISSINGNESS
 
 
 def is_table(p):
@@ -267,27 +281,40 @@ def get_table_id(part: dict) -> Optional[str]:
     warning(f'part {get_partID(part)} does not belong to any table')
 
 
+def _not_empty(field):
+    _, val = field
+    return val not in PART_NULL_SET
+
+
 def strip(parts: Dataset):
-    # TODO: strip version1* fields when not version 1
-    """Removes NA fields."""
+    """Removes null fields, except from partID."""
+    # 'partID' may be defining null fields for data, so we can't strip those.
+    # TODO: Strip version1* fields when not version 1.
     result = []
     for sparse_row in parts:
-        row = {k: v for k, v in sparse_row.items() if v not in NA}
+        fields = iter(sparse_row.items())
+        part_id_pair = next(fields)
+        assert part_id_pair[0] == PART_ID, 'partID must be the first column'
+        row = {k: v for k, v in filter(_not_empty, fields)}
+        row[PART_ID] = part_id_pair[1]
         result.append(row)
     return result
 
 
-def filter_compatible(parts: Dataset, version: Version) -> Dataset:
+def filter_compatible(parts: Dataset, schema_version: Version) -> Dataset:
     """Filters `parts` by `version`."""
     result = []
     for row in parts:
         part_id = get_partID(row)
-        if not (is_compatible(row, version)):
+        first, last = get_version_range(row)
+        active: bool = row.get(STATUS) == ACTIVE
+        if not (is_compatible(active, first, last, schema_version)):
             warning(f'skipping incompatible part: {part_id}')
             continue
-        if version.major == 1 and not has_mapping(row, version):
-            error(f'skipping part with missing version1 fields: {part_id}')
-            continue
+        if last.major > schema_version.major:
+            if not has_mapping(row, schema_version):
+                error(f'skipping part with missing version1 fields: {part_id}')
+                continue
         result.append(row)
     return result
 
@@ -300,13 +327,22 @@ def partmap(parts) -> PartMap:
     return {get_partID(part): part for part in parts}
 
 
-def gen_partdata(parts_v2: Dataset, version: Version):
-    tables = list(filter(is_table, parts_v2))
+def map_ids(mappings: Dict[PartId, PartId], part_ids: List[PartId],
+            ver: Version) -> List[PartId]:
+    if ver.major == 1:
+        return flatten([mappings[id] for id in part_ids])
+    else:
+        return part_ids
+
+
+def gen_partdata(parts: Dataset, version: Version):
+    tables = list(filter(is_table, parts))
     table_ids = list(map(get_partID, tables))
-    attributes = list(filter(is_attr, parts_v2))
-    categories = list(filter(is_cat, parts_v2))
-    catsets = partmap(filter(is_catset_attr, parts_v2))
-    bool_set = tuple(map(get_partID, islice(filter(is_bool_set, parts_v2), 2)))
+    attributes = list(filter(is_attr, parts))
+    categories = list(filter(is_cat, parts))
+    catsets = partmap(filter(is_catset_attr, parts))
+    bool_set0 = tuple(map(get_partID, islice(filter(is_bool_set, parts), 2)))
+    null_set = set(map(get_partID, filter(is_null_set, parts)))
 
     table_attrs = defaultdict(list)
     for attr in attributes:
@@ -335,11 +371,15 @@ def gen_partdata(parts_v2: Dataset, version: Version):
             table_ids=cs_table_ids,
         )
 
-    mappings = {get_partID(p): get_mappings(p, version) for p in parts_v2}
+    mappings = {get_partID(p): get_mappings(p, version) for p in parts}
     assert None not in mappings
 
+    bool_set1 = set(map_ids(mappings, list(bool_set0), version))
+
+    # TODO: preserve unmapped version of bool_set for bool meta fields
     return PartData(
-        bool_set=bool_set,
+        bool_set=bool_set1,
+        null_set=null_set,
         table_data=table_data,
         catset_data=catset_data,
         mappings=mappings,

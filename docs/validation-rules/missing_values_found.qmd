@@ -44,6 +44,7 @@ A value that is invalid due to this rule should generate a **warning** and **not
 * **warningType**: missing_values_found
 * **tableName**: The name of the table containing the missing values
 * **columnName**: The name of the mandatory column containing the missing values
+* **invalidValue**: The invalid value
 * **rowNumber**: The index of the table row with the error
 * **row**: The dictionary containing the row
 * **validationRuleFields**: The ODM data dictionary rows used to generate this rule
@@ -98,7 +99,7 @@ we would add this rule only to the `geoLat` column in the `sites` table. This ru
 We will need to use two rules from cerberus for this validation rule:
 
 1. A [forbidden](https://docs.python-cerberus.org/en/stable/validation-rules.html#forbidden) rule which includes all the `missingness` values from the dictionary
-2. A custom rule called `trimEmpty` for empty values which also handles trimming. Although the cerberus library has an `empty` rule, the rule allows values that are "empty" once trimmed.
+2. A custom rule called `emptyTrimmed` for empty values which also handles trimming. Although the cerberus library has an `empty` rule, the rule allows values that are "empty" once trimmed.
 
 The cerberus schema for the ODM dictionary snippet above is shown below,
 

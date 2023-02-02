@@ -22,6 +22,10 @@ class OdmTestCase(unittest.TestCase):
         with self.assertNoLogs(None, 'ERROR'):
             super().run(result)
 
+    def assertReportEqual(self, expected, report):
+        self.assertEqual(expected['errors'], report.errors)
+        self.assertEqual(expected['warnings'], report.warnings)
+
 
 def setup_import_path():
     global __package__

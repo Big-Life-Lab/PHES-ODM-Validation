@@ -4,6 +4,7 @@
             "warningType": "missing_values_found",
             "tableName": "sites",
             "columnName": "geoLat",
+            "invalidValue": "  ",
             "rowNumber": 1,
             "row": {
                 "siteID": "1",
@@ -12,6 +13,7 @@
             "validationRuleFields": [
                 {
                     "partID": "geoLat",
+                    "sites": "header",
                     "sitesRequired": "mandatory"
                 }
             ],

@@ -6,21 +6,21 @@ schema:
       type: dict
       schema:
         latitude:
-          trimEmpty: true
+          emptyTrimmed: false
           forbidden:
           - NA_missing
+          - 'null'
           meta:
-          - ruleId: missing_values_found
+          - ruleID: missing_values_found
             meta:
-            - partID: NA_missing
-              partType: missingness
             - partID: geoLat
+              sites: header
               sitesRequired: mandatory
               version1Location: variables
               version1Table: Site
               version1Variable: latitude
-    meta:
-      - partID: sites
-        partType: table
-        version1Location: tables
-        version1Table: Site 
+      meta:
+        - partID: sites
+          partType: table
+          version1Location: tables
+          version1Table: Site

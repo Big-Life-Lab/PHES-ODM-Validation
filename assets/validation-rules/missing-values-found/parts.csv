@@ -1,6 +1,7 @@
 partID,partType,firstReleased,status,sites,sitesRequired,version1Location,version1Table,version1Variable
 NA,missingness,2.0,active,NA,NA,NA,NA,NA
+null,missingness,1.0,active,NA,NA,NA,NA,NA
 NA_missing,missingness,1.0,active,NA,NA,NA,NA,NA
-sites,table,1.0,active,NA,NA,tables,sites,NA
+sites,table,1.0,active,NA,NA,tables,Site,NA
 geoLat,attribute,1.0,active,header,mandatory,variables,Site,latitude
 geoLong,attribute,1.0,active,header,optional,variables,Site,longitude

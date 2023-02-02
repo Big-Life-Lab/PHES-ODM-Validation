@@ -8,10 +8,9 @@ import common
 from common import asset, root_dir, param_range
 from utils import (
     import_dataset,
-    import_json_file,
     import_schema,
 )
-from validation import generate_validation_schema, _validate_data_ext
+from validation import _generate_validation_schema_ext, _validate_data_ext
 
 
 class Assets():
@@ -29,33 +28,32 @@ class Assets():
             2: import_schema(asset('schema-v2.yml')),
         }
 
-        # datasets
+        # datasets and error reports
         self.data_pass = {table: import_dataset(asset('valid-dataset.*'))}
-        self.data_fail = {
-            1: {table: import_dataset(asset('invalid-dataset-1.*'))},
-            2: {table: import_dataset(asset('invalid-dataset-2.*'))},
-        }
-
-        # error reports
-        self.error_report = {
-            1: import_json_file(asset('error-report-1.json')),
-            2: import_json_file(asset('error-report-2.json'))
-        }
+        self.data_fail = {}
+        self.reports = {}
+        for i in range(1, 4):
+            self.data_fail[i] = \
+                {table: import_dataset(asset(f'invalid-dataset-{i}.*'))}
+            self.reports[i] = import_dataset(asset(f'error-report-{i}.json'))
 
 
-class TestDuplicateEntriesFound(common.OdmTestCase):
-    rule_id = 'duplicate_entries_found'
-    table = 'addresses'
+class TestMissingValuesFound(common.OdmTestCase):
+    rule_id = 'missing_values_found'
+    table = 'sites'
 
     @classmethod
     def setUpClass(cls):
         cls.maxDiff = None
         cls.assets = Assets(cls.rule_id, cls.table)
+        cls.whitelist = [cls.rule_id]
 
     @parameterized.expand(param_range(1, 3))
     def test_schema_generation(self, major_ver):
-        result = generate_validation_schema(self.assets.parts,
-                                            schema_version=f'{major_ver}.0.0')
+        ver = f'{major_ver}.0.0'
+        result = _generate_validation_schema_ext(parts=self.assets.parts,
+                                                 schema_version=ver,
+                                                 rule_whitelist=self.whitelist)
         self.assertDictEqual(self.assets.schemas[major_ver], result)
 
     def test_passing_datasets(self):
@@ -63,11 +61,11 @@ class TestDuplicateEntriesFound(common.OdmTestCase):
                                     self.assets.data_pass)
         self.assertTrue(report.valid())
 
-    @parameterized.expand(param_range(1, 3))
+    @parameterized.expand(param_range(1, 4))
     def test_failing_datasets(self, i):
         report = _validate_data_ext(schema=self.assets.schemas[2],
                                     data=self.assets.data_fail[i])
-        expected = self.assets.error_report[i]
+        expected = self.assets.reports[i]
         self.assertReportEqual(expected, report)
 
 

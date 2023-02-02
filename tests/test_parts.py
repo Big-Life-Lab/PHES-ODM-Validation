@@ -1,7 +1,8 @@
 import unittest
 
 import common
-from part_tables import get_mappings, is_compatible
+import part_tables as pt
+from part_tables import get_mappings
 from versions import Version, parse_version
 
 common.unused_import_dummy = 1
@@ -11,26 +12,32 @@ def get_row(first: str, last: str, active: bool):
     return {
         'firstReleased': first,
         'lastUpdated': last,
-        'status': 'active' if active else 'depreciated',
+        pt.STATUS: pt.ACTIVE if active else 'depreciated',
     }
+
+
+def part_is_compatible(part: pt.Part, version: Version) -> bool:
+    first, last = pt.get_version_range(part)
+    active: bool = part.get(pt.STATUS) == pt.ACTIVE
+    return pt.is_compatible(active, first, last, version)
 
 
 class TestVersionCompat(common.OdmTestCase):
     def test_same(self):
         row = get_row('1.0.0', '1.0.0', True)
-        self.assertTrue(is_compatible(row, parse_version('1.0.0')))
+        self.assertTrue(part_is_compatible(row, parse_version('1.0.0')))
 
     def test_eq_first(self):
         row = get_row('1.0.0', '2.0.0', False)
-        self.assertTrue(is_compatible(row, parse_version('1.0.0')))
+        self.assertTrue(part_is_compatible(row, parse_version('1.0.0')))
 
     def test_eq_last(self):
         row = get_row('1.0.0', '2.0.0', False)
-        self.assertFalse(is_compatible(row, parse_version('2.0.0')))
+        self.assertFalse(part_is_compatible(row, parse_version('2.0.0')))
 
     def test_incomplete(self):
         row = get_row('2', '2.0', True)
-        self.assertTrue(is_compatible(row, parse_version('2.0.')))
+        self.assertTrue(part_is_compatible(row, parse_version('2.0.')))
 
 
 class TestVersion1FieldsExist(common.OdmTestCase):

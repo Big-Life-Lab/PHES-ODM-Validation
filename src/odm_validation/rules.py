@@ -4,7 +4,7 @@ Rule functions are ordered alphabetically.
 """
 
 from dataclasses import dataclass
-from typing import Any, Callable, Tuple
+from typing import Any, Callable, List, Tuple
 
 import part_tables as pt
 from schemas import Schema, update_schema
@@ -16,12 +16,12 @@ from rule_primitives import (
     OdmValueCtx,
     attr_items,
     gen_cerb_rules_for_type,
+    gen_conditional_schema,
     gen_global_schema,
     gen_value_schema,
-    get_attr_meta,
     get_catset_meta,
     get_table_meta,
-    map_ids,
+    is_mandatory,
     table_items,
 )
 from versions import Version
@@ -45,12 +45,24 @@ class Rule:
     - value_type
     """
     id: str
-    key: str
+    keys: List[str]
+    is_warning: bool
     gen_schema: Callable[pt.PartData, Schema]
     get_error_template: Callable[[Any, str], str]
 
+    match_all_keys: bool
+    """Used when mapping a Cerberus error to its ODM validation rule. It
+    decides whether all the Cerberus keys that are part of this rule can be
+    mapped to an odm validation rule or just the first one. For example, The
+    less_than_min_value rule requires three Cerberus rules for its
+    implementation: min, type and coerce. However, only the first one should be
+    mapped to an min-value error. The missing_values_found rule requires two
+    Cerberus rules for its implementation: emptyTrimmed and forbidden. Both of
+    these should be mapped to a missing_values_found error."""
 
-def init_rule(rule_id, error, gen_cerb_rules, gen_schema):
+
+def init_rule(rule_id, error, gen_cerb_rules, gen_schema,
+              is_warning=False, match_all_keys=False):
     """
     - `error` can either be a string or a function taking a value and returning
       a string.
@@ -61,7 +73,9 @@ def init_rule(rule_id, error, gen_cerb_rules, gen_schema):
     cerb_keys = list(gen_cerb_rules(OdmValueCtx.default()).keys())
     return Rule(
         id=rule_id,
-        key=cerb_keys[0],
+        keys=cerb_keys,
+        is_warning=is_warning,
+        match_all_keys=match_all_keys,
         get_error_template=get_error_template,
         gen_schema=gen_schema,
     )
@@ -117,27 +131,36 @@ def greater_than_max_value():
 
 def missing_mandatory_column():
     rule_id = missing_mandatory_column.__name__
-    cerb_rule = ('required', True)
     err = '{rule_name} {column_id} in table {table_id} in row number {row_num}'
 
     def gen_cerb_rules(val_ctx: OdmValueCtx):
-        return {cerb_rule[0]: cerb_rule[1]}
+        return {'required': True}
 
     def gen_schema(data: pt.PartData, ver):
-        schema = {}
-        for table_id0, table_id1, table in table_items(data, ver):
-            table_meta = get_table_meta(table, ver)
-            for attr_id0, attr_id1, attr in attr_items(data, table_id0, ver):
-                req_key = pt.table_required_field(table_id0)
-                req_val = attr.get(req_key)
-                if req_val != pt.MANDATORY:
-                    continue
-                attr_meta = get_attr_meta(attr, table_id0, ver)
-                update_schema(schema, table_id1, attr_id1, rule_id,
-                              cerb_rule, table_meta, attr_meta)
-        return schema
+        return gen_conditional_schema(data, ver, rule_id, gen_cerb_rules,
+                                      is_mandatory)
 
     return init_rule(rule_id, err, gen_cerb_rules, gen_schema)
+
+
+def missing_values_found():
+    # TODO: rename to missing_mandatory_value?
+    rule_id = missing_values_found.__name__
+    err = ('Mandatory column {column_id} in table {table_id} has a missing '
+           'value in row {row_num}')
+
+    def gen_cerb_rules(val_ctx: OdmValueCtx):
+        return {
+            'emptyTrimmed': False,
+            'forbidden': sorted(val_ctx.null_set),
+        }
+
+    def gen_schema(data: pt.PartData, ver):
+        return gen_conditional_schema(data, ver, rule_id, gen_cerb_rules,
+                                      is_mandatory)
+
+    return init_rule(rule_id, err, gen_cerb_rules, gen_schema,
+                     is_warning=True, match_all_keys=True)
 
 
 def less_than_min_length():
@@ -194,7 +217,7 @@ def invalid_category():
                 cs = cs_data.part
                 categories = cs_data.cat_parts
                 cat_ids0 = list(map(pt.get_partID, categories))
-                cat_ids1 = map_ids(data.mappings, cat_ids0, ver)
+                cat_ids1 = pt.map_ids(data.mappings, cat_ids0, ver)
                 cerb_rule = (cerb_rule_key, cat_ids1)
                 attr_meta = get_catset_meta(table_id0, cs, categories, ver)
                 update_schema(schema, table_id1, attr_id1, rule_id,
@@ -251,4 +274,5 @@ ruleset: Tuple[Rule] = (
     less_than_min_length(),
     less_than_min_value(),
     missing_mandatory_column(),
+    missing_values_found(),
 )
