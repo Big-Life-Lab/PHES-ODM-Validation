@@ -25,11 +25,15 @@ from odm_validation.validation import (
 
 ## Context
 
-When using one of the [validation schemas](../../../assets/validation-schemas/) in the repository you may find that they do not meet the validation requirements of your data. Currently, the best way to overcome this limitation is the modify the schema for your data. In this tutorial we will go over how you can do this using the `schema_additions` parameter in the `generate_validation_schema` function.
+When using any one of the [validation schemas](../../../assets/validation-schemas/) in the repository, you may find that they do not meet the validation requirements for your data. Currently, the best way to overcome this limitation is create a new validation schema that is an extension of an existing one. In this tutorial we will go over how you can do this using the `schema_additions` parameter in the `generate_validation_schema` function.
 
-As an example, consider the `healthReg` part in the dictionary which is described as *The health planning authority where the site or insititute is located*. `healthReg` is a `varchar` column in the `sites` table which is described as *The table that contains information about a site; the location where an environmental sample was taken*. Finally, `healthReg` does not have any validation requirements, the values for this column need only be a string. However, it should not be hard to imagine that public health agencies within a province for example Ontario would only want to receive data with this column containing values from their province.
+## Extending a validation schema
 
-If we take Ontario as an example, they may only allow the following values for the `healthReg` column, stored in a CSV file
+### Setting the scenario
+
+As an example, consider the `healthReg` part in the dictionary which is described as *The health planning authority where the site or insititute is located*. `healthReg` is a `varchar` column in the `sites` table. Finally, `healthReg` does not have any validation requirements, the values for this column need only be a string. However, it should not be hard to imagine that public health agencies within a province would want this column to only have health regions within their province.
+
+For example, public health agencies within Ontario may only want to allow the following health regions in this column,
 
 ```{python}
 #| echo: false
@@ -37,7 +41,7 @@ allowed_health_regs_file = import_csv_file("./allowed-health-regs.csv")
 pprint_dict_list(allowed_health_regs_file, title = "Ontario Health Regions")
 ```
 
-The validation schema we want to extend is printed below,
+The validation schema we will be extending in this tutorial is shown below,
 
 ```{python}
 #| echo: false
@@ -48,10 +52,10 @@ pprint(validation_schema_to_extend)
 
 For the sake of brevity this schema only contains a couple out of the numerous columns that are in the `sites` table. The two columns are:
 
-1. `siteID` which is the primary key for the table and is mandatory
-2. `healthReg` which is the column whose validation rule we want to modify
+1. `siteID`: which is the primary key for the table and is mandatory; and
+2. `healthReg`: which is the column whose validation rule we want to modify
 
-As we can see, the only constraint for the `healthReg` field is that it has to be a string. If we validate the dataset shown below,
+As we can see, the only constraint for the `healthReg` column is that it has to be a string. If we validate the dataset shown below,
 
 ```{python}
 #| echo: false
@@ -60,7 +64,7 @@ invalid_dataset = import_csv_file("./invalid-dataset.csv")
 pprint_dict_list(invalid_dataset, title = "Invalid Sites Table")
 ```
 
-using the `validate_data` function with our imperfect validation schema, we get the errors shown below,
+using the `validate_data` function with our current validation schema, we get the errors shown below,
 
 ```{python}
 #| echo: false
@@ -75,15 +79,15 @@ pprint(validate_data(
 
 As we can see, we're not getting any errors for the `healthReg` column. The only errors are due to the missing `siteID` column in the data.
 
-## Modifying the Schema
+### Using the `schema_additions` parameter
 
-Let's see how we can create a custom version of the original schema that properly validates the `healthReg` column. As was said earlier, the `schema_additions` parameter in the `generate_validation_schema` function can help with this. The parameter is a Python dictionary that has the following shape:
+Let's see how we can extend the original schema to restrict the values in the `healthReg` column. As was said earlier, the `schema_additions` parameter in the `generate_validation_schema` function can help with this. The parameter is a Python dictionary that has the following shape:
 
-1. The top level fields consists of the names of the tables whose schemas need to be modified
-2. These table names themselves should contain a Python dictionary whose fields contain the names of the table columns that need to be modified.
-3. Finally, each column name should contain a Python dictionary with the names of the validation rules to be updated along with their correct values. Only certain validation rules can currently be extended. For the list of supported rules refer to the `generate_validation_schema` documentation.
+1. The top level fields consists of the names of the tables whose schemas need to be extended
+2. These table names themselves should contain a Python dictionary. The fields here contain the names of the table columns that need to be extended.
+3. Finally, each column name should contain a Python dictionary with the names of the validation rules to be updated along with their values. Only certain validation rules can currently be extended. For the list of supported rules refer to the `generate_validation_schema` documentation.
 
-For our current use case, we need to update the `healthReg` column in the `sites` table with the list of allowable values from the CSV files we printed above. The code for building the `schema_additions` parameter can be seen below,
+For our current use case, we need to update the `healthReg` column in the `sites` table with the list of allowable values from the CSV file we printed above. The code for building the `schema_additions` parameter can be seen below,
 
 ```{python}
 # schema_additions should be a dictionary
@@ -109,7 +113,7 @@ with its result printed below,
 pprint(schema_additions)
 ```
 
-Lets finally build our updated validation schema and print it,
+We can use it to extend our schema using the code below,
 
 ```{python}
 parts_file = import_csv_file("./parts.csv")
@@ -117,6 +121,13 @@ updated_validation_schema = generate_validation_schema(
     parts_file,
     schema_additions = schema_additions
 )
+```
+
+with our new validation schema printed below,
+
+```{python}
+#| echo: false
+
 pprint(updated_validation_schema)
 ```
 
@@ -133,6 +144,8 @@ pprint(validate_data(
 ))
 ```
 
-We now see errors for our `healthReg` column, success!
+We now see errors for our `healthReg` column, specifically the `invalid_category` entries in the printed validation repo.
+
+## Conclusion
 
 In this tutorial we learned how to extend the validation schemas provided with the package to meet the needs of the different validation contexts within the wastewater ecosystem. Make sure to check that the rule you're trying to modify or add is supported by the package by looking at the `schema_additions` parameter in the `generate_validation_schema` documentation.
