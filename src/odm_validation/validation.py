@@ -76,6 +76,10 @@ def _get_latest_odm_version() -> str:
 
 
 def _gen_cerb_rule_map():
+    # Generates a dictionary that maps a cerberus validation rule to the ODM
+    # rule that uses it.
+    # Assumes that each cerberus validation can be mapped to one ODM validation
+    # rule with no repetations.
     result = {}
     for r in ruleset:
         for key in r.keys:

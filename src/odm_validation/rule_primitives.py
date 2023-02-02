@@ -192,6 +192,7 @@ def gen_value_schema(data: pt.PartData, ver: Version, rule_id: str,
 
 
 def is_mandatory(table_id: pt.TableId, attr: Part):
+    # Checks whether an attribute is mandatory in a table
     req_key = pt.table_required_field(table_id)
     req_val = attr.get(req_key)
     return req_val == pt.MANDATORY
@@ -199,6 +200,10 @@ def is_mandatory(table_id: pt.TableId, attr: Part):
 
 def gen_conditional_schema(data: pt.PartData, ver: Version, rule_id: str,
                            gen_cerb_rules, pred: AttrPredicate):
+    # Helper function to generate a cerberus schema the implements an ODM
+    # validation rule
+    # Uses the passed pred argument to decide whether an entry should be
+    # created for an attribute in a table
     schema = {}
     odm_key = None
     for table in table_items2(data):

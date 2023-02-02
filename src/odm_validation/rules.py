@@ -47,9 +47,18 @@ class Rule:
     id: str
     keys: List[str]
     is_warning: bool
-    match_all_keys: bool
     gen_schema: Callable[pt.PartData, Schema]
     get_error_template: Callable[[Any, str], str]
+
+    match_all_keys: bool
+    """Used when mapping a Cerberus error to its ODM validation rule. It
+    decides whether all the Cerberus keys that are part of this rule can be
+    mapped to an odm validation rule or just the first one. For example, The
+    less_than_min_value rule requires three Cerberus rules for its
+    implementation: min, type and coerce. However, only the first one should be
+    mapped to an min-value error. The missing_values_found rule requires two
+    Cerberus rules for its implementation: emptyTrimmed and forbidden. Both of
+    these should be mapped to a missing_values_found error."""
 
 
 def init_rule(rule_id, error, gen_cerb_rules, gen_schema,
