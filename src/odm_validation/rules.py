@@ -26,7 +26,7 @@ from rule_primitives import (
 )
 from versions import Version
 
-_COERCION = '_coercion'
+COERCION_RULE_ID = '_coercion'
 
 
 @dataclass(frozen=True)
