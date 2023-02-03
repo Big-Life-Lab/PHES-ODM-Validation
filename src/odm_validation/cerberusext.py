@@ -24,13 +24,18 @@ from stdext import (
 EMPTY_TRIMMED_RULE = 0x101
 
 
-def _convert_value(orig_value, type_class) -> int:
-    if type_class is int:
-        return parse_int(orig_value)
-    elif type_class is datetime:
-        return parse_datetime(orig_value)
+def _convert_value(val: Any, type_class) -> Any:
+    "Convert `val` to `type_class`."
+    # `parse_int` is explicitly called because floats without decimals
+    # (ex: 1.0) also are valid integers.
+    if isinstance(val, type_class):
+        return val
+    elif type_class is int:
+        return parse_int(val)
+    elif type_class is datetime and isinstance(val, str):
+        return parse_datetime(val)
     else:
-        return type_class(orig_value)
+        return type_class(val)
 
 
 class ContextualCoercer(Validator):
