@@ -9,7 +9,6 @@ from typing import Any, Callable, List, Tuple
 import part_tables as pt
 from schemas import Schema, update_schema
 from stdext import (
-    try_parse_float,
     try_parse_int,
 )
 from rule_primitives import (
@@ -22,6 +21,7 @@ from rule_primitives import (
     get_catset_meta,
     get_table_meta,
     is_mandatory,
+    parse_odm_val,
     table_items,
 )
 from versions import Version
@@ -120,7 +120,7 @@ def greater_than_max_value():
 
     def gen_cerb_rules(val_ctx: OdmValueCtx):
         return {
-            'max': try_parse_float(val_ctx.value)
+            'max': parse_odm_val(val_ctx)
         } | gen_cerb_rules_for_type(val_ctx)
 
     def gen_schema(data: pt.PartData, ver):
@@ -188,7 +188,7 @@ def less_than_min_value():
 
     def gen_cerb_rules(val_ctx: OdmValueCtx):
         return {
-            'min': try_parse_float(val_ctx.value)
+            'min': parse_odm_val(val_ctx)
         } | gen_cerb_rules_for_type(val_ctx)
 
     def gen_schema(data: pt.PartData, ver):

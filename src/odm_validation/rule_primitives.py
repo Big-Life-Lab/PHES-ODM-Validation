@@ -1,13 +1,18 @@
 import logging
 from dataclasses import dataclass
 from logging import warning
-from typing import Callable, List, Optional, Set
+from typing import Any, Callable, List, Optional, Set
 # from pprint import pprint
 
 import part_tables as pt
 from part_tables import Meta, MetaEntry, Part, PartData, PartId
 from schemas import init_attr_schema, init_table_schema
-from stdext import deep_update
+from stdext import (
+    deep_update,
+    parse_datetime,
+    try_parse_float,
+    try_parse_int,
+)
 from versions import Version
 
 AttrPredicate = Callable[[pt.TableId, Part], bool]
@@ -245,3 +250,19 @@ def gen_cerb_rules_for_type(val_ctx: OdmValueCtx):
     if odm_type == 'boolean':
         result['allowed'] = sorted(val_ctx.bool_set)
     return result
+
+
+def parse_odm_val(val_ctx: OdmValueCtx) -> Optional[Any]:
+    """Parses the ODM value from `val_ctx`."""
+    val = val_ctx.value
+    kind = val_ctx.datatype
+    if not val:
+        return
+    if kind == 'integer':
+        return try_parse_int(val)
+    elif kind == 'float':
+        return try_parse_float(val)
+    elif kind == 'datetime':
+        return parse_datetime(val)
+    else:
+        assert False, f'{kind} parsing not impl.'
