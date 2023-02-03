@@ -214,7 +214,7 @@ class OdmValidator(Validator):
         row = self.document
         lastUpdated = row.get('lastUpdated', '') or ''
         assert isinstance(lastUpdated, str)
-        pk = (value.strip(), lastUpdated.strip())
+        pk = (str(value).strip(), lastUpdated.strip())
         state = self.unique_state
         primary_keys = state.table_keys[table_id]
         tablekey = (table_id, pk)
