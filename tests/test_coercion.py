@@ -114,14 +114,14 @@ class TestCoercion(common.OdmTestCase):
 
     def test_extract_coercion_schema(self):
         result = ContextualCoercer._extract_coercion_schema(cerb_schema)
-        self.assertEqual(result, coercion_schema)
+        self.assertEqual(coercion_schema, result)
 
     def test_coerce(self):
         warnings = []
         v = ContextualCoercer(warnings=warnings)
         result = v.coerce(data, cerb_schema)
-        self.assertEqual(result, coerced_data)
-        self.assertEqual(warnings, expected_coercion_warnings)
+        self.assertEqual(coerced_data, result)
+        self.assertEqual(expected_coercion_warnings, warnings)
 
     def test_validation(self):
         report = _validate_data_ext(schema, data)
