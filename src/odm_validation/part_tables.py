@@ -106,6 +106,8 @@ ODM_VERSION = parse_version(ODM_VERSION_STR)
 # field constants
 CATSET_ID = 'catSetID'
 DATA_TYPE = 'dataType'
+FIRST_RELEASED = 'firstReleased'
+LAST_UPDATED = 'lastUpdated'
 PART_ID = 'partID'
 PART_TYPE = 'partType'
 STATUS = 'status'
@@ -165,8 +167,8 @@ def get_version_range(part: dict) -> (Version, Version):
     # TODO: remove default for `firstReleased` when parts-v2 is complete
     row = part
     v1 = Version(major=1)
-    first = parse_row_version(row, 'firstReleased', default=v1)
-    last = parse_row_version(row, 'lastUpdated', default=first)
+    first = parse_row_version(row, FIRST_RELEASED, default=v1)
+    last = parse_row_version(row, LAST_UPDATED, default=first)
     return (first, last)
 
 
