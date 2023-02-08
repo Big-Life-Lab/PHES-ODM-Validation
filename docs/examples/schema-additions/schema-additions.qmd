@@ -27,15 +27,15 @@ ASSET_DIR = "../../../assets/schema-additions-vignette"
 
 ## Context
 
-You can extent [ODM validation schemas](../../../assets/validation-schemas/) for you specific needs. In this tutorial, we show how you to use  `schema_additions` parameter in the [generate_validation_schema](../../specs/generate-validation-schema.md) function to generate new validation rules.
+You can extend the [ODM validation schemas](../../../assets/validation-schemas/) for your specific needs. In this tutorial, we show you how to use the `schema_additions` parameter in the [generate_validation_schema](../../specs/generate-validation-schema.md) function to generate new validation rules.
 
 ## Extending a validation schema
 
 ### Setting the scenario
 
-As an example, consider the `healthReg` part in the dictionary which is described as *The health planning authority where the site or insititute is located*. `healthReg` is a `varchar` column in the `sites` table. The core ODM validation schema does not have requirements `healthReg` other than requireing a `varchar` data type. However, you can add more rules, such as a list of valid health care regions in your testing program. 
+As an example, consider the `healthReg` part in the dictionary which is described as *The health planning authority where the site or insititute is located*. `healthReg` is a `varchar` column in the `sites` table. The core ODM validation schema does not have validation requirements for `healthReg`, other than requireing a `varchar` data type. However, you can add more rules, such as a list of valid health care regions in your testing program. 
 
-For example, public health agencies within Ontario may only want to allow the following health regions in this column: 
+For example, public health agencies within Ontario may only want to allow the following health regions:
 
 ```{python}
 #| echo: false
@@ -52,7 +52,7 @@ validation_schema_to_extend = import_yaml_file(ASSET_DIR + "./base-validation-sc
 pprint(validation_schema_to_extend, expand_all=True)
 ```
 
-For demonstration, the schema only contains two columns of the in the `sites` table:
+For demonstration, the schema only contains two columns from the `sites` table:
 
 1. `siteID`: which is the primary key for the table and is mandatory; and
 2. `healthReg`: which is the column whose validation rule we want to modify
@@ -140,6 +140,8 @@ As we can see, the `healthReg` column now has a new rule called `allowed` which 
 Finally, lets validate our original dataset with our new validation schema to make sure its working correctly,
 
 ```{python}
+#| echo: false
+
 pprint(validate_data(
     updated_validation_schema,
     {
