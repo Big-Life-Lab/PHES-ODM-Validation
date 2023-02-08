@@ -1,0 +1,11 @@
+schemaVersion: 2.0.0
+schema:
+  sites:
+    type: list
+    schema:
+      type: dict
+      schema:
+        siteID:
+          required: True
+        healthReg:
+          type: string
