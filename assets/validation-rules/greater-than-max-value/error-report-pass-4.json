@@ -1,25 +1,5 @@
 {
-    "errors": [
-        {
-            "errorType": "greater_than_max_value",
-            "tableName": "sites",
-            "columnName": "lastEdited",
-            "rowNumber": 1,
-            "row": {
-                "siteID": 1,
-                "lastEdited": "2024-12-30 00:00:00"
-            },
-            "invalidValue": "2024-12-30 00:00:00",
-            "validationRuleFields": [
-                {
-                    "partID": "lastEdited",
-                    "maxValue": "2024-01-01",
-                    "sites": "header"
-                }
-            ],
-            "message": "Value 2024-12-30 00:00:00 in row 1 in column lastEdited in table sites is greater than the allowable maximum value of 2024-01-01 00:00:00"
-        }
-    ],
+    "errors": [],
     "warnings": [
         {
             "warningType": "_coercion",
@@ -28,10 +8,10 @@
             "columnName": "lastEdited",
             "rowNumber": 1,
             "row": {
-                "lastEdited": "2024-12-30",
-                "siteID": 1
+                "siteID": 1,
+                "lastEdited": "2023-01-30"
             },
-            "invalidValue": "2024-12-30",
+            "invalidValue": "2023-01-30",
             "validationRuleFields": [
                 {
                     "partID": "lastEdited",
@@ -39,7 +19,27 @@
                     "sites": "header"
                 }
             ],
-            "message": "Value 2024-12-30 in row 1 in column lastEdited in table sites is a string and was coerced into a datetime"
+            "message": "Value 2023-01-30 in row 1 in column lastEdited in table sites is a string and was coerced into a datetime"
+        },
+        {
+            "warningType": "_coercion",
+            "coercionRules": ["greater_than_max_value"],
+            "tableName": "sites",
+            "columnName": "lastEdited",
+            "rowNumber": 2,
+            "row": {
+                "siteID": 2,
+                "lastEdited": "2023-01-30T00:00:00"
+            },
+            "invalidValue": "2023-01-30T00:00:00",
+            "validationRuleFields": [
+                {
+                    "partID": "lastEdited",
+                    "maxValue": "2024-01-01",
+                    "sites": "header"
+                }
+            ],
+            "message": "Value 2023-01-30T00:00:00 in row 2 in column lastEdited in table sites is a string and was coerced into a datetime"
         }
     ]
 }

@@ -7,7 +7,6 @@ import os
 import re
 import sys
 from copy import deepcopy
-from dataclasses import dataclass
 from itertools import groupby
 from os.path import join, normpath
 from pathlib import Path
@@ -17,45 +16,17 @@ from typing import Any, Dict, List, Optional, Set
 from cerberusext import ContextualCoercer, OdmValidator
 
 import part_tables as pt
+import reports
 import rules
+from reports import ErrorKind
 from rules import Rule, ruleset
 from schemas import CerberusSchema, Schema, init_table_schema
 from stdext import (
-    deduplicate_dict_list,
     deep_update,
     flatten,
-    get_len,
     strip_dict_key,
-    type_name,
 )
 from versions import __version__, parse_version
-
-
-@dataclass(frozen=True)
-class ErrorContext:
-    allowed_values: Set[str]
-    column_id: str
-    constraint: Any
-    odm_datatype: str
-    rows: List[dict]
-    row_numbers: List[int]
-    rule: Rule
-    rule_fields: list
-    table_id: str
-    value: Any
-    is_warning: bool
-
-
-@dataclass(frozen=True)
-class ValidationReport:
-    data_version: str
-    schema_version: str
-    package_version: str
-    errors: List[str]
-    warnings: List[str]
-
-    def valid(self) -> bool:
-        return len(self.errors) == 0
 
 
 def _get_latest_odm_version() -> str:
@@ -95,70 +66,6 @@ ODM_LATEST = _get_latest_odm_version()
 
 # private constants
 _KEY_RULES = _gen_cerb_rule_map()
-
-
-def _prettify_rule_name(rule: Rule):
-    return rule.id.replace('_', ' ').capitalize()
-
-
-def _fmt_allowed_values(values: Set[str]) -> str:
-    # XXX: The order of set-elements isn't deterministic, so we need to sort.
-    return '/'.join(sorted(values))
-
-
-def _fmt_list(items: list) -> str:
-    if len(items) > 1:
-        return ','.join(map(str, items))
-    else:
-        return str(items[0])
-
-
-def _error_msg(ctx: ErrorContext):
-    error_template = ctx.rule.get_error_template(ctx.value, ctx.odm_datatype)
-    return error_template.format(
-        allowed_values=_fmt_allowed_values(ctx.allowed_values),
-        rule_name=_prettify_rule_name(ctx.rule),
-        table_id=ctx.table_id,
-        column_id=ctx.column_id,
-        row_num=_fmt_list(ctx.row_numbers),
-        value=ctx.value,
-        value_len=get_len(ctx.value),
-        value_type=type_name(type(ctx.value)),
-        constraint=ctx.constraint,
-    )
-
-
-def _gen_rule_error(ctx: ErrorContext):
-    error = {
-        'tableName': ctx.table_id,
-        'columnName': ctx.column_id,
-        'validationRuleFields': ctx.rule_fields,
-        'message': _error_msg(ctx),
-    }
-
-    # type
-    if ctx.is_warning:
-        error['warningType'] = ctx.rule.id
-    else:
-        error['errorType'] = ctx.rule.id
-
-    # row numbers
-    if len(ctx.row_numbers) > 1:
-        error['rowNumbers'] = ctx.row_numbers
-    else:
-        error['rowNumber'] = ctx.row_numbers[0]
-
-    # rows
-    if len(ctx.rows) > 1:
-        error['rows'] = ctx.rows
-    else:
-        error['row'] = ctx.rows[0]
-
-    # value
-    if ctx.value is not None:
-        error['invalidValue'] = ctx.value
-
-    return error
 
 
 def _get_ruleId(x):
@@ -216,15 +123,21 @@ def _gen_error_entry(cerb_rule, table_id, column_id, value, row_numbers,
     # XXX: depends on meta (which should only be for debug)
     odm_datatype = _extract_datatype(column_meta)
 
-    rule_fields = pt.get_validation_rule_fields(column_meta, [rule.id])
+    # rule_fields = pt.get_validation_rule_fields(column_meta, [rule.id])
     allowed = _get_allowed_values(schema_column) if schema_column else []
-    error_ctx = ErrorContext(rule=rule, table_id=table_id, column_id=column_id,
-                             row_numbers=row_numbers, rows=rows, value=value,
-                             constraint=constraint, rule_fields=rule_fields,
-                             allowed_values=allowed,
-                             odm_datatype=odm_datatype,
-                             is_warning=rule.is_warning)
-    return _gen_rule_error(error_ctx)
+    kind = ErrorKind.WARNING if rule.is_warning else ErrorKind.ERROR
+    error_ctx = reports.ErrorCtx(
+        allowed_values=allowed,
+        column_id=column_id,
+        column_meta=column_meta,
+        constraint=constraint,
+        err_template=rule.get_error_template(value, odm_datatype),
+        row_numbers=row_numbers,
+        rows=rows, value=value,
+        rule_id=rule.id,
+        table_id=table_id,
+    )
+    return reports.gen_rule_error(error_ctx, kind=kind)
 
 
 def _gen_cerb_error_entry(e, row, schema: CerberusSchema,
@@ -294,7 +207,7 @@ def _filter_errors(errors):
     """Removes redundant errors."""
     # - invalid_type produces redundant _coercion errors
     result = []
-    target_rule_ids = {rules._COERCION}
+    target_rule_ids = {rules.COERCION_RULE_ID}
     sorted_errors = _sort_errors(errors)
     for tableName, table_errors in groupby(sorted_errors, _get_table_name):
         for rowNum, row_errors in groupby(table_errors, _get_row_num):
@@ -386,15 +299,10 @@ def _generate_validation_schema_ext(parts, schema_version,
     additions_schema = _gen_additions_schema(schema_additions)
     deep_update(cerb_schema, additions_schema)
 
-    # `deep_update` is used to join all the table-schemas together,
-    # however it will cause duplicates in the meta list. This is especially a
-    # problem for the table-meta, so we'll need to deduplicate it here.
+    # strip empty tables
     for table in list(cerb_schema):
-        table_schema = cerb_schema[table]['schema']
-        if table_schema['schema'] == {}:
+        if cerb_schema[table]['schema']['schema'] == {}:
             del cerb_schema[table]
-            continue
-        table_schema['meta'] = deduplicate_dict_list(table_schema['meta'])
 
     return {
         "schemaVersion": schema_version,
@@ -412,7 +320,7 @@ def _validate_data_ext(schema: Schema,
                        data: dict,
                        data_version: str = ODM_LATEST,
                        rule_whitelist: List[str] = [],
-                       ) -> ValidationReport:
+                       ) -> reports.ValidationReport:
     """Validates `data` with `schema`, using Cerberus."""
     # `rule_whitelist` determines which rules/errors are triggered during
     # validation. It is needed when testing data validation, to be able to
@@ -441,7 +349,7 @@ def _validate_data_ext(schema: Schema,
 
     errors = _filter_errors(errors)
 
-    return ValidationReport(
+    return reports.ValidationReport(
         data_version=data_version,
         schema_version=versioned_schema["schemaVersion"],
         package_version=__version__,
@@ -453,5 +361,5 @@ def _validate_data_ext(schema: Schema,
 def validate_data(schema: Schema,
                   data: dict,
                   data_version=ODM_LATEST,
-                  ) -> ValidationReport:
+                  ) -> reports.ValidationReport:
     return _validate_data_ext(schema, data, data_version)

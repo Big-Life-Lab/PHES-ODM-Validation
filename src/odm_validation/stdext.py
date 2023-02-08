@@ -11,13 +11,19 @@ def get_len(x: Any) -> int:
     return len(x) if getattr(x, '__len__', None) else 0
 
 
+def hash2(x) -> int:
+    """An alternative hash function that can hash anything."""
+    if isinstance(x, dict):
+        return hash(json.dumps(x, sort_keys=True))
+    else:
+        return hash(x)
+
+
 def deep_update(dst: dict, src: dict):
     """
     Recursively update a dict.
     Subdict's won't be overwritten but also updated.
     List values will be joined, but not recursed.
-
-    Warning: List items may be duplicated.
 
     Originally from: https://stackoverflow.com/a/8310229
     """
@@ -28,25 +34,13 @@ def deep_update(dst: dict, src: dict):
             deep_update(dst[key], value)
         elif isinstance(value, list):
             src_list = value
-            if len(src_list) > 0:
-                dst_list = dst[key]
-                dst_list += src_list
-
-
-def hash_dict(d) -> str:
-    json.dumps(d, sort_keys=True)
-
-
-def deduplicate_list(items: List[Any]) -> List[Any]:
-    return list(set(items))
-
-
-def deduplicate_dict_list(dicts: List[dict]) -> List[dict]:
-    assert isinstance(dicts, list)
-    assert len(dicts) == 0 or isinstance(dicts[0], dict)
-    hashes = map(hash_dict, dicts)
-    unique_dict = dict(zip(hashes, dicts))
-    return list(unique_dict.values())
+            if len(src_list) == 0:
+                continue
+            dst_list = dst[key]
+            dst_hashset = set(map(hash2, dst_list))
+            for item in src_list:
+                if hash2(item) not in dst_hashset:
+                    dst_list.append(item)
 
 
 def strip_dict_key(d: dict, target_key: str):

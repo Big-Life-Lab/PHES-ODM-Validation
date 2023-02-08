@@ -1,13 +1,18 @@
 import logging
 from dataclasses import dataclass
 from logging import warning
-from typing import Callable, List, Optional, Set
+from typing import Any, Callable, List, Optional, Set
 # from pprint import pprint
 
 import part_tables as pt
 from part_tables import Meta, MetaEntry, Part, PartData, PartId
 from schemas import init_attr_schema, init_table_schema
-from stdext import deep_update
+from stdext import (
+    deep_update,
+    parse_datetime,
+    try_parse_float,
+    try_parse_int,
+)
 from versions import Version
 
 AttrPredicate = Callable[[pt.TableId, Part], bool]
@@ -65,20 +70,12 @@ def get_part_ids(parts: List[Part]) -> List[PartId]:
     return list(map(pt.get_partID, parts))
 
 
-def get_mapped_table_id(data: PartData, table_id: PartId,
+def _get_mapped_part_id(data: PartData, part_id: PartId,
                         version: Version) -> PartId:
     if version.major == 1:
-        return data.mappings[table_id][0]
+        return data.mappings[part_id][0]
     else:
-        return table_id
-
-
-def get_mapped_attr_id(data: PartData, attr_id: PartId,
-                       version: Version) -> PartId:
-    if version.major == 1:
-        return data.mappings[attr_id][0]
-    else:
-        return attr_id
+        return part_id
 
 
 def table_items(data: PartData, version: Version):
@@ -87,7 +84,7 @@ def table_items(data: PartData, version: Version):
     Yields a tuple of: (original id, mapped id, part).
     """
     for table_id0, td in data.table_data.items():
-        table_id1 = get_mapped_table_id(data, table_id0, version)
+        table_id1 = _get_mapped_part_id(data, table_id0, version)
         table = td.part
         yield (table_id0, table_id1, table)
 
@@ -103,7 +100,7 @@ def catset_items(data: PartData, version: Version):
 
     Yields a tuple of: (original id, mapped id, part)."""
     for attr_id0, cs_data in data.catset_data.items():
-        attr_id1 = get_mapped_attr_id(data, attr_id0, version)
+        attr_id1 = _get_mapped_part_id(data, attr_id0, version)
         yield (attr_id0, attr_id1, cs_data)
 
 
@@ -113,7 +110,7 @@ def attr_items(data: PartData, table_id: PartId, version: Version):
     Yields a tuple of: (original id, mapped id, part)."""
     for attr in data.table_data[table_id].attributes:
         attr_id0 = pt.get_partID(attr)
-        attr_id1 = get_mapped_attr_id(data, attr_id0, version)
+        attr_id1 = _get_mapped_part_id(data, attr_id0, version)
         yield (attr_id0, attr_id1, attr)
 
 
@@ -138,7 +135,7 @@ def init_table_schema2(schema, data, table, version):
     # This is not part of module 'schemas' due to simplicity. It has
     # dependencies in this file and the modules may be merged soon enough.
     table_id0 = pt.get_partID(table)
-    table_id1 = get_mapped_table_id(data, table_id0, version)
+    table_id1 = _get_mapped_part_id(data, table_id0, version)
     table_meta = get_table_meta(table, version)
     return init_table_schema(table_id1, table_meta, {})
 
@@ -148,7 +145,7 @@ def set_attr_schema(table_schema, data, table, attr, rule_id,
     table_id0 = pt.get_partID(table)
     table_id1 = list(table_schema.keys())[0]
     attr_id0 = pt.get_partID(attr)
-    attr_id1 = get_mapped_attr_id(data, attr_id0, version)
+    attr_id1 = _get_mapped_part_id(data, attr_id0, version)
     attr_meta = _get_attr_meta(attr, table_id0, version, odm_key)
     attr_schema = init_attr_schema(attr_id1, rule_id, cerb_rules, attr_meta)
     deep_update(table_schema[table_id1]['schema']['schema'], attr_schema)
@@ -253,3 +250,19 @@ def gen_cerb_rules_for_type(val_ctx: OdmValueCtx):
     if odm_type == 'boolean':
         result['allowed'] = sorted(val_ctx.bool_set)
     return result
+
+
+def parse_odm_val(val_ctx: OdmValueCtx) -> Optional[Any]:
+    """Parses the ODM value from `val_ctx`."""
+    val = val_ctx.value
+    kind = val_ctx.datatype
+    if not val:
+        return
+    if kind == 'integer':
+        return try_parse_int(val)
+    elif kind == 'float':
+        return try_parse_float(val)
+    elif kind == 'datetime':
+        return parse_datetime(val)
+    else:
+        assert False, f'{kind} parsing not impl.'

@@ -2,7 +2,6 @@ import logging
 from collections import defaultdict
 from dataclasses import dataclass
 from datetime import datetime
-from enum import Enum
 from typing import Any, Dict, List, Optional, Set, Tuple
 from copy import deepcopy
 # from pprint import pprint
@@ -11,7 +10,8 @@ from cerberus import Validator
 from cerberus.errors import ErrorDefinition
 
 import part_tables as pt
-import rules as validation_rules
+import reports
+from rules import COERCION_RULE_ID
 from part_tables import Row
 from stdext import (
     inc,
@@ -21,78 +21,21 @@ from stdext import (
 )
 
 
-class LogLevel(Enum):
-    WARNING = 'warning'
-    ERROR = 'error'
-
-
-@dataclass(frozen=True)
-class CoercionCtx:
-    """Coercion context."""
-    cerb_type_name: str
-    column: str
-    column_meta: dict
-    row: dict
-    row_num: str
-    table: str
-    value: str
-
-
 EMPTY_TRIMMED_RULE = 0x101
 
 
-def _get_meta_rule_ids(column_meta) -> List[str]:
-    if not column_meta:
-        return []
-    return [m['ruleID'] for m in column_meta]
-
-
-def _generalize_cerb_type_name(name: str) -> str:
-    if name in {'float', 'integer'}:
-        return 'number'
+def _convert_value(val: Any, type_class) -> Any:
+    "Convert `val` to `type_class`."
+    # `parse_int` is explicitly called because floats without decimals
+    # (ex: 1.0) also are valid integers.
+    if isinstance(val, type_class):
+        return val
+    elif type_class is int:
+        return parse_int(val)
+    elif type_class is datetime and isinstance(val, str):
+        return parse_datetime(val)
     else:
-        return name
-
-
-def _gen_coercion_msg(lvl: LogLevel, ctx: CoercionCtx):
-    orig_type_name = type_name(type(ctx.value))
-    coerced_type_alias = _generalize_cerb_type_name(ctx.cerb_type_name)
-    result = (f'Value {ctx.value} in row {ctx.row_num} in column {ctx.column} '
-              f'in table {ctx.table} ')
-    if lvl == LogLevel.WARNING:
-        result += f'is a {orig_type_name} and was '
-    elif lvl == LogLevel.ERROR:
-        result += 'cannot be '
-    else:
-        assert False, "invalid log lvl"
-    result += f'coerced into a {coerced_type_alias}'
-    return result
-
-
-def _gen_coercion_log_entry(log_lvl, ctx):
-    rule_ids = _get_meta_rule_ids(ctx.column_meta)
-    rule_fields = pt.get_validation_rule_fields(ctx.column_meta, rule_ids)
-    msg = _gen_coercion_msg(log_lvl, ctx)
-    return {
-        (log_lvl.value + 'Type'): validation_rules._COERCION,
-        'coercionRules': rule_ids,
-        'tableName': ctx.table,
-        'columnName': ctx.column,
-        'rowNumber': ctx.row_num,
-        'row': ctx.row,
-        'invalidValue': ctx.value,
-        'validationRuleFields': rule_fields,
-        'message': msg
-    }
-
-
-def _convert_value(orig_value, type_class) -> int:
-    if type_class is int:
-        return parse_int(orig_value)
-    elif type_class is datetime:
-        return parse_datetime(orig_value)
-    else:
-        return type_class(orig_value)
+        return type_class(val)
 
 
 class ContextualCoercer(Validator):
@@ -155,9 +98,9 @@ class ContextualCoercer(Validator):
             logging.error(self.errors, stack_info=True)
         return self._config["coerced_document"]
 
-    def _log_coercion(self, lvl, ctx):
-        entry = _gen_coercion_log_entry(lvl, ctx)
-        self._config[lvl.value + 's'].append(entry)
+    def _log_coercion(self, kind, ctx):
+        entry = reports.gen_coercion_error(ctx, kind)
+        self._config[kind.value + 's'].append(entry)
 
     def _set_value(self, field, orig_value, type_class):
         if isinstance(orig_value, type_class):
@@ -168,22 +111,23 @@ class ContextualCoercer(Validator):
         row_ix = self.document_path[1]
         row = self.document
         column_meta = self.schema[field].get('meta')
-        ctx = CoercionCtx(
+        ctx = reports.ErrorCtx(
+            rule_id=COERCION_RULE_ID,
             cerb_type_name=type_name(type_class),
-            column=field,
+            column_id=field,
             column_meta=column_meta,
-            row=row,
-            row_num=row_ix+1,
-            table=table,
+            rows=[row],
+            row_numbers=[inc(row_ix)],
+            table_id=table,
             value=orig_value,
         )
         try:
             value = _convert_value(orig_value, type_class)
             self._config["coerced_document"][table][row_ix][field] = value
-            self._log_coercion(LogLevel.WARNING, ctx)
+            self._log_coercion(reports.ErrorKind.WARNING, ctx)
         except (ArithmeticError, ValueError):
             value = orig_value
-            self._log_coercion(LogLevel.ERROR, ctx)
+            self._log_coercion(reports.ErrorKind.ERROR, ctx)
 
     def _check_with_datetime(self, field, value):
         self._set_value(field, value, datetime)
