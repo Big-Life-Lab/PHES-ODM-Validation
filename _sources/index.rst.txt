@@ -12,6 +12,7 @@ Table of Contents
 
    examples/tutorial.md
    examples/explanation-document/explanation-document.md
+   examples/schema-additions/schema-additions.md
    api
    rules
    links/contributing_link
