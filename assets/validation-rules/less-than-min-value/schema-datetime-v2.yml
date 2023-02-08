@@ -1,0 +1,20 @@
+schemaVersion: 2.0.0
+schema:
+  sites:
+    type: list
+    schema:
+      type: dict
+      schema:
+        lastEdited:
+          type: datetime
+          coerce: datetime
+          min: 2023-01-01 00:00:00
+          meta:
+          - ruleID: less_than_min_value
+            meta:
+            - partID: lastEdited
+              minValue: "2023-01-01"
+              sites: header
+      meta:
+        - partID: sites
+          partType: table

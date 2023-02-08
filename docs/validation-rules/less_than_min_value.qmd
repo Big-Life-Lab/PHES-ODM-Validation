@@ -114,7 +114,7 @@ Finally, for the valid coercable dataset (valid dataset 2) above, the following 
 
 ```{python}
 #| echo: false
-pprint_json_file(asset("error-report-4.json"))
+pprint_json_file(asset("error-report-pass-2.json"))
 ```
 
 ## Rule metadata
