@@ -157,9 +157,12 @@ def is_compatible(active: bool, first: Version, last: Version,
     return active
 
 
-def parse_version1Category(s: str) -> List[str]:
-    cats = s.split(';')
-    return list(map(str.strip, cats))
+def _parse_version1Field(part, key) -> List[str]:
+    val = part.get(key)
+    if not val:
+        return []
+    raw_ids = val.split(';')
+    return list(map(str.strip, raw_ids))
 
 
 def get_mappings(part: dict, version: Version) -> Optional[List[PartId]]:
@@ -174,11 +177,11 @@ def get_mappings(part: dict, version: Version) -> Optional[List[PartId]]:
     kind = V1_KIND_MAP.get(loc)
     try:
         if kind == MapKind.TABLE:
-            ids = [part[V1_TABLE]]
+            ids = _parse_version1Field(part, V1_TABLE)
         elif kind == MapKind.ATTRIBUTE:
-            ids = [part[V1_VARIABLE]]
+            ids = _parse_version1Field(part, V1_VARIABLE)
         elif kind == MapKind.CATEGORY or is_bool_set(part):
-            ids = parse_version1Category(part[V1_CATEGORY])
+            ids = _parse_version1Field(part, V1_CATEGORY)
     except KeyError:
         return
     if len(list(filter(lambda id: id and id != '', ids))) == 0:
