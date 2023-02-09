@@ -3,6 +3,7 @@
 /specs/generate-validation-schema.md
 /specs/module-functions.md
 /validation-rules/*.md
+/index-content.md
 
 # intermediary files from running quarto
 *.ipynb
