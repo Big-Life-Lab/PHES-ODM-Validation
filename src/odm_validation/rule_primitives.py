@@ -235,11 +235,13 @@ def _odm_to_cerb_datatype(odm_datatype: str) -> Optional[str]:
 def gen_cerb_rules_for_type(val_ctx: OdmValueCtx) -> dict:
     odm_type = val_ctx.datatype
     cerb_type = _odm_to_cerb_datatype(odm_type)
-    result = {'type': cerb_type}
-    if cerb_type != 'string':
-        result['coerce'] = cerb_type
-    if odm_type == 'boolean':
-        result['allowed'] = sorted(val_ctx.bool_set)
+    result = {}
+    if cerb_type:
+        result['type'] = cerb_type
+        if cerb_type != 'string':
+            result['coerce'] = cerb_type
+        if odm_type == 'boolean':
+            result['allowed'] = sorted(val_ctx.bool_set)
     return result
 
 
