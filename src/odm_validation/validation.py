@@ -319,6 +319,10 @@ def _validate_data_ext(schema: Schema,
     cerb_schema = versioned_schema["schema"]
     coercion_schema = cerb_schema
 
+    assert isinstance(data, dict), (
+        '`data` must be a dict. Remember to wrap the datasets in a dict with '
+        'the table names as keys.')
+
     coerced_data = _coerce_data(data, coercion_schema, warnings, errors)
 
     v = OdmValidator.new()
