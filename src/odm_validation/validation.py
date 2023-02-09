@@ -3,13 +3,8 @@ This is the main module of the package. It contains functions for schema
 generation and data validation.
 """
 
-import os
-import re
-import sys
 from copy import deepcopy
 from itertools import groupby
-from os.path import join, normpath
-from pathlib import Path
 from typing import Any, Dict, List, Optional, Set
 # from pprint import pprint
 
@@ -29,23 +24,6 @@ from stdext import (
 from versions import __version__, parse_version
 
 
-def _get_latest_odm_version() -> str:
-    file_path = normpath(os.path.realpath(__file__))
-    root_dir = join(os.path.dirname(file_path), '../..')
-    dict_dir = join(root_dir, 'assets/dictionary')
-    versions = []
-    for dir_path in Path(dict_dir).glob('v*'):
-        dir_name = os.path.basename(dir_path)
-        if not (match := re.search('v(.+)', dir_name)):
-            continue
-        v = parse_version(match.group(1), verbose=False)
-        versions.append(str(v))
-    if len(versions) == 0:
-        sys.exit("failed to get latest ODM version")
-    versions.sort()
-    return versions[-1]
-
-
 def _gen_cerb_rule_map():
     # Generates a dictionary that maps a cerberus validation rule to the ODM
     # rule that uses it.
@@ -60,9 +38,6 @@ def _gen_cerb_rule_map():
                 break
     return result
 
-
-# public constants
-ODM_LATEST = _get_latest_odm_version()
 
 # private constants
 _KEY_RULES = _gen_cerb_rule_map()
@@ -310,7 +285,7 @@ def _generate_validation_schema_ext(parts, schema_version,
     }
 
 
-def generate_validation_schema(parts, schema_version=ODM_LATEST,
+def generate_validation_schema(parts, schema_version=pt.ODM_VERSION_STR,
                                schema_additions={}) -> Schema:
     return _generate_validation_schema_ext(parts, schema_version,
                                            schema_additions)
@@ -318,7 +293,7 @@ def generate_validation_schema(parts, schema_version=ODM_LATEST,
 
 def _validate_data_ext(schema: Schema,
                        data: dict,
-                       data_version: str = ODM_LATEST,
+                       data_version: str = pt.ODM_VERSION_STR,
                        rule_whitelist: List[str] = [],
                        ) -> reports.ValidationReport:
     """Validates `data` with `schema`, using Cerberus."""
@@ -360,6 +335,6 @@ def _validate_data_ext(schema: Schema,
 
 def validate_data(schema: Schema,
                   data: dict,
-                  data_version=ODM_LATEST,
+                  data_version=pt.ODM_VERSION_STR,
                   ) -> reports.ValidationReport:
     return _validate_data_ext(schema, data, data_version)

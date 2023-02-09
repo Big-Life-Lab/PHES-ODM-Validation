@@ -1,12 +1,18 @@
 """Part-table definitions."""
 
+import os
+import re
+import sys
 from collections import defaultdict
 from dataclasses import dataclass
 from enum import Enum
 from itertools import islice
 from logging import error, warning
+from os.path import join, normpath
+from pathlib import Path
 from semver import Version
 from typing import DefaultDict, Dict, List, Optional, Set
+# from pprint import pprint
 
 from stdext import flatten
 from versions import parse_version
@@ -71,12 +77,31 @@ class PartData:
     mappings: Dict[PartId, List[PartId]]  # v1 mapping, by part id
 
 
+def _get_latest_odm_version_str() -> str:
+    file_path = normpath(os.path.realpath(__file__))
+    root_dir = join(os.path.dirname(file_path), '../..')
+    dict_dir = join(root_dir, 'assets/dictionary')
+    versions = []
+    for dir_path in Path(dict_dir).glob('v*'):
+        dir_name = os.path.basename(dir_path)
+        if not (match := re.search('v(.+)', dir_name)):
+            continue
+        v = parse_version(match.group(1), verbose=False)
+        versions.append(str(v))
+    if len(versions) == 0:
+        sys.exit("failed to get latest ODM version")
+    versions.sort()
+    return versions[-1]
+
+
 # The following constants are not enums because they would be a pain to use.
 # even with a `__str__` overload to avoid writing `.value` all the time,
 # we would still have to explicitly call the `str` function.
 # Ex: str(PartType.ATTRIBUTE.value) vs ATTRIBUTE
 
 COLUMN_KINDS = set(list(map(lambda e: e.value, ColumnKind)))
+ODM_VERSION_STR = _get_latest_odm_version_str()
+ODM_VERSION = parse_version(ODM_VERSION_STR)
 
 # field constants
 CATSET_ID = 'catSetID'
