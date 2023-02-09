@@ -202,9 +202,12 @@ def _parse_version1Field(part, key) -> List[str]:
     return list(map(str.strip, raw_ids))
 
 
-def get_mappings(part: dict, version: Version) -> Optional[List[PartId]]:
+def _get_mappings(part: dict, version: Version) -> Optional[List[PartId]]:
     """Returns a list of part ids from `version` corresponding to `part`,
-    or None if there is no mapping."""
+    or None if there is no mapping.
+
+    :param version: the schema version
+    """
     # XXX: Parts may be missing version1 fields.
     # XXX: The 'booleanSet' is not required to have a version1Location.
     if version.major != 1:
@@ -227,7 +230,7 @@ def get_mappings(part: dict, version: Version) -> Optional[List[PartId]]:
 
 
 def has_mapping(part: dict, version: Version) -> bool:
-    ms = get_mappings(part, version)
+    ms = _get_mappings(part, version)
     return ms and len(ms) > 0
 
 
@@ -426,7 +429,7 @@ def gen_partdata(parts: Dataset, version: Version):
             table_ids=cs_table_ids,
         )
 
-    mappings = {get_partID(p): get_mappings(p, version) for p in parts}
+    mappings = {get_partID(p): _get_mappings(p, version) for p in parts}
     assert None not in mappings
 
     bool_set1 = set(map_ids(mappings, list(bool_set0), version))
