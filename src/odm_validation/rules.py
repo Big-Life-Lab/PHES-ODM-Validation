@@ -69,8 +69,10 @@ def init_rule(rule_id, error, gen_cerb_rules, gen_schema,
     - `gen_cerb_rules` must accept a dummy context of `None` values, and return
       a dict with cerberus rule names as keys.
     """
+    dummy_ctx = OdmValueCtx(value=1, datatype='integer', bool_set=set(),
+                            null_set=set())
+    cerb_keys = list(gen_cerb_rules(dummy_ctx).keys())
     get_error_template = error if callable(error) else (lambda x, y: error)
-    cerb_keys = list(gen_cerb_rules(OdmValueCtx.default()).keys())
     return Rule(
         id=rule_id,
         keys=cerb_keys,
