@@ -16,11 +16,11 @@ from rule_primitives import (
     attr_items,
     gen_cerb_rules_for_type,
     gen_conditional_schema,
-    gen_global_schema,
     gen_value_schema,
     get_catset_meta,
     get_table_meta,
     is_mandatory,
+    is_primary_key,
     parse_odm_val,
     table_items,
 )
@@ -90,7 +90,8 @@ def duplicate_entries_found():
         return {'unique': True}
 
     def gen_schema(data: pt.PartData, ver):
-        return gen_global_schema(data, ver, rule_id, gen_cerb_rules)
+        return gen_conditional_schema(data, ver, rule_id, gen_cerb_rules,
+                                      is_primary_key)
 
     return init_rule(rule_id, err, gen_cerb_rules, gen_schema)
 
