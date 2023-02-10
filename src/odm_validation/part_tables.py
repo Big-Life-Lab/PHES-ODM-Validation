@@ -288,17 +288,17 @@ def get_val(pair):
     return pair[1]
 
 
-def get_table_id(part: dict) -> Optional[str]:
-    """ Retrieves the table id of `part`.
+def _get_table_id(part: dict) -> Optional[str]:
+    """Retrieves the table id of `part`.
 
-    The value is looked up in the following order:
+    It is looked up in the following order:
 
     1. partID & partType
     2. <table>Required
     3. <table>:<column_kind>
-
-    :raises Exception: when table info is missing.
     """
+    # The returned id must match a corresponding part with
+    # partId=id and partType=table.
     if is_table(part):
         return part[PART_ID]
     req_keys = list(filter(lambda k: k.endswith(_REQUIRED), part.keys()))
@@ -375,11 +375,27 @@ def gen_partdata(parts: Dataset, version: Version):
     bool_set0 = tuple(map(get_partID, islice(filter(is_bool_set, parts), 2)))
     null_set = set(map(get_partID, filter(is_null_set, parts)))
 
+    # Map tables' version1Table to their partID, to be able to find the current
+    # table from a v1 reference.
+    table_ids_v1_v2 = {}
+    for p in tables:
+        part_id = get_partID(p)
+        ids = _parse_version1Field(p, V1_TABLE)
+        for id in ids:
+            table_ids_v1_v2[id] = part_id
+
     table_attrs = defaultdict(list)
     for attr in attributes:
-        table_id = get_table_id(attr)
-        if table_id:
-            table_attrs[table_id].append(attr)
+        attr_table_ids = []
+        if not is_compatible(attr, ODM_VERSION):
+            for id_v1 in _parse_version1Field(attr, V1_TABLE):
+                id_v2 = table_ids_v1_v2[id_v1]
+                attr_table_ids.append(id_v2)
+        else:
+            attr_table_ids.append(_get_table_id(attr))
+        assert len(attr_table_ids) > 0
+        for id in attr_table_ids:
+            table_attrs[id].append(attr)
 
     table_data = {}
     for table in tables:
