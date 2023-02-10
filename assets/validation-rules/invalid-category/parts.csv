@@ -4,3 +4,9 @@ coll,attribute,header,categorical,collectCat,variables,Sample,Collection,NA,acti
 comp3h,category,input,varchar,collectCat,variableCategories,Sample,Collection,Comp3h,active
 comp8h,category,input,varchar,collectCat,variableCategories,Sample,Collection,Comp8h,active
 flowPr,category,input,varchar,collectCat,variableCategories,Sample,Collection,FlowPr;FlowRatePr,active
+siteTypeID,attribute,fK,categorical,siteTypeCatSet,variables,Sample,type,NA,active
+wwtpMuC,category,input,varchar,NA,variableCategories,Sample,type,wwtpMuC,active
+wwtpMuS,category,input,varchar,NA,variableCategories,Sample,type,wwtpMuS,active
+type2,attribute,header,varchar,NA,variables,Sample,type2,NA,active
+aaa,category,input,varchar,NA,variableCategories,Sample,type2,aaa,active
+bbb,category,input,varchar,NA,variableCategories,Sample,type2,bbb,active

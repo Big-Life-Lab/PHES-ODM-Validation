@@ -43,6 +43,56 @@ schema:
               version1Table: Sample
               version1Variable: Collection
               version1Category: FlowPr;FlowRatePr
+        type:
+          allowed:
+            - wwtpMuC
+            - wwtpMuS
+          meta:
+          - ruleID: invalid_category
+            meta:
+            - dataType: categorical
+              partID: siteTypeID
+              samples: fK
+              version1Location: variables
+              version1Table: Sample
+              version1Variable: type
+            - partID: wwtpMuC
+              partType: category
+              version1Category: wwtpMuC
+              version1Location: variableCategories
+              version1Table: Sample
+              version1Variable: type
+            - partID: wwtpMuS
+              partType: category
+              version1Category: wwtpMuS
+              version1Location: variableCategories
+              version1Table: Sample
+              version1Variable: type
+        type2:
+          allowed:
+            - aaa
+            - bbb
+          meta:
+          - ruleID: invalid_category
+            meta:
+            - dataType: varchar
+              partID: type2
+              samples: header
+              version1Location: variables
+              version1Table: Sample
+              version1Variable: type2
+            - partID: aaa
+              partType: category
+              version1Category: aaa
+              version1Location: variableCategories
+              version1Table: Sample
+              version1Variable: type2
+            - partID: bbb
+              partType: category
+              version1Category: bbb
+              version1Location: variableCategories
+              version1Table: Sample
+              version1Variable: type2
       meta:
       - partID: samples
         partType: table

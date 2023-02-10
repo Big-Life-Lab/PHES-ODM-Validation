@@ -217,9 +217,9 @@ def invalid_category():
         for table_id0, table_id1, table in table_items(data, ver):
             table_meta = get_table_meta(table, ver)
             for attr_id0, attr_id1, attr in attr_items(data, table_id0, ver):
-                if not pt.has_catset(attr):
+                cs_data = data.catset_data.get(attr_id0)
+                if not cs_data:
                     continue
-                cs_data = data.catset_data[attr_id0]
                 cs = cs_data.part
                 categories = cs_data.cat_parts
                 cat_ids0 = list(map(pt.get_partID, categories))

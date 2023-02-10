@@ -49,13 +49,20 @@ def _get_attr_meta(attr: Part, table_id: PartId, version: Version,
 
 def get_catset_meta(table_id: PartId, catset: Part, categories: List[Part],
                     version: Version) -> Meta:
-    common_keys = [pt.PART_ID, pt.CATSET_ID]
-    catset_keys = common_keys + [table_id, pt.DATA_TYPE]
-    cat_keys = common_keys + [pt.PART_TYPE]
+    # XXX: v1-only category parts don't have catSetID even if they're mapped to
+    # a v2-compatible part that has.
+    catset_keys = [pt.PART_ID, table_id, pt.DATA_TYPE]
+    cat_keys = [pt.PART_ID, pt.PART_TYPE]
+
+    if version.major > 1 or pt.CATSET_ID in categories[0]:
+        catset_keys.append(pt.CATSET_ID)
+        cat_keys.append(pt.CATSET_ID)
+
     if version.major == 1:
         v1_keys = [pt.V1_LOCATION, pt.V1_TABLE, pt.V1_VARIABLE]
         catset_keys += v1_keys
         cat_keys += v1_keys + [pt.V1_CATEGORY]
+
     meta: Meta = []
     meta.append({k: catset[k] for k in catset_keys})
     for cat in categories:

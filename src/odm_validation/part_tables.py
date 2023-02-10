@@ -6,7 +6,7 @@ import sys
 from collections import defaultdict
 from dataclasses import dataclass
 from enum import Enum
-from itertools import islice
+from itertools import groupby, islice
 from logging import error, info, warning
 from os.path import join, normpath
 from pathlib import Path
@@ -400,14 +400,38 @@ def map_ids(mappings: Dict[PartId, PartId], part_ids: List[PartId],
         return part_ids
 
 
+def _get_catset_id_v1(p: Part) -> str:
+    result = p.get(V1_VARIABLE)
+    if not result:
+        error(f'missing Version1Variable in {get_partID(p)}')
+    return result or 'missingVersion1Variable'
+
+
 def gen_partdata(parts: Dataset, version: Version):
+    all_parts = partmap(parts)
     tables = list(filter(is_table, parts))
-    table_ids = list(map(get_partID, tables))
-    attributes = list(filter(is_attr, parts))
+    attributes = filter(is_attr, parts)
     categories = list(filter(is_cat, parts))
     catsets = partmap(filter(is_catset_attr, parts))
     bool_set0 = tuple(map(get_partID, islice(filter(is_bool_set, parts), 2)))
     null_set = set(map(get_partID, filter(is_null_set, parts)))
+
+    def _is_cat_v1(p: Part) -> bool:
+        # v1-only, without catSetId
+        return (p.get(V1_TABLE) and
+                p.get(V1_LOCATION) == 'variableCategories' and
+                p.get(V1_CATEGORY) and
+                not p.get(CATSET_ID))
+
+    # catsets that are only in v1
+    categories_v1: List[Part]
+    catset_categories_v1: Dict[PartId, List[Part]]
+    if version.major == 1:
+        categories_v1 = \
+            sorted(filter(_is_cat_v1, parts), key=_get_catset_id_v1)
+        catset_categories_v1 = \
+            {k: list(g) for k, g in groupby(categories_v1,
+                                            key=_get_catset_id_v1)}
 
     # Map tables' version1Table to their partID, to be able to find the current
     # table from a v1 reference.
@@ -439,16 +463,52 @@ def gen_partdata(parts: Dataset, version: Version):
             attributes=table_attrs[table_id]
         )
 
+    # v2 catsets
+    # XXX: Some v2 catsets only have v1 categories without catSetId, they
+    # should not be included here. They can be identitifed by the lack of
+    # (v2) categories/values coming from the catSetId lookup.
     catset_data = {}
     for attr_id, cs in catsets.items():
         cs_id = cs[CATSET_ID]
         cs_cats = list(filter(lambda p: p[CATSET_ID] == cs_id, categories))
+        if len(cs_cats) == 0:
+            continue
         values = list(map(get_partID, cs_cats))
         catset_data[attr_id] = CatsetData(
             part=cs,
             cat_parts=cs_cats,
             cat_values=values,
         )
+
+    # v1 pseudo-catsets
+    # - v1 categories comprise a v1 catset
+    # - each category has a value
+    # - a catset may be used in multiple tables
+    if version.major == 1:
+        def _is_catset_v1(p):
+            return (p.get(V1_TABLE) and
+                    p.get(V1_LOCATION) == 'variables' and
+                    p.get(V1_VARIABLE) and
+                    not p.get(V1_CATEGORY))
+
+        tablepartv1_partv2 = {(p[V1_TABLE], p[V1_VARIABLE]): p[PART_ID]
+                              for p in filter(_is_catset_v1, parts)}
+        for attr_id_v1, categories in catset_categories_v1.items():
+            values = list(map(lambda p: p.get(V1_CATEGORY), categories))
+            table_ids_v1 = list(set(flatten(
+                map(lambda p: _parse_version1Field(p, V1_TABLE), categories))))
+            for table_id_v1 in table_ids_v1:
+                key_v1 = (table_id_v1, attr_id_v1)
+                attr_id_v2 = tablepartv1_partv2.get(key_v1)
+                if not attr_id_v2:
+                    warning(f'missing category mapping for {key_v1}')
+                    continue
+                part = all_parts[attr_id_v2]
+                catset_data[attr_id_v2] = CatsetData(
+                    part=part,
+                    cat_parts=categories,
+                    cat_values=values,
+                )
 
     mappings = {get_partID(p): _get_mappings(p, version) for p in parts}
     assert None not in mappings
