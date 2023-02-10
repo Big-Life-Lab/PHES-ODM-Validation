@@ -172,8 +172,11 @@ def get_version_range(part: dict) -> (Version, Version):
 
 def is_compatible(part, version: Version) -> bool:
     """Returns True if part is compatible with `version`."""
-    # not (v < first) and ((v < last) or active)
+    # XXX: prerelease (like rc.3, etc.) must be stripped from `version`
+    # before compare, because `v2.0.0-rc.3` < `v.2.0.0`.
+    # logic: not (v < first) and ((v < last) or active)
     v = version
+    v._prerelease = None
     first, last = get_version_range(part)
     active = (part.get(STATUS) == ACTIVE)
     if v.compare(first) < 0:
