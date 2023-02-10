@@ -52,7 +52,6 @@ class ColumnKind(Enum):
 class CatsetData:
     """Data for each category set."""
     part: Part
-    table_ids: Set[str]  # tables in which this catset is used
     cat_parts: List[Part]  # the parts belonging to this catset
     cat_values: List[str]  # Ex: category set `coll` has ['flowPr', ...]
 
@@ -444,13 +443,11 @@ def gen_partdata(parts: Dataset, version: Version):
     for attr_id, cs in catsets.items():
         cs_id = cs[CATSET_ID]
         cs_cats = list(filter(lambda p: p[CATSET_ID] == cs_id, categories))
-        cs_table_ids = set(filter(lambda tid: cs.get(tid), table_ids))
         values = list(map(get_partID, cs_cats))
         catset_data[attr_id] = CatsetData(
             part=cs,
             cat_parts=cs_cats,
             cat_values=values,
-            table_ids=cs_table_ids,
         )
 
     mappings = {get_partID(p): _get_mappings(p, version) for p in parts}
