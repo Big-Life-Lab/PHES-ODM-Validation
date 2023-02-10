@@ -170,11 +170,12 @@ def get_version_range(part: dict) -> (Version, Version):
     return (first, last)
 
 
-def is_compatible(active: bool, first: Version, last: Version,
-                  schema_version: Version) -> bool:
-    """Returns True if part is compatible with `schema_version`."""
+def is_compatible(part, version: Version) -> bool:
+    """Returns True if part is compatible with `version`."""
     # not (v < first) and ((v < last) or active)
-    v = schema_version
+    v = version
+    first, last = get_version_range(part)
+    active = (part.get(STATUS) == ACTIVE)
     if v.compare(first) < 0:
         return False
     if v.compare(last) < 0:
@@ -334,11 +335,10 @@ def filter_compatible(parts: Dataset, schema_version: Version) -> Dataset:
     result = []
     for row in parts:
         part_id = get_partID(row)
-        first, last = get_version_range(row)
-        active: bool = row.get(STATUS) == ACTIVE
-        if not (is_compatible(active, first, last, schema_version)):
+        if not (is_compatible(row, schema_version)):
             warning(f'skipping incompatible part: {part_id}')
             continue
+        _, last = get_version_range(row)
         if last.major > schema_version.major:
             if not has_mapping(row, schema_version):
                 error(f'skipping part with missing version1 fields: {part_id}')
