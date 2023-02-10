@@ -95,15 +95,6 @@ def table_items2(data: PartData):
         yield td.part
 
 
-def catset_items(data: PartData, version: Version):
-    """Iterates over all category-set attributes.
-
-    Yields a tuple of: (original id, mapped id, part)."""
-    for attr_id0, cs_data in data.catset_data.items():
-        attr_id1 = _get_mapped_part_id(data, attr_id0, version)
-        yield (attr_id0, attr_id1, cs_data)
-
-
 def attr_items(data: PartData, table_id: PartId, version: Version):
     """Iterates over all attributes in a table.
 
