@@ -174,7 +174,10 @@ def less_than_min_length():
            'length of {constraint}')
 
     def gen_cerb_rules(val_ctx: OdmValueCtx):
-        return {'minlength': try_parse_int(val_ctx.value)}
+        val = try_parse_int(val_ctx.value)
+        if val <= 0:
+            return {}
+        return {'minlength': val}
 
     def gen_schema(data: pt.PartData, ver):
         return gen_value_schema(data, ver, rule_id, odm_key, gen_cerb_rules)
