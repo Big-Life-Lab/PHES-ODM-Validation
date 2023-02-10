@@ -254,5 +254,7 @@ def parse_odm_val(val_ctx: OdmValueCtx) -> Optional[Any]:
         return try_parse_float(val)
     elif kind == 'datetime':
         return parse_datetime(val)
+    elif kind == 'varchar':
+        return str(val)
     else:
         assert False, f'{kind} parsing not impl.'
