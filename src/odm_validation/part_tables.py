@@ -407,10 +407,18 @@ def _get_catset_id_v1(p: Part) -> str:
     return result or 'missingVersion1Variable'
 
 
+def _table_has_attr(table: Part, attr: Part, version: Version):
+    # docs/specs/odm-how-tos.md#how-to-get-the-columns-names-for-a-table
+    assert is_attr(attr)
+    result = get_partID(table) in attr
+    if not result and version.major == 1:
+        result = (table[V1_TABLE] in _parse_version1Field(attr, V1_TABLE))
+    return result
+
+
 def gen_partdata(parts: Dataset, version: Version):
     all_parts = partmap(parts)
     tables = list(filter(is_table, parts))
-    attributes = filter(is_attr, parts)
     categories = list(filter(is_cat, parts))
     catsets = partmap(filter(is_catset_attr, parts))
     bool_set0 = tuple(map(get_partID, islice(filter(is_bool_set, parts), 2)))
@@ -433,34 +441,15 @@ def gen_partdata(parts: Dataset, version: Version):
             {k: list(g) for k, g in groupby(categories_v1,
                                             key=_get_catset_id_v1)}
 
-    # Map tables' version1Table to their partID, to be able to find the current
-    # table from a v1 reference.
-    table_ids_v1_v2 = {}
-    for p in tables:
-        part_id = get_partID(p)
-        ids = _parse_version1Field(p, V1_TABLE)
-        for id in ids:
-            table_ids_v1_v2[id] = part_id
-
-    table_attrs = defaultdict(list)
-    for attr in attributes:
-        attr_table_ids = []
-        if not is_compatible(attr, ODM_VERSION):
-            for id_v1 in _parse_version1Field(attr, V1_TABLE):
-                id_v2 = table_ids_v1_v2[id_v1]
-                attr_table_ids.append(id_v2)
-        else:
-            attr_table_ids.append(_get_table_id(attr))
-        assert len(attr_table_ids) > 0
-        for id in attr_table_ids:
-            table_attrs[id].append(attr)
-
     table_data = {}
     for table in tables:
         table_id = get_partID(table)
+        attributes = list(
+            filter(lambda attr: _table_has_attr(table, attr, version),
+                   filter(is_attr, parts)))
         table_data[table_id] = TableData(
             part=table,
-            attributes=table_attrs[table_id]
+            attributes=attributes,
         )
 
     # v2 catsets
