@@ -12,7 +12,8 @@ from cerberus.errors import ErrorDefinition
 import part_tables as pt
 import reports
 from rules import COERCION_RULE_ID
-from part_tables import Row
+from part_tables import Dataset, Row
+from schemas import CerberusSchema
 from stdext import (
     inc,
     parse_datetime,
@@ -82,7 +83,7 @@ class ContextualCoercer(Validator):
                     del schema[field]
         return result
 
-    def coerce(self, document, schema) -> Optional[dict]:
+    def coerce(self, document: Dataset, schema: CerberusSchema) -> Dataset:
         # Coercion is performed by validating using a coercion-only schema.
         # Native cerberus normalization can't be used because it doesn't
         # provide context. Coercions are kept track of using `_config`.

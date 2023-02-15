@@ -24,6 +24,9 @@ from stdext import (
 from versions import __version__, parse_version
 
 
+TableDataset = Dict[pt.TableId, pt.Dataset]
+
+
 def _gen_cerb_rule_map():
     # Generates a dictionary that maps a cerberus validation rule to the ODM
     # rule that uses it.
@@ -209,7 +212,8 @@ def _filter_errors(errors):
     return result
 
 
-def _coerce_data(data, schema, warnings, errors):
+def _coerce_data(data: TableDataset, schema: CerberusSchema, warnings, errors
+                 ) -> TableDataset:
     coercer = ContextualCoercer(warnings=warnings, errors=errors)
     return coercer.coerce(data, schema)
 
@@ -303,7 +307,7 @@ def generate_validation_schema(parts, schema_version=pt.ODM_VERSION_STR,
 
 
 def _validate_data_ext(schema: Schema,
-                       data: dict,
+                       data: TableDataset,
                        data_version: str = pt.ODM_VERSION_STR,
                        rule_whitelist: List[str] = [],
                        ) -> reports.ValidationReport:
@@ -349,7 +353,7 @@ def _validate_data_ext(schema: Schema,
 
 
 def validate_data(schema: Schema,
-                  data: dict,
+                  data: TableDataset,
                   data_version=pt.ODM_VERSION_STR,
                   ) -> reports.ValidationReport:
     return _validate_data_ext(schema, data, data_version)
