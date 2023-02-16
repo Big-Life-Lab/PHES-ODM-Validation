@@ -243,14 +243,11 @@ def invalid_type():
                 'Allowed values are ISO 8601 standard full dates, full dates '
                 'and times, or full dates and times with timezone.')
 
-    def get_error_template(odm_value: Any, odm_datatype: str):
-        val = odm_value
-        kind = odm_datatype
-        assert kind
-        if kind == pt.BOOLEAN:
-            assert isinstance(val, str)
+    def get_error_template(odm_value: Any, odm_type: str):
+        if odm_type == pt.BOOLEAN:
+            assert isinstance(odm_value, str)
             return err_bool
-        elif kind == pt.DATETIME:
+        elif odm_type == pt.DATETIME:
             return err_date
         else:
             return err_default

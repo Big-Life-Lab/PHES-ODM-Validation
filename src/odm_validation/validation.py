@@ -76,15 +76,23 @@ def _get_allowed_values(cerb_rules: Dict[str, Any]) -> Set[str]:
 
 
 def _extract_datatype(column_meta: list) -> Optional[str]:
+    # XXX: depends on meta (which should only be for debug)
     rule_metas = flatten(map(lambda x: x['meta'], column_meta))
     datatype_metas = filter(lambda x: pt.DATA_TYPE in x, rule_metas)
-    return next(datatype_metas, {}).get(pt.DATA_TYPE)
+    odm_type = next(datatype_metas, {}).get(pt.DATA_TYPE)
+    return odm_type
 
 
 def _get_rule_for_cerb_key(key: str, column_meta) -> Rule:
     rule = _KEY_RULES.get(key)
     assert rule, f'missing handler for cerberus rule "{key}"'
     return _transform_rule(rule, column_meta)
+
+
+def _cerb_to_odm_type(cerb_type: str) -> Optional[str]:
+    t = cerb_type
+    if t in {'boolean', 'datetime', 'integer', 'float'}:
+        return t
 
 
 def _gen_error_entry(cerb_rule, table_id, column_id, value, row_numbers,
@@ -95,10 +103,10 @@ def _gen_error_entry(cerb_rule, table_id, column_id, value, row_numbers,
     if len(rule_whitelist) > 0 and rule.id not in rule_whitelist:
         return
 
-    # XXX: depends on meta (which should only be for debug)
-    odm_datatype = _extract_datatype(column_meta)
+    cerb_type = schema_column.get('type', None) if schema_column else None
+    odm_type = _extract_datatype(column_meta)
+    datatype = odm_type or _cerb_to_odm_type(cerb_type)
 
-    # rule_fields = pt.get_validation_rule_fields(column_meta, [rule.id])
     allowed = _get_allowed_values(schema_column) if schema_column else []
     kind = ErrorKind.WARNING if rule.is_warning else ErrorKind.ERROR
     error_ctx = reports.ErrorCtx(
@@ -106,7 +114,7 @@ def _gen_error_entry(cerb_rule, table_id, column_id, value, row_numbers,
         column_id=column_id,
         column_meta=column_meta,
         constraint=constraint,
-        err_template=rule.get_error_template(value, odm_datatype),
+        err_template=rule.get_error_template(value, datatype),
         row_numbers=row_numbers,
         rows=rows, value=value,
         rule_id=rule.id,

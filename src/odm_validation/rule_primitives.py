@@ -1,6 +1,6 @@
 import logging
 from dataclasses import dataclass
-from logging import warning
+from logging import error, warning
 from typing import Any, Callable, List, Optional, Set
 # from pprint import pprint
 
@@ -13,7 +13,7 @@ from stdext import (
     try_parse_float,
     try_parse_int,
 )
-from versions import Version
+from versions import Version, parse_version
 
 AttrPredicate = Callable[[pt.TableId, Part], bool]
 
@@ -35,7 +35,9 @@ class OdmValueCtx:
 def get_table_meta(table: Part, version: Version) -> Meta:
     keys = [pt.PART_ID, pt.PART_TYPE]
     if version.major == 1:
-        keys += [pt.V1_LOCATION, pt.V1_TABLE]
+        first, _ = pt.get_version_range(table)
+        if pt.should_have_mapping(table[pt.PART_TYPE], first, pt.ODM_VERSION):
+            keys += [pt.V1_LOCATION, pt.V1_TABLE]
     m: MetaEntry = {k: table[k] for k in keys}
     return [m]
 
@@ -73,9 +75,12 @@ def get_part_ids(parts: List[Part]) -> List[PartId]:
 def _get_mapped_part_id(data: PartData, part_id: PartId,
                         version: Version) -> PartId:
     if version.major == 1:
-        return data.mappings[part_id][0]
-    else:
-        return part_id
+        mapping = data.mappings.get(part_id)
+        if mapping:
+            return mapping[0]
+        else:
+            error(f'missing version1 fields in part {part_id}')
+    return part_id
 
 
 def table_items(data: PartData, version: Version):
@@ -222,16 +227,18 @@ def gen_conditional_schema(data: pt.PartData, ver: Version, rule_id: str,
 
 
 def _odm_to_cerb_datatype(odm_datatype: str) -> Optional[str]:
+    """converts odm datatype to cerb rule type"""
     t = odm_datatype
     assert t
     if t in ['boolean', 'categorical', 'varchar']:
         return 'string'
     if t in ['datetime', 'integer', 'float']:
         return t
-    logging.error(f'odm datatype {t} is not implemented')
+    logging.warning(f'odm datatype {t} is not implemented')
 
 
-def gen_cerb_rules_for_type(val_ctx: OdmValueCtx):
+def gen_cerb_rules_for_type(val_ctx: OdmValueCtx) -> dict:
+    # XXX: val_ctx fields are None when called from init_rule.
     odm_type = val_ctx.datatype
     cerb_type = _odm_to_cerb_datatype(odm_type) if odm_type else None
     result = {'type': cerb_type}

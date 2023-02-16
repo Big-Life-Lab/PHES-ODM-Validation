@@ -7,7 +7,7 @@ from collections import defaultdict
 from dataclasses import dataclass
 from enum import Enum
 from itertools import islice
-from logging import error, warning
+from logging import error, info, warning
 from os.path import join, normpath
 from pathlib import Path
 from semver import Version
@@ -164,7 +164,7 @@ def parse_row_version(row, field, default=None):
 
 
 def get_version_range(part: dict) -> (Version, Version):
-    # TODO: remove default for `firstReleased` when parts-v2 is complete
+    # XXX: must have default for tests (without versioned parts) to work
     row = part
     v1 = Version(major=1)
     first = parse_row_version(row, FIRST_RELEASED, default=v1)
@@ -185,12 +185,20 @@ def is_compatible(part, version: Version) -> bool:
     v = version
     v._prerelease = None
     first, last = get_version_range(part)
-    active = (part.get(STATUS) == ACTIVE)
+    active = get_part_active(part)
     if v.compare(first) < 0:
         return False
     if v.compare(last) < 0:
         return True
     return active
+
+
+def should_have_mapping(part_type, first: Version, latest: Version) -> bool:
+    # All parts released before the latest (major) version should have a
+    # mapping to that previous version, unless it's a 'missingness' part.
+    if part_type == MISSINGNESS:
+        return
+    return first.major < latest.major
 
 
 def _parse_version1Field(part, key) -> List[str]:
@@ -202,6 +210,13 @@ def _parse_version1Field(part, key) -> List[str]:
     return list(map(str.strip, raw_ids))
 
 
+def _normalize_key(key: Optional[str]) -> Optional[str]:
+    """Returns `key` with the first char in lower case."""
+    if not key:
+        return
+    return key[0].lower() + key[1:]
+
+
 def _get_mappings(part: dict, version: Version) -> Optional[List[PartId]]:
     """Returns a list of part ids from `version` corresponding to `part`,
     or None if there is no mapping.
@@ -209,12 +224,14 @@ def _get_mappings(part: dict, version: Version) -> Optional[List[PartId]]:
     :param version: the schema version
     """
     # XXX: Parts may be missing version1 fields.
-    # XXX: The 'booleanSet' is not required to have a version1Location.
-    if version.major != 1:
+    # XXX: partType 'missingness' does not have version1 fields.
+    # XXX: catSet 'booleanSet' is not required to have a version1Location.
+    part_type = part.get(PART_TYPE)
+    if not should_have_mapping(part_type, version, ODM_VERSION):
         return
     ids = []
     loc = part.get(V1_LOCATION)
-    kind = V1_KIND_MAP.get(loc)
+    kind = V1_KIND_MAP.get(_normalize_key(loc))
     try:
         if kind == MapKind.TABLE:
             ids = _parse_version1Field(part, V1_TABLE)
@@ -224,9 +241,14 @@ def _get_mappings(part: dict, version: Version) -> Optional[List[PartId]]:
             ids = _parse_version1Field(part, V1_CATEGORY)
     except KeyError:
         return
-    if len(list(filter(lambda id: id and id != '', ids))) == 0:
+    valid_ids = list(filter(lambda id: id and id != '', ids))
+    if len(valid_ids) == 0:
         return
     return ids
+
+
+def get_part_active(part) -> bool:
+    return part.get(STATUS) == ACTIVE
 
 
 def has_mapping(part: dict, version: Version) -> bool:
@@ -304,9 +326,9 @@ def _get_table_id(part: dict) -> Optional[str]:
 
     It is looked up in the following order:
 
-    1. partID & partType
-    2. <table>Required
-    3. <table>:<column_kind>
+    1. partID (if partType is table)
+    2. <table>Required (addressesRequired, etc.)
+    3. <table>=<column_kind> (addresses=header, etc.)
     """
     # The returned id must match a corresponding part with
     # partId=id and partType=table.
@@ -321,7 +343,7 @@ def _get_table_id(part: dict) -> Optional[str]:
             filter(lambda pair: get_val(pair) in COLUMN_KINDS, part.items())))
     if len(column_keys) > 0:
         return column_keys[0]
-    warning(f'part {get_partID(part)} does not belong to any table')
+    warning(f'missing table relation for part {get_partID(part)}')
 
 
 def _not_empty(field):
@@ -344,19 +366,21 @@ def strip(parts: Dataset):
     return result
 
 
-def filter_compatible(parts: Dataset, schema_version: Version) -> Dataset:
-    """Filters `parts` by `version`."""
+def filter_compatible(parts: Dataset, version: Version) -> Dataset:
+    """Returns `parts` that are compatible with `version`."""
     result = []
+    latest = ODM_VERSION
     for row in parts:
         part_id = get_partID(row)
-        if not (is_compatible(row, schema_version)):
-            warning(f'skipping incompatible part: {part_id}')
+        if not (is_compatible(row, version)):
+            info(f'skipping incompatible part: {part_id}')
             continue
-        _, last = get_version_range(row)
-        if last.major > schema_version.major:
-            if not has_mapping(row, schema_version):
-                error(f'skipping part with missing version1 fields: {part_id}')
-                continue
+        first, _ = get_version_range(row)
+        if version.major < latest.major:
+            if should_have_mapping(row[PART_TYPE], first, latest):
+                if not has_mapping(row, version):
+                    error(f'skipping part missing version1 fields: {part_id}')
+                    continue
         result.append(row)
     return result
 
