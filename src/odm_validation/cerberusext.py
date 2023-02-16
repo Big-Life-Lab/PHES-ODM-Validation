@@ -103,6 +103,9 @@ class ContextualCoercer(Validator):
         self._config[kind.value + 's'].append(entry)
 
     def _set_value(self, field, value, type_class):
+        # ignore empty values, they can't be coerced anyway
+        if not value:
+            return
         if isinstance(value, type_class):
             return
         if type_class is float and isinstance(value, int):
