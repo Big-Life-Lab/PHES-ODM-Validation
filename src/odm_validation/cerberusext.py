@@ -102,10 +102,10 @@ class ContextualCoercer(Validator):
         entry = reports.gen_coercion_error(ctx, kind)
         self._config[kind.value + 's'].append(entry)
 
-    def _set_value(self, field, orig_value, type_class):
-        if isinstance(orig_value, type_class):
+    def _set_value(self, field, value, type_class):
+        if isinstance(value, type_class):
             return
-        if type_class is float and isinstance(orig_value, int):
+        if type_class is float and isinstance(value, int):
             return
         table = self.document_path[0]
         row_ix = self.document_path[1]
@@ -119,14 +119,13 @@ class ContextualCoercer(Validator):
             rows=[row],
             row_numbers=[inc(row_ix)],
             table_id=table,
-            value=orig_value,
+            value=value,
         )
         try:
-            value = _convert_value(orig_value, type_class)
-            self._config["coerced_document"][table][row_ix][field] = value
+            new_value = _convert_value(value, type_class)
+            self._config["coerced_document"][table][row_ix][field] = new_value
             self._log_coercion(reports.ErrorKind.WARNING, ctx)
         except (ArithmeticError, ValueError):
-            value = orig_value
             self._log_coercion(reports.ErrorKind.ERROR, ctx)
 
     def _check_with_datetime(self, field, value):
