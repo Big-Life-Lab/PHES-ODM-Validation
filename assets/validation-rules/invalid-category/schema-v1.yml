@@ -12,6 +12,7 @@ schema:
           - Comp8h
           - FlowPr
           - FlowRatePr
+          - other
           meta:
           - ruleID: invalid_category
             meta:
@@ -54,6 +55,7 @@ schema:
       schema:
         type:
           allowed:
+            - other
             - someOldCat1
             - wwtpMuC
             - wwtpMuS
@@ -96,6 +98,7 @@ schema:
       schema:
         type:
           allowed:
+          - other
           - wqCOD
           - wwCOD
           meta:
