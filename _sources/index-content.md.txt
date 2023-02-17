@@ -59,14 +59,14 @@ before starting. The required version can be found in pyproject.toml.
 If you only want to install the package, you can run the following
 command:
 
-`pip install https://github.com/Big-Life-Lab/PHES-ODM-Validation.git`
+`pip install "git+https://github.com/Big-Life-Lab/PHES-ODM-Validation.git@main"`
 
 If you want to set up a development environment instead, run the
 following commands:
 
     git clone https://github.com/Big-Life-Lab/PHES-ODM-Validation.git odm-validation
     cd odm-validation
-    pip install -e src/odm_validation
+    pip install -e .
 
 Tests can be run with the following commands (after setting up a dev.
 env.):
