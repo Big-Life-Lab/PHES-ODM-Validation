@@ -195,12 +195,16 @@ def is_mandatory(table_id: pt.TableId, attr: Part):
     return req_val == pt.MANDATORY
 
 
+def is_primary_key(table_id: pt.TableId, attr: Part):
+    return attr.get(table_id) == pt.ColumnKind.PK.value
+
+
 def gen_conditional_schema(data: pt.PartData, ver: Version, rule_id: str,
                            gen_cerb_rules, pred: AttrPredicate):
-    # Helper function to generate a cerberus schema the implements an ODM
-    # validation rule
-    # Uses the passed pred argument to decide whether an entry should be
-    # created for an attribute in a table
+    """Helper function to generate a cerberus schema that implements an ODM
+    validation rule. Uses `pred` to decide whether an entry should be created
+    for an attribute in a table.
+    """
     schema = {}
     odm_key = None
     for table in table_items2(data):
@@ -213,20 +217,6 @@ def gen_conditional_schema(data: pt.PartData, ver: Version, rule_id: str,
             cerb_rules = gen_cerb_rules(val_ctx)
             set_attr_schema(table_schema, data, table, attr, rule_id,
                             odm_key, cerb_rules, ver)
-        deep_update(schema, table_schema)
-    return schema
-
-
-def gen_global_schema(data: pt.PartData, ver: Version, rule_id: str,
-                      gen_cerb_rules):
-    schema = {}
-    cerb_rules = gen_cerb_rules(None)
-    for table in table_items2(data):
-        table_id = pt.get_partID(table)
-        table_schema = init_table_schema2(schema, data, table, ver)
-        for attr in data.table_data[table_id].attributes:
-            set_attr_schema(table_schema, data, table, attr, rule_id,
-                            None, cerb_rules, ver)
         deep_update(schema, table_schema)
     return schema
 

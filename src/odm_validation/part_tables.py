@@ -1,12 +1,18 @@
 """Part-table definitions."""
 
+import os
+import re
+import sys
 from collections import defaultdict
 from dataclasses import dataclass
 from enum import Enum
 from itertools import islice
 from logging import error, warning
+from os.path import join, normpath
+from pathlib import Path
 from semver import Version
 from typing import DefaultDict, Dict, List, Optional, Set
+# from pprint import pprint
 
 from stdext import flatten
 from versions import parse_version
@@ -71,12 +77,31 @@ class PartData:
     mappings: Dict[PartId, List[PartId]]  # v1 mapping, by part id
 
 
+def _get_latest_odm_version_str() -> str:
+    file_path = normpath(os.path.realpath(__file__))
+    root_dir = join(os.path.dirname(file_path), '../..')
+    dict_dir = join(root_dir, 'assets/dictionary')
+    versions = []
+    for dir_path in Path(dict_dir).glob('v*'):
+        dir_name = os.path.basename(dir_path)
+        if not (match := re.search('v(.+)', dir_name)):
+            continue
+        v = parse_version(match.group(1), verbose=False)
+        versions.append(str(v))
+    if len(versions) == 0:
+        sys.exit("failed to get latest ODM version")
+    versions.sort()
+    return versions[-1]
+
+
 # The following constants are not enums because they would be a pain to use.
 # even with a `__str__` overload to avoid writing `.value` all the time,
 # we would still have to explicitly call the `str` function.
 # Ex: str(PartType.ATTRIBUTE.value) vs ATTRIBUTE
 
 COLUMN_KINDS = set(list(map(lambda e: e.value, ColumnKind)))
+ODM_VERSION_STR = _get_latest_odm_version_str()
+ODM_VERSION = parse_version(ODM_VERSION_STR)
 
 # field constants
 CATSET_ID = 'catSetID'
@@ -145,11 +170,20 @@ def get_version_range(part: dict) -> (Version, Version):
     return (first, last)
 
 
-def is_compatible(active: bool, first: Version, last: Version,
-                  schema_version: Version) -> bool:
-    """Returns True if part is compatible with `schema_version`."""
-    # not (v < first) and ((v < last) or active)
-    v = schema_version
+def is_compatible(part, version: Version) -> bool:
+    """Returns True if part is compatible with `version`."""
+    # XXX: prerelease (like rc.3, etc.) must be stripped from `version` before
+    # compare, because a version with a rc-suffix is seen as less than a
+    # version without it, and our ODM version is lagging behind the version of
+    # the parts (which don't have suffixes) in that sense, but we still want
+    # them to be equal.
+    # Example: (ODM version) 2.0.0-rc.3 < (part version) 2.0.0
+    #
+    # logic: not (v < first) and ((v < last) or active)
+    v = version
+    v._prerelease = None
+    first, last = get_version_range(part)
+    active = (part.get(STATUS) == ACTIVE)
     if v.compare(first) < 0:
         return False
     if v.compare(last) < 0:
@@ -157,9 +191,13 @@ def is_compatible(active: bool, first: Version, last: Version,
     return active
 
 
-def parse_version1Category(s: str) -> List[str]:
-    cats = s.split(';')
-    return list(map(str.strip, cats))
+def _parse_version1Field(part, key) -> List[str]:
+    "`key` must be one of the part columns that starts with 'version1*'."
+    val = part.get(key)
+    if not val:
+        return []
+    raw_ids = val.split(';')
+    return list(map(str.strip, raw_ids))
 
 
 def get_mappings(part: dict, version: Version) -> Optional[List[PartId]]:
@@ -174,11 +212,11 @@ def get_mappings(part: dict, version: Version) -> Optional[List[PartId]]:
     kind = V1_KIND_MAP.get(loc)
     try:
         if kind == MapKind.TABLE:
-            ids = [part[V1_TABLE]]
+            ids = _parse_version1Field(part, V1_TABLE)
         elif kind == MapKind.ATTRIBUTE:
-            ids = [part[V1_VARIABLE]]
+            ids = _parse_version1Field(part, V1_VARIABLE)
         elif kind == MapKind.CATEGORY or is_bool_set(part):
-            ids = parse_version1Category(part[V1_CATEGORY])
+            ids = _parse_version1Field(part, V1_CATEGORY)
     except KeyError:
         return
     if len(list(filter(lambda id: id and id != '', ids))) == 0:
@@ -256,17 +294,17 @@ def get_val(pair):
     return pair[1]
 
 
-def get_table_id(part: dict) -> Optional[str]:
-    """ Retrieves the table id of `part`.
+def _get_table_id(part: dict) -> Optional[str]:
+    """Retrieves the table id of `part`.
 
-    The value is looked up in the following order:
+    It is looked up in the following order:
 
     1. partID & partType
     2. <table>Required
     3. <table>:<column_kind>
-
-    :raises Exception: when table info is missing.
     """
+    # The returned id must match a corresponding part with
+    # partId=id and partType=table.
     if is_table(part):
         return part[PART_ID]
     req_keys = list(filter(lambda k: k.endswith(_REQUIRED), part.keys()))
@@ -306,11 +344,10 @@ def filter_compatible(parts: Dataset, schema_version: Version) -> Dataset:
     result = []
     for row in parts:
         part_id = get_partID(row)
-        first, last = get_version_range(row)
-        active: bool = row.get(STATUS) == ACTIVE
-        if not (is_compatible(active, first, last, schema_version)):
+        if not (is_compatible(row, schema_version)):
             warning(f'skipping incompatible part: {part_id}')
             continue
+        _, last = get_version_range(row)
         if last.major > schema_version.major:
             if not has_mapping(row, schema_version):
                 error(f'skipping part with missing version1 fields: {part_id}')
@@ -344,11 +381,27 @@ def gen_partdata(parts: Dataset, version: Version):
     bool_set0 = tuple(map(get_partID, islice(filter(is_bool_set, parts), 2)))
     null_set = set(map(get_partID, filter(is_null_set, parts)))
 
+    # Map tables' version1Table to their partID, to be able to find the current
+    # table from a v1 reference.
+    table_ids_v1_v2 = {}
+    for p in tables:
+        part_id = get_partID(p)
+        ids = _parse_version1Field(p, V1_TABLE)
+        for id in ids:
+            table_ids_v1_v2[id] = part_id
+
     table_attrs = defaultdict(list)
     for attr in attributes:
-        table_id = get_table_id(attr)
-        if table_id:
-            table_attrs[table_id].append(attr)
+        attr_table_ids = []
+        if not is_compatible(attr, ODM_VERSION):
+            for id_v1 in _parse_version1Field(attr, V1_TABLE):
+                id_v2 = table_ids_v1_v2[id_v1]
+                attr_table_ids.append(id_v2)
+        else:
+            attr_table_ids.append(_get_table_id(attr))
+        assert len(attr_table_ids) > 0
+        for id in attr_table_ids:
+            table_attrs[id].append(attr)
 
     table_data = {}
     for table in tables:
