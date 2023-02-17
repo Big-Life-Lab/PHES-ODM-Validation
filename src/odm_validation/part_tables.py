@@ -172,8 +172,13 @@ def get_version_range(part: dict) -> (Version, Version):
 
 def is_compatible(part, version: Version) -> bool:
     """Returns True if part is compatible with `version`."""
-    # XXX: prerelease (like rc.3, etc.) must be stripped from `version`
-    # before compare, because `v2.0.0-rc.3` < `v.2.0.0`.
+    # XXX: prerelease (like rc.3, etc.) must be stripped from `version` before
+    # compare, because a version with a rc-suffix is seen as less than a
+    # version without it, and our ODM version is lagging behind the version of
+    # the parts (which don't have suffixes) in that sense, but we still want
+    # them to be equal.
+    # Example: (ODM version) 2.0.0-rc.3 < (part version) 2.0.0
+    #
     # logic: not (v < first) and ((v < last) or active)
     v = version
     v._prerelease = None
