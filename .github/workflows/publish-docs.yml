@@ -4,8 +4,10 @@ on:
     branches:
     - main
     paths:
+    - '*.md'
     - '.github/**'
     - 'INSTALL'
+    - 'LICENSE'
     - 'assets/**'
     - 'docs/**'
 jobs:
