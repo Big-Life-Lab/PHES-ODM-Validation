@@ -192,6 +192,7 @@ def is_compatible(part, version: Version) -> bool:
 
 
 def _parse_version1Field(part, key) -> List[str]:
+    "`key` must be one of the part columns that starts with 'version1*'."
     val = part.get(key)
     if not val:
         return []
