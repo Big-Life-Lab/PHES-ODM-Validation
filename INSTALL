@@ -10,7 +10,8 @@ commands:
 
 ```
 git clone https://github.com/Big-Life-Lab/PHES-ODM-Validation.git odm-validation
-pip install -e ./odm-validation
+cd odm-validation
+pip install -e .
 ```
 
 Tests can be run with the following commands (after setting up a dev. env.):
