@@ -210,6 +210,7 @@ all tables which can identified using these
 ┡━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━┩
 │ addresses                    │ table                        │ NA                          │ active              │
 │ addId                        │ attribute                    │ pK                          │ active              │
+│ addL1                        │ attribute                    │ header                      │ active              │
 └──────────────────────────────┴──────────────────────────────┴─────────────────────────────┴─────────────────────┘
 </pre>
 <p>Here the <code class="docutils literal notranslate"><span class="pre">addId</span></code> part can be identified as being the primary key for the
@@ -271,6 +272,7 @@ below</p>
 ┡━━━━━━━━━━━━━╇━━━━━━━━━━━━━╇━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━┩
 │ addresses   │ table       │ NA          │ tables              │ Address          │ NA                  │ active │
 │ addId       │ attribute   │ pK          │ variables           │ Address          │ AddressId           │ active │
+│ addL1       │ attribute   │ header      │ variables           │ Address          │ AddL1               │ active │
 └─────────────┴─────────────┴─────────────┴─────────────────────┴──────────────────┴─────────────────────┴────────┘
 </pre>
 <p>The corresponding cerberus schema would be,</p>
