@@ -201,10 +201,10 @@ def is_primary_key(table_id: pt.TableId, attr: Part):
 
 def gen_conditional_schema(data: pt.PartData, ver: Version, rule_id: str,
                            gen_cerb_rules, pred: AttrPredicate):
-    # Helper function to generate a cerberus schema the implements an ODM
-    # validation rule
-    # Uses the passed pred argument to decide whether an entry should be
-    # created for an attribute in a table
+    """Helper function to generate a cerberus schema that implements an ODM
+    validation rule. Uses `pred` to decide whether an entry should be created
+    for an attribute in a table.
+    """
     schema = {}
     odm_key = None
     for table in table_items2(data):
