@@ -172,8 +172,10 @@ def get_version_range(part: dict) -> (Version, Version):
     # XXX: must have default for tests (without versioned parts) to work
     row = part
     v1 = Version(major=1)
+    latest = _strip_prerelease(ODM_VERSION)
     first = parse_row_version(row, FIRST_RELEASED, default=v1)
-    last = parse_row_version(row, LAST_UPDATED, default=first)
+    last = parse_row_version(row, LAST_UPDATED, default=latest)
+    assert first <= last
     return (first, last)
 
 
