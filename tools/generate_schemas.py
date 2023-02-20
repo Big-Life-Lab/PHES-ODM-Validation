@@ -28,7 +28,7 @@ log_file = join(log_dir, 'generate_schemas.log')
 logging.basicConfig(
     level=logging.WARNING,
     handlers=[
-        logging.StreamHandler(),
+        logging.StreamHandler(stream=sys.stderr),
         logging.FileHandler(log_file)
     ],
 )
