@@ -375,7 +375,7 @@ def filter_compatible(parts: Dataset, version: Version) -> Dataset:
             continue
         first, _ = get_version_range(row)
         if version.major < latest.major:
-            if should_have_mapping(row[PART_TYPE], first, latest):
+            if should_have_mapping(row.get(PART_TYPE), first, latest):
                 if not has_mapping(row, version):
                     error(f'skipping part missing version1 fields: {part_id}')
                     continue
