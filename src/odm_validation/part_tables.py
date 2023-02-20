@@ -189,7 +189,7 @@ def is_compatible(part, version: Version) -> bool:
     # Example: (ODM version) 2.0.0-rc.3 < (part version) 2.0.0
     v = _strip_prerelease(version)
     first, last = get_version_range(part)
-    active = get_part_active(part)
+    active = is_active(part)
     return (first <= v and v < last) or (v == last and active)
 
 
@@ -248,7 +248,7 @@ def _get_mappings(part: dict, version: Version) -> Optional[List[PartId]]:
     return ids
 
 
-def get_part_active(part) -> bool:
+def is_active(part) -> bool:
     "Returns True if the part status is active or missing."
     # missing status defaults to "active" to make it easier to write tests
     status = part.get(STATUS)
