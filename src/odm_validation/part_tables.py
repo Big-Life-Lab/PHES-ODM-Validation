@@ -219,14 +219,11 @@ def _normalize_key(key: Optional[str]) -> Optional[str]:
 
 
 def _get_mappings(part: dict, version: Version) -> Optional[List[PartId]]:
-    """Returns a list of part ids from `version` corresponding to `part`,
-    or None if there is no mapping.
-
-    :param version: the schema version
-    """
-    # XXX: Parts may be missing version1 fields.
-    # XXX: partType 'missingness' does not have version1 fields.
-    # XXX: catSet 'booleanSet' is not required to have a version1Location.
+    "Returns the mapping from part.partID to the equivalent ids in `version`."
+    # XXX:
+    # - parts may be missing version1 fields
+    # - partType 'missingness' does not have version1 fields
+    # - catSet 'booleanSet' is not required to have a version1Location
     part_type = part.get(PART_TYPE)
     if not should_have_mapping(part_type, version, ODM_VERSION):
         return
