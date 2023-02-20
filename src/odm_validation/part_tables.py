@@ -212,6 +212,7 @@ def _parse_version1Field(part, key) -> List[str]:
 
 def _normalize_key(key: Optional[str]) -> Optional[str]:
     """Returns `key` with the first char in lower case."""
+    # TODO: remove this when casing is fixed in the dictionary
     if not key:
         return
     return key[0].lower() + key[1:]
