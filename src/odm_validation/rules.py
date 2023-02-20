@@ -213,6 +213,8 @@ def invalid_category():
         return {cerb_rule_key: None}
 
     def gen_schema(data: pt.PartData, ver: Version):
+        # FIXME: `cat_ids1` contains duplicates due to v1 categories belonging
+        # to multiple tables.
         schema = {}
         for table_id0, table_id1, table in table_items(data, ver):
             table_meta = get_table_meta(table, ver)
