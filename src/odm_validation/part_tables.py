@@ -248,7 +248,10 @@ def _get_mappings(part: dict, version: Version) -> Optional[List[PartId]]:
 
 
 def get_part_active(part) -> bool:
-    return part.get(STATUS) == ACTIVE
+    "Returns True if the part status is active or missing."
+    # missing status defaults to "active" to make it easier to write tests
+    status = part.get(STATUS)
+    return (not status) or (status == ACTIVE)
 
 
 def has_mapping(part: dict, version: Version) -> bool:
