@@ -162,6 +162,12 @@ def parse_row_version(row, field, default=None):
     return parse_version(row.get(field), row.get('partID'), field, default)
 
 
+def _strip_prerelease(v: Version) -> Version:
+    result = v
+    result._prerelease = None
+    return result
+
+
 def get_version_range(part: dict) -> (Version, Version):
     # XXX: must have default for tests (without versioned parts) to work
     row = part
@@ -181,8 +187,7 @@ def is_compatible(part, version: Version) -> bool:
     # Example: (ODM version) 2.0.0-rc.3 < (part version) 2.0.0
     #
     # logic: not (v < first) and ((v < last) or active)
-    v = version
-    v._prerelease = None
+    v = _strip_prerelease(version)
     first, last = get_version_range(part)
     active = get_part_active(part)
     if v.compare(first) < 0:
