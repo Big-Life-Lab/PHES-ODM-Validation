@@ -1,3 +1,5 @@
+from copy import deepcopy
+
 from part_tables import Meta
 from stdext import deep_update
 
@@ -20,9 +22,10 @@ def init_table_schema(table_id, table_meta, attr_schema):
 
 def init_attr_schema(attr_id: str, rule_id: str, cerb_rules: dict,
                      meta: Meta):
-    # ['meta'] is a list with one entry per rule.
-    # ['meta']['meta'] is a `Meta` with one `MetaEntry` per part.
-    inner = cerb_rules
+    # - uses deepcopy to avoid mutating `cerb_rules`
+    # - ['meta'] is a list with one entry per rule.
+    # - ['meta']['meta'] is a `Meta` with one `MetaEntry` per part.
+    inner = deepcopy(cerb_rules)
     inner['meta'] = [
         {
             'ruleID': rule_id,
