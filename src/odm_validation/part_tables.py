@@ -185,16 +185,10 @@ def is_compatible(part, version: Version) -> bool:
     # the parts (which don't have suffixes) in that sense, but we still want
     # them to be equal.
     # Example: (ODM version) 2.0.0-rc.3 < (part version) 2.0.0
-    #
-    # logic: not (v < first) and ((v < last) or active)
     v = _strip_prerelease(version)
     first, last = get_version_range(part)
     active = get_part_active(part)
-    if v.compare(first) < 0:
-        return False
-    if v.compare(last) < 0:
-        return True
-    return active
+    return (first <= v and v < last) or (v == last and active)
 
 
 def should_have_mapping(part_type, first: Version, latest: Version) -> bool:
