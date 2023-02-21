@@ -266,7 +266,7 @@ def get_catset_id(p: Part) -> str:
     # XXX: measureID doesn't have a catSetID due to partType=measure being its
     # implicit catset.
     result = p.get(CATSET_ID)
-    if not result and get_partID(p) == 'measureID':
+    if not result and p.get(PART_ID) == 'measureID':
         result = 'measure'
     return result
 
@@ -454,45 +454,27 @@ def gen_partdata(parts: Dataset, version: Version):
         )
 
     # v1 catsets
-    # FIXME: rewrite this comment section
     #
-    # Categories in v1 act very similar to v2.
-    # - v1 category parts comprise a "catset" with version1Variable as its id
-    # - this catset id "belongs" to an attr part with the same version1Variable
-    # - the attr can be part of multiple v1 tables
+    # - A category in v1 is any part with a value in version1Category (and the
+    #   other "version1*" fields). The partType can be anything, and doesn't
+    #   have to be "category".
+    # - The v1 categories are grouped by `(version1Table, version1Variable)`.
+    # - All valid v1 categories are currently associated with a v2 catset
+    #   attribute. Those attributes specify which set of categories belong to
+    #   them via the version1-table/variable pair.
     #
-    # XXX: Some v1 categories (like tp24s) don't belong to any attributes, so
-    # we can only assume that it shouldn't be included in the schema.
-    #
-    # 1. get all v1 cats -> list[cat]
-    # 1. group by version1Variable-> dict[catsetid, list[cat]]
-    # 1. for each v2 catset, find the corresponding v1 cats and set the data
-    #
-    # XXX: Currently this will ingore and join values across version1Tables,
-    # and it will only take the first value in version1Variable.
+    # XXX: Some v1 categories (like "tp24s") don't belong to any attributes, so
+    # we can only assume that it shouldn't be included in the schema. It seems
+    # like this is a trend among the "*Default" category sets.
     if version.major == 1:
         def is_cat_v1(p: Part) -> bool:
             "Returns true if `p` is a v1-only category."
-            return (p.get(PART_TYPE) == CATEGORY and
-                    not has_catset(p) and
-                    p.get(V1_TABLE) and
+            return (p.get(V1_TABLE) and
                     p.get(V1_LOCATION) == 'variableCategories' and
                     p.get(V1_VARIABLE) and
                     p.get(V1_CATEGORY))
 
-        def is_catset_v1(p: Part):
-            return (is_attr(p) and
-                    not has_catset(p) and
-                    p.get(V1_TABLE) and
-                    p.get(V1_LOCATION) == 'variables' and
-                    p.get(V1_VARIABLE) and
-                    not p.get(V1_CATEGORY))
-
-        def get_catset_id_v1(p: Part):
-            return _parse_version1Field(p, V1_VARIABLE)[0]
-
-        categories_v1: List[Part] = \
-            sorted(filter(is_cat_v1, parts), key=get_catset_id_v1)
+        categories_v1: List[Part] = list(filter(is_cat_v1, parts))
 
         attr_cats = defaultdict(list)
         for cat in categories_v1:
