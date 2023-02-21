@@ -16,7 +16,6 @@ schema:
           - ruleID: invalid_category
             meta:
             - partID: coll
-              samples: header
               dataType: categorical
               catSetID: collectCat
               version1Location: variables
@@ -43,58 +42,78 @@ schema:
               version1Table: Sample
               version1Variable: Collection
               version1Category: FlowPr;FlowRatePr
-        type:
-          allowed:
-            - wwtpMuC
-            - wwtpMuS
-          meta:
-          - ruleID: invalid_category
-            meta:
-            - dataType: categorical
-              partID: siteTypeID
-              samples: fK
-              version1Location: variables
-              version1Table: Sample
-              version1Variable: type
-            - partID: wwtpMuC
-              partType: category
-              version1Category: wwtpMuC
-              version1Location: variableCategories
-              version1Table: Sample
-              version1Variable: type
-            - partID: wwtpMuS
-              partType: category
-              version1Category: wwtpMuS
-              version1Location: variableCategories
-              version1Table: Sample
-              version1Variable: type
-        type2:
-          allowed:
-            - aaa
-            - bbb
-          meta:
-          - ruleID: invalid_category
-            meta:
-            - dataType: varchar
-              partID: type2
-              samples: header
-              version1Location: variables
-              version1Table: Sample
-              version1Variable: type2
-            - partID: aaa
-              partType: category
-              version1Category: aaa
-              version1Location: variableCategories
-              version1Table: Sample
-              version1Variable: type2
-            - partID: bbb
-              partType: category
-              version1Category: bbb
-              version1Location: variableCategories
-              version1Table: Sample
-              version1Variable: type2
       meta:
       - partID: samples
         partType: table
         version1Location: tables
         version1Table: Sample
+  Site:
+    type: list
+    schema:
+      type: dict
+      schema:
+        type:
+          allowed:
+            - someOldCat1
+            - wwtpMuC
+            - wwtpMuS
+          meta:
+          - ruleID: invalid_category
+            meta:
+            - partID: siteTypeID
+              catSetID: siteTypeCatSet
+              dataType: categorical
+              version1Location: variables
+              version1Table: Site
+              version1Variable: type
+            - partID: wwtpMuC
+              partType: category
+              version1Category: wwtpMuC
+              version1Location: variableCategories
+              version1Table: Site
+              version1Variable: type
+            - partID: wwtpMuS
+              partType: category
+              version1Category: wwtpMuS
+              version1Location: variableCategories
+              version1Table: Site
+              version1Variable: type
+            - partID: someOldCat
+              partType: category
+              version1Category: someOldCat1
+              version1Location: variableCategories
+              version1Table: Site
+              version1Variable: type
+      meta:
+      - partID: sites
+        partType: table
+        version1Location: tables
+        version1Table: Site
+  WWMeasure:
+    type: list
+    schema:
+      type: dict
+      schema:
+        type:
+          allowed:
+          - wqCOD
+          - wwCOD
+          meta:
+          - ruleID: invalid_category
+            meta:
+            - dataType: varchar
+              partID: measureID
+              version1Location: variables
+              version1Table: WWMeasure
+              version1Variable: type
+            - partID: cod
+              partType: category
+              version1Category: wqCOD; wwCOD
+              version1Location: variableCategories
+              version1Table: WWMeasure; SiteMeasure
+              version1Variable: type
+      meta:
+      - partID: measures
+        partType: table
+        version1Location: tables
+        version1Table: WWMeasure

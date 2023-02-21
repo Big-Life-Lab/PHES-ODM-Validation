@@ -12,7 +12,7 @@ from os.path import join, normpath
 from pathlib import Path
 from semver import Version
 from typing import DefaultDict, Dict, List, Optional, Set
-# from pprint import pprint
+from pprint import pprint
 
 from stdext import flatten
 from versions import parse_version
@@ -128,6 +128,7 @@ ACTIVE = 'active'
 BOOLEAN = 'boolean'
 BOOLEAN_SET = 'booleanSet'
 DATETIME = 'datetime'
+DEPRECIATED = 'depreciated'  # aka deprecated
 MANDATORY = 'mandatory'
 MISSINGNESS = 'missingness'
 PART_NULL_SET = {'', 'NA', 'Not applicable', 'null'}
@@ -402,13 +403,6 @@ def map_ids(mappings: Dict[PartId, PartId], part_ids: List[PartId],
         return part_ids
 
 
-def _get_catset_id_v1(p: Part) -> str:
-    result = p.get(V1_VARIABLE)
-    if not result:
-        error(f'missing Version1Variable in {get_partID(p)}')
-    return result or 'missingVersion1Variable'
-
-
 def _table_has_attr(table: Part, attr: Part, version: Version):
     # docs/specs/odm-how-tos.md#how-to-get-the-columns-names-for-a-table
     assert is_attr(attr)
@@ -421,27 +415,11 @@ def _table_has_attr(table: Part, attr: Part, version: Version):
 def gen_partdata(parts: Dataset, version: Version):
     all_parts = partmap(parts)
     tables = list(filter(is_table, parts))
+    attributes = list(filter(is_attr, parts))
     categories = list(filter(is_cat, parts))
     catsets = partmap(filter(is_catset_attr, parts))
     bool_set0 = tuple(map(get_partID, islice(filter(is_bool_set, parts), 2)))
     null_set = set(map(get_partID, filter(is_null_set, parts)))
-
-    def _is_cat_v1(p: Part) -> bool:
-        # v1-only, without catSetId
-        return (p.get(V1_TABLE) and
-                p.get(V1_LOCATION) == 'variableCategories' and
-                p.get(V1_CATEGORY) and
-                not p.get(CATSET_ID))
-
-    # catsets that are only in v1
-    categories_v1: List[Part]
-    catset_categories_v1: Dict[PartId, List[Part]]
-    if version.major == 1:
-        categories_v1 = \
-            sorted(filter(_is_cat_v1, parts), key=_get_catset_id_v1)
-        catset_categories_v1 = \
-            {k: list(g) for k, g in groupby(categories_v1,
-                                            key=_get_catset_id_v1)}
 
     table_data = {}
     for table in tables:
@@ -455,15 +433,10 @@ def gen_partdata(parts: Dataset, version: Version):
         )
 
     # v2 catsets
-    # XXX: Some v2 catsets only have v1 categories without catSetId, they
-    # should not be included here. They can be identitifed by the lack of
-    # (v2) categories/values coming from the catSetId lookup.
-    catset_data = {}
+    catset_data: Dict[PartId, CatsetData] = {}
     for attr_id, cs in catsets.items():
         cs_id = cs[CATSET_ID]
         cs_cats = list(filter(lambda p: p[CATSET_ID] == cs_id, categories))
-        if len(cs_cats) == 0:
-            continue
         values = list(map(get_partID, cs_cats))
         catset_data[attr_id] = CatsetData(
             part=cs,
@@ -471,35 +444,68 @@ def gen_partdata(parts: Dataset, version: Version):
             cat_values=values,
         )
 
-    # v1 pseudo-catsets
-    # - v1 categories comprise a v1 catset
-    # - each category has a value
-    # - a catset may be used in multiple tables
+    # v1 catsets
+    # FIXME: rewrite this comment section
+    #
+    # Categories in v1 act very similar to v2.
+    # - v1 category parts comprise a "catset" with version1Variable as its id
+    # - this catset id "belongs" to an attr part with the same version1Variable
+    # - the attr can be part of multiple v1 tables
+    #
+    # XXX: Some v1 categories (like tp24s) don't belong to any attributes, so
+    # we can only assume that it shouldn't be included in the schema.
+    #
+    # 1. get all v1 cats -> list[cat]
+    # 1. group by version1Variable-> dict[catsetid, list[cat]]
+    # 1. for each v2 catset, find the corresponding v1 cats and set the data
+    #
+    # XXX: Currently this will ingore and join values across version1Tables,
+    # and it will only take the first value in version1Variable.
     if version.major == 1:
-        def _is_catset_v1(p):
-            return (p.get(V1_TABLE) and
+        def is_cat_v1(p: Part) -> bool:
+            "Returns true if `p` is a v1-only category."
+            return (p.get(PART_TYPE) == CATEGORY and
+                    not p.get(CATSET_ID) and
+                    p.get(V1_TABLE) and
+                    p.get(V1_LOCATION) == 'variableCategories' and
+                    p.get(V1_VARIABLE) and
+                    p.get(V1_CATEGORY))
+
+        def is_catset_v1(p: Part):
+            return (is_attr(p) and
+                    not p.get(CATSET_ID) and
+                    p.get(V1_TABLE) and
                     p.get(V1_LOCATION) == 'variables' and
                     p.get(V1_VARIABLE) and
                     not p.get(V1_CATEGORY))
 
-        tablepartv1_partv2 = {(p[V1_TABLE], p[V1_VARIABLE]): p[PART_ID]
-                              for p in filter(_is_catset_v1, parts)}
-        for attr_id_v1, categories in catset_categories_v1.items():
-            values = list(map(lambda p: p.get(V1_CATEGORY), categories))
-            table_ids_v1 = list(set(flatten(
-                map(lambda p: _parse_version1Field(p, V1_TABLE), categories))))
-            for table_id_v1 in table_ids_v1:
-                key_v1 = (table_id_v1, attr_id_v1)
-                attr_id_v2 = tablepartv1_partv2.get(key_v1)
-                if not attr_id_v2:
-                    warning(f'missing category mapping for {key_v1}')
-                    continue
-                part = all_parts[attr_id_v2]
-                catset_data[attr_id_v2] = CatsetData(
-                    part=part,
-                    cat_parts=categories,
-                    cat_values=values,
-                )
+        def get_catset_id_v1(p: Part):
+            return _parse_version1Field(p, V1_VARIABLE)[0]
+
+        categories_v1: List[Part] = \
+            sorted(filter(is_cat_v1, parts), key=get_catset_id_v1)
+
+        attr_cats = defaultdict(list)
+        for cat in categories_v1:
+            cat_tables = set(_parse_version1Field(cat, V1_TABLE))
+            cat_vars = set(_parse_version1Field(cat, V1_VARIABLE))
+
+            # find a catset attr that matches
+            for attr_id in catset_data:
+                attr = all_parts[attr_id]
+                attr_tables = set(_parse_version1Field(attr, V1_TABLE))
+                attr_vars = set(_parse_version1Field(attr, V1_VARIABLE))
+                if (len(cat_tables & attr_tables) > 0 and len(cat_vars & attr_vars) > 0):
+                    attr_cats[attr_id].append(cat)
+
+        for attr_id, cats in attr_cats.items():
+            values_v1 = flatten(list(
+                map(lambda p: _parse_version1Field(p, V1_CATEGORY), cats)))
+            catset_data[attr_id] = CatsetData(
+                part=all_parts[attr_id],
+                cat_parts=cats,
+                cat_values=values_v1
+            )
 
     mappings = {get_partID(p): _get_mappings(p, version) for p in parts}
     assert None not in mappings

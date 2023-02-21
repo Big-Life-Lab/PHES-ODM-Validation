@@ -1,5 +1,6 @@
 import unittest
 from os.path import join
+from pprint import pprint
 
 import common
 import utils
@@ -29,6 +30,8 @@ class TestInvalidCategory(common.OdmTestCase):
         cls.whitelist = ['invalid_category']
 
     def test_schema_generation_v1(self):
+        # XXX: The part 'tp24s' should not be included, since it doesn't belong
+        # to an attribute. It's only in the parts as a negative example.
         result = _generate_validation_schema_ext(
             parts=parts,
             schema_version='1.0.0',
