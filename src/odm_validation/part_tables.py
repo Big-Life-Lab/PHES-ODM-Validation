@@ -262,12 +262,21 @@ def table_required_field(table_name):
     return table_name + 'Required'
 
 
+def get_catset_id(p: Part) -> str:
+    # XXX: measureID doesn't have a catSetID due to partType=measure being its
+    # implicit catset.
+    result = p.get(CATSET_ID)
+    if not result and get_partID(p) == 'measureID':
+        result = 'measure'
+    return result
+
+
 def has_catset(p):
-    return p.get(CATSET_ID) is not None
+    return bool(get_catset_id(p))
 
 
 def is_bool_set(part):
-    return part.get(CATSET_ID) == BOOLEAN_SET
+    return get_catset_id(part) == BOOLEAN_SET
 
 
 def is_null_set(part):
@@ -435,8 +444,8 @@ def gen_partdata(parts: Dataset, version: Version):
     # v2 catsets
     catset_data: Dict[PartId, CatsetData] = {}
     for attr_id, cs in catsets.items():
-        cs_id = cs[CATSET_ID]
-        cs_cats = list(filter(lambda p: p[CATSET_ID] == cs_id, categories))
+        cs_id = get_catset_id(cs)
+        cs_cats = list(filter(lambda p: get_catset_id(p) == cs_id, categories))
         values = list(map(get_partID, cs_cats))
         catset_data[attr_id] = CatsetData(
             part=cs,
@@ -465,7 +474,7 @@ def gen_partdata(parts: Dataset, version: Version):
         def is_cat_v1(p: Part) -> bool:
             "Returns true if `p` is a v1-only category."
             return (p.get(PART_TYPE) == CATEGORY and
-                    not p.get(CATSET_ID) and
+                    not has_catset(p) and
                     p.get(V1_TABLE) and
                     p.get(V1_LOCATION) == 'variableCategories' and
                     p.get(V1_VARIABLE) and
@@ -473,7 +482,7 @@ def gen_partdata(parts: Dataset, version: Version):
 
         def is_catset_v1(p: Part):
             return (is_attr(p) and
-                    not p.get(CATSET_ID) and
+                    not has_catset(p) and
                     p.get(V1_TABLE) and
                     p.get(V1_LOCATION) == 'variables' and
                     p.get(V1_VARIABLE) and
