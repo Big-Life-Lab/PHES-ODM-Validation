@@ -850,6 +850,7 @@ schema:
         type:
           allowed:
           - hlthReg
+          - other
           - swrCatSet
           emptyTrimmed: false
           forbidden:
@@ -1476,6 +1477,7 @@ schema:
         type:
           allowed:
           - hTank
+          - other
           - pEfflu
           - pSludge
           - pstGrit

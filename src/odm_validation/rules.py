@@ -216,6 +216,7 @@ def invalid_category():
         # FIXME: `cat_ids1` contains duplicates due to v1 categories belonging
         # to multiple tables.
         schema = {}
+        other_cat = ['other'] if ver.major == 1 else []
         for table_id0, table_id1, table in table_items(data, ver):
             table_meta = get_table_meta(table, ver)
             for attr_id0, attr_id1, attr in attr_items(data, table_id0, ver):
@@ -228,7 +229,7 @@ def invalid_category():
                 cat_ids1 = pt.map_ids(data.mappings, cat_ids0, ver)
                 if len(cat_ids1) == 0:
                     continue
-                cerb_rule = (cerb_rule_key, sorted(set(cat_ids1)))
+                cerb_rule = (cerb_rule_key, sorted(set(cat_ids1 + other_cat)))
                 attr_meta = get_catset_meta(table_id0, cs, categories, ver)
                 update_schema(schema, table_id1, attr_id1, rule_id,
                               cerb_rule, table_meta, attr_meta)
