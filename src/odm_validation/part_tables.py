@@ -132,6 +132,9 @@ DEPRECIATED = 'depreciated'  # aka deprecated
 MANDATORY = 'mandatory'
 MISSINGNESS = 'missingness'
 PART_NULL_SET = {'', 'NA', 'Not applicable', 'null'}
+TABLES = 'tables'
+VARIABLES = 'variables'
+VARIABLE_CATEGORIES = 'variableCategories'
 
 V1_VARIABLE = 'version1Variable'
 V1_LOCATION = 'version1Location'
@@ -141,9 +144,9 @@ V1_CATEGORY = 'version1Category'
 
 # mapping
 V1_KIND_MAP = {
-    'tables': MapKind.TABLE,
-    'variables': MapKind.ATTRIBUTE,
-    'variableCategories': MapKind.CATEGORY,
+    TABLES: MapKind.TABLE,
+    VARIABLES: MapKind.ATTRIBUTE,
+    VARIABLE_CATEGORIES: MapKind.CATEGORY,
 }
 
 
@@ -470,7 +473,7 @@ def gen_partdata(parts: Dataset, version: Version):
         def is_cat_v1(p: Part) -> bool:
             "Returns true if `p` is a v1-only category."
             return (p.get(V1_TABLE) and
-                    p.get(V1_LOCATION) == 'variableCategories' and
+                    p.get(V1_LOCATION) == VARIABLE_CATEGORIES and
                     p.get(V1_VARIABLE) and
                     p.get(V1_CATEGORY))
 
