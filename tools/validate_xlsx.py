@@ -14,6 +14,7 @@ root_dir = join(os.path.dirname(os.path.realpath(__file__)), '..')
 sys.path.append(join(root_dir, 'src'))
 
 import odm_validation.utils as utils  # noqa:E402
+from odm_validation.reports import ErrorKind  # noqa:E402
 from odm_validation.validation import validate_data  # noqa:E402
 
 
@@ -39,6 +40,18 @@ def get_sheet_table_id(schema, sheet_name) -> Optional[str]:
             return table_id
 
 
+def write_results(report, kind: ErrorKind, outdir: str, name: str):
+    outfile = os.path.join(outdir, name + f'_{kind.value}s.txt')
+    entries = report.errors if kind == ErrorKind.ERROR else report.warnings
+    messages = list(map(lambda x: x['message'], entries))
+    with open(outfile, 'w') as f:
+        f.write('\n'.join(messages))
+
+
+def filename_without_ext(path):
+    return splitext(basename(path))[0]
+
+
 def main():
     xlsx_file = sys.argv[1]
     ver = sys.argv[2]
@@ -50,21 +63,26 @@ def main():
 
     schema = utils.import_schema(schema_file)
 
-    with tempfile.TemporaryDirectory() as tmpdir:
-        csv_files = import_xlsx(xlsx_file, tmpdir)
-        for file in csv_files:
-            name = splitext(basename(file))[0]
-            print(f'\nvalidating sheet "{name}" ', end='', flush=True)
-            data = utils.import_dataset(file)
-            table_id = get_sheet_table_id(schema, name)
-            if not table_id:
-                print('-- SKIPPING: unable to infer table name')
-                continue
-            print(f'(table {table_id}) ...')
-            data = {table_id: data}
-            report = validate_data(schema, data, ver)
-            if not report.valid():
-                pprint(list(map(lambda x: x['message'], report.errors)))
+    outdir = tempfile.mkdtemp(suffix='-'+filename_without_ext(xlsx_file))
+    print(f'writing files to {outdir}\n')
+
+    csv_files = import_xlsx(xlsx_file, outdir)
+    print()
+    for file in csv_files:
+        name = filename_without_ext(file)
+        print(f'validating sheet "{name}" ', end='', flush=True)
+        data = utils.import_dataset(file)
+        table_id = get_sheet_table_id(schema, name)
+        if not table_id:
+            print('-- SKIPPING: unable to infer table name')
+            continue
+        print(f'(table {table_id}) ...')
+        data = {table_id: data}
+        report = validate_data(schema, data, ver)
+        write_results(report, ErrorKind.WARNING, outdir, name)
+        write_results(report, ErrorKind.ERROR, outdir, name)
+
+    print()
     print('done!')
 
 
