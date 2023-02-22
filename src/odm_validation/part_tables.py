@@ -6,13 +6,13 @@ import sys
 from collections import defaultdict
 from dataclasses import dataclass
 from enum import Enum
-from itertools import groupby, islice
+from itertools import islice
 from logging import error, info, warning
 from os.path import join, normpath
 from pathlib import Path
 from semver import Version
 from typing import DefaultDict, Dict, List, Optional, Set
-from pprint import pprint
+# from pprint import pprint
 
 from stdext import flatten
 from versions import parse_version

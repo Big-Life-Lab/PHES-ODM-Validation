@@ -1,6 +1,6 @@
 import unittest
 from os.path import join
-from pprint import pprint
+# from pprint import pprint
 
 import common
 import utils

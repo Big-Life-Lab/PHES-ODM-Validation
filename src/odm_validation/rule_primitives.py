@@ -13,7 +13,7 @@ from stdext import (
     try_parse_float,
     try_parse_int,
 )
-from versions import Version, parse_version
+from versions import Version
 
 AttrPredicate = Callable[[pt.TableId, Part], bool]
 
