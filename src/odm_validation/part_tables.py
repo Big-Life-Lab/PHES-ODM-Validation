@@ -487,9 +487,11 @@ def gen_partdata(parts: Dataset, version: Version):
             # find a catset attr that matches
             for attr_id in catset_data:
                 attr = all_parts[attr_id]
-                attr_tables = set(_parse_version1Field(attr, V1_TABLE))
-                attr_vars = set(_parse_version1Field(attr, V1_VARIABLE))
-                if (len(cat_tables & attr_tables) > 0 and len(cat_vars & attr_vars) > 0):
+                attr_tables_v1 = set(_parse_version1Field(attr, V1_TABLE))
+                attr_vars_v1 = set(_parse_version1Field(attr, V1_VARIABLE))
+                tables_match = len(cat_tables & attr_tables_v1) > 0
+                vars_match = len(cat_vars & attr_vars_v1) > 0
+                if tables_match and vars_match:
                     attr_cats[attr_id].append(cat)
 
         for attr_id, cats in attr_cats.items():
