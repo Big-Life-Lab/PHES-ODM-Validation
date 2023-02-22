@@ -71,7 +71,7 @@ def parse_version(version: str, id='', label='', default: Version = None,
 
     def log_correction(new):
         if verbose:
-            logging.warning(f'corrected version {version} --> {new} ' + origin)
+            logging.info(f'corrected version {version} --> {new} ' + origin)
 
     if version is None or version == '':
         if not default:

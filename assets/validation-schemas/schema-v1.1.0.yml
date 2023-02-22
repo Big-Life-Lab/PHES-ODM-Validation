@@ -1,0 +1,3260 @@
+schema:
+  AssayMethod:
+    schema:
+      meta:
+      - partID: protocolSteps
+        partType: table
+        version1Location: Tables
+        version1Table: AssayMethod
+      schema:
+        aliasID:
+          maxlength: 10
+          meta:
+          - meta:
+            - maxLength: '10'
+              partID: aliasIDDep
+              version1Location: variables
+              version1Table: AssayMethod
+              version1Variable: aliasID
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              partID: aliasIDDep
+              version1Location: variables
+              version1Table: AssayMethod
+              version1Variable: aliasID
+            ruleID: invalid_type
+          - meta:
+            - minLength: '0'
+              partID: aliasIDDep
+              version1Location: variables
+              version1Table: AssayMethod
+              version1Variable: aliasID
+            ruleID: less_than_min_length
+          type: string
+        assayMethodID:
+          maxlength: 10
+          meta:
+          - meta:
+            - maxLength: '10'
+              partID: methodID
+              protocolSteps: fK
+              protocolStepsRequired: mandatoryIf
+              version1Location: variables
+              version1Table: AssayMethod
+              version1Variable: assayMethodID
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: categorical
+              partID: methodID
+              protocolSteps: fK
+              protocolStepsRequired: mandatoryIf
+              version1Location: variables
+              version1Table: AssayMethod
+              version1Variable: assayMethodID
+            ruleID: invalid_type
+          - meta:
+            - minLength: '0'
+              partID: methodID
+              protocolSteps: fK
+              protocolStepsRequired: mandatoryIf
+              version1Location: variables
+              version1Table: AssayMethod
+              version1Variable: assayMethodID
+            ruleID: less_than_min_length
+          type: string
+        date:
+          coerce: datetime
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              partID: date
+              version1Location: variables
+              version1Table: AssayMethod
+              version1Variable: date
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: datetime
+              partID: date
+              version1Location: variables
+              version1Table: AssayMethod
+              version1Variable: date
+            ruleID: invalid_type
+          - meta:
+            - minLength: '0'
+              partID: date
+              version1Location: variables
+              version1Table: AssayMethod
+              version1Variable: date
+            ruleID: less_than_min_length
+          type: datetime
+        instrumentID:
+          maxlength: 10
+          meta:
+          - meta:
+            - maxLength: '10'
+              partID: instrumentID
+              protocolSteps: fK
+              protocolStepsRequired: optional
+              version1Location: variables
+              version1Table: Instrument
+              version1Variable: instrumentID
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: categorical
+              partID: instrumentID
+              protocolSteps: fK
+              protocolStepsRequired: optional
+              version1Location: variables
+              version1Table: Instrument
+              version1Variable: instrumentID
+            ruleID: invalid_type
+          - meta:
+            - minLength: '0'
+              partID: instrumentID
+              protocolSteps: fK
+              protocolStepsRequired: optional
+              version1Location: variables
+              version1Table: Instrument
+              version1Variable: instrumentID
+            ruleID: less_than_min_length
+          type: string
+        organization:
+          maxlength: 100
+          meta:
+          - meta:
+            - maxLength: '100'
+              partID: organizationID
+              protocolSteps: fK
+              protocolStepsRequired: optional
+              version1Location: variables
+              version1Table: Reporter
+              version1Variable: organization
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              partID: organizationID
+              protocolSteps: fK
+              protocolStepsRequired: optional
+              version1Location: variables
+              version1Table: Reporter
+              version1Variable: organization
+            ruleID: invalid_type
+          - meta:
+            - minLength: '0'
+              partID: organizationID
+              protocolSteps: fK
+              protocolStepsRequired: optional
+              version1Location: variables
+              version1Table: Reporter
+              version1Variable: organization
+            ruleID: less_than_min_length
+          type: string
+        referenceLink:
+          maxlength: 255
+          meta:
+          - meta:
+            - maxLength: '255'
+              partID: refLink
+              protocolSteps: header
+              protocolStepsRequired: optional
+              version1Location: variables
+              version1Table: AssayMethod, Insturment
+              version1Variable: referenceLink
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              partID: refLink
+              protocolSteps: header
+              protocolStepsRequired: optional
+              version1Location: variables
+              version1Table: AssayMethod, Insturment
+              version1Variable: referenceLink
+            ruleID: invalid_type
+          - meta:
+            - minLength: '0'
+              partID: refLink
+              protocolSteps: header
+              protocolStepsRequired: optional
+              version1Location: variables
+              version1Table: AssayMethod, Insturment
+              version1Variable: referenceLink
+            ruleID: less_than_min_length
+          type: string
+        summary:
+          maxlength: 255
+          meta:
+          - meta:
+            - maxLength: '255'
+              partID: summ
+              protocolSteps: header
+              protocolStepsRequired: optional
+              version1Location: variables
+              version1Table: AssayMethod
+              version1Variable: summary
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              partID: summ
+              protocolSteps: header
+              protocolStepsRequired: optional
+              version1Location: variables
+              version1Table: AssayMethod
+              version1Variable: summary
+            ruleID: invalid_type
+          - meta:
+            - minLength: '0'
+              partID: summ
+              protocolSteps: header
+              protocolStepsRequired: optional
+              version1Location: variables
+              version1Table: AssayMethod
+              version1Variable: summary
+            ruleID: less_than_min_length
+          type: string
+        unit:
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              partID: unitID
+              protocolSteps: fK
+              protocolStepsRequired: mandatoryIf
+              version1Location: variables
+              version1Table: WWMeasure; SiteMeasure
+              version1Variable: unit
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: categorical
+              partID: unitID
+              protocolSteps: fK
+              protocolStepsRequired: mandatoryIf
+              version1Location: variables
+              version1Table: WWMeasure; SiteMeasure
+              version1Variable: unit
+            ruleID: invalid_type
+          - meta:
+            - minLength: '0'
+              partID: unitID
+              protocolSteps: fK
+              protocolStepsRequired: mandatoryIf
+              version1Location: variables
+              version1Table: WWMeasure; SiteMeasure
+              version1Variable: unit
+            ruleID: less_than_min_length
+          type: string
+        updateDate:
+          coerce: datetime
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              partID: lastEdited
+              protocolSteps: header
+              protocolStepsRequired: optional
+              version1Location: variables
+              version1Table: Lab
+              version1Variable: updateDate
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: datetime
+              partID: lastEdited
+              protocolSteps: header
+              protocolStepsRequired: optional
+              version1Location: variables
+              version1Table: Lab
+              version1Variable: updateDate
+            ruleID: invalid_type
+          - meta:
+            - minLength: '0'
+              partID: lastEdited
+              protocolSteps: header
+              protocolStepsRequired: optional
+              version1Location: variables
+              version1Table: Lab
+              version1Variable: updateDate
+            ruleID: less_than_min_length
+          type: datetime
+        version:
+          maxlength: 50
+          meta:
+          - meta:
+            - maxLength: '50'
+              partID: stepVer
+              protocolSteps: header
+              protocolStepsRequired: optional
+              version1Location: variables
+              version1Table: AssayMethod
+              version1Variable: version
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              partID: stepVer
+              protocolSteps: header
+              protocolStepsRequired: optional
+              version1Location: variables
+              version1Table: AssayMethod
+              version1Variable: version
+            ruleID: invalid_type
+          - meta:
+            - minLength: '0'
+              partID: stepVer
+              protocolSteps: header
+              protocolStepsRequired: optional
+              version1Location: variables
+              version1Table: AssayMethod
+              version1Variable: version
+            ruleID: less_than_min_length
+          type: string
+      type: dict
+    type: list
+  Instrument:
+    schema:
+      meta:
+      - partID: instruments
+        partType: table
+        version1Location: Tables
+        version1Table: Instrument
+      schema:
+        alias:
+          maxlength: 10
+          meta:
+          - meta:
+            - maxLength: '10'
+              partID: aliasDep
+              version1Location: variables
+              version1Table: Instrument
+              version1Variable: alias
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              partID: aliasDep
+              version1Location: variables
+              version1Table: Instrument
+              version1Variable: alias
+            ruleID: invalid_type
+          - meta:
+            - minLength: '0'
+              partID: aliasDep
+              version1Location: variables
+              version1Table: Instrument
+              version1Variable: alias
+            ruleID: less_than_min_length
+          type: string
+        index:
+          coerce: integer
+          maxlength: 50
+          meta:
+          - meta:
+            - instruments: header
+              instrumentsRequired: optional
+              maxLength: '50'
+              partID: index
+              version1Location: variables
+              version1Table: WWMeasure
+              version1Variable: index
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: integer
+              instruments: header
+              instrumentsRequired: optional
+              partID: index
+              version1Location: variables
+              version1Table: WWMeasure
+              version1Variable: index
+            ruleID: invalid_type
+          - meta:
+            - instruments: header
+              instrumentsRequired: optional
+              minLength: '0'
+              partID: index
+              version1Location: variables
+              version1Table: WWMeasure
+              version1Variable: index
+            ruleID: less_than_min_length
+          type: integer
+        instrumentID:
+          emptyTrimmed: false
+          forbidden:
+          - NA
+          - nan
+          - nr
+          - 'null'
+          - undisc
+          maxlength: 10
+          meta:
+          - meta:
+            - instruments: pK
+              instrumentsRequired: mandatory
+              partID: instrumentID
+              version1Location: variables
+              version1Table: Instrument
+              version1Variable: instrumentID
+            ruleID: duplicate_entries_found
+          - meta:
+            - instruments: pK
+              instrumentsRequired: mandatory
+              maxLength: '10'
+              partID: instrumentID
+              version1Location: variables
+              version1Table: Instrument
+              version1Variable: instrumentID
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: categorical
+              instruments: pK
+              instrumentsRequired: mandatory
+              partID: instrumentID
+              version1Location: variables
+              version1Table: Instrument
+              version1Variable: instrumentID
+            ruleID: invalid_type
+          - meta:
+            - instruments: pK
+              instrumentsRequired: mandatory
+              minLength: '0'
+              partID: instrumentID
+              version1Location: variables
+              version1Table: Instrument
+              version1Variable: instrumentID
+            ruleID: less_than_min_length
+          - meta:
+            - instruments: pK
+              instrumentsRequired: mandatory
+              partID: instrumentID
+              version1Location: variables
+              version1Table: Instrument
+              version1Variable: instrumentID
+            ruleID: missing_mandatory_column
+          - meta:
+            - instruments: pK
+              instrumentsRequired: mandatory
+              partID: instrumentID
+              version1Location: variables
+              version1Table: Instrument
+              version1Variable: instrumentID
+            ruleID: missing_values_found
+          required: true
+          type: string
+          unique: true
+        model:
+          emptyTrimmed: false
+          forbidden:
+          - NA
+          - nan
+          - nr
+          - 'null'
+          - undisc
+          maxlength: 100
+          meta:
+          - meta:
+            - instruments: header
+              instrumentsRequired: mandatory
+              maxLength: '100'
+              partID: model
+              version1Location: variables
+              version1Table: Instrument
+              version1Variable: model
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              instruments: header
+              instrumentsRequired: mandatory
+              partID: model
+              version1Location: variables
+              version1Table: Instrument
+              version1Variable: model
+            ruleID: invalid_type
+          - meta:
+            - instruments: header
+              instrumentsRequired: mandatory
+              minLength: '0'
+              partID: model
+              version1Location: variables
+              version1Table: Instrument
+              version1Variable: model
+            ruleID: less_than_min_length
+          - meta:
+            - instruments: header
+              instrumentsRequired: mandatory
+              partID: model
+              version1Location: variables
+              version1Table: Instrument
+              version1Variable: model
+            ruleID: missing_mandatory_column
+          - meta:
+            - instruments: header
+              instrumentsRequired: mandatory
+              partID: model
+              version1Location: variables
+              version1Table: Instrument
+              version1Variable: model
+            ruleID: missing_values_found
+          required: true
+          type: string
+        organization:
+          maxlength: 100
+          meta:
+          - meta:
+            - instruments: fK
+              instrumentsRequired: optional
+              maxLength: '100'
+              partID: organizationID
+              version1Location: variables
+              version1Table: Reporter
+              version1Variable: organization
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              instruments: fK
+              instrumentsRequired: optional
+              partID: organizationID
+              version1Location: variables
+              version1Table: Reporter
+              version1Variable: organization
+            ruleID: invalid_type
+          - meta:
+            - instruments: fK
+              instrumentsRequired: optional
+              minLength: '0'
+              partID: organizationID
+              version1Location: variables
+              version1Table: Reporter
+              version1Variable: organization
+            ruleID: less_than_min_length
+          type: string
+        referenceLink:
+          maxlength: 255
+          meta:
+          - meta:
+            - instruments: header
+              instrumentsRequired: optional
+              maxLength: '255'
+              partID: refLink
+              version1Location: variables
+              version1Table: AssayMethod, Insturment
+              version1Variable: referenceLink
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              instruments: header
+              instrumentsRequired: optional
+              partID: refLink
+              version1Location: variables
+              version1Table: AssayMethod, Insturment
+              version1Variable: referenceLink
+            ruleID: invalid_type
+          - meta:
+            - instruments: header
+              instrumentsRequired: optional
+              minLength: '0'
+              partID: refLink
+              version1Location: variables
+              version1Table: AssayMethod, Insturment
+              version1Variable: referenceLink
+            ruleID: less_than_min_length
+          type: string
+        type:
+          emptyTrimmed: false
+          forbidden:
+          - NA
+          - nan
+          - nr
+          - 'null'
+          - undisc
+          maxlength: 30
+          meta:
+          - meta:
+            - instruments: fK
+              instrumentsRequired: mandatory
+              maxLength: '30'
+              partID: insType
+              version1Location: variables
+              version1Table: Instrument
+              version1Variable: type
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: categorical
+              instruments: fK
+              instrumentsRequired: mandatory
+              partID: insType
+              version1Location: variables
+              version1Table: Instrument
+              version1Variable: type
+            ruleID: invalid_type
+          - meta:
+            - instruments: fK
+              instrumentsRequired: mandatory
+              minLength: '0'
+              partID: insType
+              version1Location: variables
+              version1Table: Instrument
+              version1Variable: type
+            ruleID: less_than_min_length
+          - meta:
+            - instruments: fK
+              instrumentsRequired: mandatory
+              partID: insType
+              version1Location: variables
+              version1Table: Instrument
+              version1Variable: type
+            ruleID: missing_mandatory_column
+          - meta:
+            - instruments: fK
+              instrumentsRequired: mandatory
+              partID: insType
+              version1Location: variables
+              version1Table: Instrument
+              version1Variable: type
+            ruleID: missing_values_found
+          required: true
+          type: string
+        typeOther:
+          maxlength: 100
+          meta:
+          - meta:
+            - instruments: header
+              instrumentsRequired: optional
+              maxLength: '100'
+              partID: insTypeOth
+              version1Location: variables
+              version1Table: Instrument
+              version1Variable: typeOther
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              instruments: header
+              instrumentsRequired: optional
+              partID: insTypeOth
+              version1Location: variables
+              version1Table: Instrument
+              version1Variable: typeOther
+            ruleID: invalid_type
+          - meta:
+            - instruments: header
+              instrumentsRequired: optional
+              minLength: '0'
+              partID: insTypeOth
+              version1Location: variables
+              version1Table: Instrument
+              version1Variable: typeOther
+            ruleID: less_than_min_length
+          type: string
+        updateDate:
+          coerce: datetime
+          maxlength: 30
+          meta:
+          - meta:
+            - instruments: header
+              instrumentsRequired: optional
+              maxLength: '30'
+              partID: lastEdited
+              version1Location: variables
+              version1Table: Lab
+              version1Variable: updateDate
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: datetime
+              instruments: header
+              instrumentsRequired: optional
+              partID: lastEdited
+              version1Location: variables
+              version1Table: Lab
+              version1Variable: updateDate
+            ruleID: invalid_type
+          - meta:
+            - instruments: header
+              instrumentsRequired: optional
+              minLength: '0'
+              partID: lastEdited
+              version1Location: variables
+              version1Table: Lab
+              version1Variable: updateDate
+            ruleID: less_than_min_length
+          type: datetime
+      type: dict
+    type: list
+  Lab:
+    schema:
+      meta:
+      - partID: organizations
+        partType: table
+        version1Location: Tables
+        version1Table: Lab
+      schema:
+        assayMethodIDDefault:
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              partID: amDefDep
+              version1Location: variables
+              version1Table: Lab
+              version1Variable: assayMethodIDDefault
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              partID: amDefDep
+              version1Location: variables
+              version1Table: Lab
+              version1Variable: assayMethodIDDefault
+            ruleID: invalid_type
+          - meta:
+            - minLength: '0'
+              partID: amDefDep
+              version1Location: variables
+              version1Table: Lab
+              version1Variable: assayMethodIDDefault
+            ruleID: less_than_min_length
+          type: string
+        contactEmail:
+          maxlength: 100
+          meta:
+          - meta:
+            - maxLength: '100'
+              partID: email
+              version1Location: variables
+              version1Table: Lab
+              version1Variable: contactEmail
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              partID: email
+              version1Location: variables
+              version1Table: Lab
+              version1Variable: contactEmail
+            ruleID: invalid_type
+          - meta:
+            - minLength: '0'
+              partID: email
+              version1Location: variables
+              version1Table: Lab
+              version1Variable: contactEmail
+            ruleID: less_than_min_length
+          type: string
+        contactName:
+          maxlength: 100
+          meta:
+          - meta:
+            - maxLength: '100'
+              partID: contactName
+              version1Location: variables
+              version1Table: Lab
+              version1Variable: contactName
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              partID: contactName
+              version1Location: variables
+              version1Table: Lab
+              version1Variable: contactName
+            ruleID: invalid_type
+          - meta:
+            - minLength: '0'
+              partID: contactName
+              version1Location: variables
+              version1Table: Lab
+              version1Variable: contactName
+            ruleID: less_than_min_length
+          type: string
+        contactPhone:
+          maxlength: 12
+          meta:
+          - meta:
+            - maxLength: '12'
+              partID: phone
+              version1Location: variables
+              version1Table: Lab
+              version1Variable: contactPhone
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              partID: phone
+              version1Location: variables
+              version1Table: Lab
+              version1Variable: contactPhone
+            ruleID: invalid_type
+          - meta:
+            - minLength: '10'
+              partID: phone
+              version1Location: variables
+              version1Table: Lab
+              version1Variable: contactPhone
+            ruleID: less_than_min_length
+          minlength: 10
+          type: string
+        labID:
+          maxlength: 10
+          meta:
+          - meta:
+            - maxLength: '10'
+              partID: labID
+              version1Location: variables
+              version1Table: Lab
+              version1Variable: labID
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              partID: labID
+              version1Location: variables
+              version1Table: Lab
+              version1Variable: labID
+            ruleID: invalid_type
+          - meta:
+            - minLength: '0'
+              partID: labID
+              version1Location: variables
+              version1Table: Lab
+              version1Variable: labID
+            ruleID: less_than_min_length
+          type: string
+        organization:
+          emptyTrimmed: false
+          forbidden:
+          - NA
+          - nan
+          - nr
+          - 'null'
+          - undisc
+          maxlength: 100
+          meta:
+          - meta:
+            - organizations: pK
+              organizationsRequired: mandatory
+              partID: organizationID
+              version1Location: variables
+              version1Table: Reporter
+              version1Variable: organization
+            ruleID: duplicate_entries_found
+          - meta:
+            - maxLength: '100'
+              organizations: pK
+              organizationsRequired: mandatory
+              partID: organizationID
+              version1Location: variables
+              version1Table: Reporter
+              version1Variable: organization
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              organizations: pK
+              organizationsRequired: mandatory
+              partID: organizationID
+              version1Location: variables
+              version1Table: Reporter
+              version1Variable: organization
+            ruleID: invalid_type
+          - meta:
+            - minLength: '0'
+              organizations: pK
+              organizationsRequired: mandatory
+              partID: organizationID
+              version1Location: variables
+              version1Table: Reporter
+              version1Variable: organization
+            ruleID: less_than_min_length
+          - meta:
+            - organizations: pK
+              organizationsRequired: mandatory
+              partID: organizationID
+              version1Location: variables
+              version1Table: Reporter
+              version1Variable: organization
+            ruleID: missing_mandatory_column
+          - meta:
+            - organizations: pK
+              organizationsRequired: mandatory
+              partID: organizationID
+              version1Location: variables
+              version1Table: Reporter
+              version1Variable: organization
+            ruleID: missing_values_found
+          required: true
+          type: string
+          unique: true
+        updateDate:
+          coerce: datetime
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              organizations: header
+              organizationsRequired: optional
+              partID: lastEdited
+              version1Location: variables
+              version1Table: Lab
+              version1Variable: updateDate
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: datetime
+              organizations: header
+              organizationsRequired: optional
+              partID: lastEdited
+              version1Location: variables
+              version1Table: Lab
+              version1Variable: updateDate
+            ruleID: invalid_type
+          - meta:
+            - minLength: '0'
+              organizations: header
+              organizationsRequired: optional
+              partID: lastEdited
+              version1Location: variables
+              version1Table: Lab
+              version1Variable: updateDate
+            ruleID: less_than_min_length
+          type: datetime
+      type: dict
+    type: list
+  Lookup:
+    schema:
+      meta:
+      - partID: sets
+        partType: table
+        version1Location: Tables
+        version1Table: Lookup
+      schema:
+        columnName:
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              partID: columnNameDep
+              version1Location: variables
+              version1Table: Lookup
+              version1Variable: columnName
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              partID: columnNameDep
+              version1Location: variables
+              version1Table: Lookup
+              version1Variable: columnName
+            ruleID: invalid_type
+          - meta:
+            - minLength: '0'
+              partID: columnNameDep
+              version1Location: variables
+              version1Table: Lookup
+              version1Variable: columnName
+            ruleID: less_than_min_length
+          type: string
+      type: dict
+    type: list
+  Polygon:
+    schema:
+      meta:
+      - partID: polygons
+        partType: table
+        version1Location: Tables
+        version1Table: Polygon
+      schema:
+        file:
+          maxlength: 65535
+          meta:
+          - meta:
+            - maxLength: '65535'
+              partID: fileLocation
+              polygons: header
+              polygonsRequired: optional
+              version1Location: variables
+              version1Table: Polygon
+              version1Variable: file
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: blob
+              partID: fileLocation
+              polygons: header
+              polygonsRequired: optional
+              version1Location: variables
+              version1Table: Polygon
+              version1Variable: file
+            ruleID: invalid_type
+          - meta:
+            - minLength: '0'
+              partID: fileLocation
+              polygons: header
+              polygonsRequired: optional
+              version1Location: variables
+              version1Table: Polygon
+              version1Variable: file
+            ruleID: less_than_min_length
+        link:
+          maxlength: 100
+          meta:
+          - meta:
+            - maxLength: '100'
+              partID: li
+              version1Location: variables
+              version1Table: Polygon
+              version1Variable: link
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              partID: li
+              version1Location: variables
+              version1Table: Polygon
+              version1Variable: link
+            ruleID: invalid_type
+          - meta:
+            - minLength: '0'
+              partID: li
+              version1Location: variables
+              version1Table: Polygon
+              version1Variable: link
+            ruleID: less_than_min_length
+          type: string
+        organization:
+          maxlength: 100
+          meta:
+          - meta:
+            - maxLength: '100'
+              partID: organizationID
+              polygons: header
+              polygonsRequired: optional
+              version1Location: variables
+              version1Table: Reporter
+              version1Variable: organization
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              partID: organizationID
+              polygons: header
+              polygonsRequired: optional
+              version1Location: variables
+              version1Table: Reporter
+              version1Variable: organization
+            ruleID: invalid_type
+          - meta:
+            - minLength: '0'
+              partID: organizationID
+              polygons: header
+              polygonsRequired: optional
+              version1Location: variables
+              version1Table: Reporter
+              version1Variable: organization
+            ruleID: less_than_min_length
+          type: string
+        polygonID:
+          emptyTrimmed: false
+          forbidden:
+          - NA
+          - nan
+          - nr
+          - 'null'
+          - undisc
+          maxlength: 10
+          meta:
+          - meta:
+            - partID: polygonID
+              polygons: pK
+              polygonsRequired: mandatory
+              version1Location: variables
+              version1Table: Polygon
+              version1Variable: polygonID
+            ruleID: duplicate_entries_found
+          - meta:
+            - maxLength: '10'
+              partID: polygonID
+              polygons: pK
+              polygonsRequired: mandatory
+              version1Location: variables
+              version1Table: Polygon
+              version1Variable: polygonID
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              partID: polygonID
+              polygons: pK
+              polygonsRequired: mandatory
+              version1Location: variables
+              version1Table: Polygon
+              version1Variable: polygonID
+            ruleID: invalid_type
+          - meta:
+            - minLength: '0'
+              partID: polygonID
+              polygons: pK
+              polygonsRequired: mandatory
+              version1Location: variables
+              version1Table: Polygon
+              version1Variable: polygonID
+            ruleID: less_than_min_length
+          - meta:
+            - partID: polygonID
+              polygons: pK
+              polygonsRequired: mandatory
+              version1Location: variables
+              version1Table: Polygon
+              version1Variable: polygonID
+            ruleID: missing_mandatory_column
+          - meta:
+            - partID: polygonID
+              polygons: pK
+              polygonsRequired: mandatory
+              version1Location: variables
+              version1Table: Polygon
+              version1Variable: polygonID
+            ruleID: missing_values_found
+          required: true
+          type: string
+          unique: true
+        referenceLink:
+          maxlength: 255
+          meta:
+          - meta:
+            - maxLength: '255'
+              partID: refLink
+              polygons: header
+              polygonsRequired: optional
+              version1Location: variables
+              version1Table: AssayMethod, Insturment
+              version1Variable: referenceLink
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              partID: refLink
+              polygons: header
+              polygonsRequired: optional
+              version1Location: variables
+              version1Table: AssayMethod, Insturment
+              version1Variable: referenceLink
+            ruleID: invalid_type
+          - meta:
+            - minLength: '0'
+              partID: refLink
+              polygons: header
+              polygonsRequired: optional
+              version1Location: variables
+              version1Table: AssayMethod, Insturment
+              version1Variable: referenceLink
+            ruleID: less_than_min_length
+          type: string
+        type:
+          allowed:
+          - hlthReg
+          - swrCatSet
+          emptyTrimmed: false
+          forbidden:
+          - NA
+          - nan
+          - nr
+          - 'null'
+          - undisc
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              partID: geoType
+              polygons: header
+              polygonsRequired: mandatory
+              version1Location: variables
+              version1Table: Polygon
+              version1Variable: type
+            ruleID: greater_than_max_length
+          - meta:
+            - catSetID: geoTypeCatSet
+              dataType: categorical
+              partID: geoType
+              version1Location: variables
+              version1Table: Polygon
+              version1Variable: type
+            - partID: hlthReg
+              partType: category
+              version1Category: hlthReg
+              version1Location: variableCategories
+              version1Table: Polygon
+              version1Variable: type
+            - partID: swrCatSet
+              partType: category
+              version1Category: swrCatSet
+              version1Location: variableCategories
+              version1Table: Polygon
+              version1Variable: type
+            ruleID: invalid_category
+          - meta:
+            - dataType: categorical
+              partID: geoType
+              polygons: header
+              polygonsRequired: mandatory
+              version1Location: variables
+              version1Table: Polygon
+              version1Variable: type
+            ruleID: invalid_type
+          - meta:
+            - minLength: '0'
+              partID: geoType
+              polygons: header
+              polygonsRequired: mandatory
+              version1Location: variables
+              version1Table: Polygon
+              version1Variable: type
+            ruleID: less_than_min_length
+          - meta:
+            - partID: geoType
+              polygons: header
+              polygonsRequired: mandatory
+              version1Location: variables
+              version1Table: Polygon
+              version1Variable: type
+            ruleID: missing_mandatory_column
+          - meta:
+            - partID: geoType
+              polygons: header
+              polygonsRequired: mandatory
+              version1Location: variables
+              version1Table: Polygon
+              version1Variable: type
+            ruleID: missing_values_found
+          required: true
+          type: string
+        updateDate:
+          coerce: datetime
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              partID: lastEdited
+              polygons: header
+              polygonsRequired: optional
+              version1Location: variables
+              version1Table: Lab
+              version1Variable: updateDate
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: datetime
+              partID: lastEdited
+              polygons: header
+              polygonsRequired: optional
+              version1Location: variables
+              version1Table: Lab
+              version1Variable: updateDate
+            ruleID: invalid_type
+          - meta:
+            - minLength: '0'
+              partID: lastEdited
+              polygons: header
+              polygonsRequired: optional
+              version1Location: variables
+              version1Table: Lab
+              version1Variable: updateDate
+            ruleID: less_than_min_length
+          type: datetime
+        wkt:
+          emptyTrimmed: false
+          forbidden:
+          - NA
+          - nan
+          - nr
+          - 'null'
+          - undisc
+          maxlength: 63
+          meta:
+          - meta:
+            - maxLength: '63'
+              partID: geoWKT
+              polygons: header
+              polygonsRequired: mandatory
+              version1Location: variables
+              version1Table: Polygon
+              version1Variable: wkt
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              partID: geoWKT
+              polygons: header
+              polygonsRequired: mandatory
+              version1Location: variables
+              version1Table: Polygon
+              version1Variable: wkt
+            ruleID: invalid_type
+          - meta:
+            - minLength: '0'
+              partID: geoWKT
+              polygons: header
+              polygonsRequired: mandatory
+              version1Location: variables
+              version1Table: Polygon
+              version1Variable: wkt
+            ruleID: less_than_min_length
+          - meta:
+            - partID: geoWKT
+              polygons: header
+              polygonsRequired: mandatory
+              version1Location: variables
+              version1Table: Polygon
+              version1Variable: wkt
+            ruleID: missing_mandatory_column
+          - meta:
+            - partID: geoWKT
+              polygons: header
+              polygonsRequired: mandatory
+              version1Location: variables
+              version1Table: Polygon
+              version1Variable: wkt
+            ruleID: missing_values_found
+          required: true
+          type: string
+      type: dict
+    type: list
+  Reporter:
+    schema:
+      meta:
+      - partID: reportersDep
+        partType: table
+        version1Location: Tables
+        version1Table: Reporter
+      schema:
+        labIDDefault:
+          maxlength: 10
+          meta:
+          - meta:
+            - maxLength: '10'
+              partID: labDefDep
+              version1Location: variables
+              version1Table: Reporter
+              version1Variable: labIDDefault
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              partID: labDefDep
+              version1Location: variables
+              version1Table: Reporter
+              version1Variable: labIDDefault
+            ruleID: invalid_type
+          - meta:
+            - minLength: '0'
+              partID: labDefDep
+              version1Location: variables
+              version1Table: Reporter
+              version1Variable: labIDDefault
+            ruleID: less_than_min_length
+          type: string
+        organization:
+          maxlength: 100
+          meta:
+          - meta:
+            - maxLength: '100'
+              partID: organizationID
+              version1Location: variables
+              version1Table: Reporter
+              version1Variable: organization
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              partID: organizationID
+              version1Location: variables
+              version1Table: Reporter
+              version1Variable: organization
+            ruleID: invalid_type
+          - meta:
+            - minLength: '0'
+              partID: organizationID
+              version1Location: variables
+              version1Table: Reporter
+              version1Variable: organization
+            ruleID: less_than_min_length
+          type: string
+        reporterID:
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              partID: reporterIDDep
+              version1Location: variables
+              version1Table: Reporter
+              version1Variable: reporterID
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              partID: reporterIDDep
+              version1Location: variables
+              version1Table: Reporter
+              version1Variable: reporterID
+            ruleID: invalid_type
+          - meta:
+            - minLength: '0'
+              partID: reporterIDDep
+              version1Location: variables
+              version1Table: Reporter
+              version1Variable: reporterID
+            ruleID: less_than_min_length
+          type: string
+        siteIDDefault:
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              partID: siteDef
+              version1Location: variables
+              version1Table: Reporter
+              version1Variable: siteIDDefault
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              partID: siteDef
+              version1Location: variables
+              version1Table: Reporter
+              version1Variable: siteIDDefault
+            ruleID: invalid_type
+          - meta:
+            - minLength: '0'
+              partID: siteDef
+              version1Location: variables
+              version1Table: Reporter
+              version1Variable: siteIDDefault
+            ruleID: less_than_min_length
+          type: string
+      type: dict
+    type: list
+  Sample:
+    schema:
+      meta:
+      - partID: samples
+        partType: table
+        version1Location: Tables
+        version1Table: Sample
+      schema:
+        collection:
+          allowed:
+          - cpFP24h
+          - cpTP24h
+          - grb
+          - grbCp3
+          - grbCp3h
+          - grbCp8h
+          - hTank
+          - mooreSw
+          - other
+          emptyTrimmed: false
+          forbidden:
+          - NA
+          - nan
+          - nr
+          - 'null'
+          - undisc
+          maxlength: 12
+          meta:
+          - meta:
+            - maxLength: '12'
+              partID: collType
+              samples: fk
+              samplesRequired: mandatory
+              version1Location: variables
+              version1Table: sample
+              version1Variable: collection
+            ruleID: greater_than_max_length
+          - meta:
+            - catSetID: collectCatSet
+              dataType: categorical
+              partID: collType
+              version1Location: variables
+              version1Table: sample
+              version1Variable: collection
+            - catSetID: collectCatSet
+              partID: tp24s
+              partType: category
+              version1Category: cpTP24h
+              version1Location: variableCategories
+              version1Table: Site
+              version1Variable: SampleCollectionDefault
+            - catSetID: collectCatSet
+              partID: comp3
+              partType: category
+              version1Category: grbCp3
+              version1Location: variableCategories
+              version1Table: Sample
+              version1Variable: collection
+            - catSetID: collectCatSet
+              partID: comp3dep
+              partType: category
+              version1Category: grbCp3
+              version1Location: variableCategories
+              version1Table: Site
+              version1Variable: SampleCollectionDefault
+            - catSetID: collectCatSet
+              partID: comp3h
+              partType: category
+              version1Category: grbCp3h
+              version1Location: variableCategories
+              version1Table: Sample
+              version1Variable: collection
+            - catSetID: collectCatSet
+              partID: comp3hdep
+              partType: category
+              version1Category: grbCp3h
+              version1Location: variableCategories
+              version1Table: Site
+              version1Variable: SampleCollectionDefault
+            - catSetID: collectCatSet
+              partID: comp8h
+              partType: category
+              version1Category: grbCp8h
+              version1Location: variableCategories
+              version1Table: Site
+              version1Variable: SampleCollectionDefault
+            - catSetID: collectCatSet
+              partID: comp8hDep
+              partType: category
+              version1Category: grbCp8h
+              version1Location: variableCategories
+              version1Table: Sample
+              version1Variable: collection
+            - catSetID: collectCatSet
+              partID: flow24hDep
+              partType: category
+              version1Category: cpFP24h
+              version1Location: variableCategories
+              version1Table: Site
+              version1Variable: SampleCollectionDefault
+            - catSetID: collectCatSet
+              partID: hoTaWa
+              partType: category
+              version1Category: hTank
+              version1Location: variableCategories
+              version1Table: Sample
+              version1Variable: type
+            - catSetID: collectCatSet
+              partID: mspsDep
+              partType: category
+              version1Category: mooreSw
+              version1Location: variableCategories
+              version1Table: Site
+              version1Variable: SampleCollectionDefault
+            - catSetID: collectCatSet
+              partID: otco
+              partType: category
+              version1Category: other
+              version1Location: variableCategories
+              version1Table: Site
+              version1Variable: SampleCollectionDefault
+            - catSetID: collectCatSet
+              partID: repGrab
+              partType: category
+              version1Category: grb
+              version1Location: variableCategories
+              version1Table: Site
+              version1Variable: SampleCollectionDefault
+            ruleID: invalid_category
+          - meta:
+            - dataType: categorical
+              partID: collType
+              samples: fk
+              samplesRequired: mandatory
+              version1Location: variables
+              version1Table: sample
+              version1Variable: collection
+            ruleID: invalid_type
+          - meta:
+            - minLength: '0'
+              partID: collType
+              samples: fk
+              samplesRequired: mandatory
+              version1Location: variables
+              version1Table: sample
+              version1Variable: collection
+            ruleID: less_than_min_length
+          - meta:
+            - partID: collType
+              samples: fk
+              samplesRequired: mandatory
+              version1Location: variables
+              version1Table: sample
+              version1Variable: collection
+            ruleID: missing_mandatory_column
+          - meta:
+            - partID: collType
+              samples: fk
+              samplesRequired: mandatory
+              version1Location: variables
+              version1Table: sample
+              version1Variable: collection
+            ruleID: missing_values_found
+          required: true
+          type: string
+        dateTime:
+          coerce: datetime
+          emptyTrimmed: false
+          forbidden:
+          - NA
+          - nan
+          - nr
+          - 'null'
+          - undisc
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              partID: collDT
+              samples: header
+              samplesRequired: mandatory
+              version1Location: variables
+              version1Table: Sample
+              version1Variable: dateTime
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: datetime
+              partID: collDT
+              samples: header
+              samplesRequired: mandatory
+              version1Location: variables
+              version1Table: Sample
+              version1Variable: dateTime
+            ruleID: invalid_type
+          - meta:
+            - minLength: '0'
+              partID: collDT
+              samples: header
+              samplesRequired: mandatory
+              version1Location: variables
+              version1Table: Sample
+              version1Variable: dateTime
+            ruleID: less_than_min_length
+          - meta:
+            - partID: collDT
+              samples: header
+              samplesRequired: mandatory
+              version1Location: variables
+              version1Table: Sample
+              version1Variable: dateTime
+            ruleID: missing_mandatory_column
+          - meta:
+            - partID: collDT
+              samples: header
+              samplesRequired: mandatory
+              version1Location: variables
+              version1Table: Sample
+              version1Variable: dateTime
+            ruleID: missing_values_found
+          required: true
+          type: datetime
+        dateTimeEnd:
+          coerce: datetime
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              partID: collDTEnd
+              samples: header
+              samplesRequired: optional
+              version1Location: variables
+              version1Table: Sample
+              version1Variable: dateTimeEnd
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: datetime
+              partID: collDTEnd
+              samples: header
+              samplesRequired: optional
+              version1Location: variables
+              version1Table: Sample
+              version1Variable: dateTimeEnd
+            ruleID: invalid_type
+          - meta:
+            - minLength: '0'
+              partID: collDTEnd
+              samples: header
+              samplesRequired: optional
+              version1Location: variables
+              version1Table: Sample
+              version1Variable: dateTimeEnd
+            ruleID: less_than_min_length
+          type: datetime
+        dateTimeStart:
+          coerce: datetime
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              partID: collDTStart
+              samples: header
+              samplesRequired: optional
+              version1Location: variables
+              version1Table: Sample
+              version1Variable: dateTimeStart
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: datetime
+              partID: collDTStart
+              samples: header
+              samplesRequired: optional
+              version1Location: variables
+              version1Table: Sample
+              version1Variable: dateTimeStart
+            ruleID: invalid_type
+          - meta:
+            - minLength: '0'
+              partID: collDTStart
+              samples: header
+              samplesRequired: optional
+              version1Location: variables
+              version1Table: Sample
+              version1Variable: dateTimeStart
+            ruleID: less_than_min_length
+          type: datetime
+        organization:
+          maxlength: 100
+          meta:
+          - meta:
+            - maxLength: '100'
+              partID: organizationID
+              samples: header
+              samplesRequired: optional
+              version1Location: variables
+              version1Table: Reporter
+              version1Variable: organization
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              partID: organizationID
+              samples: header
+              samplesRequired: optional
+              version1Location: variables
+              version1Table: Reporter
+              version1Variable: organization
+            ruleID: invalid_type
+          - meta:
+            - minLength: '0'
+              partID: organizationID
+              samples: header
+              samplesRequired: optional
+              version1Location: variables
+              version1Table: Reporter
+              version1Variable: organization
+            ruleID: less_than_min_length
+          type: string
+        parent:
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              partID: parent
+              version1Location: variables
+              version1Table: Sample
+              version1Variable: parent
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              partID: parent
+              version1Location: variables
+              version1Table: Sample
+              version1Variable: parent
+            ruleID: invalid_type
+          - meta:
+            - minLength: '0'
+              partID: parent
+              version1Location: variables
+              version1Table: Sample
+              version1Variable: parent
+            ruleID: less_than_min_length
+          type: string
+        pooled:
+          allowed:
+          - accessToAllOrg
+          - detected
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              partID: pooled
+              samples: header
+              samplesRequired: optional
+              version1Location: variables
+              version1Table: Sample
+              version1Variable: pooled
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: boolean
+              partID: pooled
+              samples: header
+              samplesRequired: optional
+              version1Location: variables
+              version1Table: Sample
+              version1Variable: pooled
+            ruleID: invalid_type
+          - meta:
+            - minLength: '0'
+              partID: pooled
+              samples: header
+              samplesRequired: optional
+              version1Location: variables
+              version1Table: Sample
+              version1Variable: pooled
+            ruleID: less_than_min_length
+          type: string
+        preTreatmentDescription:
+          maxlength: 255
+          meta:
+          - meta:
+            - maxLength: '255'
+              partID: ptDescDep
+              version1Location: variables
+              version1Table: Sample
+              version1Variable: preTreatmentDescription
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              partID: ptDescDep
+              version1Location: variables
+              version1Table: Sample
+              version1Variable: preTreatmentDescription
+            ruleID: invalid_type
+          - meta:
+            - minLength: '0'
+              partID: ptDescDep
+              version1Location: variables
+              version1Table: Sample
+              version1Variable: preTreatmentDescription
+            ruleID: less_than_min_length
+          type: string
+        sampleID:
+          emptyTrimmed: false
+          forbidden:
+          - NA
+          - nan
+          - nr
+          - 'null'
+          - undisc
+          maxlength: 30
+          meta:
+          - meta:
+            - partID: sampleID
+              samples: pK
+              samplesRequired: mandatory
+              version1Location: variables
+              version1Table: Sample
+              version1Variable: sampleID
+            ruleID: duplicate_entries_found
+          - meta:
+            - maxLength: '30'
+              partID: sampleID
+              samples: pK
+              samplesRequired: mandatory
+              version1Location: variables
+              version1Table: Sample
+              version1Variable: sampleID
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              partID: sampleID
+              samples: pK
+              samplesRequired: mandatory
+              version1Location: variables
+              version1Table: Sample
+              version1Variable: sampleID
+            ruleID: invalid_type
+          - meta:
+            - minLength: '0'
+              partID: sampleID
+              samples: pK
+              samplesRequired: mandatory
+              version1Location: variables
+              version1Table: Sample
+              version1Variable: sampleID
+            ruleID: less_than_min_length
+          - meta:
+            - partID: sampleID
+              samples: pK
+              samplesRequired: mandatory
+              version1Location: variables
+              version1Table: Sample
+              version1Variable: sampleID
+            ruleID: missing_mandatory_column
+          - meta:
+            - partID: sampleID
+              samples: pK
+              samplesRequired: mandatory
+              version1Location: variables
+              version1Table: Sample
+              version1Variable: sampleID
+            ruleID: missing_values_found
+          required: true
+          type: string
+          unique: true
+        siteID:
+          emptyTrimmed: false
+          forbidden:
+          - NA
+          - nan
+          - nr
+          - 'null'
+          - undisc
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              partID: siteID
+              samples: fK
+              samplesRequired: mandatory
+              version1Location: variables
+              version1Table: Site
+              version1Variable: siteID
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              partID: siteID
+              samples: fK
+              samplesRequired: mandatory
+              version1Location: variables
+              version1Table: Site
+              version1Variable: siteID
+            ruleID: invalid_type
+          - meta:
+            - minLength: '0'
+              partID: siteID
+              samples: fK
+              samplesRequired: mandatory
+              version1Location: variables
+              version1Table: Site
+              version1Variable: siteID
+            ruleID: less_than_min_length
+          - meta:
+            - partID: siteID
+              samples: fK
+              samplesRequired: mandatory
+              version1Location: variables
+              version1Table: Site
+              version1Variable: siteID
+            ruleID: missing_mandatory_column
+          - meta:
+            - partID: siteID
+              samples: fK
+              samplesRequired: mandatory
+              version1Location: variables
+              version1Table: Site
+              version1Variable: siteID
+            ruleID: missing_values_found
+          required: true
+          type: string
+        type:
+          allowed:
+          - hTank
+          - pEfflu
+          - pSludge
+          - pstGrit
+          - rawWW
+          - sEfflu
+          - sSludge
+          - swrSed
+          - water
+          emptyTrimmed: false
+          forbidden:
+          - NA
+          - nan
+          - nr
+          - 'null'
+          - undisc
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              partID: saMaterial
+              samples: fK
+              samplesRequired: mandatory
+              version1Location: variables
+              version1Table: Sample
+              version1Variable: type
+            ruleID: greater_than_max_length
+          - meta:
+            - catSetID: sampleMatCatSet
+              dataType: categorical
+              partID: saMaterial
+              version1Location: variables
+              version1Table: Sample
+              version1Variable: type
+            - catSetID: collectCatSet
+              partID: hoTaWa
+              partType: category
+              version1Category: hTank
+              version1Location: variableCategories
+              version1Table: Sample
+              version1Variable: type
+            - partID: nww
+              partType: category
+              version1Category: water
+              version1Location: variableCategories
+              version1Table: Sample
+              version1Variable: type
+            - partID: pEfflu
+              partType: category
+              version1Category: pEfflu
+              version1Location: variableCategories
+              version1Table: Sample
+              version1Variable: type
+            - partID: pSludge
+              partType: category
+              version1Category: pSludge
+              version1Location: variableCategories
+              version1Table: Sample
+              version1Variable: type
+            - partID: pstGrit
+              partType: category
+              version1Category: pstGrit
+              version1Location: variableCategories
+              version1Table: Sample
+              version1Variable: type
+            - partID: rawWW
+              partType: category
+              version1Category: rawWW
+              version1Location: variableCategories
+              version1Table: Sample
+              version1Variable: type
+            - partID: sEfflu
+              partType: category
+              version1Category: sEfflu
+              version1Location: variableCategories
+              version1Table: Sample
+              version1Variable: type
+            - partID: sSludge
+              partType: category
+              version1Category: sSludge
+              version1Location: variableCategories
+              version1Table: Sample
+              version1Variable: type
+            - partID: swrSed
+              partType: category
+              version1Category: swrSed
+              version1Location: variableCategories
+              version1Table: Sample
+              version1Variable: type
+            ruleID: invalid_category
+          - meta:
+            - dataType: categorical
+              partID: saMaterial
+              samples: fK
+              samplesRequired: mandatory
+              version1Location: variables
+              version1Table: Sample
+              version1Variable: type
+            ruleID: invalid_type
+          - meta:
+            - minLength: '0'
+              partID: saMaterial
+              samples: fK
+              samplesRequired: mandatory
+              version1Location: variables
+              version1Table: Sample
+              version1Variable: type
+            ruleID: less_than_min_length
+          - meta:
+            - partID: saMaterial
+              samples: fK
+              samplesRequired: mandatory
+              version1Location: variables
+              version1Table: Sample
+              version1Variable: type
+            ruleID: missing_mandatory_column
+          - meta:
+            - partID: saMaterial
+              samples: fK
+              samplesRequired: mandatory
+              version1Location: variables
+              version1Table: Sample
+              version1Variable: type
+            ruleID: missing_values_found
+          required: true
+          type: string
+        updateDate:
+          coerce: datetime
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              partID: lastEdited
+              samples: header
+              samplesRequired: optional
+              version1Location: variables
+              version1Table: Lab
+              version1Variable: updateDate
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: datetime
+              partID: lastEdited
+              samples: header
+              samplesRequired: optional
+              version1Location: variables
+              version1Table: Lab
+              version1Variable: updateDate
+            ruleID: invalid_type
+          - meta:
+            - minLength: '0'
+              partID: lastEdited
+              samples: header
+              samplesRequired: optional
+              version1Location: variables
+              version1Table: Lab
+              version1Variable: updateDate
+            ruleID: less_than_min_length
+          type: datetime
+      type: dict
+    type: list
+  Site:
+    schema:
+      meta:
+      - partID: sites
+        partType: table
+        version1Location: Tables
+        version1Table: Site
+      schema:
+        geoLat:
+          coerce: float
+          max: 90.0
+          meta:
+          - meta:
+            - maxValue: '90'
+              partID: geoLat
+              sites: header
+              sitesRequired: mandatoryIf
+              version1Location: variables
+              version1Table: Site
+              version1Variable: geoLat
+            ruleID: greater_than_max_value
+          - meta:
+            - dataType: float
+              partID: geoLat
+              sites: header
+              sitesRequired: mandatoryIf
+              version1Location: variables
+              version1Table: Site
+              version1Variable: geoLat
+            ruleID: invalid_type
+          - meta:
+            - minValue: '-90'
+              partID: geoLat
+              sites: header
+              sitesRequired: mandatoryIf
+              version1Location: variables
+              version1Table: Site
+              version1Variable: geoLat
+            ruleID: less_than_min_value
+          min: -90.0
+          type: float
+        geoLong:
+          coerce: float
+          max: 180.0
+          meta:
+          - meta:
+            - maxValue: '180'
+              partID: geoLong
+              sites: header
+              sitesRequired: mandatoryIf
+              version1Location: variables
+              version1Table: Site
+              version1Variable: geoLong
+            ruleID: greater_than_max_value
+          - meta:
+            - dataType: float
+              partID: geoLong
+              sites: header
+              sitesRequired: mandatoryIf
+              version1Location: variables
+              version1Table: Site
+              version1Variable: geoLong
+            ruleID: invalid_type
+          - meta:
+            - minValue: '-180'
+              partID: geoLong
+              sites: header
+              sitesRequired: mandatoryIf
+              version1Location: variables
+              version1Table: Site
+              version1Variable: geoLong
+            ruleID: less_than_min_value
+          min: -180.0
+          type: float
+        healthRegion:
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              partID: healthReg
+              sites: header
+              sitesRequired: optional
+              version1Location: variables
+              version1Table: Site
+              version1Variable: healthRegion
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              partID: healthReg
+              sites: header
+              sitesRequired: optional
+              version1Location: variables
+              version1Table: Site
+              version1Variable: healthRegion
+            ruleID: invalid_type
+          - meta:
+            - minLength: '0'
+              partID: healthReg
+              sites: header
+              sitesRequired: optional
+              version1Location: variables
+              version1Table: Site
+              version1Variable: healthRegion
+            ruleID: less_than_min_length
+          type: string
+        organization:
+          maxlength: 100
+          meta:
+          - meta:
+            - maxLength: '100'
+              partID: organizationID
+              sites: header
+              sitesRequired: optional
+              version1Location: variables
+              version1Table: Reporter
+              version1Variable: organization
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              partID: organizationID
+              sites: header
+              sitesRequired: optional
+              version1Location: variables
+              version1Table: Reporter
+              version1Variable: organization
+            ruleID: invalid_type
+          - meta:
+            - minLength: '0'
+              partID: organizationID
+              sites: header
+              sitesRequired: optional
+              version1Location: variables
+              version1Table: Reporter
+              version1Variable: organization
+            ruleID: less_than_min_length
+          type: string
+        polygonID:
+          maxlength: 10
+          meta:
+          - meta:
+            - maxLength: '10'
+              partID: polygonID
+              sites: fK
+              sitesRequired: optional
+              version1Location: variables
+              version1Table: Polygon
+              version1Variable: polygonID
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              partID: polygonID
+              sites: fK
+              sitesRequired: optional
+              version1Location: variables
+              version1Table: Polygon
+              version1Variable: polygonID
+            ruleID: invalid_type
+          - meta:
+            - minLength: '0'
+              partID: polygonID
+              sites: fK
+              sitesRequired: optional
+              version1Location: variables
+              version1Table: Polygon
+              version1Variable: polygonID
+            ruleID: less_than_min_length
+          type: string
+        publicHealthDepartment:
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              partID: pHDept
+              sites: header
+              sitesRequired: optional
+              version1Location: variables
+              version1Table: Site
+              version1Variable: publicHealthDepartment
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              partID: pHDept
+              sites: header
+              sitesRequired: optional
+              version1Location: variables
+              version1Table: Site
+              version1Variable: publicHealthDepartment
+            ruleID: invalid_type
+          - meta:
+            - minLength: '0'
+              partID: pHDept
+              sites: header
+              sitesRequired: optional
+              version1Location: variables
+              version1Table: Site
+              version1Variable: publicHealthDepartment
+            ruleID: less_than_min_length
+          type: string
+        sampleStorageTempCDefault:
+          maxlength: 65535
+          meta:
+          - meta:
+            - maxLength: '65535'
+              partID: storTempDef
+              version1Location: variables
+              version1Table: Site
+              version1Variable: sampleStorageTempCDefault
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: blob
+              partID: storTempDef
+              version1Location: variables
+              version1Table: Site
+              version1Variable: sampleStorageTempCDefault
+            ruleID: invalid_type
+          - meta:
+            - minLength: '0'
+              partID: storTempDef
+              version1Location: variables
+              version1Table: Site
+              version1Variable: sampleStorageTempCDefault
+            ruleID: less_than_min_length
+        sewerNetworkFileBLOB:
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              partID: sewerNetworkFileBLOB
+              version1Location: variables
+              version1Table: Site
+              version1Variable: sewerNetworkFileBLOB
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              partID: sewerNetworkFileBLOB
+              version1Location: variables
+              version1Table: Site
+              version1Variable: sewerNetworkFileBLOB
+            ruleID: invalid_type
+          - meta:
+            - minLength: '0'
+              partID: sewerNetworkFileBLOB
+              version1Location: variables
+              version1Table: Site
+              version1Variable: sewerNetworkFileBLOB
+            ruleID: less_than_min_length
+          type: string
+        sewerNetworkFileLink:
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              partID: snfl
+              version1Location: variables
+              version1Table: Site
+              version1Variable: sewerNetworkFileLink
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              partID: snfl
+              version1Location: variables
+              version1Table: Site
+              version1Variable: sewerNetworkFileLink
+            ruleID: invalid_type
+          - meta:
+            - minLength: '0'
+              partID: snfl
+              version1Location: variables
+              version1Table: Site
+              version1Variable: sewerNetworkFileLink
+            ruleID: less_than_min_length
+          type: string
+        siteID:
+          emptyTrimmed: false
+          forbidden:
+          - NA
+          - nan
+          - nr
+          - 'null'
+          - undisc
+          maxlength: 30
+          meta:
+          - meta:
+            - partID: siteID
+              sites: pK
+              sitesRequired: mandatory
+              version1Location: variables
+              version1Table: Site
+              version1Variable: siteID
+            ruleID: duplicate_entries_found
+          - meta:
+            - maxLength: '30'
+              partID: siteID
+              sites: pK
+              sitesRequired: mandatory
+              version1Location: variables
+              version1Table: Site
+              version1Variable: siteID
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              partID: siteID
+              sites: pK
+              sitesRequired: mandatory
+              version1Location: variables
+              version1Table: Site
+              version1Variable: siteID
+            ruleID: invalid_type
+          - meta:
+            - minLength: '0'
+              partID: siteID
+              sites: pK
+              sitesRequired: mandatory
+              version1Location: variables
+              version1Table: Site
+              version1Variable: siteID
+            ruleID: less_than_min_length
+          - meta:
+            - partID: siteID
+              sites: pK
+              sitesRequired: mandatory
+              version1Location: variables
+              version1Table: Site
+              version1Variable: siteID
+            ruleID: missing_mandatory_column
+          - meta:
+            - partID: siteID
+              sites: pK
+              sitesRequired: mandatory
+              version1Location: variables
+              version1Table: Site
+              version1Variable: siteID
+            ruleID: missing_values_found
+          required: true
+          type: string
+          unique: true
+        type:
+          allowed:
+          - airPln
+          - corFcil
+          - estuary
+          - faeces
+          - holdTnk
+          - hosptl
+          - lagoon
+          - lake
+          - ltcf
+          - mSwrPpl
+          - ocean
+          - other
+          - pStat
+          - retPond
+          - river
+          - school
+          - sea
+          - septTnk
+          - swgTrck
+          - uCampus
+          - wwtpInd
+          - wwtpMuC
+          - wwtpMuS
+          emptyTrimmed: false
+          forbidden:
+          - NA
+          - nan
+          - nr
+          - 'null'
+          - undisc
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              partID: siteTypeID
+              sites: fK
+              sitesRequired: mandatory
+              version1Location: variables
+              version1Table: Site
+              version1Variable: type
+            ruleID: greater_than_max_length
+          - meta:
+            - catSetID: siteTypeCatSet
+              dataType: categorical
+              partID: siteTypeID
+              version1Location: variables
+              version1Table: Site
+              version1Variable: type
+            - partID: airpln
+              partType: category
+              version1Category: airPln
+              version1Location: variableCategories
+              version1Table: Site
+              version1Variable: type
+            - partID: corFcil
+              partType: category
+              version1Category: corFcil
+              version1Location: variableCategories
+              version1Table: Site
+              version1Variable: type
+            - partID: estuary
+              partType: category
+              version1Category: estuary
+              version1Location: variableCategories
+              version1Table: Site
+              version1Variable: type
+            - partID: faeces
+              partType: category
+              version1Category: faeces
+              version1Location: variableCategories
+              version1Table: Site
+              version1Variable: type
+            - partID: hosptl
+              partType: category
+              version1Category: hosptl
+              version1Location: variableCategories
+              version1Table: Site
+              version1Variable: type
+            - partID: htSite
+              partType: category
+              version1Category: holdTnk
+              version1Location: variableCategories
+              version1Table: Site
+              version1Variable: type
+            - partID: lagoon
+              partType: category
+              version1Category: lagoon
+              version1Location: variableCategories
+              version1Table: Site
+              version1Variable: type
+            - partID: lake
+              partType: category
+              version1Category: lake
+              version1Location: variableCategories
+              version1Table: Site
+              version1Variable: type
+            - partID: ltcf
+              partType: category
+              version1Category: ltcf
+              version1Location: variableCategories
+              version1Table: Site
+              version1Variable: type
+            - partID: mSwrPpl
+              partType: category
+              version1Category: mSwrPpl
+              version1Location: variableCategories
+              version1Table: Site
+              version1Variable: type
+            - partID: ocean
+              partType: category
+              version1Category: ocean
+              version1Location: variableCategories
+              version1Table: Site
+              version1Variable: type
+            - catSetID: siteTypeCatSet
+              partID: otsisiDep
+              partType: category
+              version1Category: other
+              version1Location: variableCategories
+              version1Table: Site
+              version1Variable: type
+            - partID: pStat
+              partType: category
+              version1Category: pStat
+              version1Location: variableCategories
+              version1Table: Site
+              version1Variable: type
+            - partID: retPond
+              partType: category
+              version1Category: retPond
+              version1Location: variableCategories
+              version1Table: Site
+              version1Variable: type
+            - partID: river
+              partType: category
+              version1Category: river
+              version1Location: variableCategories
+              version1Table: Site
+              version1Variable: type
+            - partID: school
+              partType: category
+              version1Category: school
+              version1Location: variableCategories
+              version1Table: Site
+              version1Variable: type
+            - partID: sea
+              partType: category
+              version1Category: sea
+              version1Location: variableCategories
+              version1Table: Site
+              version1Variable: type
+            - partID: septTnk
+              partType: category
+              version1Category: septTnk
+              version1Location: variableCategories
+              version1Table: Site
+              version1Variable: type
+            - partID: swgTrck
+              partType: category
+              version1Category: swgTrck
+              version1Location: variableCategories
+              version1Table: Site
+              version1Variable: type
+            - partID: uCampus
+              partType: category
+              version1Category: uCampus
+              version1Location: variableCategories
+              version1Table: Site
+              version1Variable: type
+            - partID: wwtpInd
+              partType: category
+              version1Category: wwtpInd
+              version1Location: variableCategories
+              version1Table: Site
+              version1Variable: type
+            - partID: wwtpMuC
+              partType: category
+              version1Category: wwtpMuC
+              version1Location: variableCategories
+              version1Table: Site
+              version1Variable: type
+            - partID: wwtpMuS
+              partType: category
+              version1Category: wwtpMuS
+              version1Location: variableCategories
+              version1Table: Site
+              version1Variable: type
+            ruleID: invalid_category
+          - meta:
+            - dataType: categorical
+              partID: siteTypeID
+              sites: fK
+              sitesRequired: mandatory
+              version1Location: variables
+              version1Table: Site
+              version1Variable: type
+            ruleID: invalid_type
+          - meta:
+            - minLength: '0'
+              partID: siteTypeID
+              sites: fK
+              sitesRequired: mandatory
+              version1Location: variables
+              version1Table: Site
+              version1Variable: type
+            ruleID: less_than_min_length
+          - meta:
+            - partID: siteTypeID
+              sites: fK
+              sitesRequired: mandatory
+              version1Location: variables
+              version1Table: Site
+              version1Variable: type
+            ruleID: missing_mandatory_column
+          - meta:
+            - partID: siteTypeID
+              sites: fK
+              sitesRequired: mandatory
+              version1Location: variables
+              version1Table: Site
+              version1Variable: type
+            ruleID: missing_values_found
+          required: true
+          type: string
+        typeOther:
+          maxlength: 100
+          meta:
+          - meta:
+            - maxLength: '100'
+              partID: tyOtDep2
+              version1Location: variables
+              version1Table: Site
+              version1Variable: typeOther
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              partID: tyOtDep2
+              version1Location: variables
+              version1Table: Site
+              version1Variable: typeOther
+            ruleID: invalid_type
+          - meta:
+            - minLength: '0'
+              partID: tyOtDep2
+              version1Location: variables
+              version1Table: Site
+              version1Variable: typeOther
+            ruleID: less_than_min_length
+          type: string
+        updateDate:
+          coerce: datetime
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              partID: lastEdited
+              sites: header
+              sitesRequired: optional
+              version1Location: variables
+              version1Table: Lab
+              version1Variable: updateDate
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: datetime
+              partID: lastEdited
+              sites: header
+              sitesRequired: optional
+              version1Location: variables
+              version1Table: Lab
+              version1Variable: updateDate
+            ruleID: invalid_type
+          - meta:
+            - minLength: '0'
+              partID: lastEdited
+              sites: header
+              sitesRequired: optional
+              version1Location: variables
+              version1Table: Lab
+              version1Variable: updateDate
+            ruleID: less_than_min_length
+          type: datetime
+      type: dict
+    type: list
+  WWMeasure:
+    schema:
+      meta:
+      - partID: measures
+        partType: table
+        version1Location: Tables
+        version1Table: WWMeasure; SiteMeasure;CovidPublicHealthData
+      schema:
+        analysisDate:
+          coerce: datetime
+          emptyTrimmed: false
+          forbidden:
+          - NA
+          - nan
+          - nr
+          - 'null'
+          - undisc
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              measures: header
+              measuresRequired: mandatory
+              partID: aDateEnd
+              version1Location: variables
+              version1Table: WWMeasure
+              version1Variable: analysisDate
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: datetime
+              measures: header
+              measuresRequired: mandatory
+              partID: aDateEnd
+              version1Location: variables
+              version1Table: WWMeasure
+              version1Variable: analysisDate
+            ruleID: invalid_type
+          - meta:
+            - measures: header
+              measuresRequired: mandatory
+              minLength: '0'
+              partID: aDateEnd
+              version1Location: variables
+              version1Table: WWMeasure
+              version1Variable: analysisDate
+            ruleID: less_than_min_length
+          - meta:
+            - measures: header
+              measuresRequired: mandatory
+              partID: aDateEnd
+              version1Location: variables
+              version1Table: WWMeasure
+              version1Variable: analysisDate
+            ruleID: missing_mandatory_column
+          - meta:
+            - measures: header
+              measuresRequired: mandatory
+              partID: aDateEnd
+              version1Location: variables
+              version1Table: WWMeasure
+              version1Variable: analysisDate
+            ruleID: missing_values_found
+          required: true
+          type: datetime
+        dateTime:
+          coerce: datetime
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              measures: header
+              measuresRequired: optional
+              partID: aDateStart
+              version1Location: variables
+              version1Table: SiteMeasure
+              version1Variable: dateTime
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: datetime
+              measures: header
+              measuresRequired: optional
+              partID: aDateStart
+              version1Location: variables
+              version1Table: SiteMeasure
+              version1Variable: dateTime
+            ruleID: invalid_type
+          - meta:
+            - measures: header
+              measuresRequired: optional
+              minLength: '0'
+              partID: aDateStart
+              version1Location: variables
+              version1Table: SiteMeasure
+              version1Variable: dateTime
+            ruleID: less_than_min_length
+          type: datetime
+        fractionAnalyzed:
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              measures: fK
+              measuresRequired: recommended
+              partID: fractionID
+              version1Location: variables
+              version1Table: WWmeasure
+              version1Variable: fractionAnalyzed
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: categorical
+              measures: fK
+              measuresRequired: recommended
+              partID: fractionID
+              version1Location: variables
+              version1Table: WWmeasure
+              version1Variable: fractionAnalyzed
+            ruleID: invalid_type
+          - meta:
+            - measures: fK
+              measuresRequired: recommended
+              minLength: '0'
+              partID: fractionID
+              version1Location: variables
+              version1Table: WWmeasure
+              version1Variable: fractionAnalyzed
+            ruleID: less_than_min_length
+          type: string
+        index:
+          coerce: integer
+          maxlength: 50
+          meta:
+          - meta:
+            - maxLength: '50'
+              measures: header
+              measuresRequired: optional
+              partID: index
+              version1Location: variables
+              version1Table: WWMeasure
+              version1Variable: index
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: integer
+              measures: header
+              measuresRequired: optional
+              partID: index
+              version1Location: variables
+              version1Table: WWMeasure
+              version1Variable: index
+            ruleID: invalid_type
+          - meta:
+            - measures: header
+              measuresRequired: optional
+              minLength: '0'
+              partID: index
+              version1Location: variables
+              version1Table: WWMeasure
+              version1Variable: index
+            ruleID: less_than_min_length
+          type: integer
+        organization:
+          maxlength: 100
+          meta:
+          - meta:
+            - maxLength: '100'
+              measures: header
+              measuresRequired: optional
+              partID: organizationID
+              version1Location: variables
+              version1Table: Reporter
+              version1Variable: organization
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              measures: header
+              measuresRequired: optional
+              partID: organizationID
+              version1Location: variables
+              version1Table: Reporter
+              version1Variable: organization
+            ruleID: invalid_type
+          - meta:
+            - measures: header
+              measuresRequired: optional
+              minLength: '0'
+              partID: organizationID
+              version1Location: variables
+              version1Table: Reporter
+              version1Variable: organization
+            ruleID: less_than_min_length
+          type: string
+        polygonID:
+          maxlength: 10
+          meta:
+          - meta:
+            - maxLength: '10'
+              measures: fK
+              measuresRequired: optional
+              partID: polygonID
+              version1Location: variables
+              version1Table: Polygon
+              version1Variable: polygonID
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              measures: fK
+              measuresRequired: optional
+              partID: polygonID
+              version1Location: variables
+              version1Table: Polygon
+              version1Variable: polygonID
+            ruleID: invalid_type
+          - meta:
+            - measures: fK
+              measuresRequired: optional
+              minLength: '0'
+              partID: polygonID
+              version1Location: variables
+              version1Table: Polygon
+              version1Variable: polygonID
+            ruleID: less_than_min_length
+          type: string
+        referenceLink:
+          maxlength: 255
+          meta:
+          - meta:
+            - maxLength: '255'
+              measures: header
+              measuresRequired: optional
+              partID: refLink
+              version1Location: variables
+              version1Table: AssayMethod, Insturment
+              version1Variable: referenceLink
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              measures: header
+              measuresRequired: optional
+              partID: refLink
+              version1Location: variables
+              version1Table: AssayMethod, Insturment
+              version1Variable: referenceLink
+            ruleID: invalid_type
+          - meta:
+            - measures: header
+              measuresRequired: optional
+              minLength: '0'
+              partID: refLink
+              version1Location: variables
+              version1Table: AssayMethod, Insturment
+              version1Variable: referenceLink
+            ruleID: less_than_min_length
+          type: string
+        reportDate:
+          coerce: datetime
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              measures: header
+              measuresRequired: optional
+              partID: reportDate
+              version1Location: variables
+              version1Table: WWMeasure
+              version1Variable: reportDate
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: datetime
+              measures: header
+              measuresRequired: optional
+              partID: reportDate
+              version1Location: variables
+              version1Table: WWMeasure
+              version1Variable: reportDate
+            ruleID: invalid_type
+          - meta:
+            - measures: header
+              measuresRequired: optional
+              minLength: '0'
+              partID: reportDate
+              version1Location: variables
+              version1Table: WWMeasure
+              version1Variable: reportDate
+            ruleID: less_than_min_length
+          type: datetime
+        sampleID:
+          emptyTrimmed: false
+          forbidden:
+          - NA
+          - nan
+          - nr
+          - 'null'
+          - undisc
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              measures: fK
+              measuresRequired: mandatory
+              partID: sampleID
+              version1Location: variables
+              version1Table: Sample
+              version1Variable: sampleID
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              measures: fK
+              measuresRequired: mandatory
+              partID: sampleID
+              version1Location: variables
+              version1Table: Sample
+              version1Variable: sampleID
+            ruleID: invalid_type
+          - meta:
+            - measures: fK
+              measuresRequired: mandatory
+              minLength: '0'
+              partID: sampleID
+              version1Location: variables
+              version1Table: Sample
+              version1Variable: sampleID
+            ruleID: less_than_min_length
+          - meta:
+            - measures: fK
+              measuresRequired: mandatory
+              partID: sampleID
+              version1Location: variables
+              version1Table: Sample
+              version1Variable: sampleID
+            ruleID: missing_mandatory_column
+          - meta:
+            - measures: fK
+              measuresRequired: mandatory
+              partID: sampleID
+              version1Location: variables
+              version1Table: Sample
+              version1Variable: sampleID
+            ruleID: missing_values_found
+          required: true
+          type: string
+        siteID:
+          emptyTrimmed: false
+          forbidden:
+          - NA
+          - nan
+          - nr
+          - 'null'
+          - undisc
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              measures: fK
+              measuresRequired: mandatory
+              partID: siteID
+              version1Location: variables
+              version1Table: Site
+              version1Variable: siteID
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              measures: fK
+              measuresRequired: mandatory
+              partID: siteID
+              version1Location: variables
+              version1Table: Site
+              version1Variable: siteID
+            ruleID: invalid_type
+          - meta:
+            - measures: fK
+              measuresRequired: mandatory
+              minLength: '0'
+              partID: siteID
+              version1Location: variables
+              version1Table: Site
+              version1Variable: siteID
+            ruleID: less_than_min_length
+          - meta:
+            - measures: fK
+              measuresRequired: mandatory
+              partID: siteID
+              version1Location: variables
+              version1Table: Site
+              version1Variable: siteID
+            ruleID: missing_mandatory_column
+          - meta:
+            - measures: fK
+              measuresRequired: mandatory
+              partID: siteID
+              version1Location: variables
+              version1Table: Site
+              version1Variable: siteID
+            ruleID: missing_values_found
+          required: true
+          type: string
+        uWwMeasureID:
+          emptyTrimmed: false
+          forbidden:
+          - NA
+          - nan
+          - nr
+          - 'null'
+          - undisc
+          maxlength: 30
+          meta:
+          - meta:
+            - measures: pK
+              measuresRequired: mandatory
+              partID: measureRepID
+              version1Location: variables
+              version1Table: WWMeasure
+              version1Variable: uWwMeasureID
+            ruleID: duplicate_entries_found
+          - meta:
+            - maxLength: '30'
+              measures: pK
+              measuresRequired: mandatory
+              partID: measureRepID
+              version1Location: variables
+              version1Table: WWMeasure
+              version1Variable: uWwMeasureID
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              measures: pK
+              measuresRequired: mandatory
+              partID: measureRepID
+              version1Location: variables
+              version1Table: WWMeasure
+              version1Variable: uWwMeasureID
+            ruleID: invalid_type
+          - meta:
+            - measures: pK
+              measuresRequired: mandatory
+              minLength: '0'
+              partID: measureRepID
+              version1Location: variables
+              version1Table: WWMeasure
+              version1Variable: uWwMeasureID
+            ruleID: less_than_min_length
+          - meta:
+            - measures: pK
+              measuresRequired: mandatory
+              partID: measureRepID
+              version1Location: variables
+              version1Table: WWMeasure
+              version1Variable: uWwMeasureID
+            ruleID: missing_mandatory_column
+          - meta:
+            - measures: pK
+              measuresRequired: mandatory
+              partID: measureRepID
+              version1Location: variables
+              version1Table: WWMeasure
+              version1Variable: uWwMeasureID
+            ruleID: missing_values_found
+          required: true
+          type: string
+          unique: true
+        unit:
+          emptyTrimmed: false
+          forbidden:
+          - NA
+          - nan
+          - nr
+          - 'null'
+          - undisc
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              measures: fK
+              measuresRequired: mandatory
+              partID: unitID
+              version1Location: variables
+              version1Table: WWMeasure; SiteMeasure
+              version1Variable: unit
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: categorical
+              measures: fK
+              measuresRequired: mandatory
+              partID: unitID
+              version1Location: variables
+              version1Table: WWMeasure; SiteMeasure
+              version1Variable: unit
+            ruleID: invalid_type
+          - meta:
+            - measures: fK
+              measuresRequired: mandatory
+              minLength: '0'
+              partID: unitID
+              version1Location: variables
+              version1Table: WWMeasure; SiteMeasure
+              version1Variable: unit
+            ruleID: less_than_min_length
+          - meta:
+            - measures: fK
+              measuresRequired: mandatory
+              partID: unitID
+              version1Location: variables
+              version1Table: WWMeasure; SiteMeasure
+              version1Variable: unit
+            ruleID: missing_mandatory_column
+          - meta:
+            - measures: fK
+              measuresRequired: mandatory
+              partID: unitID
+              version1Location: variables
+              version1Table: WWMeasure; SiteMeasure
+              version1Variable: unit
+            ruleID: missing_values_found
+          required: true
+          type: string
+        updateDate:
+          coerce: datetime
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              measures: header
+              measuresRequired: optional
+              partID: lastEdited
+              version1Location: variables
+              version1Table: Lab
+              version1Variable: updateDate
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: datetime
+              measures: header
+              measuresRequired: optional
+              partID: lastEdited
+              version1Location: variables
+              version1Table: Lab
+              version1Variable: updateDate
+            ruleID: invalid_type
+          - meta:
+            - measures: header
+              measuresRequired: optional
+              minLength: '0'
+              partID: lastEdited
+              version1Location: variables
+              version1Table: Lab
+              version1Variable: updateDate
+            ruleID: less_than_min_length
+          type: datetime
+      type: dict
+    type: list
+schemaVersion: 1.1.0

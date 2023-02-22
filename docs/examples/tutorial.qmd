@@ -29,6 +29,7 @@ from os.path import join  # for constructing file paths
 
 # odm-validation
 import odm_validation.utils as utils
+from odm_validation.part_tables import ODM_VERSION_STR
 from odm_validation.validation import generate_validation_schema, validate_data
 
 # our asset directory
@@ -45,7 +46,7 @@ In this example we'll validate a table of samples with the default schema. The
 `validate_data` can take multiple tables at once, so we include our sample table in a Python dictionary with the table name as the key. We are validating the `samples` table in this example.
 
 ```{python}
-schema_file = join(ASSET_DIR, "validation-schemas/schema-v2.0.0-rc.1.yml")
+schema_file = join(ASSET_DIR, f"validation-schemas/schema-v{ODM_VERSION_STR}.yml")
 schema = utils.import_schema(schema_file)
 samples = utils.import_dataset("samples.csv")
 data = {"samples": samples}
@@ -107,7 +108,7 @@ using the `generate_validation_schema` function. The version parameter
 determines which version of the ODM the schema will be compatible with.
 
 ```{python}
-version = '2.0.0-rc.1'
+version = ODM_VERSION_STR
 parts_file = join(ASSET_DIR, f"dictionary/v{version}/parts.csv")
 parts = utils.import_dataset(parts_file)
 schema = generate_validation_schema(parts, version)

@@ -69,8 +69,10 @@ def init_rule(rule_id, error, gen_cerb_rules, gen_schema,
     - `gen_cerb_rules` must accept a dummy context of `None` values, and return
       a dict with cerberus rule names as keys.
     """
+    dummy_ctx = OdmValueCtx(value=1, datatype='integer', bool_set=set(),
+                            null_set=set())
+    cerb_keys = list(gen_cerb_rules(dummy_ctx).keys())
     get_error_template = error if callable(error) else (lambda x, y: error)
-    cerb_keys = list(gen_cerb_rules(OdmValueCtx.default()).keys())
     return Rule(
         id=rule_id,
         keys=cerb_keys,
@@ -172,7 +174,10 @@ def less_than_min_length():
            'length of {constraint}')
 
     def gen_cerb_rules(val_ctx: OdmValueCtx):
-        return {'minlength': try_parse_int(val_ctx.value)}
+        val = try_parse_int(val_ctx.value)
+        if val <= 0:
+            return {}
+        return {'minlength': val}
 
     def gen_schema(data: pt.PartData, ver):
         return gen_value_schema(data, ver, rule_id, odm_key, gen_cerb_rules)
@@ -208,18 +213,22 @@ def invalid_category():
         return {cerb_rule_key: None}
 
     def gen_schema(data: pt.PartData, ver: Version):
+        # FIXME: `cat_ids1` contains duplicates due to v1 categories belonging
+        # to multiple tables.
         schema = {}
         for table_id0, table_id1, table in table_items(data, ver):
             table_meta = get_table_meta(table, ver)
             for attr_id0, attr_id1, attr in attr_items(data, table_id0, ver):
-                if not pt.has_catset(attr):
+                cs_data = data.catset_data.get(attr_id0)
+                if not cs_data:
                     continue
-                cs_data = data.catset_data[attr_id0]
                 cs = cs_data.part
                 categories = cs_data.cat_parts
                 cat_ids0 = list(map(pt.get_partID, categories))
                 cat_ids1 = pt.map_ids(data.mappings, cat_ids0, ver)
-                cerb_rule = (cerb_rule_key, cat_ids1)
+                if len(cat_ids1) == 0:
+                    continue
+                cerb_rule = (cerb_rule_key, sorted(set(cat_ids1)))
                 attr_meta = get_catset_meta(table_id0, cs, categories, ver)
                 update_schema(schema, table_id1, attr_id1, rule_id,
                               cerb_rule, table_meta, attr_meta)
@@ -243,14 +252,11 @@ def invalid_type():
                 'Allowed values are ISO 8601 standard full dates, full dates '
                 'and times, or full dates and times with timezone.')
 
-    def get_error_template(odm_value: Any, odm_datatype: str):
-        val = odm_value
-        kind = odm_datatype
-        assert kind
-        if kind == pt.BOOLEAN:
-            assert isinstance(val, str)
+    def get_error_template(odm_value: Any, odm_type: str):
+        if odm_type == pt.BOOLEAN:
+            assert isinstance(odm_value, str)
             return err_bool
-        elif kind == pt.DATETIME:
+        elif odm_type == pt.DATETIME:
             return err_date
         else:
             return err_default

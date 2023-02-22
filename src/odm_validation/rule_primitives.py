@@ -1,6 +1,6 @@
 import logging
 from dataclasses import dataclass
-from logging import warning
+from logging import error, warning
 from typing import Any, Callable, List, Optional, Set
 # from pprint import pprint
 
@@ -26,16 +26,13 @@ class OdmValueCtx:
     bool_set: pt.BoolSet
     null_set: Set[str]
 
-    @staticmethod
-    def default():
-        return OdmValueCtx(value=None, datatype=None, bool_set=None,
-                           null_set={})
-
 
 def get_table_meta(table: Part, version: Version) -> Meta:
     keys = [pt.PART_ID, pt.PART_TYPE]
     if version.major == 1:
-        keys += [pt.V1_LOCATION, pt.V1_TABLE]
+        first, _ = pt.get_version_range(table)
+        if pt.should_have_mapping(table[pt.PART_TYPE], first, pt.ODM_VERSION):
+            keys += [pt.V1_LOCATION, pt.V1_TABLE]
     m: MetaEntry = {k: table[k] for k in keys}
     return [m]
 
@@ -52,17 +49,27 @@ def _get_attr_meta(attr: Part, table_id: PartId, version: Version,
 
 def get_catset_meta(table_id: PartId, catset: Part, categories: List[Part],
                     version: Version) -> Meta:
-    common_keys = [pt.PART_ID, pt.CATSET_ID]
-    catset_keys = common_keys + [table_id, pt.DATA_TYPE]
-    cat_keys = common_keys + [pt.PART_TYPE]
+    # XXX: v1-only category parts don't have catSetID even if they're mapped to
+    # a v2-compatible part that has.
+    catset_keys = [pt.PART_ID, pt.DATA_TYPE]
+    cat_keys = [pt.PART_ID, pt.PART_TYPE]
+
+    if pt.CATSET_ID in catset:
+        catset_keys.append(pt.CATSET_ID)
+
     if version.major == 1:
         v1_keys = [pt.V1_LOCATION, pt.V1_TABLE, pt.V1_VARIABLE]
         catset_keys += v1_keys
         cat_keys += v1_keys + [pt.V1_CATEGORY]
+    else:
+        catset_keys += [table_id]
+
     meta: Meta = []
     meta.append({k: catset[k] for k in catset_keys})
     for cat in categories:
         meta.append({k: cat[k] for k in cat_keys})
+        if pt.CATSET_ID in cat:
+            meta[-1][pt.CATSET_ID] = cat[pt.CATSET_ID]
     return meta
 
 
@@ -73,9 +80,12 @@ def get_part_ids(parts: List[Part]) -> List[PartId]:
 def _get_mapped_part_id(data: PartData, part_id: PartId,
                         version: Version) -> PartId:
     if version.major == 1:
-        return data.mappings[part_id][0]
-    else:
-        return part_id
+        mapping = data.mappings.get(part_id)
+        if mapping:
+            return mapping[0]
+        else:
+            error(f'missing version1 fields in part {part_id}')
+    return part_id
 
 
 def table_items(data: PartData, version: Version):
@@ -93,15 +103,6 @@ def table_items2(data: PartData):
     """Iterates over all table parts from `data`."""
     for _, td in data.table_data.items():
         yield td.part
-
-
-def catset_items(data: PartData, version: Version):
-    """Iterates over all category-set attributes.
-
-    Yields a tuple of: (original id, mapped id, part)."""
-    for attr_id0, cs_data in data.catset_data.items():
-        attr_id1 = _get_mapped_part_id(data, attr_id0, version)
-        yield (attr_id0, attr_id1, cs_data)
 
 
 def attr_items(data: PartData, table_id: PartId, version: Version):
@@ -222,23 +223,26 @@ def gen_conditional_schema(data: pt.PartData, ver: Version, rule_id: str,
 
 
 def _odm_to_cerb_datatype(odm_datatype: str) -> Optional[str]:
+    """converts odm datatype to cerb rule type"""
     t = odm_datatype
     assert t
     if t in ['boolean', 'categorical', 'varchar']:
         return 'string'
     if t in ['datetime', 'integer', 'float']:
         return t
-    logging.error(f'odm datatype {t} is not implemented')
+    logging.warning(f'odm datatype {t} is not implemented')
 
 
-def gen_cerb_rules_for_type(val_ctx: OdmValueCtx):
+def gen_cerb_rules_for_type(val_ctx: OdmValueCtx) -> dict:
     odm_type = val_ctx.datatype
-    cerb_type = _odm_to_cerb_datatype(odm_type) if odm_type else None
-    result = {'type': cerb_type}
-    if cerb_type != 'string':
-        result['coerce'] = cerb_type
-    if odm_type == 'boolean':
-        result['allowed'] = sorted(val_ctx.bool_set)
+    cerb_type = _odm_to_cerb_datatype(odm_type)
+    result = {}
+    if cerb_type:
+        result['type'] = cerb_type
+        if cerb_type != 'string':
+            result['coerce'] = cerb_type
+        if odm_type == 'boolean':
+            result['allowed'] = sorted(val_ctx.bool_set)
     return result
 
 
@@ -254,5 +258,7 @@ def parse_odm_val(val_ctx: OdmValueCtx) -> Optional[Any]:
         return try_parse_float(val)
     elif kind == 'datetime':
         return parse_datetime(val)
+    elif kind == 'varchar':
+        return str(val)
     else:
         assert False, f'{kind} parsing not impl.'
