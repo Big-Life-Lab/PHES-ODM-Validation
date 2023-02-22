@@ -50,6 +50,7 @@ data is ODM-compliant by validating it against a rule-based schema.</p>
 
 <span class="c1"># odm-validation</span>
 <span class="kn">import</span> <span class="nn">odm_validation.utils</span> <span class="k">as</span> <span class="nn">utils</span>
+<span class="kn">from</span> <span class="nn">odm_validation.part_tables</span> <span class="kn">import</span> <span class="n">ODM_VERSION_STR</span>
 <span class="kn">from</span> <span class="nn">odm_validation.validation</span> <span class="kn">import</span> <span class="n">generate_validation_schema</span><span class="p">,</span> <span class="n">validate_data</span>
 
 <span class="c1"># our asset directory</span>
@@ -65,7 +66,7 @@ a validation schema specific to the version of the ODM you’re using.</p>
 schema. The <code class="docutils literal notranslate"><span class="pre">validate_data</span></code> can take multiple tables at once, so we
 include our sample table in a Python dictionary with the table name as
 the key. We are validating the <code class="docutils literal notranslate"><span class="pre">samples</span></code> table in this example.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">schema_file</span> <span class="o">=</span> <span class="n">join</span><span class="p">(</span><span class="n">ASSET_DIR</span><span class="p">,</span> <span class="s2">&quot;validation-schemas/schema-v2.0.0-rc.1.yml&quot;</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">schema_file</span> <span class="o">=</span> <span class="n">join</span><span class="p">(</span><span class="n">ASSET_DIR</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;validation-schemas/schema-v</span><span class="si">{</span><span class="n">ODM_VERSION_STR</span><span class="si">}</span><span class="s2">.yml&quot;</span><span class="p">)</span>
 <span class="n">schema</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">import_schema</span><span class="p">(</span><span class="n">schema_file</span><span class="p">)</span>
 <span class="n">samples</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">import_dataset</span><span class="p">(</span><span class="s2">&quot;samples.csv&quot;</span><span class="p">)</span>
 <span class="n">data</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;samples&quot;</span><span class="p">:</span> <span class="n">samples</span><span class="p">}</span>
@@ -73,7 +74,7 @@ the key. We are validating the <code class="docutils literal notranslate"><span 
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;number of errors: &quot;</span><span class="p">,</span> <span class="mi">0</span> <span class="k">if</span> <span class="n">report</span><span class="o">.</span><span class="n">valid</span><span class="p">()</span> <span class="k">else</span> <span class="nb">len</span><span class="p">(</span><span class="n">report</span><span class="o">.</span><span class="n">errors</span><span class="p">))</span>
 </pre></div>
 </div>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>number of errors:  0
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>number of errors:  5
 </pre></div>
 </div>
 <p>Our sample dataset has been validated successfully with no errors.</p>
@@ -92,7 +93,11 @@ wrong and where. The message-field has a human-readable summary.</p>
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;- &quot;</span> <span class="o">+</span> <span class="n">e</span><span class="p">[</span><span class="s2">&quot;message&quot;</span><span class="p">])</span>
 </pre></div>
 </div>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>- Invalid category flowPr1 found in row 1 for column coll in table samples
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>- Missing mandatory column collDT in table samples in row number 1
+- Missing mandatory column collNumPer in table samples in row number 1
+- Value asd in row 1 in column collPer in table samples has type string but should be of type float or coercable into a float
+- Missing mandatory column collType in table samples in row number 1
+- Missing mandatory column sampleID in table samples in row number 1
 </pre></div>
 </div>
 <p>The error message starts with the name of the rule that has been broken,
@@ -121,8 +126,8 @@ not specified.</p>
 </pre></div>
 </div>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>0.1.0
-2.0.0-rc.1
-2.0.0-rc.1
+2.0.0-rc.3.2.1
+2.0.0-rc.3.2.1
 </pre></div>
 </div>
 </section>
@@ -132,7 +137,7 @@ not specified.</p>
 table, using the <code class="docutils literal notranslate"><span class="pre">generate_validation_schema</span></code> function. The version
 parameter determines which version of the ODM the schema will be
 compatible with.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">version</span> <span class="o">=</span> <span class="s1">&#39;2.0.0-rc.1&#39;</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">version</span> <span class="o">=</span> <span class="n">ODM_VERSION_STR</span>
 <span class="n">parts_file</span> <span class="o">=</span> <span class="n">join</span><span class="p">(</span><span class="n">ASSET_DIR</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;dictionary/v</span><span class="si">{</span><span class="n">version</span><span class="si">}</span><span class="s2">/parts.csv&quot;</span><span class="p">)</span>
 <span class="n">parts</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">import_dataset</span><span class="p">(</span><span class="n">parts_file</span><span class="p">)</span>
 <span class="n">schema</span> <span class="o">=</span> <span class="n">generate_validation_schema</span><span class="p">(</span><span class="n">parts</span><span class="p">,</span> <span class="n">version</span><span class="p">)</span>

@@ -17,6 +17,7 @@ from os.path import join  # for constructing file paths
 
 # odm-validation
 import odm_validation.utils as utils
+from odm_validation.part_tables import ODM_VERSION_STR
 from odm_validation.validation import generate_validation_schema, validate_data
 
 # our asset directory
@@ -34,7 +35,7 @@ include our sample table in a Python dictionary with the table name as
 the key. We are validating the `samples` table in this example.
 
 ``` python
-schema_file = join(ASSET_DIR, "validation-schemas/schema-v2.0.0-rc.1.yml")
+schema_file = join(ASSET_DIR, f"validation-schemas/schema-v{ODM_VERSION_STR}.yml")
 schema = utils.import_schema(schema_file)
 samples = utils.import_dataset("samples.csv")
 data = {"samples": samples}
@@ -42,7 +43,7 @@ report = validate_data(schema, data)
 print("number of errors: ", 0 if report.valid() else len(report.errors))
 ```
 
-    number of errors:  0
+    number of errors:  5
 
 Our sample dataset has been validated successfully with no errors.
 
@@ -65,7 +66,11 @@ for e in report.errors:
     print("- " + e["message"])
 ```
 
-    - Invalid category flowPr1 found in row 1 for column coll in table samples
+    - Missing mandatory column collDT in table samples in row number 1
+    - Missing mandatory column collNumPer in table samples in row number 1
+    - Value asd in row 1 in column collPer in table samples has type string but should be of type float or coercable into a float
+    - Missing mandatory column collType in table samples in row number 1
+    - Missing mandatory column sampleID in table samples in row number 1
 
 The error message starts with the name of the rule that has been broken,
 followed by the table name, field name, and row number. The actual
@@ -97,8 +102,8 @@ print(report.data_version)
 ```
 
     0.1.0
-    2.0.0-rc.1
-    2.0.0-rc.1
+    2.0.0-rc.3.2.1
+    2.0.0-rc.3.2.1
 
 ## Schema generation
 
@@ -108,7 +113,7 @@ parameter determines which version of the ODM the schema will be
 compatible with.
 
 ``` python
-version = '2.0.0-rc.1'
+version = ODM_VERSION_STR
 parts_file = join(ASSET_DIR, f"dictionary/v{version}/parts.csv")
 parts = utils.import_dataset(parts_file)
 schema = generate_validation_schema(parts, version)
