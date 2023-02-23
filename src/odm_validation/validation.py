@@ -44,6 +44,7 @@ def _gen_cerb_rule_map():
 
 
 # private constants
+_BATCH_SIZE = 100
 _KEY_RULES = _gen_cerb_rule_map()
 
 
@@ -313,6 +314,7 @@ def _validate_data_ext(schema: Schema,
                        data_version: str = pt.ODM_VERSION_STR,
                        rule_whitelist: List[str] = [],
                        on_progress: OnProgress = None,
+                       batch_size=_BATCH_SIZE,
                        ) -> reports.ValidationReport:
     """Validates `data` with `schema`, using Cerberus."""
     # `rule_whitelist` determines which rules/errors are triggered during
@@ -334,11 +336,10 @@ def _validate_data_ext(schema: Schema,
         'the table names as keys.')
 
     def batch_table_data(action, table_id, table_data):
-        BATCH_SIZE = 100
         total = len(table_data)
         offset = 0
         while offset < total:
-            n = min(total - offset, BATCH_SIZE)
+            n = min(total - offset, batch_size)
             first = offset
             last = offset + n
             batch_data = {table_id: table_data[first:last]}
