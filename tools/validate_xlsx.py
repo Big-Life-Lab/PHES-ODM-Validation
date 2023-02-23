@@ -3,6 +3,7 @@
 import os
 import sys
 import tempfile
+from math import ceil
 from os.path import basename, join, normpath, splitext
 from pathlib import Path
 from typing import List, Optional
@@ -15,7 +16,7 @@ sys.path.append(join(root_dir, 'src'))
 
 import odm_validation.utils as utils  # noqa:E402
 from odm_validation.reports import ErrorKind  # noqa:E402
-from odm_validation.validation import validate_data  # noqa:E402
+from odm_validation.validation import _validate_data_ext  # noqa:E402
 
 
 def import_xlsx(src_file, dst_dir) -> List[str]:
@@ -52,6 +53,13 @@ def filename_without_ext(path):
     return splitext(basename(path))[0]
 
 
+def on_progress(action, table_id, offset, total):
+    percent = int(ceil(offset/total * 100))
+    print('\r' + f'{action}: {percent}%', end='', flush=True)
+    if offset == total:
+        print()
+
+
 def main():
     xlsx_file = sys.argv[1]
     ver = sys.argv[2]
@@ -67,10 +75,9 @@ def main():
     print(f'writing files to {outdir}\n')
 
     csv_files = import_xlsx(xlsx_file, outdir)
-    print()
     for file in csv_files:
         name = filename_without_ext(file)
-        print(f'validating sheet "{name}" ', end='', flush=True)
+        print(f'\nvalidating sheet "{name}" ', end='', flush=True)
         data = utils.import_dataset(file)
         table_id = get_sheet_table_id(schema, name)
         if not table_id:
@@ -78,7 +85,8 @@ def main():
             continue
         print(f'(table {table_id}) ...')
         data = {table_id: data}
-        report = validate_data(schema, data, ver)
+        report = _validate_data_ext(schema, data, ver,
+                                    on_progress=on_progress)
         write_results(report, ErrorKind.WARNING, outdir, name)
         write_results(report, ErrorKind.ERROR, outdir, name)
 

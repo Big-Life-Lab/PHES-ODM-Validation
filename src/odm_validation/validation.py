@@ -3,9 +3,10 @@ This is the main module of the package. It contains functions for schema
 generation and data validation.
 """
 
+from collections import defaultdict
 from copy import deepcopy
 from itertools import groupby
-from typing import Any, Dict, List, Optional, Set
+from typing import Any, Callable, Dict, List, Optional, Set
 # from pprint import pprint
 
 from cerberusext import ContextualCoercer, OdmValidator
@@ -13,7 +14,7 @@ from cerberusext import ContextualCoercer, OdmValidator
 import part_tables as pt
 import reports
 import rules
-from reports import ErrorKind
+from reports import ErrorKind, get_row_num
 from rules import Rule, ruleset
 from schemas import CerberusSchema, Schema, init_table_schema
 from stdext import (
@@ -22,6 +23,9 @@ from stdext import (
     strip_dict_key,
 )
 from versions import __version__, parse_version
+
+
+TableDataset = Dict[pt.TableId, pt.Dataset]
 
 
 def _gen_cerb_rule_map():
@@ -40,6 +44,7 @@ def _gen_cerb_rule_map():
 
 
 # private constants
+_BATCH_SIZE = 100
 _KEY_RULES = _gen_cerb_rule_map()
 
 
@@ -127,12 +132,14 @@ def _gen_error_entry(cerb_rule, table_id, column_id, value, row_numbers,
 
 
 def _gen_cerb_error_entry(e, row, schema: CerberusSchema,
-                          rule_whitelist: List[str]) -> Optional[dict]:
+                          rule_whitelist: List[str], offset: int
+                          ) -> Optional[dict]:
     cerb_rule = e.schema_path[-1]
-    (table_id, row_index, column_id) = e.document_path
+    (table_id, _, column_id) = e.document_path
+    row_index = e.document_path[1]
     schema_column = schema[table_id]['schema']['schema'][column_id]
     column_meta = schema_column.get('meta', [])
-    row_numbers = [row_index + 1]
+    row_numbers = [get_row_num(row_index, offset)]
     rows = [row]
     return _gen_error_entry(
         cerb_rule,
@@ -149,7 +156,7 @@ def _gen_cerb_error_entry(e, row, schema: CerberusSchema,
 
 
 def _gen_aggregated_error_entry(agg_error,
-                                rule_whitelist: List[str]
+                                rule_whitelist: List[str],
                                 ) -> Optional[dict]:
     return _gen_error_entry(
         agg_error.cerb_rule,
@@ -212,16 +219,12 @@ def _filter_errors(errors):
     return result
 
 
-def _coerce_data(data, schema, warnings, errors):
-    coercer = ContextualCoercer(warnings=warnings, errors=errors)
-    return coercer.coerce(data, schema)
-
-
 def _strip_coerce_rules(cerb_schema):
     return strip_dict_key(deepcopy(cerb_schema), 'coerce')
 
 
-def _map_errors(cerb_errors, schema, rule_whitelist):
+def _map_cerb_errors(cerb_errors, schema, rule_whitelist, offset: int):
+    "Returns (errors, warnings)."
     errors = []
     warnings = []
     for table_error in cerb_errors:
@@ -231,7 +234,7 @@ def _map_errors(cerb_errors, schema, rule_whitelist):
                 for attr_errors in e.info:
                     for e in attr_errors:
                         entry = _gen_cerb_error_entry(e, row, schema,
-                                                      rule_whitelist)
+                                                      rule_whitelist, offset)
                         if not entry:
                             continue
                         if 'warningType' in entry:
@@ -305,10 +308,16 @@ def generate_validation_schema(parts, schema_version=pt.ODM_VERSION_STR,
                                            schema_additions)
 
 
+# OnProgress(action, table_id, processed, total)
+OnProgress = Callable[[str, str, int, int], None]
+
+
 def _validate_data_ext(schema: Schema,
-                       data: dict,
+                       data: TableDataset,
                        data_version: str = pt.ODM_VERSION_STR,
                        rule_whitelist: List[str] = [],
+                       on_progress: OnProgress = None,
+                       batch_size=_BATCH_SIZE,
                        ) -> reports.ValidationReport:
     """Validates `data` with `schema`, using Cerberus."""
     # `rule_whitelist` determines which rules/errors are triggered during
@@ -329,14 +338,40 @@ def _validate_data_ext(schema: Schema,
         '`data` must be a dict. Remember to wrap the datasets in a dict with '
         'the table names as keys.')
 
-    coerced_data = _coerce_data(data, coercion_schema, warnings, errors)
+    def batch_table_data(action, table_id, table_data):
+        total = len(table_data)
+        offset = 0
+        while offset < total:
+            n = min(total - offset, batch_size)
+            first = offset
+            last = offset + n
+            batch_data = {table_id: table_data[first:last]}
+            yield (batch_data, offset)
+            offset += n
+            if on_progress:
+                on_progress(action, table_id, offset, total)
 
-    v = OdmValidator.new()
+    coerced_data = defaultdict(list)
+    coercer = ContextualCoercer(warnings=warnings, errors=errors)
+    for table_id, table_data in data.items():
+        for batch in batch_table_data('coercing', table_id, table_data):
+            batch_data, offset = batch
+            coerce_result = coercer.coerce(batch_data, coercion_schema,
+                                           offset)
+            coerced_data[table_id] += coerce_result[table_id]
+
     validation_schema = _strip_coerce_rules(coercion_schema)
-    if not v.validate(coerced_data, validation_schema):
-        e, w = _map_errors(v._errors, validation_schema, rule_whitelist)
-        warnings += w
-        errors += e
+    for table_id, table_data in coerced_data.items():
+        v = OdmValidator.new()
+        for batch in batch_table_data('validating', table_id, table_data):
+            batch_data, offset = batch
+            v._errors.clear()
+            if v.validate(offset, batch_data, validation_schema):
+                continue
+            e, w = _map_cerb_errors(v._errors, validation_schema,
+                                    rule_whitelist, offset)
+            errors += e
+            warnings += w
         errors += _map_aggregated_errors(v.error_state.aggregated_errors,
                                          rule_whitelist)
 
@@ -352,7 +387,7 @@ def _validate_data_ext(schema: Schema,
 
 
 def validate_data(schema: Schema,
-                  data: dict,
+                  data: TableDataset,
                   data_version=pt.ODM_VERSION_STR,
                   ) -> reports.ValidationReport:
     return _validate_data_ext(schema, data, data_version)

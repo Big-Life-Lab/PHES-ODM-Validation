@@ -52,6 +52,12 @@ def _fmt_list(items: list) -> str:
         return str(items[0])
 
 
+def get_row_num(row_index: int, offset: int) -> int:
+    """Returns the spreadsheet row number of `row_index` plus `offset`,
+    converted to a one-indexed number."""
+    return offset + row_index + 1
+
+
 def _fmt_value(val: Any) -> Any:
     # needed to avoid the default `datetime.datetime(year, month, day, ...)`
     if isinstance(val, datetime.date) or isinstance(val, datetime.datetime):

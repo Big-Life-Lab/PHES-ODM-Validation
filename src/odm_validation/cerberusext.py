@@ -2,7 +2,7 @@ import logging
 from collections import defaultdict
 from dataclasses import dataclass
 from datetime import datetime
-from typing import Any, Dict, List, Optional, Set, Tuple
+from typing import Any, Dict, List, Set, Tuple
 from copy import deepcopy
 # from pprint import pprint
 
@@ -11,10 +11,11 @@ from cerberus.errors import ErrorDefinition
 
 import part_tables as pt
 import reports
+from reports import get_row_num
 from rules import COERCION_RULE_ID
-from part_tables import Row
+from part_tables import Dataset, Row
+from schemas import CerberusSchema
 from stdext import (
-    inc,
     parse_datetime,
     parse_int,
     type_name,
@@ -82,7 +83,8 @@ class ContextualCoercer(Validator):
                     del schema[field]
         return result
 
-    def coerce(self, document, schema) -> Optional[dict]:
+    def coerce(self, document: Dataset, schema: CerberusSchema,
+               offset: int) -> Dataset:
         # Coercion is performed by validating using a coercion-only schema.
         # Native cerberus normalization can't be used because it doesn't
         # provide context. Coercions are kept track of using `_config`.
@@ -94,6 +96,7 @@ class ContextualCoercer(Validator):
         coercion_schema = ContextualCoercer._extract_coercion_schema(schema)
         self.schema = coercion_schema
         self._config["coerced_document"] = deepcopy(document)
+        self._config["offset"] = offset
         if not super().validate(document):
             logging.error(self.errors, stack_info=True)
         return self._config["coerced_document"]
@@ -110,6 +113,7 @@ class ContextualCoercer(Validator):
             return
         if type_class is float and isinstance(value, int):
             return
+        offset = self._config['offset']
         table = self.document_path[0]
         row_ix = self.document_path[1]
         row = self.document
@@ -120,7 +124,7 @@ class ContextualCoercer(Validator):
             column_id=field,
             column_meta=column_meta,
             rows=[row],
-            row_numbers=[inc(row_ix)],
+            row_numbers=[get_row_num(row_ix, offset)],
             table_id=table,
             value=value,
         )
@@ -145,7 +149,7 @@ DateStr = str
 TableId = str
 PrimaryKey = Tuple[pt.PartId, DateStr]
 TableKey = Tuple[TableId, PrimaryKey]
-Index = int
+RowNum = int
 
 
 @dataclass
@@ -163,13 +167,14 @@ class UniqueRuleState:
     """State for the 'unique' rule."""
     def __init__(self):
         self.table_keys: Dict[TableId, Set[PrimaryKey]] = defaultdict(set)
-        self.tablekey_rows: Dict[TableKey, (Index, Row)] = {}
+        self.tablekey_rows: Dict[TableKey, (RowNum, Row)] = {}
         self.tablekey_errors: Dict[TableKey, AggregatedError] = \
             defaultdict(AggregatedError)
 
 
 class ErrorState:
     def __init__(self):
+        self.offset = 0
         self.aggregated_errors: List[AggregatedError] = []
 
 
@@ -211,9 +216,11 @@ class OdmValidator(Validator):
         # the primary key (pk) is a compound key of partID and lastUpdated
         if not constraint:
             return
+        offset = self.error_state.offset
         table_id = self.document_path[0]
-        row_ix = self.document_path[1]
         row = self.document
+        row_ix = self.document_path[1]
+        row_num = get_row_num(row_ix, offset)
         lastUpdated = row.get('lastUpdated', '') or ''
         assert isinstance(lastUpdated, str)
         pk = (str(value).strip(), lastUpdated.strip())
@@ -223,24 +230,25 @@ class OdmValidator(Validator):
         if pk in primary_keys:
             err = state.tablekey_errors.get(tablekey)
             if not err:
-                (first_ix, first_row) = state.tablekey_rows[tablekey]
+                (first_row_num, first_row) = state.tablekey_rows[tablekey]
                 err = AggregatedError(
                     cerb_rule='unique',
                     table_id=table_id,
                     column_id=field,
-                    row_numbers=[inc(first_ix)],
+                    row_numbers=[first_row_num],
                     rows=[first_row],
                     column_meta=self.schema[field].get('meta'),
                     value=pk[0]
                 )
                 state.tablekey_errors[tablekey] = err
-            err.row_numbers.append(inc(row_ix))
+            err.row_numbers.append(row_num)
             err.rows.append(row)
         else:
-            state.tablekey_rows[tablekey] = (row_ix, row)
+            state.tablekey_rows[tablekey] = (row_num, row)
             primary_keys.add(pk)
 
-    def validate(self, *args, **kwargs) -> bool:
+    def validate(self, offset: int, *args, **kwargs) -> bool:
+        self.error_state.offset = offset
         self.error_state.aggregated_errors.clear()
         result = super().validate(*args, **kwargs)
         self.error_state.aggregated_errors += \
