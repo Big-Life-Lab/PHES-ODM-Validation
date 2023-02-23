@@ -3212,46 +3212,6 @@ schema:
             ruleID: missing_values_found
           required: true
           type: string
-        compSet:
-          emptyTrimmed: false
-          forbidden:
-          - NA
-          - nan
-          - nr
-          - 'null'
-          - undisc
-          maxlength: 15
-          meta:
-          - meta:
-            - maxLength: '15'
-              partID: compSet
-              parts: header
-              partsRequired: mandatory
-            ruleID: greater_than_max_length
-          - meta:
-            - dataType: varchar
-              partID: compSet
-              parts: header
-              partsRequired: mandatory
-            ruleID: invalid_type
-          - meta:
-            - minLength: '0'
-              partID: compSet
-              parts: header
-              partsRequired: mandatory
-            ruleID: less_than_min_length
-          - meta:
-            - partID: compSet
-              parts: header
-              partsRequired: mandatory
-            ruleID: missing_mandatory_column
-          - meta:
-            - partID: compSet
-              parts: header
-              partsRequired: mandatory
-            ruleID: missing_values_found
-          required: true
-          type: string
         domainID:
           emptyTrimmed: false
           forbidden:
@@ -5940,25 +5900,6 @@ schema:
       - partID: sets
         partType: table
       schema:
-        compSet:
-          maxlength: 15
-          meta:
-          - meta:
-            - maxLength: '15'
-              partID: compSet
-              sets: input
-            ruleID: greater_than_max_length
-          - meta:
-            - dataType: varchar
-              partID: compSet
-              sets: input
-            ruleID: invalid_type
-          - meta:
-            - minLength: '0'
-              partID: compSet
-              sets: input
-            ruleID: less_than_min_length
-          type: string
         notes:
           maxlength: 200
           meta:
@@ -6661,4 +6602,4 @@ schema:
           type: string
       type: dict
     type: list
-schemaVersion: 2.0.0-rc.3.2.1
+schemaVersion: 2.0.0-rc.3.8

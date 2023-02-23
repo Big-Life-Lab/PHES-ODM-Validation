@@ -7,6 +7,37 @@ schema:
         version1Location: Tables
         version1Table: AssayMethod
       schema:
+        aggregation:
+          maxlength: 12
+          meta:
+          - meta:
+            - maxLength: '12'
+              partID: aggID
+              protocolSteps: fK
+              protocolStepsRequired: mandatoryIf
+              version1Location: variables
+              version1Table: WWMeasure; SiteMeasure
+              version1Variable: aggregation
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: categorical
+              partID: aggID
+              protocolSteps: fK
+              protocolStepsRequired: mandatoryIf
+              version1Location: variables
+              version1Table: WWMeasure; SiteMeasure
+              version1Variable: aggregation
+            ruleID: invalid_type
+          - meta:
+            - minLength: '0'
+              partID: aggID
+              protocolSteps: fK
+              protocolStepsRequired: mandatoryIf
+              version1Location: variables
+              version1Table: WWMeasure; SiteMeasure
+              version1Variable: aggregation
+            ruleID: less_than_min_length
+          type: string
         aliasID:
           maxlength: 10
           meta:
@@ -211,6 +242,196 @@ schema:
               version1Location: variables
               version1Table: AssayMethod
               version1Variable: summary
+            ruleID: less_than_min_length
+          type: string
+        type:
+          allowed:
+          - covE
+          - covN1
+          - covN2
+          - covN3
+          - covRdrp
+          - nPPMoV
+          - nbrsvN
+          - ncrA
+          - other
+          - varB117
+          - varB1351
+          - varP1
+          - wqCOD
+          - wqCond
+          - wqNH4N
+          - wqOPhos
+          - wqPh
+          - wqTN
+          - wqTS
+          - wqTSS
+          - wqTemp
+          - wqVSS
+          - wwCOD
+          - wwOPhos
+          - wwTN
+          maxlength: 12
+          meta:
+          - meta:
+            - maxLength: '12'
+              partID: measureID
+              protocolSteps: fK
+              protocolStepsRequired: mandatoryIf
+              version1Location: variables
+              version1Table: WWMeasure
+              version1Variable: type
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              partID: measureID
+              version1Location: variables
+              version1Table: WWMeasure
+              version1Variable: type
+            - partID: brsvN
+              partType: measure
+              version1Category: nbrsvN
+              version1Location: variableCategories
+              version1Table: WWMeasure
+              version1Variable: type
+            - partID: cod
+              partType: measure
+              version1Category: wqCOD; wwCOD
+              version1Location: variableCategories
+              version1Table: WWMeasure; SiteMeasure
+              version1Variable: type
+            - partID: cond
+              partType: measure
+              version1Category: wqCond
+              version1Location: variableCategories
+              version1Table: WWMeasure; SiteMeasure
+              version1Variable: type
+            - partID: covB117
+              partType: measure
+              version1Category: varB117
+              version1Location: variableCategories
+              version1Table: WWMeasure
+              version1Variable: type
+            - partID: covB135
+              partType: measure
+              version1Category: varB1351
+              version1Location: variableCategories
+              version1Table: WWMeasure
+              version1Variable: type
+            - partID: covE
+              partType: measure
+              version1Category: covE
+              version1Location: variableCategories
+              version1Table: WWMeasure
+              version1Variable: type
+            - partID: covN1
+              partType: measure
+              version1Category: covN1
+              version1Location: variableCategories
+              version1Table: WWMeasure
+              version1Variable: type
+            - partID: covN2
+              partType: measure
+              version1Category: covN2
+              version1Location: variableCategories
+              version1Table: WWMeasure
+              version1Variable: type
+            - partID: covN3
+              partType: measure
+              version1Category: covN3
+              version1Location: variableCategories
+              version1Table: WWMeasure
+              version1Variable: type
+            - partID: covP1
+              partType: measure
+              version1Category: varP1
+              version1Location: variableCategories
+              version1Table: WWMeasure
+              version1Variable: type
+            - partID: covRdrp
+              partType: measure
+              version1Category: covRdrp
+              version1Location: variableCategories
+              version1Table: WWMeasure
+              version1Variable: type
+            - partID: cra
+              partType: measure
+              version1Category: ncrA
+              version1Location: variableCategories
+              version1Table: WWMeasure
+              version1Variable: type
+            - partID: nH4N
+              partType: measure
+              version1Category: wqNH4N
+              version1Location: variableCategories
+              version1Table: WWMeasure; SiteMeasure
+              version1Variable: type
+            - partID: ophos
+              partType: measure
+              version1Category: wwOPhos; wqOPhos
+              version1Location: variableCategories
+              version1Table: SiteMeasure; WWMeasure
+              version1Variable: type
+            - partID: ph
+              partType: measure
+              version1Category: wqPh
+              version1Location: variableCategories
+              version1Table: WWMeasure
+              version1Variable: type
+            - partID: ppmv
+              partType: measure
+              version1Category: nPPMoV
+              version1Location: variableCategories
+              version1Table: WWMeasure
+              version1Variable: type
+            - partID: temp
+              partType: measure
+              version1Category: wqTemp
+              version1Location: variableCategories
+              version1Table: WWMeasure
+              version1Variable: type
+            - partID: tn
+              partType: measure
+              version1Category: wqTN; wwTN
+              version1Location: variableCategories
+              version1Table: WWMeasure; SiteMeasure
+              version1Variable: type
+            - partID: ts
+              partType: measure
+              version1Category: wqTS
+              version1Location: variableCategories
+              version1Table: WWMeasure
+              version1Variable: type
+            - partID: tss
+              partType: measure
+              version1Category: wqTSS
+              version1Location: variableCategories
+              version1Table: WWMeasure
+              version1Variable: type
+            - partID: vss
+              partType: measure
+              version1Category: wqVSS
+              version1Location: variableCategories
+              version1Table: WWMeasure
+              version1Variable: type
+            ruleID: invalid_category
+          - meta:
+            - dataType: varchar
+              partID: measureID
+              protocolSteps: fK
+              protocolStepsRequired: mandatoryIf
+              version1Location: variables
+              version1Table: WWMeasure
+              version1Variable: type
+            ruleID: invalid_type
+          - meta:
+            - minLength: '0'
+              partID: measureID
+              protocolSteps: fK
+              protocolStepsRequired: mandatoryIf
+              version1Location: variables
+              version1Table: WWMeasure
+              version1Variable: type
             ruleID: less_than_min_length
           type: string
         unit:
@@ -556,6 +777,12 @@ schema:
             ruleID: less_than_min_length
           type: string
         type:
+          allowed:
+          - atline
+          - hand
+          - lab
+          - online
+          - other
           emptyTrimmed: false
           forbidden:
           - NA
@@ -574,6 +801,44 @@ schema:
               version1Table: Instrument
               version1Variable: type
             ruleID: greater_than_max_length
+          - meta:
+            - catSetID: insTypeCatSet
+              dataType: categorical
+              partID: insType
+              version1Location: variables
+              version1Table: Instrument
+              version1Variable: type
+            - partID: aas
+              partType: category
+              version1Category: atline
+              version1Location: variableCategories
+              version1Table: Instrument
+              version1Variable: type
+            - partID: hma
+              partType: category
+              version1Category: hand
+              version1Location: variableCategories
+              version1Table: Instrument
+              version1Variable: type
+            - partID: instrumentTypeOther
+              partType: category
+              version1Category: other
+              version1Location: variableCategories
+              version1Table: Instrument
+              version1Variable: type
+            - partID: ola
+              partType: category
+              version1Category: lab
+              version1Location: variableCategories
+              version1Table: Instrument
+              version1Variable: type
+            - partID: onse
+              partType: category
+              version1Category: online
+              version1Location: variableCategories
+              version1Table: Instrument
+              version1Variable: type
+            ruleID: invalid_category
           - meta:
             - dataType: categorical
               instruments: fK
@@ -1418,16 +1683,6 @@ schema:
         version1Table: Sample
       schema:
         collection:
-          allowed:
-          - cpFP24h
-          - cpTP24h
-          - grb
-          - grbCp3
-          - grbCp3h
-          - grbCp8h
-          - hTank
-          - mooreSw
-          - other
           emptyTrimmed: false
           forbidden:
           - NA
@@ -1446,98 +1701,6 @@ schema:
               version1Table: sample
               version1Variable: collection
             ruleID: greater_than_max_length
-          - meta:
-            - catSetID: collectCatSet
-              dataType: categorical
-              partID: collType
-              version1Location: variables
-              version1Table: sample
-              version1Variable: collection
-            - catSetID: collectCatSet
-              partID: tp24s
-              partType: category
-              version1Category: cpTP24h
-              version1Location: variableCategories
-              version1Table: Site
-              version1Variable: SampleCollectionDefault
-            - catSetID: collectCatSet
-              partID: comp3
-              partType: category
-              version1Category: grbCp3
-              version1Location: variableCategories
-              version1Table: Sample
-              version1Variable: collection
-            - catSetID: collectCatSet
-              partID: comp3dep
-              partType: category
-              version1Category: grbCp3
-              version1Location: variableCategories
-              version1Table: Site
-              version1Variable: SampleCollectionDefault
-            - catSetID: collectCatSet
-              partID: comp3h
-              partType: category
-              version1Category: grbCp3h
-              version1Location: variableCategories
-              version1Table: Sample
-              version1Variable: collection
-            - catSetID: collectCatSet
-              partID: comp3hdep
-              partType: category
-              version1Category: grbCp3h
-              version1Location: variableCategories
-              version1Table: Site
-              version1Variable: SampleCollectionDefault
-            - catSetID: collectCatSet
-              partID: comp8h
-              partType: category
-              version1Category: grbCp8h
-              version1Location: variableCategories
-              version1Table: Site
-              version1Variable: SampleCollectionDefault
-            - catSetID: collectCatSet
-              partID: comp8hDep
-              partType: category
-              version1Category: grbCp8h
-              version1Location: variableCategories
-              version1Table: Sample
-              version1Variable: collection
-            - catSetID: collectCatSet
-              partID: flow24hDep
-              partType: category
-              version1Category: cpFP24h
-              version1Location: variableCategories
-              version1Table: Site
-              version1Variable: SampleCollectionDefault
-            - catSetID: collectCatSet
-              partID: hoTaWa
-              partType: category
-              version1Category: hTank
-              version1Location: variableCategories
-              version1Table: Sample
-              version1Variable: type
-            - catSetID: collectCatSet
-              partID: mspsDep
-              partType: category
-              version1Category: mooreSw
-              version1Location: variableCategories
-              version1Table: Site
-              version1Variable: SampleCollectionDefault
-            - catSetID: collectCatSet
-              partID: otco
-              partType: category
-              version1Category: other
-              version1Location: variableCategories
-              version1Table: Site
-              version1Variable: SampleCollectionDefault
-            - catSetID: collectCatSet
-              partID: repGrab
-              partType: category
-              version1Category: grb
-              version1Location: variableCategories
-              version1Table: Site
-              version1Variable: SampleCollectionDefault
-            ruleID: invalid_category
           - meta:
             - dataType: categorical
               partID: collType
@@ -1752,7 +1915,7 @@ schema:
           type: string
         pooled:
           allowed:
-          - accessToAllOrg
+          - accessToDetails
           - detected
           maxlength: 30
           meta:
@@ -1965,8 +2128,7 @@ schema:
               version1Location: variables
               version1Table: Sample
               version1Variable: type
-            - catSetID: collectCatSet
-              partID: hoTaWa
+            - partID: hoTaWa
               partType: category
               version1Category: hTank
               version1Location: variableCategories
@@ -2543,13 +2705,6 @@ schema:
               version1Location: variableCategories
               version1Table: Site
               version1Variable: type
-            - catSetID: siteTypeCatSet
-              partID: otsisiDep
-              partType: category
-              version1Category: other
-              version1Location: variableCategories
-              version1Table: Site
-              version1Variable: type
             - partID: pStat
               partType: category
               version1Category: pStat
@@ -2595,6 +2750,12 @@ schema:
             - partID: uCampus
               partType: category
               version1Category: uCampus
+              version1Location: variableCategories
+              version1Table: Site
+              version1Variable: type
+            - partID: otsisiDep
+              partType: category
+              version1Category: other
               version1Location: variableCategories
               version1Table: Site
               version1Variable: type
@@ -2720,6 +2881,61 @@ schema:
         version1Location: Tables
         version1Table: WWMeasure; SiteMeasure;CovidPublicHealthData
       schema:
+        aggregation:
+          emptyTrimmed: false
+          forbidden:
+          - NA
+          - nan
+          - nr
+          - 'null'
+          - undisc
+          maxlength: 12
+          meta:
+          - meta:
+            - maxLength: '12'
+              measures: fK
+              measuresRequired: mandatory
+              partID: aggID
+              version1Location: variables
+              version1Table: WWMeasure; SiteMeasure
+              version1Variable: aggregation
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: categorical
+              measures: fK
+              measuresRequired: mandatory
+              partID: aggID
+              version1Location: variables
+              version1Table: WWMeasure; SiteMeasure
+              version1Variable: aggregation
+            ruleID: invalid_type
+          - meta:
+            - measures: fK
+              measuresRequired: mandatory
+              minLength: '0'
+              partID: aggID
+              version1Location: variables
+              version1Table: WWMeasure; SiteMeasure
+              version1Variable: aggregation
+            ruleID: less_than_min_length
+          - meta:
+            - measures: fK
+              measuresRequired: mandatory
+              partID: aggID
+              version1Location: variables
+              version1Table: WWMeasure; SiteMeasure
+              version1Variable: aggregation
+            ruleID: missing_mandatory_column
+          - meta:
+            - measures: fK
+              measuresRequired: mandatory
+              partID: aggID
+              version1Location: variables
+              version1Table: WWMeasure; SiteMeasure
+              version1Variable: aggregation
+            ruleID: missing_values_found
+          required: true
+          type: string
         analysisDate:
           coerce: datetime
           emptyTrimmed: false
@@ -3103,6 +3319,220 @@ schema:
               version1Location: variables
               version1Table: Site
               version1Variable: siteID
+            ruleID: missing_values_found
+          required: true
+          type: string
+        type:
+          allowed:
+          - covE
+          - covN1
+          - covN2
+          - covN3
+          - covRdrp
+          - nPPMoV
+          - nbrsvN
+          - ncrA
+          - other
+          - varB117
+          - varB1351
+          - varP1
+          - wqCOD
+          - wqCond
+          - wqNH4N
+          - wqOPhos
+          - wqPh
+          - wqTN
+          - wqTS
+          - wqTSS
+          - wqTemp
+          - wqVSS
+          - wwCOD
+          - wwOPhos
+          - wwTN
+          emptyTrimmed: false
+          forbidden:
+          - NA
+          - nan
+          - nr
+          - 'null'
+          - undisc
+          maxlength: 12
+          meta:
+          - meta:
+            - maxLength: '12'
+              measures: fK
+              measuresRequired: mandatory
+              partID: measureID
+              version1Location: variables
+              version1Table: WWMeasure
+              version1Variable: type
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              partID: measureID
+              version1Location: variables
+              version1Table: WWMeasure
+              version1Variable: type
+            - partID: brsvN
+              partType: measure
+              version1Category: nbrsvN
+              version1Location: variableCategories
+              version1Table: WWMeasure
+              version1Variable: type
+            - partID: cod
+              partType: measure
+              version1Category: wqCOD; wwCOD
+              version1Location: variableCategories
+              version1Table: WWMeasure; SiteMeasure
+              version1Variable: type
+            - partID: cond
+              partType: measure
+              version1Category: wqCond
+              version1Location: variableCategories
+              version1Table: WWMeasure; SiteMeasure
+              version1Variable: type
+            - partID: covB117
+              partType: measure
+              version1Category: varB117
+              version1Location: variableCategories
+              version1Table: WWMeasure
+              version1Variable: type
+            - partID: covB135
+              partType: measure
+              version1Category: varB1351
+              version1Location: variableCategories
+              version1Table: WWMeasure
+              version1Variable: type
+            - partID: covE
+              partType: measure
+              version1Category: covE
+              version1Location: variableCategories
+              version1Table: WWMeasure
+              version1Variable: type
+            - partID: covN1
+              partType: measure
+              version1Category: covN1
+              version1Location: variableCategories
+              version1Table: WWMeasure
+              version1Variable: type
+            - partID: covN2
+              partType: measure
+              version1Category: covN2
+              version1Location: variableCategories
+              version1Table: WWMeasure
+              version1Variable: type
+            - partID: covN3
+              partType: measure
+              version1Category: covN3
+              version1Location: variableCategories
+              version1Table: WWMeasure
+              version1Variable: type
+            - partID: covP1
+              partType: measure
+              version1Category: varP1
+              version1Location: variableCategories
+              version1Table: WWMeasure
+              version1Variable: type
+            - partID: covRdrp
+              partType: measure
+              version1Category: covRdrp
+              version1Location: variableCategories
+              version1Table: WWMeasure
+              version1Variable: type
+            - partID: cra
+              partType: measure
+              version1Category: ncrA
+              version1Location: variableCategories
+              version1Table: WWMeasure
+              version1Variable: type
+            - partID: nH4N
+              partType: measure
+              version1Category: wqNH4N
+              version1Location: variableCategories
+              version1Table: WWMeasure; SiteMeasure
+              version1Variable: type
+            - partID: ophos
+              partType: measure
+              version1Category: wwOPhos; wqOPhos
+              version1Location: variableCategories
+              version1Table: SiteMeasure; WWMeasure
+              version1Variable: type
+            - partID: ph
+              partType: measure
+              version1Category: wqPh
+              version1Location: variableCategories
+              version1Table: WWMeasure
+              version1Variable: type
+            - partID: ppmv
+              partType: measure
+              version1Category: nPPMoV
+              version1Location: variableCategories
+              version1Table: WWMeasure
+              version1Variable: type
+            - partID: temp
+              partType: measure
+              version1Category: wqTemp
+              version1Location: variableCategories
+              version1Table: WWMeasure
+              version1Variable: type
+            - partID: tn
+              partType: measure
+              version1Category: wqTN; wwTN
+              version1Location: variableCategories
+              version1Table: WWMeasure; SiteMeasure
+              version1Variable: type
+            - partID: ts
+              partType: measure
+              version1Category: wqTS
+              version1Location: variableCategories
+              version1Table: WWMeasure
+              version1Variable: type
+            - partID: tss
+              partType: measure
+              version1Category: wqTSS
+              version1Location: variableCategories
+              version1Table: WWMeasure
+              version1Variable: type
+            - partID: vss
+              partType: measure
+              version1Category: wqVSS
+              version1Location: variableCategories
+              version1Table: WWMeasure
+              version1Variable: type
+            ruleID: invalid_category
+          - meta:
+            - dataType: varchar
+              measures: fK
+              measuresRequired: mandatory
+              partID: measureID
+              version1Location: variables
+              version1Table: WWMeasure
+              version1Variable: type
+            ruleID: invalid_type
+          - meta:
+            - measures: fK
+              measuresRequired: mandatory
+              minLength: '0'
+              partID: measureID
+              version1Location: variables
+              version1Table: WWMeasure
+              version1Variable: type
+            ruleID: less_than_min_length
+          - meta:
+            - measures: fK
+              measuresRequired: mandatory
+              partID: measureID
+              version1Location: variables
+              version1Table: WWMeasure
+              version1Variable: type
+            ruleID: missing_mandatory_column
+          - meta:
+            - measures: fK
+              measuresRequired: mandatory
+              partID: measureID
+              version1Location: variables
+              version1Table: WWMeasure
+              version1Variable: type
             ruleID: missing_values_found
           required: true
           type: string
