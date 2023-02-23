@@ -99,6 +99,9 @@ def _gen_error_entry(cerb_rule, table_id, column_id, value, row_numbers,
                      rows, column_meta, rule_whitelist: List[str],
                      constraint=None, schema_column=None,
                      ) -> Optional[dict]:
+    if not value and cerb_rule == 'type':
+        return
+
     rule = _get_rule_for_cerb_key(cerb_rule, column_meta)
     if len(rule_whitelist) > 0 and rule.id not in rule_whitelist:
         return
