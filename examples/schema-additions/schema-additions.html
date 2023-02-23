@@ -109,7 +109,7 @@ must be a string. If we validate the dataset shown below,</p>
 <p>Using the <code class="docutils literal notranslate"><span class="pre">validate_data</span></code> function with our current validation schema,
 we get the errors shown below:</p>
 <pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="color: #800080; text-decoration-color: #800080; font-weight: bold">ValidationReport</span><span style="font-weight: bold">(</span>
-<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="color: #808000; text-decoration-color: #808000">data_version</span>=<span style="color: #008000; text-decoration-color: #008000">'2.0.0-rc.3.2.1'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="color: #808000; text-decoration-color: #808000">data_version</span>=<span style="color: #008000; text-decoration-color: #008000">'2.0.0-rc.3.8'</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="color: #808000; text-decoration-color: #808000">schema_version</span>=<span style="color: #008000; text-decoration-color: #008000">'2.0.0'</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="color: #808000; text-decoration-color: #808000">package_version</span>=<span style="color: #008000; text-decoration-color: #008000">'0.1.0'</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="color: #808000; text-decoration-color: #808000">errors</span>=<span style="font-weight: bold">[</span>
@@ -198,7 +198,7 @@ can be seen below:</p>
 </div>
 <p>With our new validation schema printed below:</p>
 <pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="font-weight: bold">{</span>
-<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="color: #008000; text-decoration-color: #008000">'schemaVersion'</span>: <span style="color: #008000; text-decoration-color: #008000">'2.0.0-rc.3.2.1'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="color: #008000; text-decoration-color: #008000">'schemaVersion'</span>: <span style="color: #008000; text-decoration-color: #008000">'2.0.0-rc.3.8'</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="color: #008000; text-decoration-color: #008000">'schema'</span>: <span style="font-weight: bold">{</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="color: #008000; text-decoration-color: #008000">'sites'</span>: <span style="font-weight: bold">{</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'type'</span>: <span style="color: #008000; text-decoration-color: #008000">'list'</span>,
@@ -233,8 +233,8 @@ can be seen below:</p>
 <p>Finally, lets validate our original dataset with our new validation
 schema to make sure its working correctly,</p>
 <pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="color: #800080; text-decoration-color: #800080; font-weight: bold">ValidationReport</span><span style="font-weight: bold">(</span>
-<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="color: #808000; text-decoration-color: #808000">data_version</span>=<span style="color: #008000; text-decoration-color: #008000">'2.0.0-rc.3.2.1'</span>,
-<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="color: #808000; text-decoration-color: #808000">schema_version</span>=<span style="color: #008000; text-decoration-color: #008000">'2.0.0-rc.3.2.1'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="color: #808000; text-decoration-color: #808000">data_version</span>=<span style="color: #008000; text-decoration-color: #008000">'2.0.0-rc.3.8'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="color: #808000; text-decoration-color: #808000">schema_version</span>=<span style="color: #008000; text-decoration-color: #008000">'2.0.0-rc.3.8'</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="color: #808000; text-decoration-color: #808000">package_version</span>=<span style="color: #008000; text-decoration-color: #008000">'0.1.0'</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="color: #808000; text-decoration-color: #808000">errors</span>=<span style="font-weight: bold">[</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="font-weight: bold">{</span>
