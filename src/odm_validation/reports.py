@@ -5,7 +5,7 @@ from typing import Any, List, Optional, Set
 # from pprint import pprint
 
 import part_tables as pt
-from rules import COERCION_RULE_ID
+from rules import RuleId, COERCION_RULE_ID
 from stdext import (
     get_len,
     type_name,
