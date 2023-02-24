@@ -3,17 +3,19 @@
 import os
 import sys
 import tempfile
+from functools import reduce
 from math import ceil
 from os.path import basename, join, normpath, splitext
 from pathlib import Path
 from typing import List, Optional
-from pprint import pprint
+# from pprint import pprint
 
 from xlsx2csv import Xlsx2csv
 
 root_dir = join(os.path.dirname(os.path.realpath(__file__)), '..')
 sys.path.append(join(root_dir, 'src'))
 
+import odm_validation.reports as reports  # noqa:E402
 import odm_validation.utils as utils  # noqa:E402
 from odm_validation.reports import ErrorKind  # noqa:E402
 from odm_validation.validation import _validate_data_ext  # noqa:E402
@@ -41,12 +43,40 @@ def get_sheet_table_id(schema, sheet_name) -> Optional[str]:
             return table_id
 
 
-def write_results(report, kind: ErrorKind, outdir: str, name: str):
-    outfile = os.path.join(outdir, name + f'_{kind.value}s.txt')
-    entries = report.errors if kind == ErrorKind.ERROR else report.warnings
-    messages = list(map(lambda x: x['message'], entries))
+def write_results(report, outdir: str, name: str):
+    entries = {
+        ErrorKind.WARNING: report.warnings,
+        ErrorKind.ERROR: report.errors,
+    }
+    for kind in ErrorKind:
+        outfile = os.path.join(outdir, name + f'_{kind.value}s.txt')
+        messages = list(map(lambda x: x['message'], entries[kind]))
+        with open(outfile, 'w') as f:
+            f.write('\n'.join(messages))
+
+
+def write_summary(text: Optional[str], outdir):
+    if not text:
+        text = 'no errors'
+    outfile = os.path.join(outdir, 'summary.txt')
     with open(outfile, 'w') as f:
-        f.write('\n'.join(messages))
+        f.write(text)
+
+
+def gen_summary(summary: reports.ValidationSummary) -> Optional[str]:
+    result = '# error summary\n'
+    total = 0
+    for table_id, table_summary in summary.table_summaries.items():
+        result += f'\n## {table_id}\n'
+        table_count_max = reduce(lambda a, b: max(a, b),
+                                 table_summary.error_counts.values())
+        width = len(str(table_count_max))
+        for rule_id, count in table_summary.error_counts.items():
+            result += f'- {count:{width}d} {rule_id}\n'
+            total += count
+    if total == 0:
+        return
+    return result
 
 
 def filename_without_ext(path):
@@ -75,6 +105,8 @@ def main():
     print(f'writing files to {outdir}\n')
 
     csv_files = import_xlsx(xlsx_file, outdir)
+
+    full_summary = reports.ValidationSummary()
     for file in csv_files:
         name = filename_without_ext(file)
         print(f'\nvalidating sheet "{name}" ', end='', flush=True)
@@ -87,10 +119,19 @@ def main():
         data = {table_id: data}
         report = _validate_data_ext(schema, data, ver,
                                     on_progress=on_progress)
-        write_results(report, ErrorKind.WARNING, outdir, name)
-        write_results(report, ErrorKind.ERROR, outdir, name)
+        if report.valid():
+            continue
+        full_summary.table_summaries[table_id] = \
+            report.summary.table_summaries[table_id]
+        write_results(report, outdir, name)
+
+    summary_text = gen_summary(full_summary)
+    write_summary(summary_text, outdir)
 
     print()
+    print(summary_text)
+
+    print(f'output dir: {outdir}')
     print('done!')
 
 
