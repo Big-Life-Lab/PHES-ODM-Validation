@@ -146,9 +146,8 @@ class ContextualCoercer(Validator):
 
 
 DateStr = str
-TableId = str
 PrimaryKey = Tuple[pt.PartId, DateStr]
-TableKey = Tuple[TableId, PrimaryKey]
+TableKey = Tuple[pt.TableId, PrimaryKey]
 RowNum = int
 
 
@@ -166,7 +165,7 @@ class AggregatedError:
 class UniqueRuleState:
     """State for the 'unique' rule."""
     def __init__(self):
-        self.table_keys: Dict[TableId, Set[PrimaryKey]] = defaultdict(set)
+        self.table_keys: Dict[pt.TableId, Set[PrimaryKey]] = defaultdict(set)
         self.tablekey_rows: Dict[TableKey, (RowNum, Row)] = {}
         self.tablekey_errors: Dict[TableKey, AggregatedError] = \
             defaultdict(AggregatedError)

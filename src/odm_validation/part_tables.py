@@ -23,6 +23,7 @@ BoolSet = Set[str]  # a set of boolean values
 Part = dict
 PartId = str
 Row = dict
+TableId = str
 
 # type aliases (meta)
 MetaEntry = Dict[str, str]
@@ -32,7 +33,6 @@ MetaMap = DefaultDict[PartId, Meta]
 # type aliases (other)
 Dataset = List[Row]
 PartMap = Dict[PartId, Part]
-TableId = PartId
 
 
 class MapKind(Enum):
