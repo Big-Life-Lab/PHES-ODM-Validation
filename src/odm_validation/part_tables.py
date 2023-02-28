@@ -436,12 +436,12 @@ def gen_partdata(parts: Dataset, version: Version):
     table_data = {}
     for table in tables:
         table_id = get_partID(table)
-        attributes = list(
+        table_attributes = list(
             filter(lambda attr: _table_has_attr(table, attr, version),
-                   filter(is_attr, parts)))
+                   attributes))
         table_data[table_id] = TableData(
             part=table,
-            attributes=attributes,
+            attributes=table_attributes,
         )
 
     # v2 catsets
