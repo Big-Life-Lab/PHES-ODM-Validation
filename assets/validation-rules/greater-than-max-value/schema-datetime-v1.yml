@@ -15,6 +15,7 @@ schema:
             - partID: lastEdited
               maxValue: "2024-01-01"
               sites: header
+              version1Table: Site
               version1Location: variables
               version1Variable: LastEdited
       meta:
