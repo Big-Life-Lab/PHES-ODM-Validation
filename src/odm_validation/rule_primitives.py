@@ -1,6 +1,6 @@
 import logging
 from dataclasses import dataclass
-from logging import error, warning
+from logging import error
 from typing import Any, Callable, List, Optional, Set
 # from pprint import pprint
 
@@ -128,7 +128,7 @@ def init_val_ctx(data: PartData, attr: Part, odm_key: Optional[str],
                  ) -> Optional[OdmValueCtx]:
     odm_val = attr.get(odm_key)
     if odm_key and not odm_val:
-        warning(f'missing value for {pt.get_partID(attr)}.{odm_key}')
+        # warning(f'missing value for {pt.get_partID(attr)}.{odm_key}')
         return
     odm_datatype = attr.get(pt.DATA_TYPE)
     return OdmValueCtx(value=odm_val, datatype=odm_datatype,
