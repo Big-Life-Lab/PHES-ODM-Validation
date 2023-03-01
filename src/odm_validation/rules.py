@@ -221,7 +221,8 @@ def invalid_category():
         other_cat = ['other'] if ver.major == 1 else []
         for table_id0, table_id1, table in table_items(data, ver):
             table_meta = get_table_meta(table, ver)
-            for attr_id0, attr_id1, attr in attr_items(data, table_id0, ver):
+            for attr_id0, attr_id1, attr in attr_items(data, table_id0,
+                                                       table_id1, ver):
                 cs_data = data.catset_data.get(attr_id0)
                 if not cs_data:
                     continue

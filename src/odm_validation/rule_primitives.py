@@ -88,6 +88,19 @@ def _get_mapped_part_ids(data: PartData, part_id: PartId,
     return [part_id]
 
 
+def _get_mapped_attribute_ids(data: PartData, mapped_table_id: PartId,
+                              attr: Part, version: Version
+                              ) -> List[PartId]:
+    # FIXME: This is a hack that skips v1 attributes that don't belong to
+    # the current v1 table. The v1 mapping isn't working properly in this
+    # respect.
+    if version.major == 1:
+        if mapped_table_id not in pt._parse_version1Field(attr, pt.V1_TABLE):
+            return []
+    attr_id = pt.get_partID(attr)
+    return _get_mapped_part_ids(data, attr_id, version)
+
+
 def table_items(data: PartData, version: Version):
     """Iterates over all tables.
 
@@ -99,25 +112,26 @@ def table_items(data: PartData, version: Version):
             yield (table_id0, table_id1, table)
 
 
-def attr_items(data: PartData, table_id: PartId, version: Version,
-               pred: AttrPredicate = None):
+def attr_items(data: PartData, table_id0: PartId, table_id1: PartId,
+               version: Version, pred: AttrPredicate = None):
     """Iterates over all attributes in a table.
 
     Yields a tuple of: (original id, mapped id, part)."""
-    attributes = data.table_data[table_id].attributes
+    attributes = data.table_data[table_id0].attributes
     if pred:
         attributes = list(
-            filter(lambda attr: pred(table_id, attr), attributes))
+            filter(lambda attr: pred(table_id0, attr), attributes))
     for attr in attributes:
         attr_id0 = pt.get_partID(attr)
-        for attr_id1 in _get_mapped_part_ids(data, attr_id0, version):
+        for attr_id1 in _get_mapped_attribute_ids(data, table_id1, attr,
+                                                  version):
             yield (attr_id0, attr_id1, attr)
 
 
 def add_attr_schemas(table_schema, data, table_id0, table_id1, attr, rule_id,
                      odm_key: Optional[str], cerb_rules, version):
-    attr_id0 = pt.get_partID(attr)
-    for attr_id1 in _get_mapped_part_ids(data, attr_id0, version):
+    for attr_id1 in _get_mapped_attribute_ids(data, table_id1, attr,
+                                              version):
         attr_meta = _get_attr_meta(attr, table_id0, version, odm_key)
         attr_schema = init_attr_schema(attr_id1, rule_id, cerb_rules,
                                        attr_meta)
