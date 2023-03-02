@@ -6,7 +6,7 @@ generation and data validation.
 from collections import defaultdict
 from copy import deepcopy
 from itertools import groupby
-from typing import Any, Callable, Dict, List, Optional, Set
+from typing import Any, Callable, Dict, List, Optional, Set, Tuple
 # from pprint import pprint
 
 from cerberusext import ContextualCoercer, OdmValidator
@@ -25,6 +25,7 @@ from stdext import (
 from versions import __version__, parse_version
 
 
+RuleError = Tuple[rules.RuleId, dict]
 TableDataset = Dict[pt.TableId, pt.Dataset]
 
 
@@ -103,7 +104,7 @@ def _cerb_to_odm_type(cerb_type: str) -> Optional[str]:
 def _gen_error_entry(cerb_rule, table_id, column_id, value, row_numbers,
                      rows, column_meta, rule_whitelist: List[str],
                      constraint=None, schema_column=None,
-                     ) -> Optional[dict]:
+                     ) -> Optional[RuleError]:
     if not value and cerb_rule == 'type':
         return
 
@@ -128,12 +129,13 @@ def _gen_error_entry(cerb_rule, table_id, column_id, value, row_numbers,
         rule_id=rule.id,
         table_id=table_id,
     )
-    return reports.gen_rule_error(error_ctx, kind=kind)
+    entry = reports.gen_rule_error(error_ctx, kind=kind)
+    return (rule.id, entry)
 
 
 def _gen_cerb_error_entry(e, row, schema: CerberusSchema,
                           rule_whitelist: List[str], offset: int
-                          ) -> Optional[dict]:
+                          ) -> Optional[RuleError]:
     cerb_rule = e.schema_path[-1]
     (table_id, _, column_id) = e.document_path
     row_index = e.document_path[1]
@@ -223,7 +225,8 @@ def _strip_coerce_rules(cerb_schema):
     return strip_dict_key(deepcopy(cerb_schema), 'coerce')
 
 
-def _map_cerb_errors(cerb_errors, schema, rule_whitelist, offset: int):
+def _map_cerb_errors(table_id, cerb_errors, schema, rule_whitelist,
+                     summary: reports.ValidationSummary, offset: int):
     "Returns (errors, warnings)."
     errors = []
     warnings = []
@@ -233,10 +236,13 @@ def _map_cerb_errors(cerb_errors, schema, rule_whitelist, offset: int):
                 row = e.value
                 for attr_errors in e.info:
                     for e in attr_errors:
-                        entry = _gen_cerb_error_entry(e, row, schema,
-                                                      rule_whitelist, offset)
-                        if not entry:
+                        rule_error = _gen_cerb_error_entry(e, row, schema,
+                                                           rule_whitelist,
+                                                           offset)
+                        if not rule_error:
                             continue
+                        (rule_id, entry) = rule_error
+                        summary.record_error(table_id, rule_id)
                         if 'warningType' in entry:
                             warnings.append(entry)
                         else:
@@ -244,12 +250,15 @@ def _map_cerb_errors(cerb_errors, schema, rule_whitelist, offset: int):
     return errors, warnings
 
 
-def _map_aggregated_errors(agg_errors, rule_whitelist):
+def _map_aggregated_errors(table_id, agg_errors, rule_whitelist, summary):
     errors = []
     for ae in agg_errors:
-        entry = _gen_aggregated_error_entry(ae, rule_whitelist)
-        if entry:
-            errors.append(entry)
+        rule_error = _gen_aggregated_error_entry(ae, rule_whitelist)
+        if not rule_error:
+            continue
+        (rule_id, entry) = rule_error
+        summary.record_error(table_id, rule_id)
+        errors.append(entry)
     return errors
 
 
@@ -333,6 +342,7 @@ def _validate_data_ext(schema: Schema,
     versioned_schema = schema
     cerb_schema = versioned_schema["schema"]
     coercion_schema = cerb_schema
+    summary = reports.ValidationSummary()
 
     assert isinstance(data, dict), (
         '`data` must be a dict. Remember to wrap the datasets in a dict with '
@@ -368,12 +378,13 @@ def _validate_data_ext(schema: Schema,
             v._errors.clear()
             if v.validate(offset, batch_data, validation_schema):
                 continue
-            e, w = _map_cerb_errors(v._errors, validation_schema,
-                                    rule_whitelist, offset)
+            e, w = _map_cerb_errors(table_id, v._errors, validation_schema,
+                                    rule_whitelist, summary, offset)
             errors += e
             warnings += w
-        errors += _map_aggregated_errors(v.error_state.aggregated_errors,
-                                         rule_whitelist)
+        errors += _map_aggregated_errors(table_id,
+                                         v.error_state.aggregated_errors,
+                                         rule_whitelist, summary)
 
     errors = _filter_errors(errors)
 
@@ -383,6 +394,7 @@ def _validate_data_ext(schema: Schema,
         package_version=__version__,
         errors=errors,
         warnings=warnings,
+        summary=summary,
     )
 
 
