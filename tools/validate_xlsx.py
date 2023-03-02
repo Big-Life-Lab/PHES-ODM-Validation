@@ -56,14 +56,12 @@ def write_results(report, outdir: str, name: str):
 
 
 def write_summary(text: Optional[str], outdir):
-    if not text:
-        text = 'no errors'
     outfile = os.path.join(outdir, 'summary.txt')
     with open(outfile, 'w') as f:
         f.write(text)
 
 
-def gen_summary(summary: reports.ValidationSummary) -> Optional[str]:
+def gen_summary(summary: reports.ValidationSummary) -> str:
     result = '# error summary\n'
     total = 0
     for table_id, table_summary in summary.table_summaries.items():
@@ -75,7 +73,7 @@ def gen_summary(summary: reports.ValidationSummary) -> Optional[str]:
             result += f'- {count:{width}d} {rule_id}\n'
             total += count
     if total == 0:
-        return
+        result += '\nno errors'
     return result
 
 
@@ -131,6 +129,7 @@ def main():
     print()
     print(summary_text)
 
+    print()
     print(f'output dir: {outdir}')
     print('done!')
 
