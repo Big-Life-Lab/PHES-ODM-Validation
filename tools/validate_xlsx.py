@@ -62,6 +62,9 @@ def write_summary(text: Optional[str], outdir):
 
 
 def gen_summary(summary: reports.ValidationSummary) -> str:
+    "Returns a text summary report with error counts."
+    # The error counts are formatted with 'width' to make subsequent error
+    # counts line up nicely in the output.
     result = '# error summary\n'
     total = 0
     for table_id, table_summary in summary.table_summaries.items():
