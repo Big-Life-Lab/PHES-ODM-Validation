@@ -4,8 +4,8 @@ generation and data validation.
 """
 
 from collections import defaultdict
+from collections.abc import Iterable, Iterator
 from copy import deepcopy
-from dataclasses import dataclass
 from itertools import groupby
 from typing import Any, Callable, Dict, List, Optional, Set, Tuple
 # from pprint import pprint
@@ -30,7 +30,6 @@ RuleError = Tuple[rules.RuleId, dict]
 TableDataset = Dict[pt.TableId, pt.Dataset]
 
 
-@dataclass
 class RuleFilter:
     # `whitelist` is needed when testing schema generation and data validation.
     # Users may be more interested in `blacklist`, to remove certain irrelevant
@@ -39,10 +38,18 @@ class RuleFilter:
     blacklist: List[RuleId]
     whitelist: List[RuleId]
 
-    def enabled(self, rule_id):
+    def __init__(self, blacklist=[], whitelist=[]):
+        self.blacklist = blacklist
+        self.whitelist = whitelist
+
+    def enabled(self, rule: Rule):
         "Returns true if the rule `rule_id` is enabled."
+        rule_id = rule.id
         return (rule_id not in self.blacklist and
                 (rule_id in self.whitelist or self.whitelist == []))
+
+    def filter(self, rules: Iterable[Rule]) -> Iterator[Rule]:
+        return filter(self.enabled, rules)
 
 
 def _gen_cerb_rule_map():
@@ -125,7 +132,7 @@ def _gen_error_entry(cerb_rule, table_id, column_id, value, row_numbers,
         return
 
     rule = _get_rule_for_cerb_key(cerb_rule, column_meta)
-    if not rule_filter.enabled(rule.id):
+    if not rule_filter.enabled(rule):
         return
 
     cerb_type = schema_column.get('type', None) if schema_column else None
@@ -312,7 +319,7 @@ def _generate_validation_schema_ext(parts, schema_version,
 
     rule_filter = RuleFilter(whitelist=rule_whitelist,
                              blacklist=rule_blacklist)
-    enabled_rules = filter(lambda r: rule_filter.enabled(r.id), ruleset)
+    enabled_rules = list(rule_filter.filter(ruleset))
 
     cerb_schema = {}
     for r in enabled_rules:
