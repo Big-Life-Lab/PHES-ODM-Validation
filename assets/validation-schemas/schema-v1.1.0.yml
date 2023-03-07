@@ -7,37 +7,6 @@ schema:
         version1Location: Tables
         version1Table: AssayMethod
       schema:
-        aggregation:
-          maxlength: 12
-          meta:
-          - meta:
-            - maxLength: '12'
-              partID: aggID
-              protocolSteps: fK
-              protocolStepsRequired: mandatoryIf
-              version1Location: variables
-              version1Table: WWMeasure; SiteMeasure
-              version1Variable: aggregation
-            ruleID: greater_than_max_length
-          - meta:
-            - dataType: categorical
-              partID: aggID
-              protocolSteps: fK
-              protocolStepsRequired: mandatoryIf
-              version1Location: variables
-              version1Table: WWMeasure; SiteMeasure
-              version1Variable: aggregation
-            ruleID: invalid_type
-          - meta:
-            - minLength: '0'
-              partID: aggID
-              protocolSteps: fK
-              protocolStepsRequired: mandatoryIf
-              version1Location: variables
-              version1Table: WWMeasure; SiteMeasure
-              version1Variable: aggregation
-            ruleID: less_than_min_length
-          type: string
         aliasID:
           maxlength: 10
           meta:
@@ -120,68 +89,6 @@ schema:
               version1Variable: date
             ruleID: less_than_min_length
           type: datetime
-        instrumentID:
-          maxlength: 10
-          meta:
-          - meta:
-            - maxLength: '10'
-              partID: instrumentID
-              protocolSteps: fK
-              protocolStepsRequired: optional
-              version1Location: variables
-              version1Table: Instrument
-              version1Variable: instrumentID
-            ruleID: greater_than_max_length
-          - meta:
-            - dataType: categorical
-              partID: instrumentID
-              protocolSteps: fK
-              protocolStepsRequired: optional
-              version1Location: variables
-              version1Table: Instrument
-              version1Variable: instrumentID
-            ruleID: invalid_type
-          - meta:
-            - minLength: '0'
-              partID: instrumentID
-              protocolSteps: fK
-              protocolStepsRequired: optional
-              version1Location: variables
-              version1Table: Instrument
-              version1Variable: instrumentID
-            ruleID: less_than_min_length
-          type: string
-        organization:
-          maxlength: 100
-          meta:
-          - meta:
-            - maxLength: '100'
-              partID: organizationID
-              protocolSteps: fK
-              protocolStepsRequired: optional
-              version1Location: variables
-              version1Table: Reporter
-              version1Variable: organization
-            ruleID: greater_than_max_length
-          - meta:
-            - dataType: varchar
-              partID: organizationID
-              protocolSteps: fK
-              protocolStepsRequired: optional
-              version1Location: variables
-              version1Table: Reporter
-              version1Variable: organization
-            ruleID: invalid_type
-          - meta:
-            - minLength: '0'
-              partID: organizationID
-              protocolSteps: fK
-              protocolStepsRequired: optional
-              version1Location: variables
-              version1Table: Reporter
-              version1Variable: organization
-            ruleID: less_than_min_length
-          type: string
         referenceLink:
           maxlength: 255
           meta:
@@ -191,7 +98,7 @@ schema:
               protocolSteps: header
               protocolStepsRequired: optional
               version1Location: variables
-              version1Table: AssayMethod, Insturment
+              version1Table: AssayMethod; Instrument
               version1Variable: referenceLink
             ruleID: greater_than_max_length
           - meta:
@@ -200,7 +107,7 @@ schema:
               protocolSteps: header
               protocolStepsRequired: optional
               version1Location: variables
-              version1Table: AssayMethod, Insturment
+              version1Table: AssayMethod; Instrument
               version1Variable: referenceLink
             ruleID: invalid_type
           - meta:
@@ -209,7 +116,7 @@ schema:
               protocolSteps: header
               protocolStepsRequired: optional
               version1Location: variables
-              version1Table: AssayMethod, Insturment
+              version1Table: AssayMethod; Instrument
               version1Variable: referenceLink
             ruleID: less_than_min_length
           type: string
@@ -244,196 +151,6 @@ schema:
               version1Variable: summary
             ruleID: less_than_min_length
           type: string
-        type:
-          allowed:
-          - covE
-          - covN1
-          - covN2
-          - covN3
-          - covRdrp
-          - nPPMoV
-          - nbrsvN
-          - ncrA
-          - other
-          - varB117
-          - varB1351
-          - varP1
-          - wqCOD
-          - wqCond
-          - wqNH4N
-          - wqOPhos
-          - wqPh
-          - wqTN
-          - wqTS
-          - wqTSS
-          - wqTemp
-          - wqVSS
-          - wwCOD
-          - wwOPhos
-          - wwTN
-          maxlength: 12
-          meta:
-          - meta:
-            - maxLength: '12'
-              partID: measureID
-              protocolSteps: fK
-              protocolStepsRequired: mandatoryIf
-              version1Location: variables
-              version1Table: WWMeasure
-              version1Variable: type
-            ruleID: greater_than_max_length
-          - meta:
-            - dataType: varchar
-              partID: measureID
-              version1Location: variables
-              version1Table: WWMeasure
-              version1Variable: type
-            - partID: brsvN
-              partType: measure
-              version1Category: nbrsvN
-              version1Location: variableCategories
-              version1Table: WWMeasure
-              version1Variable: type
-            - partID: cod
-              partType: measure
-              version1Category: wqCOD; wwCOD
-              version1Location: variableCategories
-              version1Table: WWMeasure; SiteMeasure
-              version1Variable: type
-            - partID: cond
-              partType: measure
-              version1Category: wqCond
-              version1Location: variableCategories
-              version1Table: WWMeasure; SiteMeasure
-              version1Variable: type
-            - partID: covB117
-              partType: measure
-              version1Category: varB117
-              version1Location: variableCategories
-              version1Table: WWMeasure
-              version1Variable: type
-            - partID: covB135
-              partType: measure
-              version1Category: varB1351
-              version1Location: variableCategories
-              version1Table: WWMeasure
-              version1Variable: type
-            - partID: covE
-              partType: measure
-              version1Category: covE
-              version1Location: variableCategories
-              version1Table: WWMeasure
-              version1Variable: type
-            - partID: covN1
-              partType: measure
-              version1Category: covN1
-              version1Location: variableCategories
-              version1Table: WWMeasure
-              version1Variable: type
-            - partID: covN2
-              partType: measure
-              version1Category: covN2
-              version1Location: variableCategories
-              version1Table: WWMeasure
-              version1Variable: type
-            - partID: covN3
-              partType: measure
-              version1Category: covN3
-              version1Location: variableCategories
-              version1Table: WWMeasure
-              version1Variable: type
-            - partID: covP1
-              partType: measure
-              version1Category: varP1
-              version1Location: variableCategories
-              version1Table: WWMeasure
-              version1Variable: type
-            - partID: covRdrp
-              partType: measure
-              version1Category: covRdrp
-              version1Location: variableCategories
-              version1Table: WWMeasure
-              version1Variable: type
-            - partID: cra
-              partType: measure
-              version1Category: ncrA
-              version1Location: variableCategories
-              version1Table: WWMeasure
-              version1Variable: type
-            - partID: nH4N
-              partType: measure
-              version1Category: wqNH4N
-              version1Location: variableCategories
-              version1Table: WWMeasure; SiteMeasure
-              version1Variable: type
-            - partID: ophos
-              partType: measure
-              version1Category: wwOPhos; wqOPhos
-              version1Location: variableCategories
-              version1Table: SiteMeasure; WWMeasure
-              version1Variable: type
-            - partID: ph
-              partType: measure
-              version1Category: wqPh
-              version1Location: variableCategories
-              version1Table: WWMeasure
-              version1Variable: type
-            - partID: ppmv
-              partType: measure
-              version1Category: nPPMoV
-              version1Location: variableCategories
-              version1Table: WWMeasure
-              version1Variable: type
-            - partID: temp
-              partType: measure
-              version1Category: wqTemp
-              version1Location: variableCategories
-              version1Table: WWMeasure
-              version1Variable: type
-            - partID: tn
-              partType: measure
-              version1Category: wqTN; wwTN
-              version1Location: variableCategories
-              version1Table: WWMeasure; SiteMeasure
-              version1Variable: type
-            - partID: ts
-              partType: measure
-              version1Category: wqTS
-              version1Location: variableCategories
-              version1Table: WWMeasure
-              version1Variable: type
-            - partID: tss
-              partType: measure
-              version1Category: wqTSS
-              version1Location: variableCategories
-              version1Table: WWMeasure
-              version1Variable: type
-            - partID: vss
-              partType: measure
-              version1Category: wqVSS
-              version1Location: variableCategories
-              version1Table: WWMeasure
-              version1Variable: type
-            ruleID: invalid_category
-          - meta:
-            - dataType: varchar
-              partID: measureID
-              protocolSteps: fK
-              protocolStepsRequired: mandatoryIf
-              version1Location: variables
-              version1Table: WWMeasure
-              version1Variable: type
-            ruleID: invalid_type
-          - meta:
-            - minLength: '0'
-              partID: measureID
-              protocolSteps: fK
-              protocolStepsRequired: mandatoryIf
-              version1Location: variables
-              version1Table: WWMeasure
-              version1Variable: type
-            ruleID: less_than_min_length
-          type: string
         unit:
           maxlength: 30
           meta:
@@ -443,7 +160,7 @@ schema:
               protocolSteps: fK
               protocolStepsRequired: mandatoryIf
               version1Location: variables
-              version1Table: WWMeasure; SiteMeasure
+              version1Table: WWMeasure; SiteMeasure; AssayMethod
               version1Variable: unit
             ruleID: greater_than_max_length
           - meta:
@@ -452,7 +169,7 @@ schema:
               protocolSteps: fK
               protocolStepsRequired: mandatoryIf
               version1Location: variables
-              version1Table: WWMeasure; SiteMeasure
+              version1Table: WWMeasure; SiteMeasure; AssayMethod
               version1Variable: unit
             ruleID: invalid_type
           - meta:
@@ -461,42 +178,10 @@ schema:
               protocolSteps: fK
               protocolStepsRequired: mandatoryIf
               version1Location: variables
-              version1Table: WWMeasure; SiteMeasure
+              version1Table: WWMeasure; SiteMeasure; AssayMethod
               version1Variable: unit
             ruleID: less_than_min_length
           type: string
-        updateDate:
-          coerce: datetime
-          maxlength: 30
-          meta:
-          - meta:
-            - maxLength: '30'
-              partID: lastEdited
-              protocolSteps: header
-              protocolStepsRequired: optional
-              version1Location: variables
-              version1Table: Lab
-              version1Variable: updateDate
-            ruleID: greater_than_max_length
-          - meta:
-            - dataType: datetime
-              partID: lastEdited
-              protocolSteps: header
-              protocolStepsRequired: optional
-              version1Location: variables
-              version1Table: Lab
-              version1Variable: updateDate
-            ruleID: invalid_type
-          - meta:
-            - minLength: '0'
-              partID: lastEdited
-              protocolSteps: header
-              protocolStepsRequired: optional
-              version1Location: variables
-              version1Table: Lab
-              version1Variable: updateDate
-            ruleID: less_than_min_length
-          type: datetime
         version:
           maxlength: 50
           meta:
@@ -563,38 +248,6 @@ schema:
               version1Variable: alias
             ruleID: less_than_min_length
           type: string
-        index:
-          coerce: integer
-          maxlength: 50
-          meta:
-          - meta:
-            - instruments: header
-              instrumentsRequired: optional
-              maxLength: '50'
-              partID: index
-              version1Location: variables
-              version1Table: WWMeasure
-              version1Variable: index
-            ruleID: greater_than_max_length
-          - meta:
-            - dataType: integer
-              instruments: header
-              instrumentsRequired: optional
-              partID: index
-              version1Location: variables
-              version1Table: WWMeasure
-              version1Variable: index
-            ruleID: invalid_type
-          - meta:
-            - instruments: header
-              instrumentsRequired: optional
-              minLength: '0'
-              partID: index
-              version1Location: variables
-              version1Table: WWMeasure
-              version1Variable: index
-            ruleID: less_than_min_length
-          type: integer
         instrumentID:
           emptyTrimmed: false
           forbidden:
@@ -714,37 +367,6 @@ schema:
             ruleID: missing_values_found
           required: true
           type: string
-        organization:
-          maxlength: 100
-          meta:
-          - meta:
-            - instruments: fK
-              instrumentsRequired: optional
-              maxLength: '100'
-              partID: organizationID
-              version1Location: variables
-              version1Table: Reporter
-              version1Variable: organization
-            ruleID: greater_than_max_length
-          - meta:
-            - dataType: varchar
-              instruments: fK
-              instrumentsRequired: optional
-              partID: organizationID
-              version1Location: variables
-              version1Table: Reporter
-              version1Variable: organization
-            ruleID: invalid_type
-          - meta:
-            - instruments: fK
-              instrumentsRequired: optional
-              minLength: '0'
-              partID: organizationID
-              version1Location: variables
-              version1Table: Reporter
-              version1Variable: organization
-            ruleID: less_than_min_length
-          type: string
         referenceLink:
           maxlength: 255
           meta:
@@ -754,7 +376,7 @@ schema:
               maxLength: '255'
               partID: refLink
               version1Location: variables
-              version1Table: AssayMethod, Insturment
+              version1Table: AssayMethod; Instrument
               version1Variable: referenceLink
             ruleID: greater_than_max_length
           - meta:
@@ -763,7 +385,7 @@ schema:
               instrumentsRequired: optional
               partID: refLink
               version1Location: variables
-              version1Table: AssayMethod, Insturment
+              version1Table: AssayMethod; Instrument
               version1Variable: referenceLink
             ruleID: invalid_type
           - meta:
@@ -772,7 +394,7 @@ schema:
               minLength: '0'
               partID: refLink
               version1Location: variables
-              version1Table: AssayMethod, Insturment
+              version1Table: AssayMethod; Instrument
               version1Variable: referenceLink
             ruleID: less_than_min_length
           type: string
@@ -906,38 +528,6 @@ schema:
               version1Variable: typeOther
             ruleID: less_than_min_length
           type: string
-        updateDate:
-          coerce: datetime
-          maxlength: 30
-          meta:
-          - meta:
-            - instruments: header
-              instrumentsRequired: optional
-              maxLength: '30'
-              partID: lastEdited
-              version1Location: variables
-              version1Table: Lab
-              version1Variable: updateDate
-            ruleID: greater_than_max_length
-          - meta:
-            - dataType: datetime
-              instruments: header
-              instrumentsRequired: optional
-              partID: lastEdited
-              version1Location: variables
-              version1Table: Lab
-              version1Variable: updateDate
-            ruleID: invalid_type
-          - meta:
-            - instruments: header
-              instrumentsRequired: optional
-              minLength: '0'
-              partID: lastEdited
-              version1Location: variables
-              version1Table: Lab
-              version1Variable: updateDate
-            ruleID: less_than_min_length
-          type: datetime
       type: dict
     type: list
   Lab:
@@ -1074,70 +664,6 @@ schema:
               version1Variable: labID
             ruleID: less_than_min_length
           type: string
-        organization:
-          emptyTrimmed: false
-          forbidden:
-          - NA
-          - nan
-          - nr
-          - 'null'
-          - undisc
-          maxlength: 100
-          meta:
-          - meta:
-            - organizations: pK
-              organizationsRequired: mandatory
-              partID: organizationID
-              version1Location: variables
-              version1Table: Reporter
-              version1Variable: organization
-            ruleID: duplicate_entries_found
-          - meta:
-            - maxLength: '100'
-              organizations: pK
-              organizationsRequired: mandatory
-              partID: organizationID
-              version1Location: variables
-              version1Table: Reporter
-              version1Variable: organization
-            ruleID: greater_than_max_length
-          - meta:
-            - dataType: varchar
-              organizations: pK
-              organizationsRequired: mandatory
-              partID: organizationID
-              version1Location: variables
-              version1Table: Reporter
-              version1Variable: organization
-            ruleID: invalid_type
-          - meta:
-            - minLength: '0'
-              organizations: pK
-              organizationsRequired: mandatory
-              partID: organizationID
-              version1Location: variables
-              version1Table: Reporter
-              version1Variable: organization
-            ruleID: less_than_min_length
-          - meta:
-            - organizations: pK
-              organizationsRequired: mandatory
-              partID: organizationID
-              version1Location: variables
-              version1Table: Reporter
-              version1Variable: organization
-            ruleID: missing_mandatory_column
-          - meta:
-            - organizations: pK
-              organizationsRequired: mandatory
-              partID: organizationID
-              version1Location: variables
-              version1Table: Reporter
-              version1Variable: organization
-            ruleID: missing_values_found
-          required: true
-          type: string
-          unique: true
         updateDate:
           coerce: datetime
           maxlength: 30
@@ -1170,41 +696,6 @@ schema:
               version1Variable: updateDate
             ruleID: less_than_min_length
           type: datetime
-      type: dict
-    type: list
-  Lookup:
-    schema:
-      meta:
-      - partID: sets
-        partType: table
-        version1Location: Tables
-        version1Table: Lookup
-      schema:
-        columnName:
-          maxlength: 30
-          meta:
-          - meta:
-            - maxLength: '30'
-              partID: columnNameDep
-              version1Location: variables
-              version1Table: Lookup
-              version1Variable: columnName
-            ruleID: greater_than_max_length
-          - meta:
-            - dataType: varchar
-              partID: columnNameDep
-              version1Location: variables
-              version1Table: Lookup
-              version1Variable: columnName
-            ruleID: invalid_type
-          - meta:
-            - minLength: '0'
-              partID: columnNameDep
-              version1Location: variables
-              version1Table: Lookup
-              version1Variable: columnName
-            ruleID: less_than_min_length
-          type: string
       type: dict
     type: list
   Polygon:
@@ -1268,37 +759,6 @@ schema:
               version1Location: variables
               version1Table: Polygon
               version1Variable: link
-            ruleID: less_than_min_length
-          type: string
-        organization:
-          maxlength: 100
-          meta:
-          - meta:
-            - maxLength: '100'
-              partID: organizationID
-              polygons: header
-              polygonsRequired: optional
-              version1Location: variables
-              version1Table: Reporter
-              version1Variable: organization
-            ruleID: greater_than_max_length
-          - meta:
-            - dataType: varchar
-              partID: organizationID
-              polygons: header
-              polygonsRequired: optional
-              version1Location: variables
-              version1Table: Reporter
-              version1Variable: organization
-            ruleID: invalid_type
-          - meta:
-            - minLength: '0'
-              partID: organizationID
-              polygons: header
-              polygonsRequired: optional
-              version1Location: variables
-              version1Table: Reporter
-              version1Variable: organization
             ruleID: less_than_min_length
           type: string
         polygonID:
@@ -1365,37 +825,6 @@ schema:
           required: true
           type: string
           unique: true
-        referenceLink:
-          maxlength: 255
-          meta:
-          - meta:
-            - maxLength: '255'
-              partID: refLink
-              polygons: header
-              polygonsRequired: optional
-              version1Location: variables
-              version1Table: AssayMethod, Insturment
-              version1Variable: referenceLink
-            ruleID: greater_than_max_length
-          - meta:
-            - dataType: varchar
-              partID: refLink
-              polygons: header
-              polygonsRequired: optional
-              version1Location: variables
-              version1Table: AssayMethod, Insturment
-              version1Variable: referenceLink
-            ruleID: invalid_type
-          - meta:
-            - minLength: '0'
-              partID: refLink
-              polygons: header
-              polygonsRequired: optional
-              version1Location: variables
-              version1Table: AssayMethod, Insturment
-              version1Variable: referenceLink
-            ruleID: less_than_min_length
-          type: string
         type:
           allowed:
           - hlthReg
@@ -1475,38 +904,6 @@ schema:
             ruleID: missing_values_found
           required: true
           type: string
-        updateDate:
-          coerce: datetime
-          maxlength: 30
-          meta:
-          - meta:
-            - maxLength: '30'
-              partID: lastEdited
-              polygons: header
-              polygonsRequired: optional
-              version1Location: variables
-              version1Table: Lab
-              version1Variable: updateDate
-            ruleID: greater_than_max_length
-          - meta:
-            - dataType: datetime
-              partID: lastEdited
-              polygons: header
-              polygonsRequired: optional
-              version1Location: variables
-              version1Table: Lab
-              version1Variable: updateDate
-            ruleID: invalid_type
-          - meta:
-            - minLength: '0'
-              partID: lastEdited
-              polygons: header
-              polygonsRequired: optional
-              version1Location: variables
-              version1Table: Lab
-              version1Variable: updateDate
-            ruleID: less_than_min_length
-          type: datetime
         wkt:
           emptyTrimmed: false
           forbidden:
@@ -1683,6 +1080,15 @@ schema:
         version1Table: Sample
       schema:
         collection:
+          allowed:
+          - cpFP24h
+          - cpTP24h
+          - grb
+          - grbCp3
+          - grbCp3h
+          - grbCp8h
+          - mooreSw
+          - other
           emptyTrimmed: false
           forbidden:
           - NA
@@ -1698,16 +1104,72 @@ schema:
               samples: fk
               samplesRequired: mandatory
               version1Location: variables
-              version1Table: sample
+              version1Table: Sample
               version1Variable: collection
             ruleID: greater_than_max_length
+          - meta:
+            - catSetID: collectCatSet
+              dataType: categorical
+              partID: collType
+              version1Location: variables
+              version1Table: Sample
+              version1Variable: collection
+            - partID: comp3
+              partType: category
+              version1Category: grbCp3
+              version1Location: variableCategories
+              version1Table: Sample
+              version1Variable: collection
+            - partID: comp3h
+              partType: category
+              version1Category: grbCp3h
+              version1Location: variableCategories
+              version1Table: Sample
+              version1Variable: collection
+            - partID: flowPr
+              partType: category
+              version1Category: cpFP24h
+              version1Location: variableCategories
+              version1Table: Sample
+              version1Variable: collection
+            - partID: comp8hDep
+              partType: category
+              version1Category: grbCp8h
+              version1Location: variableCategories
+              version1Table: Sample
+              version1Variable: collection
+            - partID: grb
+              partType: category
+              version1Category: grb
+              version1Location: variableCategories
+              version1Table: Sample
+              version1Variable: collection
+            - partID: moorSw
+              partType: category
+              version1Category: mooreSw
+              version1Location: variableCategories
+              version1Table: Sample
+              version1Variable: collection
+            - partID: timePr
+              partType: category
+              version1Category: cpTP24h
+              version1Location: variableCategories
+              version1Table: Sample
+              version1Variable: collection
+            - partID: oColDep
+              partType: category
+              version1Category: other
+              version1Location: variableCategories
+              version1Table: Sample
+              version1Variable: collection
+            ruleID: invalid_category
           - meta:
             - dataType: categorical
               partID: collType
               samples: fk
               samplesRequired: mandatory
               version1Location: variables
-              version1Table: sample
+              version1Table: Sample
               version1Variable: collection
             ruleID: invalid_type
           - meta:
@@ -1716,7 +1178,7 @@ schema:
               samples: fk
               samplesRequired: mandatory
               version1Location: variables
-              version1Table: sample
+              version1Table: Sample
               version1Variable: collection
             ruleID: less_than_min_length
           - meta:
@@ -1724,7 +1186,7 @@ schema:
               samples: fk
               samplesRequired: mandatory
               version1Location: variables
-              version1Table: sample
+              version1Table: Sample
               version1Variable: collection
             ruleID: missing_mandatory_column
           - meta:
@@ -1732,7 +1194,7 @@ schema:
               samples: fk
               samplesRequired: mandatory
               version1Location: variables
-              version1Table: sample
+              version1Table: Sample
               version1Variable: collection
             ruleID: missing_values_found
           required: true
@@ -1857,37 +1319,6 @@ schema:
               version1Variable: dateTimeStart
             ruleID: less_than_min_length
           type: datetime
-        organization:
-          maxlength: 100
-          meta:
-          - meta:
-            - maxLength: '100'
-              partID: organizationID
-              samples: header
-              samplesRequired: optional
-              version1Location: variables
-              version1Table: Reporter
-              version1Variable: organization
-            ruleID: greater_than_max_length
-          - meta:
-            - dataType: varchar
-              partID: organizationID
-              samples: header
-              samplesRequired: optional
-              version1Location: variables
-              version1Table: Reporter
-              version1Variable: organization
-            ruleID: invalid_type
-          - meta:
-            - minLength: '0'
-              partID: organizationID
-              samples: header
-              samplesRequired: optional
-              version1Location: variables
-              version1Table: Reporter
-              version1Variable: organization
-            ruleID: less_than_min_length
-          type: string
         parent:
           maxlength: 30
           meta:
@@ -1916,7 +1347,7 @@ schema:
         pooled:
           allowed:
           - accessToDetails
-          - detected
+          - accessToLocalHA
           maxlength: 30
           meta:
           - meta:
@@ -2036,61 +1467,6 @@ schema:
           required: true
           type: string
           unique: true
-        siteID:
-          emptyTrimmed: false
-          forbidden:
-          - NA
-          - nan
-          - nr
-          - 'null'
-          - undisc
-          maxlength: 30
-          meta:
-          - meta:
-            - maxLength: '30'
-              partID: siteID
-              samples: fK
-              samplesRequired: mandatory
-              version1Location: variables
-              version1Table: Site
-              version1Variable: siteID
-            ruleID: greater_than_max_length
-          - meta:
-            - dataType: varchar
-              partID: siteID
-              samples: fK
-              samplesRequired: mandatory
-              version1Location: variables
-              version1Table: Site
-              version1Variable: siteID
-            ruleID: invalid_type
-          - meta:
-            - minLength: '0'
-              partID: siteID
-              samples: fK
-              samplesRequired: mandatory
-              version1Location: variables
-              version1Table: Site
-              version1Variable: siteID
-            ruleID: less_than_min_length
-          - meta:
-            - partID: siteID
-              samples: fK
-              samplesRequired: mandatory
-              version1Location: variables
-              version1Table: Site
-              version1Variable: siteID
-            ruleID: missing_mandatory_column
-          - meta:
-            - partID: siteID
-              samples: fK
-              samplesRequired: mandatory
-              version1Location: variables
-              version1Table: Site
-              version1Variable: siteID
-            ruleID: missing_values_found
-          required: true
-          type: string
         type:
           allowed:
           - hTank
@@ -2219,38 +1595,6 @@ schema:
             ruleID: missing_values_found
           required: true
           type: string
-        updateDate:
-          coerce: datetime
-          maxlength: 30
-          meta:
-          - meta:
-            - maxLength: '30'
-              partID: lastEdited
-              samples: header
-              samplesRequired: optional
-              version1Location: variables
-              version1Table: Lab
-              version1Variable: updateDate
-            ruleID: greater_than_max_length
-          - meta:
-            - dataType: datetime
-              partID: lastEdited
-              samples: header
-              samplesRequired: optional
-              version1Location: variables
-              version1Table: Lab
-              version1Variable: updateDate
-            ruleID: invalid_type
-          - meta:
-            - minLength: '0'
-              partID: lastEdited
-              samples: header
-              samplesRequired: optional
-              version1Location: variables
-              version1Table: Lab
-              version1Variable: updateDate
-            ruleID: less_than_min_length
-          type: datetime
       type: dict
     type: list
   Site:
@@ -2332,7 +1676,7 @@ schema:
           meta:
           - meta:
             - maxLength: '30'
-              partID: healthReg
+              partID: repOrg2
               sites: header
               sitesRequired: optional
               version1Location: variables
@@ -2341,7 +1685,7 @@ schema:
             ruleID: greater_than_max_length
           - meta:
             - dataType: varchar
-              partID: healthReg
+              partID: repOrg2
               sites: header
               sitesRequired: optional
               version1Location: variables
@@ -2350,74 +1694,12 @@ schema:
             ruleID: invalid_type
           - meta:
             - minLength: '0'
-              partID: healthReg
+              partID: repOrg2
               sites: header
               sitesRequired: optional
               version1Location: variables
               version1Table: Site
               version1Variable: healthRegion
-            ruleID: less_than_min_length
-          type: string
-        organization:
-          maxlength: 100
-          meta:
-          - meta:
-            - maxLength: '100'
-              partID: organizationID
-              sites: header
-              sitesRequired: optional
-              version1Location: variables
-              version1Table: Reporter
-              version1Variable: organization
-            ruleID: greater_than_max_length
-          - meta:
-            - dataType: varchar
-              partID: organizationID
-              sites: header
-              sitesRequired: optional
-              version1Location: variables
-              version1Table: Reporter
-              version1Variable: organization
-            ruleID: invalid_type
-          - meta:
-            - minLength: '0'
-              partID: organizationID
-              sites: header
-              sitesRequired: optional
-              version1Location: variables
-              version1Table: Reporter
-              version1Variable: organization
-            ruleID: less_than_min_length
-          type: string
-        polygonID:
-          maxlength: 10
-          meta:
-          - meta:
-            - maxLength: '10'
-              partID: polygonID
-              sites: fK
-              sitesRequired: optional
-              version1Location: variables
-              version1Table: Polygon
-              version1Variable: polygonID
-            ruleID: greater_than_max_length
-          - meta:
-            - dataType: varchar
-              partID: polygonID
-              sites: fK
-              sitesRequired: optional
-              version1Location: variables
-              version1Table: Polygon
-              version1Variable: polygonID
-            ruleID: invalid_type
-          - meta:
-            - minLength: '0'
-              partID: polygonID
-              sites: fK
-              sitesRequired: optional
-              version1Location: variables
-              version1Table: Polygon
-              version1Variable: polygonID
             ruleID: less_than_min_length
           type: string
         publicHealthDepartment:
@@ -2425,7 +1707,7 @@ schema:
           meta:
           - meta:
             - maxLength: '30'
-              partID: pHDept
+              partID: repOrg1
               sites: header
               sitesRequired: optional
               version1Location: variables
@@ -2434,7 +1716,7 @@ schema:
             ruleID: greater_than_max_length
           - meta:
             - dataType: varchar
-              partID: pHDept
+              partID: repOrg1
               sites: header
               sitesRequired: optional
               version1Location: variables
@@ -2443,7 +1725,7 @@ schema:
             ruleID: invalid_type
           - meta:
             - minLength: '0'
-              partID: pHDept
+              partID: repOrg1
               sites: header
               sitesRequired: optional
               version1Location: variables
@@ -2839,38 +2121,158 @@ schema:
               version1Variable: typeOther
             ruleID: less_than_min_length
           type: string
-        updateDate:
+      type: dict
+    type: list
+  SiteMeasure:
+    schema:
+      meta:
+      - partID: measures
+        partType: table
+        version1Location: Tables
+        version1Table: WWMeasure; SiteMeasure;CovidPublicHealthData
+      schema:
+        aggregation:
+          emptyTrimmed: false
+          forbidden:
+          - NA
+          - nan
+          - nr
+          - 'null'
+          - undisc
+          maxlength: 12
+          meta:
+          - meta:
+            - maxLength: '12'
+              measures: fK
+              measuresRequired: mandatory
+              partID: aggID
+              version1Location: variables
+              version1Table: WWMeasure; SiteMeasure
+              version1Variable: aggregation
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: categorical
+              measures: fK
+              measuresRequired: mandatory
+              partID: aggID
+              version1Location: variables
+              version1Table: WWMeasure; SiteMeasure
+              version1Variable: aggregation
+            ruleID: invalid_type
+          - meta:
+            - measures: fK
+              measuresRequired: mandatory
+              minLength: '0'
+              partID: aggID
+              version1Location: variables
+              version1Table: WWMeasure; SiteMeasure
+              version1Variable: aggregation
+            ruleID: less_than_min_length
+          - meta:
+            - measures: fK
+              measuresRequired: mandatory
+              partID: aggID
+              version1Location: variables
+              version1Table: WWMeasure; SiteMeasure
+              version1Variable: aggregation
+            ruleID: missing_mandatory_column
+          - meta:
+            - measures: fK
+              measuresRequired: mandatory
+              partID: aggID
+              version1Location: variables
+              version1Table: WWMeasure; SiteMeasure
+              version1Variable: aggregation
+            ruleID: missing_values_found
+          required: true
+          type: string
+        dateTime:
           coerce: datetime
           maxlength: 30
           meta:
           - meta:
             - maxLength: '30'
-              partID: lastEdited
-              sites: header
-              sitesRequired: optional
+              measures: header
+              measuresRequired: optional
+              partID: aDateStart
               version1Location: variables
-              version1Table: Lab
-              version1Variable: updateDate
+              version1Table: SiteMeasure
+              version1Variable: dateTime
             ruleID: greater_than_max_length
           - meta:
             - dataType: datetime
-              partID: lastEdited
-              sites: header
-              sitesRequired: optional
+              measures: header
+              measuresRequired: optional
+              partID: aDateStart
               version1Location: variables
-              version1Table: Lab
-              version1Variable: updateDate
+              version1Table: SiteMeasure
+              version1Variable: dateTime
             ruleID: invalid_type
           - meta:
-            - minLength: '0'
-              partID: lastEdited
-              sites: header
-              sitesRequired: optional
+            - measures: header
+              measuresRequired: optional
+              minLength: '0'
+              partID: aDateStart
               version1Location: variables
-              version1Table: Lab
-              version1Variable: updateDate
+              version1Table: SiteMeasure
+              version1Variable: dateTime
             ruleID: less_than_min_length
           type: datetime
+        unit:
+          emptyTrimmed: false
+          forbidden:
+          - NA
+          - nan
+          - nr
+          - 'null'
+          - undisc
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              measures: fK
+              measuresRequired: mandatory
+              partID: unitID
+              version1Location: variables
+              version1Table: WWMeasure; SiteMeasure; AssayMethod
+              version1Variable: unit
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: categorical
+              measures: fK
+              measuresRequired: mandatory
+              partID: unitID
+              version1Location: variables
+              version1Table: WWMeasure; SiteMeasure; AssayMethod
+              version1Variable: unit
+            ruleID: invalid_type
+          - meta:
+            - measures: fK
+              measuresRequired: mandatory
+              minLength: '0'
+              partID: unitID
+              version1Location: variables
+              version1Table: WWMeasure; SiteMeasure; AssayMethod
+              version1Variable: unit
+            ruleID: less_than_min_length
+          - meta:
+            - measures: fK
+              measuresRequired: mandatory
+              partID: unitID
+              version1Location: variables
+              version1Table: WWMeasure; SiteMeasure; AssayMethod
+              version1Variable: unit
+            ruleID: missing_mandatory_column
+          - meta:
+            - measures: fK
+              measuresRequired: mandatory
+              partID: unitID
+              version1Location: variables
+              version1Table: WWMeasure; SiteMeasure; AssayMethod
+              version1Variable: unit
+            ruleID: missing_values_found
+          required: true
+          type: string
       type: dict
     type: list
   WWMeasure:
@@ -2992,39 +2394,12 @@ schema:
             ruleID: missing_values_found
           required: true
           type: datetime
-        dateTime:
-          coerce: datetime
-          maxlength: 30
-          meta:
-          - meta:
-            - maxLength: '30'
-              measures: header
-              measuresRequired: optional
-              partID: aDateStart
-              version1Location: variables
-              version1Table: SiteMeasure
-              version1Variable: dateTime
-            ruleID: greater_than_max_length
-          - meta:
-            - dataType: datetime
-              measures: header
-              measuresRequired: optional
-              partID: aDateStart
-              version1Location: variables
-              version1Table: SiteMeasure
-              version1Variable: dateTime
-            ruleID: invalid_type
-          - meta:
-            - measures: header
-              measuresRequired: optional
-              minLength: '0'
-              partID: aDateStart
-              version1Location: variables
-              version1Table: SiteMeasure
-              version1Variable: dateTime
-            ruleID: less_than_min_length
-          type: datetime
         fractionAnalyzed:
+          allowed:
+          - liquid
+          - mixed
+          - other
+          - solid
           maxlength: 30
           meta:
           - meta:
@@ -3033,16 +2408,42 @@ schema:
               measuresRequired: recommended
               partID: fractionID
               version1Location: variables
-              version1Table: WWmeasure
+              version1Table: WWMeasure
               version1Variable: fractionAnalyzed
             ruleID: greater_than_max_length
+          - meta:
+            - catSetID: fractionCatSet
+              dataType: categorical
+              partID: fractionID
+              version1Location: variables
+              version1Table: WWMeasure
+              version1Variable: fractionAnalyzed
+            - partID: liq
+              partType: category
+              version1Category: liquid
+              version1Location: variableCategories
+              version1Table: WWMeasure
+              version1Variable: fractionAnalyzed
+            - partID: mix
+              partType: category
+              version1Category: mixed
+              version1Location: variableCategories
+              version1Table: WWMeasure
+              version1Variable: fractionAnalyzed
+            - partID: sol
+              partType: category
+              version1Category: solid
+              version1Location: variableCategories
+              version1Table: WWMeasure
+              version1Variable: fractionAnalyzed
+            ruleID: invalid_category
           - meta:
             - dataType: categorical
               measures: fK
               measuresRequired: recommended
               partID: fractionID
               version1Location: variables
-              version1Table: WWmeasure
+              version1Table: WWMeasure
               version1Variable: fractionAnalyzed
             ruleID: invalid_type
           - meta:
@@ -3051,7 +2452,7 @@ schema:
               minLength: '0'
               partID: fractionID
               version1Location: variables
-              version1Table: WWmeasure
+              version1Table: WWMeasure
               version1Variable: fractionAnalyzed
             ruleID: less_than_min_length
           type: string
@@ -3087,99 +2488,6 @@ schema:
               version1Variable: index
             ruleID: less_than_min_length
           type: integer
-        organization:
-          maxlength: 100
-          meta:
-          - meta:
-            - maxLength: '100'
-              measures: header
-              measuresRequired: optional
-              partID: organizationID
-              version1Location: variables
-              version1Table: Reporter
-              version1Variable: organization
-            ruleID: greater_than_max_length
-          - meta:
-            - dataType: varchar
-              measures: header
-              measuresRequired: optional
-              partID: organizationID
-              version1Location: variables
-              version1Table: Reporter
-              version1Variable: organization
-            ruleID: invalid_type
-          - meta:
-            - measures: header
-              measuresRequired: optional
-              minLength: '0'
-              partID: organizationID
-              version1Location: variables
-              version1Table: Reporter
-              version1Variable: organization
-            ruleID: less_than_min_length
-          type: string
-        polygonID:
-          maxlength: 10
-          meta:
-          - meta:
-            - maxLength: '10'
-              measures: fK
-              measuresRequired: optional
-              partID: polygonID
-              version1Location: variables
-              version1Table: Polygon
-              version1Variable: polygonID
-            ruleID: greater_than_max_length
-          - meta:
-            - dataType: varchar
-              measures: fK
-              measuresRequired: optional
-              partID: polygonID
-              version1Location: variables
-              version1Table: Polygon
-              version1Variable: polygonID
-            ruleID: invalid_type
-          - meta:
-            - measures: fK
-              measuresRequired: optional
-              minLength: '0'
-              partID: polygonID
-              version1Location: variables
-              version1Table: Polygon
-              version1Variable: polygonID
-            ruleID: less_than_min_length
-          type: string
-        referenceLink:
-          maxlength: 255
-          meta:
-          - meta:
-            - maxLength: '255'
-              measures: header
-              measuresRequired: optional
-              partID: refLink
-              version1Location: variables
-              version1Table: AssayMethod, Insturment
-              version1Variable: referenceLink
-            ruleID: greater_than_max_length
-          - meta:
-            - dataType: varchar
-              measures: header
-              measuresRequired: optional
-              partID: refLink
-              version1Location: variables
-              version1Table: AssayMethod, Insturment
-              version1Variable: referenceLink
-            ruleID: invalid_type
-          - meta:
-            - measures: header
-              measuresRequired: optional
-              minLength: '0'
-              partID: refLink
-              version1Location: variables
-              version1Table: AssayMethod, Insturment
-              version1Variable: referenceLink
-            ruleID: less_than_min_length
-          type: string
         reportDate:
           coerce: datetime
           maxlength: 30
@@ -3212,116 +2520,6 @@ schema:
               version1Variable: reportDate
             ruleID: less_than_min_length
           type: datetime
-        sampleID:
-          emptyTrimmed: false
-          forbidden:
-          - NA
-          - nan
-          - nr
-          - 'null'
-          - undisc
-          maxlength: 30
-          meta:
-          - meta:
-            - maxLength: '30'
-              measures: fK
-              measuresRequired: mandatory
-              partID: sampleID
-              version1Location: variables
-              version1Table: Sample
-              version1Variable: sampleID
-            ruleID: greater_than_max_length
-          - meta:
-            - dataType: varchar
-              measures: fK
-              measuresRequired: mandatory
-              partID: sampleID
-              version1Location: variables
-              version1Table: Sample
-              version1Variable: sampleID
-            ruleID: invalid_type
-          - meta:
-            - measures: fK
-              measuresRequired: mandatory
-              minLength: '0'
-              partID: sampleID
-              version1Location: variables
-              version1Table: Sample
-              version1Variable: sampleID
-            ruleID: less_than_min_length
-          - meta:
-            - measures: fK
-              measuresRequired: mandatory
-              partID: sampleID
-              version1Location: variables
-              version1Table: Sample
-              version1Variable: sampleID
-            ruleID: missing_mandatory_column
-          - meta:
-            - measures: fK
-              measuresRequired: mandatory
-              partID: sampleID
-              version1Location: variables
-              version1Table: Sample
-              version1Variable: sampleID
-            ruleID: missing_values_found
-          required: true
-          type: string
-        siteID:
-          emptyTrimmed: false
-          forbidden:
-          - NA
-          - nan
-          - nr
-          - 'null'
-          - undisc
-          maxlength: 30
-          meta:
-          - meta:
-            - maxLength: '30'
-              measures: fK
-              measuresRequired: mandatory
-              partID: siteID
-              version1Location: variables
-              version1Table: Site
-              version1Variable: siteID
-            ruleID: greater_than_max_length
-          - meta:
-            - dataType: varchar
-              measures: fK
-              measuresRequired: mandatory
-              partID: siteID
-              version1Location: variables
-              version1Table: Site
-              version1Variable: siteID
-            ruleID: invalid_type
-          - meta:
-            - measures: fK
-              measuresRequired: mandatory
-              minLength: '0'
-              partID: siteID
-              version1Location: variables
-              version1Table: Site
-              version1Variable: siteID
-            ruleID: less_than_min_length
-          - meta:
-            - measures: fK
-              measuresRequired: mandatory
-              partID: siteID
-              version1Location: variables
-              version1Table: Site
-              version1Variable: siteID
-            ruleID: missing_mandatory_column
-          - meta:
-            - measures: fK
-              measuresRequired: mandatory
-              partID: siteID
-              version1Location: variables
-              version1Table: Site
-              version1Variable: siteID
-            ruleID: missing_values_found
-          required: true
-          type: string
         type:
           allowed:
           - covE
@@ -3616,7 +2814,7 @@ schema:
               measuresRequired: mandatory
               partID: unitID
               version1Location: variables
-              version1Table: WWMeasure; SiteMeasure
+              version1Table: WWMeasure; SiteMeasure; AssayMethod
               version1Variable: unit
             ruleID: greater_than_max_length
           - meta:
@@ -3625,7 +2823,7 @@ schema:
               measuresRequired: mandatory
               partID: unitID
               version1Location: variables
-              version1Table: WWMeasure; SiteMeasure
+              version1Table: WWMeasure; SiteMeasure; AssayMethod
               version1Variable: unit
             ruleID: invalid_type
           - meta:
@@ -3634,7 +2832,7 @@ schema:
               minLength: '0'
               partID: unitID
               version1Location: variables
-              version1Table: WWMeasure; SiteMeasure
+              version1Table: WWMeasure; SiteMeasure; AssayMethod
               version1Variable: unit
             ruleID: less_than_min_length
           - meta:
@@ -3642,7 +2840,7 @@ schema:
               measuresRequired: mandatory
               partID: unitID
               version1Location: variables
-              version1Table: WWMeasure; SiteMeasure
+              version1Table: WWMeasure; SiteMeasure; AssayMethod
               version1Variable: unit
             ruleID: missing_mandatory_column
           - meta:
@@ -3650,43 +2848,11 @@ schema:
               measuresRequired: mandatory
               partID: unitID
               version1Location: variables
-              version1Table: WWMeasure; SiteMeasure
+              version1Table: WWMeasure; SiteMeasure; AssayMethod
               version1Variable: unit
             ruleID: missing_values_found
           required: true
           type: string
-        updateDate:
-          coerce: datetime
-          maxlength: 30
-          meta:
-          - meta:
-            - maxLength: '30'
-              measures: header
-              measuresRequired: optional
-              partID: lastEdited
-              version1Location: variables
-              version1Table: Lab
-              version1Variable: updateDate
-            ruleID: greater_than_max_length
-          - meta:
-            - dataType: datetime
-              measures: header
-              measuresRequired: optional
-              partID: lastEdited
-              version1Location: variables
-              version1Table: Lab
-              version1Variable: updateDate
-            ruleID: invalid_type
-          - meta:
-            - measures: header
-              measuresRequired: optional
-              minLength: '0'
-              partID: lastEdited
-              version1Location: variables
-              version1Table: Lab
-              version1Variable: updateDate
-            ruleID: less_than_min_length
-          type: datetime
       type: dict
     type: list
 schemaVersion: 1.1.0

@@ -1,6 +1,6 @@
 import logging
 from dataclasses import dataclass
-from logging import error, warning
+from logging import error
 from typing import Any, Callable, List, Optional, Set
 # from pprint import pprint
 
@@ -77,15 +77,28 @@ def get_part_ids(parts: List[Part]) -> List[PartId]:
     return list(map(pt.get_partID, parts))
 
 
-def _get_mapped_part_id(data: PartData, part_id: PartId,
-                        version: Version) -> PartId:
+def _get_mapped_part_ids(data: PartData, part_id: PartId,
+                         version: Version) -> List[PartId]:
     if version.major == 1:
         mapping = data.mappings.get(part_id)
         if mapping:
-            return mapping[0]
+            return mapping
         else:
             error(f'missing version1 fields in part {part_id}')
-    return part_id
+    return [part_id]
+
+
+def _get_mapped_attribute_ids(data: PartData, mapped_table_id: PartId,
+                              attr: Part, version: Version
+                              ) -> List[PartId]:
+    # FIXME: This is a hack that skips v1 attributes that don't belong to
+    # the current v1 table. The v1 mapping isn't working properly in this
+    # respect.
+    if version.major == 1:
+        if mapped_table_id not in pt._parse_version1Field(attr, pt.V1_TABLE):
+            return []
+    attr_id = pt.get_partID(attr)
+    return _get_mapped_part_ids(data, attr_id, version)
 
 
 def table_items(data: PartData, version: Version):
@@ -94,69 +107,42 @@ def table_items(data: PartData, version: Version):
     Yields a tuple of: (original id, mapped id, part).
     """
     for table_id0, td in data.table_data.items():
-        table_id1 = _get_mapped_part_id(data, table_id0, version)
-        table = td.part
-        yield (table_id0, table_id1, table)
+        for table_id1 in _get_mapped_part_ids(data, table_id0, version):
+            table = td.part
+            yield (table_id0, table_id1, table)
 
 
-def table_items2(data: PartData):
-    """Iterates over all table parts from `data`."""
-    for _, td in data.table_data.items():
-        yield td.part
-
-
-def attr_items(data: PartData, table_id: PartId, version: Version):
+def attr_items(data: PartData, table_id0: PartId, table_id1: PartId,
+               version: Version, pred: AttrPredicate = None):
     """Iterates over all attributes in a table.
 
     Yields a tuple of: (original id, mapped id, part)."""
-    for attr in data.table_data[table_id].attributes:
+    attributes = data.table_data[table_id0].attributes
+    if pred:
+        attributes = list(
+            filter(lambda attr: pred(table_id0, attr), attributes))
+    for attr in attributes:
         attr_id0 = pt.get_partID(attr)
-        attr_id1 = _get_mapped_part_id(data, attr_id0, version)
-        yield (attr_id0, attr_id1, attr)
+        for attr_id1 in _get_mapped_attribute_ids(data, table_id1, attr,
+                                                  version):
+            yield (attr_id0, attr_id1, attr)
 
 
-def attr_items2(data: PartData, table_id: PartId, key: str):
-    """Iterates over all attribute parts with `key`, which is part of table
-    `table_id`, from `data`."""
-    return filter(lambda part: key in part,
-                  data.table_data[table_id].attributes)
-
-
-def attr_items_pred(data: PartData, table_id: PartId, pred: AttrPredicate):
-    """Iterates over all attribute parts of table `table_id` that fulfills
-    `pred`."""
-    return filter(lambda attr: pred(table_id, attr),
-                  data.table_data[table_id].attributes)
-
-
-def init_table_schema2(schema, data, table, version):
-    """This is a helper for creating the table schema, to make it easier to
-    write rule-functions. This should be prefered over using
-    `init_table_schema` directly."""
-    # This is not part of module 'schemas' due to simplicity. It has
-    # dependencies in this file and the modules may be merged soon enough.
-    table_id0 = pt.get_partID(table)
-    table_id1 = _get_mapped_part_id(data, table_id0, version)
-    table_meta = get_table_meta(table, version)
-    return init_table_schema(table_id1, table_meta, {})
-
-
-def set_attr_schema(table_schema, data, table, attr, rule_id,
-                    odm_key: Optional[str], cerb_rules, version):
-    table_id0 = pt.get_partID(table)
-    table_id1 = list(table_schema.keys())[0]
-    attr_id0 = pt.get_partID(attr)
-    attr_id1 = _get_mapped_part_id(data, attr_id0, version)
-    attr_meta = _get_attr_meta(attr, table_id0, version, odm_key)
-    attr_schema = init_attr_schema(attr_id1, rule_id, cerb_rules, attr_meta)
-    deep_update(table_schema[table_id1]['schema']['schema'], attr_schema)
+def add_attr_schemas(table_schema, data, table_id0, table_id1, attr, rule_id,
+                     odm_key: Optional[str], cerb_rules, version):
+    for attr_id1 in _get_mapped_attribute_ids(data, table_id1, attr,
+                                              version):
+        attr_meta = _get_attr_meta(attr, table_id0, version, odm_key)
+        attr_schema = init_attr_schema(attr_id1, rule_id, cerb_rules,
+                                       attr_meta)
+        deep_update(table_schema[table_id1]['schema']['schema'], attr_schema)
 
 
 def init_val_ctx(data: PartData, attr: Part, odm_key: Optional[str],
                  ) -> Optional[OdmValueCtx]:
     odm_val = attr.get(odm_key)
     if odm_key and not odm_val:
-        warning(f'missing value for {pt.get_partID(attr)}.{odm_key}')
+        # warning(f'missing value for {pt.get_partID(attr)}.{odm_key}')
         return
     odm_datatype = attr.get(pt.DATA_TYPE)
     return OdmValueCtx(value=odm_val, datatype=odm_datatype,
@@ -175,16 +161,16 @@ def gen_value_schema(data: pt.PartData, ver: Version, rule_id: str,
     :gen_cerb_rules: A function returning a dict of Cerberus rules
     """
     schema = {}
-    for table in table_items2(data):
-        table_id0 = pt.get_partID(table)
-        table_schema = init_table_schema2(schema, data, table, ver)
-        for attr in attr_items2(data, table_id0, odm_key):
+    for table_id0, table_id1, table in table_items(data, ver):
+        table_meta = get_table_meta(table, ver)
+        table_schema = init_table_schema(table_id1, table_meta, {})
+        for attr in data.table_data[table_id0].attributes:
             val_ctx = init_val_ctx(data, attr, odm_key)
             if not val_ctx:
                 continue
             cerb_rules = gen_cerb_rules(val_ctx)
-            set_attr_schema(table_schema, data, table, attr, rule_id,
-                            odm_key, cerb_rules, ver)
+            add_attr_schemas(table_schema, data, table_id0, table_id1, attr,
+                             rule_id, odm_key, cerb_rules, ver)
         deep_update(schema, table_schema)
     return schema
 
@@ -208,16 +194,25 @@ def gen_conditional_schema(data: pt.PartData, ver: Version, rule_id: str,
     """
     schema = {}
     odm_key = None
-    for table in table_items2(data):
-        table_id = pt.get_partID(table)
-        table_schema = init_table_schema2(schema, data, table, ver)
-        for attr in attr_items_pred(data, table_id, pred):
+    table_attr = {}
+    for table_id0, table_id1, table in table_items(data, ver):
+        table_meta = get_table_meta(table, ver)
+        table_schema = init_table_schema(table_id1, table_meta, {})
+
+        # There can be multiple mapped table ids for every table,
+        # so we should only do this once for every original table id.
+        if table_id0 not in table_attr:
+            table_attr[table_id0] = list(
+                filter(lambda attr: pred(table_id0, attr),
+                       data.table_data[table_id0].attributes))
+
+        for attr in table_attr[table_id0]:
             val_ctx = init_val_ctx(data, attr, odm_key)
             if not val_ctx:
                 continue
             cerb_rules = gen_cerb_rules(val_ctx)
-            set_attr_schema(table_schema, data, table, attr, rule_id,
-                            odm_key, cerb_rules, ver)
+            add_attr_schemas(table_schema, data, table_id0, table_id1, attr,
+                             rule_id, odm_key, cerb_rules, ver)
         deep_update(schema, table_schema)
     return schema
 

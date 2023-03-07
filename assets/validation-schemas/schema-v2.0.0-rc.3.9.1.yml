@@ -2564,8 +2564,8 @@ schema:
           type: datetime
         reportable:
           allowed:
-          - booleanSet
-          - det
+          - booleanCatSet
+          - pretreat
           maxlength: 10
           meta:
           - meta:
@@ -2647,44 +2647,26 @@ schema:
             ruleID: less_than_min_length
           type: string
         siteID:
-          emptyTrimmed: false
-          forbidden:
-          - NA
-          - nan
-          - nr
-          - 'null'
-          - undisc
           maxlength: 30
           meta:
           - meta:
             - maxLength: '30'
               measures: fK
-              measuresRequired: mandatory
+              measuresRequired: recommended
               partID: siteID
             ruleID: greater_than_max_length
           - meta:
             - dataType: varchar
               measures: fK
-              measuresRequired: mandatory
+              measuresRequired: recommended
               partID: siteID
             ruleID: invalid_type
           - meta:
             - measures: fK
-              measuresRequired: mandatory
+              measuresRequired: recommended
               minLength: '0'
               partID: siteID
             ruleID: less_than_min_length
-          - meta:
-            - measures: fK
-              measuresRequired: mandatory
-              partID: siteID
-            ruleID: missing_mandatory_column
-          - meta:
-            - measures: fK
-              measuresRequired: mandatory
-              partID: siteID
-            ruleID: missing_values_found
-          required: true
           type: string
         specimenID:
           emptyTrimmed: false
@@ -2958,7 +2940,7 @@ schema:
               partID: notes
             ruleID: less_than_min_length
           type: string
-        orgTypeID:
+        orgType:
           emptyTrimmed: false
           forbidden:
           - NA
@@ -2972,29 +2954,29 @@ schema:
             - maxLength: '30'
               organizations: fK
               organizationsRequired: mandatory
-              partID: orgTypeID
+              partID: orgType
             ruleID: greater_than_max_length
           - meta:
             - dataType: categorical
               organizations: fK
               organizationsRequired: mandatory
-              partID: orgTypeID
+              partID: orgType
             ruleID: invalid_type
           - meta:
             - minLength: '0'
               organizations: fK
               organizationsRequired: mandatory
-              partID: orgTypeID
+              partID: orgType
             ruleID: less_than_min_length
           - meta:
             - organizations: fK
               organizationsRequired: mandatory
-              partID: orgTypeID
+              partID: orgType
             ruleID: missing_mandatory_column
           - meta:
             - organizations: fK
               organizationsRequired: mandatory
-              partID: orgTypeID
+              partID: orgType
             ruleID: missing_values_found
           required: true
           type: string
@@ -4038,50 +4020,10 @@ schema:
               protocolRelationshipsRequired: mandatoryIf
             ruleID: less_than_min_length
           type: string
-        relationshipID:
-          emptyTrimmed: false
-          forbidden:
-          - NA
-          - nan
-          - nr
-          - 'null'
-          - undisc
-          maxlength: 30
-          meta:
-          - meta:
-            - maxLength: '30'
-              partID: relationshipID
-              protocolRelationships: fK
-              protocolRelationshipsRequired: mandatory
-            ruleID: greater_than_max_length
-          - meta:
-            - dataType: varchar
-              partID: relationshipID
-              protocolRelationships: fK
-              protocolRelationshipsRequired: mandatory
-            ruleID: invalid_type
-          - meta:
-            - minLength: '0'
-              partID: relationshipID
-              protocolRelationships: fK
-              protocolRelationshipsRequired: mandatory
-            ruleID: less_than_min_length
-          - meta:
-            - partID: relationshipID
-              protocolRelationships: fK
-              protocolRelationshipsRequired: mandatory
-            ruleID: missing_mandatory_column
-          - meta:
-            - partID: relationshipID
-              protocolRelationships: fK
-              protocolRelationshipsRequired: mandatory
-            ruleID: missing_values_found
-          required: true
-          type: string
         reportable:
           allowed:
-          - booleanSet
-          - det
+          - booleanCatSet
+          - pretreat
           maxlength: 10
           meta:
           - meta:
@@ -4099,6 +4041,46 @@ schema:
               partID: reportable
               protocolRelationships: input
             ruleID: less_than_min_length
+          type: string
+        sampleRelID:
+          emptyTrimmed: false
+          forbidden:
+          - NA
+          - nan
+          - nr
+          - 'null'
+          - undisc
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              partID: sampleRelID
+              protocolRelationships: fK
+              protocolRelationshipsRequired: mandatory
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              partID: sampleRelID
+              protocolRelationships: fK
+              protocolRelationshipsRequired: mandatory
+            ruleID: invalid_type
+          - meta:
+            - minLength: '0'
+              partID: sampleRelID
+              protocolRelationships: fK
+              protocolRelationshipsRequired: mandatory
+            ruleID: less_than_min_length
+          - meta:
+            - partID: sampleRelID
+              protocolRelationships: fK
+              protocolRelationshipsRequired: mandatory
+            ruleID: missing_mandatory_column
+          - meta:
+            - partID: sampleRelID
+              protocolRelationships: fK
+              protocolRelationshipsRequired: mandatory
+            ruleID: missing_values_found
+          required: true
           type: string
         stepID:
           maxlength: 30
@@ -4742,8 +4724,8 @@ schema:
           type: string
         reportable:
           allowed:
-          - booleanSet
-          - det
+          - booleanCatSet
+          - pretreat
           maxlength: 10
           meta:
           - meta:
@@ -5080,7 +5062,7 @@ schema:
               sampleRelationshipsRequired: optional
             ruleID: less_than_min_length
           type: string
-        relationshipID:
+        sampleIDObject:
           emptyTrimmed: false
           forbidden:
           - NA
@@ -5092,35 +5074,35 @@ schema:
           meta:
           - meta:
             - maxLength: '30'
-              partID: relationshipID
+              partID: sampleIDObject
               sampleRelationships: fK
               sampleRelationshipsRequired: mandatory
             ruleID: greater_than_max_length
           - meta:
             - dataType: varchar
-              partID: relationshipID
+              partID: sampleIDObject
               sampleRelationships: fK
               sampleRelationshipsRequired: mandatory
             ruleID: invalid_type
           - meta:
             - minLength: '0'
-              partID: relationshipID
+              partID: sampleIDObject
               sampleRelationships: fK
               sampleRelationshipsRequired: mandatory
             ruleID: less_than_min_length
           - meta:
-            - partID: relationshipID
+            - partID: sampleIDObject
               sampleRelationships: fK
               sampleRelationshipsRequired: mandatory
             ruleID: missing_mandatory_column
           - meta:
-            - partID: relationshipID
+            - partID: sampleIDObject
               sampleRelationships: fK
               sampleRelationshipsRequired: mandatory
             ruleID: missing_values_found
           required: true
           type: string
-        sampleIDObj:
+        sampleIDSubject:
           emptyTrimmed: false
           forbidden:
           - NA
@@ -5132,35 +5114,35 @@ schema:
           meta:
           - meta:
             - maxLength: '30'
-              partID: sampleIDObj
+              partID: sampleIDSubject
               sampleRelationships: fK
               sampleRelationshipsRequired: mandatory
             ruleID: greater_than_max_length
           - meta:
             - dataType: varchar
-              partID: sampleIDObj
+              partID: sampleIDSubject
               sampleRelationships: fK
               sampleRelationshipsRequired: mandatory
             ruleID: invalid_type
           - meta:
             - minLength: '0'
-              partID: sampleIDObj
+              partID: sampleIDSubject
               sampleRelationships: fK
               sampleRelationshipsRequired: mandatory
             ruleID: less_than_min_length
           - meta:
-            - partID: sampleIDObj
+            - partID: sampleIDSubject
               sampleRelationships: fK
               sampleRelationshipsRequired: mandatory
             ruleID: missing_mandatory_column
           - meta:
-            - partID: sampleIDObj
+            - partID: sampleIDSubject
               sampleRelationships: fK
               sampleRelationshipsRequired: mandatory
             ruleID: missing_values_found
           required: true
           type: string
-        sampleIDSub:
+        sampleRelID:
           emptyTrimmed: false
           forbidden:
           - NA
@@ -5172,29 +5154,29 @@ schema:
           meta:
           - meta:
             - maxLength: '30'
-              partID: sampleIDSub
+              partID: sampleRelID
               sampleRelationships: fK
               sampleRelationshipsRequired: mandatory
             ruleID: greater_than_max_length
           - meta:
             - dataType: varchar
-              partID: sampleIDSub
+              partID: sampleRelID
               sampleRelationships: fK
               sampleRelationshipsRequired: mandatory
             ruleID: invalid_type
           - meta:
             - minLength: '0'
-              partID: sampleIDSub
+              partID: sampleRelID
               sampleRelationships: fK
               sampleRelationshipsRequired: mandatory
             ruleID: less_than_min_length
           - meta:
-            - partID: sampleIDSub
+            - partID: sampleRelID
               sampleRelationships: fK
               sampleRelationshipsRequired: mandatory
             ruleID: missing_mandatory_column
           - meta:
-            - partID: sampleIDSub
+            - partID: sampleRelID
               sampleRelationships: fK
               sampleRelationshipsRequired: mandatory
             ruleID: missing_values_found
@@ -5587,8 +5569,8 @@ schema:
           type: string
         pooled:
           allowed:
-          - booleanSet
-          - det
+          - booleanCatSet
+          - pretreat
           maxlength: 30
           meta:
           - meta:
@@ -5701,8 +5683,8 @@ schema:
           type: string
         reportable:
           allowed:
-          - booleanSet
-          - det
+          - booleanCatSet
+          - pretreat
           maxlength: 10
           meta:
           - meta:
@@ -6205,28 +6187,6 @@ schema:
             ruleID: less_than_min_value
           min: -180.0
           type: float
-        healthReg:
-          maxlength: 30
-          meta:
-          - meta:
-            - maxLength: '30'
-              partID: healthReg
-              sites: header
-              sitesRequired: optional
-            ruleID: greater_than_max_length
-          - meta:
-            - dataType: varchar
-              partID: healthReg
-              sites: header
-              sitesRequired: optional
-            ruleID: invalid_type
-          - meta:
-            - minLength: '0'
-              partID: healthReg
-              sites: header
-              sitesRequired: optional
-            ruleID: less_than_min_length
-          type: string
         lastEdited:
           coerce: datetime
           maxlength: 30
@@ -6316,28 +6276,6 @@ schema:
               sitesRequired: optional
             ruleID: less_than_min_length
           type: string
-        pHDept:
-          maxlength: 30
-          meta:
-          - meta:
-            - maxLength: '30'
-              partID: pHDept
-              sites: header
-              sitesRequired: optional
-            ruleID: greater_than_max_length
-          - meta:
-            - dataType: varchar
-              partID: pHDept
-              sites: header
-              sitesRequired: optional
-            ruleID: invalid_type
-          - meta:
-            - minLength: '0'
-              partID: pHDept
-              sites: header
-              sitesRequired: optional
-            ruleID: less_than_min_length
-          type: string
         parSiteID:
           maxlength: 30
           meta:
@@ -6400,6 +6338,50 @@ schema:
           - meta:
             - minLength: '0'
               partID: popServ
+              sites: header
+              sitesRequired: optional
+            ruleID: less_than_min_length
+          type: string
+        repOrg1:
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              partID: repOrg1
+              sites: header
+              sitesRequired: optional
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              partID: repOrg1
+              sites: header
+              sitesRequired: optional
+            ruleID: invalid_type
+          - meta:
+            - minLength: '0'
+              partID: repOrg1
+              sites: header
+              sitesRequired: optional
+            ruleID: less_than_min_length
+          type: string
+        repOrg2:
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              partID: repOrg2
+              sites: header
+              sitesRequired: optional
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              partID: repOrg2
+              sites: header
+              sitesRequired: optional
+            ruleID: invalid_type
+          - meta:
+            - minLength: '0'
+              partID: repOrg2
               sites: header
               sitesRequired: optional
             ruleID: less_than_min_length
@@ -6602,4 +6584,4 @@ schema:
           type: string
       type: dict
     type: list
-schemaVersion: 2.0.0-rc.3.8
+schemaVersion: 2.0.0-rc.3.9.1
