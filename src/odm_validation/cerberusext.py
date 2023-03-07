@@ -212,8 +212,9 @@ class OdmValidator(Validator):
 
     def _validate_unique(self, constraint, field, value):
         """{'type': 'boolean'}"""
-        # the primary key (pk) is a compound key of partID and lastUpdated
-        if not constraint:
+        # - the primary key (pk) is a compound key of partID and lastUpdated
+        # - ignore empty values to avoid massive list of duplicates from them
+        if not constraint or not value:
             return
         offset = self.error_state.offset
         table_id = self.document_path[0]
