@@ -25,7 +25,7 @@ def import_xlsx(src_file, dst_dir) -> List[str]:
     "Returns list of imported csv files."
     result = []
     print(f'importing {basename(src_file)}')
-    xl = Xlsx2csv(src_file)
+    xl = Xlsx2csv(src_file, skip_empty_lines=True)
     for sheet in xl.workbook.sheets:
         name = sheet['name']
         csv_path = join(dst_dir, name + '.csv')
