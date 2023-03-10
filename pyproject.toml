@@ -1,6 +1,6 @@
 [project]
 name = "odm-validation"
-version = "0.1.0"
+version = "0.3.0"
  authors = [
      { name="OHRI", email="PHES-ODM@ohri.ca" }
  ]
