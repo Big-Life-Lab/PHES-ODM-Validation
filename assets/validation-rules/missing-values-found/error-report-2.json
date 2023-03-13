@@ -12,7 +12,7 @@
             },
             "validationRuleFields": [
                 {
-                    "partID": "geoLat",
+                    "part": "geoLat",
                     "sites": "header",
                     "sitesRequired": "mandatory"
                 }

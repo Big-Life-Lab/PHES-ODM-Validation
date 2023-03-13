@@ -1,5 +1,5 @@
-partID,partType,addresses,contacts,dataType,minLength,version1Location,version1Table,version1Variable,status
-contacts,table,NA,NA,NA,NA,tables,Contact,NA,active
-phone,attribute,NA,header,varchar,10,variables,Contact,phoneNumber,active
-addresses,table,NA,NA,NA,NA,tables,Address,NA,active
-addL2,attribute,header,NA,varchar,NA,variables,Address,AddressLine2,active
+part,partType,addresses,contacts,dataType,minLength,version1Location,version1Table,version1Variable,status
+contacts,tables,NA,NA,NA,NA,tables,Contact,NA,active
+phone,attributes,NA,header,varchar,10,variables,Contact,phoneNumber,active
+addresses,tables,NA,NA,NA,NA,tables,Address,NA,active
+addL2,attributes,header,NA,varchar,NA,variables,Address,AddressLine2,active

@@ -4,21 +4,21 @@ This file specifies methods for navigating the ODM data dictionary that can be r
 
 ## How to get the names of tables that are part of the ODM
 
-We can use the `partID` and `partType` columns for this. Any part ID whose `partType` is table is considered to be a table. For example in the following dictionary,
+We can use the `part` and `partType` columns for this. Any part ID whose `partType` is `tables` is considered to be a table. For example in the following dictionary,
 
 ```python
 [
     {
-        "partID": "addresses",
-        "partType": "table"
+        "part": "addresses",
+        "partType": "tables"
     },
     {
-        "partID": "measures",
-        "partType": "table"
+        "part": "measures",
+        "partType": "tables"
     },
     {
-        "partID": "addId",
-        "partType": "attribute"
+        "part": "addId",
+        "partType": "attributes"
     }
 ]
 ```
@@ -32,39 +32,39 @@ Once we have the [table names part of the dictionary](#how-to-get-the-columns-na
 ```python
 [
     {
-        "partID": "addresses",
-        "partType": "table",
+        "part": "addresses",
+        "partType": "tables",
         "addresses: "NA",
         "contacts": "NA"
     },
     {
-        "partID": "addId",
-        "partType": "attribute",
+        "part": "addId",
+        "partType": "attributes",
         "addresses: "pK",
         "contacts": "NA"
     },
     {
-        "partID": "addId",
-        "partType": "attribute",
+        "part": "addL1",
+        "partType": "attributes",
         "addresses: "addL1",
         "contacts": "NA"
     },
     {
-        "partID": "contacts",
-        "partType": "table",
+        "part": "contacts",
+        "partType": "tables",
         "addresses: "addL1",
         "contacts": "NA"
     },
     {
-        "partID": "contID",
-        "partType": "attribute",
+        "part": "contID",
+        "partType": "attributes",
         "addresses: "NA",
         "contacts: "pK"
     },
 ]
 ```
 
-The tables are `addresses` and `contacts` and the `addresses` and `contacts` give information on which parts are their columns. Here, `addId` and `addL1` are columns in the addresses table and `contID` is a column in the contacts table. A part is a column in a table if it does not have a value of `NA` or `input` in the table column. In addition, the table column has additional possible values to describe the role a column plays in the table. All the possible values are,
+The tables are `addresses` and `contacts` and the `addresses` and `contacts` columns give information on which parts are their columns. Here, `addId` and `addL1` are columns in the addresses table and `contID` is a column in the contacts table. A part is a column in a table if it does not have a value of `NA` or `input` in the table column. In addition, the table column has additional possible values to describe the role a column plays in the table. All the possible values are,
 
 * **pK**: The column is the primary key for the table
 * **fK** The column is the foreign referencing a row in another table
@@ -93,7 +93,7 @@ The **instruments** part in version 2 is a table in version 1 called **Instrumen
 ```python
 [
     {
-        "partID": "instruments",
+        "part": "instruments",
         "version1Location": "tables",
         "version1Table": "Instrument",
         "version1Variable": "NA",
@@ -107,7 +107,7 @@ The **measRepID** part in version 2 is a column in version 1 called **uWwMeasure
 ```python
 [
     {
-        "partID": "measRepID",
+        "part": "measRepID",
         "version1Location": "variables",
         "version1Table": "WWMeasure",
         "version1Variable": "uWwMeasureID",
@@ -121,7 +121,7 @@ The **refLink** part in version 2 is a column in version 1 called **referenceLin
 ```python
 [
     {
-        "partID": "refLink",
+        "part": "refLink",
         "version1Location": "variables",
         "version1Table": "AssayMethod;Instrument",
         "version1Variable": "refLink",
@@ -135,7 +135,7 @@ Finally, the **airTemp** part in version 2 is a category in version 1 called **e
 ```python
 [
     {
-        "partID": "airTemp",
+        "part": "airTemp",
         "version1Location": "variableCategories",
         "version1Table": "SiteMeasure",
         "version1Variable": "type",
@@ -157,17 +157,17 @@ For example in the ODM snippet below,
 ```python
 [
     {
-        "partID": "geoLat",
+        "part": "geoLat",
         "sites": "header",
         "sitesRequired": "mandatory"
     },
     {
-        "partID": "geoLong",
+        "part": "geoLong",
         "sites": "header",
         "sitesRequired": "optional"
     },
     {
-        "partID": "measureID",
+        "part": "measureID",
         "sites": "NA",
         "sitesRequired": "NA"
     }

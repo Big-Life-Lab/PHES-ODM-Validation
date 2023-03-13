@@ -11,7 +11,7 @@
             "validationRuleFields": [
                 {
                     "addresses": "pK",
-                    "partID": "addID",
+                    "part": "addID",
                     "addressesRequired": "mandatory"
                 }
             ],

@@ -121,7 +121,7 @@ Generates the cerberus schema containing the validation rules to be used with th
 
 1. `odm_data_dictionary`: The ODM data dictionary [excel sheet](https://github.com/Big-Life-Lab/PHES-ODM/tree/V2-first-draft/template)
 
-    * `type`: A dictionary whose keys are the sheet names and values is a list containing the sheet rows. Currently only the parts sheet is required.
+    * `type`: A dictionary whose keys are the sheet names and values is a list containing the sheet rows. Currently the parts and sets sheet are required.
 
         Example
 
@@ -141,6 +141,17 @@ Generates the cerberus schema containing the validation rules to be used with th
                     "partType": "attribute",
                     "addresses": "pK",
                     "addressesRequired": "mandatory"
+                }
+            ],
+            "sets": [
+                {
+                    "set": "collectCat",
+                    "part": "flowPr"
+                },
+                {
+
+                    "set": "collectCat",
+                    "part": "comp8h"
                 }
             ]
         }
@@ -226,15 +237,15 @@ The cerberus schema for a part should be added only if it is active for the prov
 
 The validation metadata for a part should only be used if it was active for the version in the `version` argument.
 
-Example of two parts from dictionary version 2.
+Example of an `odm_data_dictionary` parameter is shown below,
 
 ```python
 {
     "parts": [
         {
-            "partID": "addresses",
+            "part": "addresses",
             "label": "Address table",
-            "partType": "table",
+            "partType": "tables",
             "addresses": "NA",
             "addressesRequired": "NA",
             "status": "active",
@@ -243,9 +254,9 @@ Example of two parts from dictionary version 2.
             "lastUpdated": "2"
         },
         {
-            "partID": "comp3",
+            "part": "comp3",
             "label": "Composite grab sample of 3",
-            "partType": "category",
+            "partType": "categories",
             "addresses": "NA",
             "addressesRequired": "NA",
             "status": "depreciated",
@@ -259,6 +270,54 @@ Example of two parts from dictionary version 2.
 
 * The addresses part is currently active (status = 'active') and should only be included in version 2 since it was first released (firstReleased = '2') then.
 * The `comp3` part was depreciated in version 2 (status = 'depreciated' and lastUpdated = '2') and should only be included in version 1 (firstReleased = '1')
+
+For the sets sheet, the versioning fields (`firstReleased` and `lastUpdated`) define the dictionary version when a part was added to a set. These values can be different from the versioning fields in the parts sheet. For example, consider the following ODM snippet,
+
+```python
+{
+    "parts": [
+        {
+            "part": "samples",
+            "partType": "tables",
+            "samples": "NA",
+            "firstReleased": "1",
+            "lastUpdated": "2"
+        }
+        {
+            "part": "collType",
+            "partType": "attributes",
+            "samples": "header",
+            "mmaSet": "collectSet",
+            "firstReleased": "1",
+            "lastUpdated": "2"
+        },
+        {
+            "part": "comp8r",
+            "partType": "measures",
+            "samples": "header",
+            "mmaSet": "NA",
+            "firstReleased": "1",
+            "lastUpdated": "2"
+        }
+    ],
+    "set": [
+        {
+            "set": "collectSet",
+            "part": "comp8r",
+            "firstReleased": "2",
+            "lastUpdated": "2"
+        }
+    ]
+}
+```
+
+It defines,
+
+* A table called `samples`
+* A column in the `samples` table called `collType`
+* A part called `comp8r` which is a measure and which is a category in the `collType` column
+
+However, notice that `comp8r` was only added as a category for the `collType` column in version 2. This can be seen from its entry in the sets sheet where it was `firstReleased` in version 2. For version 1, although a part was defined for it, it was not a category for `collType` only from version 2 onwards.
 
 Version 2 of the dictionary renamed certain part pieces, for example, the `WWMeasures` table was renamed to `measures` in version 2. To be backcompatible with version 1, columns were added to the parts list to document their version 1 equivalents. These columns are documented where necessary in the spec.
 

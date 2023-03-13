@@ -16,36 +16,33 @@ schema:
           meta:
           - ruleID: invalid_category
             meta:
-            - partID: coll
+            - part: coll
               dataType: categorical
-              catSetID: collectCat
+              mmaSet: collectCat
               version1Location: variables
               version1Table: Sample
               version1Variable: Collection
-            - partID: comp3h
-              partType: category
-              catSetID: collectCat
+            - part: comp3h
+              set: collectCat
               version1Location: variableCategories
               version1Table: Sample
               version1Variable: Collection
               version1Category: Comp3h
-            - partID: comp8h
-              partType: category
-              catSetID: collectCat
+            - part: comp8h
+              set: collectCat
               version1Location: variableCategories
               version1Table: Sample
               version1Variable: Collection
               version1Category: Comp8h
-            - partID: flowPr
-              partType: category
-              catSetID: collectCat
+            - part: flowPr
+              set: collectCat
               version1Location: variableCategories
               version1Table: Sample
               version1Variable: Collection
               version1Category: FlowPr;FlowRatePr
       meta:
-      - partID: samples
-        partType: table
+      - part: samples
+        partType: tables
         version1Location: tables
         version1Table: Sample
   Site:
@@ -62,33 +59,30 @@ schema:
           meta:
           - ruleID: invalid_category
             meta:
-            - partID: siteTypeID
-              catSetID: siteTypeCatSet
+            - part: siteTypeID
+              mmaSet: siteTypeCatSet
               dataType: categorical
               version1Location: variables
               version1Table: Site
               version1Variable: type
-            - partID: wwtpMuC
-              partType: category
+            - part: wwtpMuC
               version1Category: wwtpMuC
               version1Location: variableCategories
               version1Table: Site
               version1Variable: type
-            - partID: wwtpMuS
-              partType: category
+            - part: wwtpMuS
               version1Category: wwtpMuS
               version1Location: variableCategories
               version1Table: Site
               version1Variable: type
-            - partID: someOldCat
-              partType: category
+            - part: someOldCat
               version1Category: someOldCat1
               version1Location: variableCategories
               version1Table: Site
               version1Variable: type
       meta:
-      - partID: sites
-        partType: table
+      - part: sites
+        partType: tables
         version1Location: tables
         version1Table: Site
   WWMeasure:
@@ -105,18 +99,17 @@ schema:
           - ruleID: invalid_category
             meta:
             - dataType: varchar
-              partID: measureID
+              part: measureID
               version1Location: variables
               version1Table: WWMeasure
               version1Variable: type
-            - partID: cod
-              partType: category
+            - part: cod
               version1Category: wqCOD; wwCOD
               version1Location: variableCategories
               version1Table: WWMeasure; SiteMeasure
               version1Variable: type
       meta:
-      - partID: measures
-        partType: table
+      - part: measures
+        partType: tables
         version1Location: tables
         version1Table: WWMeasure

@@ -1,0 +1,4 @@
+set,part,firstReleased,lastUpdated,status
+collectCat,comp3h,1.0.0,2.0.0,active
+collectCat,comp8h,1.0.0,2.0.0,active
+collectCat,flowPr,1.0.0,2.0.0,active
