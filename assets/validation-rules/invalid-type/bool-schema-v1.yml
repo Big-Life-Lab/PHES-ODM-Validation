@@ -13,7 +13,7 @@ schema:
           meta:
           - ruleID: invalid_type
             meta:
-            - part: reportable
+            - partID: reportable
               dataType: boolean
               measures: header
               version1Location: variables
@@ -26,7 +26,7 @@ schema:
             #   catSetID: booleanSet
             #   version1Category: 'FALSE'
       meta:
-      - part: measures
+      - partID: measures
         partType: tables
         version1Location: tables
         version1Table: Measure

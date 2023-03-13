@@ -1,4 +1,4 @@
-part,partType,measures,dataType,mmaSet,version1Location,version1Table,version1Variable,version1Category,status
+partID,partType,measures,dataType,mmaSet,version1Location,version1Table,version1Variable,version1Category,status
 measures,tables,NA,NA,NA,tables,Measure,NA,NA,active
 reportable,attributes,header,boolean,NA,variables,Measure,reported,NA,active
 true,categories,NA,varchar,NA,NA,NA,NA,TRUE,active

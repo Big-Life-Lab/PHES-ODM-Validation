@@ -245,7 +245,7 @@ All the metadata for this rule is contained in the parts sheet in the ODM dictio
 2. [Get all the columns for each table](../specs/odm-how-tos.md#how-to-get-the-names-of-tables-that-are-part-of-the-odm)
 3. [Get the defined data type for each column](../specs/odm-how-tos.md#getting-the-data-type-for-a-column). If the data type is a boolean then retreive the category values by using the sets sheet:
     1. Filter out all rows except for the ones whose `set` is `booleanSet`
-    2. The `part` columns in the filtered rows contains the category values
+    2. The `partID` columns in the filtered rows contains the category values
 4. Add this validation rule if the data type is supported by this validation rule. Currently, only the `blob` is not supported and we don't need to add a rule for the `varchar` column.
 
 For example, the parts sheet snippets for the examples above can be seen below,
@@ -384,9 +384,9 @@ datetime
 pprint_yaml_file(asset("datetime-schema-v2.yml"))
 ```
 
-The meta for this rule should include the `part`, `<table_name>`, and `dataType`.
+The meta for this rule should include the `partID`, `<table_name>`, and `dataType`.
 
-For a boolean data type, it should also include the rows that contain the category values. The `part` and `set` from each row should be included in the category value rows.
+For a boolean data type, it should also include the rows that contain the category values. The `partID` and `set` from each row should be included in the category value rows.
 
 ## ODM Version 1
 

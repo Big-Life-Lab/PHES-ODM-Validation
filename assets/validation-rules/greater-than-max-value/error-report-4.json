@@ -12,7 +12,7 @@
             "invalidValue": "2024-12-30 00:00:00",
             "validationRuleFields": [
                 {
-                    "part": "lastEdited",
+                    "partID": "lastEdited",
                     "maxValue": "2024-01-01",
                     "sites": "header"
                 }
@@ -34,7 +34,7 @@
             "invalidValue": "2024-12-30",
             "validationRuleFields": [
                 {
-                    "part": "lastEdited",
+                    "partID": "lastEdited",
                     "maxValue": "2024-01-01",
                     "sites": "header"
                 }

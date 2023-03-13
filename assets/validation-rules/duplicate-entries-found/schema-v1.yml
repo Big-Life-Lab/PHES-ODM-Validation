@@ -10,13 +10,13 @@ schema:
           meta:
           - ruleID: duplicate_entries_found
             meta:
-            - part: addId
+            - partID: addId
               addresses: pK
               version1Location: variables
               version1Table: Address
               version1Variable: AddressId
       meta:
-      - part: addresses
+      - partID: addresses
         partType: tables
         version1Location: tables
         version1Table: Address

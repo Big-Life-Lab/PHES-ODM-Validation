@@ -12,7 +12,7 @@
             "invalidValue": "a",
             "validationRuleFields": [
                 {
-                    "part": "reportDate",
+                    "partID": "reportDate",
                     "dataType": "datetime",
                     "measures": "header"
                 }
@@ -31,7 +31,7 @@
             "invalidValue": "2022",
             "validationRuleFields": [
                 {
-                    "part": "reportDate",
+                    "partID": "reportDate",
                     "dataType": "datetime",
                     "measures": "header"
                 }

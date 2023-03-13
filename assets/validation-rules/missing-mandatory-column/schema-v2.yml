@@ -11,11 +11,11 @@ schema:
           meta:
           - ruleID: missing_mandatory_column
             meta:
-            - part: addID
+            - partID: addID
               addresses: pK
               addressesRequired: mandatory
       meta:
-      - part: addresses
+      - partID: addresses
         partType: tables
   contacts:
     type: list
@@ -27,9 +27,9 @@ schema:
           meta:
           - ruleID: missing_mandatory_column
             meta:
-            - part: contID
+            - partID: contID
               contacts: pK
               contactsRequired: mandatory
       meta:
-      - part: contacts
+      - partID: contacts
         partType: tables

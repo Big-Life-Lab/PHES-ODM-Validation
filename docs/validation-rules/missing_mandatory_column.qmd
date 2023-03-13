@@ -45,7 +45,7 @@ pprint_json_file(asset("error-report.json"))
 
 All the metadata for this rule is contained in the parts sheet in the data dictionary. The relevant columns are:
 
-* **part**: Contains the name of a part
+* **partID**: Contains the name of a part
 * **\<table_name\>**: Used to indicate whether the part is associated with a table
 
     Can have one of the following values:
@@ -79,7 +79,7 @@ pprint_yaml_file(asset("schema-v2.yml"))
 ```
 
 The data dictionary columns that should be included in the `meta` field are:
-* part
+* partID
 * \<table_name\>
 * \<table_name\>Required
 

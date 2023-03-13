@@ -15,7 +15,7 @@
             "invalidValue": "-89",
             "validationRuleFields": [
                 {
-                    "part": "geoLat",
+                    "partID": "geoLat",
                     "minValue": "-90",
                     "sites": "header"
                 }
@@ -36,7 +36,7 @@
             "invalidValue": "-90",
             "validationRuleFields": [
                 {
-                    "part": "geoLong",
+                    "partID": "geoLong",
                     "minValue": "-90.15",
                     "sites": "header"
                 }

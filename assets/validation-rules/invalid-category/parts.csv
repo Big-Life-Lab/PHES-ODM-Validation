@@ -1,4 +1,4 @@
-part,partType,samples,sites,measures,dataType,mmaSet,version1Location,version1Table,version1Variable,version1Category,status
+partID,partType,samples,sites,measures,dataType,mmaSet,version1Location,version1Table,version1Variable,version1Category,status
 samples,tables,NA,NA,NA,NA,NA,tables,Sample,NA,NA,active
 sites,tables,NA,NA,NA,NA,NA,tables,Site,NA,NA,active
 measures,tables,NA,NA,NA,NA,NA,tables,WWMeasure,NA,NA,active

@@ -10,9 +10,9 @@ schema:
           meta:
           - ruleID: less_than_min_length
             meta:
-            - part: phone
+            - partID: phone
               minLength: '10'
               contacts: header
       meta:
-        - part: contacts
+        - partID: contacts
           partType: table

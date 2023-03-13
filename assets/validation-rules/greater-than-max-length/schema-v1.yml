@@ -10,14 +10,14 @@ schema:
           meta:
           - ruleID: greater_than_max_length
             meta:
-            - part: phone
+            - partID: phone
               contacts: header
               maxLength: '10'
               version1Location: variables
               version1Table: Contact
               version1Variable: phoneNumber
       meta:
-        - part: contacts
+        - partID: contacts
           partType: tables
           version1Location: tables
           version1Table: Contact

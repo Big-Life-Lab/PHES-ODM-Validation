@@ -1,4 +1,4 @@
-part,partType,addresses,version1Location,version1Table,version1Variable,status
+partID,partType,addresses,version1Location,version1Table,version1Variable,status
 addresses,tables,NA,tables,Address,NA,active
 addId,attributes,pK,variables,Address,AddressId,active
 addL1,attributes,header,variables,Address,AddL1,active

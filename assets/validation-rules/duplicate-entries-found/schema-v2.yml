@@ -10,8 +10,8 @@ schema:
           meta:
           - ruleID: duplicate_entries_found
             meta:
-            - part: addId
+            - partID: addId
               addresses: pK
       meta:
-      - part: addresses
+      - partID: addresses
         partType: tables

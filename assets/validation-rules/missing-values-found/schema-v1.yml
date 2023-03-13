@@ -13,14 +13,14 @@ schema:
           meta:
           - ruleID: missing_values_found
             meta:
-            - part: geoLat
+            - partID: geoLat
               sites: header
               sitesRequired: mandatory
               version1Location: variables
               version1Table: Site
               version1Variable: latitude
       meta:
-        - part: sites
+        - partID: sites
           partType: tables
           version1Location: tables
           version1Table: Site

@@ -11,9 +11,9 @@ schema:
           meta:
           - ruleID: invalid_type
             meta:
-            - part: reportDate
+            - partID: reportDate
               dataType: datetime
               measures: header
       meta:
-      - part: measures
+      - partID: measures
         partType: tables
