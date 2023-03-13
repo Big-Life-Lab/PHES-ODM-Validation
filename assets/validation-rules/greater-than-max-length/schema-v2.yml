@@ -10,9 +10,9 @@ schema:
           meta:
           - ruleID: greater_than_max_length
             meta:
-            - partID: phone
+            - part: phone
               maxLength: '10'
               contacts: header
       meta:
-        - partID: contacts
-          partType: table
+        - part: contacts
+          partType: tables

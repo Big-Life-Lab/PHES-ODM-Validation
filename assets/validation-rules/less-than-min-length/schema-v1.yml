@@ -10,14 +10,14 @@ schema:
           meta:
           - ruleID: less_than_min_length
             meta:
-            - partID: phone
+            - part: phone
               minLength: '10'
               contacts: header
               version1Location: variables
               version1Table: Contact
               version1Variable: phoneNumber
       meta:
-        - partID: contacts
-          partType: table
+        - part: contacts
+          partType: tables
           version1Location: tables
           version1Table: Contact

@@ -11,14 +11,14 @@ schema:
           meta:
           - ruleID: invalid_type
             meta:
-            - partID: reportDate
+            - part: reportDate
               dataType: datetime
               measures: header
               version1Location: variables
               version1Table: Measure
               version1Variable: DateReport
       meta:
-      - partID: measures
-        partType: table
+      - part: measures
+        partType: tables
         version1Location: tables
         version1Table: Measure

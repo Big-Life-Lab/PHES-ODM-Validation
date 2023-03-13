@@ -11,25 +11,22 @@
             "invalidValue": "flow",
             "validationRuleFields": [
                 {
-                    "partID": "coll",
+                    "part": "coll",
                     "samples": "header",
                     "dataType": "categorical",
-                    "catSetID": "collectCat"
+                    "mmaSet": "collectCat"
                 },
                 {
-                    "partID": "comp3h",
-                    "partType": "category",
-                    "catSetID": "collectCat"
+                    "set": "collectCat",
+                    "part": "comp3h"
                 },
                 {
-                    "partID": "comp8h",
-                    "partType": "category",
-                    "catSetID": "collectCat"
+                    "set": "collectCat",
+                    "part": "comp8h"
                 },
                 {
-                    "partID": "flowPr",
-                    "partType": "category",
-                    "catSetID": "collectCat"
+                    "set": "collectCat",
+                    "part": "flowPr"
                 }
             ],
             "message": "Invalid category flow found in row 1 for column coll in table samples"

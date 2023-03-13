@@ -12,7 +12,7 @@
             "invalidValue": "Yes",
             "validationRuleFields": [
                 {
-                    "partID": "reportable",
+                    "part": "reportable",
                     "dataType": "boolean",
                     "measures": "header"
                 }

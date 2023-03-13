@@ -12,7 +12,7 @@ schema:
           meta:
           - ruleID: less_than_min_value
             meta:
-            - partID: geoLat
+            - part: geoLat
               sites: header
               version1Location: variables
               version1Table: Site
@@ -25,14 +25,14 @@ schema:
           meta:
           - ruleID: less_than_min_value
             meta:
-            - partID: geoLong
+            - part: geoLong
               sites: header
               version1Location: variables
               version1Table: Site
               version1Variable: Longitude
               minValue: "-90.15"
       meta:
-        - partID: sites
-          partType: table
+        - part: sites
+          partType: tables
           version1Location: tables
           version1Table: Site

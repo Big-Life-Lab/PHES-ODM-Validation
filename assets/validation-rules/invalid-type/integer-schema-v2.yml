@@ -11,9 +11,9 @@ schema:
           meta:
           - ruleID: invalid_type
             meta:
-            - partID: geoLat
+            - part: geoLat
               dataType: integer
               sites: header
       meta:
-        - partID: sites
-          partType: table
+        - part: sites
+          partType: tables

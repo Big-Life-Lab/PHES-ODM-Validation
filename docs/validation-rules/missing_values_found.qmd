@@ -79,7 +79,7 @@ All the metadata for this rule is contained in the parts sheet in the data dicti
 
 1. Get all values that represent missing from the parts sheet
     1. Filter the parts to only include those whose `partType` column is `missingness`
-    2. The `partID` column has the missing value
+    2. The `part` column has the missing value
 1. [Get the table names from the dictionary](../specs/odm-how-tos.md#how-to-get-the-names-of-tables-that-are-part-of-the-odm)
 2. [Get all mandatory columns for each table](../specs/odm-how-tos.md#checking-if-a-column-is-mandatory-for-a-table)
 3. Add this rule for each mandatory column

@@ -159,7 +159,7 @@ The generated cerberus object for the example above is shown below,
 pprint_yaml_file(asset("schema-v2.yml"))
 ```
 
-The metadata for this rule should include the row from the ODM for the part with its `partID` and `maxValue` column values.
+The metadata for this rule should include the row from the ODM for the part with its `part` and `maxValue` column values.
 
 ## ODM Version 1
 
@@ -179,7 +179,7 @@ pprint_yaml_file(asset("schema-v1.yml"))
 
 The metadata should include the following columns,
 
-* The `partID` column value
+* The `part` column value
 * The `version1Location` column value
 * The `version1Table` column value
 * The `version1Variable` column value

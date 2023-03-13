@@ -1,5 +1,5 @@
-partID,partType,measures,dataType,catSetID,version1Location,version1Table,version1Variable,version1Category,status
-measures,table,NA,NA,NA,tables,Measure,NA,NA,active
-reportable,attribute,header,boolean,NA,variables,Measure,reported,NA,active
-true,category,NA,varchar,booleanSet,NA,NA,NA,TRUE,active
-false,category,NA,varchar,booleanSet,NA,NA,NA,FALSE,active
+part,partType,measures,dataType,mmaSet,version1Location,version1Table,version1Variable,version1Category,status
+measures,tables,NA,NA,NA,tables,Measure,NA,NA,active
+reportable,attributes,header,boolean,NA,variables,Measure,reported,NA,active
+true,categories,NA,varchar,NA,NA,NA,NA,TRUE,active
+false,categories,NA,varchar,NA,NA,NA,NA,FALSE,active

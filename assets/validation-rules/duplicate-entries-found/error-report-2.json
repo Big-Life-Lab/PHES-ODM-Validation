@@ -18,7 +18,7 @@
             ],
             "validationRuleFields": [
                 {
-                    "partID": "addId",
+                    "part": "addId",
                     "addresses": "pK"
                 }
             ],
@@ -42,7 +42,7 @@
             ],
             "validationRuleFields": [
                 {
-                    "partID": "addId",
+                    "part": "addId",
                     "addresses": "pK"
                 }
             ],
