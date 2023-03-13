@@ -13,16 +13,16 @@ schema:
           meta:
           - ruleID: invalid_category
             meta:
-            - part: coll
+            - partID: coll
               samples: header
               dataType: categorical
               mmaSet: collectCat
-            - part: comp3h
+            - partID: comp3h
               set: collectCat
-            - part: comp8h
+            - partID: comp8h
               set: collectCat
-            - part: flowPr
+            - partID: flowPr
               set: collectCat
       meta:
-      - part: samples
+      - partID: samples
         partType: tables

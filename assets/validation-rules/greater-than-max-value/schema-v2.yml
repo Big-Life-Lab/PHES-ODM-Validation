@@ -12,7 +12,7 @@ schema:
           meta:
           - ruleID: greater_than_max_value
             meta:
-            - part: geoLat
+            - partID: geoLat
               maxValue: '90'
               sites: header
         geoLong:
@@ -22,9 +22,9 @@ schema:
           meta:
             - ruleID: greater_than_max_value
               meta:
-                - part: geoLong
+                - partID: geoLong
                   maxValue: '90.15'
                   sites: header
       meta:
-        - part: sites
+        - partID: sites
           partType: tables

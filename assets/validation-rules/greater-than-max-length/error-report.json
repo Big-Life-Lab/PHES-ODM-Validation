@@ -12,7 +12,7 @@
             "invalidValue": "123-456-111",
             "validationRuleFields": [
                 {
-                    "part": "phone",
+                    "partID": "phone",
                     "maxLength": "10",
                     "contacts": "header"
                 }

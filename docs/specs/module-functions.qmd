@@ -146,12 +146,12 @@ Generates the cerberus schema containing the validation rules to be used with th
             "sets": [
                 {
                     "set": "collectCat",
-                    "part": "flowPr"
+                    "partID": "flowPr"
                 },
                 {
 
                     "set": "collectCat",
-                    "part": "comp8h"
+                    "partID": "comp8h"
                 }
             ]
         }
@@ -243,7 +243,7 @@ Example of an `odm_data_dictionary` parameter is shown below,
 {
     "parts": [
         {
-            "part": "addresses",
+            "partID": "addresses",
             "label": "Address table",
             "partType": "tables",
             "addresses": "NA",
@@ -254,7 +254,7 @@ Example of an `odm_data_dictionary` parameter is shown below,
             "lastUpdated": "2"
         },
         {
-            "part": "comp3",
+            "partID": "comp3",
             "label": "Composite grab sample of 3",
             "partType": "categories",
             "addresses": "NA",
@@ -277,14 +277,14 @@ For the sets sheet, the versioning fields (`firstReleased` and `lastUpdated`) de
 {
     "parts": [
         {
-            "part": "samples",
+            "partID": "samples",
             "partType": "tables",
             "samples": "NA",
             "firstReleased": "1",
             "lastUpdated": "2"
         }
         {
-            "part": "collType",
+            "partID": "collType",
             "partType": "attributes",
             "samples": "header",
             "mmaSet": "collectSet",
@@ -292,7 +292,7 @@ For the sets sheet, the versioning fields (`firstReleased` and `lastUpdated`) de
             "lastUpdated": "2"
         },
         {
-            "part": "comp8r",
+            "partID": "comp8r",
             "partType": "measures",
             "samples": "header",
             "mmaSet": "NA",
@@ -303,7 +303,7 @@ For the sets sheet, the versioning fields (`firstReleased` and `lastUpdated`) de
     "set": [
         {
             "set": "collectSet",
-            "part": "comp8r",
+            "partID": "comp8r",
             "firstReleased": "2",
             "lastUpdated": "2"
         }

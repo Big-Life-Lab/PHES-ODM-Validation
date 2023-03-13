@@ -12,7 +12,7 @@
             "invalidValue": "",
             "validationRuleFields": [
                 {
-                    "part": "geoLat",
+                    "partID": "geoLat",
                     "sites": "header",
                     "sitesRequired": "mandatory"
                 }

@@ -1,4 +1,4 @@
-part,partType,addresses,contacts,dataType,maxLength,version1Location,version1Table,version1Variable,status
+partID,partType,addresses,contacts,dataType,maxLength,version1Location,version1Table,version1Variable,status
 addresses,tables,NA,NA,NA,NA,tables,Address,NA,active
 addL2,attributes,header,NA,varchar,NA,variables,Address,AddLine2,active
 contacts,tables,NA,NA,NA,NA,tables,Contact,NA,active

@@ -14,9 +14,9 @@ schema:
           meta:
           - ruleID: missing_values_found
             meta:
-            - part: geoLat
+            - partID: geoLat
               sites: header
               sitesRequired: mandatory
       meta:
-      - part: sites
+      - partID: sites
         partType: tables

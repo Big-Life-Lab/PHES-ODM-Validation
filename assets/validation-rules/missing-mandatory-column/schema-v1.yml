@@ -11,14 +11,14 @@ schema:
           meta:
           - ruleID: missing_mandatory_column
             meta:
-            - part: addID
+            - partID: addID
               addresses: pK
               addressesRequired: mandatory
               version1Location: variables
               version1Table: Address
               version1Variable: AddressId
       meta:
-      - part: addresses
+      - partID: addresses
         partType: tables
         version1Location: tables
         version1Table: Address
@@ -32,14 +32,14 @@ schema:
           meta:
           - ruleID: missing_mandatory_column
             meta:
-            - part: contID
+            - partID: contID
               contacts: pK
               contactsRequired: mandatory
               version1Location: variables
               version1Table: Contact
               version1Variable: ContactId
       meta:
-      - part: contacts
+      - partID: contacts
         partType: tables
         version1Location: tables
         version1Table: Contact

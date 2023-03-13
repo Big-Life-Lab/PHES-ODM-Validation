@@ -54,7 +54,7 @@ The steps to use this meatdata are:
 2. Filter the columns to only include those that are categorical. Categorical columns have a `dataType` value of `categorical`.
 3. For each categorical column, identify the name of the set that has the categories for that column. The set name is stored in the `mmaSet` column.
 4. Use the sets sheet and the value of the `mmaSet` column to identify the categories. For each categorical column, filter the sets sheet to only include those rows whose `set` column value is the same as the `mmaSet` value. 
-5. In the filtered rows, the `part` column contains the category values.
+5. In the filtered rows, the `partID` column contains the category values.
 
 Example
 

@@ -1,4 +1,4 @@
-part,partType,sites,dataType,minValue,version1Location,version1Table,version1Variable,status
+partID,partType,sites,dataType,minValue,version1Location,version1Table,version1Variable,status
 sites,tables,NA,NA,NA,tables,Site,NA,active
 geoLat,attributes,header,integer,-90,variables,Site,Latitude,active
 geoLong,attributes,header,float,-90.15,variables,Site,Longitude,active

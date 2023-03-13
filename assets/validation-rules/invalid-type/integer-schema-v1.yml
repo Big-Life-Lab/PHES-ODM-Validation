@@ -11,14 +11,14 @@ schema:
           meta:
           - ruleID: invalid_type
             meta:
-            - part: geoLat
+            - partID: geoLat
               dataType: integer
               sites: header
               version1Location: variables
               version1Table: Site
               version1Variable: Latitude
       meta:
-        - part: sites
+        - partID: sites
           partType: tables
           version1Location: tables
           version1Table: Site

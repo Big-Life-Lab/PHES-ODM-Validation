@@ -1,4 +1,4 @@
-part,partType,addresses,contacts,dataType,minLength,version1Location,version1Table,version1Variable,status
+partID,partType,addresses,contacts,dataType,minLength,version1Location,version1Table,version1Variable,status
 contacts,tables,NA,NA,NA,NA,tables,Contact,NA,active
 phone,attributes,NA,header,varchar,10,variables,Contact,phoneNumber,active
 addresses,tables,NA,NA,NA,NA,tables,Address,NA,active
