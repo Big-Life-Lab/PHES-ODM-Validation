@@ -17,15 +17,15 @@
                     "mmaSet": "collectCat"
                 },
                 {
-                    "set": "collectCat",
+                    "setID": "collectCat",
                     "partID": "comp3h"
                 },
                 {
-                    "set": "collectCat",
+                    "setID": "collectCat",
                     "partID": "comp8h"
                 },
                 {
-                    "set": "collectCat",
+                    "setID": "collectCat",
                     "partID": "flowPr"
                 }
             ],
