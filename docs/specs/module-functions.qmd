@@ -145,12 +145,12 @@ Generates the cerberus schema containing the validation rules to be used with th
             ],
             "sets": [
                 {
-                    "set": "collectCat",
+                    "setID": "collectCat",
                     "partID": "flowPr"
                 },
                 {
 
-                    "set": "collectCat",
+                    "setID": "collectCat",
                     "partID": "comp8h"
                 }
             ]
@@ -300,9 +300,9 @@ For the sets sheet, the versioning fields (`firstReleased` and `lastUpdated`) de
             "lastUpdated": "2"
         }
     ],
-    "set": [
+    "sets": [
         {
-            "set": "collectSet",
+            "setID": "collectSet",
             "partID": "comp8r",
             "firstReleased": "2",
             "lastUpdated": "2"

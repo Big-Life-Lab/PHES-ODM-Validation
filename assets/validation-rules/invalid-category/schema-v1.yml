@@ -23,19 +23,19 @@ schema:
               version1Table: Sample
               version1Variable: Collection
             - partID: comp3h
-              set: collectCat
+              setID: collectCat
               version1Location: variableCategories
               version1Table: Sample
               version1Variable: Collection
               version1Category: Comp3h
             - partID: comp8h
-              set: collectCat
+              setID: collectCat
               version1Location: variableCategories
               version1Table: Sample
               version1Variable: Collection
               version1Category: Comp8h
             - partID: flowPr
-              set: collectCat
+              setID: collectCat
               version1Location: variableCategories
               version1Table: Sample
               version1Variable: Collection
