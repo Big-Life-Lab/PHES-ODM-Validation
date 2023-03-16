@@ -442,5 +442,6 @@ def _validate_data_ext(schema: Schema,
 def validate_data(schema: Schema,
                   data: TableDataset,
                   data_version=pt.ODM_VERSION_STR,
+                  rule_blacklist: List[RuleId] = [],
                   ) -> reports.ValidationReport:
-    return _validate_data_ext(schema, data, data_version)
+    return _validate_data_ext(schema, data, data_version, rule_blacklist)
