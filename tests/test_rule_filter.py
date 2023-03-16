@@ -13,7 +13,7 @@ def get_enabled_ids(rule_filter):
     return list(map(lambda r: r.id, rule_filter.filter(ruleset)))
 
 
-class TestStdExt(common.OdmTestCase):
+class TestRuleFilter(common.OdmTestCase):
 
     def test_blacklist(self):
         unwanted_rule_id = rules.invalid_category.__name__
