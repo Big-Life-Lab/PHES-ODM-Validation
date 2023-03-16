@@ -297,8 +297,8 @@ def _gen_additions_schema(additions) -> CerberusSchema:
 
 def _generate_validation_schema_ext(parts, schema_version,
                                     schema_additions={},
-                                    rule_whitelist: List[RuleId] = [],
                                     rule_blacklist: List[RuleId] = [],
+                                    rule_whitelist: List[RuleId] = [],
                                     ) -> Schema:
     """
     This is the extended version of `generate_validation_schema`, with
@@ -354,8 +354,8 @@ OnProgress = Callable[[str, str, int, int], None]
 def _validate_data_ext(schema: Schema,
                        data: TableDataset,
                        data_version: str = pt.ODM_VERSION_STR,
-                       rule_whitelist: List[RuleId] = [],
                        rule_blacklist: List[RuleId] = [],
+                       rule_whitelist: List[RuleId] = [],
                        on_progress: OnProgress = None,
                        batch_size=_BATCH_SIZE,
                        ) -> reports.ValidationReport:
