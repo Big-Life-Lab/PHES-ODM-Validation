@@ -18,8 +18,17 @@ The following samples table row would pass validation,
 
 ```{python}
 #| echo: false
-pprint_csv_file(asset("valid-dataset.csv"), "Valid Dataset")
+pprint_csv_file(asset("valid-dataset-1.csv"), "Valid Dataset")
 ```
+
+For non-mandatory categorical columns, values representing missing are also allowed. Assuming that `coll` is not mandatory, the following table should pass validation,
+
+```{python}
+#| echo: false
+pprint_csv_file(asset("valid-dataset-2.csv"), "Valid Dataset")
+```
+
+The second row contains an empty string.
 
 ## Error report
 
