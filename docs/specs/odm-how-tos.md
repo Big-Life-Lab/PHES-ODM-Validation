@@ -34,32 +34,32 @@ Once we have the [table names part of the dictionary](#how-to-get-the-columns-na
     {
         "partID": "addresses",
         "partType": "tables",
-        "addresses: "NA",
+        "addresses": "NA",
         "contacts": "NA"
     },
     {
         "partID": "addId",
         "partType": "attributes",
-        "addresses: "pK",
+        "addresses": "pK",
         "contacts": "NA"
     },
     {
         "partID": "addL1",
         "partType": "attributes",
-        "addresses: "addL1",
+        "addresses": "addL1",
         "contacts": "NA"
     },
     {
         "partID": "contacts",
         "partType": "tables",
-        "addresses: "addL1",
+        "addresses": "addL1",
         "contacts": "NA"
     },
     {
         "partID": "contID",
         "partType": "attributes",
-        "addresses: "NA",
-        "contacts: "pK"
+        "addresses": "NA",
+        "contacts": "pK"
     },
 ]
 ```
