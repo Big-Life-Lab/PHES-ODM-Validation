@@ -1,4 +1,4 @@
-partID,partType,addresses,version1Location,version1Table,version1Variable,status
-addresses,tables,NA,tables,Address,NA,active
-addId,attributes,pK,variables,Address,AddressId,active
-addL1,attributes,header,variables,Address,AddL1,active
+partID,partType,addresses,version1Location,version1Table,version1Variable,status,firstReleased,lastUpdated
+addresses,tables,NA,tables,Address,NA,active,1.0.0,2.0.0
+addId,attributes,pK,variables,Address,AddressId,active,1.0.0,2.0.0
+addL1,attributes,header,variables,Address,AddL1,active,1.0.0,2.0.0

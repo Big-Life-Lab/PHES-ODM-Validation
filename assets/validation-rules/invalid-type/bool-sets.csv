@@ -1,3 +1,3 @@
-setID,partID
-booleanSet,true
-booleanSet,false
+setID,partID,firstReleased,lastUpdated
+booleanSet,true,1.0.0,2.0.0
+booleanSet,false,1.0.0,2.0.0
