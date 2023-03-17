@@ -15,8 +15,12 @@ schema_v1 = utils.import_schema(join(asset_dir, 'schema-v1.yml'))
 schema_v2 = utils.import_schema(join(asset_dir, 'schema-v2.yml'))
 
 
-invalid_category_pass_v2 = {
-    'samples': utils.import_dataset(join(asset_dir, 'valid-dataset.csv')),
+invalid_category_pass_1_v2 = {
+    'samples': utils.import_dataset(join(asset_dir, 'valid-dataset-1.csv')),
+}
+
+invalid_category_pass_2_v2 = {
+    'samples': utils.import_dataset(join(asset_dir, 'valid-dataset-2.csv')),
 }
 
 invalid_category_fail_v2 = {
@@ -50,8 +54,12 @@ class TestInvalidCategory(common.OdmTestCase):
         self.assertDictEqual(expected, got)
 
     def test_invalid_category_v2(self):
-        report = validate_data(schema_v2, invalid_category_pass_v2)
+        report = validate_data(schema_v2, invalid_category_pass_1_v2)
         self.assertTrue(report.valid())
+
+        report = validate_data(schema_v2, invalid_category_pass_1_v2)
+        self.assertTrue(report.valid())
+
         report = validate_data(schema_v2, invalid_category_fail_v2)
         expected = utils.import_json_file(join(asset_dir, 'error-report.json'))
         self.assertEqual(report.errors, expected['errors'])

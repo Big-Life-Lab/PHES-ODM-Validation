@@ -13,3 +13,4 @@ someOldCat,categories,NA,input,NA,varchar,NA,variableCategories,Site,type,someOl
 tp24s,categories,NA,NA,NA,NA,NA,variableCategories,Site,SampleCollectionDefault,cpTP24h,depreciated,1.0.0,2.0.0
 measureID,attributes,NA,NA,fK,varchar,NA,variables,WWMeasure,type,NA,active,1.0.0,2.0.0
 cod,categories,NA,NA,input,varchar,NA,variableCategories,WWMeasure; SiteMeasure,type,wqCOD; wwCOD,active,1.0.0,2.0.0
+NA,missingness,NA,NA,NA,varchar,NA,NA,NA,NA,NA,active,1.0.0,2.0.0
