@@ -1,6 +1,6 @@
 import logging
 from dataclasses import dataclass
-from logging import error
+from logging import error, warning
 from typing import Any, Callable, List, Optional, Set
 # from pprint import pprint
 
@@ -256,4 +256,4 @@ def parse_odm_val(val_ctx: OdmValueCtx) -> Optional[Any]:
     elif kind == 'varchar':
         return str(val)
     else:
-        assert False, f'{kind} parsing not impl.'
+        warning(f'{kind} parsing not impl.')
