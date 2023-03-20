@@ -5,6 +5,7 @@ Rule functions are ordered alphabetically.
 
 from dataclasses import dataclass
 from typing import Any, Callable, List, Tuple
+# from pprint import pprint
 
 import part_tables as pt
 from schemas import Schema, update_schema
@@ -49,7 +50,7 @@ class Rule:
     id: str
     keys: List[str]
     is_warning: bool
-    gen_schema: Callable[pt.PartData, Schema]
+    gen_schema: Callable[pt.OdmData, Schema]
     get_error_template: Callable[[Any, str], str]
 
     match_all_keys: bool
@@ -93,7 +94,7 @@ def duplicate_entries_found():
     def gen_cerb_rules(val_ctx: OdmValueCtx):
         return {'unique': True}
 
-    def gen_schema(data: pt.PartData, ver):
+    def gen_schema(data: pt.OdmData, ver):
         return gen_conditional_schema(data, ver, rule_id, gen_cerb_rules,
                                       is_primary_key)
 
@@ -110,7 +111,7 @@ def greater_than_max_length():
     def gen_cerb_rules(val_ctx: OdmValueCtx):
         return {'maxlength': try_parse_int(val_ctx.value)}
 
-    def gen_schema(data: pt.PartData, ver):
+    def gen_schema(data: pt.OdmData, ver):
         return gen_value_schema(data, ver, rule_id, odm_key, gen_cerb_rules)
 
     return init_rule(rule_id, err, gen_cerb_rules, gen_schema)
@@ -128,7 +129,7 @@ def greater_than_max_value():
             'max': parse_odm_val(val_ctx)
         } | gen_cerb_rules_for_type(val_ctx)
 
-    def gen_schema(data: pt.PartData, ver):
+    def gen_schema(data: pt.OdmData, ver):
         return gen_value_schema(data, ver, rule_id, odm_key, gen_cerb_rules)
 
     return init_rule(rule_id, err, gen_cerb_rules, gen_schema)
@@ -141,7 +142,7 @@ def missing_mandatory_column():
     def gen_cerb_rules(val_ctx: OdmValueCtx):
         return {'required': True}
 
-    def gen_schema(data: pt.PartData, ver):
+    def gen_schema(data: pt.OdmData, ver):
         return gen_conditional_schema(data, ver, rule_id, gen_cerb_rules,
                                       is_mandatory)
 
@@ -160,7 +161,7 @@ def missing_values_found():
             'forbidden': sorted(val_ctx.null_set),
         }
 
-    def gen_schema(data: pt.PartData, ver):
+    def gen_schema(data: pt.OdmData, ver):
         return gen_conditional_schema(data, ver, rule_id, gen_cerb_rules,
                                       is_mandatory)
 
@@ -181,7 +182,7 @@ def less_than_min_length():
             return {}
         return {'minlength': val}
 
-    def gen_schema(data: pt.PartData, ver):
+    def gen_schema(data: pt.OdmData, ver):
         return gen_value_schema(data, ver, rule_id, odm_key, gen_cerb_rules)
 
     return init_rule(rule_id, err, gen_cerb_rules, gen_schema)
@@ -199,7 +200,7 @@ def less_than_min_value():
             'min': parse_odm_val(val_ctx)
         } | gen_cerb_rules_for_type(val_ctx)
 
-    def gen_schema(data: pt.PartData, ver):
+    def gen_schema(data: pt.OdmData, ver):
         return gen_value_schema(data, ver, rule_id, odm_key, gen_cerb_rules)
 
     return init_rule(rule_id, err, gen_cerb_rules, gen_schema)
@@ -214,7 +215,7 @@ def invalid_category():
     def gen_cerb_rules(val_ctx: OdmValueCtx):
         return {cerb_rule_key: None}
 
-    def gen_schema(data: pt.PartData, ver: Version):
+    def gen_schema(data: pt.OdmData, ver: Version):
         # FIXME: `cat_ids1` contains duplicates due to v1 categories belonging
         # to multiple tables.
         schema = {}
@@ -223,7 +224,7 @@ def invalid_category():
             table_meta = get_table_meta(table, ver)
             for attr_id0, attr_id1, attr in attr_items(data, table_id0,
                                                        table_id1, ver):
-                cs_data = data.catset_data.get(attr_id0)
+                cs_data = data.catset_data.get((table_id0, attr_id0))
                 if not cs_data:
                     continue
                 cs = cs_data.part
@@ -268,7 +269,7 @@ def invalid_type():
     def gen_cerb_rules(val_ctx: OdmValueCtx):
         return gen_cerb_rules_for_type(val_ctx)
 
-    def gen_schema(data: pt.PartData, ver):
+    def gen_schema(data: pt.OdmData, ver):
         return gen_value_schema(data, ver, rule_id, odm_key, gen_cerb_rules)
 
     return init_rule(rule_id, get_error_template, gen_cerb_rules, gen_schema)
