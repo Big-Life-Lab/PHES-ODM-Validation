@@ -225,7 +225,7 @@ def _odm_to_cerb_datatype(odm_datatype: str) -> Optional[str]:
         return 'string'
     if t in ['datetime', 'integer', 'float']:
         return t
-    logging.warning(f'odm datatype {t} is not implemented')
+    warning(f'conversion of odm datatype "{t}" is not implemented')
 
 
 def gen_cerb_rules_for_type(val_ctx: OdmValueCtx) -> dict:
@@ -256,4 +256,4 @@ def parse_odm_val(val_ctx: OdmValueCtx) -> Optional[Any]:
     elif kind == 'varchar':
         return str(val)
     else:
-        warning(f'{kind} parsing not impl.')
+        warning(f'parsing of odm datatype "{kind}" is not implemented')
