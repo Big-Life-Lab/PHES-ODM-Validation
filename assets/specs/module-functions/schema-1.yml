@@ -1,11 +1,11 @@
-schemaVersion: 2.0.0
+schemaVersion: 1.0.0
 schema:
-  sites:
+  Site:
     type: list
     schema:
       type: dict
       schema:
-        siteID:
+        SiteID:
           required: true
           allowed:
           - Ottawa Site
@@ -16,6 +16,11 @@ schema:
             - partID: siteID
               sitesRequired: mandatory
               sites: pK
+              version1Location: variables
+              version1Table: Site
+              version1Variable: SiteID
       meta:
       - partID: sites
-        partType: table
+        partType: tables
+        version1Location: tables
+        version1Table: Site

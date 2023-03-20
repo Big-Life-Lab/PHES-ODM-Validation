@@ -1,6 +1,6 @@
 {
-    "sites": {
-        "siteID": {
+    "Site": {
+        "SiteID": {
             "allowed": ["Ottawa Site", "Montreal Site"]
         }
     }
