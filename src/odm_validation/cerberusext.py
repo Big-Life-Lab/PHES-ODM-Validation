@@ -11,7 +11,7 @@ from cerberus.errors import ErrorDefinition
 
 import part_tables as pt
 import reports
-from reports import get_row_num
+from reports import DataKind, get_row_num
 from rules import COERCION_RULE_ID
 from part_tables import Dataset, Row
 from schemas import CerberusSchema
@@ -84,7 +84,7 @@ class ContextualCoercer(Validator):
         return result
 
     def coerce(self, document: Dataset, schema: CerberusSchema,
-               offset: int) -> Dataset:
+               offset: int, data_kind=DataKind.python) -> Dataset:
         # Coercion is performed by validating using a coercion-only schema.
         # Native cerberus normalization can't be used because it doesn't
         # provide context. Coercions are kept track of using `_config`.
@@ -97,6 +97,7 @@ class ContextualCoercer(Validator):
         self.schema = coercion_schema
         self._config["coerced_document"] = deepcopy(document)
         self._config["offset"] = offset
+        self._config["data_kind"] = data_kind
         if not super().validate(document):
             logging.error(self.errors, stack_info=True)
         return self._config["coerced_document"]
@@ -114,6 +115,7 @@ class ContextualCoercer(Validator):
         if type_class is float and isinstance(value, int):
             return
         offset = self._config['offset']
+        data_kind = self._config['data_kind']
         table = self.document_path[0]
         row_ix = self.document_path[1]
         row = self.document
@@ -124,7 +126,7 @@ class ContextualCoercer(Validator):
             column_id=field,
             column_meta=column_meta,
             rows=[row],
-            row_numbers=[get_row_num(row_ix, offset)],
+            row_numbers=[get_row_num(row_ix, offset, data_kind)],
             table_id=table,
             value=value,
         )
@@ -174,6 +176,7 @@ class UniqueRuleState:
 class ErrorState:
     def __init__(self):
         self.offset = 0
+        self.data_kind = DataKind.python
         self.aggregated_errors: List[AggregatedError] = []
 
 
@@ -216,10 +219,11 @@ class OdmValidator(Validator):
         if not constraint:
             return
         offset = self.error_state.offset
+        data_kind = self.error_state.data_kind
         table_id = self.document_path[0]
         row = self.document
         row_ix = self.document_path[1]
-        row_num = get_row_num(row_ix, offset)
+        row_num = get_row_num(row_ix, offset, data_kind)
         lastUpdated = row.get('lastUpdated', '') or ''
         assert isinstance(lastUpdated, str)
         pk = (str(value).strip(), lastUpdated.strip())
@@ -246,8 +250,10 @@ class OdmValidator(Validator):
             state.tablekey_rows[tablekey] = (row_num, row)
             primary_keys.add(pk)
 
-    def validate(self, offset: int, *args, **kwargs) -> bool:
+    def validate(self, offset: int, data_kind: DataKind,
+                 *args, **kwargs) -> bool:
         self.error_state.offset = offset
+        self.error_state.data_kind = data_kind
         self.error_state.aggregated_errors.clear()
         result = super().validate(*args, **kwargs)
         self.error_state.aggregated_errors += \

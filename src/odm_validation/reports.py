@@ -13,6 +13,11 @@ from stdext import (
 )
 
 
+class DataKind(Enum):
+    python = 1
+    spreadsheet = 2
+
+
 class ErrorKind(Enum):
     WARNING = 'warning'
     ERROR = 'error'
@@ -71,10 +76,13 @@ def _fmt_list(items: list) -> str:
         return str(items[0])
 
 
-def get_row_num(row_index: int, offset: int) -> int:
-    """Returns the spreadsheet row number of `row_index` plus `offset`,
-    converted to a one-indexed number."""
-    return offset + row_index + 1
+def get_row_num(row_index: int, offset: int, data_kind: DataKind) -> int:
+    "Returns the dataset row number, starting from 1."
+    # spreadsheets have a header row, which increases the number by one
+    result = offset + row_index + 1
+    if data_kind == DataKind.spreadsheet:
+        result += 1
+    return result
 
 
 def _fmt_value(val: Any) -> Any:
