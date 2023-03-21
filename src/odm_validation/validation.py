@@ -31,6 +31,10 @@ TableDataset = Dict[pt.TableId, pt.Dataset]
 
 
 class RuleFilter:
+    """A rule filter.
+
+    The blacklist takes precedence over the whitelist, and an empty whitelist
+    represents all rules."""
     # `whitelist` is needed when testing schema generation and data validation.
     # Users may be more interested in `blacklist`, to remove certain irrelevant
     # errors from their reports.
@@ -304,8 +308,10 @@ def _generate_validation_schema_ext(parts, schema_version,
     This is the extended version of `generate_validation_schema`, with
     additional parameters for setting advanced options.
 
-    :param rule_whitelist: list of rule ids to explicitly enable.
-    :param rule_blacklist: list of rule ids to explicitly disable.
+    :param rule_whitelist: A list of rule ids to explicitly enable. An empty
+        list represents all the rules.
+    :param rule_blacklist: A list of rule ids to explicitly disable. This takes
+        precedence over the whitelist.
     """
     # `parts` must be stripped before further processing. This is important for
     # performance and simplicity of implementation.
@@ -444,4 +450,7 @@ def validate_data(schema: Schema,
                   data_version=pt.ODM_VERSION_STR,
                   rule_blacklist: List[RuleId] = [],
                   ) -> reports.ValidationReport:
+    """
+    :param rule_blacklist: A list of rule ids to explicitly disable.
+    """
     return _validate_data_ext(schema, data, data_version, rule_blacklist)
