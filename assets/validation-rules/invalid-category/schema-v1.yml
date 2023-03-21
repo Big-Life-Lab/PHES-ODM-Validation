@@ -18,24 +18,20 @@ schema:
             meta:
             - partID: coll
               dataType: categorical
-              mmaSet: collectCat
               version1Location: variables
               version1Table: Sample
               version1Variable: Collection
             - partID: comp3h
-              setID: collectCat
               version1Location: variableCategories
               version1Table: Sample
               version1Variable: Collection
               version1Category: Comp3h
             - partID: comp8h
-              setID: collectCat
               version1Location: variableCategories
               version1Table: Sample
               version1Variable: Collection
               version1Category: Comp8h
             - partID: flowPr
-              setID: collectCat
               version1Location: variableCategories
               version1Table: Sample
               version1Variable: Collection
@@ -60,7 +56,6 @@ schema:
           - ruleID: invalid_category
             meta:
             - partID: siteTypeID
-              mmaSet: siteTypeCatSet
               dataType: categorical
               version1Location: variables
               version1Table: Site

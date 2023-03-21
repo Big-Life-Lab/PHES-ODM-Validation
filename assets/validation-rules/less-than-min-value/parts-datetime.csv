@@ -1,2 +1,2 @@
 partID,partType,sites,dataType,minValue,version1Location,version1Table,version1Variable,status
-lastEdited,attribute,header,datetime,2023-01-01,variables,Site,LastEdited,active
+lastEdited,attributes,header,datetime,2023-01-01,variables,Site,LastEdited,active

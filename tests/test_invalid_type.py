@@ -21,6 +21,9 @@ class Assets():
                                 f'assets/validation-rules/{rule_dirname}')
 
         self.parts_v2 = import_dataset(asset(f'{kind}-parts.csv'))
+        self.sets = (import_dataset(asset('bool-sets.csv')) if kind == 'bool'
+                     else [])
+
         self.schemas = {
             1: import_schema(asset(f'{kind}-schema-v1.yml')),
             2: import_schema(asset(f'{kind}-schema-v2.yml')),
@@ -71,6 +74,7 @@ class TestInvalidType(common.OdmTestCase):
     def test_schema_generation(self, major_ver):
         ver = f'{major_ver}.0.0'
         result = _generate_validation_schema_ext(parts=self.assets.parts_v2,
+                                                 sets=self.assets.sets,
                                                  schema_version=ver,
                                                  rule_whitelist=self.whitelist)
         self.assertDictEqual(self.assets.schemas[major_ver], result)
