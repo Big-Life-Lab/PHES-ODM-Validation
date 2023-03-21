@@ -132,6 +132,7 @@ def _gen_error_entry(cerb_rule, table_id, column_id, value, row_numbers,
                      rows, column_meta, rule_filter: RuleFilter,
                      constraint=None, schema_column=None,
                      ) -> Optional[RuleError]:
+    "Generates a single validation error from input params."
     if not value and cerb_rule == 'type':
         return
 
@@ -163,6 +164,7 @@ def _gen_error_entry(cerb_rule, table_id, column_id, value, row_numbers,
 def _gen_cerb_error_entry(e, row, schema: CerberusSchema,
                           rule_filter: RuleFilter, offset: int
                           ) -> Optional[RuleError]:
+    "Transforms a single Cerberus error into a validation error."
     cerb_rule = e.schema_path[-1]
     (table_id, _, column_id) = e.document_path
     row_index = e.document_path[1]
@@ -186,6 +188,8 @@ def _gen_cerb_error_entry(e, row, schema: CerberusSchema,
 
 def _gen_aggregated_error_entry(agg_error, rule_filter: RuleFilter
                                 ) -> Optional[dict]:
+    """Transforms a single aggregated error (from OdmValidator) to a validation
+    error."""
     return _gen_error_entry(
         agg_error.cerb_rule,
         agg_error.table_id,
@@ -253,7 +257,10 @@ def _strip_coerce_rules(cerb_schema):
 
 def _map_cerb_errors(table_id, cerb_errors, schema, rule_filter,
                      summary: reports.ValidationSummary, offset: int):
-    "Returns (errors, warnings)."
+    """Transforms Cerberus errors to validation errors (and warnings).
+
+    :return: a pair of lists (errors, warnings).
+    """
     errors = []
     warnings = []
     for table_error in cerb_errors:
@@ -277,6 +284,8 @@ def _map_cerb_errors(table_id, cerb_errors, schema, rule_filter,
 
 
 def _map_aggregated_errors(table_id, agg_errors, rule_filter, summary):
+    """Transforms a list of aggregated errors from OdmValidator to a list of
+    validation errors."""
     errors = []
     for ae in agg_errors:
         rule_error = _gen_aggregated_error_entry(ae, rule_filter)
