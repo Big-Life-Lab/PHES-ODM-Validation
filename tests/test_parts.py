@@ -76,21 +76,21 @@ class TestVersion1Table(common.OdmTestCase):
     parts = [
         {
             'partID': 'mynewtable',
-            'partType': 'table',
+            'partType': 'tables',
             'version1Table': 'myoldtable',
             'version1Location': 'tables',
             'status': 'active',
         },
         {
             'partID': 'mynewtable2',
-            'partType': 'table',
+            'partType': 'tables',
             'version1Table': 'myoldtable2',
             'version1Location': 'tables',
             'status': 'active',
         },
         {
             'partID': 'myoldpart',
-            'partType': 'attribute',
+            'partType': 'attributes',
             'dataType': 'integer',
             'firstReleased': '1',
             'lastUpdated': '2',
@@ -121,7 +121,7 @@ class TestVersion1Table(common.OdmTestCase):
                 }},
                 'meta': [{
                     'partID': 'mynewtable',
-                    'partType': 'table',
+                    'partType': 'tables',
                     'version1Location': 'tables',
                     'version1Table': 'myoldtable'}]}},
         'myoldtable2': {
@@ -143,13 +143,13 @@ class TestVersion1Table(common.OdmTestCase):
                 }},
                 'meta': [{
                     'partID': 'mynewtable2',
-                    'partType': 'table',
+                    'partType': 'tables',
                     'version1Location': 'tables',
                     'version1Table': 'myoldtable2'}]}}}
 
     def test(self):
         self.maxDiff = None
-        schema = generate_validation_schema(self.parts, '1.0.0')
+        schema = generate_validation_schema(self.parts, schema_version='1.0.0')
         self.assertDictEqual(self.expected_schema, schema['schema'])
 
 

@@ -17,16 +17,16 @@
                     "mmaSet": "collectCat"
                 },
                 {
-                    "setID": "collectCat",
-                    "partID": "comp3h"
+                    "partID": "comp3h",
+                    "setID": "collectCat"
                 },
                 {
-                    "setID": "collectCat",
-                    "partID": "comp8h"
+                    "partID": "comp8h",
+                    "setID": "collectCat"
                 },
                 {
-                    "setID": "collectCat",
-                    "partID": "flowPr"
+                    "partID": "flowPr",
+                    "setID": "collectCat"
                 }
             ],
             "message": "Invalid category flow found in row 1 for column coll in table samples"

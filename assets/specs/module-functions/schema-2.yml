@@ -20,11 +20,11 @@ schema:
               dataType: categorical
               mmaSet: collectCat
             - partID: comp3h
-              partType: categories
+              setID: collectCat
             - partID: comp8h
-              partType: categories
+              setID: collectCat
             - partID: flowPr
-              partType: categories
+              setID: collectCat
       meta:
       - partID: samples
         partType: tables

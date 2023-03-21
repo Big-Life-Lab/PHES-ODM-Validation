@@ -10,6 +10,7 @@ asset_dir = join(common.root_dir,
                  'assets/validation-rules/invalid-category')
 
 parts = utils.import_dataset(join(asset_dir, 'parts.csv'))
+sets = utils.import_dataset(join(asset_dir, 'sets.csv'))
 schema_v1 = utils.import_schema(join(asset_dir, 'schema-v1.yml'))
 schema_v2 = utils.import_schema(join(asset_dir, 'schema-v2.yml'))
 
@@ -41,6 +42,7 @@ class TestInvalidCategory(common.OdmTestCase):
     def test_schema_generation_v2(self):
         result = _generate_validation_schema_ext(
             parts=parts,
+            sets=sets,
             schema_version='2.0.0',
             rule_whitelist=self.whitelist)
         got = result['schema']['samples']
