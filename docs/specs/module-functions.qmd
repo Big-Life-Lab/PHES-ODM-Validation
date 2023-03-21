@@ -88,6 +88,18 @@ Validates an ODM dataset.
         }
         ```
 
+3. `rule_blacklist`: A list of rule ids to explicitly disable.
+
+    * `type`: A Python list of strings.
+
+        Example:
+
+        `[rules.invalid_category.__name__, rules.invalid_type.__name__]`
+
+        or simply
+
+        `['invalid_category', 'invalid_type']`
+
 ### Return
 
 Returns a dictionary with the found errors and warnings.
