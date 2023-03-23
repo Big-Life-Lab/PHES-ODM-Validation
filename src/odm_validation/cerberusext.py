@@ -133,7 +133,8 @@ class ContextualCoercer(Validator):
         try:
             new_value = _convert_value(value, type_class)
             self._config["coerced_document"][table][row_ix][field] = new_value
-            self._log_coercion(reports.ErrorKind.WARNING, ctx)
+            if data_kind != DataKind.spreadsheet:
+                self._log_coercion(reports.ErrorKind.WARNING, ctx)
         except (ArithmeticError, ValueError):
             self._log_coercion(reports.ErrorKind.ERROR, ctx)
 

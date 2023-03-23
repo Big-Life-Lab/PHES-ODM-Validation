@@ -50,6 +50,35 @@ class TestReports(common.OdmTestCase):
         self.assertEqual(report.errors[0]['errorType'],
                          rules.missing_mandatory_column.__name__)
 
+    def test_coercion_warnings_for_data_kind(self):
+        schema = {
+            'schemaVersion': '2.0.0',
+            'schema': {
+                'addresses': {
+                    'type': 'list',
+                    'schema': {
+                        'type': 'dict',
+                        'schema': {
+                            'addID': {
+                                'type': 'integer',
+                                'coerce': 'integer',
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        data = {
+            'addresses': [
+                {'addID': '123'},
+            ]
+        }
+
+        report = validate_data(schema, data, data_kind=DataKind.python)
+        self.assertEqual(len(report.warnings), 1)
+        report = validate_data(schema, data, data_kind=DataKind.spreadsheet)
+        self.assertEqual(len(report.warnings), 0)
+
 
 if __name__ == '__main__':
     unittest.main()
