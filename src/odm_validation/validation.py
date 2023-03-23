@@ -132,6 +132,7 @@ def _cerb_to_odm_type(cerb_type: str) -> Optional[str]:
 def _gen_error_entry(cerb_rule, table_id, column_id, value, row_numbers,
                      rows, column_meta, rule_filter: RuleFilter,
                      constraint=None, schema_column=None,
+                     data_kind=DataKind.python
                      ) -> Optional[RuleError]:
     "Generates a single validation error from input params."
     if not value and cerb_rule == 'type':
@@ -140,6 +141,15 @@ def _gen_error_entry(cerb_rule, table_id, column_id, value, row_numbers,
     rule = _get_rule_for_cerb_key(cerb_rule, column_meta)
     if not rule_filter.enabled(rule):
         return
+
+    # Only report column errors for the first line in spreadsheets.
+    # It will always trigger on the first line do to how csv-files are
+    # imported.
+    if rule.is_column and data_kind == DataKind.spreadsheet:
+        first_row_num = get_row_num(0, 0, data_kind)
+        assert len(row_numbers) == 1
+        if row_numbers[0] > first_row_num:
+            return
 
     cerb_type = schema_column.get('type', None) if schema_column else None
     odm_type = _extract_datatype(column_meta)
@@ -183,7 +193,8 @@ def _gen_cerb_error_entry(e, row, schema: CerberusSchema,
         column_meta,
         rule_filter,
         e.constraint,
-        schema_column
+        schema_column,
+        data_kind=data_kind,
     )
 
 

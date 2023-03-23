@@ -48,6 +48,7 @@ class Rule:
     """
     id: str
     keys: List[str]
+    is_column: bool
     is_warning: bool
     gen_schema: Callable[pt.PartData, Schema]
     get_error_template: Callable[[Any, str], str]
@@ -64,12 +65,13 @@ class Rule:
 
 
 def init_rule(rule_id, error, gen_cerb_rules, gen_schema,
-              is_warning=False, match_all_keys=False):
+              is_column=False, is_warning=False, match_all_keys=False):
     """
     - `error` can either be a string or a function taking a value and returning
       a string.
     - `gen_cerb_rules` must accept a dummy context of `None` values, and return
       a dict with cerberus rule names as keys.
+    - `is_column` determines if the rule is validating columns/headers.
     """
     dummy_ctx = OdmValueCtx(value=1, datatype='integer', bool_set=set(),
                             null_set=set())
@@ -78,6 +80,7 @@ def init_rule(rule_id, error, gen_cerb_rules, gen_schema,
     return Rule(
         id=rule_id,
         keys=cerb_keys,
+        is_column=is_column,
         is_warning=is_warning,
         match_all_keys=match_all_keys,
         get_error_template=get_error_template,
@@ -145,7 +148,7 @@ def missing_mandatory_column():
         return gen_conditional_schema(data, ver, rule_id, gen_cerb_rules,
                                       is_mandatory)
 
-    return init_rule(rule_id, err, gen_cerb_rules, gen_schema)
+    return init_rule(rule_id, err, gen_cerb_rules, gen_schema, is_column=True)
 
 
 def missing_values_found():
