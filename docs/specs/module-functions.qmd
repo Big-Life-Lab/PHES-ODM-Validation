@@ -88,7 +88,11 @@ Validates an ODM dataset.
         }
         ```
 
-3. `rule_blacklist`: A list of rule ids to explicitly disable.
+3. `data_version`: The ODM version of the `data`.
+
+    * `type`: string.
+
+4. `rule_blacklist`: A list of rule ids to explicitly disable.
 
     * `type`: A Python list of strings.
 
@@ -107,9 +111,9 @@ Returns a dictionary with the found errors and warnings.
 All errors and warnings for each validation rule are documented in the [specification for each validation rule](../validation-rules/).
 
 * type: A Python dictionary consisting of the following fields
-    * `odmDataVersion`: string consisting of the version of the ODM data
-    * `validationSchemaVersion`: string consisting of the version of the validation schema used
-    * `validationPackageVersion`: string consisting of the version of the validation package used
+    * `data_version`: string consisting of the version of the ODM data
+    * `schema_version`: string consisting of the version of the validation schema used
+    * `package_version`: string consisting of the version of the validation package used
     * `errors`: A list of Python dictionaries describing each error. For more information refer to the files in the [validation-rules](../validation-rules/) folder
     * `warnings`: A list of Python dictionaries describing each warning.
 
@@ -119,7 +123,8 @@ Generates the cerberus schema containing the validation rules to be used with th
 
 ### Arguments
 
-1. `odm_data_dictionary`: The ODM data dictionary [excel sheet](https://github.com/Big-Life-Lab/PHES-ODM/tree/V2-first-draft/template)
+1. `parts`: The ODM data dictionary [excel
+sheet](https://github.com/Big-Life-Lab/PHES-ODM/tree/V2.0.0-rc.3/dictionary-tables) 'parts'.
 
     * `type`: A dictionary whose keys are the sheet names and values is a list containing the sheet rows. Currently the parts and sets sheet are required.
 
@@ -142,7 +147,18 @@ Generates the cerberus schema containing the validation rules to be used with th
                     "addresses": "pK",
                     "addressesRequired": "mandatory"
                 }
-            ],
+            ]
+        }
+        ```
+
+2. `sets`: The ODM data dictionary [excel sheet](https://github.com/Big-Life-Lab/PHES-ODM/tree/V2.0.0-rc.3/dictionary-tables) 'sets'.
+
+    * `type`: A dictionary whose keys are the sheet names and values is a list containing the sheet rows. Currently the parts and sets sheet are required.
+
+        Example
+
+        ```python
+        {
             "sets": [
                 {
                     "setID": "collectCat",
@@ -157,11 +173,11 @@ Generates the cerberus schema containing the validation rules to be used with th
         }
         ```
 
-2. `version`: The version of the ODM dictionary the cerberus schema is for
+3. `schema_version`: Optional version of the ODM dictionary the cerberus schema is for.
 
-    * `type`: A string representing the version of the ODM to use
+    * `type`: A string representing the version of the ODM to use.
 
-3. `schema_additions`: Optional argument which allows the user to update the cerberus schema with additional validations
+4. `schema_additions`: Optional argument which allows the user to update the cerberus schema with additional validations
 
     * `type`: A dictionary containing the updates. The shape is shown below,
 
@@ -172,7 +188,7 @@ Generates the cerberus schema containing the validation rules to be used with th
             # The name of the column whose validation rules to update
             "<column_name>": {
                 # Adds or updates the allowed rule for this column
-                "[allowed]": string[]
+                "allowed": string[]
             }
         }
     }
