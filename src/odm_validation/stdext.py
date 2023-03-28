@@ -104,8 +104,3 @@ def type_name(type_class) -> str:
     if result == 'str':
         result = 'string'
     return result
-
-
-def inc(x):
-    """Increment x by 1, as seen in Pascal."""
-    return x + 1
