@@ -104,3 +104,7 @@ def type_name(type_class) -> str:
     if result == 'str':
         result = 'string'
     return result
+
+
+def quote(x: str) -> str:
+    return f'"{x}"'
