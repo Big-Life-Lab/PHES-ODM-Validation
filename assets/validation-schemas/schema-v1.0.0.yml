@@ -177,37 +177,31 @@ schema:
               version1Table: WWMeasure; SiteMeasure; AssayMethod
               version1Variable: unit
             - partID: gcCrA
-              partType: units
               version1Category: gcCrA
               version1Location: variableCategories
               version1Table: WWMeasure; AssayMethod
               version1Variable: unit
             - partID: gCGS
-              partType: units
               version1Category: gcGs
               version1Location: variableCategories
               version1Table: WWMeasure; AssayMethod
               version1Variable: unit
             - partID: gcL
-              partType: units
               version1Category: gcL
               version1Location: variableCategories
               version1Table: WWMeasure; AssayMethod
               version1Variable: unit
             - partID: gcMl
-              partType: units
               version1Category: gcMl
               version1Location: variableCategories
               version1Table: WWMeasure; AssayMethod
               version1Variable: unit
             - partID: gcPpmov
-              partType: units
               version1Category: gcPMMoV
               version1Location: variableCategories
               version1Table: AssayMethod
               version1Variable: unit
             - partID: otunDep
-              partType: units
               version1Category: other
               version1Location: variableCategories
               version1Table: WWMeasure; AssayMethod
@@ -416,31 +410,26 @@ schema:
               version1Table: Instrument
               version1Variable: type
             - partID: aas
-              partType: categories
               version1Category: atline
               version1Location: variableCategories
               version1Table: Instrument
               version1Variable: type
             - partID: hma
-              partType: categories
               version1Category: hand
               version1Location: variableCategories
               version1Table: Instrument
               version1Variable: type
             - partID: instrumentTypeOther
-              partType: categories
               version1Category: other
               version1Location: variableCategories
               version1Table: Instrument
               version1Variable: type
             - partID: ola
-              partType: categories
               version1Category: lab
               version1Location: variableCategories
               version1Table: Instrument
               version1Variable: type
             - partID: onse
-              partType: categories
               version1Category: online
               version1Location: variableCategories
               version1Table: Instrument
@@ -840,13 +829,11 @@ schema:
               version1Table: Polygon
               version1Variable: type
             - partID: hlthReg
-              partType: categories
               version1Category: hlthReg
               version1Location: variableCategories
               version1Table: Polygon
               version1Variable: type
             - partID: swrSet
-              partType: categories
               version1Category: swrCatSet
               version1Location: variableCategories
               version1Table: Polygon
@@ -1048,49 +1035,41 @@ schema:
               version1Table: Sample
               version1Variable: collection
             - partID: comp3
-              partType: categories
               version1Category: grbCp3
               version1Location: variableCategories
               version1Table: Sample
               version1Variable: collection
             - partID: comp3h
-              partType: categories
               version1Category: grbCp3h
               version1Location: variableCategories
               version1Table: Sample
               version1Variable: collection
             - partID: comp8hDep
-              partType: categories
               version1Category: grbCp8h
               version1Location: variableCategories
               version1Table: Sample
               version1Variable: collection
             - partID: flowPr
-              partType: categories
               version1Category: cpFP24h
               version1Location: variableCategories
               version1Table: Sample
               version1Variable: collection
             - partID: grb
-              partType: categories
               version1Category: grb
               version1Location: variableCategories
               version1Table: Sample
               version1Variable: collection
             - partID: moorSw
-              partType: categories
               version1Category: mooreSw
               version1Location: variableCategories
               version1Table: Sample
               version1Variable: collection
             - partID: oColDep
-              partType: categories
               version1Category: other
               version1Location: variableCategories
               version1Table: Sample
               version1Variable: collection
             - partID: timePr
-              partType: categories
               version1Category: cpTP24h
               version1Location: variableCategories
               version1Table: Sample
@@ -1346,55 +1325,46 @@ schema:
               version1Table: Sample
               version1Variable: type
             - partID: hoTaWa
-              partType: categories
               version1Category: hTank
               version1Location: variableCategories
               version1Table: Sample
               version1Variable: type
             - partID: nww
-              partType: categories
               version1Category: water
               version1Location: variableCategories
               version1Table: Sample
               version1Variable: type
             - partID: pEfflu
-              partType: categories
               version1Category: pEfflu
               version1Location: variableCategories
               version1Table: Sample
               version1Variable: type
             - partID: pSludge
-              partType: categories
               version1Category: pSludge
               version1Location: variableCategories
               version1Table: Sample
               version1Variable: type
             - partID: pstGrit
-              partType: categories
               version1Category: pstGrit
               version1Location: variableCategories
               version1Table: Sample
               version1Variable: type
             - partID: rawWW
-              partType: categories
               version1Category: rawWW
               version1Location: variableCategories
               version1Table: Sample
               version1Variable: type
             - partID: sEfflu
-              partType: categories
               version1Category: sEfflu
               version1Location: variableCategories
               version1Table: Sample
               version1Variable: type
             - partID: sSludge
-              partType: categories
               version1Category: sSludge
               version1Location: variableCategories
               version1Table: Sample
               version1Variable: type
             - partID: swrSed
-              partType: categories
               version1Category: swrSed
               version1Location: variableCategories
               version1Table: Sample
@@ -1634,127 +1604,106 @@ schema:
               version1Table: Site
               version1Variable: type
             - partID: airpln
-              partType: categories
               version1Category: airPln
               version1Location: variableCategories
               version1Table: Site
               version1Variable: type
             - partID: corFcil
-              partType: categories
               version1Category: corFcil
               version1Location: variableCategories
               version1Table: Site
               version1Variable: type
             - partID: estuary
-              partType: categories
               version1Category: estuary
               version1Location: variableCategories
               version1Table: Site
               version1Variable: type
             - partID: faeces
-              partType: categories
               version1Category: faeces
               version1Location: variableCategories
               version1Table: Site
               version1Variable: type
             - partID: hosptl
-              partType: categories
               version1Category: hosptl
               version1Location: variableCategories
               version1Table: Site
               version1Variable: type
             - partID: htSite
-              partType: categories
               version1Category: holdTnk
               version1Location: variableCategories
               version1Table: Site
               version1Variable: type
             - partID: lagoon
-              partType: categories
               version1Category: lagoon
               version1Location: variableCategories
               version1Table: Site
               version1Variable: type
             - partID: lake
-              partType: categories
               version1Category: lake
               version1Location: variableCategories
               version1Table: Site
               version1Variable: type
             - partID: ltcf
-              partType: categories
               version1Category: ltcf
               version1Location: variableCategories
               version1Table: Site
               version1Variable: type
             - partID: mSwrPpl
-              partType: categories
               version1Category: mSwrPpl
               version1Location: variableCategories
               version1Table: Site
               version1Variable: type
             - partID: ocean
-              partType: categories
               version1Category: ocean
               version1Location: variableCategories
               version1Table: Site
               version1Variable: type
             - partID: otsisiDep
-              partType: categories
               version1Category: other
               version1Location: variableCategories
               version1Table: Site
               version1Variable: type
             - partID: pStat
-              partType: categories
               version1Category: pStat
               version1Location: variableCategories
               version1Table: Site
               version1Variable: type
             - partID: retPond
-              partType: categories
               version1Category: retPond
               version1Location: variableCategories
               version1Table: Site
               version1Variable: type
             - partID: river
-              partType: categories
               version1Category: river
               version1Location: variableCategories
               version1Table: Site
               version1Variable: type
             - partID: school
-              partType: categories
               version1Category: school
               version1Location: variableCategories
               version1Table: Site
               version1Variable: type
             - partID: sea
-              partType: categories
               version1Category: sea
               version1Location: variableCategories
               version1Table: Site
               version1Variable: type
             - partID: septTnk
-              partType: categories
               version1Category: septTnk
               version1Location: variableCategories
               version1Table: Site
               version1Variable: type
             - partID: swgTrck
-              partType: categories
               version1Category: swgTrck
               version1Location: variableCategories
               version1Table: Site
               version1Variable: type
             - partID: wwtpInd
-              partType: categories
               version1Category: wwtpInd
               version1Location: variableCategories
               version1Table: Site
               version1Variable: type
             - partID: wwtpMuC
-              partType: categories
               version1Category: wwtpMuC
               version1Location: variableCategories
               version1Table: Site
