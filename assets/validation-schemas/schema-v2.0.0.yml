@@ -1150,15 +1150,15 @@ schema:
               mmaSet: insTypeSet
               partID: insType
             - partID: aas
-              partType: categories
+              setID: insTypeSet
             - partID: hma
-              partType: categories
+              setID: insTypeSet
             - partID: instrumentTypeOther
-              partType: categories
+              setID: insTypeSet
             - partID: ola
-              partType: categories
+              setID: insTypeSet
             - partID: onse
-              partType: categories
+              setID: insTypeSet
             ruleID: invalid_category
           - meta:
             - dataType: varchar
@@ -2205,11 +2205,11 @@ schema:
               mmaSet: fractionSet
               partID: fraction
             - partID: liq
-              partType: categories
+              setID: fractionSet
             - partID: mix
-              partType: categories
+              setID: fractionSet
             - partID: sol
-              partType: categories
+              setID: fractionSet
             ruleID: invalid_category
           - meta:
             - dataType: categorical
@@ -2554,19 +2554,19 @@ schema:
               mmaSet: purposeSet
               partID: purpose
             - partID: education
-              partType: categories
+              setID: purposeSet
             - partID: multiple
-              partType: categories
+              setID: purposeSet
             - partID: provisional
-              partType: categories
+              setID: purposeSet
             - partID: qualityControl
-              partType: categories
+              setID: purposeSet
             - partID: regular
-              partType: categories
+              setID: purposeSet
             - partID: testing
-              partType: categories
+              setID: purposeSet
             - partID: validationStudy
-              partType: categories
+              setID: purposeSet
             ruleID: invalid_category
           - meta:
             - dataType: categorical
@@ -2644,9 +2644,9 @@ schema:
               mmaSet: booleanSet
               partID: reportable
             - partID: 'true'
-              partType: categories
+              setID: booleanSet
             - partID: 'false'
-              partType: categories
+              setID: booleanSet
             ruleID: invalid_category
           - meta:
             - dataType: boolean
@@ -2719,11 +2719,11 @@ schema:
               mmaSet: sevSet
               partID: severity
             - partID: low
-              partType: categories
+              setID: sevSet
             - partID: mid
-              partType: categories
+              setID: sevSet
             - partID: high
-              partType: categories
+              setID: sevSet
             ruleID: invalid_category
           - meta:
             - dataType: varchar
@@ -3211,17 +3211,17 @@ schema:
               organizations: header
               partID: orgLevel
             - partID: neighborLevel
-              partType: attributes
+              setID: orgLevelSet
             - partID: municipalLevel
-              partType: attributes
+              setID: orgLevelSet
             - partID: stateProvLevel
-              partType: attributes
+              setID: orgLevelSet
             - partID: admRegLevel
-              partType: attributes
+              setID: orgLevelSet
             - partID: countryLevel
-              partType: attributes
+              setID: orgLevelSet
             - partID: countyLevel
-              partType: attributes
+              setID: orgLevelSet
             ruleID: invalid_category
           - meta:
             - dataType: categorical
@@ -3264,29 +3264,29 @@ schema:
               organizations: header
               partID: orgSector
             - partID: ccc
-              partType: categories
+              setID: orgSectorSet
             - partID: pubHealth
-              partType: categories
+              setID: orgSectorSet
             - partID: lab
-              partType: categories
+              setID: orgSectorSet
             - partID: healthAdm
-              partType: categories
+              setID: orgSectorSet
             - partID: fiNa
-              partType: categories
+              setID: orgSectorSet
             - partID: ltcf
-              partType: categories
+              setID: orgSectorSet
             - partID: ltcfAl
-              partType: categories
+              setID: orgSectorSet
             - partID: school
-              partType: categories
+              setID: orgSectorSet
             - partID: sss
-              partType: categories
+              setID: orgSectorSet
             - partID: uCampus
-              partType: categories
+              setID: orgSectorSet
             - partID: airport
-              partType: categories
+              setID: orgSectorSet
             - partID: dorm
-              partType: categories
+              setID: orgSectorSet
             ruleID: invalid_category
           - meta:
             - dataType: categorical
@@ -3320,11 +3320,11 @@ schema:
               organizations: header
               partID: orgType
             - partID: academ
-              partType: categories
+              setID: orgTypeSet
             - partID: govt
-              partType: categories
+              setID: orgTypeSet
             - partID: priv
-              partType: categories
+              setID: orgTypeSet
             ruleID: invalid_category
           - meta:
             - dataType: categorical
@@ -3952,9 +3952,9 @@ schema:
               partID: geoType
               polygons: header
             - partID: hlthReg
-              partType: categories
+              setID: geoTypeSet
             - partID: swrSet
-              partType: categories
+              setID: geoTypeSet
             ruleID: invalid_category
           - meta:
             - dataType: categorical
@@ -4367,9 +4367,9 @@ schema:
               partID: reportable
               protocolRelationships: input
             - partID: 'true'
-              partType: categories
+              setID: booleanSet
             - partID: 'false'
-              partType: categories
+              setID: booleanSet
             ruleID: invalid_category
           - meta:
             - dataType: boolean
@@ -5086,9 +5086,9 @@ schema:
               partID: reportable
               protocols: input
             - partID: 'true'
-              partType: categories
+              setID: booleanSet
             - partID: 'false'
-              partType: categories
+              setID: booleanSet
             ruleID: invalid_category
           - meta:
             - dataType: boolean
@@ -5363,11 +5363,11 @@ schema:
               partID: severity
               qualityReports: header
             - partID: low
-              partType: categories
+              setID: sevSet
             - partID: mid
-              partType: categories
+              setID: sevSet
             - partID: high
-              partType: categories
+              setID: sevSet
             ruleID: invalid_category
           - meta:
             - dataType: varchar
@@ -5818,23 +5818,23 @@ schema:
               partID: collType
               samples: fk
             - partID: areaPr
-              partType: categories
+              setID: collectSet
             - partID: cosca
-              partType: categories
+              setID: collectSet
             - partID: flowPr
-              partType: categories
+              setID: collectSet
             - partID: grb
-              partType: categories
+              setID: collectSet
             - partID: moorSw
-              partType: categories
+              setID: collectSet
             - partID: surfSw
-              partType: categories
+              setID: collectSet
             - partID: timePr
-              partType: categories
+              setID: collectSet
             - partID: volPr
-              partType: categories
+              setID: collectSet
             - partID: comp
-              partType: categories
+              setID: collectSet
             ruleID: invalid_category
           - meta:
             - dataType: categorical
@@ -6011,9 +6011,9 @@ schema:
               partID: pooled
               samples: header
             - partID: 'true'
-              partType: categories
+              setID: booleanSet
             - partID: 'false'
-              partType: categories
+              setID: booleanSet
             ruleID: invalid_category
           - meta:
             - dataType: boolean
@@ -6073,19 +6073,19 @@ schema:
               partID: purpose
               samples: fK
             - partID: education
-              partType: categories
+              setID: purposeSet
             - partID: multiple
-              partType: categories
+              setID: purposeSet
             - partID: provisional
-              partType: categories
+              setID: purposeSet
             - partID: qualityControl
-              partType: categories
+              setID: purposeSet
             - partID: regular
-              partType: categories
+              setID: purposeSet
             - partID: testing
-              partType: categories
+              setID: purposeSet
             - partID: validationStudy
-              partType: categories
+              setID: purposeSet
             ruleID: invalid_category
           - meta:
             - dataType: categorical
@@ -6145,17 +6145,17 @@ schema:
               partID: repType
               samples: fK
             - partID: colocated
-              partType: categories
+              setID: replicateSet
             - partID: fieldReplicate
-              partType: categories
+              setID: replicateSet
             - partID: labDuplicate
-              partType: categories
+              setID: replicateSet
             - partID: lcsd
-              partType: categories
+              setID: replicateSet
             - partID: msd
-              partType: categories
+              setID: replicateSet
             - partID: unique
-              partType: categories
+              setID: replicateSet
             ruleID: invalid_category
           - meta:
             - dataType: categorical
@@ -6188,9 +6188,9 @@ schema:
               partID: reportable
               samples: header
             - partID: 'true'
-              partType: categories
+              setID: booleanSet
             - partID: 'false'
-              partType: categories
+              setID: booleanSet
             ruleID: invalid_category
           - meta:
             - dataType: boolean
@@ -6245,39 +6245,39 @@ schema:
               partID: saMaterial
               samples: fK
             - partID: afu
-              partType: categories
+              setID: sampleMatSet
             - partID: desk
-              partType: categories
+              setID: sampleMatSet
             - partID: faeces
-              partType: categories
+              setID: sampleMatSet
             - partID: floor
-              partType: categories
+              setID: sampleMatSet
             - partID: htSam
-              partType: categories
+              setID: sampleMatSet
             - partID: nww
-              partType: categories
+              setID: sampleMatSet
             - partID: pEfflu
-              partType: categories
+              setID: sampleMatSet
             - partID: pSludge
-              partType: categories
+              setID: sampleMatSet
             - partID: pstGrit
-              partType: categories
+              setID: sampleMatSet
             - partID: rawWW
-              partType: categories
+              setID: sampleMatSet
             - partID: rawWWdown
-              partType: categories
+              setID: sampleMatSet
             - partID: rawWWup
-              partType: categories
+              setID: sampleMatSet
             - partID: sEfflu
-              partType: categories
+              setID: sampleMatSet
             - partID: septage
-              partType: categories
+              setID: sampleMatSet
             - partID: sSludge
-              partType: categories
+              setID: sampleMatSet
             - partID: surface
-              partType: categories
+              setID: sampleMatSet
             - partID: swrSed
-              partType: categories
+              setID: sampleMatSet
             ruleID: invalid_category
           - meta:
             - dataType: categorical
@@ -6390,11 +6390,11 @@ schema:
               partID: severity
               samples: Input
             - partID: low
-              partType: categories
+              setID: sevSet
             - partID: mid
-              partType: categories
+              setID: sevSet
             - partID: high
-              partType: categories
+              setID: sevSet
             ruleID: invalid_category
           - meta:
             - dataType: varchar
@@ -7001,43 +7001,43 @@ schema:
               partID: sampleShed
               sites: header
             - partID: airpln
-              partType: categories
+              setID: shedSet
             - partID: ccc
-              partType: categories
+              setID: shedSet
             - partID: cdc
-              partType: categories
+              setID: shedSet
             - partID: corFcil
-              partType: categories
+              setID: shedSet
             - partID: dorm
-              partType: categories
+              setID: shedSet
             - partID: fiNa
-              partType: categories
+              setID: shedSet
             - partID: hosptl
-              partType: categories
+              setID: shedSet
             - partID: ltcf
-              partType: categories
+              setID: shedSet
             - partID: ltcfAl
-              partType: categories
+              setID: shedSet
             - partID: ltcfO
-              partType: categories
+              setID: shedSet
             - partID: municp
-              partType: categories
+              setID: shedSet
             - partID: neigh
-              partType: categories
+              setID: shedSet
             - partID: orb
-              partType: categories
+              setID: shedSet
             - partID: school
-              partType: categories
+              setID: shedSet
             - partID: ship
-              partType: categories
+              setID: shedSet
             - partID: sss
-              partType: categories
+              setID: shedSet
             - partID: uCampus
-              partType: categories
+              setID: shedSet
             - partID: airport
-              partType: categories
+              setID: shedSet
             - partID: terminal
-              partType: categories
+              setID: shedSet
             ruleID: invalid_category
           - meta:
             - dataType: categorical
@@ -7153,47 +7153,47 @@ schema:
               partID: siteType
               sites: fK
             - partID: bSwrPpl
-              partType: categories
+              setID: siteTypeSet
             - partID: buildCO
-              partType: categories
+              setID: siteTypeSet
             - partID: estuary
-              partType: categories
+              setID: siteTypeSet
             - partID: lake
-              partType: categories
+              setID: siteTypeSet
             - partID: htSite
-              partType: categories
+              setID: siteTypeSet
             - partID: lagoon
-              partType: categories
+              setID: siteTypeSet
             - partID: mSwrPpl
-              partType: categories
+              setID: siteTypeSet
             - partID: ocean
-              partType: categories
+              setID: siteTypeSet
             - partID: pStat
-              partType: categories
+              setID: siteTypeSet
             - partID: retPond
-              partType: categories
+              setID: siteTypeSet
             - partID: river
-              partType: categories
+              setID: siteTypeSet
             - partID: sea
-              partType: categories
+              setID: siteTypeSet
             - partID: septTnk
-              partType: categories
+              setID: siteTypeSet
             - partID: stabPnd
-              partType: categories
+              setID: siteTypeSet
             - partID: swgTrck
-              partType: categories
+              setID: siteTypeSet
             - partID: wwtpInd
-              partType: categories
+              setID: siteTypeSet
             - partID: wwtpMuC
-              partType: categories
+              setID: siteTypeSet
             - partID: wwtpMuS
-              partType: categories
+              setID: siteTypeSet
             - partID: wwtp
-              partType: categories
+              setID: siteTypeSet
             - partID: upstream
-              partType: categories
+              setID: siteTypeSet
             - partID: wwtpBack
-              partType: categories
+              setID: siteTypeSet
             ruleID: invalid_category
           - meta:
             - dataType: categorical
