@@ -164,6 +164,8 @@ def gen_value_schema(data: pt.OdmData, ver: Version, rule_id: str,
             if not val_ctx:
                 continue
             cerb_rules = gen_cerb_rules(val_ctx)
+            if not cerb_rules:
+                continue
             add_attr_schemas(table_schema, data, table_id0, table_id1, attr,
                              rule_id, odm_key, cerb_rules, ver)
         deep_update(schema, table_schema)
