@@ -111,7 +111,7 @@ determines which version of the ODM the schema will be compatible with.
 version = ODM_VERSION_STR
 parts_file = join(ASSET_DIR, f"dictionary/v{version}/parts.csv")
 parts = utils.import_dataset(parts_file)
-schema = generate_validation_schema(parts, version)
+schema = generate_validation_schema(parts, schema_version=version)
 ```
 
 The resulting schema can also be exported to a YAML file for future use.
