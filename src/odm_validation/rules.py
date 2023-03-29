@@ -113,7 +113,9 @@ def greater_than_max_length():
            'length of {constraint}')
 
     def gen_cerb_rules(val_ctx: OdmValueCtx):
-        return {'maxlength': try_parse_int(val_ctx.value)}
+        val = try_parse_int(val_ctx.value)
+        if val:
+            return {'maxlength': val}
 
     def gen_schema(data: pt.OdmData, ver):
         return gen_value_schema(data, ver, rule_id, odm_key, gen_cerb_rules)
@@ -129,9 +131,9 @@ def greater_than_max_value():
            '{constraint}')
 
     def gen_cerb_rules(val_ctx: OdmValueCtx):
-        return {
-            'max': parse_odm_val(val_ctx)
-        } | gen_cerb_rules_for_type(val_ctx)
+        val = parse_odm_val(val_ctx)
+        if val:
+            return {'max': val} | gen_cerb_rules_for_type(val_ctx)
 
     def gen_schema(data: pt.OdmData, ver):
         return gen_value_schema(data, ver, rule_id, odm_key, gen_cerb_rules)
@@ -190,9 +192,8 @@ def less_than_min_length():
 
     def gen_cerb_rules(val_ctx: OdmValueCtx):
         val = try_parse_int(val_ctx.value)
-        if val <= 0:
-            return {}
-        return {'minlength': val}
+        if val > 0:
+            return {'minlength': val}
 
     def gen_schema(data: pt.OdmData, ver):
         return gen_value_schema(data, ver, rule_id, odm_key, gen_cerb_rules)
@@ -208,9 +209,9 @@ def less_than_min_value():
            '{constraint}')
 
     def gen_cerb_rules(val_ctx: OdmValueCtx):
-        return {
-            'min': parse_odm_val(val_ctx)
-        } | gen_cerb_rules_for_type(val_ctx)
+        val = parse_odm_val(val_ctx)
+        if val:
+            return {'min': val} | gen_cerb_rules_for_type(val_ctx)
 
     def gen_schema(data: pt.OdmData, ver):
         return gen_value_schema(data, ver, rule_id, odm_key, gen_cerb_rules)
