@@ -7,6 +7,7 @@ from dataclasses import dataclass
 from typing import Any, Callable, List, Tuple
 
 import part_tables as pt
+from input_data import DataKind
 from schemas import Schema, update_schema
 from stdext import (
     try_parse_int,
@@ -51,7 +52,7 @@ class Rule:
     is_column: bool
     is_warning: bool
     gen_schema: Callable[pt.PartData, Schema]
-    get_error_template: Callable[[Any, str], str]
+    get_error_template: Callable[[Any, str, DataKind], str]
 
     match_all_keys: bool
     """Used when mapping a Cerberus error to its ODM validation rule. It
@@ -76,7 +77,7 @@ def init_rule(rule_id, error, gen_cerb_rules, gen_schema,
     dummy_ctx = OdmValueCtx(value=1, datatype='integer', bool_set=set(),
                             null_set=set())
     cerb_keys = list(gen_cerb_rules(dummy_ctx).keys())
-    get_error_template = error if callable(error) else (lambda x, y: error)
+    get_error_template = error if callable(error) else (lambda x, y, z: error)
     return Rule(
         id=rule_id,
         keys=cerb_keys,
@@ -259,7 +260,7 @@ def invalid_type():
                 'Allowed values are ISO 8601 standard full dates, full dates '
                 'and times, or full dates and times with timezone.')
 
-    def get_error_template(odm_value: Any, odm_type: str):
+    def get_error_template(odm_value: Any, odm_type: str, data_kind: DataKind):
         if odm_type == pt.BOOLEAN:
             assert isinstance(odm_value, str)
             return err_bool
