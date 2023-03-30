@@ -140,7 +140,14 @@ def greater_than_max_value():
 
 def missing_mandatory_column():
     rule_id = missing_mandatory_column.__name__
-    err = '{rule_name} {column_id} in table {table_id} in row number {row_num}'
+    err = '{rule_name} {column_id} in table {table_id}'
+    err_with_row = err + ' in row number {row_num}'
+
+    def get_error_template(odm_value: Any, odm_type: str, data_kind: DataKind):
+        if data_kind == DataKind.python:
+            return err_with_row
+        else:
+            return err
 
     def gen_cerb_rules(val_ctx: OdmValueCtx):
         return {'required': True}
@@ -149,7 +156,8 @@ def missing_mandatory_column():
         return gen_conditional_schema(data, ver, rule_id, gen_cerb_rules,
                                       is_mandatory)
 
-    return init_rule(rule_id, err, gen_cerb_rules, gen_schema, is_column=True)
+    return init_rule(rule_id, get_error_template, gen_cerb_rules, gen_schema,
+                     is_column=True)
 
 
 def missing_values_found():
