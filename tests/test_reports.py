@@ -1,11 +1,10 @@
 import unittest
 
 import common
-import rules
 from input_data import DataKind
 from reports import get_row_num
 from validation import validate_data
-from pprint import pprint
+# from pprint import pprint
 
 common.unused_import_dummy = 1
 
@@ -46,10 +45,14 @@ class TestReports(common.OdmTestCase):
 
         # just one error even tho there are 2 rows missing the
         report = validate_data(schema, data, data_kind=DataKind.spreadsheet)
-        self.assertEqual(len(report.errors), 1)
-        self.assertEqual(report.errors[0]['rowNumber'], 2)
-        self.assertEqual(report.errors[0]['errorType'],
-                         rules.missing_mandatory_column.__name__)
+        expected_errors = [{
+            'columnName': 'addID',
+            'errorType': 'missing_mandatory_column',
+            'message': 'Missing mandatory column addID in table addresses',
+            'tableName': 'addresses',
+            'validationRuleFields': []
+        }]
+        self.assertEqual(expected_errors, report.errors)
 
     def test_coercion_warnings_for_data_kind(self):
         schema = {
