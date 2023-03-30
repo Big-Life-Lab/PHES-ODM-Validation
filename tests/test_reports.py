@@ -1,4 +1,5 @@
 import unittest
+from copy import deepcopy
 
 import common
 from input_data import DataKind
@@ -7,6 +8,23 @@ from validation import validate_data
 # from pprint import pprint
 
 common.unused_import_dummy = 1
+
+base_schema = {
+    'schemaVersion': '2.0.0',
+    'schema': {
+        'addresses': {
+            'type': 'list',
+            'schema': {
+                'type': 'dict',
+                'schema': {}
+            }
+        }
+    }
+}
+
+
+def get_table_schema(schema):
+    return schema['schema']['addresses']['schema']['schema']
 
 
 class TestReports(common.OdmTestCase):
@@ -20,22 +38,9 @@ class TestReports(common.OdmTestCase):
         self.assertEqual(get_row_num(2, 10, DataKind.spreadsheet), 14)
 
     def test_column_rules_reported_once_for_spreadsheet(self):
-        schema = {
-            'schemaVersion': '2.0.0',
-            'schema': {
-                'addresses': {
-                    'type': 'list',
-                    'schema': {
-                        'type': 'dict',
-                        'schema': {
-                            'addID': {
-                                'required': True
-                            }
-                        }
-                    }
-                }
-            }
-        }
+        schema = deepcopy(base_schema)
+        table_schema = get_table_schema(schema)
+        table_schema['addID'] = {'required': True}
         data = {
             'addresses': [
                 {'qwe': 'a'},  # row 2
