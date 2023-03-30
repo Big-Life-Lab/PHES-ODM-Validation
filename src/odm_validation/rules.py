@@ -128,7 +128,7 @@ def greater_than_max_value():
 
     def gen_cerb_rules(val_ctx: OdmValueCtx):
         val = parse_odm_val(val_ctx)
-        if val:
+        if val is not None:
             return {'max': val} | gen_cerb_rules_for_type(val_ctx)
 
     def gen_schema(data: pt.OdmData, ver):
@@ -198,7 +198,7 @@ def less_than_min_value():
 
     def gen_cerb_rules(val_ctx: OdmValueCtx):
         val = parse_odm_val(val_ctx)
-        if val:
+        if val is not None:
             return {'min': val} | gen_cerb_rules_for_type(val_ctx)
 
     def gen_schema(data: pt.OdmData, ver):

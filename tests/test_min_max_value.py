@@ -93,5 +93,24 @@ class TestMinMaxValue(common.OdmTestCase):
         self.assertReportEqual(expected, report)
 
 
+class TestMinMaxValueExtra(common.OdmTestCase):
+    ruleIds = ['less_than_min_value', 'greater_than_max_value']
+
+    def test_schema_generation_zero(self):
+        # zero is a valid min/max value
+        parts = [
+            {'partID': 't', 'partType': 'tables', 'status': 'active'},
+            {'partID': 'a', 'partType': 'attributes', 't': 'header',
+             'dataType': 'integer',
+             'minValue': 0, 'maxValue': 0, 'status': 'active'},
+        ]
+        schema = _generate_validation_schema_ext(
+            parts,
+            rule_whitelist=self.ruleIds)
+        attr_schema = schema['schema']['t']['schema']['schema']['a']
+        self.assertEqual(attr_schema['min'], 0)
+        self.assertEqual(attr_schema['max'], 0)
+
+
 if __name__ == '__main__':
     unittest.main()

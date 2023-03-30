@@ -136,7 +136,7 @@ def add_attr_schemas(table_schema, data, table_id0, table_id1, attr, rule_id,
 def init_val_ctx(data: OdmData, attr: Part, odm_key: Optional[str],
                  ) -> Optional[OdmValueCtx]:
     odm_val = attr.get(odm_key)
-    if odm_key and not odm_val:
+    if odm_key and odm_val is None:
         # warning(f'missing value for {pt.get_partID(attr)}.{odm_key}')
         return
     odm_datatype = attr.get(pt.DATA_TYPE)
@@ -242,7 +242,7 @@ def parse_odm_val(val_ctx: OdmValueCtx) -> Optional[Any]:
     """Parses the ODM value from `val_ctx`."""
     val = val_ctx.value
     kind = val_ctx.datatype
-    if not val:
+    if val is None:
         return
     if kind == 'integer':
         return try_parse_int(val)
