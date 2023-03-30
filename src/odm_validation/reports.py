@@ -32,7 +32,9 @@ class ErrorCtx:
     allowed_values: Set[str] = field(default_factory=set)
     cerb_type_name: str = ''
     constraint: Any = None
+    data_kind: DataKind = DataKind.python
     err_template: str = ''
+    is_column: bool = False
 
 
 class TableSummary:
@@ -138,6 +140,10 @@ def gen_rule_error(ctx: ErrorCtx,
         'validationRuleFields': _fmt_dataset_values(rule_fields),
         'message': _gen_error_msg(ctx, err_template),
     }
+
+    # skip row info for spreadsheet-column errors
+    if ctx.data_kind == DataKind.spreadsheet and ctx.is_column:
+        return error
 
     # row numbers
     if len(ctx.row_numbers) > 1:

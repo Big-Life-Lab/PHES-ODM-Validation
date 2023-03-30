@@ -167,6 +167,8 @@ def _gen_error_entry(cerb_rule, table_id, column_id, value, row_numbers,
         rows=rows, value=value,
         rule_id=rule.id,
         table_id=table_id,
+        data_kind=data_kind,
+        is_column=rule.is_column,
     )
     entry = reports.gen_rule_error(error_ctx, kind=kind)
     return (rule.id, entry)
