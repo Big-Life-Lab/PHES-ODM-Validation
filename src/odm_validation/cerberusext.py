@@ -11,7 +11,8 @@ from cerberus.errors import ErrorDefinition
 
 import part_tables as pt
 import reports
-from reports import DataKind, get_row_num
+from input_data import DataKind
+from reports import get_row_num
 from rules import COERCION_RULE_ID
 from part_tables import Dataset, Row
 from schemas import CerberusSchema

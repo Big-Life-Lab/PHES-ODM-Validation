@@ -6,16 +6,12 @@ from typing import Any, Dict, List, Optional, Set
 # from pprint import pprint
 
 import part_tables as pt
+from input_data import DataKind
 from rules import RuleId, COERCION_RULE_ID
 from stdext import (
     get_len,
     type_name,
 )
-
-
-class DataKind(Enum):
-    python = 1
-    spreadsheet = 2
 
 
 class ErrorKind(Enum):

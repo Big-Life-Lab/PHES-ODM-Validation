@@ -2,7 +2,8 @@ import unittest
 
 import common
 import rules
-from reports import DataKind, get_row_num
+from input_data import DataKind
+from reports import get_row_num
 from validation import validate_data
 from pprint import pprint
 

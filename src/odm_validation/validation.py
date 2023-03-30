@@ -6,7 +6,6 @@ generation and data validation.
 from collections import defaultdict
 from collections.abc import Iterable, Iterator
 from copy import deepcopy
-from enum import Enum
 from itertools import groupby
 from typing import Any, Callable, Dict, List, Optional, Set, Tuple
 # from pprint import pprint
@@ -16,7 +15,8 @@ from cerberusext import ContextualCoercer, OdmValidator
 import part_tables as pt
 import reports
 import rules
-from reports import DataKind, ErrorKind, get_row_num
+from input_data import DataKind
+from reports import ErrorKind, get_row_num
 from rules import Rule, RuleId, ruleset
 from schemas import CerberusSchema, Schema, init_table_schema
 from stdext import (
