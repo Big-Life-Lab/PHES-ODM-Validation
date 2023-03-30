@@ -66,6 +66,10 @@ class TestReports(common.OdmTestCase):
                             'addID': {
                                 'type': 'integer',
                                 'coerce': 'integer',
+                            },
+                            'somedate': {
+                                'type': 'datetime',
+                                'coerce': 'datetime',
                             }
                         }
                     }
@@ -74,12 +78,12 @@ class TestReports(common.OdmTestCase):
         }
         data = {
             'addresses': [
-                {'addID': '123'},
+                {'addID': '123', 'somedate': '2023-01-01'},
             ]
         }
 
         report = validate_data(schema, data, data_kind=DataKind.python)
-        self.assertEqual(len(report.warnings), 1)
+        self.assertEqual(len(report.warnings), 2)
         report = validate_data(schema, data, data_kind=DataKind.spreadsheet)
         self.assertEqual(len(report.warnings), 0)
 
