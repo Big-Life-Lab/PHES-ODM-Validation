@@ -76,6 +76,8 @@ The generated cerberus object for the example above is shown below,
 pprint_yaml_file(asset("schema-v2.yml"))
 ```
 
+Parts with `minLength` less or equal to zero will be ignored.
+
 The metadata for this rule should have the row from the ODM parts sheet for the column with its `partID` and `minLength` column values.
 
 ## ODM Version 1

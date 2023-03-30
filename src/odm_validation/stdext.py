@@ -80,7 +80,7 @@ def parse_int(val) -> int:
 
 
 def try_parse_int(val) -> Optional[int]:
-    if not val:
+    if val is None:
         return
     try:
         return parse_int(val)
