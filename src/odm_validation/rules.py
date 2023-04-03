@@ -7,6 +7,7 @@ from dataclasses import dataclass
 from typing import Any, Callable, List, Tuple
 
 import part_tables as pt
+from input_data import DataKind
 from schemas import Schema, update_schema
 from stdext import (
     try_parse_int,
@@ -48,9 +49,10 @@ class Rule:
     """
     id: str
     keys: List[str]
+    is_column: bool
     is_warning: bool
     gen_schema: Callable[pt.PartData, Schema]
-    get_error_template: Callable[[Any, str], str]
+    get_error_template: Callable[[Any, str, DataKind], str]
 
     match_all_keys: bool
     """Used when mapping a Cerberus error to its ODM validation rule. It
@@ -64,20 +66,22 @@ class Rule:
 
 
 def init_rule(rule_id, error, gen_cerb_rules, gen_schema,
-              is_warning=False, match_all_keys=False):
+              is_column=False, is_warning=False, match_all_keys=False):
     """
     - `error` can either be a string or a function taking a value and returning
       a string.
     - `gen_cerb_rules` must accept a dummy context of `None` values, and return
       a dict with cerberus rule names as keys.
+    - `is_column` determines if the rule is validating columns/headers.
     """
     dummy_ctx = OdmValueCtx(value=1, datatype='integer', bool_set=set(),
                             null_set=set())
     cerb_keys = list(gen_cerb_rules(dummy_ctx).keys())
-    get_error_template = error if callable(error) else (lambda x, y: error)
+    get_error_template = error if callable(error) else (lambda x, y, z: error)
     return Rule(
         id=rule_id,
         keys=cerb_keys,
+        is_column=is_column,
         is_warning=is_warning,
         match_all_keys=match_all_keys,
         get_error_template=get_error_template,
@@ -136,7 +140,14 @@ def greater_than_max_value():
 
 def missing_mandatory_column():
     rule_id = missing_mandatory_column.__name__
-    err = '{rule_name} {column_id} in table {table_id} in row number {row_num}'
+    err = '{rule_name} {column_id} in table {table_id}'
+    err_with_row = err + ' in row number {row_num}'
+
+    def get_error_template(odm_value: Any, odm_type: str, data_kind: DataKind):
+        if data_kind == DataKind.python:
+            return err_with_row
+        else:
+            return err
 
     def gen_cerb_rules(val_ctx: OdmValueCtx):
         return {'required': True}
@@ -145,7 +156,8 @@ def missing_mandatory_column():
         return gen_conditional_schema(data, ver, rule_id, gen_cerb_rules,
                                       is_mandatory)
 
-    return init_rule(rule_id, err, gen_cerb_rules, gen_schema)
+    return init_rule(rule_id, get_error_template, gen_cerb_rules, gen_schema,
+                     is_column=True)
 
 
 def missing_values_found():
@@ -256,7 +268,7 @@ def invalid_type():
                 'Allowed values are ISO 8601 standard full dates, full dates '
                 'and times, or full dates and times with timezone.')
 
-    def get_error_template(odm_value: Any, odm_type: str):
+    def get_error_template(odm_value: Any, odm_type: str, data_kind: DataKind):
         if odm_type == pt.BOOLEAN:
             assert isinstance(odm_value, str)
             return err_bool

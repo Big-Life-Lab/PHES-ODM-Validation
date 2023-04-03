@@ -6,6 +6,7 @@ from typing import Any, Dict, List, Optional, Set
 # from pprint import pprint
 
 import part_tables as pt
+from input_data import DataKind
 from rules import RuleId, COERCION_RULE_ID
 from stdext import (
     get_len,
@@ -31,7 +32,9 @@ class ErrorCtx:
     allowed_values: Set[str] = field(default_factory=set)
     cerb_type_name: str = ''
     constraint: Any = None
+    data_kind: DataKind = DataKind.python
     err_template: str = ''
+    is_column: bool = False
 
 
 class TableSummary:
@@ -71,10 +74,13 @@ def _fmt_list(items: list) -> str:
         return str(items[0])
 
 
-def get_row_num(row_index: int, offset: int) -> int:
-    """Returns the spreadsheet row number of `row_index` plus `offset`,
-    converted to a one-indexed number."""
-    return offset + row_index + 1
+def get_row_num(row_index: int, offset: int, data_kind: DataKind) -> int:
+    "Returns the dataset row number, starting from 1."
+    # spreadsheets have a header row, which increases the number by one
+    result = offset + row_index + 1
+    if data_kind == DataKind.spreadsheet:
+        result += 1
+    return result
 
 
 def _fmt_value(val: Any) -> Any:
@@ -134,6 +140,10 @@ def gen_rule_error(ctx: ErrorCtx,
         'validationRuleFields': _fmt_dataset_values(rule_fields),
         'message': _gen_error_msg(ctx, err_template),
     }
+
+    # skip row info for spreadsheet-column errors
+    if ctx.data_kind == DataKind.spreadsheet and ctx.is_column:
+        return error
 
     # row numbers
     if len(ctx.row_numbers) > 1:
