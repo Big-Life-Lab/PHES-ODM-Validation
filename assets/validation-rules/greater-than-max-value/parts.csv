@@ -1,5 +1,5 @@
 partID,partType,sites,dataType,maxValue,version1Location,version1Table,version1Variable,status
-sites,table,NA,NA,NA,tables,Site,NA,active
-geoLat,attribute,header,integer,90,variables,Site,Latitude,active
-geoLong,attribute,header,float,90.15,variables,Site,Longitude,active
-geoEPSG,attribute,header,integer,NA,variables,Site,LatitudeEPSG,active
+sites,tables,NA,NA,NA,tables,Site,NA,active
+geoLat,attributes,header,integer,90,variables,Site,Latitude,active
+geoLong,attributes,header,float,90.15,variables,Site,Longitude,active
+geoEPSG,attributes,header,integer,NA,variables,Site,LatitudeEPSG,active

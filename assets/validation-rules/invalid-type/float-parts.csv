@@ -1,3 +1,3 @@
 partID,partType,sites,dataType,version1Location,version1Table,version1Variable,status
-sites,table,NA,NA,tables,Site,NA,active
-geoLat,attribute,header,float,variables,Site,Latitude,active
+sites,tables,NA,NA,tables,Site,NA,active
+geoLat,attributes,header,float,variables,Site,Latitude,active

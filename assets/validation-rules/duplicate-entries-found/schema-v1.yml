@@ -17,6 +17,6 @@ schema:
               version1Variable: AddressId
       meta:
       - partID: addresses
-        partType: table
+        partType: tables
         version1Location: tables
         version1Table: Address

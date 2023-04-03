@@ -15,4 +15,4 @@ schema:
               contacts: header
       meta:
         - partID: contacts
-          partType: table
+          partType: tables

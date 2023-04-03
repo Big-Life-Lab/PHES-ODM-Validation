@@ -16,4 +16,4 @@ schema:
               measures: header
       meta:
       - partID: measures
-        partType: table
+        partType: tables

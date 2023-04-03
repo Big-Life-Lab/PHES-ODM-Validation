@@ -27,6 +27,6 @@ schema:
             #   version1Category: 'FALSE'
       meta:
       - partID: measures
-        partType: table
+        partType: tables
         version1Location: tables
         version1Table: Measure

@@ -19,4 +19,4 @@ schema:
               sitesRequired: mandatory
       meta:
       - partID: sites
-        partType: table
+        partType: tables

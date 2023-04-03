@@ -156,7 +156,8 @@ We can use the `generate_validation_schema` function to generate a validation sc
 The following code chunk generates a validation schema from the above parts sheet for version 2.0.0 datasets.
 
 ```{python}
-validation_schema_2 = generate_validation_schema(parts_sheet, "2.0.0")
+validation_schema_2 = generate_validation_schema(parts_sheet,
+                                                 schema_version="2.0.0")
 
 pprint(validation_schema_2)
 ```
@@ -179,7 +180,8 @@ pprintDictList(parts_sheet_v1, "Version 1 Parts Sheet")
 ```
 
 ```{python}
-validation_schema_2_v1 = generate_validation_schema(parts_sheet_v1, "1.0.0")
+validation_schema_2_v1 = generate_validation_schema(parts_sheet_v1,
+                                                    schema_version="1.0.0")
 
 pprint(validation_schema_2_v1)
 ```

@@ -88,7 +88,11 @@ Validates an ODM dataset.
         }
         ```
 
-3. `rule_blacklist`: A list of rule ids to explicitly disable.
+3. `data_version`: The ODM version of the `data`.
+
+    * `type`: string.
+
+4. `rule_blacklist`: A list of rule ids to explicitly disable.
 
     * `type`: A Python list of strings.
 
@@ -107,9 +111,9 @@ Returns a dictionary with the found errors and warnings.
 All errors and warnings for each validation rule are documented in the [specification for each validation rule](../validation-rules/).
 
 * type: A Python dictionary consisting of the following fields
-    * `odmDataVersion`: string consisting of the version of the ODM data
-    * `validationSchemaVersion`: string consisting of the version of the validation schema used
-    * `validationPackageVersion`: string consisting of the version of the validation package used
+    * `data_version`: string consisting of the version of the ODM data
+    * `schema_version`: string consisting of the version of the validation schema used
+    * `package_version`: string consisting of the version of the validation package used
     * `errors`: A list of Python dictionaries describing each error. For more information refer to the files in the [validation-rules](../validation-rules/) folder
     * `warnings`: A list of Python dictionaries describing each warning.
 
@@ -119,9 +123,10 @@ Generates the cerberus schema containing the validation rules to be used with th
 
 ### Arguments
 
-1. `odm_data_dictionary`: The ODM data dictionary [excel sheet](https://github.com/Big-Life-Lab/PHES-ODM/tree/V2-first-draft/template)
+1. `parts`: The ODM data dictionary [excel
+sheet](https://github.com/Big-Life-Lab/PHES-ODM/tree/V2.0.0-rc.3/dictionary-tables) 'parts'.
 
-    * `type`: A dictionary whose keys are the sheet names and values is a list containing the sheet rows. Currently only the parts sheet is required.
+    * `type`: A dictionary whose keys are the sheet names and values is a list containing the sheet rows. Currently the parts and sets sheet are required.
 
         Example
 
@@ -146,11 +151,33 @@ Generates the cerberus schema containing the validation rules to be used with th
         }
         ```
 
-2. `version`: The version of the ODM dictionary the cerberus schema is for
+2. `sets`: The ODM data dictionary [excel sheet](https://github.com/Big-Life-Lab/PHES-ODM/tree/V2.0.0-rc.3/dictionary-tables) 'sets'.
 
-    * `type`: A string representing the version of the ODM to use
+    * `type`: A dictionary whose keys are the sheet names and values is a list containing the sheet rows. Currently the parts and sets sheet are required.
 
-3. `schema_additions`: Optional argument which allows the user to update the cerberus schema with additional validations
+        Example
+
+        ```python
+        {
+            "sets": [
+                {
+                    "setID": "collectCat",
+                    "partID": "flowPr"
+                },
+                {
+
+                    "setID": "collectCat",
+                    "partID": "comp8h"
+                }
+            ]
+        }
+        ```
+
+3. `schema_version`: Optional version of the ODM dictionary the cerberus schema is for.
+
+    * `type`: A string representing the version of the ODM to use.
+
+4. `schema_additions`: Optional argument which allows the user to update the cerberus schema with additional validations
 
     * `type`: A dictionary containing the updates. The shape is shown below,
 
@@ -161,7 +188,7 @@ Generates the cerberus schema containing the validation rules to be used with th
             # The name of the column whose validation rules to update
             "<column_name>": {
                 # Adds or updates the allowed rule for this column
-                "[allowed]": string[]
+                "allowed": string[]
             }
         }
     }
@@ -226,7 +253,7 @@ The cerberus schema for a part should be added only if it is active for the prov
 
 The validation metadata for a part should only be used if it was active for the version in the `version` argument.
 
-Example of two parts from dictionary version 2.
+Example of an `odm_data_dictionary` parameter is shown below,
 
 ```python
 {
@@ -234,7 +261,7 @@ Example of two parts from dictionary version 2.
         {
             "partID": "addresses",
             "label": "Address table",
-            "partType": "table",
+            "partType": "tables",
             "addresses": "NA",
             "addressesRequired": "NA",
             "status": "active",
@@ -245,7 +272,7 @@ Example of two parts from dictionary version 2.
         {
             "partID": "comp3",
             "label": "Composite grab sample of 3",
-            "partType": "category",
+            "partType": "categories",
             "addresses": "NA",
             "addressesRequired": "NA",
             "status": "depreciated",
@@ -259,6 +286,54 @@ Example of two parts from dictionary version 2.
 
 * The addresses part is currently active (status = 'active') and should only be included in version 2 since it was first released (firstReleased = '2') then.
 * The `comp3` part was depreciated in version 2 (status = 'depreciated' and lastUpdated = '2') and should only be included in version 1 (firstReleased = '1')
+
+For the sets sheet, the versioning fields (`firstReleased` and `lastUpdated`) define the dictionary version when a part was added to a set. These values can be different from the versioning fields in the parts sheet. For example, consider the following ODM snippet,
+
+```python
+{
+    "parts": [
+        {
+            "partID": "samples",
+            "partType": "tables",
+            "samples": "NA",
+            "firstReleased": "1",
+            "lastUpdated": "2"
+        }
+        {
+            "partID": "collType",
+            "partType": "attributes",
+            "samples": "header",
+            "mmaSet": "collectSet",
+            "firstReleased": "1",
+            "lastUpdated": "2"
+        },
+        {
+            "partID": "comp8r",
+            "partType": "measures",
+            "samples": "header",
+            "mmaSet": "NA",
+            "firstReleased": "1",
+            "lastUpdated": "2"
+        }
+    ],
+    "sets": [
+        {
+            "setID": "collectSet",
+            "partID": "comp8r",
+            "firstReleased": "2",
+            "lastUpdated": "2"
+        }
+    ]
+}
+```
+
+It defines,
+
+* A table called `samples`
+* A column in the `samples` table called `collType`
+* A part called `comp8r` which is a measure and which is a category in the `collType` column
+
+However, notice that `comp8r` was only added as a category for the `collType` column in version 2. This can be seen from its entry in the sets sheet where it was `firstReleased` in version 2. For version 1, although a part was defined for it, it was not a category for `collType` only from version 2 onwards.
 
 Version 2 of the dictionary renamed certain part pieces, for example, the `WWMeasures` table was renamed to `measures` in version 2. To be backcompatible with version 1, columns were added to the parts list to document their version 1 equivalents. These columns are documented where necessary in the spec.
 

@@ -19,7 +19,7 @@ schema:
               version1Variable: AddressId
       meta:
       - partID: addresses
-        partType: table
+        partType: tables
         version1Location: tables
         version1Table: Address
   Contact:
@@ -40,6 +40,6 @@ schema:
               version1Variable: ContactId
       meta:
       - partID: contacts
-        partType: table
+        partType: tables
         version1Location: tables
         version1Table: Contact

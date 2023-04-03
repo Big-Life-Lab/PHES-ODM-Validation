@@ -21,6 +21,6 @@ schema:
               version1Variable: latitude
       meta:
         - partID: sites
-          partType: table
+          partType: tables
           version1Location: tables
           version1Table: Site

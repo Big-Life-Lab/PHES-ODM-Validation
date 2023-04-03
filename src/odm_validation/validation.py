@@ -323,10 +323,12 @@ def _gen_additions_schema(additions) -> CerberusSchema:
     return result
 
 
-def _generate_validation_schema_ext(parts, schema_version,
-                                    schema_additions={},
-                                    rule_blacklist: List[RuleId] = [],
-                                    rule_whitelist: List[RuleId] = [],
+def _generate_validation_schema_ext(parts: pt.Dataset,
+                                    sets: pt.Dataset = [],
+                                    schema_version: str = pt.ODM_VERSION_STR,
+                                    schema_additions: dict = {},
+                                    rule_blacklist: List[rules.RuleId] = [],
+                                    rule_whitelist: List[rules.RuleId] = []
                                     ) -> Schema:
     """
     This is the extended version of `generate_validation_schema`, with
@@ -342,10 +344,9 @@ def _generate_validation_schema_ext(parts, schema_version,
     # `rule_whitelist` determines which rules are included in the schema. It is
     # needed when testing schema generation, to be able to compare isolated
     # rule-specific schemas.
+    assert isinstance(sets, list), "invalid sets param"
     version = parse_version(schema_version)
-    parts = pt.strip(parts)
-    parts = pt.filter_compatible(parts, version)
-    data = pt.gen_partdata(parts, version)
+    odm_data = pt.gen_odmdata(parts, sets, version)
 
     rule_filter = RuleFilter(whitelist=rule_whitelist,
                              blacklist=rule_blacklist)
@@ -354,7 +355,7 @@ def _generate_validation_schema_ext(parts, schema_version,
     cerb_schema = {}
     for r in enabled_rules:
         assert r.gen_schema, f'missing `gen_schema` in rule {r.id}'
-        s = r.gen_schema(data, version)
+        s = r.gen_schema(odm_data, version)
         assert s is not None
         deep_update(cerb_schema, s)
     additions_schema = _gen_additions_schema(schema_additions)
@@ -371,9 +372,11 @@ def _generate_validation_schema_ext(parts, schema_version,
     }
 
 
-def generate_validation_schema(parts, schema_version=pt.ODM_VERSION_STR,
+def generate_validation_schema(parts: pt.Dataset,
+                               sets: pt.Dataset = [],
+                               schema_version=pt.ODM_VERSION_STR,
                                schema_additions={}) -> Schema:
-    return _generate_validation_schema_ext(parts, schema_version,
+    return _generate_validation_schema_ext(parts, sets, schema_version,
                                            schema_additions)
 
 
