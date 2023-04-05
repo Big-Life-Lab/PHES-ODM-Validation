@@ -19,7 +19,7 @@
                     "sites": "header"
                 }
             ],
-            "message": "Value 2023-01-30 in row 1 in column lastEdited in table sites is a string and was coerced into a datetime"
+            "message": "_coercion rule triggered in table sites, column lastEdited, row 1: Value \"2023-01-30\" is a string and was coerced into a datetime"
         },
         {
             "warningType": "_coercion",
@@ -39,7 +39,7 @@
                     "sites": "header"
                 }
             ],
-            "message": "Value 2023-01-30T00:00:00 in row 2 in column lastEdited in table sites is a string and was coerced into a datetime"
+            "message": "_coercion rule triggered in table sites, column lastEdited, row 2: Value \"2023-01-30T00:00:00\" is a string and was coerced into a datetime"
         }
     ]
 }

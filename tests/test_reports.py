@@ -63,7 +63,9 @@ class TestReports(common.OdmTestCase):
         expected_errors = [{
             'columnName': 'addID',
             'errorType': 'missing_mandatory_column',
-            'message': 'Missing mandatory column addID in table addresses',
+            'message': ('missing_mandatory_column rule violated in '
+                        'table addresses, column addID, row 2: '
+                        'Missing mandatory column addID'),
             'tableName': 'addresses',
             'validationRuleFields': []
         }]

@@ -17,7 +17,7 @@
                     "sites": "header"
                 }
             ],
-            "message": "Value 1.23 in row 1 in column geoLat in table sites has type float but should be of type integer or coercable into a integer"
+            "message": "invalid_type rule violated in table sites, column geoLat, row 1: Value \"1.23\" has type float but should be of type integer or coercable into a integer"
         }
     ],
     "warnings": []

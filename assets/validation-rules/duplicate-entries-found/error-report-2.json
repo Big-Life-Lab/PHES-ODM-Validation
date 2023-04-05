@@ -22,7 +22,7 @@
                     "addresses": "pK"
                 }
             ],
-            "message": "Duplicate entries found in rows 2,3 with primary key column addId and primary key value 1 in table addresses"
+            "message": "duplicate_entries_found rule violated in table addresses, column addId, row 2,3: Duplicate entries found with primary key value \"1\""
         },
         {
             "errorType": "duplicate_entries_found",
@@ -46,7 +46,7 @@
                     "addresses": "pK"
                 }
             ],
-            "message": "Duplicate entries found in rows 5,6 with primary key column addId and primary key value 2 in table addresses"
+            "message": "duplicate_entries_found rule violated in table addresses, column addId, row 5,6: Duplicate entries found with primary key value \"2\""
         }
     ],
     "warnings": []

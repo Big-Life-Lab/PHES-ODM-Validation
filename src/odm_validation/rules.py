@@ -41,7 +41,7 @@ class Rule:
     - column_id
     - constraint
     - row_num
-    - rule_name
+    - rule_id
     - table_id
     - value
     - value_len
@@ -91,8 +91,7 @@ def init_rule(rule_id, error, gen_cerb_rules, gen_schema,
 
 def duplicate_entries_found():
     rule_id = duplicate_entries_found.__name__
-    err = ('Duplicate entries found in rows {row_num} with primary key column '
-           '{column_id} and primary key value {value} in table {table_id}')
+    err = ('Duplicate entries found with primary key value {value}')
 
     def gen_cerb_rules(val_ctx: OdmValueCtx):
         return {'unique': True}
@@ -107,9 +106,8 @@ def duplicate_entries_found():
 def greater_than_max_length():
     rule_id = greater_than_max_length.__name__
     odm_key = 'maxLength'
-    err = ('Value {value} in row {row_num} in column {column_id} in table '
-           '{table_id} has length {value_len} which is greater than the max '
-           'length of {constraint}')
+    err = ('Value {value} has length {value_len} which is greater than the '
+           'max length of {constraint}')
 
     def gen_cerb_rules(val_ctx: OdmValueCtx):
         return {'maxlength': try_parse_int(val_ctx.value)}
@@ -123,8 +121,7 @@ def greater_than_max_length():
 def greater_than_max_value():
     rule_id = greater_than_max_value.__name__
     odm_key = 'maxValue'
-    err = ('Value {value} in row {row_num} in column {column_id} in table '
-           '{table_id} is greater than the allowable maximum value of '
+    err = ('Value {value} is greater than the allowable maximum value of '
            '{constraint}')
 
     def gen_cerb_rules(val_ctx: OdmValueCtx):
@@ -140,14 +137,7 @@ def greater_than_max_value():
 
 def missing_mandatory_column():
     rule_id = missing_mandatory_column.__name__
-    err = '{rule_name} {column_id} in table {table_id}'
-    err_with_row = err + ' in row number {row_num}'
-
-    def get_error_template(odm_value: Any, odm_type: str, data_kind: DataKind):
-        if data_kind == DataKind.python:
-            return err_with_row
-        else:
-            return err
+    err = 'Missing mandatory column {column_id}'
 
     def gen_cerb_rules(val_ctx: OdmValueCtx):
         return {'required': True}
@@ -156,15 +146,14 @@ def missing_mandatory_column():
         return gen_conditional_schema(data, ver, rule_id, gen_cerb_rules,
                                       is_mandatory)
 
-    return init_rule(rule_id, get_error_template, gen_cerb_rules, gen_schema,
+    return init_rule(rule_id, err, gen_cerb_rules, gen_schema,
                      is_column=True)
 
 
 def missing_values_found():
     # TODO: rename to missing_mandatory_value?
     rule_id = missing_values_found.__name__
-    err = ('Mandatory column {column_id} in table {table_id} has a missing '
-           'value in row {row_num}')
+    err = 'Missing value'
 
     def gen_cerb_rules(val_ctx: OdmValueCtx):
         return {
@@ -183,8 +172,7 @@ def missing_values_found():
 def less_than_min_length():
     rule_id = less_than_min_length.__name__
     odm_key = 'minLength'
-    err = ('Value {value} in row {row_num} in column {column_id} in table '
-           '{table_id} has length {value_len} which is less than the min '
+    err = ('Value {value} has length {value_len} which is less than the min '
            'length of {constraint}')
 
     def gen_cerb_rules(val_ctx: OdmValueCtx):
@@ -202,8 +190,7 @@ def less_than_min_length():
 def less_than_min_value():
     rule_id = less_than_min_value.__name__
     odm_key = 'minValue'
-    err = ('Value {value} in row {row_num} in column {column_id} in table '
-           '{table_id} is less than the allowable minimum value of '
+    err = ('Value {value} is less than the allowable minimum value of '
            '{constraint}')
 
     def gen_cerb_rules(val_ctx: OdmValueCtx):
@@ -220,8 +207,7 @@ def less_than_min_value():
 def invalid_category():
     rule_id = invalid_category.__name__
     cerb_rule_key = 'allowed'
-    err = ('{rule_name} {value} found in row {row_num} '
-           'for column {column_id} in table {table_id}')
+    err = 'Invalid category {value}'
 
     def gen_cerb_rules(val_ctx: OdmValueCtx):
         return {cerb_rule_key: None}
@@ -256,15 +242,11 @@ def invalid_category():
 def invalid_type():
     rule_id = invalid_type.__name__
     odm_key = 'dataType'
-    err_default = ('Value {value} in row {row_num} in column {column_id} in '
-                   'table {table_id} has type {value_type} but should be of '
+    err_default = ('Value {value} has type {value_type} but should be of '
                    'type {constraint} or coercable into a {constraint}')
-    err_bool = ('Column {column_id} in row {row_num} in table {table_id} is a '
-                'boolean but has value {value}. '
+    err_bool = ('Column {column_id} is a boolean but has value {value}. '
                 'Allowed values are {allowed_values}.')
-    err_date = ('Column {column_id} in row {row_num} in table {table_id} is a '
-                'datetime with value {value} that has an unsupported datetime '
-                'format. '
+    err_date = ('Column {column_id} is a datetime but has value {value}. '
                 'Allowed values are ISO 8601 standard full dates, full dates '
                 'and times, or full dates and times with timezone.')
 

@@ -22,7 +22,7 @@
                     "addresses": "pK"
                 }
             ],
-            "message": "Duplicate entries found in rows 1,2 with primary key column addId and primary key value 1 in table addresses"
+            "message": "duplicate_entries_found rule violated in table addresses, column addId, row 1,2: Duplicate entries found with primary key value \"1\""
         }
     ],
     "warnings": []

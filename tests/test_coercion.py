@@ -82,8 +82,9 @@ expected_coercion_warnings = [
         'coercionRules': ['myrule1', 'myrule2'],
         'columnName': 'amount',
         'invalidValue': '123',
-        'message': 'Value 123 in row 1 in column amount in table mytable is '
-                   'a string and was coerced into a number',
+        'message': ('_coercion rule triggered '
+                    'in table mytable, column amount, row 1: '
+                    'Value \"123\" is a string and was coerced into a number'),
         'row': {'amount': '123', 'unknown': 'asd'},
         'rowNumber': 1,
         'tableName': 'mytable',
@@ -97,8 +98,9 @@ expected_coercion_warnings = [
         'coercionRules': [],
         'columnName': 'quantity',
         'invalidValue': '567',
-        'message': 'Value 567 in row 2 in column quantity in table mytable is '
-                   'a string and was coerced into a number',
+        'message': ('_coercion rule triggered '
+                    'in table mytable, column quantity, row 2: '
+                    'Value \"567\" is a string and was coerced into a number'),
         'row': {'quantity': '567'},
         'rowNumber': 2,
         'tableName': 'mytable',

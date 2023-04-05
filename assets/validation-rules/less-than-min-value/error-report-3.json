@@ -19,7 +19,7 @@
                     "sites": "header"
                 }
             ],
-            "message": "Value a in row 1 in column geoLat in table sites cannot be coerced into a number"
+            "message": "_coercion rule violated in table sites, column geoLat, row 1: Value \"a\" cannot be coerced into a number"
         },
         {
             "errorType": "_coercion",
@@ -40,7 +40,7 @@
                     "sites": "header"
                 }
             ],
-            "message": "Value b in row 1 in column geoLong in table sites cannot be coerced into a number"
+            "message": "_coercion rule violated in table sites, column geoLong, row 1: Value \"b\" cannot be coerced into a number"
         }
     ],
     "warnings": []

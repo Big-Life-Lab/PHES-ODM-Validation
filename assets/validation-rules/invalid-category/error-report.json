@@ -32,7 +32,7 @@
                     "catSetID": "collectCat"
                 }
             ],
-            "message": "Invalid category flow found in row 1 for column coll in table samples"
+            "message": "invalid_category rule violated in table samples, column coll, row 1: Invalid category \"flow\""
         }
     ],
     "warnings": []
