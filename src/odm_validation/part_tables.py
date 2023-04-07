@@ -448,7 +448,7 @@ def validate_and_fix(all_parts: PartMap, version):
         part = all_parts.get(part_id)
         if part and should_have_mapping(part, version, ODM_VERSION):
             if V1_CATEGORY not in part:
-                part[V1_CATEGORY] = part_id
+                part[V1_CATEGORY] = part_id.capitalize()
                 assert has_mapping(part, version)
 
 
@@ -470,8 +470,15 @@ def gen_odmdata(parts: Dataset, sets: Dataset, version: Version):
     attributes = list(filter(is_attr, parts))
     null_set = set(map(get_partID, filter(is_null_set, parts)))
 
-    bool_set_rows = list(filter(lambda s: s[SET_ID] == BOOLEAN_SET, sets))
-    bool_set0 = set(map(get_partID, bool_set_rows))
+    # bool set
+    bool_set0 = {}
+    bool_set_rows = []
+    if version.major == 1:
+        if version.minor > 0:
+            bool_set0 = BOOL_SET
+    else:
+        bool_set_rows = list(filter(lambda s: s[SET_ID] == BOOLEAN_SET, sets))
+        bool_set0 = set(map(get_partID, bool_set_rows))
 
     # table attributes
     table_data = {}

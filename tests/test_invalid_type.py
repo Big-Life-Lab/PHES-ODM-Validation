@@ -72,7 +72,11 @@ class TestInvalidType(common.OdmTestCase):
 
     @parameterized.expand(param_range(1, 3))
     def test_schema_generation(self, major_ver):
-        ver = f'{major_ver}.0.0'
+        # XXX: bool parts were introduced in v1.1
+        if self.kind == 'bool' and major_ver == 1:
+            ver = '1.1.0'
+        else:
+            ver = f'{major_ver}.0.0'
         result = _generate_validation_schema_ext(parts=self.assets.parts_v2,
                                                  sets=self.assets.sets,
                                                  schema_version=ver,
