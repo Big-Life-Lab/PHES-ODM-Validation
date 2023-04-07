@@ -18,7 +18,7 @@ sys.path.append(join(root_dir, 'src'))
 import odm_validation.reports as reports  # noqa:E402
 import odm_validation.utils as utils  # noqa:E402
 from odm_validation.reports import ErrorKind  # noqa:E402
-from odm_validation.validation import _validate_data_ext  # noqa:E402
+from odm_validation.validation import _validate_data_ext, DataKind  # noqa:E402
 
 
 def import_xlsx(src_file, dst_dir) -> List[str]:
@@ -118,7 +118,7 @@ def main():
             continue
         print(f'(table {table_id}) ...')
         data = {table_id: data}
-        report = _validate_data_ext(schema, data, ver,
+        report = _validate_data_ext(schema, data, DataKind.spreadsheet, ver,
                                     on_progress=on_progress)
         if report.valid():
             continue
