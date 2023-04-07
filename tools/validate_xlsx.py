@@ -49,8 +49,10 @@ def write_results(report, outdir: str, name: str):
         ErrorKind.ERROR: report.errors,
     }
     for kind in ErrorKind:
-        outfile = os.path.join(outdir, name + f'_{kind.value}s.txt')
         messages = list(map(lambda x: x['message'], entries[kind]))
+        if len(messages) == 0:
+            continue
+        outfile = os.path.join(outdir, name + f'_{kind.value}s.txt')
         with open(outfile, 'w') as f:
             f.write('\n'.join(messages))
 
