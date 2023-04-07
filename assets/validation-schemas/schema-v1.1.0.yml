@@ -1100,7 +1100,9 @@ schema:
             ruleID: invalid_type
           type: string
         pooled:
-          allowed: []
+          allowed:
+          - 'False'
+          - 'True'
           maxlength: 30
           meta:
           - meta:
