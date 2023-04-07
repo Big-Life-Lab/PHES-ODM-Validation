@@ -25,6 +25,7 @@ def import_xlsx(src_file, dst_dir) -> List[str]:
     "Returns list of imported csv files."
     result = []
     print(f'importing {basename(src_file)}')
+    os.makedirs(dst_dir, exist_ok=True)
     xl = Xlsx2csv(src_file, skip_empty_lines=True)
     for sheet in xl.workbook.sheets:
         name = sheet['name']
@@ -105,9 +106,10 @@ def main():
     schema = utils.import_schema(schema_file)
 
     outdir = tempfile.mkdtemp(suffix='-'+filename_without_ext(xlsx_file))
+    csvdir = join(outdir, 'csv-files')
     print(f'writing files to {outdir}\n')
 
-    csv_files = import_xlsx(xlsx_file, outdir)
+    csv_files = import_xlsx(xlsx_file, csvdir)
 
     full_summary = reports.ValidationSummary()
     for file in csv_files:
