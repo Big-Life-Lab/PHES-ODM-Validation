@@ -1,5 +1,40 @@
 # Changelog
 
+## [0.4.0] - 2023-04-11
+
+### General
+
+- Added parameter to validate_data function for specifying spreadsheet input
+- Added rule blacklist for disabling individual rules
+- Added support for the final ODM v2.0.0 release
+- Changed error report message format, to make it more consistent
+- Fixed docs, parts and schemas
+
+### Spreadsheet validation
+
+- Fixed redundant coercion warnings (from string to other types)
+- Fixed redundant column errors
+- Fixed row numbers in the error report so that they match Excel
+
+### Excel validation tool
+
+- Fixed writing of empty error/warning files
+- Changed output dir for csv files to decrease clutter
+
+### Validation schemas
+
+#### v1.1.0
+
+- Added AssayMethod.unit.allowed
+- Added SiteMeasure.siteID.maxlength
+- Added WWMeasure.siteID.maxlength
+- Changed Sample.pooled.allowed to [False, True]
+- Removed Site.siteID
+- Removed Site.type.allowed.wwtpMuS
+- Removed WWMeasure.fractionAnalyzed.allowed
+- Removed WWMeasure.index.coerce
+- Removed WWMeasure.type.allowed
+
 ## [0.3.0] - 2023-03-10
 
 ### General
