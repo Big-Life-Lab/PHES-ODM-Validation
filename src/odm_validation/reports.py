@@ -128,10 +128,15 @@ def _gen_error_msg(ctx: ErrorCtx, template: Optional[str] = None,
     #   the text otherwise.
     verb = 'violated' if error_kind == ErrorKind.ERROR else 'triggered'
 
+    # prefix gen
     prefix = ('{rule_id} rule ' + verb + ' in '
               'table {table_id}, column {column_id}')
     if ctx.data_kind == DataKind.python:
-        prefix += ', row {row_num}'
+        if len(ctx.row_numbers) == 1:
+            prefix += ', row '
+        else:
+            prefix += ', rows '
+        prefix += '{row_num}'
     prefix += ': '
 
     if not template:
