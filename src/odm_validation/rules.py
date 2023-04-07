@@ -153,7 +153,12 @@ def missing_mandatory_column():
 def missing_values_found():
     # TODO: rename to missing_mandatory_value?
     rule_id = missing_values_found.__name__
-    err = 'Missing value'
+
+    def get_error_template(odm_value: Any, odm_type: str, data_kind: DataKind):
+        if odm_value == '':
+            return 'Empty string found'
+        else:
+            return 'Missing value {value}'
 
     def gen_cerb_rules(val_ctx: OdmValueCtx):
         return {
@@ -165,7 +170,7 @@ def missing_values_found():
         return gen_conditional_schema(data, ver, rule_id, gen_cerb_rules,
                                       is_mandatory)
 
-    return init_rule(rule_id, err, gen_cerb_rules, gen_schema,
+    return init_rule(rule_id, get_error_template, gen_cerb_rules, gen_schema,
                      is_warning=True, match_all_keys=True)
 
 

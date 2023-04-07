@@ -17,7 +17,7 @@
                     "sitesRequired": "mandatory"
                 }
             ],
-            "message": "missing_values_found rule triggered in table sites, column geoLat, row 1: Missing value"
+            "message": "missing_values_found rule triggered in table sites, column geoLat, row 1: Missing value \"  \""
         }
     ],
     "errors": []
