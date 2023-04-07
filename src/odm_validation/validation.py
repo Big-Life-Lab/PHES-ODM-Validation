@@ -235,9 +235,9 @@ def _get_rule_id(x):
 
 def _get_table_rownum_column(x):
     row_num = _get_row_num(x)
-    if isinstance(row_num, list):
+    if row_num is not None and isinstance(row_num, list):
         row_num = row_num[0]
-    return (_get_table_name(x), row_num, _get_column_name(x))
+    return (_get_table_name(x), _get_column_name(x), row_num)
 
 
 def _sort_errors(errors):

@@ -131,7 +131,7 @@ def _gen_error_msg(ctx: ErrorCtx, template: Optional[str] = None,
     # prefix gen
     prefix = ('{rule_id} rule ' + verb + ' in '
               'table {table_id}, column {column_id}')
-    if ctx.data_kind == DataKind.python:
+    if not (ctx.is_column and ctx.data_kind == DataKind.spreadsheet):
         if len(ctx.row_numbers) == 1:
             prefix += ', row '
         else:

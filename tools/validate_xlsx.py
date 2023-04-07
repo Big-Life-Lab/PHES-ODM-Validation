@@ -18,13 +18,14 @@ sys.path.append(join(root_dir, 'src'))
 import odm_validation.reports as reports  # noqa:E402
 import odm_validation.utils as utils  # noqa:E402
 from odm_validation.reports import ErrorKind  # noqa:E402
-from odm_validation.validation import _validate_data_ext  # noqa:E402
+from odm_validation.validation import _validate_data_ext, DataKind  # noqa:E402
 
 
 def import_xlsx(src_file, dst_dir) -> List[str]:
     "Returns list of imported csv files."
     result = []
     print(f'importing {basename(src_file)}')
+    os.makedirs(dst_dir, exist_ok=True)
     xl = Xlsx2csv(src_file, skip_empty_lines=True)
     for sheet in xl.workbook.sheets:
         name = sheet['name']
@@ -49,8 +50,10 @@ def write_results(report, outdir: str, name: str):
         ErrorKind.ERROR: report.errors,
     }
     for kind in ErrorKind:
-        outfile = os.path.join(outdir, name + f'_{kind.value}s.txt')
         messages = list(map(lambda x: x['message'], entries[kind]))
+        if len(messages) == 0:
+            continue
+        outfile = os.path.join(outdir, name + f'-{kind.value}s.txt')
         with open(outfile, 'w') as f:
             f.write('\n'.join(messages))
 
@@ -103,9 +106,10 @@ def main():
     schema = utils.import_schema(schema_file)
 
     outdir = tempfile.mkdtemp(suffix='-'+filename_without_ext(xlsx_file))
+    csvdir = join(outdir, 'csv-files')
     print(f'writing files to {outdir}\n')
 
-    csv_files = import_xlsx(xlsx_file, outdir)
+    csv_files = import_xlsx(xlsx_file, csvdir)
 
     full_summary = reports.ValidationSummary()
     for file in csv_files:
@@ -118,7 +122,7 @@ def main():
             continue
         print(f'(table {table_id}) ...')
         data = {table_id: data}
-        report = _validate_data_ext(schema, data, ver,
+        report = _validate_data_ext(schema, data, DataKind.spreadsheet, ver,
                                     on_progress=on_progress)
         if report.valid():
             continue
