@@ -20,7 +20,7 @@
                     "sites": "header"
                 }
             ],
-            "message": "Value -89 in row 1 in column geoLat in table sites is a string and was coerced into a number"
+            "message": "_coercion rule triggered in table sites, column geoLat, row 1: Value \"-89\" is a string and was coerced into a number"
         },
         {
             "warningType": "_coercion",
@@ -41,7 +41,7 @@
                     "sites": "header"
                 }
             ],
-            "message": "Value -90 in row 1 in column geoLong in table sites is a string and was coerced into a number"
+            "message": "_coercion rule triggered in table sites, column geoLong, row 1: Value \"-90\" is a string and was coerced into a number"
         }
     ]
 }

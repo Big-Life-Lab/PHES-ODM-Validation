@@ -17,7 +17,7 @@
                     "sites": "header"
                 }
             ],
-            "message": "Value a in row 1 in column geoLat in table sites has type string but should be of type integer or coercable into a integer"
+            "message": "invalid_type rule violated in table sites, column geoLat, row 1: Value \"a\" has type string but should be of type integer or coercable into a integer"
         },
         {
             "errorType": "invalid_type",
@@ -36,7 +36,7 @@
                     "sites": "header"
                 }
             ],
-            "message": "Value 1.01 in row 2 in column geoLat in table sites has type string but should be of type integer or coercable into a integer"
+            "message": "invalid_type rule violated in table sites, column geoLat, row 2: Value \"1.01\" has type string but should be of type integer or coercable into a integer"
         }
     ],
     "warnings": []

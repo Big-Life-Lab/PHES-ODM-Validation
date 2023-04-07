@@ -18,7 +18,7 @@
                     "sites": "header"
                 }
             ],
-            "message": "Value 91 in row 1 in column geoLat in table sites is greater than the allowable maximum value of 90"
+            "message": "greater_than_max_value rule violated in table sites, column geoLat, row 1: Value \"91\" is greater than the allowable maximum value of \"90\""
         },
         {
             "errorType": "greater_than_max_value",
@@ -38,7 +38,7 @@
                     "sites": "header"
                 }
             ],
-            "message": "Value 90.2 in row 1 in column geoLong in table sites is greater than the allowable maximum value of 90.15"
+            "message": "greater_than_max_value rule violated in table sites, column geoLong, row 1: Value \"90.2\" is greater than the allowable maximum value of \"90.15\""
         }
     ],
     "warnings": [
@@ -61,7 +61,7 @@
                     "sites": "header"
                 }
             ],
-            "message": "Value 91 in row 1 in column geoLat in table sites is a string and was coerced into a number"
+            "message": "_coercion rule triggered in table sites, column geoLat, row 1: Value \"91\" is a string and was coerced into a number"
         },
         {
             "warningType": "_coercion",
@@ -82,7 +82,7 @@
                     "sites": "header"
                 }
             ],
-            "message": "Value 90.2 in row 1 in column geoLong in table sites is a string and was coerced into a number"
+            "message": "_coercion rule triggered in table sites, column geoLong, row 1: Value \"90.2\" is a string and was coerced into a number"
         }
     ]
 }

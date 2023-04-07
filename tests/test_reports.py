@@ -58,12 +58,14 @@ class TestReports(common.OdmTestCase):
             ]
         }
 
-        # just one error even tho there are 2 rows missing the
+        # just one error even tho there are 2 rows missing the column
         report = validate_data(schema, data, data_kind=DataKind.spreadsheet)
         expected_errors = [{
             'columnName': 'addID',
             'errorType': 'missing_mandatory_column',
-            'message': 'Missing mandatory column addID in table addresses',
+            'message': ('missing_mandatory_column rule violated in '
+                        'table addresses, column addID: '
+                        'Missing mandatory column addID'),
             'tableName': 'addresses',
             'validationRuleFields': []
         }]

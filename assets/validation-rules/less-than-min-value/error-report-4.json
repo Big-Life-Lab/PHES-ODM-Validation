@@ -17,7 +17,7 @@
                     "sites": "header"
                 }
             ],
-            "message": "Value 2022-12-30 00:00:00 in row 1 in column lastEdited in table sites is less than the allowable minimum value of 2023-01-01 00:00:00"
+            "message": "less_than_min_value rule violated in table sites, column lastEdited, row 1: Value \"2022-12-30 00:00:00\" is less than the allowable minimum value of \"2023-01-01 00:00:00\""
         }
     ],
     "warnings": [
@@ -39,7 +39,7 @@
                     "sites": "header"
                 }
             ],
-            "message": "Value 2022-12-30 in row 1 in column lastEdited in table sites is a string and was coerced into a datetime"
+            "message": "_coercion rule triggered in table sites, column lastEdited, row 1: Value \"2022-12-30\" is a string and was coerced into a datetime"
         }
     ]
 }

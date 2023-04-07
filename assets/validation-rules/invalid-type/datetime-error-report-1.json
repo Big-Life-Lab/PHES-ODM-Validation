@@ -17,7 +17,7 @@
                     "measures": "header"
                 }
             ],
-            "message": "Column reportDate in row 1 in table measures is a datetime with value a that has an unsupported datetime format. Allowed values are ISO 8601 standard full dates, full dates and times, or full dates and times with timezone."
+            "message": "invalid_type rule violated in table measures, column reportDate, row 1: Column reportDate is a datetime but has value \"a\". Allowed values are ISO 8601 standard full dates, full dates and times, or full dates and times with timezone."
         },
         {
             "errorType": "invalid_type",
@@ -36,7 +36,7 @@
                     "measures": "header"
                 }
             ],
-            "message": "Column reportDate in row 2 in table measures is a datetime with value 2022 that has an unsupported datetime format. Allowed values are ISO 8601 standard full dates, full dates and times, or full dates and times with timezone."
+            "message": "invalid_type rule violated in table measures, column reportDate, row 2: Column reportDate is a datetime but has value \"2022\". Allowed values are ISO 8601 standard full dates, full dates and times, or full dates and times with timezone."
         }
     ],
     "warnings": []
