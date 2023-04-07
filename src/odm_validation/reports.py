@@ -118,7 +118,7 @@ def _fmt_msg_value(value: Any, relaxed=False) -> Any:
 
 
 def _gen_error_msg(ctx: ErrorCtx, template: Optional[str] = None,
-                   kind: Optional[ErrorKind] = None):
+                   error_kind: Optional[ErrorKind] = None):
     ":param template: overrides ctx.err_template"
     # requirements for error message:
     # - prefix with sortable order: table before column, etc.
@@ -126,9 +126,14 @@ def _gen_error_msg(ctx: ErrorCtx, template: Optional[str] = None,
     #   "<rule> in <table> in <column>", etc.
     # - quote values and constraints, since it's hard to distinguish them from
     #   the text otherwise.
-    verb = 'violated' if kind == ErrorKind.ERROR else 'triggered'
+    verb = 'violated' if error_kind == ErrorKind.ERROR else 'triggered'
+
     prefix = ('{rule_id} rule ' + verb + ' in '
-              'table {table_id}, column {column_id}, row {row_num}: ')
+              'table {table_id}, column {column_id}')
+    if ctx.data_kind == DataKind.python:
+        prefix += ', row {row_num}'
+    prefix += ': '
+
     if not template:
         template = ctx.err_template
     template = prefix + template
