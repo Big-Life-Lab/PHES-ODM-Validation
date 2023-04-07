@@ -53,7 +53,7 @@ def write_results(report, outdir: str, name: str):
         messages = list(map(lambda x: x['message'], entries[kind]))
         if len(messages) == 0:
             continue
-        outfile = os.path.join(outdir, name + f'_{kind.value}s.txt')
+        outfile = os.path.join(outdir, name + f'-{kind.value}s.txt')
         with open(outfile, 'w') as f:
             f.write('\n'.join(messages))
 
