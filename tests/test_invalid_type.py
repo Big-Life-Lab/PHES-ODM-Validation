@@ -32,17 +32,17 @@ class Assets():
         # datasets
         # TODO: glob all files instead of hardcoding them like this?
         self.data_pass = [
-            {table: import_dataset(asset(f'valid-{kind}-dataset-1.*'))},
+            {table: import_dataset(asset(f'{kind}-valid-dataset-1.*'))},
         ]
         self.data_fail = [
-            {table: import_dataset(asset(f'invalid-{kind}-dataset-1.*'))},
+            {table: import_dataset(asset(f'{kind}-invalid-dataset-1.*'))},
         ]
         if kind in {'float', 'integer'}:
             self.data_pass.append(
-                {table: import_dataset(asset(f'valid-{kind}-dataset-2.*'))})
+                {table: import_dataset(asset(f'{kind}-valid-dataset-2.*'))})
         if kind in {'bool', 'integer'}:
             self.data_fail.append(
-                {table: import_dataset(asset(f'invalid-{kind}-dataset-2.*'))})
+                {table: import_dataset(asset(f'{kind}-invalid-dataset-2.*'))})
 
         # error reports
         self.error_report = [

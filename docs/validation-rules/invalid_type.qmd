@@ -15,21 +15,21 @@ An integer is defined as a number without a decimal point. Imagine a column `geo
 
 ```{python}
 # This is a YAML file since in a CSV file all the numbers would be included as a string
-pprint_yaml_file(asset("invalid-integer-dataset-1.yml"))
+pprint_yaml_file(asset("integer-invalid-dataset-1.yml"))
 ```
 
 whereas the following would pass validation
 
 ```{python}
 # This is a YAML file since in a CSV file all the numbers would be included as a string
-pprint_yaml_file(asset("valid-integer-dataset-1.yml"))
+pprint_yaml_file(asset("integer-valid-dataset-1.yml"))
 ```
 
 Values that are not explicitly integers but can be coerced into integers should pass validation. For example, the following should pass validation,
 
 ```{python}
 #| echo: false
-pprint_csv_file(asset("valid-integer-dataset-2.csv"), "Valid integer dataset")
+pprint_csv_file(asset("integer-valid-dataset-2.csv"), "Valid integer dataset")
 ```
 
 A floating point number can be coerced into an integer if the coercion does not result in a value change. In above example, coercing 1.00 to its integer value of 1 does not change its value.
@@ -38,7 +38,7 @@ The snippet below should fail validation since they cannot be coerced to integer
 
 ```{python}
 #| echo: false
-pprint_csv_file(asset("invalid-integer-dataset-2.csv"), "Invalid integer dataset")
+pprint_csv_file(asset("integer-invalid-dataset-2.csv"), "Invalid integer dataset")
 ```
 
 ## float
@@ -47,21 +47,21 @@ A float is a decimal number. Imagine the same `geoLat` column but its defined ty
 
 ```{python}
 #| echo: false
-pprint_csv_file(asset("invalid-float-dataset-1.csv"), "Invalid float dataset")
+pprint_csv_file(asset("float-invalid-dataset-1.csv"), "Invalid float dataset")
 ```
 
 whereas the following would pass validation
 
 ```{python}
 #| echo: false
-pprint_yaml_file(asset("valid-float-dataset-1.yml"))
+pprint_yaml_file(asset("float-valid-dataset-1.yml"))
 ```
 
 Once again, values that can be coerced into floats should pass validation. All integers and certain strings can be coerced into floats. For example, the following snippet below should pass validation,
 
 ```{python}
 #| echo: false
-pprint_csv_file(asset("valid-float-dataset-2.csv"), "Valid float dataset")
+pprint_csv_file(asset("float-valid-dataset-2.csv"), "Valid float dataset")
 ```
 
 ## email
@@ -98,21 +98,21 @@ A column that can have one of two values, representing Yes/No. The category valu
 
 ```{python}
 #| echo: false
-pprint_csv_file(asset("invalid-bool-dataset-1.csv"), "Invalid bool dataset")
+pprint_csv_file(asset("bool-invalid-dataset-1.csv"), "Invalid bool dataset")
 ```
 
 whereas the following the would pass validation,
 
 ```{python}
 #| echo: false
-pprint_csv_file(asset("valid-bool-dataset-1.csv"), "Valid bool dataset")
+pprint_csv_file(asset("bool-valid-dataset-1.csv"), "Valid bool dataset")
 ```
 
 The category values are case-sensitive i.e. the boolean column value case should match the one in the category values. For example, the following would fail validation,
 
 ```{python}
 #| echo: false
-pprint_csv_file(asset("invalid-bool-dataset-2.csv"), "Invalid bool dataset")
+pprint_csv_file(asset("bool-invalid-dataset-2.csv"), "Invalid bool dataset")
 ```
 
 ## datetime
@@ -126,13 +126,13 @@ A type that allows columns to have a string that holds a date and time value. Th
 For example, consider the `reportDate` column in the `measures` table whose type is `datetime`. The following dataset snippet should pass validation,
 
 ```{python}
-pprint_csv_file(asset("valid-datetime-dataset-1.csv"), "Valid datetime dataset")
+pprint_csv_file(asset("datetime-valid-dataset-1.csv"), "Valid datetime dataset")
 ```
 
 whereas the following dataset should fail validation,
 
 ```{python}
-pprint_csv_file(asset("invalid-datetime-dataset-1.csv"), "Invalid datetime dataset")
+pprint_csv_file(asset("datetime-invalid-dataset-1.csv"), "Invalid datetime dataset")
 ```
 
 ## categorical
