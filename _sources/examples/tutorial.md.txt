@@ -66,11 +66,11 @@ for e in report.errors:
     print("- " + e["message"])
 ```
 
-    - Missing mandatory column collDT in table samples in row number 1
-    - Missing mandatory column collNumPer in table samples in row number 1
-    - Value asd in row 1 in column collPer in table samples has type string but should be of type float or coercable into a float
-    - Missing mandatory column collType in table samples in row number 1
-    - Missing mandatory column sampleID in table samples in row number 1
+    - missing_mandatory_column rule violated in table samples, column collDT, row 1: Missing mandatory column collDT
+    - missing_mandatory_column rule violated in table samples, column collNumPer, row 1: Missing mandatory column collNumPer
+    - invalid_type rule violated in table samples, column collPer, row 1: Value "asd" has type string but should be of type float or coercable into a float
+    - missing_mandatory_column rule violated in table samples, column collType, row 1: Missing mandatory column collType
+    - missing_mandatory_column rule violated in table samples, column sampleID, row 1: Missing mandatory column sampleID
 
 The error message starts with the name of the rule that has been broken,
 followed by the table name, field name, and row number. The actual
@@ -101,9 +101,9 @@ print(report.schema_version)
 print(report.data_version)
 ```
 
-    0.3.0
-    2.0.0-rc.3.9.1
-    2.0.0-rc.3.9.1
+    0.4.0
+    2.0.0
+    2.0.0
 
 ## Schema generation
 
@@ -116,7 +116,7 @@ compatible with.
 version = ODM_VERSION_STR
 parts_file = join(ASSET_DIR, f"dictionary/v{version}/parts.csv")
 parts = utils.import_dataset(parts_file)
-schema = generate_validation_schema(parts, version)
+schema = generate_validation_schema(parts, schema_version=version)
 ```
 
 The resulting schema can also be exported to a YAML file for future use.

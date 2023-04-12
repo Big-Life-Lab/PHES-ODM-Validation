@@ -57,6 +57,18 @@ table row would fail validation,</p>
 │ flowPr                                                                                                          │
 └─────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
 </pre>
+<p>For non-mandatory categorical columns, values representing missing are
+also allowed. Assuming that <code class="docutils literal notranslate"><span class="pre">coll</span></code> is not mandatory, the following table
+should pass validation,</p>
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="font-style: italic">                                                   Valid Dataset                                                   </span>
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃<span style="font-weight: bold"> coll                                                                                                            </span>┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│ NA                                                                                                              │
+│                                                                                                                 │
+└─────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+</pre>
+<p>The second row contains an empty string.</p>
 <section id="error-report">
 <h2>Error report<a class="headerlink" href="#error-report" title="Permalink to this heading">¶</a></h2>
 <p>The error report will have the following fields</p>
@@ -90,25 +102,22 @@ by this row</p></li>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partID'</span>: <span style="color: #008000; text-decoration-color: #008000">'coll'</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'samples'</span>: <span style="color: #008000; text-decoration-color: #008000">'header'</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'dataType'</span>: <span style="color: #008000; text-decoration-color: #008000">'categorical'</span>,
-<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'catSetID'</span>: <span style="color: #008000; text-decoration-color: #008000">'collectCat'</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'mmaSet'</span>: <span style="color: #008000; text-decoration-color: #008000">'collectCat'</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="font-weight: bold">}</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="font-weight: bold">{</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partID'</span>: <span style="color: #008000; text-decoration-color: #008000">'comp3h'</span>,
-<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partType'</span>: <span style="color: #008000; text-decoration-color: #008000">'category'</span>,
-<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'catSetID'</span>: <span style="color: #008000; text-decoration-color: #008000">'collectCat'</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'setID'</span>: <span style="color: #008000; text-decoration-color: #008000">'collectCat'</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="font-weight: bold">}</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="font-weight: bold">{</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partID'</span>: <span style="color: #008000; text-decoration-color: #008000">'comp8h'</span>,
-<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partType'</span>: <span style="color: #008000; text-decoration-color: #008000">'category'</span>,
-<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'catSetID'</span>: <span style="color: #008000; text-decoration-color: #008000">'collectCat'</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'setID'</span>: <span style="color: #008000; text-decoration-color: #008000">'collectCat'</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="font-weight: bold">}</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="font-weight: bold">{</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partID'</span>: <span style="color: #008000; text-decoration-color: #008000">'flowPr'</span>,
-<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partType'</span>: <span style="color: #008000; text-decoration-color: #008000">'category'</span>,
-<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'catSetID'</span>: <span style="color: #008000; text-decoration-color: #008000">'collectCat'</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'setID'</span>: <span style="color: #008000; text-decoration-color: #008000">'collectCat'</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="font-weight: bold">}</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="font-weight: bold">]</span>,
-<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'message'</span>: <span style="color: #008000; text-decoration-color: #008000">'Invalid category flow found in row 1 for column coll in table samples'</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'message'</span>: <span style="color: #008000; text-decoration-color: #008000">'invalid_category rule violated in table samples, column coll, row 1: Invalid category "flow"'</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="font-weight: bold">}</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="font-weight: bold">]</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="color: #008000; text-decoration-color: #008000">'warnings'</span>: <span style="font-weight: bold">[]</span>
@@ -117,57 +126,63 @@ by this row</p></li>
 </section>
 <section id="rule-metadata">
 <h2>Rule metadata<a class="headerlink" href="#rule-metadata" title="Permalink to this heading">¶</a></h2>
-<p>All the metadata for this rule is contained in the parts sheet in the
-data dictionary. The metadata is used to identify the following two
-pieces:</p>
+<p>The metadata for this rule is contained in two sheets:</p>
 <ol class="arabic simple">
-<li><p>The categorical columns in a table. These are identified using the
-<code class="docutils literal notranslate"><span class="pre">partID</span></code>, <code class="docutils literal notranslate"><span class="pre">dataType</span></code>, and <code class="docutils literal notranslate"><span class="pre">&lt;table_name&gt;</span></code> columns.</p>
-<ul class="simple">
-<li><p><strong>partID</strong>: Contains the name of a possible column</p></li>
-<li><p><strong>&lt;table_name&gt;</strong>: Whether the part is associated with a table.
-Look for values of <strong>PK</strong>, <strong>FK</strong>, or <strong>header</strong> to indicate that
-the part is the name of a column in the table.</p></li>
-<li><p><strong>dataType</strong>: A value of <code class="docutils literal notranslate"><span class="pre">categorical</span></code> is used to indicate that
-the part is categorical</p></li>
-</ul>
-</li>
-<li><p>The category values for a categorical column. These are identified
-using the <code class="docutils literal notranslate"><span class="pre">partID</span></code>, <code class="docutils literal notranslate"><span class="pre">partType</span></code>, and <code class="docutils literal notranslate"><span class="pre">catSetId</span></code> column.</p>
-<ul class="simple">
-<li><p><strong>partID</strong>: Contains the name of a possible category</p></li>
-<li><p><strong>partType</strong>: A value of <code class="docutils literal notranslate"><span class="pre">category</span></code> is used to indicate that the
-part is a category value</p></li>
-<li><p><strong>catSetId</strong>: The name of the category set that this category is
-for. The value will match up with the value in a categorical
-column.</p></li>
-</ul>
-</li>
+<li><p>The parts sheet which has information on whether a column is
+categorical and if it is, information on how to find the categories
+that are part of it</p></li>
+<li><p>The sets sheet which contains information on the categories</p></li>
+</ol>
+<p>The steps to use this meatdata are:</p>
+<ol class="arabic simple">
+<li><p><a class="reference internal" href="../specs/odm-how-tos.html#how-to-get-the-columns-names-for-a-table"><span class="std std-ref">Get all the columns that are part of the
+table</span></a></p></li>
+<li><p>Filter the columns to only include those that are categorical.
+Categorical columns have a <code class="docutils literal notranslate"><span class="pre">dataType</span></code> value of <code class="docutils literal notranslate"><span class="pre">categorical</span></code>.</p></li>
+<li><p>For each categorical column, identify the name of the set that has
+the categories for that column. The set name is stored in the
+<code class="docutils literal notranslate"><span class="pre">mmaSet</span></code> column.</p></li>
+<li><p>Use the sets sheet and the value of the <code class="docutils literal notranslate"><span class="pre">mmaSet</span></code> column to identify
+the categories. For each categorical column, filter the sets sheet
+to only include those rows whose <code class="docutils literal notranslate"><span class="pre">setID</span></code> column value is the same as
+the <code class="docutils literal notranslate"><span class="pre">mmaSet</span></code> value.</p></li>
+<li><p>In the filtered rows, the <code class="docutils literal notranslate"><span class="pre">partID</span></code> column contains the category
+values.</p></li>
 </ol>
 <p>Example</p>
 <pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="font-style: italic">                                                     Parts v2                                                      </span>
-┏━━━━━━━━━━━━━━┳━━━━━━━━━━━━━┳━━━━━━━━━━━┳━━━━━━━━━┳━━━━━━━━━━━━┳━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━┓
-┃<span style="font-weight: bold"> partID       </span>┃<span style="font-weight: bold"> partType    </span>┃<span style="font-weight: bold"> samples   </span>┃<span style="font-weight: bold"> sites   </span>┃<span style="font-weight: bold"> measures   </span>┃<span style="font-weight: bold"> dataType      </span>┃<span style="font-weight: bold"> catSetID         </span>┃<span style="font-weight: bold"> status       </span>┃
-┡━━━━━━━━━━━━━━╇━━━━━━━━━━━━━╇━━━━━━━━━━━╇━━━━━━━━━╇━━━━━━━━━━━━╇━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━┩
-│ samples      │ table       │ NA        │ NA      │ NA         │ NA            │ NA               │ active       │
-│ sites        │ table       │ NA        │ NA      │ NA         │ NA            │ NA               │ active       │
-│ measures     │ table       │ NA        │ NA      │ NA         │ NA            │ NA               │ active       │
-│ coll         │ attribute   │ header    │ NA      │ NA         │ categorical   │ collectCat       │ active       │
-│ comp3h       │ category    │ input     │ NA      │ NA         │ varchar       │ collectCat       │ active       │
-│ comp8h       │ category    │ input     │ NA      │ NA         │ varchar       │ collectCat       │ active       │
-│ flowPr       │ category    │ input     │ NA      │ NA         │ varchar       │ collectCat       │ active       │
-│ siteTypeID   │ attribute   │ NA        │ fK      │ NA         │ categorical   │ siteTypeCatSet   │ active       │
-│ wwtpMuC      │ category    │ NA        │ input   │ NA         │ varchar       │ NA               │ active       │
-│ wwtpMuS      │ category    │ NA        │ input   │ NA         │ varchar       │ NA               │ active       │
-│ someOldCat   │ category    │ NA        │ input   │ NA         │ varchar       │ NA               │ depreciated  │
-│ tp24s        │ category    │ NA        │ NA      │ NA         │ NA            │ NA               │ depreciated  │
-│ measureID    │ attribute   │ NA        │ NA      │ fK         │ varchar       │ NA               │ active       │
-│ cod          │ category    │ NA        │ NA      │ input      │ varchar       │ NA               │ active       │
-└──────────────┴─────────────┴───────────┴─────────┴────────────┴───────────────┴──────────────────┴──────────────┘
+┏━━━━━━━━━━━┳━━━━━━━━━━━┳━━━━━━━━━┳━━━━━━━┳━━━━━━━━━━┳━━━━━━━━━━━┳━━━━━━━━━━━┳━━━━━━━━━━━┳━━━━━━━━━━━━┳━━━━━━━━━━━┓
+┃<span style="font-weight: bold"> partID    </span>┃<span style="font-weight: bold"> partType  </span>┃<span style="font-weight: bold"> samples </span>┃<span style="font-weight: bold"> sites </span>┃<span style="font-weight: bold"> measures </span>┃<span style="font-weight: bold"> dataType  </span>┃<span style="font-weight: bold"> mmaSet    </span>┃<span style="font-weight: bold"> status    </span>┃<span style="font-weight: bold"> firstRele… </span>┃<span style="font-weight: bold"> lastUpda… </span>┃
+┡━━━━━━━━━━━╇━━━━━━━━━━━╇━━━━━━━━━╇━━━━━━━╇━━━━━━━━━━╇━━━━━━━━━━━╇━━━━━━━━━━━╇━━━━━━━━━━━╇━━━━━━━━━━━━╇━━━━━━━━━━━┩
+│ samples   │ tables    │ NA      │ NA    │ NA       │ NA        │ NA        │ active    │ 1.0.0      │ 2.0.0     │
+│ sites     │ tables    │ NA      │ NA    │ NA       │ NA        │ NA        │ active    │ 1.0.0      │ 2.0.0     │
+│ measures  │ tables    │ NA      │ NA    │ NA       │ NA        │ NA        │ active    │ 1.0.0      │ 2.0.0     │
+│ coll      │ attribut… │ header  │ NA    │ NA       │ categori… │ collectC… │ active    │ 1.0.0      │ 2.0.0     │
+│ comp3h    │ categori… │ input   │ NA    │ NA       │ varchar   │ NA        │ active    │ 1.0.0      │ 2.0.0     │
+│ comp8h    │ categori… │ input   │ NA    │ NA       │ varchar   │ NA        │ active    │ 1.0.0      │ 2.0.0     │
+│ flowPr    │ categori… │ input   │ NA    │ NA       │ varchar   │ NA        │ active    │ 1.0.0      │ 2.0.0     │
+│ siteType… │ attribut… │ NA      │ fK    │ NA       │ categori… │ siteType… │ active    │ 1.0.0      │ 2.0.0     │
+│ wwtpMuC   │ categori… │ NA      │ input │ NA       │ varchar   │ NA        │ active    │ 1.0.0      │ 2.0.0     │
+│ wwtpMuS   │ categori… │ NA      │ input │ NA       │ varchar   │ NA        │ active    │ 1.0.0      │ 2.0.0     │
+│ someOldC… │ categori… │ NA      │ input │ NA       │ varchar   │ NA        │ deprecia… │ 1.0.0      │ 2.0.0     │
+│ tp24s     │ categori… │ NA      │ NA    │ NA       │ NA        │ NA        │ deprecia… │ 1.0.0      │ 2.0.0     │
+│ measureID │ attribut… │ NA      │ NA    │ fK       │ varchar   │ NA        │ active    │ 1.0.0      │ 2.0.0     │
+│ cod       │ categori… │ NA      │ NA    │ input    │ varchar   │ NA        │ active    │ 1.0.0      │ 2.0.0     │
+│ NA        │ missingn… │ NA      │ NA    │ NA       │ varchar   │ NA        │ active    │ 1.0.0      │ 2.0.0     │
+└───────────┴───────────┴─────────┴───────┴──────────┴───────────┴───────────┴───────────┴────────────┴───────────┘
 </pre>
-<p>Here, the name of the categorical column is <code class="docutils literal notranslate"><span class="pre">coll</span></code> and its the name of a
-column in the <code class="docutils literal notranslate"><span class="pre">samples</span></code> table. The category set name is <code class="docutils literal notranslate"><span class="pre">collectCat</span></code>
-which is used to identify the category values which are <code class="docutils literal notranslate"><span class="pre">comp3h</span></code>,
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="font-style: italic">                                                       Sets                                                        </span>
+┏━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━┓
+┃<span style="font-weight: bold"> setID                  </span>┃<span style="font-weight: bold"> partID         </span>┃<span style="font-weight: bold"> firstReleased               </span>┃<span style="font-weight: bold"> lastUpdated             </span>┃<span style="font-weight: bold"> status        </span>┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━┩
+│ collectCat             │ comp3h         │ 1.0.0                       │ 2.0.0                   │ active        │
+│ collectCat             │ comp8h         │ 1.0.0                       │ 2.0.0                   │ active        │
+│ collectCat             │ flowPr         │ 1.0.0                       │ 2.0.0                   │ active        │
+└────────────────────────┴────────────────┴─────────────────────────────┴─────────────────────────┴───────────────┘
+</pre>
+<p>Here, the name of the categorical column is <code class="docutils literal notranslate"><span class="pre">coll</span></code> and its a column in
+the <code class="docutils literal notranslate"><span class="pre">samples</span></code> table. The set name is <code class="docutils literal notranslate"><span class="pre">collectCat</span></code> which is used to
+identify the category values in the sets sheet which are <code class="docutils literal notranslate"><span class="pre">comp3h</span></code>,
 <code class="docutils literal notranslate"><span class="pre">comp8h</span></code>, and <code class="docutils literal notranslate"><span class="pre">flowPr</span></code>.</p>
 </section>
 <section id="cerberus-schema">
@@ -195,22 +210,19 @@ which is used to identify the category values which are <code class="docutils li
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partID'</span>: <span style="color: #008000; text-decoration-color: #008000">'coll'</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'samples'</span>: <span style="color: #008000; text-decoration-color: #008000">'header'</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'dataType'</span>: <span style="color: #008000; text-decoration-color: #008000">'categorical'</span>,
-<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'catSetID'</span>: <span style="color: #008000; text-decoration-color: #008000">'collectCat'</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'mmaSet'</span>: <span style="color: #008000; text-decoration-color: #008000">'collectCat'</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   </span><span style="font-weight: bold">}</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   </span><span style="font-weight: bold">{</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partID'</span>: <span style="color: #008000; text-decoration-color: #008000">'comp3h'</span>,
-<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partType'</span>: <span style="color: #008000; text-decoration-color: #008000">'category'</span>,
-<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'catSetID'</span>: <span style="color: #008000; text-decoration-color: #008000">'collectCat'</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'setID'</span>: <span style="color: #008000; text-decoration-color: #008000">'collectCat'</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   </span><span style="font-weight: bold">}</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   </span><span style="font-weight: bold">{</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partID'</span>: <span style="color: #008000; text-decoration-color: #008000">'comp8h'</span>,
-<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partType'</span>: <span style="color: #008000; text-decoration-color: #008000">'category'</span>,
-<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'catSetID'</span>: <span style="color: #008000; text-decoration-color: #008000">'collectCat'</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'setID'</span>: <span style="color: #008000; text-decoration-color: #008000">'collectCat'</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   </span><span style="font-weight: bold">}</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   </span><span style="font-weight: bold">{</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partID'</span>: <span style="color: #008000; text-decoration-color: #008000">'flowPr'</span>,
-<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partType'</span>: <span style="color: #008000; text-decoration-color: #008000">'category'</span>,
-<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'catSetID'</span>: <span style="color: #008000; text-decoration-color: #008000">'collectCat'</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'setID'</span>: <span style="color: #008000; text-decoration-color: #008000">'collectCat'</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   </span><span style="font-weight: bold">}</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   </span><span style="font-weight: bold">]</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   </span><span style="font-weight: bold">}</span>
@@ -220,7 +232,7 @@ which is used to identify the category values which are <code class="docutils li
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'meta'</span>: <span style="font-weight: bold">[</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="font-weight: bold">{</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partID'</span>: <span style="color: #008000; text-decoration-color: #008000">'samples'</span>,
-<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partType'</span>: <span style="color: #008000; text-decoration-color: #008000">'table'</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partType'</span>: <span style="color: #008000; text-decoration-color: #008000">'tables'</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="font-weight: bold">}</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="font-weight: bold">]</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="font-weight: bold">}</span>
@@ -232,7 +244,7 @@ which is used to identify the category values which are <code class="docutils li
 ODM dictionary:</p>
 <ul class="simple">
 <li><p>The part definition for the column in the table</p></li>
-<li><p>The part definition for each category that forms the category set for
+<li><p>The sets definition for each category that forms the category set for
 the categorical column</p></li>
 </ul>
 </section>
@@ -253,25 +265,26 @@ then look at the value of the <code class="docutils literal notranslate"><span c
 the category value was in version 1. For example, in the ODM parts
 snippet below,</p>
 <pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="font-style: italic">                                                     Parts v1                                                      </span>
-┏━━━━━━━━━┳━━━━━━━━━┳━━━━━━━━━┳━━━━━━━┳━━━━━━━━━┳━━━━━━━━┳━━━━━━━━━┳━━━━━━━━┳━━━━━━━━━┳━━━━━━━━┳━━━━━━━━━┳━━━━━━━━┓
-┃<span style="font-weight: bold"> partID  </span>┃<span style="font-weight: bold"> partTy… </span>┃<span style="font-weight: bold"> samples </span>┃<span style="font-weight: bold"> sites </span>┃<span style="font-weight: bold"> measur… </span>┃<span style="font-weight: bold"> dataT… </span>┃<span style="font-weight: bold"> catSet… </span>┃<span style="font-weight: bold"> versi… </span>┃<span style="font-weight: bold"> versio… </span>┃<span style="font-weight: bold"> versi… </span>┃<span style="font-weight: bold"> versio… </span>┃<span style="font-weight: bold"> status </span>┃
-┡━━━━━━━━━╇━━━━━━━━━╇━━━━━━━━━╇━━━━━━━╇━━━━━━━━━╇━━━━━━━━╇━━━━━━━━━╇━━━━━━━━╇━━━━━━━━━╇━━━━━━━━╇━━━━━━━━━╇━━━━━━━━┩
-│ samples │ table   │ NA      │ NA    │ NA      │ NA     │ NA      │ tables │ Sample  │ NA     │ NA      │ active │
-│ sites   │ table   │ NA      │ NA    │ NA      │ NA     │ NA      │ tables │ Site    │ NA     │ NA      │ active │
-│ measur… │ table   │ NA      │ NA    │ NA      │ NA     │ NA      │ tables │ WWMeas… │ NA     │ NA      │ active │
-│ coll    │ attrib… │ header  │ NA    │ NA      │ categ… │ collec… │ varia… │ Sample  │ Colle… │ NA      │ active │
-│ comp3h  │ catego… │ input   │ NA    │ NA      │ varch… │ collec… │ varia… │ Sample  │ Colle… │ Comp3h  │ active │
-│ comp8h  │ catego… │ input   │ NA    │ NA      │ varch… │ collec… │ varia… │ Sample  │ Colle… │ Comp8h  │ active │
-│ flowPr  │ catego… │ input   │ NA    │ NA      │ varch… │ collec… │ varia… │ Sample  │ Colle… │ FlowPr… │ active │
-│ siteTy… │ attrib… │ NA      │ fK    │ NA      │ categ… │ siteTy… │ varia… │ Site    │ type   │ NA      │ active │
-│ wwtpMuC │ catego… │ NA      │ input │ NA      │ varch… │ NA      │ varia… │ Site    │ type   │ wwtpMuC │ active │
-│ wwtpMuS │ catego… │ NA      │ input │ NA      │ varch… │ NA      │ varia… │ Site    │ type   │ wwtpMuS │ active │
-│ someOl… │ catego… │ NA      │ input │ NA      │ varch… │ NA      │ varia… │ Site    │ type   │ someOl… │ depre… │
-│ tp24s   │ catego… │ NA      │ NA    │ NA      │ NA     │ NA      │ varia… │ Site    │ Sampl… │ cpTP24h │ depre… │
-│ measur… │ attrib… │ NA      │ NA    │ fK      │ varch… │ NA      │ varia… │ WWMeas… │ type   │ NA      │ active │
-│ cod     │ catego… │ NA      │ NA    │ input   │ varch… │ NA      │ varia… │ WWMeas… │ type   │ wqCOD;  │ active │
-│         │         │         │       │         │        │         │        │ SiteMe… │        │ wwCOD   │        │
-└─────────┴─────────┴─────────┴───────┴─────────┴────────┴─────────┴────────┴─────────┴────────┴─────────┴────────┘
+┏━━━━━━━┳━━━━━━━┳━━━━━━━┳━━━━━━━┳━━━━━━━┳━━━━━━━┳━━━━━━━┳━━━━━━━┳━━━━━━━┳━━━━━━━┳━━━━━━━┳━━━━━━━━┳━━━━━━━┳━━━━━━━━┓
+┃<span style="font-weight: bold"> part… </span>┃<span style="font-weight: bold"> part… </span>┃<span style="font-weight: bold"> samp… </span>┃<span style="font-weight: bold"> sites </span>┃<span style="font-weight: bold"> meas… </span>┃<span style="font-weight: bold"> data… </span>┃<span style="font-weight: bold"> mmaS… </span>┃<span style="font-weight: bold"> vers… </span>┃<span style="font-weight: bold"> vers… </span>┃<span style="font-weight: bold"> vers… </span>┃<span style="font-weight: bold"> vers… </span>┃<span style="font-weight: bold"> status </span>┃<span style="font-weight: bold"> firs… </span>┃<span style="font-weight: bold"> lastU… </span>┃
+┡━━━━━━━╇━━━━━━━╇━━━━━━━╇━━━━━━━╇━━━━━━━╇━━━━━━━╇━━━━━━━╇━━━━━━━╇━━━━━━━╇━━━━━━━╇━━━━━━━╇━━━━━━━━╇━━━━━━━╇━━━━━━━━┩
+│ samp… │ tabl… │ NA    │ NA    │ NA    │ NA    │ NA    │ tabl… │ Samp… │ NA    │ NA    │ active │ 1.0.0 │ 2.0.0  │
+│ sites │ tabl… │ NA    │ NA    │ NA    │ NA    │ NA    │ tabl… │ Site  │ NA    │ NA    │ active │ 1.0.0 │ 2.0.0  │
+│ meas… │ tabl… │ NA    │ NA    │ NA    │ NA    │ NA    │ tabl… │ WWMe… │ NA    │ NA    │ active │ 1.0.0 │ 2.0.0  │
+│ coll  │ attr… │ head… │ NA    │ NA    │ cate… │ coll… │ vari… │ Samp… │ Coll… │ NA    │ active │ 1.0.0 │ 2.0.0  │
+│ comp… │ cate… │ input │ NA    │ NA    │ varc… │ NA    │ vari… │ Samp… │ Coll… │ Comp… │ active │ 1.0.0 │ 2.0.0  │
+│ comp… │ cate… │ input │ NA    │ NA    │ varc… │ NA    │ vari… │ Samp… │ Coll… │ Comp… │ active │ 1.0.0 │ 2.0.0  │
+│ flow… │ cate… │ input │ NA    │ NA    │ varc… │ NA    │ vari… │ Samp… │ Coll… │ Flow… │ active │ 1.0.0 │ 2.0.0  │
+│ site… │ attr… │ NA    │ fK    │ NA    │ cate… │ site… │ vari… │ Site  │ type  │ NA    │ active │ 1.0.0 │ 2.0.0  │
+│ wwtp… │ cate… │ NA    │ input │ NA    │ varc… │ NA    │ vari… │ Site  │ type  │ wwtp… │ active │ 1.0.0 │ 2.0.0  │
+│ wwtp… │ cate… │ NA    │ input │ NA    │ varc… │ NA    │ vari… │ Site  │ type  │ wwtp… │ active │ 1.0.0 │ 2.0.0  │
+│ some… │ cate… │ NA    │ input │ NA    │ varc… │ NA    │ vari… │ Site  │ type  │ some… │ depre… │ 1.0.0 │ 2.0.0  │
+│ tp24s │ cate… │ NA    │ NA    │ NA    │ NA    │ NA    │ vari… │ Site  │ Samp… │ cpTP… │ depre… │ 1.0.0 │ 2.0.0  │
+│ meas… │ attr… │ NA    │ NA    │ fK    │ varc… │ NA    │ vari… │ WWMe… │ type  │ NA    │ active │ 1.0.0 │ 2.0.0  │
+│ cod   │ cate… │ NA    │ NA    │ input │ varc… │ NA    │ vari… │ WWMe… │ type  │ wqCO… │ active │ 1.0.0 │ 2.0.0  │
+│       │       │       │       │       │       │       │       │ Site… │       │ wwCOD │        │       │        │
+│ NA    │ miss… │ NA    │ NA    │ NA    │ varc… │ NA    │ NA    │ NA    │ NA    │ NA    │ active │ 1.0.0 │ 2.0.0  │
+└───────┴───────┴───────┴───────┴───────┴───────┴───────┴───────┴───────┴───────┴───────┴────────┴───────┴────────┘
 </pre>
 <p>In the snippet above, for a version 1 variable, we check whether the
 <code class="docutils literal notranslate"><span class="pre">version1Category</span></code> column has a value. If it does then it is
@@ -305,15 +318,12 @@ seperated by a semi-colon.</p>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   </span><span style="font-weight: bold">{</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partID'</span>: <span style="color: #008000; text-decoration-color: #008000">'coll'</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'dataType'</span>: <span style="color: #008000; text-decoration-color: #008000">'categorical'</span>,
-<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'catSetID'</span>: <span style="color: #008000; text-decoration-color: #008000">'collectCat'</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'version1Location'</span>: <span style="color: #008000; text-decoration-color: #008000">'variables'</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'version1Table'</span>: <span style="color: #008000; text-decoration-color: #008000">'Sample'</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'version1Variable'</span>: <span style="color: #008000; text-decoration-color: #008000">'Collection'</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   </span><span style="font-weight: bold">}</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   </span><span style="font-weight: bold">{</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partID'</span>: <span style="color: #008000; text-decoration-color: #008000">'comp3h'</span>,
-<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partType'</span>: <span style="color: #008000; text-decoration-color: #008000">'category'</span>,
-<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'catSetID'</span>: <span style="color: #008000; text-decoration-color: #008000">'collectCat'</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'version1Location'</span>: <span style="color: #008000; text-decoration-color: #008000">'variableCategories'</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'version1Table'</span>: <span style="color: #008000; text-decoration-color: #008000">'Sample'</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'version1Variable'</span>: <span style="color: #008000; text-decoration-color: #008000">'Collection'</span>,
@@ -321,8 +331,6 @@ seperated by a semi-colon.</p>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   </span><span style="font-weight: bold">}</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   </span><span style="font-weight: bold">{</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partID'</span>: <span style="color: #008000; text-decoration-color: #008000">'comp8h'</span>,
-<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partType'</span>: <span style="color: #008000; text-decoration-color: #008000">'category'</span>,
-<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'catSetID'</span>: <span style="color: #008000; text-decoration-color: #008000">'collectCat'</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'version1Location'</span>: <span style="color: #008000; text-decoration-color: #008000">'variableCategories'</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'version1Table'</span>: <span style="color: #008000; text-decoration-color: #008000">'Sample'</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'version1Variable'</span>: <span style="color: #008000; text-decoration-color: #008000">'Collection'</span>,
@@ -330,8 +338,6 @@ seperated by a semi-colon.</p>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   </span><span style="font-weight: bold">}</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   </span><span style="font-weight: bold">{</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partID'</span>: <span style="color: #008000; text-decoration-color: #008000">'flowPr'</span>,
-<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partType'</span>: <span style="color: #008000; text-decoration-color: #008000">'category'</span>,
-<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'catSetID'</span>: <span style="color: #008000; text-decoration-color: #008000">'collectCat'</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'version1Location'</span>: <span style="color: #008000; text-decoration-color: #008000">'variableCategories'</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'version1Table'</span>: <span style="color: #008000; text-decoration-color: #008000">'Sample'</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'version1Variable'</span>: <span style="color: #008000; text-decoration-color: #008000">'Collection'</span>,
@@ -345,7 +351,7 @@ seperated by a semi-colon.</p>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'meta'</span>: <span style="font-weight: bold">[</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="font-weight: bold">{</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partID'</span>: <span style="color: #008000; text-decoration-color: #008000">'samples'</span>,
-<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partType'</span>: <span style="color: #008000; text-decoration-color: #008000">'table'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partType'</span>: <span style="color: #008000; text-decoration-color: #008000">'tables'</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'version1Location'</span>: <span style="color: #008000; text-decoration-color: #008000">'tables'</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'version1Table'</span>: <span style="color: #008000; text-decoration-color: #008000">'Sample'</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="font-weight: bold">}</span>
@@ -370,7 +376,6 @@ seperated by a semi-colon.</p>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'meta'</span>: <span style="font-weight: bold">[</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   </span><span style="font-weight: bold">{</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partID'</span>: <span style="color: #008000; text-decoration-color: #008000">'siteTypeID'</span>,
-<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'catSetID'</span>: <span style="color: #008000; text-decoration-color: #008000">'siteTypeCatSet'</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'dataType'</span>: <span style="color: #008000; text-decoration-color: #008000">'categorical'</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'version1Location'</span>: <span style="color: #008000; text-decoration-color: #008000">'variables'</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'version1Table'</span>: <span style="color: #008000; text-decoration-color: #008000">'Site'</span>,
@@ -378,7 +383,6 @@ seperated by a semi-colon.</p>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   </span><span style="font-weight: bold">}</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   </span><span style="font-weight: bold">{</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partID'</span>: <span style="color: #008000; text-decoration-color: #008000">'wwtpMuC'</span>,
-<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partType'</span>: <span style="color: #008000; text-decoration-color: #008000">'category'</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'version1Category'</span>: <span style="color: #008000; text-decoration-color: #008000">'wwtpMuC'</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'version1Location'</span>: <span style="color: #008000; text-decoration-color: #008000">'variableCategories'</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'version1Table'</span>: <span style="color: #008000; text-decoration-color: #008000">'Site'</span>,
@@ -386,7 +390,6 @@ seperated by a semi-colon.</p>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   </span><span style="font-weight: bold">}</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   </span><span style="font-weight: bold">{</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partID'</span>: <span style="color: #008000; text-decoration-color: #008000">'wwtpMuS'</span>,
-<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partType'</span>: <span style="color: #008000; text-decoration-color: #008000">'category'</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'version1Category'</span>: <span style="color: #008000; text-decoration-color: #008000">'wwtpMuS'</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'version1Location'</span>: <span style="color: #008000; text-decoration-color: #008000">'variableCategories'</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'version1Table'</span>: <span style="color: #008000; text-decoration-color: #008000">'Site'</span>,
@@ -394,7 +397,6 @@ seperated by a semi-colon.</p>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   </span><span style="font-weight: bold">}</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   </span><span style="font-weight: bold">{</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partID'</span>: <span style="color: #008000; text-decoration-color: #008000">'someOldCat'</span>,
-<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partType'</span>: <span style="color: #008000; text-decoration-color: #008000">'category'</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'version1Category'</span>: <span style="color: #008000; text-decoration-color: #008000">'someOldCat1'</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'version1Location'</span>: <span style="color: #008000; text-decoration-color: #008000">'variableCategories'</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'version1Table'</span>: <span style="color: #008000; text-decoration-color: #008000">'Site'</span>,
@@ -408,7 +410,7 @@ seperated by a semi-colon.</p>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'meta'</span>: <span style="font-weight: bold">[</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="font-weight: bold">{</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partID'</span>: <span style="color: #008000; text-decoration-color: #008000">'sites'</span>,
-<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partType'</span>: <span style="color: #008000; text-decoration-color: #008000">'table'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partType'</span>: <span style="color: #008000; text-decoration-color: #008000">'tables'</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'version1Location'</span>: <span style="color: #008000; text-decoration-color: #008000">'tables'</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'version1Table'</span>: <span style="color: #008000; text-decoration-color: #008000">'Site'</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="font-weight: bold">}</span>
@@ -439,7 +441,6 @@ seperated by a semi-colon.</p>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   </span><span style="font-weight: bold">}</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   </span><span style="font-weight: bold">{</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partID'</span>: <span style="color: #008000; text-decoration-color: #008000">'cod'</span>,
-<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partType'</span>: <span style="color: #008000; text-decoration-color: #008000">'category'</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'version1Category'</span>: <span style="color: #008000; text-decoration-color: #008000">'wqCOD; wwCOD'</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'version1Location'</span>: <span style="color: #008000; text-decoration-color: #008000">'variableCategories'</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'version1Table'</span>: <span style="color: #008000; text-decoration-color: #008000">'WWMeasure; SiteMeasure'</span>,
@@ -453,7 +454,7 @@ seperated by a semi-colon.</p>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'meta'</span>: <span style="font-weight: bold">[</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="font-weight: bold">{</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partID'</span>: <span style="color: #008000; text-decoration-color: #008000">'measures'</span>,
-<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partType'</span>: <span style="color: #008000; text-decoration-color: #008000">'table'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partType'</span>: <span style="color: #008000; text-decoration-color: #008000">'tables'</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'version1Location'</span>: <span style="color: #008000; text-decoration-color: #008000">'tables'</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'version1Table'</span>: <span style="color: #008000; text-decoration-color: #008000">'WWMeasure'</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="font-weight: bold">}</span>

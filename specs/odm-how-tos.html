@@ -39,19 +39,19 @@
 <p>This file specifies methods for navigating the ODM data dictionary that can be referenced by different specification files in this repo.</p>
 <section id="how-to-get-the-names-of-tables-that-are-part-of-the-odm">
 <h2>How to get the names of tables that are part of the ODM<a class="headerlink" href="#how-to-get-the-names-of-tables-that-are-part-of-the-odm" title="Permalink to this heading">¶</a></h2>
-<p>We can use the <code class="docutils literal notranslate"><span class="pre">partID</span></code> and <code class="docutils literal notranslate"><span class="pre">partType</span></code> columns for this. Any part ID whose <code class="docutils literal notranslate"><span class="pre">partType</span></code> is table is considered to be a table. For example in the following dictionary,</p>
+<p>We can use the <code class="docutils literal notranslate"><span class="pre">partID</span></code> and <code class="docutils literal notranslate"><span class="pre">partType</span></code> columns for this. Any part ID whose <code class="docutils literal notranslate"><span class="pre">partType</span></code> is <code class="docutils literal notranslate"><span class="pre">tables</span></code> is considered to be a table. For example in the following dictionary,</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">[</span>
     <span class="p">{</span>
         <span class="s2">&quot;partID&quot;</span><span class="p">:</span> <span class="s2">&quot;addresses&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;partType&quot;</span><span class="p">:</span> <span class="s2">&quot;table&quot;</span>
+        <span class="s2">&quot;partType&quot;</span><span class="p">:</span> <span class="s2">&quot;tables&quot;</span>
     <span class="p">},</span>
     <span class="p">{</span>
         <span class="s2">&quot;partID&quot;</span><span class="p">:</span> <span class="s2">&quot;measures&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;partType&quot;</span><span class="p">:</span> <span class="s2">&quot;table&quot;</span>
+        <span class="s2">&quot;partType&quot;</span><span class="p">:</span> <span class="s2">&quot;tables&quot;</span>
     <span class="p">},</span>
     <span class="p">{</span>
         <span class="s2">&quot;partID&quot;</span><span class="p">:</span> <span class="s2">&quot;addId&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;partType&quot;</span><span class="p">:</span> <span class="s2">&quot;attribute&quot;</span>
+        <span class="s2">&quot;partType&quot;</span><span class="p">:</span> <span class="s2">&quot;attributes&quot;</span>
     <span class="p">}</span>
 <span class="p">]</span>
 </pre></div>
@@ -64,38 +64,38 @@
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">[</span>
     <span class="p">{</span>
         <span class="s2">&quot;partID&quot;</span><span class="p">:</span> <span class="s2">&quot;addresses&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;partType&quot;</span><span class="p">:</span> <span class="s2">&quot;table&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;addresses: &quot;</span><span class="n">NA</span><span class="s2">&quot;,</span>
+        <span class="s2">&quot;partType&quot;</span><span class="p">:</span> <span class="s2">&quot;tables&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;addresses&quot;</span><span class="p">:</span> <span class="s2">&quot;NA&quot;</span><span class="p">,</span>
         <span class="s2">&quot;contacts&quot;</span><span class="p">:</span> <span class="s2">&quot;NA&quot;</span>
     <span class="p">},</span>
     <span class="p">{</span>
         <span class="s2">&quot;partID&quot;</span><span class="p">:</span> <span class="s2">&quot;addId&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;partType&quot;</span><span class="p">:</span> <span class="s2">&quot;attribute&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;addresses: &quot;</span><span class="n">pK</span><span class="s2">&quot;,</span>
+        <span class="s2">&quot;partType&quot;</span><span class="p">:</span> <span class="s2">&quot;attributes&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;addresses&quot;</span><span class="p">:</span> <span class="s2">&quot;pK&quot;</span><span class="p">,</span>
         <span class="s2">&quot;contacts&quot;</span><span class="p">:</span> <span class="s2">&quot;NA&quot;</span>
     <span class="p">},</span>
     <span class="p">{</span>
-        <span class="s2">&quot;partID&quot;</span><span class="p">:</span> <span class="s2">&quot;addId&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;partType&quot;</span><span class="p">:</span> <span class="s2">&quot;attribute&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;addresses: &quot;</span><span class="n">addL1</span><span class="s2">&quot;,</span>
+        <span class="s2">&quot;partID&quot;</span><span class="p">:</span> <span class="s2">&quot;addL1&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;partType&quot;</span><span class="p">:</span> <span class="s2">&quot;attributes&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;addresses&quot;</span><span class="p">:</span> <span class="s2">&quot;addL1&quot;</span><span class="p">,</span>
         <span class="s2">&quot;contacts&quot;</span><span class="p">:</span> <span class="s2">&quot;NA&quot;</span>
     <span class="p">},</span>
     <span class="p">{</span>
         <span class="s2">&quot;partID&quot;</span><span class="p">:</span> <span class="s2">&quot;contacts&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;partType&quot;</span><span class="p">:</span> <span class="s2">&quot;table&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;addresses: &quot;</span><span class="n">addL1</span><span class="s2">&quot;,</span>
+        <span class="s2">&quot;partType&quot;</span><span class="p">:</span> <span class="s2">&quot;tables&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;addresses&quot;</span><span class="p">:</span> <span class="s2">&quot;addL1&quot;</span><span class="p">,</span>
         <span class="s2">&quot;contacts&quot;</span><span class="p">:</span> <span class="s2">&quot;NA&quot;</span>
     <span class="p">},</span>
     <span class="p">{</span>
         <span class="s2">&quot;partID&quot;</span><span class="p">:</span> <span class="s2">&quot;contID&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;partType&quot;</span><span class="p">:</span> <span class="s2">&quot;attribute&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;addresses: &quot;</span><span class="n">NA</span><span class="s2">&quot;,</span>
-        <span class="s2">&quot;contacts: &quot;</span><span class="n">pK</span><span class="s2">&quot;</span>
+        <span class="s2">&quot;partType&quot;</span><span class="p">:</span> <span class="s2">&quot;attributes&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;addresses&quot;</span><span class="p">:</span> <span class="s2">&quot;NA&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;contacts&quot;</span><span class="p">:</span> <span class="s2">&quot;pK&quot;</span>
     <span class="p">},</span>
 <span class="p">]</span>
 </pre></div>
 </div>
-<p>The tables are <code class="docutils literal notranslate"><span class="pre">addresses</span></code> and <code class="docutils literal notranslate"><span class="pre">contacts</span></code> and the <code class="docutils literal notranslate"><span class="pre">addresses</span></code> and <code class="docutils literal notranslate"><span class="pre">contacts</span></code> give information on which parts are their columns. Here, <code class="docutils literal notranslate"><span class="pre">addId</span></code> and <code class="docutils literal notranslate"><span class="pre">addL1</span></code> are columns in the addresses table and <code class="docutils literal notranslate"><span class="pre">contID</span></code> is a column in the contacts table. A part is a column in a table if it does not have a value of <code class="docutils literal notranslate"><span class="pre">NA</span></code> or <code class="docutils literal notranslate"><span class="pre">input</span></code> in the table column. In addition, the table column has additional possible values to describe the role a column plays in the table. All the possible values are,</p>
+<p>The tables are <code class="docutils literal notranslate"><span class="pre">addresses</span></code> and <code class="docutils literal notranslate"><span class="pre">contacts</span></code> and the <code class="docutils literal notranslate"><span class="pre">addresses</span></code> and <code class="docutils literal notranslate"><span class="pre">contacts</span></code> columns give information on which parts are their columns. Here, <code class="docutils literal notranslate"><span class="pre">addId</span></code> and <code class="docutils literal notranslate"><span class="pre">addL1</span></code> are columns in the addresses table and <code class="docutils literal notranslate"><span class="pre">contID</span></code> is a column in the contacts table. A part is a column in a table if it does not have a value of <code class="docutils literal notranslate"><span class="pre">NA</span></code> or <code class="docutils literal notranslate"><span class="pre">input</span></code> in the table column. In addition, the table column has additional possible values to describe the role a column plays in the table. All the possible values are,</p>
 <ul class="simple">
 <li><p><strong>pK</strong>: The column is the primary key for the table</p></li>
 <li><p><strong>fK</strong> The column is the foreign referencing a row in another table</p></li>

@@ -93,11 +93,11 @@ wrong and where. The message-field has a human-readable summary.</p>
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;- &quot;</span> <span class="o">+</span> <span class="n">e</span><span class="p">[</span><span class="s2">&quot;message&quot;</span><span class="p">])</span>
 </pre></div>
 </div>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>- Missing mandatory column collDT in table samples in row number 1
-- Missing mandatory column collNumPer in table samples in row number 1
-- Value asd in row 1 in column collPer in table samples has type string but should be of type float or coercable into a float
-- Missing mandatory column collType in table samples in row number 1
-- Missing mandatory column sampleID in table samples in row number 1
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>- missing_mandatory_column rule violated in table samples, column collDT, row 1: Missing mandatory column collDT
+- missing_mandatory_column rule violated in table samples, column collNumPer, row 1: Missing mandatory column collNumPer
+- invalid_type rule violated in table samples, column collPer, row 1: Value &quot;asd&quot; has type string but should be of type float or coercable into a float
+- missing_mandatory_column rule violated in table samples, column collType, row 1: Missing mandatory column collType
+- missing_mandatory_column rule violated in table samples, column sampleID, row 1: Missing mandatory column sampleID
 </pre></div>
 </div>
 <p>The error message starts with the name of the rule that has been broken,
@@ -125,9 +125,9 @@ not specified.</p>
 <span class="nb">print</span><span class="p">(</span><span class="n">report</span><span class="o">.</span><span class="n">data_version</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>0.3.0
-2.0.0-rc.3.9.1
-2.0.0-rc.3.9.1
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>0.4.0
+2.0.0
+2.0.0
 </pre></div>
 </div>
 </section>
@@ -140,7 +140,7 @@ compatible with.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">version</span> <span class="o">=</span> <span class="n">ODM_VERSION_STR</span>
 <span class="n">parts_file</span> <span class="o">=</span> <span class="n">join</span><span class="p">(</span><span class="n">ASSET_DIR</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;dictionary/v</span><span class="si">{</span><span class="n">version</span><span class="si">}</span><span class="s2">/parts.csv&quot;</span><span class="p">)</span>
 <span class="n">parts</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">import_dataset</span><span class="p">(</span><span class="n">parts_file</span><span class="p">)</span>
-<span class="n">schema</span> <span class="o">=</span> <span class="n">generate_validation_schema</span><span class="p">(</span><span class="n">parts</span><span class="p">,</span> <span class="n">version</span><span class="p">)</span>
+<span class="n">schema</span> <span class="o">=</span> <span class="n">generate_validation_schema</span><span class="p">(</span><span class="n">parts</span><span class="p">,</span> <span class="n">schema_version</span><span class="o">=</span><span class="n">version</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>The resulting schema can also be exported to a YAML file for future use.</p>

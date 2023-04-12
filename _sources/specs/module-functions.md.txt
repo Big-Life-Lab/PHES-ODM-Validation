@@ -7,45 +7,8 @@ Validates an ODM dataset.
 
 ### Arguments
 
-1.  `data`: The ODM data to be validated.
-
-    - `type`: A Python dictionary whose keys are the names of the tables
-      as contained in the ODM data dictionary and values is a list
-      containing the table rows.
-
-      Example
-
-      ``` python
-      {
-          "addresses": [
-              {
-                  "addressID": "WastewaterSiteOttawa",
-                  "addL1": "123 Laurier Avenue",
-                  "addL2": "",
-                  "city": "Ottawa",
-                  "country": "Canada",
-                  "datasetID": "",
-                  "stateProvReg": "Ontario",
-                  "zipCode": "KE2 TYU"
-              }
-          ],
-          "contacts": [
-              {
-                  "contactID": "OttawaWWContact",
-                  "organizationID": "WWOttawa",
-                  "email": "ww@ottawa.ca",
-                  "phone": "6137458999",
-                  "firstName": "John",
-                  "lastName": "Doe",
-                  "role": "Technician",
-                  "notes": ""
-              }
-          ]
-      }
-      ```
-
-2.  `validation_rules`: The rules to validate the data against. This is
-    a dictionary that contains a
+1.  `schema`: The rules to validate the data against. This is a
+    dictionary that contains a
     [cerberus](https://docs.python-cerberus.org/en/stable/) schema
     object, as well as the odm-version it’s based on. The cerberus
     schema object should ideally be generated using the
@@ -91,6 +54,59 @@ Validates an ODM dataset.
       }
       ```
 
+2.  `data`: The ODM data to be validated.
+
+    - `type`: A Python dictionary whose keys are the names of the tables
+      as contained in the ODM data dictionary and values is a list
+      containing the table rows.
+
+      Example
+
+      ``` python
+      {
+          "addresses": [
+              {
+                  "addressID": "WastewaterSiteOttawa",
+                  "addL1": "123 Laurier Avenue",
+                  "addL2": "",
+                  "city": "Ottawa",
+                  "country": "Canada",
+                  "datasetID": "",
+                  "stateProvReg": "Ontario",
+                  "zipCode": "KE2 TYU"
+              }
+          ],
+          "contacts": [
+              {
+                  "contactID": "OttawaWWContact",
+                  "organizationID": "WWOttawa",
+                  "email": "ww@ottawa.ca",
+                  "phone": "6137458999",
+                  "firstName": "John",
+                  "lastName": "Doe",
+                  "role": "Technician",
+                  "notes": ""
+              }
+          ]
+      }
+      ```
+
+3.  `data_version`: The ODM version of the `data`.
+
+    - `type`: string.
+
+4.  `rule_blacklist`: A list of rule ids to explicitly disable.
+
+    - `type`: A Python list of strings.
+
+      Example:
+
+      `[rules.invalid_category.__name__, rules.invalid_type.__name__]`
+
+      or simply
+
+      `['invalid_category', 'invalid_type']`
+
 ### Return
 
 Returns a dictionary with the found errors and warnings.
@@ -99,10 +115,10 @@ All errors and warnings for each validation rule are documented in the
 [specification for each validation rule](../validation-rules/).
 
 - type: A Python dictionary consisting of the following fields
-  - `odmDataVersion`: string consisting of the version of the ODM data
-  - `validationSchemaVersion`: string consisting of the version of the
-    validation schema used
-  - `validationPackageVersion`: string consisting of the version of the
+  - `data_version`: string consisting of the version of the ODM data
+  - `schema_version`: string consisting of the version of the validation
+    schema used
+  - `package_version`: string consisting of the version of the
     validation package used
   - `errors`: A list of Python dictionaries describing each error. For
     more information refer to the files in the
@@ -116,12 +132,13 @@ with the `validate_data` function.
 
 ### Arguments
 
-1.  `odm_data_dictionary`: The ODM data dictionary [excel
-    sheet](https://github.com/Big-Life-Lab/PHES-ODM/tree/V2-first-draft/template)
+1.  `parts`: The ODM data dictionary [excel
+    sheet](https://github.com/Big-Life-Lab/PHES-ODM/tree/V2.0.0-rc.3/dictionary-tables)
+    ‘parts’.
 
     - `type`: A dictionary whose keys are the sheet names and values is
-      a list containing the sheet rows. Currently only the parts sheet
-      is required.
+      a list containing the sheet rows. Currently the parts and sets
+      sheet are required.
 
       Example
 
@@ -146,12 +163,38 @@ with the `validate_data` function.
       }
       ```
 
-2.  `version`: The version of the ODM dictionary the cerberus schema is
-    for
+2.  `sets`: The ODM data dictionary [excel
+    sheet](https://github.com/Big-Life-Lab/PHES-ODM/tree/V2.0.0-rc.3/dictionary-tables)
+    ‘sets’.
 
-    - `type`: A string representing the version of the ODM to use
+    - `type`: A dictionary whose keys are the sheet names and values is
+      a list containing the sheet rows. Currently the parts and sets
+      sheet are required.
 
-3.  `schema_additions`: Optional argument which allows the user to
+      Example
+
+      ``` python
+      {
+          "sets": [
+              {
+                  "setID": "collectCat",
+                  "partID": "flowPr"
+              },
+              {
+
+                  "setID": "collectCat",
+                  "partID": "comp8h"
+              }
+          ]
+      }
+      ```
+
+3.  `schema_version`: Optional version of the ODM dictionary the
+    cerberus schema is for.
+
+    - `type`: A string representing the version of the ODM to use.
+
+4.  `schema_additions`: Optional argument which allows the user to
     update the cerberus schema with additional validations
 
     - `type`: A dictionary containing the updates. The shape is shown
@@ -164,7 +207,7 @@ with the `validate_data` function.
             # The name of the column whose validation rules to update
             "<column_name>": {
                 # Adds or updates the allowed rule for this column
-                "[allowed]": string[]
+                "allowed": string[]
             }
         }
     }
@@ -237,7 +280,7 @@ used.
 The validation metadata for a part should only be used if it was active
 for the version in the `version` argument.
 
-Example of two parts from dictionary version 2.
+Example of an `odm_data_dictionary` parameter is shown below,
 
 ``` python
 {
@@ -245,7 +288,7 @@ Example of two parts from dictionary version 2.
         {
             "partID": "addresses",
             "label": "Address table",
-            "partType": "table",
+            "partType": "tables",
             "addresses": "NA",
             "addressesRequired": "NA",
             "status": "active",
@@ -256,7 +299,7 @@ Example of two parts from dictionary version 2.
         {
             "partID": "comp3",
             "label": "Composite grab sample of 3",
-            "partType": "category",
+            "partType": "categories",
             "addresses": "NA",
             "addressesRequired": "NA",
             "status": "depreciated",
@@ -274,6 +317,62 @@ Example of two parts from dictionary version 2.
 - The `comp3` part was depreciated in version 2 (status = ‘depreciated’
   and lastUpdated = ‘2’) and should only be included in version 1
   (firstReleased = ‘1’)
+
+For the sets sheet, the versioning fields (`firstReleased` and
+`lastUpdated`) define the dictionary version when a part was added to a
+set. These values can be different from the versioning fields in the
+parts sheet. For example, consider the following ODM snippet,
+
+``` python
+{
+    "parts": [
+        {
+            "partID": "samples",
+            "partType": "tables",
+            "samples": "NA",
+            "firstReleased": "1",
+            "lastUpdated": "2"
+        }
+        {
+            "partID": "collType",
+            "partType": "attributes",
+            "samples": "header",
+            "mmaSet": "collectSet",
+            "firstReleased": "1",
+            "lastUpdated": "2"
+        },
+        {
+            "partID": "comp8r",
+            "partType": "measures",
+            "samples": "header",
+            "mmaSet": "NA",
+            "firstReleased": "1",
+            "lastUpdated": "2"
+        }
+    ],
+    "sets": [
+        {
+            "setID": "collectSet",
+            "partID": "comp8r",
+            "firstReleased": "2",
+            "lastUpdated": "2"
+        }
+    ]
+}
+```
+
+It defines,
+
+- A table called `samples`
+- A column in the `samples` table called `collType`
+- A part called `comp8r` which is a measure and which is a category in
+  the `collType` column
+
+However, notice that `comp8r` was only added as a category for the
+`collType` column in version 2. This can be seen from its entry in the
+sets sheet where it was `firstReleased` in version 2. For version 1,
+although a part was defined for it, it was not a category for `collType`
+only from version 2 onwards.
 
 Version 2 of the dictionary renamed certain part pieces, for example,
 the `WWMeasures` table was renamed to `measures` in version 2. To be
@@ -295,16 +394,21 @@ parts =
 <pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="font-weight: bold">[</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="font-weight: bold">{</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="color: #008000; text-decoration-color: #008000">'partID'</span>: <span style="color: #008000; text-decoration-color: #008000">'sites'</span>,
-<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="color: #008000; text-decoration-color: #008000">'partType'</span>: <span style="color: #008000; text-decoration-color: #008000">'table'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="color: #008000; text-decoration-color: #008000">'partType'</span>: <span style="color: #008000; text-decoration-color: #008000">'tables'</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="color: #008000; text-decoration-color: #008000">'sites'</span>: <span style="color: #008000; text-decoration-color: #008000">'NA'</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="color: #008000; text-decoration-color: #008000">'sitesRequired'</span>: <span style="color: #008000; text-decoration-color: #008000">'NA'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="color: #008000; text-decoration-color: #008000">'version1Location'</span>: <span style="color: #008000; text-decoration-color: #008000">'tables'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="color: #008000; text-decoration-color: #008000">'version1Table'</span>: <span style="color: #008000; text-decoration-color: #008000">'Site'</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="color: #008000; text-decoration-color: #008000">'status'</span>: <span style="color: #008000; text-decoration-color: #008000">'active'</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="font-weight: bold">}</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="font-weight: bold">{</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="color: #008000; text-decoration-color: #008000">'partID'</span>: <span style="color: #008000; text-decoration-color: #008000">'siteID'</span>,
-<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="color: #008000; text-decoration-color: #008000">'partType'</span>: <span style="color: #008000; text-decoration-color: #008000">'attribute'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="color: #008000; text-decoration-color: #008000">'partType'</span>: <span style="color: #008000; text-decoration-color: #008000">'attributes'</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="color: #008000; text-decoration-color: #008000">'sites'</span>: <span style="color: #008000; text-decoration-color: #008000">'pK'</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="color: #008000; text-decoration-color: #008000">'sitesRequired'</span>: <span style="color: #008000; text-decoration-color: #008000">'mandatory'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="color: #008000; text-decoration-color: #008000">'version1Location'</span>: <span style="color: #008000; text-decoration-color: #008000">'variables'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="color: #008000; text-decoration-color: #008000">'version1Table'</span>: <span style="color: #008000; text-decoration-color: #008000">'Site'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="color: #008000; text-decoration-color: #008000">'version1Variable'</span>: <span style="color: #008000; text-decoration-color: #008000">'SiteID'</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="color: #008000; text-decoration-color: #008000">'status'</span>: <span style="color: #008000; text-decoration-color: #008000">'active'</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="font-weight: bold">}</span>
 <span style="font-weight: bold">]</span>
@@ -315,8 +419,8 @@ version = “2.0.0”
 schema_additions =
 
 <pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="font-weight: bold">{</span>
-<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="color: #008000; text-decoration-color: #008000">'sites'</span>: <span style="font-weight: bold">{</span>
-<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="color: #008000; text-decoration-color: #008000">'siteID'</span>: <span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="color: #008000; text-decoration-color: #008000">'Site'</span>: <span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="color: #008000; text-decoration-color: #008000">'SiteID'</span>: <span style="font-weight: bold">{</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'allowed'</span>: <span style="font-weight: bold">[</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'Ottawa Site'</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'Montreal Site'</span>
@@ -329,14 +433,14 @@ schema_additions =
 The corresponding validation schema should be,
 
 <pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="font-weight: bold">{</span>
-<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="color: #008000; text-decoration-color: #008000">'schemaVersion'</span>: <span style="color: #008000; text-decoration-color: #008000">'2.0.0'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="color: #008000; text-decoration-color: #008000">'schemaVersion'</span>: <span style="color: #008000; text-decoration-color: #008000">'1.0.0'</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="color: #008000; text-decoration-color: #008000">'schema'</span>: <span style="font-weight: bold">{</span>
-<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="color: #008000; text-decoration-color: #008000">'sites'</span>: <span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="color: #008000; text-decoration-color: #008000">'Site'</span>: <span style="font-weight: bold">{</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'type'</span>: <span style="color: #008000; text-decoration-color: #008000">'list'</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'schema'</span>: <span style="font-weight: bold">{</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'type'</span>: <span style="color: #008000; text-decoration-color: #008000">'dict'</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'schema'</span>: <span style="font-weight: bold">{</span>
-<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'siteID'</span>: <span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'SiteID'</span>: <span style="font-weight: bold">{</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'required'</span>: <span style="color: #00ff00; text-decoration-color: #00ff00; font-style: italic">True</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'allowed'</span>: <span style="font-weight: bold">[</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'Ottawa Site'</span>,
@@ -349,7 +453,10 @@ The corresponding validation schema should be,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   </span><span style="font-weight: bold">{</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partID'</span>: <span style="color: #008000; text-decoration-color: #008000">'siteID'</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'sitesRequired'</span>: <span style="color: #008000; text-decoration-color: #008000">'mandatory'</span>,
-<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'sites'</span>: <span style="color: #008000; text-decoration-color: #008000">'pK'</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'sites'</span>: <span style="color: #008000; text-decoration-color: #008000">'pK'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'version1Location'</span>: <span style="color: #008000; text-decoration-color: #008000">'variables'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'version1Table'</span>: <span style="color: #008000; text-decoration-color: #008000">'Site'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'version1Variable'</span>: <span style="color: #008000; text-decoration-color: #008000">'SiteID'</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   </span><span style="font-weight: bold">}</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   </span><span style="font-weight: bold">]</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   </span><span style="font-weight: bold">}</span>
@@ -359,7 +466,9 @@ The corresponding validation schema should be,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'meta'</span>: <span style="font-weight: bold">[</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="font-weight: bold">{</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partID'</span>: <span style="color: #008000; text-decoration-color: #008000">'sites'</span>,
-<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partType'</span>: <span style="color: #008000; text-decoration-color: #008000">'table'</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partType'</span>: <span style="color: #008000; text-decoration-color: #008000">'tables'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'version1Location'</span>: <span style="color: #008000; text-decoration-color: #008000">'tables'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'version1Table'</span>: <span style="color: #008000; text-decoration-color: #008000">'Site'</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="font-weight: bold">}</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="font-weight: bold">]</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="font-weight: bold">}</span>
@@ -377,39 +486,36 @@ parts =
 <pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="font-weight: bold">[</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="font-weight: bold">{</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="color: #008000; text-decoration-color: #008000">'partID'</span>: <span style="color: #008000; text-decoration-color: #008000">'samples'</span>,
-<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="color: #008000; text-decoration-color: #008000">'partType'</span>: <span style="color: #008000; text-decoration-color: #008000">'table'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="color: #008000; text-decoration-color: #008000">'partType'</span>: <span style="color: #008000; text-decoration-color: #008000">'tables'</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="color: #008000; text-decoration-color: #008000">'status'</span>: <span style="color: #008000; text-decoration-color: #008000">'active'</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="font-weight: bold">}</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="font-weight: bold">{</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="color: #008000; text-decoration-color: #008000">'partID'</span>: <span style="color: #008000; text-decoration-color: #008000">'collection'</span>,
-<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="color: #008000; text-decoration-color: #008000">'partType'</span>: <span style="color: #008000; text-decoration-color: #008000">'attribute'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="color: #008000; text-decoration-color: #008000">'partType'</span>: <span style="color: #008000; text-decoration-color: #008000">'attributes'</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="color: #008000; text-decoration-color: #008000">'samples'</span>: <span style="color: #008000; text-decoration-color: #008000">'header'</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="color: #008000; text-decoration-color: #008000">'dataType'</span>: <span style="color: #008000; text-decoration-color: #008000">'categorical'</span>,
-<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="color: #008000; text-decoration-color: #008000">'catSetID'</span>: <span style="color: #008000; text-decoration-color: #008000">'collectCat'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="color: #008000; text-decoration-color: #008000">'mmaSet'</span>: <span style="color: #008000; text-decoration-color: #008000">'collectCat'</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="color: #008000; text-decoration-color: #008000">'status'</span>: <span style="color: #008000; text-decoration-color: #008000">'active'</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="font-weight: bold">}</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="font-weight: bold">{</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="color: #008000; text-decoration-color: #008000">'partID'</span>: <span style="color: #008000; text-decoration-color: #008000">'comp3h'</span>,
-<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="color: #008000; text-decoration-color: #008000">'partType'</span>: <span style="color: #008000; text-decoration-color: #008000">'category'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="color: #008000; text-decoration-color: #008000">'partType'</span>: <span style="color: #008000; text-decoration-color: #008000">'categories'</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="color: #008000; text-decoration-color: #008000">'samples'</span>: <span style="color: #008000; text-decoration-color: #008000">'input'</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="color: #008000; text-decoration-color: #008000">'dataType'</span>: <span style="color: #008000; text-decoration-color: #008000">'varchar'</span>,
-<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="color: #008000; text-decoration-color: #008000">'catSetID'</span>: <span style="color: #008000; text-decoration-color: #008000">'collectCat'</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="color: #008000; text-decoration-color: #008000">'status'</span>: <span style="color: #008000; text-decoration-color: #008000">'active'</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="font-weight: bold">}</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="font-weight: bold">{</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="color: #008000; text-decoration-color: #008000">'partID'</span>: <span style="color: #008000; text-decoration-color: #008000">'comp8h'</span>,
-<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="color: #008000; text-decoration-color: #008000">'partType'</span>: <span style="color: #008000; text-decoration-color: #008000">'category'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="color: #008000; text-decoration-color: #008000">'partType'</span>: <span style="color: #008000; text-decoration-color: #008000">'categories'</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="color: #008000; text-decoration-color: #008000">'samples'</span>: <span style="color: #008000; text-decoration-color: #008000">'input'</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="color: #008000; text-decoration-color: #008000">'dataType'</span>: <span style="color: #008000; text-decoration-color: #008000">'varchar'</span>,
-<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="color: #008000; text-decoration-color: #008000">'catSetID'</span>: <span style="color: #008000; text-decoration-color: #008000">'collectCat'</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="color: #008000; text-decoration-color: #008000">'status'</span>: <span style="color: #008000; text-decoration-color: #008000">'active'</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="font-weight: bold">}</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="font-weight: bold">{</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="color: #008000; text-decoration-color: #008000">'partID'</span>: <span style="color: #008000; text-decoration-color: #008000">'flowPr'</span>,
-<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="color: #008000; text-decoration-color: #008000">'partType'</span>: <span style="color: #008000; text-decoration-color: #008000">'category'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="color: #008000; text-decoration-color: #008000">'partType'</span>: <span style="color: #008000; text-decoration-color: #008000">'categories'</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="color: #008000; text-decoration-color: #008000">'samples'</span>: <span style="color: #008000; text-decoration-color: #008000">'input'</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="color: #008000; text-decoration-color: #008000">'dataType'</span>: <span style="color: #008000; text-decoration-color: #008000">'varchar'</span>,
-<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="color: #008000; text-decoration-color: #008000">'catSetID'</span>: <span style="color: #008000; text-decoration-color: #008000">'collectCat'</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="color: #008000; text-decoration-color: #008000">'status'</span>: <span style="color: #008000; text-decoration-color: #008000">'active'</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="font-weight: bold">}</span>
 <span style="font-weight: bold">]</span>
@@ -457,22 +563,19 @@ The corresponding validation schema would be,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partID'</span>: <span style="color: #008000; text-decoration-color: #008000">'collection'</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'samples'</span>: <span style="color: #008000; text-decoration-color: #008000">'header'</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'dataType'</span>: <span style="color: #008000; text-decoration-color: #008000">'categorical'</span>,
-<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'catSetID'</span>: <span style="color: #008000; text-decoration-color: #008000">'collectCat'</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'mmaSet'</span>: <span style="color: #008000; text-decoration-color: #008000">'collectCat'</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   </span><span style="font-weight: bold">}</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   </span><span style="font-weight: bold">{</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partID'</span>: <span style="color: #008000; text-decoration-color: #008000">'comp3h'</span>,
-<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partType'</span>: <span style="color: #008000; text-decoration-color: #008000">'category'</span>,
-<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'catSetID'</span>: <span style="color: #008000; text-decoration-color: #008000">'collectCat'</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'setID'</span>: <span style="color: #008000; text-decoration-color: #008000">'collectCat'</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   </span><span style="font-weight: bold">}</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   </span><span style="font-weight: bold">{</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partID'</span>: <span style="color: #008000; text-decoration-color: #008000">'comp8h'</span>,
-<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partType'</span>: <span style="color: #008000; text-decoration-color: #008000">'category'</span>,
-<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'catSetID'</span>: <span style="color: #008000; text-decoration-color: #008000">'collectCat'</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'setID'</span>: <span style="color: #008000; text-decoration-color: #008000">'collectCat'</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   </span><span style="font-weight: bold">}</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   </span><span style="font-weight: bold">{</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partID'</span>: <span style="color: #008000; text-decoration-color: #008000">'flowPr'</span>,
-<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partType'</span>: <span style="color: #008000; text-decoration-color: #008000">'category'</span>,
-<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'catSetID'</span>: <span style="color: #008000; text-decoration-color: #008000">'collectCat'</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'setID'</span>: <span style="color: #008000; text-decoration-color: #008000">'collectCat'</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   </span><span style="font-weight: bold">}</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   </span><span style="font-weight: bold">]</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   </span><span style="font-weight: bold">}</span>
@@ -482,7 +585,7 @@ The corresponding validation schema would be,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'meta'</span>: <span style="font-weight: bold">[</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="font-weight: bold">{</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partID'</span>: <span style="color: #008000; text-decoration-color: #008000">'samples'</span>,
-<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partType'</span>: <span style="color: #008000; text-decoration-color: #008000">'table'</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partType'</span>: <span style="color: #008000; text-decoration-color: #008000">'tables'</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="font-weight: bold">}</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="font-weight: bold">]</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="font-weight: bold">}</span>

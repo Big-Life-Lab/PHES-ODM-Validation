@@ -42,45 +42,8 @@
 <section id="arguments">
 <h3>Arguments<a class="headerlink" href="#arguments" title="Permalink to this heading">¶</a></h3>
 <ol class="arabic">
-<li><p><code class="docutils literal notranslate"><span class="pre">data</span></code>: The ODM data to be validated.</p>
-<ul>
-<li><p><code class="docutils literal notranslate"><span class="pre">type</span></code>: A Python dictionary whose keys are the names of the tables
-as contained in the ODM data dictionary and values is a list
-containing the table rows.</p>
-<p>Example</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
-    <span class="s2">&quot;addresses&quot;</span><span class="p">:</span> <span class="p">[</span>
-        <span class="p">{</span>
-            <span class="s2">&quot;addressID&quot;</span><span class="p">:</span> <span class="s2">&quot;WastewaterSiteOttawa&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;addL1&quot;</span><span class="p">:</span> <span class="s2">&quot;123 Laurier Avenue&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;addL2&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;city&quot;</span><span class="p">:</span> <span class="s2">&quot;Ottawa&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;country&quot;</span><span class="p">:</span> <span class="s2">&quot;Canada&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;datasetID&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;stateProvReg&quot;</span><span class="p">:</span> <span class="s2">&quot;Ontario&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;zipCode&quot;</span><span class="p">:</span> <span class="s2">&quot;KE2 TYU&quot;</span>
-        <span class="p">}</span>
-    <span class="p">],</span>
-    <span class="s2">&quot;contacts&quot;</span><span class="p">:</span> <span class="p">[</span>
-        <span class="p">{</span>
-            <span class="s2">&quot;contactID&quot;</span><span class="p">:</span> <span class="s2">&quot;OttawaWWContact&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;organizationID&quot;</span><span class="p">:</span> <span class="s2">&quot;WWOttawa&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;email&quot;</span><span class="p">:</span> <span class="s2">&quot;ww@ottawa.ca&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;phone&quot;</span><span class="p">:</span> <span class="s2">&quot;6137458999&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;firstName&quot;</span><span class="p">:</span> <span class="s2">&quot;John&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;lastName&quot;</span><span class="p">:</span> <span class="s2">&quot;Doe&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;Technician&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;notes&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span>
-        <span class="p">}</span>
-    <span class="p">]</span>
-<span class="p">}</span>
-</pre></div>
-</div>
-</li>
-</ul>
-</li>
-<li><p><code class="docutils literal notranslate"><span class="pre">validation_rules</span></code>: The rules to validate the data against. This is
-a dictionary that contains a
+<li><p><code class="docutils literal notranslate"><span class="pre">schema</span></code>: The rules to validate the data against. This is a
+dictionary that contains a
 <a class="reference external" href="https://docs.python-cerberus.org/en/stable/">cerberus</a> schema
 object, as well as the odm-version it’s based on. The cerberus
 schema object should ideally be generated using the
@@ -124,6 +87,58 @@ schema</a></p>
 </li>
 </ul>
 </li>
+<li><p><code class="docutils literal notranslate"><span class="pre">data</span></code>: The ODM data to be validated.</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">type</span></code>: A Python dictionary whose keys are the names of the tables
+as contained in the ODM data dictionary and values is a list
+containing the table rows.</p>
+<p>Example</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s2">&quot;addresses&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;addressID&quot;</span><span class="p">:</span> <span class="s2">&quot;WastewaterSiteOttawa&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;addL1&quot;</span><span class="p">:</span> <span class="s2">&quot;123 Laurier Avenue&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;addL2&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;city&quot;</span><span class="p">:</span> <span class="s2">&quot;Ottawa&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;country&quot;</span><span class="p">:</span> <span class="s2">&quot;Canada&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;datasetID&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;stateProvReg&quot;</span><span class="p">:</span> <span class="s2">&quot;Ontario&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;zipCode&quot;</span><span class="p">:</span> <span class="s2">&quot;KE2 TYU&quot;</span>
+        <span class="p">}</span>
+    <span class="p">],</span>
+    <span class="s2">&quot;contacts&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;contactID&quot;</span><span class="p">:</span> <span class="s2">&quot;OttawaWWContact&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;organizationID&quot;</span><span class="p">:</span> <span class="s2">&quot;WWOttawa&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;email&quot;</span><span class="p">:</span> <span class="s2">&quot;ww@ottawa.ca&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;phone&quot;</span><span class="p">:</span> <span class="s2">&quot;6137458999&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;firstName&quot;</span><span class="p">:</span> <span class="s2">&quot;John&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;lastName&quot;</span><span class="p">:</span> <span class="s2">&quot;Doe&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;Technician&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;notes&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span>
+        <span class="p">}</span>
+    <span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">data_version</span></code>: The ODM version of the <code class="docutils literal notranslate"><span class="pre">data</span></code>.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">type</span></code>: string.</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">rule_blacklist</span></code>: A list of rule ids to explicitly disable.</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">type</span></code>: A Python list of strings.</p>
+<p>Example:</p>
+<p><code class="docutils literal notranslate"><span class="pre">[rules.invalid_category.__name__,</span> <span class="pre">rules.invalid_type.__name__]</span></code></p>
+<p>or simply</p>
+<p><code class="docutils literal notranslate"><span class="pre">['invalid_category',</span> <span class="pre">'invalid_type']</span></code></p>
+</li>
+</ul>
+</li>
 </ol>
 </section>
 <section id="return">
@@ -134,10 +149,10 @@ schema</a></p>
 <ul class="simple">
 <li><p>type: A Python dictionary consisting of the following fields</p>
 <ul>
-<li><p><code class="docutils literal notranslate"><span class="pre">odmDataVersion</span></code>: string consisting of the version of the ODM data</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">validationSchemaVersion</span></code>: string consisting of the version of the
-validation schema used</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">validationPackageVersion</span></code>: string consisting of the version of the
+<li><p><code class="docutils literal notranslate"><span class="pre">data_version</span></code>: string consisting of the version of the ODM data</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">schema_version</span></code>: string consisting of the version of the validation
+schema used</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">package_version</span></code>: string consisting of the version of the
 validation package used</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">errors</span></code>: A list of Python dictionaries describing each error. For
 more information refer to the files in the
@@ -155,12 +170,13 @@ with the <code class="docutils literal notranslate"><span class="pre">validate_d
 <section id="id1">
 <h3>Arguments<a class="headerlink" href="#id1" title="Permalink to this heading">¶</a></h3>
 <ol class="arabic">
-<li><p><code class="docutils literal notranslate"><span class="pre">odm_data_dictionary</span></code>: The ODM data dictionary <a class="reference external" href="https://github.com/Big-Life-Lab/PHES-ODM/tree/V2-first-draft/template">excel
-sheet</a></p>
+<li><p><code class="docutils literal notranslate"><span class="pre">parts</span></code>: The ODM data dictionary <a class="reference external" href="https://github.com/Big-Life-Lab/PHES-ODM/tree/V2.0.0-rc.3/dictionary-tables">excel
+sheet</a>
+‘parts’.</p>
 <ul>
 <li><p><code class="docutils literal notranslate"><span class="pre">type</span></code>: A dictionary whose keys are the sheet names and values is
-a list containing the sheet rows. Currently only the parts sheet
-is required.</p>
+a list containing the sheet rows. Currently the parts and sets
+sheet are required.</p>
 <p>Example</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
     <span class="s2">&quot;parts&quot;</span><span class="p">:</span> <span class="p">[</span>
@@ -185,10 +201,36 @@ is required.</p>
 </li>
 </ul>
 </li>
-<li><p><code class="docutils literal notranslate"><span class="pre">version</span></code>: The version of the ODM dictionary the cerberus schema is
-for</p>
+<li><p><code class="docutils literal notranslate"><span class="pre">sets</span></code>: The ODM data dictionary <a class="reference external" href="https://github.com/Big-Life-Lab/PHES-ODM/tree/V2.0.0-rc.3/dictionary-tables">excel
+sheet</a>
+‘sets’.</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">type</span></code>: A dictionary whose keys are the sheet names and values is
+a list containing the sheet rows. Currently the parts and sets
+sheet are required.</p>
+<p>Example</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s2">&quot;sets&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;setID&quot;</span><span class="p">:</span> <span class="s2">&quot;collectCat&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;partID&quot;</span><span class="p">:</span> <span class="s2">&quot;flowPr&quot;</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+
+            <span class="s2">&quot;setID&quot;</span><span class="p">:</span> <span class="s2">&quot;collectCat&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;partID&quot;</span><span class="p">:</span> <span class="s2">&quot;comp8h&quot;</span>
+        <span class="p">}</span>
+    <span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">schema_version</span></code>: Optional version of the ODM dictionary the
+cerberus schema is for.</p>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">type</span></code>: A string representing the version of the ODM to use</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">type</span></code>: A string representing the version of the ODM to use.</p></li>
 </ul>
 </li>
 <li><p><code class="docutils literal notranslate"><span class="pre">schema_additions</span></code>: Optional argument which allows the user to
@@ -203,7 +245,7 @@ below,</p></li>
         <span class="c1"># The name of the column whose validation rules to update</span>
         <span class="s2">&quot;&lt;column_name&gt;&quot;</span><span class="p">:</span> <span class="p">{</span>
             <span class="c1"># Adds or updates the allowed rule for this column</span>
-            <span class="s2">&quot;[allowed]&quot;</span><span class="p">:</span> <span class="n">string</span><span class="p">[]</span>
+            <span class="s2">&quot;allowed&quot;</span><span class="p">:</span> <span class="n">string</span><span class="p">[]</span>
         <span class="p">}</span>
     <span class="p">}</span>
 <span class="p">}</span>
@@ -275,13 +317,13 @@ version to another.</p></li>
 </ul>
 <p>The validation metadata for a part should only be used if it was active
 for the version in the <code class="docutils literal notranslate"><span class="pre">version</span></code> argument.</p>
-<p>Example of two parts from dictionary version 2.</p>
+<p>Example of an <code class="docutils literal notranslate"><span class="pre">odm_data_dictionary</span></code> parameter is shown below,</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
     <span class="s2">&quot;parts&quot;</span><span class="p">:</span> <span class="p">[</span>
         <span class="p">{</span>
             <span class="s2">&quot;partID&quot;</span><span class="p">:</span> <span class="s2">&quot;addresses&quot;</span><span class="p">,</span>
             <span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="s2">&quot;Address table&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;partType&quot;</span><span class="p">:</span> <span class="s2">&quot;table&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;partType&quot;</span><span class="p">:</span> <span class="s2">&quot;tables&quot;</span><span class="p">,</span>
             <span class="s2">&quot;addresses&quot;</span><span class="p">:</span> <span class="s2">&quot;NA&quot;</span><span class="p">,</span>
             <span class="s2">&quot;addressesRequired&quot;</span><span class="p">:</span> <span class="s2">&quot;NA&quot;</span><span class="p">,</span>
             <span class="s2">&quot;status&quot;</span><span class="p">:</span> <span class="s2">&quot;active&quot;</span><span class="p">,</span>
@@ -292,7 +334,7 @@ for the version in the <code class="docutils literal notranslate"><span class="p
         <span class="p">{</span>
             <span class="s2">&quot;partID&quot;</span><span class="p">:</span> <span class="s2">&quot;comp3&quot;</span><span class="p">,</span>
             <span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="s2">&quot;Composite grab sample of 3&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;partType&quot;</span><span class="p">:</span> <span class="s2">&quot;category&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;partType&quot;</span><span class="p">:</span> <span class="s2">&quot;categories&quot;</span><span class="p">,</span>
             <span class="s2">&quot;addresses&quot;</span><span class="p">:</span> <span class="s2">&quot;NA&quot;</span><span class="p">,</span>
             <span class="s2">&quot;addressesRequired&quot;</span><span class="p">:</span> <span class="s2">&quot;NA&quot;</span><span class="p">,</span>
             <span class="s2">&quot;status&quot;</span><span class="p">:</span> <span class="s2">&quot;depreciated&quot;</span><span class="p">,</span>
@@ -312,6 +354,59 @@ only be included in version 2 since it was first released
 and lastUpdated = ‘2’) and should only be included in version 1
 (firstReleased = ‘1’)</p></li>
 </ul>
+<p>For the sets sheet, the versioning fields (<code class="docutils literal notranslate"><span class="pre">firstReleased</span></code> and
+<code class="docutils literal notranslate"><span class="pre">lastUpdated</span></code>) define the dictionary version when a part was added to a
+set. These values can be different from the versioning fields in the
+parts sheet. For example, consider the following ODM snippet,</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s2">&quot;parts&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;partID&quot;</span><span class="p">:</span> <span class="s2">&quot;samples&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;partType&quot;</span><span class="p">:</span> <span class="s2">&quot;tables&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;samples&quot;</span><span class="p">:</span> <span class="s2">&quot;NA&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;firstReleased&quot;</span><span class="p">:</span> <span class="s2">&quot;1&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;lastUpdated&quot;</span><span class="p">:</span> <span class="s2">&quot;2&quot;</span>
+        <span class="p">}</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;partID&quot;</span><span class="p">:</span> <span class="s2">&quot;collType&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;partType&quot;</span><span class="p">:</span> <span class="s2">&quot;attributes&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;samples&quot;</span><span class="p">:</span> <span class="s2">&quot;header&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;mmaSet&quot;</span><span class="p">:</span> <span class="s2">&quot;collectSet&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;firstReleased&quot;</span><span class="p">:</span> <span class="s2">&quot;1&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;lastUpdated&quot;</span><span class="p">:</span> <span class="s2">&quot;2&quot;</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;partID&quot;</span><span class="p">:</span> <span class="s2">&quot;comp8r&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;partType&quot;</span><span class="p">:</span> <span class="s2">&quot;measures&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;samples&quot;</span><span class="p">:</span> <span class="s2">&quot;header&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;mmaSet&quot;</span><span class="p">:</span> <span class="s2">&quot;NA&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;firstReleased&quot;</span><span class="p">:</span> <span class="s2">&quot;1&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;lastUpdated&quot;</span><span class="p">:</span> <span class="s2">&quot;2&quot;</span>
+        <span class="p">}</span>
+    <span class="p">],</span>
+    <span class="s2">&quot;sets&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;setID&quot;</span><span class="p">:</span> <span class="s2">&quot;collectSet&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;partID&quot;</span><span class="p">:</span> <span class="s2">&quot;comp8r&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;firstReleased&quot;</span><span class="p">:</span> <span class="s2">&quot;2&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;lastUpdated&quot;</span><span class="p">:</span> <span class="s2">&quot;2&quot;</span>
+        <span class="p">}</span>
+    <span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>It defines,</p>
+<ul class="simple">
+<li><p>A table called <code class="docutils literal notranslate"><span class="pre">samples</span></code></p></li>
+<li><p>A column in the <code class="docutils literal notranslate"><span class="pre">samples</span></code> table called <code class="docutils literal notranslate"><span class="pre">collType</span></code></p></li>
+<li><p>A part called <code class="docutils literal notranslate"><span class="pre">comp8r</span></code> which is a measure and which is a category in
+the <code class="docutils literal notranslate"><span class="pre">collType</span></code> column</p></li>
+</ul>
+<p>However, notice that <code class="docutils literal notranslate"><span class="pre">comp8r</span></code> was only added as a category for the
+<code class="docutils literal notranslate"><span class="pre">collType</span></code> column in version 2. This can be seen from its entry in the
+sets sheet where it was <code class="docutils literal notranslate"><span class="pre">firstReleased</span></code> in version 2. For version 1,
+although a part was defined for it, it was not a category for <code class="docutils literal notranslate"><span class="pre">collType</span></code>
+only from version 2 onwards.</p>
 <p>Version 2 of the dictionary renamed certain part pieces, for example,
 the <code class="docutils literal notranslate"><span class="pre">WWMeasures</span></code> table was renamed to <code class="docutils literal notranslate"><span class="pre">measures</span></code> in version 2. To be
 backcompatible with version 1, columns were added to the parts list to
@@ -330,16 +425,21 @@ validation rules,</p>
 <pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="font-weight: bold">[</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="font-weight: bold">{</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="color: #008000; text-decoration-color: #008000">'partID'</span>: <span style="color: #008000; text-decoration-color: #008000">'sites'</span>,
-<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="color: #008000; text-decoration-color: #008000">'partType'</span>: <span style="color: #008000; text-decoration-color: #008000">'table'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="color: #008000; text-decoration-color: #008000">'partType'</span>: <span style="color: #008000; text-decoration-color: #008000">'tables'</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="color: #008000; text-decoration-color: #008000">'sites'</span>: <span style="color: #008000; text-decoration-color: #008000">'NA'</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="color: #008000; text-decoration-color: #008000">'sitesRequired'</span>: <span style="color: #008000; text-decoration-color: #008000">'NA'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="color: #008000; text-decoration-color: #008000">'version1Location'</span>: <span style="color: #008000; text-decoration-color: #008000">'tables'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="color: #008000; text-decoration-color: #008000">'version1Table'</span>: <span style="color: #008000; text-decoration-color: #008000">'Site'</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="color: #008000; text-decoration-color: #008000">'status'</span>: <span style="color: #008000; text-decoration-color: #008000">'active'</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="font-weight: bold">}</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="font-weight: bold">{</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="color: #008000; text-decoration-color: #008000">'partID'</span>: <span style="color: #008000; text-decoration-color: #008000">'siteID'</span>,
-<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="color: #008000; text-decoration-color: #008000">'partType'</span>: <span style="color: #008000; text-decoration-color: #008000">'attribute'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="color: #008000; text-decoration-color: #008000">'partType'</span>: <span style="color: #008000; text-decoration-color: #008000">'attributes'</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="color: #008000; text-decoration-color: #008000">'sites'</span>: <span style="color: #008000; text-decoration-color: #008000">'pK'</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="color: #008000; text-decoration-color: #008000">'sitesRequired'</span>: <span style="color: #008000; text-decoration-color: #008000">'mandatory'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="color: #008000; text-decoration-color: #008000">'version1Location'</span>: <span style="color: #008000; text-decoration-color: #008000">'variables'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="color: #008000; text-decoration-color: #008000">'version1Table'</span>: <span style="color: #008000; text-decoration-color: #008000">'Site'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="color: #008000; text-decoration-color: #008000">'version1Variable'</span>: <span style="color: #008000; text-decoration-color: #008000">'SiteID'</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="color: #008000; text-decoration-color: #008000">'status'</span>: <span style="color: #008000; text-decoration-color: #008000">'active'</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="font-weight: bold">}</span>
 <span style="font-weight: bold">]</span>
@@ -347,8 +447,8 @@ validation rules,</p>
 <p>version = “2.0.0”</p>
 <p>schema_additions =</p>
 <pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="font-weight: bold">{</span>
-<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="color: #008000; text-decoration-color: #008000">'sites'</span>: <span style="font-weight: bold">{</span>
-<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="color: #008000; text-decoration-color: #008000">'siteID'</span>: <span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="color: #008000; text-decoration-color: #008000">'Site'</span>: <span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="color: #008000; text-decoration-color: #008000">'SiteID'</span>: <span style="font-weight: bold">{</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'allowed'</span>: <span style="font-weight: bold">[</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'Ottawa Site'</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'Montreal Site'</span>
@@ -359,14 +459,14 @@ validation rules,</p>
 </pre>
 <p>The corresponding validation schema should be,</p>
 <pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="font-weight: bold">{</span>
-<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="color: #008000; text-decoration-color: #008000">'schemaVersion'</span>: <span style="color: #008000; text-decoration-color: #008000">'2.0.0'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="color: #008000; text-decoration-color: #008000">'schemaVersion'</span>: <span style="color: #008000; text-decoration-color: #008000">'1.0.0'</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="color: #008000; text-decoration-color: #008000">'schema'</span>: <span style="font-weight: bold">{</span>
-<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="color: #008000; text-decoration-color: #008000">'sites'</span>: <span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="color: #008000; text-decoration-color: #008000">'Site'</span>: <span style="font-weight: bold">{</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'type'</span>: <span style="color: #008000; text-decoration-color: #008000">'list'</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'schema'</span>: <span style="font-weight: bold">{</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'type'</span>: <span style="color: #008000; text-decoration-color: #008000">'dict'</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'schema'</span>: <span style="font-weight: bold">{</span>
-<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'siteID'</span>: <span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'SiteID'</span>: <span style="font-weight: bold">{</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'required'</span>: <span style="color: #00ff00; text-decoration-color: #00ff00; font-style: italic">True</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'allowed'</span>: <span style="font-weight: bold">[</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'Ottawa Site'</span>,
@@ -379,7 +479,10 @@ validation rules,</p>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   </span><span style="font-weight: bold">{</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partID'</span>: <span style="color: #008000; text-decoration-color: #008000">'siteID'</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'sitesRequired'</span>: <span style="color: #008000; text-decoration-color: #008000">'mandatory'</span>,
-<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'sites'</span>: <span style="color: #008000; text-decoration-color: #008000">'pK'</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'sites'</span>: <span style="color: #008000; text-decoration-color: #008000">'pK'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'version1Location'</span>: <span style="color: #008000; text-decoration-color: #008000">'variables'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'version1Table'</span>: <span style="color: #008000; text-decoration-color: #008000">'Site'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'version1Variable'</span>: <span style="color: #008000; text-decoration-color: #008000">'SiteID'</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   </span><span style="font-weight: bold">}</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   </span><span style="font-weight: bold">]</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   </span><span style="font-weight: bold">}</span>
@@ -389,7 +492,9 @@ validation rules,</p>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'meta'</span>: <span style="font-weight: bold">[</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="font-weight: bold">{</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partID'</span>: <span style="color: #008000; text-decoration-color: #008000">'sites'</span>,
-<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partType'</span>: <span style="color: #008000; text-decoration-color: #008000">'table'</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partType'</span>: <span style="color: #008000; text-decoration-color: #008000">'tables'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'version1Location'</span>: <span style="color: #008000; text-decoration-color: #008000">'tables'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'version1Table'</span>: <span style="color: #008000; text-decoration-color: #008000">'Site'</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="font-weight: bold">}</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="font-weight: bold">]</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="font-weight: bold">}</span>
@@ -404,39 +509,36 @@ that column. For example for the arguments below,</p>
 <pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="font-weight: bold">[</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="font-weight: bold">{</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="color: #008000; text-decoration-color: #008000">'partID'</span>: <span style="color: #008000; text-decoration-color: #008000">'samples'</span>,
-<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="color: #008000; text-decoration-color: #008000">'partType'</span>: <span style="color: #008000; text-decoration-color: #008000">'table'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="color: #008000; text-decoration-color: #008000">'partType'</span>: <span style="color: #008000; text-decoration-color: #008000">'tables'</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="color: #008000; text-decoration-color: #008000">'status'</span>: <span style="color: #008000; text-decoration-color: #008000">'active'</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="font-weight: bold">}</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="font-weight: bold">{</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="color: #008000; text-decoration-color: #008000">'partID'</span>: <span style="color: #008000; text-decoration-color: #008000">'collection'</span>,
-<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="color: #008000; text-decoration-color: #008000">'partType'</span>: <span style="color: #008000; text-decoration-color: #008000">'attribute'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="color: #008000; text-decoration-color: #008000">'partType'</span>: <span style="color: #008000; text-decoration-color: #008000">'attributes'</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="color: #008000; text-decoration-color: #008000">'samples'</span>: <span style="color: #008000; text-decoration-color: #008000">'header'</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="color: #008000; text-decoration-color: #008000">'dataType'</span>: <span style="color: #008000; text-decoration-color: #008000">'categorical'</span>,
-<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="color: #008000; text-decoration-color: #008000">'catSetID'</span>: <span style="color: #008000; text-decoration-color: #008000">'collectCat'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="color: #008000; text-decoration-color: #008000">'mmaSet'</span>: <span style="color: #008000; text-decoration-color: #008000">'collectCat'</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="color: #008000; text-decoration-color: #008000">'status'</span>: <span style="color: #008000; text-decoration-color: #008000">'active'</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="font-weight: bold">}</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="font-weight: bold">{</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="color: #008000; text-decoration-color: #008000">'partID'</span>: <span style="color: #008000; text-decoration-color: #008000">'comp3h'</span>,
-<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="color: #008000; text-decoration-color: #008000">'partType'</span>: <span style="color: #008000; text-decoration-color: #008000">'category'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="color: #008000; text-decoration-color: #008000">'partType'</span>: <span style="color: #008000; text-decoration-color: #008000">'categories'</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="color: #008000; text-decoration-color: #008000">'samples'</span>: <span style="color: #008000; text-decoration-color: #008000">'input'</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="color: #008000; text-decoration-color: #008000">'dataType'</span>: <span style="color: #008000; text-decoration-color: #008000">'varchar'</span>,
-<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="color: #008000; text-decoration-color: #008000">'catSetID'</span>: <span style="color: #008000; text-decoration-color: #008000">'collectCat'</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="color: #008000; text-decoration-color: #008000">'status'</span>: <span style="color: #008000; text-decoration-color: #008000">'active'</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="font-weight: bold">}</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="font-weight: bold">{</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="color: #008000; text-decoration-color: #008000">'partID'</span>: <span style="color: #008000; text-decoration-color: #008000">'comp8h'</span>,
-<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="color: #008000; text-decoration-color: #008000">'partType'</span>: <span style="color: #008000; text-decoration-color: #008000">'category'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="color: #008000; text-decoration-color: #008000">'partType'</span>: <span style="color: #008000; text-decoration-color: #008000">'categories'</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="color: #008000; text-decoration-color: #008000">'samples'</span>: <span style="color: #008000; text-decoration-color: #008000">'input'</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="color: #008000; text-decoration-color: #008000">'dataType'</span>: <span style="color: #008000; text-decoration-color: #008000">'varchar'</span>,
-<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="color: #008000; text-decoration-color: #008000">'catSetID'</span>: <span style="color: #008000; text-decoration-color: #008000">'collectCat'</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="color: #008000; text-decoration-color: #008000">'status'</span>: <span style="color: #008000; text-decoration-color: #008000">'active'</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="font-weight: bold">}</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="font-weight: bold">{</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="color: #008000; text-decoration-color: #008000">'partID'</span>: <span style="color: #008000; text-decoration-color: #008000">'flowPr'</span>,
-<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="color: #008000; text-decoration-color: #008000">'partType'</span>: <span style="color: #008000; text-decoration-color: #008000">'category'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="color: #008000; text-decoration-color: #008000">'partType'</span>: <span style="color: #008000; text-decoration-color: #008000">'categories'</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="color: #008000; text-decoration-color: #008000">'samples'</span>: <span style="color: #008000; text-decoration-color: #008000">'input'</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="color: #008000; text-decoration-color: #008000">'dataType'</span>: <span style="color: #008000; text-decoration-color: #008000">'varchar'</span>,
-<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="color: #008000; text-decoration-color: #008000">'catSetID'</span>: <span style="color: #008000; text-decoration-color: #008000">'collectCat'</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="color: #008000; text-decoration-color: #008000">'status'</span>: <span style="color: #008000; text-decoration-color: #008000">'active'</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="font-weight: bold">}</span>
 <span style="font-weight: bold">]</span>
@@ -479,22 +581,19 @@ that column. For example for the arguments below,</p>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partID'</span>: <span style="color: #008000; text-decoration-color: #008000">'collection'</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'samples'</span>: <span style="color: #008000; text-decoration-color: #008000">'header'</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'dataType'</span>: <span style="color: #008000; text-decoration-color: #008000">'categorical'</span>,
-<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'catSetID'</span>: <span style="color: #008000; text-decoration-color: #008000">'collectCat'</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'mmaSet'</span>: <span style="color: #008000; text-decoration-color: #008000">'collectCat'</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   </span><span style="font-weight: bold">}</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   </span><span style="font-weight: bold">{</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partID'</span>: <span style="color: #008000; text-decoration-color: #008000">'comp3h'</span>,
-<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partType'</span>: <span style="color: #008000; text-decoration-color: #008000">'category'</span>,
-<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'catSetID'</span>: <span style="color: #008000; text-decoration-color: #008000">'collectCat'</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'setID'</span>: <span style="color: #008000; text-decoration-color: #008000">'collectCat'</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   </span><span style="font-weight: bold">}</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   </span><span style="font-weight: bold">{</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partID'</span>: <span style="color: #008000; text-decoration-color: #008000">'comp8h'</span>,
-<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partType'</span>: <span style="color: #008000; text-decoration-color: #008000">'category'</span>,
-<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'catSetID'</span>: <span style="color: #008000; text-decoration-color: #008000">'collectCat'</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'setID'</span>: <span style="color: #008000; text-decoration-color: #008000">'collectCat'</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   </span><span style="font-weight: bold">}</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   </span><span style="font-weight: bold">{</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partID'</span>: <span style="color: #008000; text-decoration-color: #008000">'flowPr'</span>,
-<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partType'</span>: <span style="color: #008000; text-decoration-color: #008000">'category'</span>,
-<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'catSetID'</span>: <span style="color: #008000; text-decoration-color: #008000">'collectCat'</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'setID'</span>: <span style="color: #008000; text-decoration-color: #008000">'collectCat'</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   │   </span><span style="font-weight: bold">}</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   │   </span><span style="font-weight: bold">]</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   </span><span style="font-weight: bold">}</span>
@@ -504,7 +603,7 @@ that column. For example for the arguments below,</p>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'meta'</span>: <span style="font-weight: bold">[</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="font-weight: bold">{</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partID'</span>: <span style="color: #008000; text-decoration-color: #008000">'samples'</span>,
-<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partType'</span>: <span style="color: #008000; text-decoration-color: #008000">'table'</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partType'</span>: <span style="color: #008000; text-decoration-color: #008000">'tables'</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="font-weight: bold">}</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="font-weight: bold">]</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="font-weight: bold">}</span>
