@@ -14,25 +14,22 @@
                     "partID": "coll",
                     "samples": "header",
                     "dataType": "categorical",
-                    "catSetID": "collectCat"
+                    "mmaSet": "collectCat"
                 },
                 {
                     "partID": "comp3h",
-                    "partType": "category",
-                    "catSetID": "collectCat"
+                    "setID": "collectCat"
                 },
                 {
                     "partID": "comp8h",
-                    "partType": "category",
-                    "catSetID": "collectCat"
+                    "setID": "collectCat"
                 },
                 {
                     "partID": "flowPr",
-                    "partType": "category",
-                    "catSetID": "collectCat"
+                    "setID": "collectCat"
                 }
             ],
-            "message": "Invalid category flow found in row 1 for column coll in table samples"
+            "message": "invalid_category rule violated in table samples, column coll, row 1: Invalid category \"flow\""
         }
     ],
     "warnings": []

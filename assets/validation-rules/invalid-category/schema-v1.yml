@@ -18,34 +18,27 @@ schema:
             meta:
             - partID: coll
               dataType: categorical
-              catSetID: collectCat
               version1Location: variables
               version1Table: Sample
               version1Variable: Collection
             - partID: comp3h
-              partType: category
-              catSetID: collectCat
               version1Location: variableCategories
               version1Table: Sample
               version1Variable: Collection
               version1Category: Comp3h
             - partID: comp8h
-              partType: category
-              catSetID: collectCat
               version1Location: variableCategories
               version1Table: Sample
               version1Variable: Collection
               version1Category: Comp8h
             - partID: flowPr
-              partType: category
-              catSetID: collectCat
               version1Location: variableCategories
               version1Table: Sample
               version1Variable: Collection
               version1Category: FlowPr;FlowRatePr
       meta:
       - partID: samples
-        partType: table
+        partType: tables
         version1Location: tables
         version1Table: Sample
   Site:
@@ -63,32 +56,28 @@ schema:
           - ruleID: invalid_category
             meta:
             - partID: siteTypeID
-              catSetID: siteTypeCatSet
               dataType: categorical
               version1Location: variables
               version1Table: Site
               version1Variable: type
             - partID: wwtpMuC
-              partType: category
               version1Category: wwtpMuC
               version1Location: variableCategories
               version1Table: Site
               version1Variable: type
             - partID: wwtpMuS
-              partType: category
               version1Category: wwtpMuS
               version1Location: variableCategories
               version1Table: Site
               version1Variable: type
             - partID: someOldCat
-              partType: category
               version1Category: someOldCat1
               version1Location: variableCategories
               version1Table: Site
               version1Variable: type
       meta:
       - partID: sites
-        partType: table
+        partType: tables
         version1Location: tables
         version1Table: Site
   WWMeasure:
@@ -110,13 +99,12 @@ schema:
               version1Table: WWMeasure
               version1Variable: type
             - partID: cod
-              partType: category
               version1Category: wqCOD; wwCOD
               version1Location: variableCategories
               version1Table: WWMeasure; SiteMeasure
               version1Variable: type
       meta:
       - partID: measures
-        partType: table
+        partType: tables
         version1Location: tables
         version1Table: WWMeasure

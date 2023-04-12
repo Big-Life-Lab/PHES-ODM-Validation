@@ -16,4 +16,4 @@ schema:
               sites: header
       meta:
         - partID: sites
-          partType: table
+          partType: tables

@@ -4,6 +4,7 @@ generation and data validation.
 """
 
 from collections import defaultdict
+from collections.abc import Iterable, Iterator
 from copy import deepcopy
 from itertools import groupby
 from typing import Any, Callable, Dict, List, Optional, Set, Tuple
@@ -14,8 +15,9 @@ from cerberusext import ContextualCoercer, OdmValidator
 import part_tables as pt
 import reports
 import rules
+from input_data import DataKind
 from reports import ErrorKind, get_row_num
-from rules import Rule, ruleset
+from rules import Rule, RuleId, ruleset
 from schemas import CerberusSchema, Schema, init_table_schema
 from stdext import (
     deep_update,
@@ -27,6 +29,32 @@ from versions import __version__, parse_version
 
 RuleError = Tuple[rules.RuleId, dict]
 TableDataset = Dict[pt.TableId, pt.Dataset]
+
+
+class RuleFilter:
+    """A rule filter.
+
+    The blacklist takes precedence over the whitelist, and an empty whitelist
+    represents all rules."""
+    # `whitelist` is needed when testing schema generation and data validation.
+    # Users may be more interested in `blacklist`, to remove certain irrelevant
+    # errors from their reports.
+
+    blacklist: List[RuleId]
+    whitelist: List[RuleId]
+
+    def __init__(self, blacklist=[], whitelist=[]):
+        self.blacklist = blacklist
+        self.whitelist = whitelist
+
+    def enabled(self, rule: Rule):
+        "Returns true if the rule `rule_id` is enabled."
+        rule_id = rule.id
+        return (rule_id not in self.blacklist and
+                (rule_id in self.whitelist or self.whitelist == []))
+
+    def filter(self, rules: Iterable[Rule]) -> Iterator[Rule]:
+        return filter(self.enabled, rules)
 
 
 def _gen_cerb_rule_map():
@@ -102,15 +130,26 @@ def _cerb_to_odm_type(cerb_type: str) -> Optional[str]:
 
 
 def _gen_error_entry(cerb_rule, table_id, column_id, value, row_numbers,
-                     rows, column_meta, rule_whitelist: List[str],
+                     rows, column_meta, rule_filter: RuleFilter,
                      constraint=None, schema_column=None,
+                     data_kind=DataKind.python
                      ) -> Optional[RuleError]:
+    "Generates a single validation error from input params."
     if not value and cerb_rule == 'type':
         return
 
     rule = _get_rule_for_cerb_key(cerb_rule, column_meta)
-    if len(rule_whitelist) > 0 and rule.id not in rule_whitelist:
+    if not rule_filter.enabled(rule):
         return
+
+    # Only report column errors for the first line in spreadsheets.
+    # It will always trigger on the first line do to how csv-files are
+    # imported.
+    if rule.is_column and data_kind == DataKind.spreadsheet:
+        first_row_num = get_row_num(0, 0, data_kind)
+        assert len(row_numbers) == 1
+        if row_numbers[0] > first_row_num:
+            return
 
     cerb_type = schema_column.get('type', None) if schema_column else None
     odm_type = _extract_datatype(column_meta)
@@ -123,25 +162,28 @@ def _gen_error_entry(cerb_rule, table_id, column_id, value, row_numbers,
         column_id=column_id,
         column_meta=column_meta,
         constraint=constraint,
-        err_template=rule.get_error_template(value, datatype),
+        err_template=rule.get_error_template(value, datatype, data_kind),
         row_numbers=row_numbers,
         rows=rows, value=value,
         rule_id=rule.id,
         table_id=table_id,
+        data_kind=data_kind,
+        is_column=rule.is_column,
     )
     entry = reports.gen_rule_error(error_ctx, kind=kind)
     return (rule.id, entry)
 
 
 def _gen_cerb_error_entry(e, row, schema: CerberusSchema,
-                          rule_whitelist: List[str], offset: int
-                          ) -> Optional[RuleError]:
+                          rule_filter: RuleFilter, offset: int,
+                          data_kind: DataKind) -> Optional[RuleError]:
+    "Transforms a single Cerberus error into a validation error."
     cerb_rule = e.schema_path[-1]
     (table_id, _, column_id) = e.document_path
     row_index = e.document_path[1]
     schema_column = schema[table_id]['schema']['schema'][column_id]
     column_meta = schema_column.get('meta', [])
-    row_numbers = [get_row_num(row_index, offset)]
+    row_numbers = [get_row_num(row_index, offset, data_kind)]
     rows = [row]
     return _gen_error_entry(
         cerb_rule,
@@ -151,15 +193,17 @@ def _gen_cerb_error_entry(e, row, schema: CerberusSchema,
         row_numbers,
         rows,
         column_meta,
-        rule_whitelist,
+        rule_filter,
         e.constraint,
-        schema_column
+        schema_column,
+        data_kind=data_kind,
     )
 
 
-def _gen_aggregated_error_entry(agg_error,
-                                rule_whitelist: List[str],
+def _gen_aggregated_error_entry(agg_error, rule_filter: RuleFilter
                                 ) -> Optional[dict]:
+    """Transforms a single aggregated error (from OdmValidator) to a validation
+    error."""
     return _gen_error_entry(
         agg_error.cerb_rule,
         agg_error.table_id,
@@ -168,7 +212,7 @@ def _gen_aggregated_error_entry(agg_error,
         agg_error.row_numbers,
         agg_error.rows,
         agg_error.column_meta,
-        rule_whitelist
+        rule_filter,
     )
 
 
@@ -191,9 +235,9 @@ def _get_rule_id(x):
 
 def _get_table_rownum_column(x):
     row_num = _get_row_num(x)
-    if isinstance(row_num, list):
+    if row_num is not None and isinstance(row_num, list):
         row_num = row_num[0]
-    return (_get_table_name(x), row_num, _get_column_name(x))
+    return (_get_table_name(x), _get_column_name(x), row_num)
 
 
 def _sort_errors(errors):
@@ -225,9 +269,13 @@ def _strip_coerce_rules(cerb_schema):
     return strip_dict_key(deepcopy(cerb_schema), 'coerce')
 
 
-def _map_cerb_errors(table_id, cerb_errors, schema, rule_whitelist,
-                     summary: reports.ValidationSummary, offset: int):
-    "Returns (errors, warnings)."
+def _map_cerb_errors(table_id, cerb_errors, schema, rule_filter,
+                     summary: reports.ValidationSummary, offset: int,
+                     data_kind):
+    """Transforms Cerberus errors to validation errors (and warnings).
+
+    :return: a pair of lists (errors, warnings).
+    """
     errors = []
     warnings = []
     for table_error in cerb_errors:
@@ -237,8 +285,8 @@ def _map_cerb_errors(table_id, cerb_errors, schema, rule_whitelist,
                 for attr_errors in e.info:
                     for e in attr_errors:
                         rule_error = _gen_cerb_error_entry(e, row, schema,
-                                                           rule_whitelist,
-                                                           offset)
+                                                           rule_filter, offset,
+                                                           data_kind)
                         if not rule_error:
                             continue
                         (rule_id, entry) = rule_error
@@ -250,10 +298,12 @@ def _map_cerb_errors(table_id, cerb_errors, schema, rule_whitelist,
     return errors, warnings
 
 
-def _map_aggregated_errors(table_id, agg_errors, rule_whitelist, summary):
+def _map_aggregated_errors(table_id, agg_errors, rule_filter, summary):
+    """Transforms a list of aggregated errors from OdmValidator to a list of
+    validation errors."""
     errors = []
     for ae in agg_errors:
-        rule_error = _gen_aggregated_error_entry(ae, rule_whitelist)
+        rule_error = _gen_aggregated_error_entry(ae, rule_filter)
         if not rule_error:
             continue
         (rule_id, entry) = rule_error
@@ -273,28 +323,39 @@ def _gen_additions_schema(additions) -> CerberusSchema:
     return result
 
 
-def _generate_validation_schema_ext(parts, schema_version,
-                                    schema_additions={},
-                                    rule_whitelist=[]
+def _generate_validation_schema_ext(parts: pt.Dataset,
+                                    sets: pt.Dataset = [],
+                                    schema_version: str = pt.ODM_VERSION_STR,
+                                    schema_additions: dict = {},
+                                    rule_blacklist: List[rules.RuleId] = [],
+                                    rule_whitelist: List[rules.RuleId] = []
                                     ) -> Schema:
+    """
+    This is the extended version of `generate_validation_schema`, with
+    additional parameters for setting advanced options.
+
+    :param rule_whitelist: A list of rule ids to explicitly enable. An empty
+        list represents all the rules.
+    :param rule_blacklist: A list of rule ids to explicitly disable. This takes
+        precedence over the whitelist.
+    """
     # `parts` must be stripped before further processing. This is important for
     # performance and simplicity of implementation.
     # `rule_whitelist` determines which rules are included in the schema. It is
     # needed when testing schema generation, to be able to compare isolated
     # rule-specific schemas.
+    assert isinstance(sets, list), "invalid sets param"
     version = parse_version(schema_version)
-    parts = pt.strip(parts)
-    parts = pt.filter_compatible(parts, version)
-    data = pt.gen_partdata(parts, version)
+    odm_data = pt.gen_odmdata(parts, sets, version)
 
-    active_rules = ruleset
-    if len(rule_whitelist) > 0:
-        active_rules = filter(lambda r: r.id in rule_whitelist, active_rules)
+    rule_filter = RuleFilter(whitelist=rule_whitelist,
+                             blacklist=rule_blacklist)
+    enabled_rules = list(rule_filter.filter(ruleset))
 
     cerb_schema = {}
-    for r in active_rules:
+    for r in enabled_rules:
         assert r.gen_schema, f'missing `gen_schema` in rule {r.id}'
-        s = r.gen_schema(data, version)
+        s = r.gen_schema(odm_data, version)
         assert s is not None
         deep_update(cerb_schema, s)
     additions_schema = _gen_additions_schema(schema_additions)
@@ -311,9 +372,11 @@ def _generate_validation_schema_ext(parts, schema_version,
     }
 
 
-def generate_validation_schema(parts, schema_version=pt.ODM_VERSION_STR,
+def generate_validation_schema(parts: pt.Dataset,
+                               sets: pt.Dataset = [],
+                               schema_version=pt.ODM_VERSION_STR,
                                schema_additions={}) -> Schema:
-    return _generate_validation_schema_ext(parts, schema_version,
+    return _generate_validation_schema_ext(parts, sets, schema_version,
                                            schema_additions)
 
 
@@ -323,12 +386,22 @@ OnProgress = Callable[[str, str, int, int], None]
 
 def _validate_data_ext(schema: Schema,
                        data: TableDataset,
+                       data_kind: DataKind = DataKind.python,
                        data_version: str = pt.ODM_VERSION_STR,
-                       rule_whitelist: List[str] = [],
+                       rule_blacklist: List[RuleId] = [],
+                       rule_whitelist: List[RuleId] = [],
                        on_progress: OnProgress = None,
                        batch_size=_BATCH_SIZE,
                        ) -> reports.ValidationReport:
-    """Validates `data` with `schema`, using Cerberus."""
+    """
+    Validates `data` with `schema`, using Cerberus.
+
+    This is the extended version of `validate_data`, with additional parameters
+    for setting advanced options.
+
+    :param rule_whitelist: list of rule ids to explicitly enable.
+    :param rule_blacklist: list of rule ids to explicitly disable.
+    """
     # `rule_whitelist` determines which rules/errors are triggered during
     # validation. It is needed when testing data validation, to be able to
     # compare error reports in isolation.
@@ -337,16 +410,23 @@ def _validate_data_ext(schema: Schema,
     # looking at the `coerce` rules, then those rules are stripped and
     # validation is performed on the remaining rules.
 
+    # inform user of param order/type mistakes
+    assert isinstance(data, dict), (
+        '`data` must be a dict. Remember to wrap the datasets in a dict with '
+        'the table names as keys.')
+    assert isinstance(data_kind, DataKind), 'invalid data_kind param type'
+    assert isinstance(data_version, str), 'invalid data_version param type'
+    assert isinstance(rule_whitelist, list), \
+        'invalid rule_whitelist param type'
+
     errors = []
     warnings = []
     versioned_schema = schema
     cerb_schema = versioned_schema["schema"]
     coercion_schema = cerb_schema
     summary = reports.ValidationSummary()
-
-    assert isinstance(data, dict), (
-        '`data` must be a dict. Remember to wrap the datasets in a dict with '
-        'the table names as keys.')
+    rule_filter = RuleFilter(whitelist=rule_whitelist,
+                             blacklist=rule_blacklist)
 
     def batch_table_data(action, table_id, table_data):
         total = len(table_data)
@@ -367,7 +447,7 @@ def _validate_data_ext(schema: Schema,
         for batch in batch_table_data('coercing', table_id, table_data):
             batch_data, offset = batch
             coerce_result = coercer.coerce(batch_data, coercion_schema,
-                                           offset)
+                                           offset, data_kind)
             coerced_data[table_id] += coerce_result[table_id]
 
     validation_schema = _strip_coerce_rules(coercion_schema)
@@ -376,15 +456,15 @@ def _validate_data_ext(schema: Schema,
         for batch in batch_table_data('validating', table_id, table_data):
             batch_data, offset = batch
             v._errors.clear()
-            if v.validate(offset, batch_data, validation_schema):
+            if v.validate(offset, data_kind, batch_data, validation_schema):
                 continue
             e, w = _map_cerb_errors(table_id, v._errors, validation_schema,
-                                    rule_whitelist, summary, offset)
+                                    rule_filter, summary, offset, data_kind)
             errors += e
             warnings += w
         errors += _map_aggregated_errors(table_id,
                                          v.error_state.aggregated_errors,
-                                         rule_whitelist, summary)
+                                         rule_filter, summary)
 
     errors = _filter_errors(errors)
 
@@ -400,6 +480,12 @@ def _validate_data_ext(schema: Schema,
 
 def validate_data(schema: Schema,
                   data: TableDataset,
+                  data_kind: DataKind = DataKind.python,
                   data_version=pt.ODM_VERSION_STR,
+                  rule_blacklist: List[RuleId] = [],
                   ) -> reports.ValidationReport:
-    return _validate_data_ext(schema, data, data_version)
+    """
+    :param rule_blacklist: A list of rule ids to explicitly disable.
+    """
+    return _validate_data_ext(schema, data, data_kind, data_version,
+                              rule_blacklist)

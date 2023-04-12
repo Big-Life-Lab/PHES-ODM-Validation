@@ -17,6 +17,7 @@ from odm_validation.validation import generate_validation_schema  # noqa:E402
 from odm_validation.versions import parse_version  # noqa:E402
 
 PARTS_FILENAME = 'parts.csv'
+SETS_FILENAME = 'sets.csv'
 LEGACY_SCHEMA_VERSIONS = sorted([
     Version(major=1),
     Version(major=1, minor=1),
@@ -34,24 +35,25 @@ logging.basicConfig(
 )
 
 
-def generate_schema_for_version(parts, version, schema_dir):
+def generate_schema_for_version(parts, sets, version, schema_dir):
     filename = f'schema-v{version}.yml'
     path = join(schema_dir, filename)
     print(f'generating {os.path.basename(path)}')
-    schema = generate_validation_schema(parts, version)
+    schema = generate_validation_schema(parts, sets, version)
     utils.export_schema(schema, path)
 
 
-def generate_schemas_from_parts(parts_path, schema_dir):
-    print(f'using {relpath(parts_path)}')
-    parts_path_regex = f'.+/v(.+)/{PARTS_FILENAME}'
-    if not (match := re.search(parts_path_regex, str(parts_path))):
+def generate_schemas_from_odm_tables(odm_dir, schema_dir):
+    print(f'using {relpath(odm_dir)}')
+    path_version_re = '.+/v(.+)/?'
+    if not (match := re.search(path_version_re, odm_dir)):
         return
-    parts = utils.import_dataset(parts_path)
-    parts_version = parse_version(match.group(1))
-    for version in (LEGACY_SCHEMA_VERSIONS + [parts_version]):
-        assert version <= parts_version
-        generate_schema_for_version(parts, str(version), schema_dir)
+    odm_version = parse_version(match.group(1))
+    parts = utils.import_dataset(join(odm_dir, PARTS_FILENAME))
+    sets = utils.import_dataset(join(odm_dir, SETS_FILENAME))
+    for version in (LEGACY_SCHEMA_VERSIONS + [odm_version]):
+        assert version <= odm_version
+        generate_schema_for_version(parts, sets, str(version), schema_dir)
 
 
 def main():
@@ -60,16 +62,16 @@ def main():
     schema_dir = normpath(join(asset_dir, 'validation-schemas'))
     dataset_dir = normpath(join(asset_dir, 'dictionary'))
 
-    print(f'looking for parts in {dataset_dir}')
+    print(f'looking for ODM-tables in {dataset_dir}')
     p = Path(dataset_dir)
-    parts_paths = list(p.glob(f'v*/{PARTS_FILENAME}'))
-    if len(parts_paths) == 0:
+    odm_dirs = list(map(str, p.glob('v*')))
+    if len(odm_dirs) == 0:
         warning('no files found')
     else:
         print(f'writing schemas to {schema_dir}')
 
-    for parts_path in parts_paths:
-        generate_schemas_from_parts(parts_path, schema_dir)
+    for odm_dir in odm_dirs:
+        generate_schemas_from_odm_tables(odm_dir, schema_dir)
     print('done')
 
 

@@ -16,16 +16,13 @@ schema:
             - partID: coll
               samples: header
               dataType: categorical
-              catSetID: collectCat
+              mmaSet: collectCat
             - partID: comp3h
-              partType: category
-              catSetID: collectCat
+              setID: collectCat
             - partID: comp8h
-              partType: category
-              catSetID: collectCat
+              setID: collectCat
             - partID: flowPr
-              partType: category
-              catSetID: collectCat
+              setID: collectCat
       meta:
       - partID: samples
-        partType: table
+        partType: tables

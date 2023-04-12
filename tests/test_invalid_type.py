@@ -21,6 +21,9 @@ class Assets():
                                 f'assets/validation-rules/{rule_dirname}')
 
         self.parts_v2 = import_dataset(asset(f'{kind}-parts.csv'))
+        self.sets = (import_dataset(asset('bool-sets.csv')) if kind == 'bool'
+                     else [])
+
         self.schemas = {
             1: import_schema(asset(f'{kind}-schema-v1.yml')),
             2: import_schema(asset(f'{kind}-schema-v2.yml')),
@@ -29,17 +32,17 @@ class Assets():
         # datasets
         # TODO: glob all files instead of hardcoding them like this?
         self.data_pass = [
-            {table: import_dataset(asset(f'valid-{kind}-dataset-1.*'))},
+            {table: import_dataset(asset(f'{kind}-valid-dataset-1.*'))},
         ]
         self.data_fail = [
-            {table: import_dataset(asset(f'invalid-{kind}-dataset-1.*'))},
+            {table: import_dataset(asset(f'{kind}-invalid-dataset-1.*'))},
         ]
         if kind in {'float', 'integer'}:
             self.data_pass.append(
-                {table: import_dataset(asset(f'valid-{kind}-dataset-2.*'))})
+                {table: import_dataset(asset(f'{kind}-valid-dataset-2.*'))})
         if kind in {'bool', 'integer'}:
             self.data_fail.append(
-                {table: import_dataset(asset(f'invalid-{kind}-dataset-2.*'))})
+                {table: import_dataset(asset(f'{kind}-invalid-dataset-2.*'))})
 
         # error reports
         self.error_report = [
@@ -69,8 +72,13 @@ class TestInvalidType(common.OdmTestCase):
 
     @parameterized.expand(param_range(1, 3))
     def test_schema_generation(self, major_ver):
-        ver = f'{major_ver}.0.0'
+        # XXX: bool parts were introduced in v1.1
+        if self.kind == 'bool' and major_ver == 1:
+            ver = '1.1.0'
+        else:
+            ver = f'{major_ver}.0.0'
         result = _generate_validation_schema_ext(parts=self.assets.parts_v2,
+                                                 sets=self.assets.sets,
                                                  schema_version=ver,
                                                  rule_whitelist=self.whitelist)
         self.assertDictEqual(self.assets.schemas[major_ver], result)

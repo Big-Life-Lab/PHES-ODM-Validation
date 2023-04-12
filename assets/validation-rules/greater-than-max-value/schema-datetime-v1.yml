@@ -20,6 +20,6 @@ schema:
               version1Variable: LastEdited
       meta:
         - partID: sites
-          partType: table
+          partType: tables
           version1Location: tables
           version1Table: Site

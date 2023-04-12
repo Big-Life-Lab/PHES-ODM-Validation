@@ -4,21 +4,21 @@ This file specifies methods for navigating the ODM data dictionary that can be r
 
 ## How to get the names of tables that are part of the ODM
 
-We can use the `partID` and `partType` columns for this. Any part ID whose `partType` is table is considered to be a table. For example in the following dictionary,
+We can use the `partID` and `partType` columns for this. Any part ID whose `partType` is `tables` is considered to be a table. For example in the following dictionary,
 
 ```python
 [
     {
         "partID": "addresses",
-        "partType": "table"
+        "partType": "tables"
     },
     {
         "partID": "measures",
-        "partType": "table"
+        "partType": "tables"
     },
     {
         "partID": "addId",
-        "partType": "attribute"
+        "partType": "attributes"
     }
 ]
 ```
@@ -33,38 +33,38 @@ Once we have the [table names part of the dictionary](#how-to-get-the-columns-na
 [
     {
         "partID": "addresses",
-        "partType": "table",
-        "addresses: "NA",
+        "partType": "tables",
+        "addresses": "NA",
         "contacts": "NA"
     },
     {
         "partID": "addId",
-        "partType": "attribute",
-        "addresses: "pK",
+        "partType": "attributes",
+        "addresses": "pK",
         "contacts": "NA"
     },
     {
-        "partID": "addId",
-        "partType": "attribute",
-        "addresses: "addL1",
+        "partID": "addL1",
+        "partType": "attributes",
+        "addresses": "addL1",
         "contacts": "NA"
     },
     {
         "partID": "contacts",
-        "partType": "table",
-        "addresses: "addL1",
+        "partType": "tables",
+        "addresses": "addL1",
         "contacts": "NA"
     },
     {
         "partID": "contID",
-        "partType": "attribute",
-        "addresses: "NA",
-        "contacts: "pK"
+        "partType": "attributes",
+        "addresses": "NA",
+        "contacts": "pK"
     },
 ]
 ```
 
-The tables are `addresses` and `contacts` and the `addresses` and `contacts` give information on which parts are their columns. Here, `addId` and `addL1` are columns in the addresses table and `contID` is a column in the contacts table. A part is a column in a table if it does not have a value of `NA` or `input` in the table column. In addition, the table column has additional possible values to describe the role a column plays in the table. All the possible values are,
+The tables are `addresses` and `contacts` and the `addresses` and `contacts` columns give information on which parts are their columns. Here, `addId` and `addL1` are columns in the addresses table and `contID` is a column in the contacts table. A part is a column in a table if it does not have a value of `NA` or `input` in the table column. In addition, the table column has additional possible values to describe the role a column plays in the table. All the possible values are,
 
 * **pK**: The column is the primary key for the table
 * **fK** The column is the foreign referencing a row in another table

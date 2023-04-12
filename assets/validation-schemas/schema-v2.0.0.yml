@@ -3,7 +3,7 @@ schema:
     schema:
       meta:
       - partID: addresses
-        partType: table
+        partType: tables
       schema:
         addL1:
           emptyTrimmed: false
@@ -27,12 +27,6 @@ schema:
               dataType: varchar
               partID: addL1
             ruleID: invalid_type
-          - meta:
-            - addresses: header
-              addressesRequired: mandatory
-              minLength: '0'
-              partID: addL1
-            ruleID: less_than_min_length
           - meta:
             - addresses: header
               addressesRequired: mandatory
@@ -60,12 +54,6 @@ schema:
               dataType: varchar
               partID: addL2
             ruleID: invalid_type
-          - meta:
-            - addresses: header
-              addressesRequired: optional
-              minLength: '0'
-              partID: addL2
-            ruleID: less_than_min_length
           type: string
         addressID:
           emptyTrimmed: false
@@ -94,12 +82,6 @@ schema:
               dataType: varchar
               partID: addressID
             ruleID: invalid_type
-          - meta:
-            - addresses: pK
-              addressesRequired: mandatory
-              minLength: '0'
-              partID: addressID
-            ruleID: less_than_min_length
           - meta:
             - addresses: pK
               addressesRequired: mandatory
@@ -138,12 +120,6 @@ schema:
           - meta:
             - addresses: header
               addressesRequired: mandatory
-              minLength: '0'
-              partID: city
-            ruleID: less_than_min_length
-          - meta:
-            - addresses: header
-              addressesRequired: mandatory
               partID: city
             ruleID: missing_mandatory_column
           - meta:
@@ -178,12 +154,6 @@ schema:
           - meta:
             - addresses: fK
               addressesRequired: mandatory
-              minLength: '0'
-              partID: country
-            ruleID: less_than_min_length
-          - meta:
-            - addresses: fK
-              addressesRequired: mandatory
               partID: country
             ruleID: missing_mandatory_column
           - meta:
@@ -218,12 +188,6 @@ schema:
           - meta:
             - addresses: fK
               addressesRequired: mandatory
-              minLength: '0'
-              partID: datasetID
-            ruleID: less_than_min_length
-          - meta:
-            - addresses: fK
-              addressesRequired: mandatory
               partID: datasetID
             ruleID: missing_mandatory_column
           - meta:
@@ -249,12 +213,6 @@ schema:
               dataType: datetime
               partID: lastEdited
             ruleID: invalid_type
-          - meta:
-            - addresses: header
-              addressesRequired: optional
-              minLength: '0'
-              partID: lastEdited
-            ruleID: less_than_min_length
           type: datetime
         notes:
           maxlength: 200
@@ -271,12 +229,6 @@ schema:
               dataType: varchar
               partID: notes
             ruleID: invalid_type
-          - meta:
-            - addresses: header
-              addressesRequired: optional
-              minLength: '0'
-              partID: notes
-            ruleID: less_than_min_length
           type: string
         pCode:
           maxlength: 30
@@ -293,12 +245,6 @@ schema:
               dataType: varchar
               partID: pCode
             ruleID: invalid_type
-          - meta:
-            - addresses: header
-              addressesRequired: optional
-              minLength: '0'
-              partID: pCode
-            ruleID: less_than_min_length
           type: string
         stateProvReg:
           emptyTrimmed: false
@@ -325,12 +271,6 @@ schema:
           - meta:
             - addresses: header
               addressesRequired: mandatory
-              minLength: '0'
-              partID: stateProvReg
-            ruleID: less_than_min_length
-          - meta:
-            - addresses: header
-              addressesRequired: mandatory
               partID: stateProvReg
             ruleID: missing_mandatory_column
           - meta:
@@ -346,7 +286,7 @@ schema:
     schema:
       meta:
       - partID: contacts
-        partType: table
+        partType: tables
       schema:
         contactID:
           emptyTrimmed: false
@@ -378,12 +318,6 @@ schema:
           - meta:
             - contacts: pK
               contactsRequired: mandatory
-              minLength: '0'
-              partID: contactID
-            ruleID: less_than_min_length
-          - meta:
-            - contacts: pK
-              contactsRequired: mandatory
               partID: contactID
             ruleID: missing_mandatory_column
           - meta:
@@ -409,12 +343,6 @@ schema:
               dataType: varchar
               partID: datasetID
             ruleID: invalid_type
-          - meta:
-            - contacts: fK
-              contactsRequired: optional
-              minLength: '0'
-              partID: datasetID
-            ruleID: less_than_min_length
           type: string
         email:
           emptyTrimmed: false
@@ -438,12 +366,6 @@ schema:
               dataType: varchar
               partID: email
             ruleID: invalid_type
-          - meta:
-            - contacts: header
-              contactsRequired: mandatory
-              minLength: '0'
-              partID: email
-            ruleID: less_than_min_length
           - meta:
             - contacts: header
               contactsRequired: mandatory
@@ -471,12 +393,6 @@ schema:
               dataType: varchar
               partID: firstName
             ruleID: invalid_type
-          - meta:
-            - contacts: header
-              contactsRequired: optional
-              minLength: '0'
-              partID: firstName
-            ruleID: less_than_min_length
           type: string
         lastEdited:
           coerce: datetime
@@ -494,12 +410,6 @@ schema:
               dataType: datetime
               partID: lastEdited
             ruleID: invalid_type
-          - meta:
-            - contacts: header
-              contactsRequired: optional
-              minLength: '0'
-              partID: lastEdited
-            ruleID: less_than_min_length
           type: datetime
         lastName:
           maxlength: 30
@@ -516,12 +426,6 @@ schema:
               dataType: varchar
               partID: lastName
             ruleID: invalid_type
-          - meta:
-            - contacts: header
-              contactsRequired: optional
-              minLength: '0'
-              partID: lastName
-            ruleID: less_than_min_length
           type: string
         notes:
           maxlength: 200
@@ -538,12 +442,6 @@ schema:
               dataType: varchar
               partID: notes
             ruleID: invalid_type
-          - meta:
-            - contacts: header
-              contactsRequired: optional
-              minLength: '0'
-              partID: notes
-            ruleID: less_than_min_length
           type: string
         organizationID:
           emptyTrimmed: false
@@ -567,12 +465,6 @@ schema:
               dataType: varchar
               partID: organizationID
             ruleID: invalid_type
-          - meta:
-            - contacts: fK
-              contactsRequired: mandatory
-              minLength: '0'
-              partID: organizationID
-            ruleID: less_than_min_length
           - meta:
             - contacts: fK
               contactsRequired: mandatory
@@ -623,12 +515,6 @@ schema:
               dataType: varchar
               partID: role
             ruleID: invalid_type
-          - meta:
-            - contacts: header
-              contactsRequired: optional
-              minLength: '0'
-              partID: role
-            ruleID: less_than_min_length
           type: string
       type: dict
     type: list
@@ -636,7 +522,7 @@ schema:
     schema:
       meta:
       - partID: datasets
-        partType: table
+        partType: tables
       schema:
         custodyCont:
           maxlength: 30
@@ -653,12 +539,6 @@ schema:
               datasetsRequired: recommended
               partID: custodyCont
             ruleID: invalid_type
-          - meta:
-            - datasets: fK
-              datasetsRequired: recommended
-              minLength: '0'
-              partID: custodyCont
-            ruleID: less_than_min_length
           type: string
         custodyID:
           emptyTrimmed: false
@@ -682,12 +562,6 @@ schema:
               datasetsRequired: mandatory
               partID: custodyID
             ruleID: invalid_type
-          - meta:
-            - datasets: fK
-              datasetsRequired: mandatory
-              minLength: '0'
-              partID: custodyID
-            ruleID: less_than_min_length
           - meta:
             - datasets: fK
               datasetsRequired: mandatory
@@ -716,12 +590,6 @@ schema:
               datasetsRequired: recommended
               partID: datasetDate
             ruleID: invalid_type
-          - meta:
-            - datasets: header
-              datasetsRequired: recommended
-              minLength: '0'
-              partID: datasetDate
-            ruleID: less_than_min_length
           type: datetime
         datasetID:
           emptyTrimmed: false
@@ -753,12 +621,6 @@ schema:
           - meta:
             - datasets: pK
               datasetsRequired: mandatory
-              minLength: '0'
-              partID: datasetID
-            ruleID: less_than_min_length
-          - meta:
-            - datasets: pK
-              datasetsRequired: mandatory
               partID: datasetID
             ruleID: missing_mandatory_column
           - meta:
@@ -784,12 +646,6 @@ schema:
               datasetsRequired: optional
               partID: descr
             ruleID: invalid_type
-          - meta:
-            - datasets: header
-              datasetsRequired: optional
-              minLength: '0'
-              partID: descr
-            ruleID: less_than_min_length
           type: string
         funderCont:
           maxlength: 30
@@ -806,12 +662,6 @@ schema:
               datasetsRequired: recommended
               partID: funderCont
             ruleID: invalid_type
-          - meta:
-            - datasets: fK
-              datasetsRequired: recommended
-              minLength: '0'
-              partID: funderCont
-            ruleID: less_than_min_length
           type: string
         funderID:
           maxlength: 30
@@ -828,34 +678,22 @@ schema:
               datasetsRequired: optional
               partID: funderID
             ruleID: invalid_type
-          - meta:
-            - datasets: fK
-              datasetsRequired: optional
-              minLength: '0'
-              partID: funderID
-            ruleID: less_than_min_length
           type: string
-        langID:
+        lang:
           maxlength: 30
           meta:
           - meta:
             - datasets: fK
               datasetsRequired: optional
               maxLength: '30'
-              partID: langID
+              partID: lang
             ruleID: greater_than_max_length
           - meta:
             - dataType: varchar
               datasets: fK
               datasetsRequired: optional
-              partID: langID
+              partID: lang
             ruleID: invalid_type
-          - meta:
-            - datasets: fK
-              datasetsRequired: optional
-              minLength: '0'
-              partID: langID
-            ruleID: less_than_min_length
           type: string
         lastEdited:
           coerce: datetime
@@ -873,12 +711,6 @@ schema:
               datasetsRequired: optional
               partID: lastEdited
             ruleID: invalid_type
-          - meta:
-            - datasets: header
-              datasetsRequired: optional
-              minLength: '0'
-              partID: lastEdited
-            ruleID: less_than_min_length
           type: datetime
         license:
           emptyTrimmed: false
@@ -902,12 +734,6 @@ schema:
               datasetsRequired: mandatory
               partID: license
             ruleID: invalid_type
-          - meta:
-            - datasets: fK
-              datasetsRequired: mandatory
-              minLength: '0'
-              partID: license
-            ruleID: less_than_min_length
           - meta:
             - datasets: fK
               datasetsRequired: mandatory
@@ -935,12 +761,6 @@ schema:
               datasetsRequired: recommended
               partID: name
             ruleID: invalid_type
-          - meta:
-            - datasets: header
-              datasetsRequired: recommended
-              minLength: '0'
-              partID: name
-            ruleID: less_than_min_length
           type: string
         notes:
           maxlength: 200
@@ -957,12 +777,6 @@ schema:
               datasetsRequired: optional
               partID: notes
             ruleID: invalid_type
-          - meta:
-            - datasets: header
-              datasetsRequired: optional
-              minLength: '0'
-              partID: notes
-            ruleID: less_than_min_length
           type: string
         parDatasetID:
           maxlength: 30
@@ -979,12 +793,6 @@ schema:
               datasetsRequired: optional
               partID: parDatasetID
             ruleID: invalid_type
-          - meta:
-            - datasets: fK
-              datasetsRequired: optional
-              minLength: '0'
-              partID: parDatasetID
-            ruleID: less_than_min_length
           type: string
         refLink:
           maxlength: 255
@@ -1001,12 +809,6 @@ schema:
               datasetsRequired: optional
               partID: refLink
             ruleID: invalid_type
-          - meta:
-            - datasets: header
-              datasetsRequired: optional
-              minLength: '0'
-              partID: refLink
-            ruleID: less_than_min_length
           type: string
       type: dict
     type: list
@@ -1014,7 +816,7 @@ schema:
     schema:
       meta:
       - partID: instruments
-        partType: table
+        partType: tables
       schema:
         contactID:
           maxlength: 30
@@ -1031,12 +833,6 @@ schema:
               instrumentsRequired: optional
               partID: contactID
             ruleID: invalid_type
-          - meta:
-            - instruments: fK
-              instrumentsRequired: optional
-              minLength: '0'
-              partID: contactID
-            ruleID: less_than_min_length
           type: string
         datasetID:
           emptyTrimmed: false
@@ -1060,12 +856,6 @@ schema:
               instrumentsRequired: mandatory
               partID: datasetID
             ruleID: invalid_type
-          - meta:
-            - instruments: fK
-              instrumentsRequired: mandatory
-              minLength: '0'
-              partID: datasetID
-            ruleID: less_than_min_length
           - meta:
             - instruments: fK
               instrumentsRequired: mandatory
@@ -1093,15 +883,8 @@ schema:
               instrumentsRequired: optional
               partID: descr
             ruleID: invalid_type
-          - meta:
-            - instruments: header
-              instrumentsRequired: optional
-              minLength: '0'
-              partID: descr
-            ruleID: less_than_min_length
           type: string
         index:
-          coerce: integer
           maxlength: 50
           meta:
           - meta:
@@ -1111,19 +894,19 @@ schema:
               partID: index
             ruleID: greater_than_max_length
           - meta:
-            - dataType: integer
+            - dataType: varchar
               instruments: header
               instrumentsRequired: optional
               partID: index
             ruleID: invalid_type
-          - meta:
-            - instruments: header
-              instrumentsRequired: optional
-              minLength: '0'
-              partID: index
-            ruleID: less_than_min_length
-          type: integer
+          type: string
         insType:
+          allowed:
+          - aas
+          - hma
+          - instrumentTypeOther
+          - ola
+          - onse
           emptyTrimmed: false
           forbidden:
           - NA
@@ -1140,17 +923,27 @@ schema:
               partID: insType
             ruleID: greater_than_max_length
           - meta:
-            - dataType: categorical
+            - dataType: varchar
+              instruments: fK
+              mmaSet: insTypeSet
+              partID: insType
+            - partID: aas
+              setID: insTypeSet
+            - partID: hma
+              setID: insTypeSet
+            - partID: instrumentTypeOther
+              setID: insTypeSet
+            - partID: ola
+              setID: insTypeSet
+            - partID: onse
+              setID: insTypeSet
+            ruleID: invalid_category
+          - meta:
+            - dataType: varchar
               instruments: fK
               instrumentsRequired: mandatory
               partID: insType
             ruleID: invalid_type
-          - meta:
-            - instruments: fK
-              instrumentsRequired: mandatory
-              minLength: '0'
-              partID: insType
-            ruleID: less_than_min_length
           - meta:
             - instruments: fK
               instrumentsRequired: mandatory
@@ -1178,12 +971,6 @@ schema:
               instrumentsRequired: optional
               partID: insTypeOth
             ruleID: invalid_type
-          - meta:
-            - instruments: header
-              instrumentsRequired: optional
-              minLength: '0'
-              partID: insTypeOth
-            ruleID: less_than_min_length
           type: string
         instrumentID:
           emptyTrimmed: false
@@ -1215,12 +1002,6 @@ schema:
           - meta:
             - instruments: pK
               instrumentsRequired: mandatory
-              minLength: '0'
-              partID: instrumentID
-            ruleID: less_than_min_length
-          - meta:
-            - instruments: pK
-              instrumentsRequired: mandatory
               partID: instrumentID
             ruleID: missing_mandatory_column
           - meta:
@@ -1247,12 +1028,6 @@ schema:
               instrumentsRequired: optional
               partID: lastEdited
             ruleID: invalid_type
-          - meta:
-            - instruments: header
-              instrumentsRequired: optional
-              minLength: '0'
-              partID: lastEdited
-            ruleID: less_than_min_length
           type: datetime
         manufacturer:
           maxlength: 100
@@ -1269,12 +1044,6 @@ schema:
               instrumentsRequired: optional
               partID: manufacturer
             ruleID: invalid_type
-          - meta:
-            - instruments: header
-              instrumentsRequired: optional
-              minLength: '0'
-              partID: manufacturer
-            ruleID: less_than_min_length
           type: string
         model:
           emptyTrimmed: false
@@ -1298,12 +1067,6 @@ schema:
               instrumentsRequired: mandatory
               partID: model
             ruleID: invalid_type
-          - meta:
-            - instruments: header
-              instrumentsRequired: mandatory
-              minLength: '0'
-              partID: model
-            ruleID: less_than_min_length
           - meta:
             - instruments: header
               instrumentsRequired: mandatory
@@ -1331,12 +1094,6 @@ schema:
               instrumentsRequired: recommended
               partID: name
             ruleID: invalid_type
-          - meta:
-            - instruments: header
-              instrumentsRequired: recommended
-              minLength: '0'
-              partID: name
-            ruleID: less_than_min_length
           type: string
         notes:
           maxlength: 200
@@ -1353,12 +1110,6 @@ schema:
               instrumentsRequired: optional
               partID: notes
             ruleID: invalid_type
-          - meta:
-            - instruments: header
-              instrumentsRequired: optional
-              minLength: '0'
-              partID: notes
-            ruleID: less_than_min_length
           type: string
         organizationID:
           maxlength: 100
@@ -1375,12 +1126,6 @@ schema:
               instrumentsRequired: optional
               partID: organizationID
             ruleID: invalid_type
-          - meta:
-            - instruments: fK
-              instrumentsRequired: optional
-              minLength: '0'
-              partID: organizationID
-            ruleID: less_than_min_length
           type: string
         refLink:
           maxlength: 255
@@ -1397,12 +1142,6 @@ schema:
               instrumentsRequired: optional
               partID: refLink
             ruleID: invalid_type
-          - meta:
-            - instruments: header
-              instrumentsRequired: optional
-              minLength: '0'
-              partID: refLink
-            ruleID: less_than_min_length
           type: string
       type: dict
     type: list
@@ -1410,7 +1149,7 @@ schema:
     schema:
       meta:
       - partID: languages
-        partType: table
+        partType: tables
       schema:
         iso6391:
           emptyTrimmed: false
@@ -1434,12 +1173,6 @@ schema:
               languagesRequired: mandatory
               partID: iso6391
             ruleID: invalid_type
-          - meta:
-            - languages: header
-              languagesRequired: mandatory
-              minLength: '0'
-              partID: iso6391
-            ruleID: less_than_min_length
           - meta:
             - languages: header
               languagesRequired: mandatory
@@ -1477,12 +1210,6 @@ schema:
           - meta:
             - languages: header
               languagesRequired: mandatory
-              minLength: '0'
-              partID: iso6392B
-            ruleID: less_than_min_length
-          - meta:
-            - languages: header
-              languagesRequired: mandatory
               partID: iso6392B
             ruleID: missing_mandatory_column
           - meta:
@@ -1514,12 +1241,6 @@ schema:
               languagesRequired: mandatory
               partID: iso6392T
             ruleID: invalid_type
-          - meta:
-            - languages: header
-              languagesRequired: mandatory
-              minLength: '0'
-              partID: iso6392T
-            ruleID: less_than_min_length
           - meta:
             - languages: header
               languagesRequired: mandatory
@@ -1557,12 +1278,6 @@ schema:
           - meta:
             - languages: header
               languagesRequired: mandatory
-              minLength: '0'
-              partID: iso6393
-            ruleID: less_than_min_length
-          - meta:
-            - languages: header
-              languagesRequired: mandatory
               partID: iso6393
             ruleID: missing_mandatory_column
           - meta:
@@ -1597,12 +1312,6 @@ schema:
           - meta:
             - languages: header
               languagesRequired: mandatory
-              minLength: '0'
-              partID: iso6396
-            ruleID: less_than_min_length
-          - meta:
-            - languages: header
-              languagesRequired: mandatory
               partID: iso6396
             ruleID: missing_mandatory_column
           - meta:
@@ -1612,6 +1321,46 @@ schema:
             ruleID: missing_values_found
           required: true
           type: string
+        lang:
+          emptyTrimmed: false
+          forbidden:
+          - NA
+          - nan
+          - nr
+          - 'null'
+          - undisc
+          maxlength: 30
+          meta:
+          - meta:
+            - languages: pK
+              languagesRequired: mandatory
+              partID: lang
+            ruleID: duplicate_entries_found
+          - meta:
+            - languages: pK
+              languagesRequired: mandatory
+              maxLength: '30'
+              partID: lang
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              languages: pK
+              languagesRequired: mandatory
+              partID: lang
+            ruleID: invalid_type
+          - meta:
+            - languages: pK
+              languagesRequired: mandatory
+              partID: lang
+            ruleID: missing_mandatory_column
+          - meta:
+            - languages: pK
+              languagesRequired: mandatory
+              partID: lang
+            ruleID: missing_values_found
+          required: true
+          type: string
+          unique: true
         langFam:
           emptyTrimmed: false
           forbidden:
@@ -1637,12 +1386,6 @@ schema:
           - meta:
             - languages: header
               languagesRequired: mandatory
-              minLength: '0'
-              partID: langFam
-            ruleID: less_than_min_length
-          - meta:
-            - languages: header
-              languagesRequired: mandatory
               partID: langFam
             ruleID: missing_mandatory_column
           - meta:
@@ -1652,52 +1395,6 @@ schema:
             ruleID: missing_values_found
           required: true
           type: string
-        langID:
-          emptyTrimmed: false
-          forbidden:
-          - NA
-          - nan
-          - nr
-          - 'null'
-          - undisc
-          maxlength: 30
-          meta:
-          - meta:
-            - languages: pK
-              languagesRequired: mandatory
-              partID: langID
-            ruleID: duplicate_entries_found
-          - meta:
-            - languages: pK
-              languagesRequired: mandatory
-              maxLength: '30'
-              partID: langID
-            ruleID: greater_than_max_length
-          - meta:
-            - dataType: varchar
-              languages: pK
-              languagesRequired: mandatory
-              partID: langID
-            ruleID: invalid_type
-          - meta:
-            - languages: pK
-              languagesRequired: mandatory
-              minLength: '0'
-              partID: langID
-            ruleID: less_than_min_length
-          - meta:
-            - languages: pK
-              languagesRequired: mandatory
-              partID: langID
-            ruleID: missing_mandatory_column
-          - meta:
-            - languages: pK
-              languagesRequired: mandatory
-              partID: langID
-            ruleID: missing_values_found
-          required: true
-          type: string
-          unique: true
         langName:
           emptyTrimmed: false
           forbidden:
@@ -1720,12 +1417,6 @@ schema:
               languagesRequired: mandatory
               partID: langName
             ruleID: invalid_type
-          - meta:
-            - languages: header
-              languagesRequired: mandatory
-              minLength: '0'
-              partID: langName
-            ruleID: less_than_min_length
           - meta:
             - languages: header
               languagesRequired: mandatory
@@ -1763,12 +1454,6 @@ schema:
           - meta:
             - languages: header
               languagesRequired: mandatory
-              minLength: '0'
-              partID: natName
-            ruleID: less_than_min_length
-          - meta:
-            - languages: header
-              languagesRequired: mandatory
               partID: natName
             ruleID: missing_mandatory_column
           - meta:
@@ -1793,12 +1478,6 @@ schema:
               languagesRequired: optional
               partID: notes
             ruleID: invalid_type
-          - meta:
-            - languages: header
-              languagesRequired: optional
-              minLength: '0'
-              partID: notes
-            ruleID: less_than_min_length
           type: string
       type: dict
     type: list
@@ -1806,7 +1485,7 @@ schema:
     schema:
       meta:
       - partID: measureSets
-        partType: table
+        partType: tables
       schema:
         contactID:
           maxlength: 30
@@ -1823,12 +1502,6 @@ schema:
               measureSetsRequired: optional
               partID: contactID
             ruleID: invalid_type
-          - meta:
-            - measureSets: fK
-              measureSetsRequired: optional
-              minLength: '0'
-              partID: contactID
-            ruleID: less_than_min_length
           type: string
         lastEdited:
           coerce: datetime
@@ -1846,12 +1519,6 @@ schema:
               measureSetsRequired: optional
               partID: lastEdited
             ruleID: invalid_type
-          - meta:
-            - measureSets: header
-              measureSetsRequired: optional
-              minLength: '0'
-              partID: lastEdited
-            ruleID: less_than_min_length
           type: datetime
         meaureSetRepID:
           emptyTrimmed: false
@@ -1883,12 +1550,6 @@ schema:
           - meta:
             - measureSets: pK
               measureSetsRequired: mandatory
-              minLength: '0'
-              partID: meaureSetRepID
-            ruleID: less_than_min_length
-          - meta:
-            - measureSets: pK
-              measureSetsRequired: mandatory
               partID: meaureSetRepID
             ruleID: missing_mandatory_column
           - meta:
@@ -1914,12 +1575,6 @@ schema:
               measureSetsRequired: optional
               partID: name
             ruleID: invalid_type
-          - meta:
-            - measureSets: header
-              measureSetsRequired: optional
-              minLength: '0'
-              partID: name
-            ruleID: less_than_min_length
           type: string
         notes:
           maxlength: 200
@@ -1936,12 +1591,6 @@ schema:
               measureSetsRequired: optional
               partID: notes
             ruleID: invalid_type
-          - meta:
-            - measureSets: header
-              measureSetsRequired: optional
-              minLength: '0'
-              partID: notes
-            ruleID: less_than_min_length
           type: string
         organizationID:
           maxlength: 100
@@ -1958,12 +1607,6 @@ schema:
               measureSetsRequired: optional
               partID: organizationID
             ruleID: invalid_type
-          - meta:
-            - measureSets: fK
-              measureSetsRequired: optional
-              minLength: '0'
-              partID: organizationID
-            ruleID: less_than_min_length
           type: string
         protocolID:
           maxlength: 30
@@ -1980,12 +1623,6 @@ schema:
               measureSetsRequired: optional
               partID: protocolID
             ruleID: invalid_type
-          - meta:
-            - measureSets: fK
-              measureSetsRequired: optional
-              minLength: '0'
-              partID: protocolID
-            ruleID: less_than_min_length
           type: string
       type: dict
     type: list
@@ -1993,7 +1630,7 @@ schema:
     schema:
       meta:
       - partID: measures
-        partType: table
+        partType: tables
       schema:
         aDateEnd:
           coerce: datetime
@@ -2018,12 +1655,6 @@ schema:
               measuresRequired: mandatory
               partID: aDateEnd
             ruleID: invalid_type
-          - meta:
-            - measures: header
-              measuresRequired: mandatory
-              minLength: '0'
-              partID: aDateEnd
-            ruleID: less_than_min_length
           - meta:
             - measures: header
               measuresRequired: mandatory
@@ -2052,14 +1683,8 @@ schema:
               measuresRequired: optional
               partID: aDateStart
             ruleID: invalid_type
-          - meta:
-            - measures: header
-              measuresRequired: optional
-              minLength: '0'
-              partID: aDateStart
-            ruleID: less_than_min_length
           type: datetime
-        aggID:
+        aggregation:
           emptyTrimmed: false
           forbidden:
           - NA
@@ -2073,53 +1698,41 @@ schema:
             - maxLength: '12'
               measures: fK
               measuresRequired: mandatory
-              partID: aggID
+              partID: aggregation
             ruleID: greater_than_max_length
           - meta:
             - dataType: categorical
               measures: fK
               measuresRequired: mandatory
-              partID: aggID
+              partID: aggregation
             ruleID: invalid_type
           - meta:
             - measures: fK
               measuresRequired: mandatory
-              minLength: '0'
-              partID: aggID
-            ruleID: less_than_min_length
-          - meta:
-            - measures: fK
-              measuresRequired: mandatory
-              partID: aggID
+              partID: aggregation
             ruleID: missing_mandatory_column
           - meta:
             - measures: fK
               measuresRequired: mandatory
-              partID: aggID
+              partID: aggregation
             ruleID: missing_values_found
           required: true
           type: string
-        classID:
+        class:
           maxlength: 30
           meta:
           - meta:
             - maxLength: '30'
               measures: fK
               measuresRequired: optional
-              partID: classID
+              partID: class
             ruleID: greater_than_max_length
           - meta:
             - dataType: categorical
               measures: fK
               measuresRequired: optional
-              partID: classID
+              partID: class
             ruleID: invalid_type
-          - meta:
-            - measures: fK
-              measuresRequired: optional
-              minLength: '0'
-              partID: classID
-            ruleID: less_than_min_length
           type: string
         contactID:
           maxlength: 30
@@ -2136,12 +1749,6 @@ schema:
               measuresRequired: optional
               partID: contactID
             ruleID: invalid_type
-          - meta:
-            - measures: header
-              measuresRequired: optional
-              minLength: '0'
-              partID: contactID
-            ruleID: less_than_min_length
           type: string
         datasetID:
           maxlength: 30
@@ -2158,59 +1765,56 @@ schema:
               measuresRequired: optional
               partID: datasetID
             ruleID: invalid_type
-          - meta:
-            - measures: fK
-              measuresRequired: optional
-              minLength: '0'
-              partID: datasetID
-            ruleID: less_than_min_length
           type: string
-        fractionID:
+        fraction:
+          allowed:
+          - liq
+          - mix
+          - sol
           maxlength: 30
           meta:
           - meta:
             - maxLength: '30'
               measures: fK
               measuresRequired: recommended
-              partID: fractionID
+              partID: fraction
             ruleID: greater_than_max_length
           - meta:
             - dataType: categorical
               measures: fK
-              measuresRequired: recommended
-              partID: fractionID
-            ruleID: invalid_type
+              mmaSet: fractionSet
+              partID: fraction
+            - partID: liq
+              setID: fractionSet
+            - partID: mix
+              setID: fractionSet
+            - partID: sol
+              setID: fractionSet
+            ruleID: invalid_category
           - meta:
-            - measures: fK
+            - dataType: categorical
+              measures: fK
               measuresRequired: recommended
-              minLength: '0'
-              partID: fractionID
-            ruleID: less_than_min_length
+              partID: fraction
+            ruleID: invalid_type
           type: string
-        groupID:
+        group:
           maxlength: 30
           meta:
           - meta:
             - maxLength: '30'
               measures: fK
               measuresRequired: optional
-              partID: groupID
+              partID: group
             ruleID: greater_than_max_length
           - meta:
             - dataType: categorical
               measures: fK
               measuresRequired: optional
-              partID: groupID
+              partID: group
             ruleID: invalid_type
-          - meta:
-            - measures: fK
-              measuresRequired: optional
-              minLength: '0'
-              partID: groupID
-            ruleID: less_than_min_length
           type: string
         index:
-          coerce: integer
           maxlength: 50
           meta:
           - meta:
@@ -2220,18 +1824,12 @@ schema:
               partID: index
             ruleID: greater_than_max_length
           - meta:
-            - dataType: integer
+            - dataType: varchar
               measures: header
               measuresRequired: optional
               partID: index
             ruleID: invalid_type
-          - meta:
-            - measures: header
-              measuresRequired: optional
-              minLength: '0'
-              partID: index
-            ruleID: less_than_min_length
-          type: integer
+          type: string
         lastEdited:
           coerce: datetime
           maxlength: 30
@@ -2248,14 +1846,8 @@ schema:
               measuresRequired: optional
               partID: lastEdited
             ruleID: invalid_type
-          - meta:
-            - measures: header
-              measuresRequired: optional
-              minLength: '0'
-              partID: lastEdited
-            ruleID: less_than_min_length
           type: datetime
-        measureID:
+        measure:
           emptyTrimmed: false
           forbidden:
           - NA
@@ -2269,29 +1861,23 @@ schema:
             - maxLength: '12'
               measures: fK
               measuresRequired: mandatory
-              partID: measureID
+              partID: measure
             ruleID: greater_than_max_length
           - meta:
             - dataType: varchar
               measures: fK
               measuresRequired: mandatory
-              partID: measureID
+              partID: measure
             ruleID: invalid_type
           - meta:
             - measures: fK
               measuresRequired: mandatory
-              minLength: '0'
-              partID: measureID
-            ruleID: less_than_min_length
-          - meta:
-            - measures: fK
-              measuresRequired: mandatory
-              partID: measureID
+              partID: measure
             ruleID: missing_mandatory_column
           - meta:
             - measures: fK
               measuresRequired: mandatory
-              partID: measureID
+              partID: measure
             ruleID: missing_values_found
           required: true
           type: string
@@ -2325,12 +1911,6 @@ schema:
           - meta:
             - measures: pK
               measuresRequired: mandatory
-              minLength: '0'
-              partID: measureRepID
-            ruleID: less_than_min_length
-          - meta:
-            - measures: pK
-              measuresRequired: mandatory
               partID: measureRepID
             ruleID: missing_mandatory_column
           - meta:
@@ -2356,12 +1936,6 @@ schema:
               measuresRequired: optional
               partID: meaureSetRepID
             ruleID: invalid_type
-          - meta:
-            - measures: fK
-              measuresRequired: optional
-              minLength: '0'
-              partID: meaureSetRepID
-            ruleID: less_than_min_length
           type: string
         mesureLic:
           maxlength: 30
@@ -2378,34 +1952,22 @@ schema:
               measuresRequired: optional
               partID: mesureLic
             ruleID: invalid_type
-          - meta:
-            - measures: header
-              measuresRequired: optional
-              minLength: '0'
-              partID: mesureLic
-            ruleID: less_than_min_length
           type: string
-        nomenclatureID:
+        nomenclature:
           maxlength: 30
           meta:
           - meta:
             - maxLength: '30'
               measures: fK
               measuresRequired: optional
-              partID: nomenclatureID
+              partID: nomenclature
             ruleID: greater_than_max_length
           - meta:
             - dataType: categorical
               measures: fK
               measuresRequired: optional
-              partID: nomenclatureID
+              partID: nomenclature
             ruleID: invalid_type
-          - meta:
-            - measures: fK
-              measuresRequired: optional
-              minLength: '0'
-              partID: nomenclatureID
-            ruleID: less_than_min_length
           type: string
         notes:
           maxlength: 200
@@ -2422,12 +1984,6 @@ schema:
               measuresRequired: optional
               partID: notes
             ruleID: invalid_type
-          - meta:
-            - measures: header
-              measuresRequired: optional
-              minLength: '0'
-              partID: notes
-            ruleID: less_than_min_length
           type: string
         organizationID:
           maxlength: 100
@@ -2444,12 +2000,6 @@ schema:
               measuresRequired: optional
               partID: organizationID
             ruleID: invalid_type
-          - meta:
-            - measures: header
-              measuresRequired: optional
-              minLength: '0'
-              partID: organizationID
-            ruleID: less_than_min_length
           type: string
         polygonID:
           maxlength: 10
@@ -2466,12 +2016,6 @@ schema:
               measuresRequired: optional
               partID: polygonID
             ruleID: invalid_type
-          - meta:
-            - measures: fK
-              measuresRequired: optional
-              minLength: '0'
-              partID: polygonID
-            ruleID: less_than_min_length
           type: string
         protocolID:
           maxlength: 30
@@ -2488,34 +2032,50 @@ schema:
               measuresRequired: optional
               partID: protocolID
             ruleID: invalid_type
-          - meta:
-            - measures: fK
-              measuresRequired: optional
-              minLength: '0'
-              partID: protocolID
-            ruleID: less_than_min_length
           type: string
-        purposeID:
+        purpose:
+          allowed:
+          - education
+          - multiple
+          - provisional
+          - qualityControl
+          - regular
+          - testing
+          - validationStudy
           maxlength: 30
           meta:
           - meta:
             - maxLength: '30'
               measures: fK
               measuresRequired: optional
-              partID: purposeID
+              partID: purpose
             ruleID: greater_than_max_length
           - meta:
             - dataType: categorical
               measures: fK
-              measuresRequired: optional
-              partID: purposeID
-            ruleID: invalid_type
+              mmaSet: purposeSet
+              partID: purpose
+            - partID: education
+              setID: purposeSet
+            - partID: multiple
+              setID: purposeSet
+            - partID: provisional
+              setID: purposeSet
+            - partID: qualityControl
+              setID: purposeSet
+            - partID: regular
+              setID: purposeSet
+            - partID: testing
+              setID: purposeSet
+            - partID: validationStudy
+              setID: purposeSet
+            ruleID: invalid_category
           - meta:
-            - measures: fK
+            - dataType: categorical
+              measures: fK
               measuresRequired: optional
-              minLength: '0'
-              partID: purposeID
-            ruleID: less_than_min_length
+              partID: purpose
+            ruleID: invalid_type
           type: string
         refLink:
           maxlength: 255
@@ -2532,12 +2092,6 @@ schema:
               measuresRequired: optional
               partID: refLink
             ruleID: invalid_type
-          - meta:
-            - measures: header
-              measuresRequired: optional
-              minLength: '0'
-              partID: refLink
-            ruleID: less_than_min_length
           type: string
         reportDate:
           coerce: datetime
@@ -2555,17 +2109,11 @@ schema:
               measuresRequired: optional
               partID: reportDate
             ruleID: invalid_type
-          - meta:
-            - measures: header
-              measuresRequired: optional
-              minLength: '0'
-              partID: reportDate
-            ruleID: less_than_min_length
           type: datetime
         reportable:
           allowed:
-          - booleanCatSet
-          - pretreat
+          - 'false'
+          - 'true'
           maxlength: 10
           meta:
           - meta:
@@ -2577,15 +2125,19 @@ schema:
           - meta:
             - dataType: boolean
               measures: header
+              mmaSet: booleanSet
+              partID: reportable
+            - partID: 'true'
+              setID: booleanSet
+            - partID: 'false'
+              setID: booleanSet
+            ruleID: invalid_category
+          - meta:
+            - dataType: boolean
+              measures: header
               measuresRequired: optional
               partID: reportable
             ruleID: invalid_type
-          - meta:
-            - measures: header
-              measuresRequired: optional
-              minLength: '0'
-              partID: reportable
-            ruleID: less_than_min_length
           type: string
         sampleID:
           emptyTrimmed: false
@@ -2612,12 +2164,6 @@ schema:
           - meta:
             - measures: fK
               measuresRequired: mandatory
-              minLength: '0'
-              partID: sampleID
-            ruleID: less_than_min_length
-          - meta:
-            - measures: fK
-              measuresRequired: mandatory
               partID: sampleID
             ruleID: missing_mandatory_column
           - meta:
@@ -2628,6 +2174,10 @@ schema:
           required: true
           type: string
         severity:
+          allowed:
+          - high
+          - low
+          - mid
           maxlength: 30
           meta:
           - meta:
@@ -2638,13 +2188,20 @@ schema:
           - meta:
             - dataType: varchar
               measures: input
+              mmaSet: sevSet
+              partID: severity
+            - partID: low
+              setID: sevSet
+            - partID: mid
+              setID: sevSet
+            - partID: high
+              setID: sevSet
+            ruleID: invalid_category
+          - meta:
+            - dataType: varchar
+              measures: input
               partID: severity
             ruleID: invalid_type
-          - meta:
-            - measures: input
-              minLength: '0'
-              partID: severity
-            ruleID: less_than_min_length
           type: string
         siteID:
           maxlength: 30
@@ -2661,14 +2218,8 @@ schema:
               measuresRequired: recommended
               partID: siteID
             ruleID: invalid_type
-          - meta:
-            - measures: fK
-              measuresRequired: recommended
-              minLength: '0'
-              partID: siteID
-            ruleID: less_than_min_length
           type: string
-        specimenID:
+        specimen:
           emptyTrimmed: false
           forbidden:
           - NA
@@ -2682,33 +2233,27 @@ schema:
             - maxLength: '12'
               measures: fK
               measuresRequired: mandatory
-              partID: specimenID
+              partID: specimen
             ruleID: greater_than_max_length
           - meta:
             - dataType: categorical
               measures: fK
               measuresRequired: mandatory
-              partID: specimenID
+              partID: specimen
             ruleID: invalid_type
           - meta:
             - measures: fK
               measuresRequired: mandatory
-              minLength: '0'
-              partID: specimenID
-            ruleID: less_than_min_length
-          - meta:
-            - measures: fK
-              measuresRequired: mandatory
-              partID: specimenID
+              partID: specimen
             ruleID: missing_mandatory_column
           - meta:
             - measures: fK
               measuresRequired: mandatory
-              partID: specimenID
+              partID: specimen
             ruleID: missing_values_found
           required: true
           type: string
-        unitID:
+        unit:
           emptyTrimmed: false
           forbidden:
           - NA
@@ -2722,31 +2267,39 @@ schema:
             - maxLength: '30'
               measures: fK
               measuresRequired: mandatory
-              partID: unitID
+              partID: unit
             ruleID: greater_than_max_length
           - meta:
             - dataType: categorical
               measures: fK
               measuresRequired: mandatory
-              partID: unitID
+              partID: unit
             ruleID: invalid_type
           - meta:
             - measures: fK
               measuresRequired: mandatory
-              minLength: '0'
-              partID: unitID
-            ruleID: less_than_min_length
-          - meta:
-            - measures: fK
-              measuresRequired: mandatory
-              partID: unitID
+              partID: unit
             ruleID: missing_mandatory_column
           - meta:
             - measures: fK
               measuresRequired: mandatory
-              partID: unitID
+              partID: unit
             ruleID: missing_values_found
           required: true
+          type: string
+        unitSet:
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              measures: input
+              partID: unitSet
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              measures: input
+              partID: unitSet
+            ruleID: invalid_type
           type: string
         value:
           emptyTrimmed: false
@@ -2756,20 +2309,20 @@ schema:
           - nr
           - 'null'
           - undisc
-          maxlength: 28
+          maxlength: 15
           meta:
           - meta:
-            - maxLength: '28'
+            - maxLength: '15'
               measures: header
               measuresRequired: mandatory
               partID: value
             ruleID: greater_than_max_length
           - meta:
-            - measures: header
+            - dataType: varchar
+              measures: header
               measuresRequired: mandatory
-              minLength: '0'
               partID: value
-            ruleID: less_than_min_length
+            ruleID: invalid_type
           - meta:
             - measures: header
               measuresRequired: mandatory
@@ -2781,13 +2334,28 @@ schema:
               partID: value
             ruleID: missing_values_found
           required: true
+          type: string
+        wMeasureID:
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              measures: input
+              partID: wMeasureID
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              measures: input
+              partID: wMeasureID
+            ruleID: invalid_type
+          type: string
       type: dict
     type: list
   organizations:
     schema:
       meta:
       - partID: organizations
-        partType: table
+        partType: tables
       schema:
         addressID:
           emptyTrimmed: false
@@ -2812,12 +2380,6 @@ schema:
               partID: addressID
             ruleID: invalid_type
           - meta:
-            - minLength: '0'
-              organizations: fK
-              organizationsRequired: mandatory
-              partID: addressID
-            ruleID: less_than_min_length
-          - meta:
             - organizations: fK
               organizationsRequired: mandatory
               partID: addressID
@@ -2828,6 +2390,48 @@ schema:
               partID: addressID
             ruleID: missing_values_found
           required: true
+          type: string
+        admRegLevel:
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              organizations: input
+              partID: admRegLevel
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              organizations: input
+              partID: admRegLevel
+            ruleID: invalid_type
+          type: string
+        countryLevel:
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              organizations: input
+              partID: countryLevel
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              organizations: input
+              partID: countryLevel
+            ruleID: invalid_type
+          type: string
+        countyLevel:
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              organizations: input
+              partID: countyLevel
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              organizations: input
+              partID: countyLevel
+            ruleID: invalid_type
           type: string
         datasetID:
           maxlength: 30
@@ -2844,12 +2448,6 @@ schema:
               organizationsRequired: optional
               partID: datasetID
             ruleID: invalid_type
-          - meta:
-            - minLength: '0'
-              organizations: fK
-              organizationsRequired: optional
-              partID: datasetID
-            ruleID: less_than_min_length
           type: string
         descr:
           maxlength: 200
@@ -2866,12 +2464,6 @@ schema:
               organizationsRequired: optional
               partID: descr
             ruleID: invalid_type
-          - meta:
-            - minLength: '0'
-              organizations: header
-              organizationsRequired: optional
-              partID: descr
-            ruleID: less_than_min_length
           type: string
         lastEdited:
           coerce: datetime
@@ -2889,13 +2481,21 @@ schema:
               organizationsRequired: optional
               partID: lastEdited
             ruleID: invalid_type
-          - meta:
-            - minLength: '0'
-              organizations: header
-              organizationsRequired: optional
-              partID: lastEdited
-            ruleID: less_than_min_length
           type: datetime
+        municipalLevel:
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              organizations: input
+              partID: municipalLevel
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              organizations: input
+              partID: municipalLevel
+            ruleID: invalid_type
+          type: string
         name:
           maxlength: 30
           meta:
@@ -2911,12 +2511,20 @@ schema:
               organizationsRequired: recommended
               partID: name
             ruleID: invalid_type
+          type: string
+        neighborLevel:
+          maxlength: 30
+          meta:
           - meta:
-            - minLength: '0'
-              organizations: header
-              organizationsRequired: recommended
-              partID: name
-            ruleID: less_than_min_length
+            - maxLength: '30'
+              organizations: input
+              partID: neighborLevel
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              organizations: input
+              partID: neighborLevel
+            ruleID: invalid_type
           type: string
         notes:
           maxlength: 200
@@ -2933,52 +2541,138 @@ schema:
               organizationsRequired: optional
               partID: notes
             ruleID: invalid_type
-          - meta:
-            - minLength: '0'
-              organizations: header
-              organizationsRequired: optional
-              partID: notes
-            ruleID: less_than_min_length
           type: string
-        orgType:
-          emptyTrimmed: false
-          forbidden:
-          - NA
-          - nan
-          - nr
-          - 'null'
-          - undisc
+        orgLevel:
+          allowed:
+          - admRegLevel
+          - countryLevel
+          - countyLevel
+          - municipalLevel
+          - neighborLevel
+          - stateProvLevel
           maxlength: 30
           meta:
           - meta:
             - maxLength: '30'
-              organizations: fK
-              organizationsRequired: mandatory
+              organizations: header
+              organizationsRequired: recommended
+              partID: orgLevel
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: categorical
+              mmaSet: orgLevelSet
+              organizations: header
+              partID: orgLevel
+            - partID: neighborLevel
+              setID: orgLevelSet
+            - partID: municipalLevel
+              setID: orgLevelSet
+            - partID: stateProvLevel
+              setID: orgLevelSet
+            - partID: admRegLevel
+              setID: orgLevelSet
+            - partID: countryLevel
+              setID: orgLevelSet
+            - partID: countyLevel
+              setID: orgLevelSet
+            ruleID: invalid_category
+          - meta:
+            - dataType: categorical
+              organizations: header
+              organizationsRequired: recommended
+              partID: orgLevel
+            ruleID: invalid_type
+          type: string
+        orgSector:
+          allowed:
+          - airport
+          - ccc
+          - dorm
+          - fiNa
+          - healthAdm
+          - lab
+          - ltcf
+          - ltcfAl
+          - pubHealth
+          - school
+          - sss
+          - uCampus
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              organizations: header
+              organizationsRequired: recommended
+              partID: orgSector
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: categorical
+              mmaSet: orgSectorSet
+              organizations: header
+              partID: orgSector
+            - partID: ccc
+              setID: orgSectorSet
+            - partID: pubHealth
+              setID: orgSectorSet
+            - partID: lab
+              setID: orgSectorSet
+            - partID: healthAdm
+              setID: orgSectorSet
+            - partID: fiNa
+              setID: orgSectorSet
+            - partID: ltcf
+              setID: orgSectorSet
+            - partID: ltcfAl
+              setID: orgSectorSet
+            - partID: school
+              setID: orgSectorSet
+            - partID: sss
+              setID: orgSectorSet
+            - partID: uCampus
+              setID: orgSectorSet
+            - partID: airport
+              setID: orgSectorSet
+            - partID: dorm
+              setID: orgSectorSet
+            ruleID: invalid_category
+          - meta:
+            - dataType: categorical
+              organizations: header
+              organizationsRequired: recommended
+              partID: orgSector
+            ruleID: invalid_type
+          type: string
+        orgType:
+          allowed:
+          - academ
+          - govt
+          - priv
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              organizations: header
+              organizationsRequired: recommended
               partID: orgType
             ruleID: greater_than_max_length
           - meta:
             - dataType: categorical
-              organizations: fK
-              organizationsRequired: mandatory
+              mmaSet: orgTypeSet
+              organizations: header
+              partID: orgType
+            - partID: academ
+              setID: orgTypeSet
+            - partID: govt
+              setID: orgTypeSet
+            - partID: priv
+              setID: orgTypeSet
+            ruleID: invalid_category
+          - meta:
+            - dataType: categorical
+              organizations: header
+              organizationsRequired: recommended
               partID: orgType
             ruleID: invalid_type
-          - meta:
-            - minLength: '0'
-              organizations: fK
-              organizationsRequired: mandatory
-              partID: orgType
-            ruleID: less_than_min_length
-          - meta:
-            - organizations: fK
-              organizationsRequired: mandatory
-              partID: orgType
-            ruleID: missing_mandatory_column
-          - meta:
-            - organizations: fK
-              organizationsRequired: mandatory
-              partID: orgType
-            ruleID: missing_values_found
-          required: true
           type: string
         organizationID:
           emptyTrimmed: false
@@ -3008,12 +2702,6 @@ schema:
               partID: organizationID
             ruleID: invalid_type
           - meta:
-            - minLength: '0'
-              organizations: pK
-              organizationsRequired: mandatory
-              partID: organizationID
-            ruleID: less_than_min_length
-          - meta:
             - organizations: pK
               organizationsRequired: mandatory
               partID: organizationID
@@ -3026,15 +2714,29 @@ schema:
           required: true
           type: string
           unique: true
+        stateProvLevel:
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              organizations: input
+              partID: stateProvLevel
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              organizations: input
+              partID: stateProvLevel
+            ruleID: invalid_type
+          type: string
       type: dict
     type: list
   parts:
     schema:
       meta:
       - partID: parts
-        partType: table
+        partType: tables
       schema:
-        aggScaleID:
+        aggragationScale:
           emptyTrimmed: false
           forbidden:
           - NA
@@ -3046,35 +2748,29 @@ schema:
           meta:
           - meta:
             - maxLength: '12'
-              partID: aggScaleID
+              partID: aggragationScale
               parts: header
               partsRequired: mandatory
             ruleID: greater_than_max_length
           - meta:
             - dataType: categorical
-              partID: aggScaleID
+              partID: aggragationScale
               parts: header
               partsRequired: mandatory
             ruleID: invalid_type
           - meta:
-            - minLength: '0'
-              partID: aggScaleID
-              parts: header
-              partsRequired: mandatory
-            ruleID: less_than_min_length
-          - meta:
-            - partID: aggScaleID
+            - partID: aggragationScale
               parts: header
               partsRequired: mandatory
             ruleID: missing_mandatory_column
           - meta:
-            - partID: aggScaleID
+            - partID: aggragationScale
               parts: header
               partsRequired: mandatory
             ruleID: missing_values_found
           required: true
           type: string
-        aggSetID:
+        aggregationSet:
           emptyTrimmed: false
           forbidden:
           - NA
@@ -3086,35 +2782,131 @@ schema:
           meta:
           - meta:
             - maxLength: '12'
-              partID: aggSetID
+              partID: aggregationSet
               parts: header
               partsRequired: mandatory
             ruleID: greater_than_max_length
           - meta:
             - dataType: categorical
-              partID: aggSetID
+              partID: aggregationSet
               parts: header
               partsRequired: mandatory
             ruleID: invalid_type
           - meta:
-            - minLength: '0'
-              partID: aggSetID
-              parts: header
-              partsRequired: mandatory
-            ruleID: less_than_min_length
-          - meta:
-            - partID: aggSetID
+            - partID: aggregationSet
               parts: header
               partsRequired: mandatory
             ruleID: missing_mandatory_column
           - meta:
-            - partID: aggSetID
+            - partID: aggregationSet
               parts: header
               partsRequired: mandatory
             ruleID: missing_values_found
           required: true
           type: string
-        catSetID:
+        class:
+          emptyTrimmed: false
+          forbidden:
+          - NA
+          - nan
+          - nr
+          - 'null'
+          - undisc
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              partID: class
+              parts: header
+              partsRequired: mandatory
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: categorical
+              partID: class
+              parts: header
+              partsRequired: mandatory
+            ruleID: invalid_type
+          - meta:
+            - partID: class
+              parts: header
+              partsRequired: mandatory
+            ruleID: missing_mandatory_column
+          - meta:
+            - partID: class
+              parts: header
+              partsRequired: mandatory
+            ruleID: missing_values_found
+          required: true
+          type: string
+        domain:
+          emptyTrimmed: false
+          forbidden:
+          - NA
+          - nan
+          - nr
+          - 'null'
+          - undisc
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              partID: domain
+              parts: header
+              partsRequired: mandatory
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: categorical
+              partID: domain
+              parts: header
+              partsRequired: mandatory
+            ruleID: invalid_type
+          - meta:
+            - partID: domain
+              parts: header
+              partsRequired: mandatory
+            ruleID: missing_mandatory_column
+          - meta:
+            - partID: domain
+              parts: header
+              partsRequired: mandatory
+            ruleID: missing_values_found
+          required: true
+          type: string
+        group:
+          emptyTrimmed: false
+          forbidden:
+          - NA
+          - nan
+          - nr
+          - 'null'
+          - undisc
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              partID: group
+              parts: header
+              partsRequired: mandatory
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: categorical
+              partID: group
+              parts: header
+              partsRequired: mandatory
+            ruleID: invalid_type
+          - meta:
+            - partID: group
+              parts: header
+              partsRequired: mandatory
+            ruleID: missing_mandatory_column
+          - meta:
+            - partID: group
+              parts: header
+              partsRequired: mandatory
+            ruleID: missing_values_found
+          required: true
+          type: string
+        mmaSet:
           emptyTrimmed: false
           forbidden:
           - NA
@@ -3126,35 +2918,29 @@ schema:
           meta:
           - meta:
             - maxLength: '12'
-              partID: catSetID
+              partID: mmaSet
               parts: header
               partsRequired: mandatory
             ruleID: greater_than_max_length
           - meta:
             - dataType: categorical
-              partID: catSetID
+              partID: mmaSet
               parts: header
               partsRequired: mandatory
             ruleID: invalid_type
           - meta:
-            - minLength: '0'
-              partID: catSetID
-              parts: header
-              partsRequired: mandatory
-            ruleID: less_than_min_length
-          - meta:
-            - partID: catSetID
+            - partID: mmaSet
               parts: header
               partsRequired: mandatory
             ruleID: missing_mandatory_column
           - meta:
-            - partID: catSetID
+            - partID: mmaSet
               parts: header
               partsRequired: mandatory
             ruleID: missing_values_found
           required: true
           type: string
-        classID:
+        nomenclature:
           emptyTrimmed: false
           forbidden:
           - NA
@@ -3166,149 +2952,23 @@ schema:
           meta:
           - meta:
             - maxLength: '30'
-              partID: classID
+              partID: nomenclature
               parts: header
               partsRequired: mandatory
             ruleID: greater_than_max_length
           - meta:
             - dataType: categorical
-              partID: classID
+              partID: nomenclature
               parts: header
               partsRequired: mandatory
             ruleID: invalid_type
           - meta:
-            - minLength: '0'
-              partID: classID
-              parts: header
-              partsRequired: mandatory
-            ruleID: less_than_min_length
-          - meta:
-            - partID: classID
+            - partID: nomenclature
               parts: header
               partsRequired: mandatory
             ruleID: missing_mandatory_column
           - meta:
-            - partID: classID
-              parts: header
-              partsRequired: mandatory
-            ruleID: missing_values_found
-          required: true
-          type: string
-        domainID:
-          emptyTrimmed: false
-          forbidden:
-          - NA
-          - nan
-          - nr
-          - 'null'
-          - undisc
-          maxlength: 30
-          meta:
-          - meta:
-            - maxLength: '30'
-              partID: domainID
-              parts: header
-              partsRequired: mandatory
-            ruleID: greater_than_max_length
-          - meta:
-            - dataType: categorical
-              partID: domainID
-              parts: header
-              partsRequired: mandatory
-            ruleID: invalid_type
-          - meta:
-            - minLength: '0'
-              partID: domainID
-              parts: header
-              partsRequired: mandatory
-            ruleID: less_than_min_length
-          - meta:
-            - partID: domainID
-              parts: header
-              partsRequired: mandatory
-            ruleID: missing_mandatory_column
-          - meta:
-            - partID: domainID
-              parts: header
-              partsRequired: mandatory
-            ruleID: missing_values_found
-          required: true
-          type: string
-        groupID:
-          emptyTrimmed: false
-          forbidden:
-          - NA
-          - nan
-          - nr
-          - 'null'
-          - undisc
-          maxlength: 30
-          meta:
-          - meta:
-            - maxLength: '30'
-              partID: groupID
-              parts: header
-              partsRequired: mandatory
-            ruleID: greater_than_max_length
-          - meta:
-            - dataType: categorical
-              partID: groupID
-              parts: header
-              partsRequired: mandatory
-            ruleID: invalid_type
-          - meta:
-            - minLength: '0'
-              partID: groupID
-              parts: header
-              partsRequired: mandatory
-            ruleID: less_than_min_length
-          - meta:
-            - partID: groupID
-              parts: header
-              partsRequired: mandatory
-            ruleID: missing_mandatory_column
-          - meta:
-            - partID: groupID
-              parts: header
-              partsRequired: mandatory
-            ruleID: missing_values_found
-          required: true
-          type: string
-        nomenclatureID:
-          emptyTrimmed: false
-          forbidden:
-          - NA
-          - nan
-          - nr
-          - 'null'
-          - undisc
-          maxlength: 30
-          meta:
-          - meta:
-            - maxLength: '30'
-              partID: nomenclatureID
-              parts: header
-              partsRequired: mandatory
-            ruleID: greater_than_max_length
-          - meta:
-            - dataType: categorical
-              partID: nomenclatureID
-              parts: header
-              partsRequired: mandatory
-            ruleID: invalid_type
-          - meta:
-            - minLength: '0'
-              partID: nomenclatureID
-              parts: header
-              partsRequired: mandatory
-            ruleID: less_than_min_length
-          - meta:
-            - partID: nomenclatureID
-              parts: header
-              partsRequired: mandatory
-            ruleID: missing_mandatory_column
-          - meta:
-            - partID: nomenclatureID
+            - partID: nomenclature
               parts: header
               partsRequired: mandatory
             ruleID: missing_values_found
@@ -3336,12 +2996,6 @@ schema:
               parts: header
               partsRequired: mandatory
             ruleID: invalid_type
-          - meta:
-            - minLength: '0'
-              partID: qualitySetID
-              parts: header
-              partsRequired: mandatory
-            ruleID: less_than_min_length
           - meta:
             - partID: qualitySetID
               parts: header
@@ -3377,12 +3031,6 @@ schema:
               partsRequired: mandatory
             ruleID: invalid_type
           - meta:
-            - minLength: '0'
-              partID: refLink
-              parts: header
-              partsRequired: mandatory
-            ruleID: less_than_min_length
-          - meta:
             - partID: refLink
               parts: header
               partsRequired: mandatory
@@ -3394,85 +3042,19 @@ schema:
             ruleID: missing_values_found
           required: true
           type: string
-        specimenSet:
-          emptyTrimmed: false
-          forbidden:
-          - NA
-          - nan
-          - nr
-          - 'null'
-          - undisc
+        value:
           maxlength: 15
           meta:
           - meta:
             - maxLength: '15'
-              partID: specimenSet
-              parts: fK
-              partsRequired: mandatory
+              partID: value
+              parts: input
             ruleID: greater_than_max_length
           - meta:
             - dataType: varchar
-              partID: specimenSet
-              parts: fK
-              partsRequired: mandatory
+              partID: value
+              parts: input
             ruleID: invalid_type
-          - meta:
-            - minLength: '0'
-              partID: specimenSet
-              parts: fK
-              partsRequired: mandatory
-            ruleID: less_than_min_length
-          - meta:
-            - partID: specimenSet
-              parts: fK
-              partsRequired: mandatory
-            ruleID: missing_mandatory_column
-          - meta:
-            - partID: specimenSet
-              parts: fK
-              partsRequired: mandatory
-            ruleID: missing_values_found
-          required: true
-          type: string
-        unitSetID:
-          emptyTrimmed: false
-          forbidden:
-          - NA
-          - nan
-          - nr
-          - 'null'
-          - undisc
-          maxlength: 28
-          meta:
-          - meta:
-            - maxLength: '28'
-              partID: unitSetID
-              parts: header
-              partsRequired: mandatory
-            ruleID: greater_than_max_length
-          - meta:
-            - dataType: categorical
-              partID: unitSetID
-              parts: header
-              partsRequired: mandatory
-            ruleID: invalid_type
-          - meta:
-            - minLength: '0'
-              partID: unitSetID
-              parts: header
-              partsRequired: mandatory
-            ruleID: less_than_min_length
-          - meta:
-            - partID: unitSetID
-              parts: header
-              partsRequired: mandatory
-            ruleID: missing_mandatory_column
-          - meta:
-            - partID: unitSetID
-              parts: header
-              partsRequired: mandatory
-            ruleID: missing_values_found
-          required: true
           type: string
       type: dict
     type: list
@@ -3480,7 +3062,7 @@ schema:
     schema:
       meta:
       - partID: polygons
-        partType: table
+        partType: tables
       schema:
         contactID:
           maxlength: 30
@@ -3497,12 +3079,6 @@ schema:
               polygons: header
               polygonsRequired: optional
             ruleID: invalid_type
-          - meta:
-            - minLength: '0'
-              partID: contactID
-              polygons: header
-              polygonsRequired: optional
-            ruleID: less_than_min_length
           type: string
         datasetID:
           maxlength: 30
@@ -3519,12 +3095,6 @@ schema:
               polygons: fK
               polygonsRequired: optional
             ruleID: invalid_type
-          - meta:
-            - minLength: '0'
-              partID: datasetID
-              polygons: fK
-              polygonsRequired: optional
-            ruleID: less_than_min_length
           type: string
         descr:
           maxlength: 200
@@ -3541,12 +3111,6 @@ schema:
               polygons: header
               polygonsRequired: optional
             ruleID: invalid_type
-          - meta:
-            - minLength: '0'
-              partID: descr
-              polygons: header
-              polygonsRequired: optional
-            ruleID: less_than_min_length
           type: string
         fileLocation:
           maxlength: 65535
@@ -3557,18 +3121,6 @@ schema:
               polygons: header
               polygonsRequired: optional
             ruleID: greater_than_max_length
-          - meta:
-            - dataType: blob
-              partID: fileLocation
-              polygons: header
-              polygonsRequired: optional
-            ruleID: invalid_type
-          - meta:
-            - minLength: '0'
-              partID: fileLocation
-              polygons: header
-              polygonsRequired: optional
-            ruleID: less_than_min_length
         geoEPSG:
           coerce: float
           emptyTrimmed: false
@@ -3593,12 +3145,6 @@ schema:
               polygonsRequired: mandatory
             ruleID: invalid_type
           - meta:
-            - minLength: '0'
-              partID: geoEPSG
-              polygons: header
-              polygonsRequired: mandatory
-            ruleID: less_than_min_length
-          - meta:
             - partID: geoEPSG
               polygons: header
               polygonsRequired: mandatory
@@ -3611,6 +3157,9 @@ schema:
           required: true
           type: float
         geoType:
+          allowed:
+          - hlthReg
+          - swrSet
           emptyTrimmed: false
           forbidden:
           - NA
@@ -3628,16 +3177,20 @@ schema:
             ruleID: greater_than_max_length
           - meta:
             - dataType: categorical
+              mmaSet: geoTypeSet
+              partID: geoType
+              polygons: header
+            - partID: hlthReg
+              setID: geoTypeSet
+            - partID: swrSet
+              setID: geoTypeSet
+            ruleID: invalid_category
+          - meta:
+            - dataType: categorical
               partID: geoType
               polygons: header
               polygonsRequired: mandatory
             ruleID: invalid_type
-          - meta:
-            - minLength: '0'
-              partID: geoType
-              polygons: header
-              polygonsRequired: mandatory
-            ruleID: less_than_min_length
           - meta:
             - partID: geoType
               polygons: header
@@ -3673,12 +3226,6 @@ schema:
               polygonsRequired: mandatory
             ruleID: invalid_type
           - meta:
-            - minLength: '0'
-              partID: geoWKT
-              polygons: header
-              polygonsRequired: mandatory
-            ruleID: less_than_min_length
-          - meta:
             - partID: geoWKT
               polygons: header
               polygonsRequired: mandatory
@@ -3706,12 +3253,6 @@ schema:
               polygons: header
               polygonsRequired: optional
             ruleID: invalid_type
-          - meta:
-            - minLength: '0'
-              partID: lastEdited
-              polygons: header
-              polygonsRequired: optional
-            ruleID: less_than_min_length
           type: datetime
         name:
           maxlength: 30
@@ -3728,12 +3269,6 @@ schema:
               polygons: header
               polygonsRequired: recommended
             ruleID: invalid_type
-          - meta:
-            - minLength: '0'
-              partID: name
-              polygons: header
-              polygonsRequired: recommended
-            ruleID: less_than_min_length
           type: string
         notes:
           maxlength: 200
@@ -3750,12 +3285,6 @@ schema:
               polygons: header
               polygonsRequired: optional
             ruleID: invalid_type
-          - meta:
-            - minLength: '0'
-              partID: notes
-              polygons: header
-              polygonsRequired: optional
-            ruleID: less_than_min_length
           type: string
         organizationID:
           maxlength: 100
@@ -3772,12 +3301,6 @@ schema:
               polygons: header
               polygonsRequired: optional
             ruleID: invalid_type
-          - meta:
-            - minLength: '0'
-              partID: organizationID
-              polygons: header
-              polygonsRequired: optional
-            ruleID: less_than_min_length
           type: string
         polyPop:
           coerce: integer
@@ -3824,12 +3347,6 @@ schema:
               polygonsRequired: mandatory
             ruleID: invalid_type
           - meta:
-            - minLength: '0'
-              partID: polygonID
-              polygons: pK
-              polygonsRequired: mandatory
-            ruleID: less_than_min_length
-          - meta:
             - partID: polygonID
               polygons: pK
               polygonsRequired: mandatory
@@ -3857,12 +3374,6 @@ schema:
               polygons: header
               polygonsRequired: optional
             ruleID: invalid_type
-          - meta:
-            - minLength: '0'
-              partID: refLink
-              polygons: header
-              polygonsRequired: optional
-            ruleID: less_than_min_length
           type: string
       type: dict
     type: list
@@ -3870,7 +3381,7 @@ schema:
     schema:
       meta:
       - partID: protocolRelationships
-        partType: table
+        partType: tables
       schema:
         lastEdited:
           coerce: datetime
@@ -3888,12 +3399,6 @@ schema:
               protocolRelationships: header
               protocolRelationshipsRequired: optional
             ruleID: invalid_type
-          - meta:
-            - minLength: '0'
-              partID: lastEdited
-              protocolRelationships: header
-              protocolRelationshipsRequired: optional
-            ruleID: less_than_min_length
           type: datetime
         notes:
           maxlength: 200
@@ -3910,12 +3415,6 @@ schema:
               protocolRelationships: header
               protocolRelationshipsRequired: optional
             ruleID: invalid_type
-          - meta:
-            - minLength: '0'
-              partID: notes
-              protocolRelationships: header
-              protocolRelationshipsRequired: optional
-            ruleID: less_than_min_length
           type: string
         protocolID:
           maxlength: 30
@@ -3930,11 +3429,6 @@ schema:
               partID: protocolID
               protocolRelationships: input
             ruleID: invalid_type
-          - meta:
-            - minLength: '0'
-              partID: protocolID
-              protocolRelationships: input
-            ruleID: less_than_min_length
           type: string
         protocolIDContainer:
           emptyTrimmed: false
@@ -3958,12 +3452,6 @@ schema:
               protocolRelationships: fK
               protocolRelationshipsRequired: mandatory
             ruleID: invalid_type
-          - meta:
-            - minLength: '0'
-              partID: protocolIDContainer
-              protocolRelationships: fK
-              protocolRelationshipsRequired: mandatory
-            ruleID: less_than_min_length
           - meta:
             - partID: protocolIDContainer
               protocolRelationships: fK
@@ -3991,12 +3479,6 @@ schema:
               protocolRelationships: fK
               protocolRelationshipsRequired: mandatoryIf
             ruleID: invalid_type
-          - meta:
-            - minLength: '0'
-              partID: protocolIDObj
-              protocolRelationships: fK
-              protocolRelationshipsRequired: mandatoryIf
-            ruleID: less_than_min_length
           type: string
         protocolIDSub:
           maxlength: 30
@@ -4013,17 +3495,11 @@ schema:
               protocolRelationships: fK
               protocolRelationshipsRequired: mandatoryIf
             ruleID: invalid_type
-          - meta:
-            - minLength: '0'
-              partID: protocolIDSub
-              protocolRelationships: fK
-              protocolRelationshipsRequired: mandatoryIf
-            ruleID: less_than_min_length
           type: string
         reportable:
           allowed:
-          - booleanCatSet
-          - pretreat
+          - 'false'
+          - 'true'
           maxlength: 10
           meta:
           - meta:
@@ -4033,14 +3509,19 @@ schema:
             ruleID: greater_than_max_length
           - meta:
             - dataType: boolean
+              mmaSet: booleanSet
+              partID: reportable
+              protocolRelationships: input
+            - partID: 'true'
+              setID: booleanSet
+            - partID: 'false'
+              setID: booleanSet
+            ruleID: invalid_category
+          - meta:
+            - dataType: boolean
               partID: reportable
               protocolRelationships: input
             ruleID: invalid_type
-          - meta:
-            - minLength: '0'
-              partID: reportable
-              protocolRelationships: input
-            ruleID: less_than_min_length
           type: string
         sampleRelID:
           emptyTrimmed: false
@@ -4064,12 +3545,6 @@ schema:
               protocolRelationships: fK
               protocolRelationshipsRequired: mandatory
             ruleID: invalid_type
-          - meta:
-            - minLength: '0'
-              partID: sampleRelID
-              protocolRelationships: fK
-              protocolRelationshipsRequired: mandatory
-            ruleID: less_than_min_length
           - meta:
             - partID: sampleRelID
               protocolRelationships: fK
@@ -4095,11 +3570,6 @@ schema:
               partID: stepID
               protocolRelationships: input
             ruleID: invalid_type
-          - meta:
-            - minLength: '0'
-              partID: stepID
-              protocolRelationships: input
-            ruleID: less_than_min_length
           type: string
         stepIDObj:
           coerce: integer
@@ -4133,12 +3603,6 @@ schema:
               protocolRelationships: fK
               protocolRelationshipsRequired: mandatoryIf
             ruleID: invalid_type
-          - meta:
-            - minLength: '0'
-              partID: stepIDSub
-              protocolRelationships: fK
-              protocolRelationshipsRequired: mandatoryIf
-            ruleID: less_than_min_length
           type: string
       type: dict
     type: list
@@ -4146,29 +3610,23 @@ schema:
     schema:
       meta:
       - partID: protocolSteps
-        partType: table
+        partType: tables
       schema:
-        aggID:
+        aggregation:
           maxlength: 12
           meta:
           - meta:
             - maxLength: '12'
-              partID: aggID
+              partID: aggregation
               protocolSteps: fK
               protocolStepsRequired: mandatoryIf
             ruleID: greater_than_max_length
           - meta:
             - dataType: categorical
-              partID: aggID
+              partID: aggregation
               protocolSteps: fK
               protocolStepsRequired: mandatoryIf
             ruleID: invalid_type
-          - meta:
-            - minLength: '0'
-              partID: aggID
-              protocolSteps: fK
-              protocolStepsRequired: mandatoryIf
-            ruleID: less_than_min_length
           type: string
         contactID:
           maxlength: 30
@@ -4185,12 +3643,6 @@ schema:
               protocolSteps: fK
               protocolStepsRequired: optional
             ruleID: invalid_type
-          - meta:
-            - minLength: '0'
-              partID: contactID
-              protocolSteps: fK
-              protocolStepsRequired: optional
-            ruleID: less_than_min_length
           type: string
         instrumentID:
           maxlength: 10
@@ -4207,12 +3659,6 @@ schema:
               protocolSteps: fK
               protocolStepsRequired: optional
             ruleID: invalid_type
-          - meta:
-            - minLength: '0'
-              partID: instrumentID
-              protocolSteps: fK
-              protocolStepsRequired: optional
-            ruleID: less_than_min_length
           type: string
         lastEdited:
           coerce: datetime
@@ -4230,56 +3676,38 @@ schema:
               protocolSteps: header
               protocolStepsRequired: optional
             ruleID: invalid_type
-          - meta:
-            - minLength: '0'
-              partID: lastEdited
-              protocolSteps: header
-              protocolStepsRequired: optional
-            ruleID: less_than_min_length
           type: datetime
-        measureID:
+        measure:
           maxlength: 12
           meta:
           - meta:
             - maxLength: '12'
-              partID: measureID
+              partID: measure
               protocolSteps: fK
               protocolStepsRequired: mandatoryIf
             ruleID: greater_than_max_length
           - meta:
             - dataType: varchar
-              partID: measureID
+              partID: measure
               protocolSteps: fK
               protocolStepsRequired: mandatoryIf
             ruleID: invalid_type
-          - meta:
-            - minLength: '0'
-              partID: measureID
-              protocolSteps: fK
-              protocolStepsRequired: mandatoryIf
-            ruleID: less_than_min_length
           type: string
-        methodID:
+        method:
           maxlength: 10
           meta:
           - meta:
             - maxLength: '10'
-              partID: methodID
+              partID: method
               protocolSteps: fK
               protocolStepsRequired: mandatoryIf
             ruleID: greater_than_max_length
           - meta:
             - dataType: categorical
-              partID: methodID
+              partID: method
               protocolSteps: fK
               protocolStepsRequired: mandatoryIf
             ruleID: invalid_type
-          - meta:
-            - minLength: '0'
-              partID: methodID
-              protocolSteps: fK
-              protocolStepsRequired: mandatoryIf
-            ruleID: less_than_min_length
           type: string
         notes:
           maxlength: 200
@@ -4296,12 +3724,6 @@ schema:
               protocolSteps: header
               protocolStepsRequired: optional
             ruleID: invalid_type
-          - meta:
-            - minLength: '0'
-              partID: notes
-              protocolSteps: header
-              protocolStepsRequired: optional
-            ruleID: less_than_min_length
           type: string
         organizationID:
           maxlength: 100
@@ -4318,12 +3740,6 @@ schema:
               protocolSteps: fK
               protocolStepsRequired: optional
             ruleID: invalid_type
-          - meta:
-            - minLength: '0'
-              partID: organizationID
-              protocolSteps: fK
-              protocolStepsRequired: optional
-            ruleID: less_than_min_length
           type: string
         refLink:
           maxlength: 255
@@ -4340,12 +3756,6 @@ schema:
               protocolSteps: header
               protocolStepsRequired: optional
             ruleID: invalid_type
-          - meta:
-            - minLength: '0'
-              partID: refLink
-              protocolSteps: header
-              protocolStepsRequired: optional
-            ruleID: less_than_min_length
           type: string
         sourceStep:
           maxlength: 30
@@ -4362,12 +3772,6 @@ schema:
               protocolSteps: fK
               protocolStepsRequired: optional
             ruleID: invalid_type
-          - meta:
-            - minLength: '0'
-              partID: sourceStep
-              protocolSteps: fK
-              protocolStepsRequired: optional
-            ruleID: less_than_min_length
           type: string
         stepID:
           emptyTrimmed: false
@@ -4397,12 +3801,6 @@ schema:
               protocolStepsRequired: mandatory
             ruleID: invalid_type
           - meta:
-            - minLength: '0'
-              partID: stepID
-              protocolSteps: pK
-              protocolStepsRequired: mandatory
-            ruleID: less_than_min_length
-          - meta:
             - partID: stepID
               protocolSteps: pK
               protocolStepsRequired: mandatory
@@ -4430,12 +3828,6 @@ schema:
               protocolSteps: header
               protocolStepsRequired: optional
             ruleID: invalid_type
-          - meta:
-            - minLength: '0'
-              partID: stepVer
-              protocolSteps: header
-              protocolStepsRequired: optional
-            ruleID: less_than_min_length
           type: string
         summ:
           maxlength: 255
@@ -4452,57 +3844,46 @@ schema:
               protocolSteps: header
               protocolStepsRequired: optional
             ruleID: invalid_type
-          - meta:
-            - minLength: '0'
-              partID: summ
-              protocolSteps: header
-              protocolStepsRequired: optional
-            ruleID: less_than_min_length
           type: string
-        unitID:
+        unit:
           maxlength: 30
           meta:
           - meta:
             - maxLength: '30'
-              partID: unitID
+              partID: unit
               protocolSteps: fK
               protocolStepsRequired: mandatoryIf
             ruleID: greater_than_max_length
           - meta:
             - dataType: categorical
-              partID: unitID
+              partID: unit
               protocolSteps: fK
               protocolStepsRequired: mandatoryIf
             ruleID: invalid_type
-          - meta:
-            - minLength: '0'
-              partID: unitID
-              protocolSteps: fK
-              protocolStepsRequired: mandatoryIf
-            ruleID: less_than_min_length
           type: string
         value:
-          maxlength: 28
+          maxlength: 15
           meta:
           - meta:
-            - maxLength: '28'
+            - maxLength: '15'
               partID: value
               protocolSteps: header
-              protocolStepsRequired: mandatoryIf
+              protocolStepsRequired: mandatoryif
             ruleID: greater_than_max_length
           - meta:
-            - minLength: '0'
+            - dataType: varchar
               partID: value
               protocolSteps: header
-              protocolStepsRequired: mandatoryIf
-            ruleID: less_than_min_length
+              protocolStepsRequired: mandatoryif
+            ruleID: invalid_type
+          type: string
       type: dict
     type: list
   protocols:
     schema:
       meta:
       - partID: protocols
-        partType: table
+        partType: tables
       schema:
         contactID:
           maxlength: 30
@@ -4519,12 +3900,6 @@ schema:
               protocols: fK
               protocolsRequired: optional
             ruleID: invalid_type
-          - meta:
-            - minLength: '0'
-              partID: contactID
-              protocols: fK
-              protocolsRequired: optional
-            ruleID: less_than_min_length
           type: string
         datasetID:
           maxlength: 30
@@ -4541,12 +3916,6 @@ schema:
               protocols: fK
               protocolsRequired: optional
             ruleID: invalid_type
-          - meta:
-            - minLength: '0'
-              partID: datasetID
-              protocols: fK
-              protocolsRequired: optional
-            ruleID: less_than_min_length
           type: string
         lastEdited:
           coerce: datetime
@@ -4564,12 +3933,6 @@ schema:
               protocols: header
               protocolsRequired: optional
             ruleID: invalid_type
-          - meta:
-            - minLength: '0'
-              partID: lastEdited
-              protocols: header
-              protocolsRequired: optional
-            ruleID: less_than_min_length
           type: datetime
         name:
           maxlength: 30
@@ -4586,12 +3949,6 @@ schema:
               protocols: header
               protocolsRequired: optional
             ruleID: invalid_type
-          - meta:
-            - minLength: '0'
-              partID: name
-              protocols: header
-              protocolsRequired: optional
-            ruleID: less_than_min_length
           type: string
         notes:
           maxlength: 200
@@ -4608,12 +3965,6 @@ schema:
               protocols: header
               protocolsRequired: optional
             ruleID: invalid_type
-          - meta:
-            - minLength: '0'
-              partID: notes
-              protocols: header
-              protocolsRequired: optional
-            ruleID: less_than_min_length
           type: string
         organizationID:
           maxlength: 100
@@ -4630,12 +3981,6 @@ schema:
               protocols: fK
               protocolsRequired: optional
             ruleID: invalid_type
-          - meta:
-            - minLength: '0'
-              partID: organizationID
-              protocols: fK
-              protocolsRequired: optional
-            ruleID: less_than_min_length
           type: string
         protocolID:
           emptyTrimmed: false
@@ -4664,12 +4009,6 @@ schema:
               protocols: pK
               protocolsRequired: mandatory
             ruleID: invalid_type
-          - meta:
-            - minLength: '0'
-              partID: protocolID
-              protocols: pK
-              protocolsRequired: mandatory
-            ruleID: less_than_min_length
           - meta:
             - partID: protocolID
               protocols: pK
@@ -4715,17 +4054,11 @@ schema:
               protocols: header
               protocolsRequired: optional
             ruleID: invalid_type
-          - meta:
-            - minLength: '0'
-              partID: refLink
-              protocols: header
-              protocolsRequired: optional
-            ruleID: less_than_min_length
           type: string
         reportable:
           allowed:
-          - booleanCatSet
-          - pretreat
+          - 'false'
+          - 'true'
           maxlength: 10
           meta:
           - meta:
@@ -4735,14 +4068,19 @@ schema:
             ruleID: greater_than_max_length
           - meta:
             - dataType: boolean
+              mmaSet: booleanSet
+              partID: reportable
+              protocols: input
+            - partID: 'true'
+              setID: booleanSet
+            - partID: 'false'
+              setID: booleanSet
+            ruleID: invalid_category
+          - meta:
+            - dataType: boolean
               partID: reportable
               protocols: input
             ruleID: invalid_type
-          - meta:
-            - minLength: '0'
-              partID: reportable
-              protocols: input
-            ruleID: less_than_min_length
           type: string
         sourceProtocol:
           maxlength: 30
@@ -4759,12 +4097,6 @@ schema:
               protocols: fK
               protocolsRequired: optional
             ruleID: invalid_type
-          - meta:
-            - minLength: '0'
-              partID: sourceProtocol
-              protocols: fK
-              protocolsRequired: optional
-            ruleID: less_than_min_length
           type: string
         summ:
           maxlength: 255
@@ -4781,12 +4113,6 @@ schema:
               protocols: header
               protocolsRequired: optional
             ruleID: invalid_type
-          - meta:
-            - minLength: '0'
-              partID: summ
-              protocols: header
-              protocolsRequired: optional
-            ruleID: less_than_min_length
           type: string
       type: dict
     type: list
@@ -4794,7 +4120,7 @@ schema:
     schema:
       meta:
       - partID: qualityReports
-        partType: table
+        partType: tables
       schema:
         lastEdited:
           coerce: datetime
@@ -4812,12 +4138,6 @@ schema:
               qualityReports: header
               qualityReportsRequired: optional
             ruleID: invalid_type
-          - meta:
-            - minLength: '0'
-              partID: lastEdited
-              qualityReports: header
-              qualityReportsRequired: optional
-            ruleID: less_than_min_length
           type: datetime
         measureRepID:
           maxlength: 30
@@ -4834,12 +4154,6 @@ schema:
               qualityReports: FK
               qualityReportsRequired: mandatoryIf
             ruleID: invalid_type
-          - meta:
-            - minLength: '0'
-              partID: measureRepID
-              qualityReports: FK
-              qualityReportsRequired: mandatoryIf
-            ruleID: less_than_min_length
           type: string
         meaureSetRepID:
           maxlength: 30
@@ -4856,12 +4170,6 @@ schema:
               qualityReports: FK
               qualityReportsRequired: mandatoryIf
             ruleID: invalid_type
-          - meta:
-            - minLength: '0'
-              partID: meaureSetRepID
-              qualityReports: FK
-              qualityReportsRequired: mandatoryIf
-            ruleID: less_than_min_length
           type: string
         notes:
           maxlength: 200
@@ -4878,12 +4186,6 @@ schema:
               qualityReports: header
               qualityReportsRequired: optional
             ruleID: invalid_type
-          - meta:
-            - minLength: '0'
-              partID: notes
-              qualityReports: header
-              qualityReportsRequired: optional
-            ruleID: less_than_min_length
           type: string
         qualityFlag:
           emptyTrimmed: false
@@ -4907,12 +4209,6 @@ schema:
               qualityReports: header
               qualityReportsRequired: mandatory
             ruleID: invalid_type
-          - meta:
-            - minLength: '0'
-              partID: qualityFlag
-              qualityReports: header
-              qualityReportsRequired: mandatory
-            ruleID: less_than_min_length
           - meta:
             - partID: qualityFlag
               qualityReports: header
@@ -4948,12 +4244,6 @@ schema:
               qualityReportsRequired: mandatory
             ruleID: invalid_type
           - meta:
-            - minLength: '0'
-              partID: qualityID
-              qualityReports: PK
-              qualityReportsRequired: mandatory
-            ruleID: less_than_min_length
-          - meta:
             - partID: qualityID
               qualityReports: PK
               qualityReportsRequired: mandatory
@@ -4980,14 +4270,12 @@ schema:
               qualityReports: FK
               qualityReportsRequired: mandatoryIf
             ruleID: invalid_type
-          - meta:
-            - minLength: '0'
-              partID: sampleID
-              qualityReports: FK
-              qualityReportsRequired: mandatoryIf
-            ruleID: less_than_min_length
           type: string
         severity:
+          allowed:
+          - high
+          - low
+          - mid
           maxlength: 30
           meta:
           - meta:
@@ -4998,16 +4286,36 @@ schema:
             ruleID: greater_than_max_length
           - meta:
             - dataType: varchar
+              mmaSet: sevSet
+              partID: severity
+              qualityReports: header
+            - partID: low
+              setID: sevSet
+            - partID: mid
+              setID: sevSet
+            - partID: high
+              setID: sevSet
+            ruleID: invalid_category
+          - meta:
+            - dataType: varchar
               partID: severity
               qualityReports: header
               qualityReportsRequired: optional
             ruleID: invalid_type
+          type: string
+        wMeasureID:
+          maxlength: 30
+          meta:
           - meta:
-            - minLength: '0'
-              partID: severity
-              qualityReports: header
-              qualityReportsRequired: optional
-            ruleID: less_than_min_length
+            - maxLength: '30'
+              partID: wMeasureID
+              qualityReports: input
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              partID: wMeasureID
+              qualityReports: input
+            ruleID: invalid_type
           type: string
       type: dict
     type: list
@@ -5015,7 +4323,7 @@ schema:
     schema:
       meta:
       - partID: sampleRelationships
-        partType: table
+        partType: tables
       schema:
         lastEdited:
           coerce: datetime
@@ -5033,12 +4341,6 @@ schema:
               sampleRelationships: header
               sampleRelationshipsRequired: optional
             ruleID: invalid_type
-          - meta:
-            - minLength: '0'
-              partID: lastEdited
-              sampleRelationships: header
-              sampleRelationshipsRequired: optional
-            ruleID: less_than_min_length
           type: datetime
         notes:
           maxlength: 200
@@ -5055,12 +4357,6 @@ schema:
               sampleRelationships: header
               sampleRelationshipsRequired: optional
             ruleID: invalid_type
-          - meta:
-            - minLength: '0'
-              partID: notes
-              sampleRelationships: header
-              sampleRelationshipsRequired: optional
-            ruleID: less_than_min_length
           type: string
         sampleIDObject:
           emptyTrimmed: false
@@ -5084,12 +4380,6 @@ schema:
               sampleRelationships: fK
               sampleRelationshipsRequired: mandatory
             ruleID: invalid_type
-          - meta:
-            - minLength: '0'
-              partID: sampleIDObject
-              sampleRelationships: fK
-              sampleRelationshipsRequired: mandatory
-            ruleID: less_than_min_length
           - meta:
             - partID: sampleIDObject
               sampleRelationships: fK
@@ -5125,12 +4415,6 @@ schema:
               sampleRelationshipsRequired: mandatory
             ruleID: invalid_type
           - meta:
-            - minLength: '0'
-              partID: sampleIDSubject
-              sampleRelationships: fK
-              sampleRelationshipsRequired: mandatory
-            ruleID: less_than_min_length
-          - meta:
             - partID: sampleIDSubject
               sampleRelationships: fK
               sampleRelationshipsRequired: mandatory
@@ -5165,12 +4449,6 @@ schema:
               sampleRelationshipsRequired: mandatory
             ruleID: invalid_type
           - meta:
-            - minLength: '0'
-              partID: sampleRelID
-              sampleRelationships: fK
-              sampleRelationshipsRequired: mandatory
-            ruleID: less_than_min_length
-          - meta:
             - partID: sampleRelID
               sampleRelationships: fK
               sampleRelationshipsRequired: mandatory
@@ -5188,7 +4466,7 @@ schema:
     schema:
       meta:
       - partID: samples
-        partType: table
+        partType: tables
       schema:
         collDT:
           coerce: datetime
@@ -5213,12 +4491,6 @@ schema:
               samples: header
               samplesRequired: mandatory
             ruleID: invalid_type
-          - meta:
-            - minLength: '0'
-              partID: collDT
-              samples: header
-              samplesRequired: mandatory
-            ruleID: less_than_min_length
           - meta:
             - partID: collDT
               samples: header
@@ -5247,12 +4519,6 @@ schema:
               samples: header
               samplesRequired: optional
             ruleID: invalid_type
-          - meta:
-            - minLength: '0'
-              partID: collDTEnd
-              samples: header
-              samplesRequired: optional
-            ruleID: less_than_min_length
           type: datetime
         collDTStart:
           coerce: datetime
@@ -5270,12 +4536,6 @@ schema:
               samples: header
               samplesRequired: optional
             ruleID: invalid_type
-          - meta:
-            - minLength: '0'
-              partID: collDTStart
-              samples: header
-              samplesRequired: optional
-            ruleID: less_than_min_length
           type: datetime
         collNum:
           coerce: integer
@@ -5335,12 +4595,6 @@ schema:
               samplesRequired: mandatory
             ruleID: invalid_type
           - meta:
-            - minLength: '0'
-              partID: collNumPer
-              samples: header
-              samplesRequired: mandatory
-            ruleID: less_than_min_length
-          - meta:
             - minValue: '1:1'
               partID: collNumPer
               samples: header
@@ -5395,6 +4649,16 @@ schema:
           required: true
           type: float
         collType:
+          allowed:
+          - areaPr
+          - comp
+          - cosca
+          - flowPr
+          - grb
+          - moorSw
+          - surfSw
+          - timePr
+          - volPr
           emptyTrimmed: false
           forbidden:
           - NA
@@ -5412,16 +4676,34 @@ schema:
             ruleID: greater_than_max_length
           - meta:
             - dataType: categorical
+              mmaSet: collectSet
+              partID: collType
+              samples: fk
+            - partID: areaPr
+              setID: collectSet
+            - partID: cosca
+              setID: collectSet
+            - partID: flowPr
+              setID: collectSet
+            - partID: grb
+              setID: collectSet
+            - partID: moorSw
+              setID: collectSet
+            - partID: surfSw
+              setID: collectSet
+            - partID: timePr
+              setID: collectSet
+            - partID: volPr
+              setID: collectSet
+            - partID: comp
+              setID: collectSet
+            ruleID: invalid_category
+          - meta:
+            - dataType: categorical
               partID: collType
               samples: fk
               samplesRequired: mandatory
             ruleID: invalid_type
-          - meta:
-            - minLength: '0'
-              partID: collType
-              samples: fk
-              samplesRequired: mandatory
-            ruleID: less_than_min_length
           - meta:
             - partID: collType
               samples: fk
@@ -5449,12 +4731,6 @@ schema:
               samples: fK
               samplesRequired: optional
             ruleID: invalid_type
-          - meta:
-            - minLength: '0'
-              partID: contactID
-              samples: fK
-              samplesRequired: optional
-            ruleID: less_than_min_length
           type: string
         datasetID:
           maxlength: 30
@@ -5471,12 +4747,6 @@ schema:
               samples: fK
               samplesRequired: optional
             ruleID: invalid_type
-          - meta:
-            - minLength: '0'
-              partID: datasetID
-              samples: fK
-              samplesRequired: optional
-            ruleID: less_than_min_length
           type: string
         lastEdited:
           coerce: datetime
@@ -5494,12 +4764,6 @@ schema:
               samples: header
               samplesRequired: optional
             ruleID: invalid_type
-          - meta:
-            - minLength: '0'
-              partID: lastEdited
-              samples: header
-              samplesRequired: optional
-            ruleID: less_than_min_length
           type: datetime
         notes:
           maxlength: 200
@@ -5516,12 +4780,6 @@ schema:
               samples: header
               samplesRequired: optional
             ruleID: invalid_type
-          - meta:
-            - minLength: '0'
-              partID: notes
-              samples: header
-              samplesRequired: optional
-            ruleID: less_than_min_length
           type: string
         organizationID:
           maxlength: 100
@@ -5538,12 +4796,6 @@ schema:
               samples: header
               samplesRequired: optional
             ruleID: invalid_type
-          - meta:
-            - minLength: '0'
-              partID: organizationID
-              samples: header
-              samplesRequired: optional
-            ruleID: less_than_min_length
           type: string
         origin:
           maxlength: 30
@@ -5560,17 +4812,11 @@ schema:
               samples: header
               samplesRequired: optional
             ruleID: invalid_type
-          - meta:
-            - minLength: '0'
-              partID: origin
-              samples: header
-              samplesRequired: optional
-            ruleID: less_than_min_length
           type: string
         pooled:
           allowed:
-          - booleanCatSet
-          - pretreat
+          - 'false'
+          - 'true'
           maxlength: 30
           meta:
           - meta:
@@ -5581,16 +4827,20 @@ schema:
             ruleID: greater_than_max_length
           - meta:
             - dataType: boolean
+              mmaSet: booleanSet
+              partID: pooled
+              samples: header
+            - partID: 'true'
+              setID: booleanSet
+            - partID: 'false'
+              setID: booleanSet
+            ruleID: invalid_category
+          - meta:
+            - dataType: boolean
               partID: pooled
               samples: header
               samplesRequired: optional
             ruleID: invalid_type
-          - meta:
-            - minLength: '0'
-              partID: pooled
-              samples: header
-              samplesRequired: optional
-            ruleID: less_than_min_length
           type: string
         protocolID:
           maxlength: 30
@@ -5607,34 +4857,50 @@ schema:
               samples: fK
               samplesRequired: optional
             ruleID: invalid_type
-          - meta:
-            - minLength: '0'
-              partID: protocolID
-              samples: fK
-              samplesRequired: optional
-            ruleID: less_than_min_length
           type: string
-        purposeID:
+        purpose:
+          allowed:
+          - education
+          - multiple
+          - provisional
+          - qualityControl
+          - regular
+          - testing
+          - validationStudy
           maxlength: 30
           meta:
           - meta:
             - maxLength: '30'
-              partID: purposeID
+              partID: purpose
               samples: fK
               samplesRequired: optional
             ruleID: greater_than_max_length
           - meta:
             - dataType: categorical
-              partID: purposeID
+              mmaSet: purposeSet
+              partID: purpose
+              samples: fK
+            - partID: education
+              setID: purposeSet
+            - partID: multiple
+              setID: purposeSet
+            - partID: provisional
+              setID: purposeSet
+            - partID: qualityControl
+              setID: purposeSet
+            - partID: regular
+              setID: purposeSet
+            - partID: testing
+              setID: purposeSet
+            - partID: validationStudy
+              setID: purposeSet
+            ruleID: invalid_category
+          - meta:
+            - dataType: categorical
+              partID: purpose
               samples: fK
               samplesRequired: optional
             ruleID: invalid_type
-          - meta:
-            - minLength: '0'
-              partID: purposeID
-              samples: fK
-              samplesRequired: optional
-            ruleID: less_than_min_length
           type: string
         recDate:
           coerce: datetime
@@ -5652,14 +4918,15 @@ schema:
               samples: header
               samplesRequired: optional
             ruleID: invalid_type
-          - meta:
-            - minLength: '0'
-              partID: recDate
-              samples: header
-              samplesRequired: optional
-            ruleID: less_than_min_length
           type: datetime
         repType:
+          allowed:
+          - colocated
+          - fieldReplicate
+          - labDuplicate
+          - lcsd
+          - msd
+          - unique
           maxlength: 30
           meta:
           - meta:
@@ -5670,21 +4937,33 @@ schema:
             ruleID: greater_than_max_length
           - meta:
             - dataType: categorical
+              mmaSet: replicateSet
+              partID: repType
+              samples: fK
+            - partID: colocated
+              setID: replicateSet
+            - partID: fieldReplicate
+              setID: replicateSet
+            - partID: labDuplicate
+              setID: replicateSet
+            - partID: lcsd
+              setID: replicateSet
+            - partID: msd
+              setID: replicateSet
+            - partID: unique
+              setID: replicateSet
+            ruleID: invalid_category
+          - meta:
+            - dataType: categorical
               partID: repType
               samples: fK
               samplesRequired: optional
             ruleID: invalid_type
-          - meta:
-            - minLength: '0'
-              partID: repType
-              samples: fK
-              samplesRequired: optional
-            ruleID: less_than_min_length
           type: string
         reportable:
           allowed:
-          - booleanCatSet
-          - pretreat
+          - 'false'
+          - 'true'
           maxlength: 10
           meta:
           - meta:
@@ -5695,18 +4974,40 @@ schema:
             ruleID: greater_than_max_length
           - meta:
             - dataType: boolean
+              mmaSet: booleanSet
+              partID: reportable
+              samples: header
+            - partID: 'true'
+              setID: booleanSet
+            - partID: 'false'
+              setID: booleanSet
+            ruleID: invalid_category
+          - meta:
+            - dataType: boolean
               partID: reportable
               samples: header
               samplesRequired: optional
             ruleID: invalid_type
-          - meta:
-            - minLength: '0'
-              partID: reportable
-              samples: header
-              samplesRequired: optional
-            ruleID: less_than_min_length
           type: string
         saMaterial:
+          allowed:
+          - afu
+          - desk
+          - faeces
+          - floor
+          - htSam
+          - nww
+          - pEfflu
+          - pSludge
+          - pstGrit
+          - rawWW
+          - rawWWdown
+          - rawWWup
+          - sEfflu
+          - sSludge
+          - septage
+          - surface
+          - swrSed
           emptyTrimmed: false
           forbidden:
           - NA
@@ -5724,16 +5025,50 @@ schema:
             ruleID: greater_than_max_length
           - meta:
             - dataType: categorical
+              mmaSet: sampleMatSet
+              partID: saMaterial
+              samples: fK
+            - partID: afu
+              setID: sampleMatSet
+            - partID: desk
+              setID: sampleMatSet
+            - partID: faeces
+              setID: sampleMatSet
+            - partID: floor
+              setID: sampleMatSet
+            - partID: htSam
+              setID: sampleMatSet
+            - partID: nww
+              setID: sampleMatSet
+            - partID: pEfflu
+              setID: sampleMatSet
+            - partID: pSludge
+              setID: sampleMatSet
+            - partID: pstGrit
+              setID: sampleMatSet
+            - partID: rawWW
+              setID: sampleMatSet
+            - partID: rawWWdown
+              setID: sampleMatSet
+            - partID: rawWWup
+              setID: sampleMatSet
+            - partID: sEfflu
+              setID: sampleMatSet
+            - partID: septage
+              setID: sampleMatSet
+            - partID: sSludge
+              setID: sampleMatSet
+            - partID: surface
+              setID: sampleMatSet
+            - partID: swrSed
+              setID: sampleMatSet
+            ruleID: invalid_category
+          - meta:
+            - dataType: categorical
               partID: saMaterial
               samples: fK
               samplesRequired: mandatory
             ruleID: invalid_type
-          - meta:
-            - minLength: '0'
-              partID: saMaterial
-              samples: fK
-              samplesRequired: mandatory
-            ruleID: less_than_min_length
           - meta:
             - partID: saMaterial
               samples: fK
@@ -5774,12 +5109,6 @@ schema:
               samplesRequired: mandatory
             ruleID: invalid_type
           - meta:
-            - minLength: '0'
-              partID: sampleID
-              samples: pK
-              samplesRequired: mandatory
-            ruleID: less_than_min_length
-          - meta:
             - partID: sampleID
               samples: pK
               samplesRequired: mandatory
@@ -5808,14 +5137,12 @@ schema:
               samples: header
               samplesRequired: optional
             ruleID: invalid_type
-          - meta:
-            - minLength: '0'
-              partID: sentDate
-              samples: header
-              samplesRequired: optional
-            ruleID: less_than_min_length
           type: datetime
         severity:
+          allowed:
+          - high
+          - low
+          - mid
           maxlength: 30
           meta:
           - meta:
@@ -5825,14 +5152,21 @@ schema:
             ruleID: greater_than_max_length
           - meta:
             - dataType: varchar
+              mmaSet: sevSet
+              partID: severity
+              samples: Input
+            - partID: low
+              setID: sevSet
+            - partID: mid
+              setID: sevSet
+            - partID: high
+              setID: sevSet
+            ruleID: invalid_category
+          - meta:
+            - dataType: varchar
               partID: severity
               samples: Input
             ruleID: invalid_type
-          - meta:
-            - minLength: '0'
-              partID: severity
-              samples: Input
-            ruleID: less_than_min_length
           type: string
         siteID:
           emptyTrimmed: false
@@ -5857,12 +5191,6 @@ schema:
               samplesRequired: mandatory
             ruleID: invalid_type
           - meta:
-            - minLength: '0'
-              partID: siteID
-              samples: fK
-              samplesRequired: mandatory
-            ruleID: less_than_min_length
-          - meta:
             - partID: siteID
               samples: fK
               samplesRequired: mandatory
@@ -5874,13 +5202,27 @@ schema:
             ruleID: missing_values_found
           required: true
           type: string
+        wMeasureID:
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              partID: wMeasureID
+              samples: input
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              partID: wMeasureID
+              samples: input
+            ruleID: invalid_type
+          type: string
       type: dict
     type: list
   sets:
     schema:
       meta:
       - partID: sets
-        partType: table
+        partType: tables
       schema:
         notes:
           maxlength: 200
@@ -5897,12 +5239,6 @@ schema:
               sets: header
               setsRequired: optional
             ruleID: invalid_type
-          - meta:
-            - minLength: '0'
-              partID: notes
-              sets: header
-              setsRequired: optional
-            ruleID: less_than_min_length
           type: string
         setID:
           emptyTrimmed: false
@@ -5931,12 +5267,6 @@ schema:
               sets: pK
               setsRequired: mandatory
             ruleID: invalid_type
-          - meta:
-            - minLength: '0'
-              partID: setID
-              sets: pK
-              setsRequired: mandatory
-            ruleID: less_than_min_length
           - meta:
             - partID: setID
               sets: pK
@@ -5967,12 +5297,6 @@ schema:
               setsRequired: mandatory
             ruleID: greater_than_max_length
           - meta:
-            - minLength: '0'
-              partID: setValue
-              sets: fK
-              setsRequired: mandatory
-            ruleID: less_than_min_length
-          - meta:
             - partID: setValue
               sets: fK
               setsRequired: mandatory
@@ -5983,32 +5307,13 @@ schema:
               setsRequired: mandatory
             ruleID: missing_values_found
           required: true
-        specimenSet:
-          maxlength: 15
-          meta:
-          - meta:
-            - maxLength: '15'
-              partID: specimenSet
-              sets: input
-            ruleID: greater_than_max_length
-          - meta:
-            - dataType: varchar
-              partID: specimenSet
-              sets: input
-            ruleID: invalid_type
-          - meta:
-            - minLength: '0'
-              partID: specimenSet
-              sets: input
-            ruleID: less_than_min_length
-          type: string
       type: dict
     type: list
   sites:
     schema:
       meta:
       - partID: sites
-        partType: table
+        partType: tables
       schema:
         addressID:
           maxlength: 30
@@ -6025,12 +5330,6 @@ schema:
               sites: fK
               sitesRequired: optional
             ruleID: invalid_type
-          - meta:
-            - minLength: '0'
-              partID: addressID
-              sites: fK
-              sitesRequired: optional
-            ruleID: less_than_min_length
           type: string
         contactID:
           emptyTrimmed: false
@@ -6054,12 +5353,6 @@ schema:
               sites: fK
               sitesRequired: mandatory
             ruleID: invalid_type
-          - meta:
-            - minLength: '0'
-              partID: contactID
-              sites: fK
-              sitesRequired: mandatory
-            ruleID: less_than_min_length
           - meta:
             - partID: contactID
               sites: fK
@@ -6087,12 +5380,6 @@ schema:
               sites: fK
               sitesRequired: optional
             ruleID: invalid_type
-          - meta:
-            - minLength: '0'
-              partID: datasetID
-              sites: fK
-              sitesRequired: optional
-            ruleID: less_than_min_length
           type: string
         descr:
           maxlength: 200
@@ -6109,12 +5396,6 @@ schema:
               sites: header
               sitesRequired: optional
             ruleID: invalid_type
-          - meta:
-            - minLength: '0'
-              partID: descr
-              sites: header
-              sitesRequired: optional
-            ruleID: less_than_min_length
           type: string
         geoEPSG:
           coerce: float
@@ -6132,12 +5413,6 @@ schema:
               sites: header
               sitesRequired: mandatoryIf
             ruleID: invalid_type
-          - meta:
-            - minLength: '0'
-              partID: geoEPSG
-              sites: header
-              sitesRequired: mandatoryIf
-            ruleID: less_than_min_length
           type: float
         geoLat:
           coerce: float
@@ -6203,12 +5478,6 @@ schema:
               sites: header
               sitesRequired: optional
             ruleID: invalid_type
-          - meta:
-            - minLength: '0'
-              partID: lastEdited
-              sites: header
-              sitesRequired: optional
-            ruleID: less_than_min_length
           type: datetime
         name:
           maxlength: 30
@@ -6225,12 +5494,6 @@ schema:
               sites: header
               sitesRequired: recommended
             ruleID: invalid_type
-          - meta:
-            - minLength: '0'
-              partID: name
-              sites: header
-              sitesRequired: recommended
-            ruleID: less_than_min_length
           type: string
         notes:
           maxlength: 200
@@ -6247,12 +5510,6 @@ schema:
               sites: header
               sitesRequired: optional
             ruleID: invalid_type
-          - meta:
-            - minLength: '0'
-              partID: notes
-              sites: header
-              sitesRequired: optional
-            ruleID: less_than_min_length
           type: string
         organizationID:
           maxlength: 100
@@ -6269,12 +5526,6 @@ schema:
               sites: header
               sitesRequired: optional
             ruleID: invalid_type
-          - meta:
-            - minLength: '0'
-              partID: organizationID
-              sites: header
-              sitesRequired: optional
-            ruleID: less_than_min_length
           type: string
         parSiteID:
           maxlength: 30
@@ -6291,12 +5542,6 @@ schema:
               sites: fK
               sitesRequired: optional
             ruleID: invalid_type
-          - meta:
-            - minLength: '0'
-              partID: parSiteID
-              sites: fK
-              sitesRequired: optional
-            ruleID: less_than_min_length
           type: string
         polygonID:
           maxlength: 10
@@ -6313,12 +5558,6 @@ schema:
               sites: fK
               sitesRequired: optional
             ruleID: invalid_type
-          - meta:
-            - minLength: '0'
-              partID: polygonID
-              sites: fK
-              sitesRequired: optional
-            ruleID: less_than_min_length
           type: string
         popServ:
           maxlength: 30
@@ -6335,12 +5574,6 @@ schema:
               sites: header
               sitesRequired: optional
             ruleID: invalid_type
-          - meta:
-            - minLength: '0'
-              partID: popServ
-              sites: header
-              sitesRequired: optional
-            ruleID: less_than_min_length
           type: string
         repOrg1:
           maxlength: 30
@@ -6357,12 +5590,6 @@ schema:
               sites: header
               sitesRequired: optional
             ruleID: invalid_type
-          - meta:
-            - minLength: '0'
-              partID: repOrg1
-              sites: header
-              sitesRequired: optional
-            ruleID: less_than_min_length
           type: string
         repOrg2:
           maxlength: 30
@@ -6379,14 +5606,28 @@ schema:
               sites: header
               sitesRequired: optional
             ruleID: invalid_type
-          - meta:
-            - minLength: '0'
-              partID: repOrg2
-              sites: header
-              sitesRequired: optional
-            ruleID: less_than_min_length
           type: string
         sampleShed:
+          allowed:
+          - airpln
+          - airport
+          - ccc
+          - cdc
+          - corFcil
+          - dorm
+          - fiNa
+          - hosptl
+          - ltcf
+          - ltcfAl
+          - ltcfO
+          - municp
+          - neigh
+          - orb
+          - school
+          - ship
+          - sss
+          - terminal
+          - uCampus
           emptyTrimmed: false
           forbidden:
           - NA
@@ -6404,16 +5645,54 @@ schema:
             ruleID: greater_than_max_length
           - meta:
             - dataType: categorical
+              mmaSet: shedSet
+              partID: sampleShed
+              sites: header
+            - partID: airpln
+              setID: shedSet
+            - partID: ccc
+              setID: shedSet
+            - partID: cdc
+              setID: shedSet
+            - partID: corFcil
+              setID: shedSet
+            - partID: dorm
+              setID: shedSet
+            - partID: fiNa
+              setID: shedSet
+            - partID: hosptl
+              setID: shedSet
+            - partID: ltcf
+              setID: shedSet
+            - partID: ltcfAl
+              setID: shedSet
+            - partID: ltcfO
+              setID: shedSet
+            - partID: municp
+              setID: shedSet
+            - partID: neigh
+              setID: shedSet
+            - partID: orb
+              setID: shedSet
+            - partID: school
+              setID: shedSet
+            - partID: ship
+              setID: shedSet
+            - partID: sss
+              setID: shedSet
+            - partID: uCampus
+              setID: shedSet
+            - partID: airport
+              setID: shedSet
+            - partID: terminal
+              setID: shedSet
+            ruleID: invalid_category
+          - meta:
+            - dataType: categorical
               partID: sampleShed
               sites: header
               sitesRequired: mandatory
             ruleID: invalid_type
-          - meta:
-            - minLength: '0'
-              partID: sampleShed
-              sites: header
-              sitesRequired: mandatory
-            ruleID: less_than_min_length
           - meta:
             - partID: sampleShed
               sites: header
@@ -6454,12 +5733,6 @@ schema:
               sitesRequired: mandatory
             ruleID: invalid_type
           - meta:
-            - minLength: '0'
-              partID: siteID
-              sites: pK
-              sitesRequired: mandatory
-            ruleID: less_than_min_length
-          - meta:
             - partID: siteID
               sites: pK
               sitesRequired: mandatory
@@ -6472,7 +5745,29 @@ schema:
           required: true
           type: string
           unique: true
-        siteTypeID:
+        siteType:
+          allowed:
+          - bSwrPpl
+          - buildCO
+          - estuary
+          - htSite
+          - lagoon
+          - lake
+          - mSwrPpl
+          - ocean
+          - pStat
+          - retPond
+          - river
+          - sea
+          - septTnk
+          - stabPnd
+          - swgTrck
+          - upstream
+          - wwtp
+          - wwtpBack
+          - wwtpInd
+          - wwtpMuC
+          - wwtpMuS
           emptyTrimmed: false
           forbidden:
           - NA
@@ -6484,29 +5779,71 @@ schema:
           meta:
           - meta:
             - maxLength: '30'
-              partID: siteTypeID
+              partID: siteType
               sites: fK
               sitesRequired: mandatory
             ruleID: greater_than_max_length
           - meta:
             - dataType: categorical
-              partID: siteTypeID
+              mmaSet: siteTypeSet
+              partID: siteType
+              sites: fK
+            - partID: bSwrPpl
+              setID: siteTypeSet
+            - partID: buildCO
+              setID: siteTypeSet
+            - partID: estuary
+              setID: siteTypeSet
+            - partID: lake
+              setID: siteTypeSet
+            - partID: htSite
+              setID: siteTypeSet
+            - partID: lagoon
+              setID: siteTypeSet
+            - partID: mSwrPpl
+              setID: siteTypeSet
+            - partID: ocean
+              setID: siteTypeSet
+            - partID: pStat
+              setID: siteTypeSet
+            - partID: retPond
+              setID: siteTypeSet
+            - partID: river
+              setID: siteTypeSet
+            - partID: sea
+              setID: siteTypeSet
+            - partID: septTnk
+              setID: siteTypeSet
+            - partID: stabPnd
+              setID: siteTypeSet
+            - partID: swgTrck
+              setID: siteTypeSet
+            - partID: wwtpInd
+              setID: siteTypeSet
+            - partID: wwtpMuC
+              setID: siteTypeSet
+            - partID: wwtpMuS
+              setID: siteTypeSet
+            - partID: wwtp
+              setID: siteTypeSet
+            - partID: upstream
+              setID: siteTypeSet
+            - partID: wwtpBack
+              setID: siteTypeSet
+            ruleID: invalid_category
+          - meta:
+            - dataType: categorical
+              partID: siteType
               sites: fK
               sitesRequired: mandatory
             ruleID: invalid_type
           - meta:
-            - minLength: '0'
-              partID: siteTypeID
-              sites: fK
-              sitesRequired: mandatory
-            ruleID: less_than_min_length
-          - meta:
-            - partID: siteTypeID
+            - partID: siteType
               sites: fK
               sitesRequired: mandatory
             ruleID: missing_mandatory_column
           - meta:
-            - partID: siteTypeID
+            - partID: siteType
               sites: fK
               sitesRequired: mandatory
             ruleID: missing_values_found
@@ -6518,9 +5855,9 @@ schema:
     schema:
       meta:
       - partID: translations
-        partType: table
+        partType: tables
       schema:
-        langID:
+        lang:
           emptyTrimmed: false
           forbidden:
           - NA
@@ -6532,29 +5869,23 @@ schema:
           meta:
           - meta:
             - maxLength: '30'
-              partID: langID
+              partID: lang
               translations: fK
               translationsRequired: mandatory
             ruleID: greater_than_max_length
           - meta:
             - dataType: varchar
-              partID: langID
+              partID: lang
               translations: fK
               translationsRequired: mandatory
             ruleID: invalid_type
           - meta:
-            - minLength: '0'
-              partID: langID
-              translations: fK
-              translationsRequired: mandatory
-            ruleID: less_than_min_length
-          - meta:
-            - partID: langID
+            - partID: lang
               translations: fK
               translationsRequired: mandatory
             ruleID: missing_mandatory_column
           - meta:
-            - partID: langID
+            - partID: lang
               translations: fK
               translationsRequired: mandatory
             ruleID: missing_values_found
@@ -6575,13 +5906,7 @@ schema:
               translations: header
               translationsRequired: optional
             ruleID: invalid_type
-          - meta:
-            - minLength: '0'
-              partID: notes
-              translations: header
-              translationsRequired: optional
-            ruleID: less_than_min_length
           type: string
       type: dict
     type: list
-schemaVersion: 2.0.0-rc.3.9.1
+schemaVersion: 2.0.0

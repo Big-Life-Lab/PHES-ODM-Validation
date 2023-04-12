@@ -6,9 +6,11 @@ from typing import Any, Dict, List, Optional, Set
 # from pprint import pprint
 
 import part_tables as pt
+from input_data import DataKind
 from rules import RuleId, COERCION_RULE_ID
 from stdext import (
     get_len,
+    quote,
     type_name,
 )
 
@@ -31,7 +33,9 @@ class ErrorCtx:
     allowed_values: Set[str] = field(default_factory=set)
     cerb_type_name: str = ''
     constraint: Any = None
+    data_kind: DataKind = DataKind.python
     err_template: str = ''
+    is_column: bool = False
 
 
 class TableSummary:
@@ -71,10 +75,13 @@ def _fmt_list(items: list) -> str:
         return str(items[0])
 
 
-def get_row_num(row_index: int, offset: int) -> int:
-    """Returns the spreadsheet row number of `row_index` plus `offset`,
-    converted to a one-indexed number."""
-    return offset + row_index + 1
+def get_row_num(row_index: int, offset: int, data_kind: DataKind) -> int:
+    "Returns the dataset row number, starting from 1."
+    # spreadsheets have a header row, which increases the number by one
+    result = offset + row_index + 1
+    if data_kind == DataKind.spreadsheet:
+        result += 1
+    return result
 
 
 def _fmt_value(val: Any) -> Any:
@@ -92,29 +99,59 @@ def _fmt_dataset_values(rows: List[pt.Row]) -> List[pt.Row]:
     return list(map(_fmt_row, rows))
 
 
-def _fmt_rule_name(rule_id: str):
-    return rule_id.replace('_', ' ').capitalize()
-
-
 def _fmt_allowed_values(values: Set[str]) -> str:
     # XXX: The order of set-elements isn't deterministic, so we need to sort.
     return '/'.join(sorted(values))
 
 
-def _gen_error_msg(ctx: ErrorCtx, template: Optional[str] = None):
+def _fmt_msg_value(value: Any, relaxed=False) -> Any:
+    """Quote `value` as needed, in addition to the formatting done by
+    `_fmt_value`. This is meant to be used as part of another string/message.
+
+    :param relaxed: skips quotation when not needed.
+    """
+    fval = _fmt_value(value)
+    if relaxed and isinstance(fval, str):
+        if (fval != '') and (' ' not in fval):
+            return fval
+    return quote(str(fval))
+
+
+def _gen_error_msg(ctx: ErrorCtx, template: Optional[str] = None,
+                   error_kind: Optional[ErrorKind] = None):
     ":param template: overrides ctx.err_template"
+    # requirements for error message:
+    # - prefix with sortable order: table before column, etc.
+    # - prefix with natural order, as if it was a sentence:
+    #   "<rule> in <table> in <column>", etc.
+    # - quote values and constraints, since it's hard to distinguish them from
+    #   the text otherwise.
+    verb = 'violated' if error_kind == ErrorKind.ERROR else 'triggered'
+
+    # prefix gen
+    prefix = ('{rule_id} rule ' + verb + ' in '
+              'table {table_id}, column {column_id}')
+    if not (ctx.is_column and ctx.data_kind == DataKind.spreadsheet):
+        if len(ctx.row_numbers) == 1:
+            prefix += ', row '
+        else:
+            prefix += ', rows '
+        prefix += '{row_num}'
+    prefix += ': '
+
     if not template:
         template = ctx.err_template
+    template = prefix + template
     return template.format(
         allowed_values=_fmt_allowed_values(ctx.allowed_values),
         column_id=ctx.column_id,
-        constraint=_fmt_value(ctx.constraint),
+        constraint=_fmt_msg_value(ctx.constraint, relaxed=True),
         row_num=_fmt_list(ctx.row_numbers),
-        rule_name=_fmt_rule_name(ctx.rule_id),
+        rule_id=ctx.rule_id,
         table_id=ctx.table_id,
-        value=_fmt_value(ctx.value),
+        value=_fmt_msg_value(ctx.value),
         value_len=get_len(ctx.value),
-        value_type=type_name(type(ctx.value)),
+        value_type=type_name(type(ctx.value))
     )
 
 
@@ -132,8 +169,12 @@ def gen_rule_error(ctx: ErrorCtx,
         'tableName': ctx.table_id,
         'columnName': ctx.column_id,
         'validationRuleFields': _fmt_dataset_values(rule_fields),
-        'message': _gen_error_msg(ctx, err_template),
+        'message': _gen_error_msg(ctx, err_template, kind),
     }
+
+    # skip row info for spreadsheet-column errors
+    if ctx.data_kind == DataKind.spreadsheet and ctx.is_column:
+        return error
 
     # row numbers
     if len(ctx.row_numbers) > 1:
@@ -175,8 +216,7 @@ def _get_meta_rule_ids(column_meta) -> Set[str]:
 def _gen_coercion_msg(ctx: ErrorCtx, kind: ErrorKind):
     orig_type_name = type_name(type(ctx.value))
     coerced_type_alias = _generalize_cerb_type_name(ctx.cerb_type_name)
-    result = ('Value {value} in row {row_num} in column {column_id} '
-              'in table {table_id} ')
+    result = 'Value {value} '
     if kind == ErrorKind.WARNING:
         result += f'is a {orig_type_name} and was '
     else:

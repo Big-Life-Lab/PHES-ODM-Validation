@@ -22,6 +22,11 @@ class Assets():
             2: import_json_file(asset('parts-2.json'))
         }
 
+        self.sets = {
+            1: [],
+            2: import_json_file(asset('sets-2.json'))
+        }
+
         self.schema_additions = {
             1: import_json_file(asset('schema-additions-1.json')),
             2: import_json_file(asset('schema-additions-2.json')),
@@ -43,8 +48,9 @@ class TestSchemaAdditions(common.OdmTestCase):
     @parameterized.expand(param_range(1, 3))
     def test_schema_generation(self, i):
         additions = self.assets.schema_additions[i]
-        result = _generate_validation_schema_ext(self.assets.parts[i],
-                                                 schema_version='2.0.0',
+        result = _generate_validation_schema_ext(parts=self.assets.parts[i],
+                                                 sets=self.assets.sets[i],
+                                                 schema_version=f'{i}.0.0',
                                                  schema_additions=additions,
                                                  rule_whitelist=self.whitelist)
         self.assertDictEqual(self.assets.schemas[i], result)

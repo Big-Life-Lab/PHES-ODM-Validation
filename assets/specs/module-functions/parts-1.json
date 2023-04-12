@@ -1,16 +1,21 @@
 [
     {
         "partID": "sites",
-        "partType": "table",
+        "partType": "tables",
         "sites": "NA",
         "sitesRequired": "NA",
+        "version1Location": "tables",
+        "version1Table": "Site",
         "status": "active"
     },
     {
         "partID": "siteID",
-        "partType": "attribute",
+        "partType": "attributes",
         "sites": "pK",
         "sitesRequired": "mandatory",
+        "version1Location": "variables",
+        "version1Table": "Site",
+        "version1Variable": "SiteID",
         "status": "active"
     }
 ]

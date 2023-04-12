@@ -22,4 +22,4 @@ schema:
             #   catSetID: booleanSet
       meta:
       - partID: measures
-        partType: table
+        partType: tables

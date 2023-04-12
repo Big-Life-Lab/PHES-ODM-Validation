@@ -18,6 +18,6 @@ schema:
               version1Variable: phoneNumber
       meta:
         - partID: contacts
-          partType: table
+          partType: tables
           version1Location: tables
           version1Table: Contact

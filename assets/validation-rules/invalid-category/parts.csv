@@ -1,15 +1,16 @@
-partID,partType,samples,sites,measures,dataType,catSetID,version1Location,version1Table,version1Variable,version1Category,status
-samples,table,NA,NA,NA,NA,NA,tables,Sample,NA,NA,active
-sites,table,NA,NA,NA,NA,NA,tables,Site,NA,NA,active
-measures,table,NA,NA,NA,NA,NA,tables,WWMeasure,NA,NA,active
-coll,attribute,header,NA,NA,categorical,collectCat,variables,Sample,Collection,NA,active
-comp3h,category,input,NA,NA,varchar,collectCat,variableCategories,Sample,Collection,Comp3h,active
-comp8h,category,input,NA,NA,varchar,collectCat,variableCategories,Sample,Collection,Comp8h,active
-flowPr,category,input,NA,NA,varchar,collectCat,variableCategories,Sample,Collection,FlowPr;FlowRatePr,active
-siteTypeID,attribute,NA,fK,NA,categorical,siteTypeCatSet,variables,Site,type,NA,active
-wwtpMuC,category,NA,input,NA,varchar,NA,variableCategories,Site,type,wwtpMuC,active
-wwtpMuS,category,NA,input,NA,varchar,NA,variableCategories,Site,type,wwtpMuS,active
-someOldCat,category,NA,input,NA,varchar,NA,variableCategories,Site,type,someOldCat1,depreciated
-tp24s,category,NA,NA,NA,NA,NA,variableCategories,Site,SampleCollectionDefault,cpTP24h,depreciated
-measureID,attribute,NA,NA,fK,varchar,NA,variables,WWMeasure,type,NA,active
-cod,category,NA,NA,input,varchar,NA,variableCategories,WWMeasure; SiteMeasure,type,wqCOD; wwCOD,active
+partID,partType,samples,sites,measures,dataType,mmaSet,version1Location,version1Table,version1Variable,version1Category,status,firstReleased,lastUpdated
+samples,tables,NA,NA,NA,NA,NA,tables,Sample,NA,NA,active,1.0.0,2.0.0
+sites,tables,NA,NA,NA,NA,NA,tables,Site,NA,NA,active,1.0.0,2.0.0
+measures,tables,NA,NA,NA,NA,NA,tables,WWMeasure,NA,NA,active,1.0.0,2.0.0
+coll,attributes,header,NA,NA,categorical,collectCat,variables,Sample,Collection,NA,active,1.0.0,2.0.0
+comp3h,categories,input,NA,NA,varchar,NA,variableCategories,Sample,Collection,Comp3h,active,1.0.0,2.0.0
+comp8h,categories,input,NA,NA,varchar,NA,variableCategories,Sample,Collection,Comp8h,active,1.0.0,2.0.0
+flowPr,categories,input,NA,NA,varchar,NA,variableCategories,Sample,Collection,FlowPr;FlowRatePr,active,1.0.0,2.0.0
+siteTypeID,attributes,NA,fK,NA,categorical,siteTypeCatSet,variables,Site,type,NA,active,1.0.0,2.0.0
+wwtpMuC,categories,NA,input,NA,varchar,NA,variableCategories,Site,type,wwtpMuC,active,1.0.0,2.0.0
+wwtpMuS,categories,NA,input,NA,varchar,NA,variableCategories,Site,type,wwtpMuS,active,1.0.0,2.0.0
+someOldCat,categories,NA,input,NA,varchar,NA,variableCategories,Site,type,someOldCat1,depreciated,1.0.0,2.0.0
+tp24s,categories,NA,NA,NA,NA,NA,variableCategories,Site,SampleCollectionDefault,cpTP24h,depreciated,1.0.0,2.0.0
+measureID,attributes,NA,NA,fK,varchar,NA,variables,WWMeasure,type,NA,active,1.0.0,2.0.0
+cod,categories,NA,NA,input,varchar,NA,variableCategories,WWMeasure; SiteMeasure,type,wqCOD; wwCOD,active,1.0.0,2.0.0
+NA,missingness,NA,NA,NA,varchar,NA,NA,NA,NA,NA,active,1.0.0,2.0.0

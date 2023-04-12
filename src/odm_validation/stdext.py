@@ -80,7 +80,7 @@ def parse_int(val) -> int:
 
 
 def try_parse_int(val) -> Optional[int]:
-    if not val:
+    if val is None:
         return
     try:
         return parse_int(val)
@@ -106,6 +106,5 @@ def type_name(type_class) -> str:
     return result
 
 
-def inc(x):
-    """Increment x by 1, as seen in Pascal."""
-    return x + 1
+def quote(x: str) -> str:
+    return f'"{x}"'

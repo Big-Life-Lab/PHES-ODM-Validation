@@ -1,4 +1,4 @@
-schemaVersion: 1.0.0
+schemaVersion: 1.1.0
 schema:
   Measure:
     type: list
@@ -27,6 +27,6 @@ schema:
             #   version1Category: 'FALSE'
       meta:
       - partID: measures
-        partType: table
+        partType: tables
         version1Location: tables
         version1Table: Measure

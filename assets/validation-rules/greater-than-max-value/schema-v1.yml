@@ -33,6 +33,6 @@ schema:
               maxValue: '90.15'
       meta:
         - partID: sites
-          partType: table
+          partType: tables
           version1Location: tables
           version1Table: Site

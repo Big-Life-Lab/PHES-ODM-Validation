@@ -5,8 +5,10 @@ Rule functions are ordered alphabetically.
 
 from dataclasses import dataclass
 from typing import Any, Callable, List, Tuple
+# from pprint import pprint
 
 import part_tables as pt
+from input_data import DataKind
 from schemas import Schema, update_schema
 from stdext import (
     try_parse_int,
@@ -40,7 +42,7 @@ class Rule:
     - column_id
     - constraint
     - row_num
-    - rule_name
+    - rule_id
     - table_id
     - value
     - value_len
@@ -48,9 +50,10 @@ class Rule:
     """
     id: str
     keys: List[str]
+    is_column: bool
     is_warning: bool
-    gen_schema: Callable[pt.PartData, Schema]
-    get_error_template: Callable[[Any, str], str]
+    gen_schema: Callable[pt.OdmData, Schema]
+    get_error_template: Callable[[Any, str, DataKind], str]
 
     match_all_keys: bool
     """Used when mapping a Cerberus error to its ODM validation rule. It
@@ -64,20 +67,22 @@ class Rule:
 
 
 def init_rule(rule_id, error, gen_cerb_rules, gen_schema,
-              is_warning=False, match_all_keys=False):
+              is_column=False, is_warning=False, match_all_keys=False):
     """
     - `error` can either be a string or a function taking a value and returning
       a string.
     - `gen_cerb_rules` must accept a dummy context of `None` values, and return
       a dict with cerberus rule names as keys.
+    - `is_column` determines if the rule is validating columns/headers.
     """
     dummy_ctx = OdmValueCtx(value=1, datatype='integer', bool_set=set(),
                             null_set=set())
     cerb_keys = list(gen_cerb_rules(dummy_ctx).keys())
-    get_error_template = error if callable(error) else (lambda x, y: error)
+    get_error_template = error if callable(error) else (lambda x, y, z: error)
     return Rule(
         id=rule_id,
         keys=cerb_keys,
+        is_column=is_column,
         is_warning=is_warning,
         match_all_keys=match_all_keys,
         get_error_template=get_error_template,
@@ -87,13 +92,12 @@ def init_rule(rule_id, error, gen_cerb_rules, gen_schema,
 
 def duplicate_entries_found():
     rule_id = duplicate_entries_found.__name__
-    err = ('Duplicate entries found in rows {row_num} with primary key column '
-           '{column_id} and primary key value {value} in table {table_id}')
+    err = ('Duplicate entries found with primary key value {value}')
 
     def gen_cerb_rules(val_ctx: OdmValueCtx):
         return {'unique': True}
 
-    def gen_schema(data: pt.PartData, ver):
+    def gen_schema(data: pt.OdmData, ver):
         return gen_conditional_schema(data, ver, rule_id, gen_cerb_rules,
                                       is_primary_key)
 
@@ -103,14 +107,15 @@ def duplicate_entries_found():
 def greater_than_max_length():
     rule_id = greater_than_max_length.__name__
     odm_key = 'maxLength'
-    err = ('Value {value} in row {row_num} in column {column_id} in table '
-           '{table_id} has length {value_len} which is greater than the max '
-           'length of {constraint}')
+    err = ('Value {value} has length {value_len} which is greater than the '
+           'max length of {constraint}')
 
     def gen_cerb_rules(val_ctx: OdmValueCtx):
-        return {'maxlength': try_parse_int(val_ctx.value)}
+        val = try_parse_int(val_ctx.value)
+        if val:
+            return {'maxlength': val}
 
-    def gen_schema(data: pt.PartData, ver):
+    def gen_schema(data: pt.OdmData, ver):
         return gen_value_schema(data, ver, rule_id, odm_key, gen_cerb_rules)
 
     return init_rule(rule_id, err, gen_cerb_rules, gen_schema)
@@ -119,16 +124,15 @@ def greater_than_max_length():
 def greater_than_max_value():
     rule_id = greater_than_max_value.__name__
     odm_key = 'maxValue'
-    err = ('Value {value} in row {row_num} in column {column_id} in table '
-           '{table_id} is greater than the allowable maximum value of '
+    err = ('Value {value} is greater than the allowable maximum value of '
            '{constraint}')
 
     def gen_cerb_rules(val_ctx: OdmValueCtx):
-        return {
-            'max': parse_odm_val(val_ctx)
-        } | gen_cerb_rules_for_type(val_ctx)
+        val = parse_odm_val(val_ctx)
+        if val is not None:
+            return {'max': val} | gen_cerb_rules_for_type(val_ctx)
 
-    def gen_schema(data: pt.PartData, ver):
+    def gen_schema(data: pt.OdmData, ver):
         return gen_value_schema(data, ver, rule_id, odm_key, gen_cerb_rules)
 
     return init_rule(rule_id, err, gen_cerb_rules, gen_schema)
@@ -136,23 +140,28 @@ def greater_than_max_value():
 
 def missing_mandatory_column():
     rule_id = missing_mandatory_column.__name__
-    err = '{rule_name} {column_id} in table {table_id} in row number {row_num}'
+    err = 'Missing mandatory column {column_id}'
 
     def gen_cerb_rules(val_ctx: OdmValueCtx):
         return {'required': True}
 
-    def gen_schema(data: pt.PartData, ver):
+    def gen_schema(data: pt.OdmData, ver):
         return gen_conditional_schema(data, ver, rule_id, gen_cerb_rules,
                                       is_mandatory)
 
-    return init_rule(rule_id, err, gen_cerb_rules, gen_schema)
+    return init_rule(rule_id, err, gen_cerb_rules, gen_schema,
+                     is_column=True)
 
 
 def missing_values_found():
     # TODO: rename to missing_mandatory_value?
     rule_id = missing_values_found.__name__
-    err = ('Mandatory column {column_id} in table {table_id} has a missing '
-           'value in row {row_num}')
+
+    def get_error_template(odm_value: Any, odm_type: str, data_kind: DataKind):
+        if odm_value == '':
+            return 'Empty string found'
+        else:
+            return 'Missing value {value}'
 
     def gen_cerb_rules(val_ctx: OdmValueCtx):
         return {
@@ -160,28 +169,26 @@ def missing_values_found():
             'forbidden': sorted(val_ctx.null_set),
         }
 
-    def gen_schema(data: pt.PartData, ver):
+    def gen_schema(data: pt.OdmData, ver):
         return gen_conditional_schema(data, ver, rule_id, gen_cerb_rules,
                                       is_mandatory)
 
-    return init_rule(rule_id, err, gen_cerb_rules, gen_schema,
+    return init_rule(rule_id, get_error_template, gen_cerb_rules, gen_schema,
                      is_warning=True, match_all_keys=True)
 
 
 def less_than_min_length():
     rule_id = less_than_min_length.__name__
     odm_key = 'minLength'
-    err = ('Value {value} in row {row_num} in column {column_id} in table '
-           '{table_id} has length {value_len} which is less than the min '
+    err = ('Value {value} has length {value_len} which is less than the min '
            'length of {constraint}')
 
     def gen_cerb_rules(val_ctx: OdmValueCtx):
         val = try_parse_int(val_ctx.value)
-        if val <= 0:
-            return {}
-        return {'minlength': val}
+        if val > 0:
+            return {'minlength': val}
 
-    def gen_schema(data: pt.PartData, ver):
+    def gen_schema(data: pt.OdmData, ver):
         return gen_value_schema(data, ver, rule_id, odm_key, gen_cerb_rules)
 
     return init_rule(rule_id, err, gen_cerb_rules, gen_schema)
@@ -190,16 +197,15 @@ def less_than_min_length():
 def less_than_min_value():
     rule_id = less_than_min_value.__name__
     odm_key = 'minValue'
-    err = ('Value {value} in row {row_num} in column {column_id} in table '
-           '{table_id} is less than the allowable minimum value of '
+    err = ('Value {value} is less than the allowable minimum value of '
            '{constraint}')
 
     def gen_cerb_rules(val_ctx: OdmValueCtx):
-        return {
-            'min': parse_odm_val(val_ctx)
-        } | gen_cerb_rules_for_type(val_ctx)
+        val = parse_odm_val(val_ctx)
+        if val is not None:
+            return {'min': val} | gen_cerb_rules_for_type(val_ctx)
 
-    def gen_schema(data: pt.PartData, ver):
+    def gen_schema(data: pt.OdmData, ver):
         return gen_value_schema(data, ver, rule_id, odm_key, gen_cerb_rules)
 
     return init_rule(rule_id, err, gen_cerb_rules, gen_schema)
@@ -208,13 +214,12 @@ def less_than_min_value():
 def invalid_category():
     rule_id = invalid_category.__name__
     cerb_rule_key = 'allowed'
-    err = ('{rule_name} {value} found in row {row_num} '
-           'for column {column_id} in table {table_id}')
+    err = 'Invalid category {value}'
 
     def gen_cerb_rules(val_ctx: OdmValueCtx):
         return {cerb_rule_key: None}
 
-    def gen_schema(data: pt.PartData, ver: Version):
+    def gen_schema(data: pt.OdmData, ver: Version):
         # FIXME: `cat_ids1` contains duplicates due to v1 categories belonging
         # to multiple tables.
         schema = {}
@@ -223,7 +228,7 @@ def invalid_category():
             table_meta = get_table_meta(table, ver)
             for attr_id0, attr_id1, attr in attr_items(data, table_id0,
                                                        table_id1, ver):
-                cs_data = data.catset_data.get(attr_id0)
+                cs_data = data.catset_data.get((table_id0, attr_id0))
                 if not cs_data:
                     continue
                 cs = cs_data.part
@@ -244,19 +249,15 @@ def invalid_category():
 def invalid_type():
     rule_id = invalid_type.__name__
     odm_key = 'dataType'
-    err_default = ('Value {value} in row {row_num} in column {column_id} in '
-                   'table {table_id} has type {value_type} but should be of '
+    err_default = ('Value {value} has type {value_type} but should be of '
                    'type {constraint} or coercable into a {constraint}')
-    err_bool = ('Column {column_id} in row {row_num} in table {table_id} is a '
-                'boolean but has value {value}. '
+    err_bool = ('Column {column_id} is a boolean but has value {value}. '
                 'Allowed values are {allowed_values}.')
-    err_date = ('Column {column_id} in row {row_num} in table {table_id} is a '
-                'datetime with value {value} that has an unsupported datetime '
-                'format. '
+    err_date = ('Column {column_id} is a datetime but has value {value}. '
                 'Allowed values are ISO 8601 standard full dates, full dates '
                 'and times, or full dates and times with timezone.')
 
-    def get_error_template(odm_value: Any, odm_type: str):
+    def get_error_template(odm_value: Any, odm_type: str, data_kind: DataKind):
         if odm_type == pt.BOOLEAN:
             assert isinstance(odm_value, str)
             return err_bool
@@ -268,7 +269,7 @@ def invalid_type():
     def gen_cerb_rules(val_ctx: OdmValueCtx):
         return gen_cerb_rules_for_type(val_ctx)
 
-    def gen_schema(data: pt.PartData, ver):
+    def gen_schema(data: pt.OdmData, ver):
         return gen_value_schema(data, ver, rule_id, odm_key, gen_cerb_rules)
 
     return init_rule(rule_id, get_error_template, gen_cerb_rules, gen_schema)

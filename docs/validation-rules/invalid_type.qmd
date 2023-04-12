@@ -15,21 +15,21 @@ An integer is defined as a number without a decimal point. Imagine a column `geo
 
 ```{python}
 # This is a YAML file since in a CSV file all the numbers would be included as a string
-pprint_yaml_file(asset("invalid-integer-dataset-1.yml"))
+pprint_yaml_file(asset("integer-invalid-dataset-1.yml"))
 ```
 
 whereas the following would pass validation
 
 ```{python}
 # This is a YAML file since in a CSV file all the numbers would be included as a string
-pprint_yaml_file(asset("valid-integer-dataset-1.yml"))
+pprint_yaml_file(asset("integer-valid-dataset-1.yml"))
 ```
 
 Values that are not explicitly integers but can be coerced into integers should pass validation. For example, the following should pass validation,
 
 ```{python}
 #| echo: false
-pprint_csv_file(asset("valid-integer-dataset-2.csv"), "Valid integer dataset")
+pprint_csv_file(asset("integer-valid-dataset-2.csv"), "Valid integer dataset")
 ```
 
 A floating point number can be coerced into an integer if the coercion does not result in a value change. In above example, coercing 1.00 to its integer value of 1 does not change its value.
@@ -38,7 +38,7 @@ The snippet below should fail validation since they cannot be coerced to integer
 
 ```{python}
 #| echo: false
-pprint_csv_file(asset("invalid-integer-dataset-2.csv"), "Invalid integer dataset")
+pprint_csv_file(asset("integer-invalid-dataset-2.csv"), "Invalid integer dataset")
 ```
 
 ## float
@@ -47,21 +47,21 @@ A float is a decimal number. Imagine the same `geoLat` column but its defined ty
 
 ```{python}
 #| echo: false
-pprint_csv_file(asset("invalid-float-dataset-1.csv"), "Invalid float dataset")
+pprint_csv_file(asset("float-invalid-dataset-1.csv"), "Invalid float dataset")
 ```
 
 whereas the following would pass validation
 
 ```{python}
 #| echo: false
-pprint_yaml_file(asset("valid-float-dataset-1.yml"))
+pprint_yaml_file(asset("float-valid-dataset-1.yml"))
 ```
 
 Once again, values that can be coerced into floats should pass validation. All integers and certain strings can be coerced into floats. For example, the following snippet below should pass validation,
 
 ```{python}
 #| echo: false
-pprint_csv_file(asset("valid-float-dataset-2.csv"), "Valid float dataset")
+pprint_csv_file(asset("float-valid-dataset-2.csv"), "Valid float dataset")
 ```
 
 ## email
@@ -98,21 +98,21 @@ A column that can have one of two values, representing Yes/No. The category valu
 
 ```{python}
 #| echo: false
-pprint_csv_file(asset("invalid-bool-dataset-1.csv"), "Invalid bool dataset")
+pprint_csv_file(asset("bool-invalid-dataset-1.csv"), "Invalid bool dataset")
 ```
 
 whereas the following the would pass validation,
 
 ```{python}
 #| echo: false
-pprint_csv_file(asset("valid-bool-dataset-1.csv"), "Valid bool dataset")
+pprint_csv_file(asset("bool-valid-dataset-1.csv"), "Valid bool dataset")
 ```
 
 The category values are case-sensitive i.e. the boolean column value case should match the one in the category values. For example, the following would fail validation,
 
 ```{python}
 #| echo: false
-pprint_csv_file(asset("invalid-bool-dataset-2.csv"), "Invalid bool dataset")
+pprint_csv_file(asset("bool-invalid-dataset-2.csv"), "Invalid bool dataset")
 ```
 
 ## datetime
@@ -126,13 +126,13 @@ A type that allows columns to have a string that holds a date and time value. Th
 For example, consider the `reportDate` column in the `measures` table whose type is `datetime`. The following dataset snippet should pass validation,
 
 ```{python}
-pprint_csv_file(asset("valid-datetime-dataset-1.csv"), "Valid datetime dataset")
+pprint_csv_file(asset("datetime-valid-dataset-1.csv"), "Valid datetime dataset")
 ```
 
 whereas the following dataset should fail validation,
 
 ```{python}
-pprint_csv_file(asset("invalid-datetime-dataset-1.csv"), "Invalid datetime dataset")
+pprint_csv_file(asset("datetime-invalid-dataset-1.csv"), "Invalid datetime dataset")
 ```
 
 ## categorical
@@ -243,8 +243,8 @@ All the metadata for this rule is contained in the parts sheet in the ODM dictio
 
 1. [Get the table names in the dictionary](../specs/odm-how-tos.md#how-to-get-the-names-of-tables-that-are-part-of-the-odm)
 2. [Get all the columns for each table](../specs/odm-how-tos.md#how-to-get-the-names-of-tables-that-are-part-of-the-odm)
-3. [Get the defined data type for each column](../specs/odm-how-tos.md#getting-the-data-type-for-a-column). If the data type is a boolean then retreive the category values by:
-    1. Filtering out all rows except for the ones whose `catSetID` is `booleanSet`
+3. [Get the defined data type for each column](../specs/odm-how-tos.md#getting-the-data-type-for-a-column). If the data type is a boolean then retreive the category values by using the sets sheet:
+    1. Filter out all rows except for the ones whose `setID` is `booleanSet`
     2. The `partID` columns in the filtered rows contains the category values
 4. Add this validation rule if the data type is supported by this validation rule. Currently, only the `blob` is not supported and we don't need to add a rule for the `varchar` column.
 
@@ -289,10 +289,19 @@ For the email `contactEmail` column in the labs table
 
 For the boolean `reportable` column in the `measures` table,
 
+the part sheet is below,
+
 ```{python}
 #| echo: false
 pprint_csv_file(asset("bool-parts.csv"), "Bool parts v2",
                 ignore_prefix="version1")
+```
+
+and the sets sheet is,
+
+```{python}
+#| echo: false
+pprint_csv_file(asset("bool-sets.csv"), "Bool set v2")
 ```
 
 For the datetime `reportDate` column in the `measures` table,
@@ -377,7 +386,7 @@ pprint_yaml_file(asset("datetime-schema-v2.yml"))
 
 The meta for this rule should include the `partID`, `<table_name>`, and `dataType`.
 
-For a boolean data type, it should also include the rows that contain the category values. The `partID` and `catSetID` from each row should be included in the category value rows.
+For a boolean data type, it should also include the rows that contain the category values. The `partID` and `setID` from each row should be included in the category value rows.
 
 ## ODM Version 1
 

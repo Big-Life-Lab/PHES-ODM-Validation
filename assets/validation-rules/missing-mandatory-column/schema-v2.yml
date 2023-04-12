@@ -16,7 +16,7 @@ schema:
               addressesRequired: mandatory
       meta:
       - partID: addresses
-        partType: table
+        partType: tables
   contacts:
     type: list
     schema:
@@ -32,4 +32,4 @@ schema:
               contactsRequired: mandatory
       meta:
       - partID: contacts
-        partType: table
+        partType: tables

@@ -14,4 +14,4 @@ schema:
               addresses: pK
       meta:
       - partID: addresses
-        partType: table
+        partType: tables
