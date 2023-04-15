@@ -117,6 +117,41 @@ All errors and warnings for each validation rule are documented in the [specific
     * `errors`: A list of Python dictionaries describing each error. For more information refer to the files in the [validation-rules](../validation-rules/) folder
     * `warnings`: A list of Python dictionaries describing each warning.
 
+## summarize_report
+
+Summarizes the validation report.
+
+### Arguments
+
+1. `report`: A validation report returned from `validate_data`.
+
+   - type: `ValidationReport`
+
+### Return
+
+Returns a summarized version of `report`.
+
+- type: A `ReportSummary` object with the following fields and methods:
+    * `data_version`: string consisting of the version of the ODM data
+    * `schema_version`: string consisting of the version of the validation schema used
+    * `package_version`: string consisting of the version of the validation package used
+    - `errors`: A Python dictionary where the keys are table names and
+      the values are Python dictionaries where the keys are rule names and the
+      values are integers representing the number of times the rule were
+      triggered.
+    - `warnings`: Same as above
+    - `to_markdown`: A method returning string with the text/markdown representation of the
+      summary.
+
+### Example
+
+```python
+report = validate_data(...)
+summary = summarize_report(report)
+rule_violation_count = summary.errors['mytable']['myrule']
+text = summary.to_markdown()
+```
+
 ## generate_validation_schema
 
 Generates the cerberus schema containing the validation rules to be used with the `validate_data` function.

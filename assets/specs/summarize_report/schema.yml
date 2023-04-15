@@ -1,0 +1,10 @@
+schemaVersion: 2.0.0
+schema:
+  addresses:
+    type: list
+    schema:
+      type: dict
+      schema:
+        addID:
+          type: integer
+          coerce: integer

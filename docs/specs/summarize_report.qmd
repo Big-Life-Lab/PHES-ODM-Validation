@@ -1,0 +1,46 @@
+# summarize_report
+
+{{< include ../validation-rules/_setup.qmd >}}
+
+```{python}
+#| echo: false
+ASSET_DIR = '../../assets/specs/summarize_report'
+
+from rich.pretty import pprint
+```
+
+This document provides the specifications for programmatically summarizing a
+validation report generated with the `validation.validate_data` function within the `PHES-ODM-Validaion` Python package.
+
+## Import schema
+
+```{python}
+from odm_validation.utils import import_schema
+
+schema = import_schema(asset('schema.yml'))
+pprint(schema, expand_all=True)
+```
+
+## Validate data
+
+```{python}
+from odm_validation.validation import validate_data
+
+data = {
+    'addresses': [
+        {'addID': 1},
+        {'addID': "2a"},
+    ]
+}
+report = validate_data(schema, data)
+pprint(report.errors)
+```
+
+## Summarize data
+
+```python
+from odm_validation.validation import summarize_report
+
+summary = summarize_report(report)
+pprint(summary.to_markdown)
+```
