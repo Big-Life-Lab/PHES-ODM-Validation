@@ -10,6 +10,7 @@ from pathlib import Path
 from typing import List, Optional
 # from pprint import pprint
 
+import typer
 from xlsx2csv import Xlsx2csv
 
 root_dir = join(os.path.dirname(os.path.realpath(__file__)), '..')
@@ -94,22 +95,19 @@ def on_progress(action, table_id, offset, total):
         print()
 
 
-def main():
-    xlsx_file = sys.argv[1]
-    ver = sys.argv[2]
-
-    dir = os.path.dirname(os.path.realpath(__file__))
-    asset_dir = join(dir, '../assets')
-    schema_dir = Path(normpath(join(asset_dir, 'validation-schemas')))
-    schema_file = join(schema_dir, f'schema-v{ver}.yml')
-
-    schema = utils.import_schema(schema_file)
-
-    outdir = tempfile.mkdtemp(suffix='-'+filename_without_ext(xlsx_file))
+def main(xlsx_file: str, version: str, outdir: str = ""):
+    if not outdir:
+        outdir = tempfile.mkdtemp(suffix='-'+filename_without_ext(xlsx_file))
     csvdir = join(outdir, 'csv-files')
     print(f'writing files to {outdir}\n')
 
     csv_files = import_xlsx(xlsx_file, csvdir)
+
+    dir = os.path.dirname(os.path.realpath(__file__))
+    asset_dir = join(dir, '../assets')
+    schema_dir = Path(normpath(join(asset_dir, 'validation-schemas')))
+    schema_file = join(schema_dir, f'schema-v{version}.yml')
+    schema = utils.import_schema(schema_file)
 
     full_summary = reports.ValidationSummary()
     for file in csv_files:
@@ -122,8 +120,8 @@ def main():
             continue
         print(f'(table {table_id}) ...')
         data = {table_id: data}
-        report = _validate_data_ext(schema, data, DataKind.spreadsheet, ver,
-                                    on_progress=on_progress)
+        report = _validate_data_ext(schema, data, DataKind.spreadsheet,
+                                    version, on_progress=on_progress)
         if report.valid():
             continue
         full_summary.table_summaries[table_id] = \
@@ -142,4 +140,4 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    typer.run(main)
