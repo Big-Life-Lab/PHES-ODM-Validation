@@ -12,6 +12,12 @@ from rich.pretty import pprint
 This document provides the specifications for programmatically summarizing a
 validation report generated with the `validation.validate_data` function within the `PHES-ODM-Validaion` Python package.
 
+Summarizing the validation report is desireable when multiple rows in the input
+data has the same kind of errors, which causes the primary report to overflow
+with repeating messages. When passing the report through summarization, it will
+only show how many rules of which type were broken, and in which table/column
+they originated.
+
 ## Import schema
 
 ```{python}
@@ -29,12 +35,23 @@ from odm_validation.validation import validate_data
 data = {
     'addresses': [
         {'addID': 1},
-        {'addID': "2a"},
+        {'addID': 2},
+        {'addID': "2"},
+        {'addID': "3"},
+        {'addID': "4a"},
+        {'addID': 5},
+        {'addID': "6"},
+        {'addID': "7a"},
+        {'addID': "8b"},
     ]
 }
 report = validate_data(schema, data)
 pprint(report.errors)
+pprint(report.warnings)
 ```
+
+As you can see from the report above, the amount of information is overwhelming
+due to the amount of rows in the input with similar errors.
 
 ## Summarize data
 
@@ -44,3 +61,5 @@ from odm_validation.validation import summarize_report
 summary = summarize_report(report)
 pprint(summary.to_markdown)
 ```
+
+This will print a neat summary as soon as the function is implemented.
