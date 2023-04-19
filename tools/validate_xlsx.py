@@ -16,6 +16,7 @@ from xlsx2csv import Xlsx2csv
 root_dir = join(os.path.dirname(os.path.realpath(__file__)), '..')
 sys.path.append(join(root_dir, 'src'))
 
+import odm_validation.part_tables as pt  # noqa:E402
 import odm_validation.reports as reports  # noqa:E402
 import odm_validation.utils as utils  # noqa:E402
 from odm_validation.reports import ErrorKind  # noqa:E402
@@ -95,7 +96,17 @@ def on_progress(action, table_id, offset, total):
         print()
 
 
-def main(xlsx_file: str, version: str, outdir: str = ""):
+DEF_VER = pt.ODM_VERSION_STR
+
+XLSX_FILE_DESC = "path to input file (excel/xlsx)"
+VERSION_DESC = "ODM version to validate against"
+OUTDIR_DESC = "Output directory for generated files"
+
+
+def main(xlsx_file: str = typer.Argument(..., help=XLSX_FILE_DESC),
+         version: str = typer.Option(default=DEF_VER, help=VERSION_DESC),
+         outdir: str = typer.Option(default="", help=OUTDIR_DESC)):
+
     if not outdir:
         outdir = tempfile.mkdtemp(suffix='-'+filename_without_ext(xlsx_file))
     csvdir = join(outdir, 'csv-files')
