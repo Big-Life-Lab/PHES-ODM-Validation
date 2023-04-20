@@ -30,21 +30,15 @@ pprint(schema, expand_all=True)
 ## Validate data
 
 ```{python}
+from odm_validation.utils import import_dataset
+
+data = import_dataset(asset('data.yml'))
+pprint(data)
+```
+
+```{python}
 from odm_validation.validation import validate_data
 
-data = {
-    'addresses': [
-        {'addID': 1},
-        {'addID': 2},
-        {'addID': "2"},
-        {'addID': "3"},
-        {'addID': "4a"},
-        {'addID': 5},
-        {'addID': "6"},
-        {'addID': "7a"},
-        {'addID': "8b"},
-    ]
-}
 report = validate_data(schema, data)
 pprint(report.errors)
 pprint(report.warnings)
