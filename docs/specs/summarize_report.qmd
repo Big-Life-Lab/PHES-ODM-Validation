@@ -10,7 +10,7 @@ from rich.pretty import pprint
 ```
 
 This document provides the specifications for programmatically summarizing a
-validation report generated with the `validation.validate_data` function within the `PHES-ODM-Validaion` Python package.
+validation report generated with the `validation.validate_data` function within the PHES `odm-validation` Python package.
 
 Summarizing the validation report is desireable when multiple rows in the input
 data has the same kind of errors, which causes the primary report to overflow
