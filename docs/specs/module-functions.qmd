@@ -127,6 +127,13 @@ Summarizes the validation report.
 
    - type: `ValidationReport`
 
+2. `by`: Specifies what to summarize by. An additional level of detail
+   will be added under each table when `column` or `row` is selected. This
+   argument is optional and defaults to `table` (without any extra level of
+   detail).
+
+   - type: `enum (table, column, row)`
+
 ### Return
 
 Returns a summarized version of `report`.
@@ -147,9 +154,28 @@ Returns a summarized version of `report`.
 
 ```python
 report = validate_data(...)
-summary = summarize_report(report)
-rule_violation_count = summary.errors['mytable']['myrule']
-text = summary.to_markdown()
+
+summary = summarize_report(report, by=table)
+assert summary.errors == {
+    'addresses': {
+        'duplicate_entries_found': 5,
+        'greater_than_max_length': 3,
+        'invalid_type': 2,
+    }
+}
+
+summary = summarize_report(report, by=column)
+assert summary.errors == {
+    'addresses': {
+        'addID': {
+            'duplicate_entries_found': 5,
+            'invalid_type': 2,
+        },
+        'addL1': {
+            'greater_than_max_length': 3,
+        }
+    }
+}
 ```
 
 ## generate_validation_schema
