@@ -59,7 +59,36 @@ due to the amount of rows in the input with similar errors.
 from odm_validation.validation import summarize_report
 
 summary = summarize_report(report)
+assert summary.errors == {
+    'addresses': {
+        'invalid_type': 3,
+    }
+}
+assert summary.warnings == {
+    'addresses': {
+        '_coercion': 3,
+    }
+}
 pprint(summary.to_markdown)
 ```
 
-This will print a neat summary as soon as the function is implemented.
+<!-- TODO: replace with computed output-->
+```markdown
+# summary
+
+## errors
+
+### addresses
+
+3 errors
+
+- invalid_type: 3
+
+## warnings
+
+### addresses
+
+3 warnings
+
+- _coercion: 3
+```
