@@ -431,13 +431,15 @@ def map_ids(mappings: Dict[PartId, PartId], part_ids: List[PartId],
         return part_ids
 
 
-def _table_has_attr(table: Part, attr: Part, version: Version):
+def _table_has_attr(table: Part, attr: Part, version: Version) -> bool:
     # docs/specs/odm-how-tos.md#how-to-get-the-columns-names-for-a-table
     assert is_attr(attr)
-    result = get_partID(table) in attr
-    if not result and version.major == 1:
-        result = (table[V1_TABLE] in _parse_version1Field(attr, V1_TABLE))
-    return result
+    if version.major == 1:
+        table_ids = set(_parse_version1Field(table, V1_TABLE))
+        attr_table_ids = set(_parse_version1Field(attr, V1_TABLE))
+        return len(table_ids & attr_table_ids) > 0
+    else:
+        return get_partID(table) in attr
 
 
 def validate_and_fix(all_parts: PartMap, version):
