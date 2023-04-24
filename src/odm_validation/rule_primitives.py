@@ -37,13 +37,23 @@ def get_table_meta(table: Part, version: Version) -> Meta:
 
 
 def _get_attr_meta(attr: Part, table_id: PartId, version: Version,
-                   odm_key: str = None):
+                   odm_key: str = None, cerb_rules: dict = None):
+    result = []
     keys = [pt.PART_ID, table_id, pt.table_required_field(table_id)]
     if version.major == 1:
         keys += [pt.V1_LOCATION, pt.V1_TABLE, pt.V1_VARIABLE]
     if odm_key:
         keys += [odm_key]
-    return [{k: attr[k] for k in keys if k in attr}]
+    result += [{k: attr[k] for k in keys if k in attr}]
+
+    # sets
+    if version.major >= 2 and cerb_rules:
+        allowed_ids = cerb_rules.get('allowed')
+        if allowed_ids:
+            set_id = attr['mmaSet']
+            for part_id in allowed_ids:
+                result.append({'partID': part_id, 'setID': set_id})
+    return result
 
 
 def get_catset_meta(table_id: PartId, catset: Part, categories: List[Part],
@@ -118,7 +128,8 @@ def attr_items(data: OdmData, table_id0: PartId, table_id1: PartId,
 def add_attr_schemas(table_schema, data, table_id0, table_id1, attr, rule_id,
                      odm_key: Optional[str], cerb_rules, version):
     for attr_id1 in _get_mapped_attribute_ids(data, attr, version):
-        attr_meta = _get_attr_meta(attr, table_id0, version, odm_key)
+        attr_meta = _get_attr_meta(attr, table_id0, version, odm_key,
+                                   cerb_rules)
         attr_schema = init_attr_schema(attr_id1, rule_id, cerb_rules,
                                        attr_meta)
         deep_update(table_schema[table_id1]['schema']['schema'], attr_schema)

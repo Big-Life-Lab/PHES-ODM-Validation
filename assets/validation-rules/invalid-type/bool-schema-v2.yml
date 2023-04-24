@@ -16,10 +16,10 @@ schema:
             - partID: reportable
               dataType: boolean
               measures: header
-            # - partID: 'true'
-            #   catSetID: booleanSet
-            # - partID: 'false'
-            #   catSetID: booleanSet
+            - partID: 'false'
+              setID: booleanSet
+            - partID: 'true'
+              setID: booleanSet
       meta:
       - partID: measures
         partType: tables
