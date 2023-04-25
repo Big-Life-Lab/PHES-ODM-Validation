@@ -108,3 +108,9 @@ def type_name(type_class) -> str:
 
 def quote(x: str) -> str:
     return f'"{x}"'
+
+
+def countdown(count: int):
+    "counts down from `count`-1 to 0"
+    for i in range(count - 1, -1, -1):
+        yield i

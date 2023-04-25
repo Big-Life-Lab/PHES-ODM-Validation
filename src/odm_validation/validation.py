@@ -19,6 +19,7 @@ from reports import ErrorKind, get_row_num
 from rules import Rule, RuleId, ruleset
 from schemas import CerberusSchema, Schema, init_table_schema
 from stdext import (
+    countdown,
     deep_update,
     flatten,
     strip_dict_key,
@@ -247,9 +248,11 @@ def _sort_errors(errors):
 
 def _filter_errors(errors):
     """Removes redundant errors."""
-    # - invalid_type produces redundant _coercion errors
+    # This function currently only removes redundant _coercion errors produced
+    # by `invalid_type`.
+    #
+    # Errors are deleted in reverse order to keep the two lists in sync.
     result = []
-    target_rule_ids = {RuleId._coercion.name}
     sorted_errors = _sort_errors(errors)
     for tableName, table_errors in groupby(sorted_errors, _get_table_name):
         for rowNum, row_errors in groupby(table_errors, _get_row_num):
@@ -258,9 +261,9 @@ def _filter_errors(errors):
                 value_errors = list(col_errors)
                 rule_ids = list(map(_get_error_rule_id, value_errors))
                 if RuleId.invalid_type.name in rule_ids:
-                    for id in (set(rule_ids) & target_rule_ids):
-                        ix = rule_ids.index(id)
-                        del value_errors[ix]
+                    for i in countdown(len(value_errors)):
+                        if rule_ids[i] == RuleId._coercion.name:
+                            del value_errors[i]
                 result += value_errors
     return result
 
