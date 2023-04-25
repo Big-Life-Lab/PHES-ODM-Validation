@@ -83,9 +83,31 @@ column or if they're spread out. The summary report should help with this.
 
 ### Summarizing by table
 
-The user should be able to generate a summary for each table. The summary
-should include the count of each error and warning type encountered. For 
-example, for the dataset above the summary object should inform the user that 
+The user should be able to generate a summary for each table. 
+
+The summary should include an overall table summary that includes:
+
+* The number rows in the table and the number of rows with errors
+* The number of columns in the table and the number of columns with errors
+
+For example, for the dataset above, 
+
+* **5** rows found in the `addresses` table
+    * **0** rows with errors
+    * **0** rows with warnings
+* **1** column found in the `addresses` table
+    * **0** columns with errors
+    * **0** columns with warnings
+* **3** rows found in the `sites` table
+    * **3** rows with errors
+    * **3** rows with warnings
+* **2** columns found in the `sites` table
+    * **2** column with errors
+    * **2** columns with warnings
+    * **1** missing mandatory column
+
+The summary should include the count of each error and warning type encountered. 
+For example, for the dataset above, the summary report should inform the user that 
 there are:
 
 * **0** errors in the `addresses` table
