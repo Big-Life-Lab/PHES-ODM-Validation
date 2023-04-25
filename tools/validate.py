@@ -3,6 +3,7 @@
 import os
 import sys
 import tempfile
+import yaml
 from functools import reduce
 from math import ceil
 from os.path import basename, join, normpath, splitext
@@ -46,7 +47,13 @@ def get_sheet_table_id(schema, sheet_name) -> Optional[str]:
             return table_id
 
 
-def write_results(report, outdir: str, name: str):
+def write_report(report, outdir: str, name: str):
+    outfile = os.path.join(outdir, name + '-report.yaml')
+    with open(outfile, 'w') as f:
+        f.write(yaml.dump(report))
+
+
+def write_messages(report, outdir: str, name: str):
     entries = {
         ErrorKind.WARNING: report.warnings,
         ErrorKind.ERROR: report.errors,
@@ -137,7 +144,8 @@ def main(xlsx_file: str = typer.Argument(..., help=XLSX_FILE_DESC),
             continue
         full_summary.table_summaries[table_id] = \
             report.summary.table_summaries[table_id]
-        write_results(report, outdir, name)
+        write_report(report, outdir, name)
+        write_messages(report, outdir, name)
 
     summary_text = gen_summary(full_summary)
     write_summary(summary_text, outdir)
