@@ -2,6 +2,7 @@ import unittest
 from os.path import join
 
 import common
+from rules import RuleId
 import utils
 from validation import _generate_validation_schema_ext, validate_data
 
@@ -22,7 +23,7 @@ missing_mandatory_column_fail_v2 = {
 
 
 class TestMissingMandatoryColumn(common.OdmTestCase):
-    rule_id = 'missing_mandatory_column'
+    rule_id = RuleId.missing_mandatory_column
 
     def setUp(self):
         self.maxDiff = None
