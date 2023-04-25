@@ -35,7 +35,7 @@ def init_attr_schema(attr_id: str, rule_id: str, cerb_rules: dict,
     return {attr_id: inner}
 
 
-def update_schema(schema, table_id, attr_id, rule_id, cerb_rule,
+def update_schema(schema, table_id, attr_id, rule_id: str, cerb_rule,
                   table_meta: Meta, attr_meta: Meta):
     cerb_rules = {cerb_rule[0]: cerb_rule[1]}
     attr_schema = init_attr_schema(attr_id, rule_id, cerb_rules, attr_meta)

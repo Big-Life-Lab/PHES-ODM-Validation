@@ -4,6 +4,7 @@ Rule functions are ordered alphabetically.
 """
 
 from dataclasses import dataclass
+from enum import Enum
 from typing import Any, Callable, List, Tuple
 # from pprint import pprint
 
@@ -28,9 +29,19 @@ from rule_primitives import (
 )
 from versions import Version
 
-RuleId = str
 
-COERCION_RULE_ID: RuleId = '_coercion'
+RuleId = Enum('RuleId', [
+    '_coercion',
+    'duplicate_entries_found',
+    'greater_than_max_length',
+    'greater_than_max_value',
+    'missing_mandatory_column',
+    'missing_values_found',
+    'less_than_min_length',
+    'less_than_min_value',
+    'invalid_category',
+    'invalid_type',
+])
 
 
 @dataclass(frozen=True)
@@ -48,7 +59,7 @@ class Rule:
     - value_len
     - value_type
     """
-    id: str
+    id: RuleId
     keys: List[str]
     is_column: bool
     is_warning: bool
@@ -91,21 +102,21 @@ def init_rule(rule_id, error, gen_cerb_rules, gen_schema,
 
 
 def duplicate_entries_found():
-    rule_id = duplicate_entries_found.__name__
+    rule_id = RuleId.duplicate_entries_found
     err = ('Duplicate entries found with primary key value {value}')
 
     def gen_cerb_rules(val_ctx: OdmValueCtx):
         return {'unique': True}
 
     def gen_schema(data: pt.OdmData, ver):
-        return gen_conditional_schema(data, ver, rule_id, gen_cerb_rules,
+        return gen_conditional_schema(data, ver, rule_id.name, gen_cerb_rules,
                                       is_primary_key)
 
     return init_rule(rule_id, err, gen_cerb_rules, gen_schema)
 
 
 def greater_than_max_length():
-    rule_id = greater_than_max_length.__name__
+    rule_id = RuleId.greater_than_max_length
     odm_key = 'maxLength'
     err = ('Value {value} has length {value_len} which is greater than the '
            'max length of {constraint}')
@@ -116,13 +127,14 @@ def greater_than_max_length():
             return {'maxlength': val}
 
     def gen_schema(data: pt.OdmData, ver):
-        return gen_value_schema(data, ver, rule_id, odm_key, gen_cerb_rules)
+        return gen_value_schema(data, ver, rule_id.name, odm_key,
+                                gen_cerb_rules)
 
     return init_rule(rule_id, err, gen_cerb_rules, gen_schema)
 
 
 def greater_than_max_value():
-    rule_id = greater_than_max_value.__name__
+    rule_id = RuleId.greater_than_max_value
     odm_key = 'maxValue'
     err = ('Value {value} is greater than the allowable maximum value of '
            '{constraint}')
@@ -133,20 +145,21 @@ def greater_than_max_value():
             return {'max': val} | gen_cerb_rules_for_type(val_ctx)
 
     def gen_schema(data: pt.OdmData, ver):
-        return gen_value_schema(data, ver, rule_id, odm_key, gen_cerb_rules)
+        return gen_value_schema(data, ver, rule_id.name, odm_key,
+                                gen_cerb_rules)
 
     return init_rule(rule_id, err, gen_cerb_rules, gen_schema)
 
 
 def missing_mandatory_column():
-    rule_id = missing_mandatory_column.__name__
+    rule_id = RuleId.missing_mandatory_column
     err = 'Missing mandatory column {column_id}'
 
     def gen_cerb_rules(val_ctx: OdmValueCtx):
         return {'required': True}
 
     def gen_schema(data: pt.OdmData, ver):
-        return gen_conditional_schema(data, ver, rule_id, gen_cerb_rules,
+        return gen_conditional_schema(data, ver, rule_id.name, gen_cerb_rules,
                                       is_mandatory)
 
     return init_rule(rule_id, err, gen_cerb_rules, gen_schema,
@@ -155,7 +168,7 @@ def missing_mandatory_column():
 
 def missing_values_found():
     # TODO: rename to missing_mandatory_value?
-    rule_id = missing_values_found.__name__
+    rule_id = RuleId.missing_values_found
 
     def get_error_template(odm_value: Any, odm_type: str, data_kind: DataKind):
         if odm_value == '':
@@ -170,7 +183,7 @@ def missing_values_found():
         }
 
     def gen_schema(data: pt.OdmData, ver):
-        return gen_conditional_schema(data, ver, rule_id, gen_cerb_rules,
+        return gen_conditional_schema(data, ver, rule_id.name, gen_cerb_rules,
                                       is_mandatory)
 
     return init_rule(rule_id, get_error_template, gen_cerb_rules, gen_schema,
@@ -178,7 +191,7 @@ def missing_values_found():
 
 
 def less_than_min_length():
-    rule_id = less_than_min_length.__name__
+    rule_id = RuleId.less_than_min_length
     odm_key = 'minLength'
     err = ('Value {value} has length {value_len} which is less than the min '
            'length of {constraint}')
@@ -189,13 +202,14 @@ def less_than_min_length():
             return {'minlength': val}
 
     def gen_schema(data: pt.OdmData, ver):
-        return gen_value_schema(data, ver, rule_id, odm_key, gen_cerb_rules)
+        return gen_value_schema(data, ver, rule_id.name, odm_key,
+                                gen_cerb_rules)
 
     return init_rule(rule_id, err, gen_cerb_rules, gen_schema)
 
 
 def less_than_min_value():
-    rule_id = less_than_min_value.__name__
+    rule_id = RuleId.less_than_min_value
     odm_key = 'minValue'
     err = ('Value {value} is less than the allowable minimum value of '
            '{constraint}')
@@ -206,13 +220,14 @@ def less_than_min_value():
             return {'min': val} | gen_cerb_rules_for_type(val_ctx)
 
     def gen_schema(data: pt.OdmData, ver):
-        return gen_value_schema(data, ver, rule_id, odm_key, gen_cerb_rules)
+        return gen_value_schema(data, ver, rule_id.name, odm_key,
+                                gen_cerb_rules)
 
     return init_rule(rule_id, err, gen_cerb_rules, gen_schema)
 
 
 def invalid_category():
-    rule_id = invalid_category.__name__
+    rule_id = RuleId.invalid_category
     cerb_rule_key = 'allowed'
     err = 'Invalid category {value}'
 
@@ -239,7 +254,7 @@ def invalid_category():
                     continue
                 cerb_rule = (cerb_rule_key, sorted(set(cat_ids1 + other_cat)))
                 attr_meta = get_catset_meta(table_id0, cs, categories, ver)
-                update_schema(schema, table_id1, attr_id1, rule_id,
+                update_schema(schema, table_id1, attr_id1, rule_id.name,
                               cerb_rule, table_meta, attr_meta)
         return schema
 
@@ -247,7 +262,7 @@ def invalid_category():
 
 
 def invalid_type():
-    rule_id = invalid_type.__name__
+    rule_id = RuleId.invalid_type
     odm_key = 'dataType'
     err_default = ('Value {value} has type {value_type} but should be of '
                    'type {constraint} or coercable into a {constraint}')
@@ -270,7 +285,8 @@ def invalid_type():
         return gen_cerb_rules_for_type(val_ctx)
 
     def gen_schema(data: pt.OdmData, ver):
-        return gen_value_schema(data, ver, rule_id, odm_key, gen_cerb_rules)
+        return gen_value_schema(data, ver, rule_id.name, odm_key,
+                                gen_cerb_rules)
 
     return init_rule(rule_id, get_error_template, gen_cerb_rules, gen_schema)
 
