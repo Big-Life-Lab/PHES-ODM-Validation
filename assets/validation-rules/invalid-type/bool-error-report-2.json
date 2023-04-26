@@ -15,6 +15,14 @@
                     "partID": "reportable",
                     "dataType": "boolean",
                     "measures": "header"
+                },
+                {
+                    "partID": "false",
+                    "setID": "booleanSet"
+                },
+                {
+                    "partID": "true",
+                    "setID": "booleanSet"
                 }
             ],
             "message": "invalid_type rule violated in table measures, column reportable, row 1: Column reportable is a boolean but has value \"True\". Allowed values are false/true."
