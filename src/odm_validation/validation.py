@@ -77,8 +77,9 @@ _BATCH_SIZE = 100
 _KEY_RULES = _gen_cerb_rule_map()
 
 
-def _get_rule_id(x):
-    return x['ruleID']
+def _get_rule_id(x) -> RuleId:
+    strval = x['ruleID']
+    return RuleId[strval]
 
 
 def _get_dataType(x):
@@ -97,10 +98,9 @@ def _transform_rule(rule: Rule, column_meta) -> Rule:
     if rule.keys[0] == 'allowed':
         rule_ids = list(map(_get_rule_id, column_meta))
         new_rule = next(filter(_is_invalid_type_rule, ruleset), None)
-        new_rule_id = new_rule.id.name
-        if not new_rule or (new_rule_id not in rule_ids):
+        if not new_rule or (new_rule.id not in rule_ids):
             return rule
-        ix = rule_ids.index(new_rule_id)
+        ix = rule_ids.index(new_rule.id)
         if pt.BOOLEAN in map(_get_dataType, column_meta[ix]['meta']):
             return new_rule
     return rule
@@ -229,9 +229,10 @@ def _get_column_name(x):
     return x['columnName']
 
 
-def _get_error_rule_id(x):
+def _get_error_rule_id(x) -> RuleId:
     assert 'errorType' in x, x
-    return x['errorType']
+    strval = x['errorType']
+    return RuleId[strval]
 
 
 def _get_table_rownum_column(x):
@@ -260,9 +261,9 @@ def _filter_errors(errors):
                                                   _get_column_name):
                 value_errors = list(col_errors)
                 rule_ids = list(map(_get_error_rule_id, value_errors))
-                if RuleId.invalid_type.name in rule_ids:
+                if RuleId.invalid_type in rule_ids:
                     for i in countdown(len(value_errors)):
-                        if rule_ids[i] == RuleId._coercion.name:
+                        if rule_ids[i] == RuleId._coercion:
                             del value_errors[i]
                 result += value_errors
     return result
