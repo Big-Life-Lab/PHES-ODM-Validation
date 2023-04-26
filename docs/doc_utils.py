@@ -1,10 +1,17 @@
+import sys
+
 from typing import List, Optional
 
 from rich.console import Console
 from rich.pretty import pprint
 from rich.table import Table
 
-from utils import import_dataset, import_json_file, import_yaml_file
+sys.path.append("../src")
+from odm_validation.utils import (  # noqa:E402
+    import_dataset,
+    import_json_file,
+    import_yaml_file,
+)
 
 
 def pprint_dict_list(dict_list: List[dict], title: str,
