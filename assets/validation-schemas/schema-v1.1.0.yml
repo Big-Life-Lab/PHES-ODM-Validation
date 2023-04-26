@@ -419,6 +419,16 @@ schema:
               version1Location: variables
               version1Table: WWMeasure; SiteMeasure
               version1Variable: aggregation
+            - partID: NA
+              partType: missingness
+            - partID: nan
+              partType: missingness
+            - partID: nr
+              partType: missingness
+            - partID: 'null'
+              partType: missingness
+            - partID: undisc
+              partType: missingness
             ruleID: missing_values_found
           required: true
           type: string
@@ -480,6 +490,16 @@ schema:
               version1Location: variables
               version1Table: WWMeasure
               version1Variable: analysisDate
+            - partID: NA
+              partType: missingness
+            - partID: nan
+              partType: missingness
+            - partID: nr
+              partType: missingness
+            - partID: 'null'
+              partType: missingness
+            - partID: undisc
+              partType: missingness
             ruleID: missing_values_found
           required: true
           type: datetime
@@ -728,6 +748,16 @@ schema:
               version1Location: variables
               version1Table: WWMeasure
               version1Variable: type
+            - partID: NA
+              partType: missingness
+            - partID: nan
+              partType: missingness
+            - partID: nr
+              partType: missingness
+            - partID: 'null'
+              partType: missingness
+            - partID: undisc
+              partType: missingness
             ruleID: missing_values_found
           required: true
           type: string
@@ -782,6 +812,16 @@ schema:
               version1Location: variables
               version1Table: WWMeasure
               version1Variable: uWwMeasureID
+            - partID: NA
+              partType: missingness
+            - partID: nan
+              partType: missingness
+            - partID: nr
+              partType: missingness
+            - partID: 'null'
+              partType: missingness
+            - partID: undisc
+              partType: missingness
             ruleID: missing_values_found
           required: true
           type: string
@@ -829,6 +869,16 @@ schema:
               version1Location: variables
               version1Table: WWMeasure; SiteMeasure; AssayMethod
               version1Variable: unit
+            - partID: NA
+              partType: missingness
+            - partID: nan
+              partType: missingness
+            - partID: nr
+              partType: missingness
+            - partID: 'null'
+              partType: missingness
+            - partID: undisc
+              partType: missingness
             ruleID: missing_values_found
           required: true
           type: string
@@ -911,6 +961,16 @@ schema:
               version1Location: variables
               version1Table: Instrument
               version1Variable: instrumentID
+            - partID: NA
+              partType: missingness
+            - partID: nan
+              partType: missingness
+            - partID: nr
+              partType: missingness
+            - partID: 'null'
+              partType: missingness
+            - partID: undisc
+              partType: missingness
             ruleID: missing_values_found
           required: true
           type: string
@@ -958,6 +1018,16 @@ schema:
               version1Location: variables
               version1Table: Instrument
               version1Variable: model
+            - partID: NA
+              partType: missingness
+            - partID: nan
+              partType: missingness
+            - partID: nr
+              partType: missingness
+            - partID: 'null'
+              partType: missingness
+            - partID: undisc
+              partType: missingness
             ruleID: missing_values_found
           required: true
           type: string
@@ -1064,6 +1134,16 @@ schema:
               version1Location: variables
               version1Table: Instrument
               version1Variable: type
+            - partID: NA
+              partType: missingness
+            - partID: nan
+              partType: missingness
+            - partID: nr
+              partType: missingness
+            - partID: 'null'
+              partType: missingness
+            - partID: undisc
+              partType: missingness
             ruleID: missing_values_found
           required: true
           type: string
@@ -1311,6 +1391,16 @@ schema:
               version1Location: variables
               version1Table: Polygon
               version1Variable: polygonID
+            - partID: NA
+              partType: missingness
+            - partID: nan
+              partType: missingness
+            - partID: nr
+              partType: missingness
+            - partID: 'null'
+              partType: missingness
+            - partID: undisc
+              partType: missingness
             ruleID: missing_values_found
           required: true
           type: string
@@ -1379,6 +1469,16 @@ schema:
               version1Location: variables
               version1Table: Polygon
               version1Variable: type
+            - partID: NA
+              partType: missingness
+            - partID: nan
+              partType: missingness
+            - partID: nr
+              partType: missingness
+            - partID: 'null'
+              partType: missingness
+            - partID: undisc
+              partType: missingness
             ruleID: missing_values_found
           required: true
           type: string
@@ -1425,6 +1525,16 @@ schema:
               version1Location: variables
               version1Table: Polygon
               version1Variable: wkt
+            - partID: NA
+              partType: missingness
+            - partID: nan
+              partType: missingness
+            - partID: nr
+              partType: missingness
+            - partID: 'null'
+              partType: missingness
+            - partID: undisc
+              partType: missingness
             ruleID: missing_values_found
           required: true
           type: string
@@ -1619,6 +1729,16 @@ schema:
               version1Location: variables
               version1Table: Sample
               version1Variable: collection
+            - partID: NA
+              partType: missingness
+            - partID: nan
+              partType: missingness
+            - partID: nr
+              partType: missingness
+            - partID: 'null'
+              partType: missingness
+            - partID: undisc
+              partType: missingness
             ruleID: missing_values_found
           required: true
           type: string
@@ -1666,6 +1786,16 @@ schema:
               version1Location: variables
               version1Table: Sample
               version1Variable: dateTime
+            - partID: NA
+              partType: missingness
+            - partID: nan
+              partType: missingness
+            - partID: nr
+              partType: missingness
+            - partID: 'null'
+              partType: missingness
+            - partID: undisc
+              partType: missingness
             ruleID: missing_values_found
           required: true
           type: datetime
@@ -1827,6 +1957,16 @@ schema:
               version1Location: variables
               version1Table: Sample
               version1Variable: sampleID
+            - partID: NA
+              partType: missingness
+            - partID: nan
+              partType: missingness
+            - partID: nr
+              partType: missingness
+            - partID: 'null'
+              partType: missingness
+            - partID: undisc
+              partType: missingness
             ruleID: missing_values_found
           required: true
           type: string
@@ -1937,6 +2077,16 @@ schema:
               version1Location: variables
               version1Table: Sample
               version1Variable: type
+            - partID: NA
+              partType: missingness
+            - partID: nan
+              partType: missingness
+            - partID: nr
+              partType: missingness
+            - partID: 'null'
+              partType: missingness
+            - partID: undisc
+              partType: missingness
             ruleID: missing_values_found
           required: true
           type: string
@@ -2289,6 +2439,16 @@ schema:
               version1Location: variables
               version1Table: Site
               version1Variable: type
+            - partID: NA
+              partType: missingness
+            - partID: nan
+              partType: missingness
+            - partID: nr
+              partType: missingness
+            - partID: 'null'
+              partType: missingness
+            - partID: undisc
+              partType: missingness
             ruleID: missing_values_found
           required: true
           type: string
@@ -2531,6 +2691,16 @@ schema:
               version1Location: variables
               version1Table: WWMeasure; SiteMeasure
               version1Variable: aggregation
+            - partID: NA
+              partType: missingness
+            - partID: nan
+              partType: missingness
+            - partID: nr
+              partType: missingness
+            - partID: 'null'
+              partType: missingness
+            - partID: undisc
+              partType: missingness
             ruleID: missing_values_found
           required: true
           type: string
@@ -2592,6 +2762,16 @@ schema:
               version1Location: variables
               version1Table: WWMeasure
               version1Variable: analysisDate
+            - partID: NA
+              partType: missingness
+            - partID: nan
+              partType: missingness
+            - partID: nr
+              partType: missingness
+            - partID: 'null'
+              partType: missingness
+            - partID: undisc
+              partType: missingness
             ruleID: missing_values_found
           required: true
           type: datetime
@@ -2840,6 +3020,16 @@ schema:
               version1Location: variables
               version1Table: WWMeasure
               version1Variable: type
+            - partID: NA
+              partType: missingness
+            - partID: nan
+              partType: missingness
+            - partID: nr
+              partType: missingness
+            - partID: 'null'
+              partType: missingness
+            - partID: undisc
+              partType: missingness
             ruleID: missing_values_found
           required: true
           type: string
@@ -2894,6 +3084,16 @@ schema:
               version1Location: variables
               version1Table: WWMeasure
               version1Variable: uWwMeasureID
+            - partID: NA
+              partType: missingness
+            - partID: nan
+              partType: missingness
+            - partID: nr
+              partType: missingness
+            - partID: 'null'
+              partType: missingness
+            - partID: undisc
+              partType: missingness
             ruleID: missing_values_found
           required: true
           type: string
@@ -2941,6 +3141,16 @@ schema:
               version1Location: variables
               version1Table: WWMeasure; SiteMeasure; AssayMethod
               version1Variable: unit
+            - partID: NA
+              partType: missingness
+            - partID: nan
+              partType: missingness
+            - partID: nr
+              partType: missingness
+            - partID: 'null'
+              partType: missingness
+            - partID: undisc
+              partType: missingness
             ruleID: missing_values_found
           required: true
           type: string
@@ -3165,6 +3375,16 @@ schema:
               version1Location: variables
               version1Table: WWMeasure; SiteMeasure
               version1Variable: aggregation
+            - partID: NA
+              partType: missingness
+            - partID: nan
+              partType: missingness
+            - partID: nr
+              partType: missingness
+            - partID: 'null'
+              partType: missingness
+            - partID: undisc
+              partType: missingness
             ruleID: missing_values_found
           required: true
           type: string
@@ -3226,6 +3446,16 @@ schema:
               version1Location: variables
               version1Table: WWMeasure
               version1Variable: analysisDate
+            - partID: NA
+              partType: missingness
+            - partID: nan
+              partType: missingness
+            - partID: nr
+              partType: missingness
+            - partID: 'null'
+              partType: missingness
+            - partID: undisc
+              partType: missingness
             ruleID: missing_values_found
           required: true
           type: datetime
@@ -3474,6 +3704,16 @@ schema:
               version1Location: variables
               version1Table: WWMeasure
               version1Variable: type
+            - partID: NA
+              partType: missingness
+            - partID: nan
+              partType: missingness
+            - partID: nr
+              partType: missingness
+            - partID: 'null'
+              partType: missingness
+            - partID: undisc
+              partType: missingness
             ruleID: missing_values_found
           required: true
           type: string
@@ -3528,6 +3768,16 @@ schema:
               version1Location: variables
               version1Table: WWMeasure
               version1Variable: uWwMeasureID
+            - partID: NA
+              partType: missingness
+            - partID: nan
+              partType: missingness
+            - partID: nr
+              partType: missingness
+            - partID: 'null'
+              partType: missingness
+            - partID: undisc
+              partType: missingness
             ruleID: missing_values_found
           required: true
           type: string
@@ -3575,6 +3825,16 @@ schema:
               version1Location: variables
               version1Table: WWMeasure; SiteMeasure; AssayMethod
               version1Variable: unit
+            - partID: NA
+              partType: missingness
+            - partID: nan
+              partType: missingness
+            - partID: nr
+              partType: missingness
+            - partID: 'null'
+              partType: missingness
+            - partID: undisc
+              partType: missingness
             ruleID: missing_values_found
           required: true
           type: string
