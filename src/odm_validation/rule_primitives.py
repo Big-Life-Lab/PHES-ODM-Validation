@@ -46,13 +46,21 @@ def _get_attr_meta(attr: Part, table_id: PartId, version: Version,
         keys += [odm_key]
     result += [{k: attr[k] for k in keys if k in attr}]
 
-    # sets
-    if version.major >= 2 and cerb_rules:
-        allowed_ids = cerb_rules.get('allowed')
-        if allowed_ids:
-            set_id = attr['mmaSet']
-            for part_id in allowed_ids:
-                result.append({'partID': part_id, 'setID': set_id})
+    if cerb_rules:
+        # pseudo sets
+        forbidden_ids = cerb_rules.get('forbidden')
+        if forbidden_ids:
+            for part_id in forbidden_ids:
+                result.append({'partID': part_id, 'partType': pt.MISSINGNESS})
+
+        # sets
+        if version.major >= 2:
+            allowed_ids = cerb_rules.get('allowed')
+            if allowed_ids:
+                # print(pt.get_partID(attr))
+                set_id = attr['mmaSet']
+                for part_id in allowed_ids:
+                    result.append({'partID': part_id, 'setID': set_id})
     return result
 
 
