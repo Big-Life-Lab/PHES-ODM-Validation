@@ -2137,6 +2137,10 @@ schema:
               measures: header
               measuresRequired: optional
               partID: reportable
+            - partID: 'false'
+              setID: booleanSet
+            - partID: 'true'
+              setID: booleanSet
             ruleID: invalid_type
           type: string
         sampleID:
@@ -3521,6 +3525,10 @@ schema:
             - dataType: boolean
               partID: reportable
               protocolRelationships: input
+            - partID: 'false'
+              setID: booleanSet
+            - partID: 'true'
+              setID: booleanSet
             ruleID: invalid_type
           type: string
         sampleRelID:
@@ -4080,6 +4088,10 @@ schema:
             - dataType: boolean
               partID: reportable
               protocols: input
+            - partID: 'false'
+              setID: booleanSet
+            - partID: 'true'
+              setID: booleanSet
             ruleID: invalid_type
           type: string
         sourceProtocol:
@@ -4840,6 +4852,10 @@ schema:
               partID: pooled
               samples: header
               samplesRequired: optional
+            - partID: 'false'
+              setID: booleanSet
+            - partID: 'true'
+              setID: booleanSet
             ruleID: invalid_type
           type: string
         protocolID:
@@ -4987,6 +5003,10 @@ schema:
               partID: reportable
               samples: header
               samplesRequired: optional
+            - partID: 'false'
+              setID: booleanSet
+            - partID: 'true'
+              setID: booleanSet
             ruleID: invalid_type
           type: string
         saMaterial:
