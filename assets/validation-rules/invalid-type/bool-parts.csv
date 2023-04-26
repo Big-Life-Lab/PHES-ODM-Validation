@@ -1,5 +1,5 @@
 partID,partType,measures,dataType,mmaSet,version1Location,version1Table,version1Variable,version1Category,status,firstReleased,lastUpdated
 measures,tables,NA,NA,NA,tables,Measure,NA,NA,active,1.0.0,2.0.0
-reportable,attributes,header,boolean,NA,variables,Measure,reported,NA,active,1.0.0,2.0.0
+reportable,attributes,header,boolean,booleanSet,variables,Measure,reported,NA,active,1.0.0,2.0.0
 true,categories,NA,varchar,NA,NA,NA,NA,TRUE,active,1.0.0,2.0.0
 false,categories,NA,varchar,NA,NA,NA,NA,FALSE,active,1.0.0,2.0.0

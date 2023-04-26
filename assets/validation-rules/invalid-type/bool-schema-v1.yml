@@ -19,12 +19,6 @@ schema:
               version1Location: variables
               version1Table: Measure
               version1Variable: reported
-            # - partID: 'true'
-            #   catSetID: booleanSet
-            #   version1Category: 'TRUE'
-            # - partID: 'false'
-            #   catSetID: booleanSet
-            #   version1Category: 'FALSE'
       meta:
       - partID: measures
         partType: tables
