@@ -1,0 +1,22 @@
+- value: 91
+  error_context:
+    table: sites
+    row_num: 0
+    column: geoLat
+    row:
+      siteID: "1234567"
+      geoLat: "91"
+      geoLong: "89"
+    schema_key: min
+    schema_value: 90
+- value: 91
+  error_context:
+    table: sites
+    row_num: 1
+    column: geoLong
+    row:
+      siteID: "1"
+      geoLat: "89"
+      geoLong: "91"
+    schema_key: min
+    schema_value: 90

@@ -1,0 +1,22 @@
+# First call to validate_data
+- value: "1234567"
+  schema: 6
+  data_context:
+    row:
+      siteID: "1234567"
+      geoLat: "91"
+      geoLong: "89"
+    row_num: 0
+    column: 'siteID'
+    table: 'sites'
+# Second call to validate_data
+- value: "1"
+  schema: 6
+  data_context:
+    row:
+      siteID: "1"
+      geoLat: "89"
+      geoLong: "91"
+    row_num: 1
+    column: 'siteID'
+    table: 'sites'
