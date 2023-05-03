@@ -14,12 +14,12 @@ from cerberusext import ContextualCoercer, OdmValidator
 
 import part_tables as pt
 import reports
-import rules
 from input_data import DataKind
 from reports import ErrorKind, get_row_num
 from rules import Rule, RuleId, ruleset
 from schemas import CerberusSchema, Schema, init_table_schema
 from stdext import (
+    countdown,
     deep_update,
     flatten,
     strip_dict_key,
@@ -27,7 +27,7 @@ from stdext import (
 from versions import __version__, parse_version
 
 
-RuleError = Tuple[rules.RuleId, dict]
+RuleError = Tuple[RuleId, dict]
 TableDataset = Dict[pt.TableId, pt.Dataset]
 
 
@@ -77,8 +77,9 @@ _BATCH_SIZE = 100
 _KEY_RULES = _gen_cerb_rule_map()
 
 
-def _get_ruleId(x):
-    return x['ruleID']
+def _get_rule_id(x) -> RuleId:
+    strval = x['ruleID']
+    return RuleId[strval]
 
 
 def _get_dataType(x):
@@ -86,7 +87,7 @@ def _get_dataType(x):
 
 
 def _is_invalid_type_rule(rule):
-    return rule.id == rules.invalid_type.__name__
+    return rule.id == RuleId.invalid_type
 
 
 def _transform_rule(rule: Rule, column_meta) -> Rule:
@@ -95,9 +96,9 @@ def _transform_rule(rule: Rule, column_meta) -> Rule:
     # XXX: dependency on meta value (which is only supposed to aid debug)
     # XXX: does not handle rules with match_all_keys enabled
     if rule.keys[0] == 'allowed':
-        rule_ids = list(map(_get_ruleId, column_meta))
+        rule_ids = list(map(_get_rule_id, column_meta))
         new_rule = next(filter(_is_invalid_type_rule, ruleset), None)
-        if not new_rule or new_rule.id not in rule_ids:
+        if not new_rule or (new_rule.id not in rule_ids):
             return rule
         ix = rule_ids.index(new_rule.id)
         if pt.BOOLEAN in map(_get_dataType, column_meta[ix]['meta']):
@@ -228,9 +229,10 @@ def _get_column_name(x):
     return x['columnName']
 
 
-def _get_rule_id(x):
+def _get_error_rule_id(x) -> RuleId:
     assert 'errorType' in x, x
-    return x['errorType']
+    strval = x['errorType']
+    return RuleId[strval]
 
 
 def _get_table_rownum_column(x):
@@ -247,20 +249,22 @@ def _sort_errors(errors):
 
 def _filter_errors(errors):
     """Removes redundant errors."""
-    # - invalid_type produces redundant _coercion errors
+    # This function currently only removes redundant _coercion errors produced
+    # by `invalid_type`.
+    #
+    # Errors are deleted in reverse order to keep the two lists in sync.
     result = []
-    target_rule_ids = {rules.COERCION_RULE_ID}
     sorted_errors = _sort_errors(errors)
     for tableName, table_errors in groupby(sorted_errors, _get_table_name):
         for rowNum, row_errors in groupby(table_errors, _get_row_num):
             for columnName, col_errors in groupby(row_errors,
                                                   _get_column_name):
                 value_errors = list(col_errors)
-                rule_ids = list(map(_get_rule_id, value_errors))
-                if rules.invalid_type.__name__ in rule_ids:
-                    for id in set(rule_ids).intersection(target_rule_ids):
-                        ix = rule_ids.index(id)
-                        del value_errors[ix]
+                rule_ids = list(map(_get_error_rule_id, value_errors))
+                if RuleId.invalid_type in rule_ids:
+                    for i in countdown(len(value_errors)):
+                        if rule_ids[i] == RuleId._coercion:
+                            del value_errors[i]
                 result += value_errors
     return result
 
@@ -327,8 +331,8 @@ def _generate_validation_schema_ext(parts: pt.Dataset,
                                     sets: pt.Dataset = [],
                                     schema_version: str = pt.ODM_VERSION_STR,
                                     schema_additions: dict = {},
-                                    rule_blacklist: List[rules.RuleId] = [],
-                                    rule_whitelist: List[rules.RuleId] = []
+                                    rule_blacklist: List[RuleId] = [],
+                                    rule_whitelist: List[RuleId] = []
                                     ) -> Schema:
     """
     This is the extended version of `generate_validation_schema`, with

@@ -7,7 +7,7 @@ from typing import Any, Dict, List, Optional, Set
 
 import part_tables as pt
 from input_data import DataKind
-from rules import RuleId, COERCION_RULE_ID
+from rules import RuleId
 from stdext import (
     get_len,
     quote,
@@ -26,7 +26,7 @@ class ErrorCtx:
     column_meta: dict
     row_numbers: List[int]
     rows: List[dict]
-    rule_id: str
+    rule_id: RuleId
     table_id: str
     value: Any
 
@@ -147,7 +147,7 @@ def _gen_error_msg(ctx: ErrorCtx, template: Optional[str] = None,
         column_id=ctx.column_id,
         constraint=_fmt_msg_value(ctx.constraint, relaxed=True),
         row_num=_fmt_list(ctx.row_numbers),
-        rule_id=ctx.rule_id,
+        rule_id=ctx.rule_id.name,
         table_id=ctx.table_id,
         value=_fmt_msg_value(ctx.value),
         value_len=get_len(ctx.value),
@@ -165,7 +165,7 @@ def gen_rule_error(ctx: ErrorCtx,
     rule_ids = _get_meta_rule_ids(ctx.column_meta)
     rule_fields = pt.get_validation_rule_fields(ctx.column_meta, rule_ids)
     error = {
-        (kind.value + 'Type'): ctx.rule_id,
+        (kind.value + 'Type'): ctx.rule_id.name,
         'tableName': ctx.table_id,
         'columnName': ctx.column_id,
         'validationRuleFields': _fmt_dataset_values(rule_fields),
@@ -194,7 +194,7 @@ def gen_rule_error(ctx: ErrorCtx,
         error['invalidValue'] = _fmt_value(ctx.value)
 
     # coercion
-    if ctx.rule_id == COERCION_RULE_ID:
+    if ctx.rule_id == RuleId._coercion:
         error['coercionRules'] = rule_ids
 
     return error

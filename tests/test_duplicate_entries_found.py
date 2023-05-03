@@ -6,6 +6,7 @@ from parameterized import parameterized
 
 import common
 from common import asset, root_dir, param_range
+from rules import RuleId
 from utils import (
     import_dataset,
     import_json_file,
@@ -16,7 +17,7 @@ from validation import generate_validation_schema, _validate_data_ext
 
 class Assets():
     def __init__(self, rule_id: str, table: str):
-        rule_dirname = rule_id.replace('_', '-')
+        rule_dirname = rule_id.name.replace('_', '-')
         common.ASSET_DIR = join(root_dir,
                                 f'assets/validation-rules/{rule_dirname}')
 
@@ -44,7 +45,7 @@ class Assets():
 
 
 class TestDuplicateEntriesFound(common.OdmTestCase):
-    rule_id = 'duplicate_entries_found'
+    rule_id = RuleId.duplicate_entries_found
     table = 'addresses'
 
     @classmethod
