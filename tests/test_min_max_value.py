@@ -6,6 +6,7 @@ from parameterized import parameterized, parameterized_class
 
 import common
 from common import asset, root_dir, param_range
+from rules import RuleId
 from stdext import deep_update
 from utils import (
     import_dataset,
@@ -16,8 +17,8 @@ from validation import _generate_validation_schema_ext, _validate_data_ext
 
 
 class Assets():
-    def __init__(self, ruleId: str):
-        rule_dirname = ruleId.replace('_', '-')
+    def __init__(self, ruleId: RuleId):
+        rule_dirname = ruleId.name.replace('_', '-')
         common.ASSET_DIR = join(root_dir,
                                 f'assets/validation-rules/{rule_dirname}')
 
@@ -56,11 +57,11 @@ class Assets():
 
 
 @parameterized_class([
-   {'ruleId': 'less_than_min_value'},
-   {'ruleId': 'greater_than_max_value'},
+   {'ruleId': RuleId.less_than_min_value},
+   {'ruleId': RuleId.greater_than_max_value},
 ])
 class TestMinMaxValue(common.OdmTestCase):
-    ruleId: str
+    ruleId: RuleId
 
     @classmethod
     def setUpClass(cls):
@@ -94,7 +95,7 @@ class TestMinMaxValue(common.OdmTestCase):
 
 
 class TestMinMaxValueExtra(common.OdmTestCase):
-    ruleIds = ['less_than_min_value', 'greater_than_max_value']
+    ruleIds = [RuleId.less_than_min_value, RuleId.greater_than_max_value]
 
     def test_schema_generation_zero(self):
         # zero is a valid min/max value

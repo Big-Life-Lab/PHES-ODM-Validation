@@ -6,6 +6,7 @@ from parameterized import parameterized, parameterized_class
 
 import common
 from common import asset, root_dir, param_range
+from rules import RuleId
 from utils import (
     import_dataset,
     import_json_file,
@@ -15,8 +16,8 @@ from validation import _generate_validation_schema_ext, validate_data
 
 
 class Assets():
-    def __init__(self, ruleId: str):
-        rule_dirname = ruleId.replace('_', '-')
+    def __init__(self, ruleId: RuleId):
+        rule_dirname = ruleId.name.replace('_', '-')
         common.ASSET_DIR = join(root_dir,
                                 f'assets/validation-rules/{rule_dirname}')
 
@@ -38,11 +39,11 @@ class Assets():
 
 
 @parameterized_class([
-   {'ruleId': 'less_than_min_length'},
-   {'ruleId': 'greater_than_max_length'},
+   {'ruleId': RuleId.less_than_min_length},
+   {'ruleId': RuleId.greater_than_max_length},
 ])
 class TestMinMaxLength(common.OdmTestCase):
-    ruleId: str
+    ruleId: RuleId
 
     @classmethod
     def setUpClass(cls):

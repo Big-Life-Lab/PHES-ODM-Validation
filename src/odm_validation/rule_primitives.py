@@ -133,8 +133,9 @@ def attr_items(data: OdmData, table_id0: PartId, table_id1: PartId,
             yield (attr_id0, attr_id1, attr)
 
 
-def add_attr_schemas(table_schema, data, table_id0, table_id1, attr, rule_id,
-                     odm_key: Optional[str], cerb_rules, version):
+def add_attr_schemas(table_schema, data, table_id0, table_id1, attr,
+                     rule_id: str, odm_key: Optional[str],
+                     cerb_rules, version):
     for attr_id1 in _get_mapped_attribute_ids(data, attr, version):
         attr_meta = _get_attr_meta(attr, table_id0, version, odm_key,
                                    cerb_rules)

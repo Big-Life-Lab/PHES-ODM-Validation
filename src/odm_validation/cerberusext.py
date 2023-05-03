@@ -13,7 +13,7 @@ import part_tables as pt
 import reports
 from input_data import DataKind
 from reports import get_row_num
-from rules import COERCION_RULE_ID
+from rules import RuleId
 from part_tables import Dataset, Row
 from schemas import CerberusSchema
 from stdext import (
@@ -122,7 +122,7 @@ class ContextualCoercer(Validator):
         row = self.document
         column_meta = self.schema[field].get('meta')
         ctx = reports.ErrorCtx(
-            rule_id=COERCION_RULE_ID,
+            rule_id=RuleId._coercion,
             cerb_type_name=type_name(type_class),
             column_id=field,
             column_meta=column_meta,
