@@ -128,6 +128,8 @@ pprint_dict_list(sites_table, "Sites Table")
 the validation logic for the `greater_than_max_length` rule would be run for all
 values in the `siteID` column.
 
+**This step is optional if the desired validation can be done by cerberus**
+
 ## Specifications
 
 These next few sections will go over the different elements of the API. 
