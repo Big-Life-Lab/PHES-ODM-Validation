@@ -149,7 +149,7 @@ all methods are not implemented can be shown to the user.
 The `ValidationRule` class has the following methods:
 
 1. `get_schema_keys`
-2. `gen_schema`
+2. `gen_schema_values`
 3. `validate_data`
 4. `gen_report`
 5. `transformed`
@@ -162,7 +162,7 @@ In the following sections we will go over the listed methods in detail.
 **Every method by default takes the Python `self` parameter as its first 
 argument. Its presence is assumed and will not be mentioned unless warranted.**
 
-### `get_schema_keys` and `gen_schema`
+### `get_schema_keys` and `gen_schema_values`
 
 These two functions are used in the schema generation process and are together
 used to construct the schema for a rule. The schema for a rule is an object
@@ -172,7 +172,7 @@ a piece of validation metadata, and the value contains the metadata.
 The `get_schema_keys` method does not take any parameters and should return a 
 list of strings that represents the keys.
 
-The `gen_schema` method takes the following 4 parameters:
+The `gen_schema_values` method takes the following 4 parameters:
 
 1. The name of the **table** to generate the schema values for;
 2. The name of the **column** in the above table to generate the schema values for;
@@ -191,14 +191,14 @@ The method should return one of the following values:
 For example, for the `greater_than_max_length` rule:
 
 1. The `gen_schema_keys` method would return the list `['maxlength']`; and
-2. The `gen_schema` method would return the list `[6]` for the `siteID` column 
+2. The `gen_schema_values` method would return the list `[6]` for the `siteID` column 
 and `None` otherwise
 
 Similiarly, if we were to implement the two methods for the 
 `greater_than_max_value` rule with the parts sheet displayed above:
 
 1. The `get_schema_keys` method would return the list `['type', 'coerce', 'max']`
-2. The `gen_schema` method would return the list `['integer', 'integer', 90]`  
+2. The `gen_schema_values` method would return the list `['integer', 'integer', 90]`  
 for the `geoLat` and `geoLong` columns. It would return `None` for the
 other columns.
 
@@ -219,7 +219,7 @@ The method takes the following 3 parameters:
 
 1. The value to be validated. 
 2. The schema information to validate this value with. This is the schema
-value that the rule returned in their `gen_schema` method for the table-column
+value that the rule returned in their `gen_schema_values` method for the table-column
 pair that the value belongs to.
 3. An object that contains metadata about the value. It should include the 
 following:
@@ -325,7 +325,7 @@ if a successful coercion took place.
 
 #### Two methods for schema generation?
 
-The functionality of `get_schema_keys` could be rolled into `gen_schema`, 
+The functionality of `get_schema_keys` could be rolled into `gen_schema_values`, 
 so that the latter method now returns the entire schema object, with keys
 and values.
 
