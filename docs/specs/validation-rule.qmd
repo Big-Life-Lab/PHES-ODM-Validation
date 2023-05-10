@@ -267,7 +267,7 @@ list in the validation report. If the `errorType` is `error` its added to
 former, and if its `warning` its added to the latter.
 
 A rule can return `None`, for example, to avoid duplicate errors in the report.
-For example, with the `greater_than_max_value` rule, the `gen_error` method 
+For example, with the `greater_than_max_value` rule, the `gen_report` method 
 could return an object only for the `max` schema key.
 
 For example, for the `greater_than_max_value` rule, this method would be called 
@@ -275,13 +275,13 @@ twice, once for the `geoLat` column value in row 1 and once for the `geoLong`
 value in row 2.
 
 It would be called with the following parameters below. Each item in the list
-has the parameters for each call of the `gen_error` method.
+has the parameters for each call of the `gen_report` method.
 
 ```{python}
 #| echo: false
 
-gen_error_parameters = import_dataset(asset("gen-error-parameters.yml"))
-pprint(gen_error_parameters)
+gen_report_parameters = import_dataset(asset("gen-error-parameters.yml"))
+pprint(gen_report_parameters)
 ```
 
 #### `transformed`
@@ -329,13 +329,13 @@ The functionality of `get_schema_keys` could be rolled into `gen_schema_values`,
 so that the latter method now returns the entire schema object, with keys
 and values.
 
-This is not possible because of the way the `validate_data` and `gen_error`
+This is not possible because of the way the `validate_data` and `gen_report`
 methods work. For both these methods the library needs to know the schema
 keys that map to each rule:
 
 1. If a rule implements its own `validate_data` method, the library needs
 to attach that method to cerberus, with the schema key associated with it.
-2. For the `gen_error` method, the library needs to know how to map each
+2. For the `gen_report` method, the library needs to know how to map each
 cerberus error object to the rule it belongs to. It uses the schema key for
 this.
 
