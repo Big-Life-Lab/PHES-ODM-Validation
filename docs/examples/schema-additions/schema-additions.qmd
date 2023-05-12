@@ -27,7 +27,7 @@ ASSET_DIR = "../../../assets/schema-additions-vignette"
 
 ## Context
 
-You can extend the [ODM validation schemas](../../../assets/validation-schemas/) for your specific needs. In this tutorial, we show you how to use the `schema_additions` parameter in the [generate_validation_schema](../../specs/generate-validation-schema.md) function to generate new validation rules.
+You can extend the [ODM validation schemas](../../../assets/validation-schemas/) for your specific needs. In this tutorial, we show you how to use the `schema_additions` parameter in the [generate_validation_schema](../../specs/generate-validation-schema-function.md) function to generate new validation rules.
 
 ## Extending a validation schema
 
