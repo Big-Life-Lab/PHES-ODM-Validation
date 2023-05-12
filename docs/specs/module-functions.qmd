@@ -114,6 +114,8 @@ All errors and warnings for each validation rule are documented in the [specific
     * `data_version`: string consisting of the version of the ODM data
     * `schema_version`: string consisting of the version of the validation schema used
     * `package_version`: string consisting of the version of the validation package used
+    - `table_info`: A Python dictionary mapping all validated table(-ids) to
+      their column/row counts.
     * `errors`: A list of Python dictionaries describing each error. For more information refer to the files in the [validation-rules](../validation-rules/) folder
     * `warnings`: A list of Python dictionaries describing each warning.
 
