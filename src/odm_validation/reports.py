@@ -1,5 +1,4 @@
 import datetime
-from collections import defaultdict
 from dataclasses import dataclass, field
 from enum import Enum
 from typing import Any, Dict, List, Optional, Set
@@ -39,12 +38,19 @@ class ErrorCtx:
 
 
 @dataclass(frozen=True)
+class TableInfo:
+    columns: int
+    rows: int
+
+
+@dataclass(frozen=True)
 class ValidationReport:
     data_version: str
     schema_version: str
     package_version: str
-    errors: List[str]
-    warnings: List[str]
+    table_info: Dict[pt.TableId, TableInfo]
+    errors: List[dict]
+    warnings: List[dict]
 
     def valid(self) -> bool:
         return len(self.errors) == 0
@@ -137,6 +143,22 @@ def _gen_error_msg(ctx: ErrorCtx, template: Optional[str] = None,
     )
 
 
+def get_error_kind(report_error) -> ErrorKind:
+    if 'warningType' in report_error:
+        return ErrorKind.WARNING
+    else:
+        return ErrorKind.ERROR
+
+
+def get_error_type_field_name(error_kind: ErrorKind) -> str:
+    return error_kind.value + 'Type'
+
+
+def get_error_rule_id(report_error: dict, error_kind: ErrorKind) -> RuleId:
+    rule_name = report_error[get_error_type_field_name(error_kind)]
+    return RuleId[rule_name]
+
+
 def gen_rule_error(ctx: ErrorCtx,
                    err_template: Optional[str] = None,
                    kind: Optional[ErrorKind] = None,
@@ -147,7 +169,7 @@ def gen_rule_error(ctx: ErrorCtx,
     rule_ids = _get_meta_rule_ids(ctx.column_meta)
     rule_fields = pt.get_validation_rule_fields(ctx.column_meta, rule_ids)
     error = {
-        (kind.value + 'Type'): ctx.rule_id.name,
+        (get_error_type_field_name(kind)): ctx.rule_id.name,
         'tableName': ctx.table_id,
         'columnName': ctx.column_id,
         'validationRuleFields': _fmt_dataset_values(rule_fields),
