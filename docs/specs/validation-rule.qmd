@@ -261,10 +261,7 @@ includes:
     5. The name of the schema key that failed validation
     6. The value of the schema key
 
-The method should return an object or `None`. Depending on the value of the
-`errorType` field in the object, its either added to the errors or warnings
-list in the validation report. If the `errorType` is `error` its added to
-former, and if its `warning` its added to the latter.
+The method can return `None` or a [`report object`](#the-report-object).
 
 A rule can return `None`, for example, to avoid duplicate errors in the report.
 For example, with the `greater_than_max_value` rule, the `gen_report` method 
@@ -300,10 +297,7 @@ includes:
     3. The name of the column the value is from
     4. An object containing the row the value is from
 
-The method can return an object that returns an error or a warning to add to the
-validation report. Whether its an error or a warning is signified by the
-presence of an `errorType` key in case of the former or `warningType` key in 
-case of the latter.
+The method can return `None` or a [`report object`](#the-report-object).
 
 For example, for the same `sites` table and the `greater_than_max_value` rule,
 this method would be called four times, for the two values in the `geoLat` and
@@ -362,3 +356,18 @@ For example, for the `duplicate_entries_found` rule, it can keep track of each
 primaryKey-lastUpdated pair in `self` whenever `validate_data` is called. It
 can then refer to that field when validating a new pair to check if it is
 unique or not.
+
+#### The Report object
+
+Within the `gen_report` and `transformed` functions the validation rule can 
+decide to return an object that represents an error/warning report.
+
+Depending on whether the report is an error or a warning the `errorType` or 
+`warningType` field should be set, with `errorType` being for the former and
+`warningType` being for the latter.
+
+If the report is an error then it should be added to the errors list in the 
+report and if it is warning it should be to the warnings list.
+
+Finally, the validation rule is allowed to add any other metadata it deems
+necessary to the report object, for example, the offending value(s).
