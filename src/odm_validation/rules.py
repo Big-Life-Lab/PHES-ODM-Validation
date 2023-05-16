@@ -31,6 +31,7 @@ from versions import Version
 
 
 RuleId = Enum('RuleId', [
+    '_all',
     '_coercion',
     'duplicate_entries_found',
     'greater_than_max_length',

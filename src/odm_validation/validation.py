@@ -15,7 +15,7 @@ from cerberusext import ContextualCoercer, OdmValidator
 import part_tables as pt
 import reports
 from input_data import DataKind
-from reports import ErrorKind, get_row_num
+from reports import ErrorKind, TableInfo, get_row_num
 from rules import Rule, RuleId, ruleset
 from schemas import CerberusSchema, Schema, init_table_schema
 from stdext import (
@@ -450,8 +450,13 @@ def _validate_data_ext(schema: Schema,
                                            offset, data_kind)
             coerced_data[table_id] += coerce_result[table_id]
 
+    table_info: Dict[pt.TableId, TableInfo] = {}
     validation_schema = _strip_coerce_rules(coercion_schema)
     for table_id, table_data in coerced_data.items():
+        table_info[table_id] = TableInfo(
+            columns=len(table_data[0]),
+            rows=len(table_data),
+        )
         v = OdmValidator.new()
         for batch in batch_table_data('validating', table_id, table_data):
             batch_data, offset = batch
@@ -472,6 +477,7 @@ def _validate_data_ext(schema: Schema,
         data_version=data_version,
         schema_version=versioned_schema["schemaVersion"],
         package_version=__version__,
+        table_info=table_info,
         errors=errors,
         warnings=warnings,
     )
