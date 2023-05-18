@@ -1,0 +1,28 @@
+schemaVersion: 2.0.0
+schema:
+  addresses:
+    type: list
+    schema:
+      type: dict
+      schema:
+        addID:
+          type: string
+          required: True
+  sites:
+    type: list
+    schema:
+      type: dict
+      schema:
+        siteID: 
+          type: integer
+          required: True
+        geoLat: 
+          type: integer
+          coerce: integer
+          min: -90
+          max: 90
+        geoLong:
+          type: integer
+          coerce: integer
+          min: -90
+          max: 90
