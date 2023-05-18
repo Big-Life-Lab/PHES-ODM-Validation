@@ -1,0 +1,188 @@
+# Summary Report
+
+{{< include ../validation-rules/_setup.qmd >}}
+
+```{python}
+#| echo: false
+ASSET_DIR = '../../assets/specs/summary-report'
+
+from rich.pretty import pprint
+```
+
+This document provides the specifications for programmatically summarizing a
+validation report generated with the `validation.validate_data` function.
+
+## Context
+
+Summarizing the validation report is desireable when the dataset is large and
+there are a lot of validation errors/warnings. A summary report enables a user
+to have a bird's eye view of the validation errors in a dataset, making it
+easy to identify where in the errors are localized, if they are.
+
+The next sections go over the assets we will be working with in this
+specification.
+
+### The validation schema
+
+The validation schema we will be working with is displayed below,
+
+```{python}
+#| echo: false
+from odm_validation.utils import import_schema
+
+schema = import_schema(asset('schema.yml'))
+pprint(schema, expand_all=True)
+```
+
+It defines the following entities:
+
+* An `addresses` table with a **string** column called `addID` which is
+**mandatory**; and
+* A `sites` table with:
+    * A **string** column called `siteID` which is mandatory
+    * Two **integer** columns called `geoLat` and `geoLong`, both with a
+    **min** and **max** value of **-90** and **90** respectively.
+
+### The dataset
+
+The `addresses` and `sites` tables we will be validating are shown below,
+
+```{python}
+#| echo: false
+from odm_validation.utils import import_dataset
+
+addresses_table = import_dataset(asset('addresses-table.csv'))
+pprint_dict_list(addresses_table, "Addresses Table")
+
+sites_table = import_dataset(asset('sites-table.csv'))
+pprint_dict_list(sites_table, "Sites Table")
+```
+
+### The validation report
+
+Finally, the full validation report for our dataset is printed below,
+
+```{python}
+#| echo: false
+from odm_validation.validation import validate_data, DataKind
+
+data = {
+    "addresses": addresses_table,
+    "sites": sites_table
+}
+
+report = validate_data(schema, data)
+pprint(report)
+```
+
+As you can see, the report is overwhelming, even for this relatively small
+dataset. Its hard to see whether the errors are localized to one table and or
+column or if they're spread out. The summary report should help with this.
+
+## Specifications
+
+### Summarizing by table
+
+The user should be able to generate a summary for each table.
+
+The summary should include an overall table summary that includes:
+
+* The number rows in the table and the number of rows with errors
+* The number of columns in the table and the number of columns with errors
+
+For example, for the dataset above,
+
+* **5** rows found in the `addresses` table
+    * **0** rows with errors
+    * **0** rows with warnings
+* **1** column found in the `addresses` table
+    * **0** columns with errors
+    * **0** columns with warnings
+* **3** rows found in the `sites` table
+    * **3** rows with errors
+    * **3** rows with warnings
+* **2** columns found in the `sites` table
+    * **2** column with errors
+    * **2** columns with warnings
+    * **1** missing mandatory column
+
+The summary should provide the following information about the errors and
+warnings for each table:
+
+* The total number of errors in each table
+* The total number of errors of each type in each table
+* The total number of warnings in each table
+* The total number of warnings of each type in each table
+
+For example, for the dataset above, the summary report should inform the user 
+that there are:
+
+* **0** errors in the `addresses` table
+* **9** errors in the `sites` table
+    * **3** `less_than_min_value` errors
+    * **3** `greater_than_max_value` errors
+    * **3** `missing_mandatory_column` errors
+* **6** warnings in the `sites` table
+    * **6** `_coercion` warnings
+
+### Summarizing by row
+
+The user should be able to generate a summary for each row in the table. This
+summary is always generated within the context of a table. For example, for the
+dataset above, the summary report should inform the user that there are:
+
+* **0** errors in the `addresses` table
+* **9** errors in the `sites` table
+    * **3** errors in row 1
+        * **1** `less_than_min_value` error
+        * **1** `greater_than_max_value` error
+        * **1** `missing_mandatory_column` error
+    * **3** errors in row 2
+        * **1** `less_than_min_value` error
+        * **1** `greater_than_max_value` error
+        * **1** `missing_mandatory_column` error
+    * **3** errors in row 3
+        * **1** `less_than_min_value` error
+        * **1** `greater_than_max_value` error
+        * **1** `missing_mandatory_column` error
+* **6** warnings in the `sites` table
+    * **2** warnings in row 1
+        * **2** `_coercion` warnings
+    * **2** warnings in row 2
+        * **2** `_coercion` warnings
+    * **2** warnings in row 3
+        * **2** `_coercion` warnings
+
+## Summarizing by column
+
+The user should be able to generate a summary for each column in the table.
+This summary is always generated within a context of a table. For example, for
+the dataset above, the summary report should inform the user that there are:
+
+* **0** errors in the `addresses` table
+* **9** errors in the `sites` table
+    * **3** errors in the `geoLat` column
+        * **3** `less_than_min_value` errors
+    * **3** errors in the `geoLong` column
+        * **3** `greater_than_max_value` errors
+    * **3** errors in the column `siteID`
+        * **3** `missing_mandatory_column` errors
+* **6** warnings in the `sites` table
+    * **3** warnings in the `geoLat` column
+        * **3** `_coercion` warnings
+    * **3** warnings in the `geoLong` column
+        * **3** `_coercion` warnings
+
+## Default summarization
+
+By default, the summary report should be generated by table.
+
+## Printing a summary
+
+The user should be able to print the report in a markdown format. The
+summary should include both the errors and warnings. Depending on how the user
+decided to create the summary report, there are 3 versions that can be printed:
+
+1. Summary by table;
+2. Summary by table and row; and
+3. Summary by table and column

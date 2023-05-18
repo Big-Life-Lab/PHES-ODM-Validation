@@ -1,0 +1,43 @@
+# Validate Tool
+
+The validate tool is used to validate a spreadsheet (either an Excel workbook
+or a single csv file), and generate a validation report that can be used to
+either fix errors or accompany the data as a "proof of validity".
+
+## Usage
+
+` python tools/validate.py <data-file> [options...]`
+
+### Arguments
+
+- `data-file`
+
+  The Excel/CSV file to be validated.
+
+### Options
+
+- `--version=<version>`
+
+  The ODM version to validate against. Defaults to the latest ODM version.
+
+- `--out=<path>`
+
+  The path to write the validation report to. Defaults to stdout when not
+  specified.
+
+- `--format=(yaml, markdown)`
+
+  The output format. When the `--out` parameter is passed, the format can be
+  auto-detected from the filename extension, otherwise it defaults to YAML.
+
+## Examples
+
+- Validate a CSV file and print the output to the console with markdown
+  formatting:
+
+    `python tools/validate.py measures.csv --format=markdown`
+
+- Validate an Excel file with version 1.1.0 of the ODM, and write the result to
+  a YAML file:
+
+    `python tools/validate.py lab-data.xlsx --version=1.1.0 --out=./report.yaml`
