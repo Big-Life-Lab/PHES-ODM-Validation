@@ -1,10 +1,17 @@
 # Contributing
 
-The PHES-ODM validation tool kit is an open source and community-driven. You can make suggestions for new validation rules or comment on existing rules on the PHES-ODM [discussion board](https://odm.discourse.group) or GitHub [Issues](https://github.com/Big-Life-Lab/PHES-ODM-Validation/issues).
+The PHES-ODM validation tool kit is an open source and community-driven. You can
+make suggestions for new validation rules or comment on existing rules on the 
+PHES-ODM [discussion board](https://odm.discourse.group) or GitHub 
+[Issues](https://github.com/Big-Life-Lab/PHES-ODM-Validation/issues).
 
 ## Adding a new rule
 
-New validation rules can be requested by anyone ODM user. Instructions on how to add a new rule is found in [/docs/validation-rules/README.md](/docs/validation-rules/README.md). The validation rules README.md is a good source of additional information about how rules work.
+New validation rules can be requested by anyone ODM user. Instructions on how to
+add a new rule can be found in the 
+[documentation](/rules.html#adding-a-new-rule). The validation rules 
+[README.md](/rules.html) is a good source of additional information about 
+how rules work.
 
 ## Code style
 
