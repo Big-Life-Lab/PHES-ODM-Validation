@@ -1,4 +1,3 @@
-
 # generate_validation_schema
 
 This document provides the specifications for programmatically

@@ -1,4 +1,3 @@
-
 # missing_values_found
 
 This rule checks if a mandatory column contain any missing values. A

@@ -1,4 +1,3 @@
-
 # missing_mandatory_column
 
 This rule checks if the rows of each table contains its mandatory

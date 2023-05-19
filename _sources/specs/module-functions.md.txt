@@ -1,4 +1,3 @@
-
 # Module functions
 
 ## validate_data

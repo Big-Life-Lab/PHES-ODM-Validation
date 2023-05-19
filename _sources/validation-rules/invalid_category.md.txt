@@ -1,4 +1,3 @@
-
 # invalid_category
 
 This rule checks if the rows of a categorical column in a table have the

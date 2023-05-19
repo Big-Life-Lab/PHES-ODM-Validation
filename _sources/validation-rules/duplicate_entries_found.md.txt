@@ -1,4 +1,3 @@
-
 # duplicate_entries_found
 
 This rule identifies when there are two identical entries with the same
