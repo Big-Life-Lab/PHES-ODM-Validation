@@ -273,8 +273,7 @@ def _strip_coerce_rules(cerb_schema):
     return strip_dict_key(deepcopy(cerb_schema), 'coerce')
 
 
-def _map_cerb_errors(table_id, cerb_errors, schema, rule_filter,
-                     summary: reports.ValidationSummary, offset: int,
+def _map_cerb_errors(table_id, cerb_errors, schema, rule_filter, offset: int,
                      data_kind):
     """Transforms Cerberus errors to validation errors (and warnings).
 
@@ -294,7 +293,6 @@ def _map_cerb_errors(table_id, cerb_errors, schema, rule_filter,
                         if not rule_error:
                             continue
                         (rule_id, entry) = rule_error
-                        summary.record_error(table_id, rule_id)
                         if 'warningType' in entry:
                             warnings.append(entry)
                         else:
@@ -302,7 +300,7 @@ def _map_cerb_errors(table_id, cerb_errors, schema, rule_filter,
     return errors, warnings
 
 
-def _map_aggregated_errors(table_id, agg_errors, rule_filter, summary):
+def _map_aggregated_errors(table_id, agg_errors, rule_filter):
     """Transforms a list of aggregated errors from OdmValidator to a list of
     validation errors."""
     errors = []
@@ -311,7 +309,6 @@ def _map_aggregated_errors(table_id, agg_errors, rule_filter, summary):
         if not rule_error:
             continue
         (rule_id, entry) = rule_error
-        summary.record_error(table_id, rule_id)
         errors.append(entry)
     return errors
 
@@ -428,7 +425,6 @@ def _validate_data_ext(schema: Schema,
     versioned_schema = schema
     cerb_schema = versioned_schema["schema"]
     coercion_schema = cerb_schema
-    summary = reports.ValidationSummary()
     rule_filter = RuleFilter(whitelist=rule_whitelist,
                              blacklist=rule_blacklist)
 
@@ -463,12 +459,12 @@ def _validate_data_ext(schema: Schema,
             if v.validate(offset, data_kind, batch_data, validation_schema):
                 continue
             e, w = _map_cerb_errors(table_id, v._errors, validation_schema,
-                                    rule_filter, summary, offset, data_kind)
+                                    rule_filter, offset, data_kind)
             errors += e
             warnings += w
         errors += _map_aggregated_errors(table_id,
                                          v.error_state.aggregated_errors,
-                                         rule_filter, summary)
+                                         rule_filter)
 
     errors = _filter_errors(errors)
 
@@ -478,7 +474,6 @@ def _validate_data_ext(schema: Schema,
         package_version=__version__,
         errors=errors,
         warnings=warnings,
-        summary=summary,
     )
 
 

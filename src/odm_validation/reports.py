@@ -38,23 +38,6 @@ class ErrorCtx:
     is_column: bool = False
 
 
-class TableSummary:
-    error_counts: Dict[RuleId, int]
-
-    def __init__(self):
-        self.error_counts = defaultdict(int)
-
-
-class ValidationSummary:
-    table_summaries: Dict[pt.TableId, TableSummary]
-
-    def __init__(self):
-        self.table_summaries = defaultdict(TableSummary)
-
-    def record_error(self, table_id, rule_id):
-        self.table_summaries[table_id].error_counts[rule_id] += 1
-
-
 @dataclass(frozen=True)
 class ValidationReport:
     data_version: str
@@ -62,7 +45,6 @@ class ValidationReport:
     package_version: str
     errors: List[str]
     warnings: List[str]
-    summary: ValidationSummary
 
     def valid(self) -> bool:
         return len(self.errors) == 0
