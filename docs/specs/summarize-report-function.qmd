@@ -71,8 +71,10 @@ overview = {
         'addresses': {
             'columns': 2,
             'rows': 6,
-            'invalid_columns': 2,
-            'invalid_rows': 6,
+            'rules': {
+                'x': 4,
+                'y': 2,
+            }
         }
     },
     'errors': {
@@ -118,11 +120,11 @@ errors: ErrorSummary = {
         E(ruleId='x', count=2, key='row',    value='2'),
         E(ruleId='y', count=1, key='row',    value='2'),
 
-        E(ruleId='_total', count=6, key='table',  value='addresses'),
-        E(ruleId='_total', count=3, key='column', value='addId'),
-        E(ruleId='_total', count=3, key='column', value='addL1'),
-        E(ruleId='_total', count=3, key='row',    value='1'),
-        E(ruleId='_total', count=3, key='row',    value='2'),
+        E(ruleId='_all', count=6, key='table',  value='addresses'),
+        E(ruleId='_all', count=3, key='column', value='addId'),
+        E(ruleId='_all', count=3, key='column', value='addL1'),
+        E(ruleId='_all', count=3, key='row',    value='1'),
+        E(ruleId='_all', count=3, key='row',    value='2'),
     ]
 }
 ```
@@ -158,14 +160,14 @@ ErrorSummary = Dict[TableId, Dict[SummaryKey, Dict[str, Count]]]
 
 errors: ErrorSummary = {
     'addresses': {
-        table: {'x': 4, 'y': 2, '_total': 6},
+        table: {'x': 4, 'y': 2, '_all': 6},
         column: {
-            'addId': {'x': 1, 'y': 2, '_total': 3},
-            'addL1': {'x': 3, '_total': 3},
+            'addId': {'x': 1, 'y': 2, '_all': 3},
+            'addL1': {'x': 3, '_all': 3},
         },
         row: {
-            '1': {'x': 2, 'y': 1, '_total': 3},
-            '2': {'x': 2, 'y': 1, '_total': 3},
+            '1': {'x': 2, 'y': 1, '_all': 3},
+            '2': {'x': 2, 'y': 1, '_all': 3},
         }
     }
 }
