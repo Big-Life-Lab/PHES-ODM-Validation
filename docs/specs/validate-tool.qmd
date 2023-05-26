@@ -2,7 +2,10 @@
 
 The validate tool is used to validate a spreadsheet (either an Excel workbook
 or a single csv file), and generate a validation report that can be used to
-either fix errors or accompany the data as a "proof of validity".
+either fix errors or accompany the data as "proof of validity".
+
+Console output is separated into stdout and stderr, to support piping the
+validation result to another program.
 
 ## Usage
 
@@ -12,7 +15,7 @@ either fix errors or accompany the data as a "proof of validity".
 
 - `data-file`
 
-  The Excel/CSV file to be validated.
+  The path of the Excel/CSV file to be validated.
 
 ### Options
 
@@ -22,20 +25,28 @@ either fix errors or accompany the data as a "proof of validity".
 
 - `--out=<path>`
 
-  The path to write the validation report to. Defaults to stdout when not
-  specified.
+  The path to write the validation report to. Defaults to stdout/console when
+  not specified.
 
-- `--format=(yaml, markdown)`
+- `--format=(txt, json, yaml)`
 
   The output format. When the `--out` parameter is passed, the format can be
-  auto-detected from the filename extension, otherwise it defaults to YAML.
+  auto-detected from the filename extension, otherwise it defaults to TXT.
+
+  The TXT format is a human readable format, which looks more like the output
+  from a compiler than an actual report. This is useful for fixing errors in
+  the input data.
+
+- `--verbosity=(0, 1, 2)`
+
+  The error message verbosity. Defaults to 2.
 
 ## Examples
 
-- Validate a CSV file and print the output to the console with markdown
-  formatting:
+- Validate a CSV file with the latest ODM version, and print human readable
+  errors to the console:
 
-    `python tools/validate.py measures.csv --format=markdown`
+    `python tools/validate.py measures.csv`
 
 - Validate an Excel file with version 1.1.0 of the ODM, and write the result to
   a YAML file:
