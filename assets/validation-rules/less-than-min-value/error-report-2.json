@@ -18,7 +18,7 @@
                     "sites": "header"
                 }
             ],
-            "message": "less_than_min_value rule violated in table sites, column geoLat, row(s) 1: Value \"-91\" is less than the allowable minimum value of \"-90\""
+            "message": "less_than_min_value rule violated in table sites, column geoLat, row(s) 1: Value \"-91\" is less than the min value of \"-90\""
         },
         {
             "errorType": "less_than_min_value",
@@ -38,7 +38,7 @@
                     "sites": "header"
                 }
             ],
-            "message": "less_than_min_value rule violated in table sites, column geoLong, row(s) 1: Value \"-90.2\" is less than the allowable minimum value of \"-90.15\""
+            "message": "less_than_min_value rule violated in table sites, column geoLong, row(s) 1: Value \"-90.2\" is less than the min value of \"-90.15\""
         }
     ],
     "warnings": [
