@@ -18,7 +18,7 @@
                     "sites": "header"
                 }
             ],
-            "message": "greater_than_max_value rule violated in table sites, column geoLat, row 1: Value \"91\" is greater than the allowable maximum value of \"90\""
+            "message": "greater_than_max_value rule violated in table sites, column geoLat, row(s) 1: Value \"91\" is greater than the allowable maximum value of \"90\""
         },
         {
             "errorType": "greater_than_max_value",
@@ -38,7 +38,7 @@
                     "sites": "header"
                 }
             ],
-            "message": "greater_than_max_value rule violated in table sites, column geoLong, row 1: Value \"90.2\" is greater than the allowable maximum value of \"90.15\""
+            "message": "greater_than_max_value rule violated in table sites, column geoLong, row(s) 1: Value \"90.2\" is greater than the allowable maximum value of \"90.15\""
         }
     ],
     "warnings": []

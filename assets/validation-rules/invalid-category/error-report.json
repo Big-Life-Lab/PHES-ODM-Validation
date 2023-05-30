@@ -29,7 +29,7 @@
                     "setID": "collectCat"
                 }
             ],
-            "message": "invalid_category rule violated in table samples, column coll, row 1: Invalid category \"flow\""
+            "message": "invalid_category rule violated in table samples, column coll, row(s) 1: Invalid category \"flow\""
         }
     ],
     "warnings": []

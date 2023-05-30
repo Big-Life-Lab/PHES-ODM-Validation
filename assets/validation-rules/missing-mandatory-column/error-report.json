@@ -15,7 +15,7 @@
                     "addressesRequired": "mandatory"
                 }
             ],
-            "message": "missing_mandatory_column rule violated in table addresses, column addID, row 1: Missing mandatory column addID"
+            "message": "missing_mandatory_column rule violated in table addresses, column addID: Missing mandatory column addID"
         }
     ],
     "warnings": []

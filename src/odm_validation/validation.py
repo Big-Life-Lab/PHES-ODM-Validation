@@ -72,9 +72,12 @@ def _gen_cerb_rule_map():
     return result
 
 
-# private constants
+# constants
+# XXX: These are global to avoid passing them all over the code. This is safe
+# as long as they are only mutated by the user of the library.
 _BATCH_SIZE = 100
 _KEY_RULES = _gen_cerb_rule_map()
+_VERBOSITY: int = 2
 
 
 def _get_rule_id(x) -> RuleId:
@@ -156,6 +159,7 @@ def _gen_error_entry(cerb_rule, table_id, column_id, value, row_numbers,
     odm_type = _extract_datatype(column_meta)
     datatype = odm_type or _cerb_to_odm_type(cerb_type)
 
+    global _VERBOSITY
     allowed = _get_allowed_values(schema_column) if schema_column else []
     kind = ErrorKind.WARNING if rule.is_warning else ErrorKind.ERROR
     error_ctx = reports.ErrorCtx(
@@ -170,6 +174,7 @@ def _gen_error_entry(cerb_rule, table_id, column_id, value, row_numbers,
         table_id=table_id,
         data_kind=data_kind,
         is_column=rule.is_column,
+        verbosity=_VERBOSITY,
     )
     entry = reports.gen_rule_error(error_ctx, kind=kind)
     return (rule.id, entry)

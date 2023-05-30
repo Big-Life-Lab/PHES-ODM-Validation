@@ -17,7 +17,7 @@
                     "sites": "header"
                 }
             ],
-            "message": "invalid_type rule violated in table sites, column geoLat, row 1: Value \"a\" has type string but should be of type float or coercable into a float"
+            "message": "invalid_type rule violated in table sites, column geoLat, row(s) 1: Value \"a\" has type string but should be of type float or coercable into a float"
         }
     ],
     "warnings": []
