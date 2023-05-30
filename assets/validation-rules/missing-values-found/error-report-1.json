@@ -29,7 +29,7 @@
                     "partType": "missingness"
                 }
             ],
-            "message": "missing_values_found rule triggered in table sites, column geoLat, row 1: Empty string found"
+            "message": "missing_values_found rule triggered in table sites, column geoLat, row(s) 1: Empty string found"
         }
     ],
     "errors": []
