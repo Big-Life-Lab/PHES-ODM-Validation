@@ -31,7 +31,7 @@ repository. It should use the report file outputted from the validation tool
 
   The path to write the summary file to. Defaults to stdout when not specified.
 
-- `--format=(yaml, markdown)`
+- `--format=(json, yaml)`
 
   The output format. The format can be inferred from the file extension when
   the `--out` parameter is used. Defaults to YAML.
