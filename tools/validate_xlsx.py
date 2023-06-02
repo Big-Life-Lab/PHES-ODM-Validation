@@ -3,7 +3,6 @@
 import os
 import sys
 import tempfile
-from functools import reduce
 from math import ceil
 from os.path import basename, join, normpath, splitext
 from pathlib import Path
@@ -17,7 +16,6 @@ root_dir = join(os.path.dirname(os.path.realpath(__file__)), '..')
 sys.path.append(join(root_dir, 'src'))
 
 import odm_validation.part_tables as pt  # noqa:E402
-import odm_validation.reports as reports  # noqa:E402
 import odm_validation.utils as utils  # noqa:E402
 from odm_validation.reports import ErrorKind  # noqa:E402
 from odm_validation.validation import _validate_data_ext, DataKind  # noqa:E402
@@ -60,31 +58,6 @@ def write_results(report, outdir: str, name: str):
             f.write('\n'.join(messages))
 
 
-def write_summary(text: Optional[str], outdir):
-    outfile = os.path.join(outdir, 'summary.txt')
-    with open(outfile, 'w') as f:
-        f.write(text)
-
-
-def gen_summary(summary: reports.ValidationSummary) -> str:
-    "Returns a text summary report with error counts."
-    # The error counts are formatted with 'width' to make subsequent error
-    # counts line up nicely in the output.
-    result = '# error summary\n'
-    total = 0
-    for table_id, table_summary in summary.table_summaries.items():
-        result += f'\n## {table_id}\n'
-        table_count_max = reduce(lambda a, b: max(a, b),
-                                 table_summary.error_counts.values())
-        width = len(str(table_count_max))
-        for rule_id, count in table_summary.error_counts.items():
-            result += f'- {count:{width}d} {rule_id}\n'
-            total += count
-    if total == 0:
-        result += '\nno errors'
-    return result
-
-
 def filename_without_ext(path):
     return splitext(basename(path))[0]
 
@@ -120,7 +93,6 @@ def main(xlsx_file: str = typer.Argument(..., help=XLSX_FILE_DESC),
     schema_file = join(schema_dir, f'schema-v{version}.yml')
     schema = utils.import_schema(schema_file)
 
-    full_summary = reports.ValidationSummary()
     for file in csv_files:
         name = filename_without_ext(file)
         print(f'\nvalidating sheet "{name}" ', end='', flush=True)
@@ -135,15 +107,7 @@ def main(xlsx_file: str = typer.Argument(..., help=XLSX_FILE_DESC),
                                     version, on_progress=on_progress)
         if report.valid():
             continue
-        full_summary.table_summaries[table_id] = \
-            report.summary.table_summaries[table_id]
         write_results(report, outdir, name)
-
-    summary_text = gen_summary(full_summary)
-    write_summary(summary_text, outdir)
-
-    print()
-    print(summary_text)
 
     print()
     print(f'output dir: {outdir}')
