@@ -11,15 +11,15 @@ repository. It should use the report file outputted from the validation tool
 
 ### Options
 
-- `--by=[(table, column, row)],...`
+- `--by=(table, column, row)`
 
-  A comma separated list/set of the keys to summarize by. Each key specified
-  will add a separate summarization to the summary report, but the same key
-  can't be repeated as this is a set. Specifying an empty set (with `--by=`)
-  will create a summary report without any error summaries. Defaults to
-  `table`.
+  The key(s) to summarize by. Multiple keys can be specified by passing this
+  option multiple times. Each key will add a separate summarization to the
+  summary report, but the same key can't be repeated as this is a set.
+  Specifying an empty set (with `--by=`) will create a summary report without
+  any error summaries. Defaults to `table`.
 
-  Example: `--by=table,column`
+  Example: `--by=table --by=column`
 
 - `--errorLevel=(error, warning)`
 
@@ -77,7 +77,8 @@ The following command will summarize the validation report by tables, columns
 and rows, and write the result to the console using markdown syntax.
 
 ```{shell}
-> python tools/summarize.py $REPORT --by=table,column,row --format=markdown
+> cd tools
+> ./summarize.py $REPORT --by=table --by=column --by=row --format=markdown
 
 # summary
 
@@ -140,7 +141,8 @@ format is implied by the '.yml' file extension.
 
 ```{shell}
 > SUMMARY=$DIR/report-summary.yml
-> python tools/summarize.py $REPORT --by=table,column,row --out=$SUMMARY
+> cd tools
+> ./summarize.py $REPORT --by=table --by=column --by=row --out=$SUMMARY
 > cat $SUMMARY
 
 errors:
