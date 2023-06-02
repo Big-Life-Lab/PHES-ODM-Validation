@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 
-import json
 import os
 import sys
 import tempfile
@@ -8,12 +7,10 @@ from enum import Enum
 from math import ceil
 from os.path import basename, join, normpath, splitext
 from pathlib import Path
-from typing import Dict, List, Optional
+from typing import Dict, IO, List, Optional
 # from pprint import pprint
 
-import jsons
 import typer
-import yaml
 from xlsx2csv import Xlsx2csv
 
 root_dir = join(os.path.dirname(os.path.realpath(__file__)), '..')
@@ -22,20 +19,22 @@ sys.path.append(join(root_dir, 'src'))
 import odm_validation.part_tables as pt  # noqa:E402
 import odm_validation.utils as utils  # noqa:E402
 import odm_validation.validation as validation  # noqa:E402
-from odm_validation.reports import ErrorKind, join_reports  # noqa:E402
+from odm_validation.reports import join_reports  # noqa:E402
 from odm_validation.validation import _validate_data_ext, DataKind  # noqa:E402
+
+from reportutils import (  # noqa:E402
+    ReportFormat,
+    detect_report_format_from_path,
+    get_ext,
+    write_json_report,
+    write_txt_report,
+    write_yaml_report,
+)
 
 
 class DataFormat(Enum):
     CSV = 'csv'
     XLSX = 'xlsx'
-
-
-class Format(Enum):
-    """Output format"""
-    TXT = 'txt'
-    JSON = 'json'
-    YAML = 'yaml'
 
 
 DEF_VER = pt.ODM_VERSION_STR
@@ -78,43 +77,6 @@ def get_sheet_table_id(schema, sheet_name) -> Optional[str]:
             return table_id
 
 
-def write_txt_report(output, report):
-    def get_msg(e) -> str:
-        return e['message']
-    errorkind_messages = {
-        ErrorKind.ERROR: list(map(get_msg, report.errors)),
-        ErrorKind.WARNING: list(map(get_msg, report.warnings))
-    }
-    for error_kind, messages in errorkind_messages.items():
-        error_name = error_kind.value.capitalize()
-        n = len(messages)
-        output.write(f'{error_name}s: {n}\n')
-        if n == 0:
-            continue
-        output.write(('-' * 79) + '\n')
-        output.write('\n'.join(messages) + '\n\n')
-
-
-def write_json_report(output, report):
-    # XXX: serialization with 'jsons' is needed to avoid writing serialization
-    # methods for ValidationReport and TableInfo
-    data = jsons.dump(report)
-    json.dump(data, output)
-
-
-def write_yaml_report(output, report):
-    yaml.dump(report, output)
-
-
-def write_report(output, report, fmt: Format):
-    if fmt == Format.TXT:
-        write_txt_report(output, report)
-    elif fmt == Format.JSON:
-        write_json_report(output, report)
-    elif fmt == Format.YAML:
-        write_yaml_report(output, report)
-
-
 def filename_without_ext(path):
     return splitext(basename(path))[0]
 
@@ -128,30 +90,12 @@ def enum_values(E) -> List[str]:
     return list(map(lambda e: e.value, iter(E)))
 
 
-def get_ext(path: Optional[str]) -> str:
-    """returns path file extension without dot"""
-    if not path:
-        return
-    ext = os.path.splitext(path)[1]
-    if len(ext) > 1:
-        return ext[1:]
-
-
 def detect_data_format(path: str) -> Optional[DataFormat]:
     ext = get_ext(path)
     try:
         return DataFormat[ext.upper()]
     except KeyError:
         return
-
-
-def detect_output_format(path: Optional[str]) -> Optional[Format]:
-    ext = get_ext(path)
-    try:
-        return Format[ext.upper()]
-    except KeyError:
-        if ext.lower() == 'yml':
-            return Format.YAML
 
 
 def get_schema_path(version: str) -> str:
@@ -202,6 +146,15 @@ def load_db_data(tables: Dict[pt.TableId, str]) -> dict:
     return result
 
 
+def write_report(output: IO, report, fmt: ReportFormat):
+    if fmt == ReportFormat.TXT:
+        write_txt_report(output, report)
+    elif fmt == ReportFormat.JSON:
+        write_json_report(output, report)
+    elif fmt == ReportFormat.YAML:
+        write_yaml_report(output, report)
+
+
 # XXX: locals must be disabled to avoid `schema` being dumped to console on an
 # exception (and makeing it unreadable)
 app = typer.Typer(pretty_exceptions_show_locals=False)
@@ -211,8 +164,8 @@ app = typer.Typer(pretty_exceptions_show_locals=False)
 def main(data_file: str = typer.Argument(..., help=DATA_FILE_DESC),
          version: str = typer.Option(default=DEF_VER, help=VERSION_DESC),
          out: str = typer.Option(default="", help=OUT_DESC),
-         format: Optional[Format] = typer.Option(default=None,
-                                                 help=FORMAT_DESC),
+         format: Optional[ReportFormat] = typer.Option(default=None,
+                                                       help=FORMAT_DESC),
          verbosity: int = typer.Option(default=2, help=VERB_DESC)):
 
     out_path = out
@@ -227,13 +180,13 @@ def main(data_file: str = typer.Argument(..., help=DATA_FILE_DESC),
 
     if not out_fmt:
         if out_path:
-            out_fmt = detect_output_format(out_path)
+            out_fmt = detect_report_format_from_path(out_path)
             if not out_fmt:
-                out_fmt = Format.TXT
+                out_fmt = ReportFormat.TXT
                 info('Unable to infer output format from filename, ' +
                      f'using {out_fmt}.')
         else:
-            out_fmt = Format.TXT
+            out_fmt = ReportFormat.TXT
 
     schema_path = get_schema_path(version)
     schema = utils.import_schema(schema_path)
@@ -266,11 +219,11 @@ def main(data_file: str = typer.Argument(..., help=DATA_FILE_DESC),
         # watching in realtime on the terminal, however, stdout can be piped to
         # somewhere else, so we should detect and take that into account
         info()
-        is_terminal = out_fmt == Format.TXT and not out_path
+        is_terminal = out_fmt == ReportFormat.TXT and not out_path
         if is_terminal:
             for table_id, table_data in db_data.items():
                 report = validate({table_id: table_data})
-                write_txt_report(output, report)
+                write_report(output, report, ReportFormat.TXT)
                 info()
         else:
             main_report = None

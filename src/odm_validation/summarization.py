@@ -21,13 +21,20 @@ EntityId = str
 
 
 class SummaryKey(Enum):
+    # XXX:
+    # - int-values are for comparison/order
+    # - values are overloaded as lower-case names
     TABLE = 1
     COLUMN = 2
     ROW = 3
 
+    @property
+    def value(self):
+        return self.name.lower()
+
     def __lt__(self, other):
         if self.__class__ is other.__class__:
-            return self.value < other.value
+            return self._value_ < other._value_
         return NotImplemented
 
 
@@ -162,13 +169,9 @@ def _gen_summary(keys: Set[SummaryKey], counts: Counts) -> ErrorSummary:
     :param keys: the set of keys to summarize by.
     :param errors: the list of validation errors to count.
     """
-
-    def key_index(key: SummaryKey) -> int:
-        return key.value - 1
-
     # keys must be sorted to make equality work in tests
     summary: ErrorSummary = defaultdict(list)
-    for key in sorted(keys, key=key_index):
+    for key in sorted(keys):
         table_counts: TableCounts = counts.key_counts[key]
         for table_id, entity_counts in table_counts.items():
             summary[table_id] += _gen_summary_list(key, entity_counts)

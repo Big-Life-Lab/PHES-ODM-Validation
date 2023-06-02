@@ -1,0 +1,6 @@
+errorLevel,rule_id,count,key,value
+error,greater_than_max_length,1,table,Lab
+error,_all,1,table,Lab
+error,duplicate_entries_found,2,table,Sample
+error,invalid_category,2,table,Sample
+error,_all,4,table,Sample
