@@ -21,9 +21,9 @@ EntityId = str
 
 
 class SummaryKey(Enum):
-    table = 1
-    column = 2
-    row = 3
+    TABLE = 1
+    COLUMN = 2
+    ROW = 3
 
     def __lt__(self, other):
         if self.__class__ is other.__class__:
@@ -35,7 +35,7 @@ class SummaryKey(Enum):
 ErrorCounts = Dict[RuleId, Count]
 
 # table -> entity -> error/rule -> count
-# ex: SummaryKey.column -> 'addresses' -> 'addID' -> 'invalid_type' -> 3
+# ex: SummaryKey.COLUMN -> 'addresses' -> 'addID' -> 'invalid_type' -> 3
 EntityCounts = Dict[EntityId, ErrorCounts]
 TableCounts = Dict[TableId, EntityCounts]
 
@@ -120,13 +120,13 @@ def _count_errors(keys: Set[SummaryKey], errors: list) -> Counts:
         count = len(row_ids)
         total_counts[rule_id] += count
         for key in keys:
-            if key == SummaryKey.row:
+            if key == SummaryKey.ROW:
                 for row_id in row_ids:
                     entity_id = str(row_id)
                     _update_entity(key, table_id, entity_id, rule_id, 1)
             else:
                 column_id = e['columnName']
-                entity_id = table_id if key == SummaryKey.table else column_id
+                entity_id = table_id if key == SummaryKey.TABLE else column_id
                 _update_entity(key, table_id, entity_id, rule_id, count)
 
     return Counts(
@@ -235,7 +235,7 @@ def _remove_summary_entries(summary: ErrorSummary, key: SummaryKey):
 
 
 def summarize_report(report: ValidationReport,
-                     by: Set[SummaryKey] = {SummaryKey.table}
+                     by: Set[SummaryKey] = {SummaryKey.TABLE}
                      ) -> SummarizedReport:
     """Summarizes `report`.
 
