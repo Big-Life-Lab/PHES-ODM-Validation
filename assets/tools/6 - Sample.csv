@@ -1,0 +1,3 @@
+sampleID,siteID,type,collection,dateTime,dateTimeStart,dateTimeEnd,sizeL,fieldSampleTempC,shippedOnIce,notes
+aaa_bbb_12mar2023_c24,xx,rawWWW,cpTP24h,,2023-01-01 12:05,2023-01-01 12:00,1.0,4.0,Yes,bla bla bla
+aaa_bbb_12mar2023_c24,xx,rawWWW,cpTP24h,,2023-01-01 12:05,2023-01-01 12:00,1.0,4.0,Yes,bla bla bla
