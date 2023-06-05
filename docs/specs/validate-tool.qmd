@@ -9,11 +9,11 @@ validation result to another program.
 
 ## Usage
 
-` python tools/validate.py <data-file> [options...]`
+` python tools/validate.py [OPTIONS] DATA_FILE`
 
 ### Arguments
 
-- `data-file`
+- `DATA_FILE`
 
   The path of the Excel/CSV file to be validated.
 
