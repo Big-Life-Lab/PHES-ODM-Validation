@@ -1,7 +1,7 @@
 # Validate Tool
 
 The validate tool is used to validate a spreadsheet (either an Excel workbook
-or a single csv file), and generate a validation report that can be used to
+or a list of csv files), and generate a validation report that can be used to
 either fix errors or accompany the data as "proof of validity".
 
 Console output is separated into stdout and stderr, to support piping the
@@ -9,13 +9,13 @@ validation result to another program.
 
 ## Usage
 
-` python tools/validate.py [OPTIONS] DATA_FILE`
+` python tools/validate.py [OPTIONS] DATA_FILE...`
 
 ### Arguments
 
-- `DATA_FILE`
+- `DATA_FILE...`
 
-  The path of the Excel/CSV file to be validated.
+  The path of the Excel file or CSV files to be validated.
 
 ### Options
 
@@ -43,10 +43,10 @@ validation result to another program.
 
 ## Examples
 
-- Validate a CSV file with the latest ODM version, and print human readable
+- Validate two CSV files with the latest ODM version, and print human readable
   errors to the console:
 
-    `python tools/validate.py measures.csv`
+    `python tools/validate.py measures.csv samples.csv`
 
 - Validate an Excel file with version 1.1.0 of the ODM, and write the result to
   a YAML file:

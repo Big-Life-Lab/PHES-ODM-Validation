@@ -39,7 +39,7 @@ class DataFormat(Enum):
 
 DEF_VER = pt.ODM_VERSION_STR
 
-DATA_FILE_DESC = "Path of input file (xlsx/csv)."
+DATA_FILE_DESC = "Path of input files (xlsx/csv)."
 VERSION_DESC = "ODM version to validate against."
 OUT_DESC = "Output path of validation report. Defaults to stdout/console."
 FORMAT_DESC = "Output format. Defaults to txt if unable to autodetect."
@@ -106,17 +106,12 @@ def get_schema_path(version: str) -> str:
     return join(schema_dir, schema_filename)
 
 
-def preprocess_datafile(path: str, fmt: DataFormat) -> List[str]:
-    """Returns data paths."""
-    result = []
-    if fmt == DataFormat.XLSX:
-        tmpdir = tempfile.mkdtemp(suffix='-'+filename_without_ext(path))
-        csvdir = join(tmpdir, 'csv-files')
-        info(f'writing intermediary files to {tmpdir}\n')
-        result = import_xlsx(path, csvdir)
-    else:
-        result = [path]
-    return result
+def convert_excel_to_csv(path: str) -> List[str]:
+    """Returns list of csv file paths."""
+    tmpdir = tempfile.mkdtemp(suffix='-'+filename_without_ext(path))
+    csvdir = join(tmpdir, 'csv-files')
+    info(f'writing intermediary files to {tmpdir}\n')
+    return import_xlsx(path, csvdir)
 
 
 def load_tables(schema, in_paths: list) -> Dict[pt.TableId, str]:
@@ -161,7 +156,7 @@ app = typer.Typer(pretty_exceptions_show_locals=False)
 
 
 @app.command()
-def main(data_file: str = typer.Argument(..., help=DATA_FILE_DESC),
+def main(data_file: List[str] = typer.Argument(..., help=DATA_FILE_DESC),
          version: str = typer.Option(default=DEF_VER, help=VERSION_DESC),
          out: str = typer.Option(default="", help=OUT_DESC),
          format: Optional[ReportFormat] = typer.Option(default=None,
@@ -170,13 +165,20 @@ def main(data_file: str = typer.Argument(..., help=DATA_FILE_DESC),
 
     out_path = out
     out_fmt = format
-    in_path = data_file
-    in_fmt = detect_data_format(in_path)
+    in_paths: list = data_file
+    in_fmt = detect_data_format(in_paths[0])
 
     if not in_fmt:
-        info(f'Invalid data file type for "{os.path.basename(in_path)}". ' +
+        info(f'Invalid data file type for "{os.path.basename(in_paths[0])}". '
              f'Valid file types are {enum_values(DataFormat)}.')
         quit(1)
+
+    assert in_fmt != DataFormat.XLSX or len(in_paths) == 1, \
+           'multiple excel files are not supported'
+
+    for path in in_paths:
+        fmt = detect_data_format(path)
+        assert fmt == in_fmt, 'all input files must have the same format'
 
     if not out_fmt:
         if out_path:
@@ -196,11 +198,12 @@ def main(data_file: str = typer.Argument(..., help=DATA_FILE_DESC),
 
     output = open(out_path, 'w') if out_path else sys.stdout
     try:
-        info(f'validating "{in_path}"')
+        info(f'validating {in_paths}')
         info(f'using schema "{os.path.basename(schema_path)}"')
         validation._VERBOSITY = verbosity
 
-        in_paths = preprocess_datafile(in_path, in_fmt)
+        if in_fmt == DataFormat.XLSX:
+            in_paths = convert_excel_to_csv(in_paths[0], in_fmt)
         tables = load_tables(schema, in_paths)
         db_data = load_db_data(tables)
 
