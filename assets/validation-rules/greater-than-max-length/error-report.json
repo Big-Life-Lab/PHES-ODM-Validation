@@ -17,7 +17,7 @@
                     "contacts": "header"
                 }
             ],
-            "message": "greater_than_max_length rule violated in table contacts, column phone, row 1: Value \"123-456-111\" has length 11 which is greater than the max length of \"10\""
+            "message": "greater_than_max_length rule violated in table contacts, column phone, row(s) 1: Value \"123-456-111\" (of length 11) exceeds the max length of \"10\""
         }
     ],
     "warnings": []

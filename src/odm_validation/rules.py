@@ -104,7 +104,7 @@ def init_rule(rule_id, error, gen_cerb_rules, gen_schema,
 
 def duplicate_entries_found():
     rule_id = RuleId.duplicate_entries_found
-    err = ('Duplicate entries found with primary key value {value}')
+    err = ('Duplicate entries found with primary key {value}')
 
     def gen_cerb_rules(val_ctx: OdmValueCtx):
         return {'unique': True}
@@ -119,8 +119,8 @@ def duplicate_entries_found():
 def greater_than_max_length():
     rule_id = RuleId.greater_than_max_length
     odm_key = 'maxLength'
-    err = ('Value {value} has length {value_len} which is greater than the '
-           'max length of {constraint}')
+    err = ('Value {value} (of length {value_len}) '
+           'exceeds the max length of {constraint}')
 
     def gen_cerb_rules(val_ctx: OdmValueCtx):
         val = try_parse_int(val_ctx.value)
@@ -137,8 +137,7 @@ def greater_than_max_length():
 def greater_than_max_value():
     rule_id = RuleId.greater_than_max_value
     odm_key = 'maxValue'
-    err = ('Value {value} is greater than the allowable maximum value of '
-           '{constraint}')
+    err = ('Value {value} is greater than the max value of {constraint}')
 
     def gen_cerb_rules(val_ctx: OdmValueCtx):
         val = parse_odm_val(val_ctx)
@@ -194,7 +193,7 @@ def missing_values_found():
 def less_than_min_length():
     rule_id = RuleId.less_than_min_length
     odm_key = 'minLength'
-    err = ('Value {value} has length {value_len} which is less than the min '
+    err = ('Value {value} (of length {value_len}) is less than the min '
            'length of {constraint}')
 
     def gen_cerb_rules(val_ctx: OdmValueCtx):
@@ -212,8 +211,7 @@ def less_than_min_length():
 def less_than_min_value():
     rule_id = RuleId.less_than_min_value
     odm_key = 'minValue'
-    err = ('Value {value} is less than the allowable minimum value of '
-           '{constraint}')
+    err = ('Value {value} is less than the min value of {constraint}')
 
     def gen_cerb_rules(val_ctx: OdmValueCtx):
         val = parse_odm_val(val_ctx)
@@ -265,8 +263,8 @@ def invalid_category():
 def invalid_type():
     rule_id = RuleId.invalid_type
     odm_key = 'dataType'
-    err_default = ('Value {value} has type {value_type} but should be of '
-                   'type {constraint} or coercable into a {constraint}')
+    err_default = ('Value {value} has type {value_type} '
+                   'which is incompatible with {constraint}')
     err_bool = ('Column {column_id} is a boolean but has value {value}. '
                 'Allowed values are {allowed_values}.')
     err_date = ('Column {column_id} is a datetime but has value {value}. '
