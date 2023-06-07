@@ -35,6 +35,7 @@ class ErrorCtx:
     data_kind: DataKind = DataKind.python
     err_template: str = ''
     is_column: bool = False
+    verbosity: int = 2
 
 
 @dataclass(frozen=True)
@@ -54,6 +55,24 @@ class ValidationReport:
 
     def valid(self) -> bool:
         return len(self.errors) == 0
+
+
+def join_reports(a, b: ValidationReport) -> ValidationReport:
+    """Joins two reports together into a new report."""
+    if a is None:
+        assert b is not None
+        return b
+    assert a.data_version == b.data_version
+    assert a.schema_version == b.schema_version
+    assert a.package_version == b.package_version
+    return ValidationReport(
+        data_version=a.data_version,
+        schema_version=a.schema_version,
+        package_version=a.package_version,
+        table_info=(a.table_info | b.table_info),
+        errors=(a.errors + b.errors),
+        warnings=(a.warnings + b.warnings),
+    )
 
 
 def _fmt_list(items: list) -> str:
@@ -116,20 +135,30 @@ def _gen_error_msg(ctx: ErrorCtx, template: Optional[str] = None,
     #   the text otherwise.
     verb = 'violated' if error_kind == ErrorKind.ERROR else 'triggered'
 
-    # prefix gen
-    prefix = ('{rule_id} rule ' + verb + ' in '
-              'table {table_id}, column {column_id}')
-    if not (ctx.is_column and ctx.data_kind == DataKind.spreadsheet):
-        if len(ctx.row_numbers) == 1:
-            prefix += ', row '
-        else:
-            prefix += ', rows '
-        prefix += '{row_num}'
-    prefix += ': '
+    # prefix and suffix, with increasing verbosity
+    is_col = ctx.is_column
+    verbosity_xfix = [
+        {
+            'prefix': '{table_id}({column_id}',
+            'prefix_end': ('' if is_col else ', {row_num}') + '): ',
+            'suffix': ' [{rule_id}]',
+        },
+        {},  # same as prev level, just with messages
+        {
+            'prefix': ('{rule_id} rule ' + verb + ' in table {table_id}, '
+                       'column {column_id}'),
+            'prefix_end': ('' if is_col else ', row(s) {row_num}') + ': ',
+            'suffix': '',
+        },
+    ]
+    verbosity_xfix[1] = verbosity_xfix[0]
+    xfix = verbosity_xfix[ctx.verbosity]
 
     if not template:
         template = ctx.err_template
-    template = prefix + template
+    if ctx.verbosity == 0:
+        template = ''
+    template = xfix['prefix'] + xfix['prefix_end'] + template + xfix['suffix']
     return template.format(
         allowed_values=_fmt_allowed_values(ctx.allowed_values),
         column_id=ctx.column_id,
