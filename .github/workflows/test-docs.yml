@@ -25,7 +25,7 @@ jobs:
         pip install -r requirements.txt
         pip install -r docs/requirements.txt
     - name: Render Quarto docs
-      run: python tools/render_quarto_docs.py
+      run: ./docs/convert.sh
     - name: Build and Commit
       uses: sphinx-notes/pages@2.1 # requires checkout with `fetch-depth: 0`
       with:
