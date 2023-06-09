@@ -8,5 +8,5 @@ echo "converting $count qmd files to gfm"
 echo "rendering..."
 quarto render $files --no-cache
 echo "converting..."
-find . -name "*.html" -exec sh -c 'pandoc "${0}" -t gfm -o "${0%.ipynb}.md"' {} \;
+find . -name "*.html" -exec sh -c 'pandoc "${0}" -t gfm -o "${0%.html}.md"' {} \;
 echo "done"
