@@ -19,8 +19,13 @@ sys.path.append(join(root_dir, 'src'))
 import odm_validation.part_tables as pt  # noqa:E402
 import odm_validation.utils as utils  # noqa:E402
 import odm_validation.validation as validation  # noqa:E402
-from odm_validation.reports import join_reports  # noqa:E402
 from odm_validation.validation import _validate_data_ext, DataKind  # noqa:E402
+
+from odm_validation.reports import (  # noqa:E402
+    ErrorKind,
+    ValidationReport,
+    join_reports
+)
 
 from reportutils import (  # noqa:E402
     ReportFormat,
@@ -141,6 +146,20 @@ def load_db_data(tables: Dict[pt.TableId, str]) -> dict:
     return result
 
 
+def strip_report(report: ValidationReport):
+    """Removes the error debug fields 'validationRuleFields' and
+    'row'/'rows'."""
+    errorkind_errors = {
+        ErrorKind.ERROR: report.errors,
+        ErrorKind.WARNING: report.warnings,
+    }
+    for errors in errorkind_errors.values():
+        for e in errors:
+            del e['validationRuleFields']
+            e.pop('row', None)
+            e.pop('rows', None)
+
+
 def write_report(output: IO, report, fmt: ReportFormat):
     if fmt == ReportFormat.TXT:
         write_txt_report(output, report)
@@ -208,15 +227,16 @@ def main(data_file: List[str] = typer.Argument(..., help=DATA_FILE_DESC),
         db_data = load_db_data(tables)
 
         def validate(data):
-            result = _validate_data_ext(schema, data, DataKind.spreadsheet,
+            report = _validate_data_ext(schema, data, DataKind.spreadsheet,
                                         version, on_progress=on_progress)
+            strip_report(report)
             info()  # newline after progressbar
 
             # XXX: just in case the validation wrote anything to the console,
             # to avoid race-conditions with upcoming report output
             sys.stdout.flush()
             sys.stderr.flush()
-            return result
+            return report
 
         # TODO: we should write continuously to output when the user is
         # watching in realtime on the terminal, however, stdout can be piped to
