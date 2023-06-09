@@ -104,6 +104,7 @@ class ContextualCoercer(Validator):
         return self._config["coerced_document"]
 
     def _log_coercion(self, kind, ctx):
+        # set `errors` and `warnings`
         entry = reports.gen_coercion_error(ctx, kind)
         self._config[kind.value + 's'].append(entry)
 
