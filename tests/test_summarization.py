@@ -45,22 +45,22 @@ errors_in = [
 
 errors_out: ErrorSummary = {
     'addresses': [
-        SE(rule_id=E0, count=2, key=SummaryKey.table, value='addresses'),
-        SE(rule_id=E0, count=2, key=SummaryKey.column, value='addID'),
-        SE(rule_id=E0, count=1, key=SummaryKey.row, value='1'),
-        SE(rule_id=E0, count=1, key=SummaryKey.row, value='2'),
-        SE(rule_id=ALL, count=2, key=SummaryKey.table, value='addresses'),
-        SE(rule_id=ALL, count=2, key=SummaryKey.column, value='addID'),
-        SE(rule_id=ALL, count=1, key=SummaryKey.row, value='1'),
-        SE(rule_id=ALL, count=1, key=SummaryKey.row, value='2'),
+        SE(rule_id=E0, count=2, key=SummaryKey.TABLE, value='addresses'),
+        SE(rule_id=E0, count=2, key=SummaryKey.COLUMN, value='addID'),
+        SE(rule_id=E0, count=1, key=SummaryKey.ROW, value='1'),
+        SE(rule_id=E0, count=1, key=SummaryKey.ROW, value='2'),
+        SE(rule_id=ALL, count=2, key=SummaryKey.TABLE, value='addresses'),
+        SE(rule_id=ALL, count=2, key=SummaryKey.COLUMN, value='addID'),
+        SE(rule_id=ALL, count=1, key=SummaryKey.ROW, value='1'),
+        SE(rule_id=ALL, count=1, key=SummaryKey.ROW, value='2'),
     ],
     'sites': [
-        SE(rule_id=E0, count=1, key=SummaryKey.table, value='sites'),
-        SE(rule_id=E0, count=1, key=SummaryKey.column, value='siteID'),
-        SE(rule_id=E0, count=1, key=SummaryKey.row, value='1'),
-        SE(rule_id=ALL, count=1, key=SummaryKey.table, value='sites'),
-        SE(rule_id=ALL, count=1, key=SummaryKey.column, value='siteID'),
-        SE(rule_id=ALL, count=1, key=SummaryKey.row, value='1'),
+        SE(rule_id=E0, count=1, key=SummaryKey.TABLE, value='sites'),
+        SE(rule_id=E0, count=1, key=SummaryKey.COLUMN, value='siteID'),
+        SE(rule_id=E0, count=1, key=SummaryKey.ROW, value='1'),
+        SE(rule_id=ALL, count=1, key=SummaryKey.TABLE, value='sites'),
+        SE(rule_id=ALL, count=1, key=SummaryKey.COLUMN, value='siteID'),
+        SE(rule_id=ALL, count=1, key=SummaryKey.ROW, value='1'),
     ]
 }
 
@@ -81,24 +81,24 @@ warnings_in = [
 
 warnings_out = {
     'addresses': [
-        SE(rule_id=W0, count=1, key=SummaryKey.table, value='addresses'),
-        SE(rule_id=W0, count=1, key=SummaryKey.column, value='addID'),
-        SE(rule_id=W0, count=1, key=SummaryKey.row, value='1'),
-        SE(rule_id=ALL, count=1, key=SummaryKey.table, value='addresses'),
-        SE(rule_id=ALL, count=1, key=SummaryKey.column, value='addID'),
-        SE(rule_id=ALL, count=1, key=SummaryKey.row, value='1'),
+        SE(rule_id=W0, count=1, key=SummaryKey.TABLE, value='addresses'),
+        SE(rule_id=W0, count=1, key=SummaryKey.COLUMN, value='addID'),
+        SE(rule_id=W0, count=1, key=SummaryKey.ROW, value='1'),
+        SE(rule_id=ALL, count=1, key=SummaryKey.TABLE, value='addresses'),
+        SE(rule_id=ALL, count=1, key=SummaryKey.COLUMN, value='addID'),
+        SE(rule_id=ALL, count=1, key=SummaryKey.ROW, value='1'),
     ],
     'sites': [
-        SE(rule_id=W0, count=3, key=SummaryKey.table, value='sites'),
-        SE(rule_id=W0, count=3, key=SummaryKey.column, value='siteID'),
-        SE(rule_id=W0, count=1, key=SummaryKey.row, value='1'),
-        SE(rule_id=W0, count=1, key=SummaryKey.row, value='2'),
-        SE(rule_id=W0, count=1, key=SummaryKey.row, value='3'),
-        SE(rule_id=ALL, count=3, key=SummaryKey.table, value='sites'),
-        SE(rule_id=ALL, count=3, key=SummaryKey.column, value='siteID'),
-        SE(rule_id=ALL, count=1, key=SummaryKey.row, value='1'),
-        SE(rule_id=ALL, count=1, key=SummaryKey.row, value='2'),
-        SE(rule_id=ALL, count=1, key=SummaryKey.row, value='3'),
+        SE(rule_id=W0, count=3, key=SummaryKey.TABLE, value='sites'),
+        SE(rule_id=W0, count=3, key=SummaryKey.COLUMN, value='siteID'),
+        SE(rule_id=W0, count=1, key=SummaryKey.ROW, value='1'),
+        SE(rule_id=W0, count=1, key=SummaryKey.ROW, value='2'),
+        SE(rule_id=W0, count=1, key=SummaryKey.ROW, value='3'),
+        SE(rule_id=ALL, count=3, key=SummaryKey.TABLE, value='sites'),
+        SE(rule_id=ALL, count=3, key=SummaryKey.COLUMN, value='siteID'),
+        SE(rule_id=ALL, count=1, key=SummaryKey.ROW, value='1'),
+        SE(rule_id=ALL, count=1, key=SummaryKey.ROW, value='2'),
+        SE(rule_id=ALL, count=1, key=SummaryKey.ROW, value='3'),
     ]
 }
 
@@ -174,11 +174,11 @@ class TestSummarizationInternals(common.OdmTestCase):
 
     def test_calc_summary_entry_totals(self):
         entries_in = [
-            SE(rule_id=E0, count=2, key=SummaryKey.table, value='addresses'),
-            SE(rule_id=E1, count=2, key=SummaryKey.table, value='addresses'),
+            SE(rule_id=E0, count=2, key=SummaryKey.TABLE, value='addresses'),
+            SE(rule_id=E1, count=2, key=SummaryKey.TABLE, value='addresses'),
         ]
         entries_out = [
-            SE(rule_id=ALL, count=4, key=SummaryKey.table, value='addresses')
+            SE(rule_id=ALL, count=4, key=SummaryKey.TABLE, value='addresses')
         ]
         result = _calc_summary_entry_totals(entries_in)
         self.assertEqual(entries_out, result)
@@ -199,21 +199,21 @@ class TestSummarizationApi(common.OdmTestCase):
         self.assertEqual(expected_w, summary.warnings)
 
     def test_by_table(self):
-        summary = summarize_report(self.report, by={SummaryKey.table})
-        self.check_summary(summary, SummaryKey.table)
+        summary = summarize_report(self.report, by={SummaryKey.TABLE})
+        self.check_summary(summary, SummaryKey.TABLE)
 
     def test_by_column(self):
-        summary = summarize_report(self.report, by={SummaryKey.column})
-        self.check_summary(summary, SummaryKey.column)
+        summary = summarize_report(self.report, by={SummaryKey.COLUMN})
+        self.check_summary(summary, SummaryKey.COLUMN)
 
     def test_by_row(self):
-        summary = summarize_report(self.report, by={SummaryKey.row})
-        self.check_summary(summary, SummaryKey.row)
+        summary = summarize_report(self.report, by={SummaryKey.ROW})
+        self.check_summary(summary, SummaryKey.ROW)
 
     def test_by_all(self):
-        summary = summarize_report(self.report, by={SummaryKey.table,
-                                                    SummaryKey.column,
-                                                    SummaryKey.row})
+        summary = summarize_report(self.report, by={SummaryKey.TABLE,
+                                                    SummaryKey.COLUMN,
+                                                    SummaryKey.ROW})
         self.assertEqual(errors_out, summary.errors)
         self.assertEqual(warnings_out, summary.warnings)
 

@@ -21,13 +21,20 @@ EntityId = str
 
 
 class SummaryKey(Enum):
-    table = 1
-    column = 2
-    row = 3
+    # XXX:
+    # - int-values are for comparison/order
+    # - values are overloaded as lower-case names
+    TABLE = 1
+    COLUMN = 2
+    ROW = 3
+
+    @property
+    def value(self):
+        return self.name.lower()
 
     def __lt__(self, other):
         if self.__class__ is other.__class__:
-            return self.value < other.value
+            return self._value_ < other._value_
         return NotImplemented
 
 
@@ -35,7 +42,7 @@ class SummaryKey(Enum):
 ErrorCounts = Dict[RuleId, Count]
 
 # table -> entity -> error/rule -> count
-# ex: SummaryKey.column -> 'addresses' -> 'addID' -> 'invalid_type' -> 3
+# ex: SummaryKey.COLUMN -> 'addresses' -> 'addID' -> 'invalid_type' -> 3
 EntityCounts = Dict[EntityId, ErrorCounts]
 TableCounts = Dict[TableId, EntityCounts]
 
@@ -120,13 +127,13 @@ def _count_errors(keys: Set[SummaryKey], errors: list) -> Counts:
         count = len(row_ids)
         total_counts[rule_id] += count
         for key in keys:
-            if key == SummaryKey.row:
+            if key == SummaryKey.ROW:
                 for row_id in row_ids:
                     entity_id = str(row_id)
                     _update_entity(key, table_id, entity_id, rule_id, 1)
             else:
                 column_id = e['columnName']
-                entity_id = table_id if key == SummaryKey.table else column_id
+                entity_id = table_id if key == SummaryKey.TABLE else column_id
                 _update_entity(key, table_id, entity_id, rule_id, count)
 
     return Counts(
@@ -162,13 +169,9 @@ def _gen_summary(keys: Set[SummaryKey], counts: Counts) -> ErrorSummary:
     :param keys: the set of keys to summarize by.
     :param errors: the list of validation errors to count.
     """
-
-    def key_index(key: SummaryKey) -> int:
-        return key.value - 1
-
     # keys must be sorted to make equality work in tests
     summary: ErrorSummary = defaultdict(list)
-    for key in sorted(keys, key=key_index):
+    for key in sorted(keys):
         table_counts: TableCounts = counts.key_counts[key]
         for table_id, entity_counts in table_counts.items():
             summary[table_id] += _gen_summary_list(key, entity_counts)
@@ -235,7 +238,7 @@ def _remove_summary_entries(summary: ErrorSummary, key: SummaryKey):
 
 
 def summarize_report(report: ValidationReport,
-                     by: Set[SummaryKey] = {SummaryKey.table}
+                     by: Set[SummaryKey] = {SummaryKey.TABLE}
                      ) -> SummarizedReport:
     """Summarizes `report`.
 
