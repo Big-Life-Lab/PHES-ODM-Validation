@@ -21,10 +21,11 @@ jobs:
       with:
         fetch-depth: 0
 
-    # - uses: actions/cache@v2
-    # with:
-    #   path: ~/.cache/pip
-    #   key: ${{ hashFiles('**/requirements.txt') }}
+    # cache python dependencies
+    - uses: actions/cache@v2
+      with:
+        path: ~/.cache/pip
+        key: ${{ hashFiles('**/requirements.txt') }}
 
     - name: Install python dependencies
       run: |
