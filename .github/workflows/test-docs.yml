@@ -29,8 +29,8 @@ jobs:
 
     - name: Install python dependencies
       run: |
-        pip install -r requirements.txt
-        pip install -r docs/requirements.txt
+        pip install -U --upgrade-strategy eager -r requirements.txt
+        pip install -U --upgrade-strategy eager -r docs/requirements.txt
 
     - name: Render Quarto docs
       run: ./docs/convert.sh
