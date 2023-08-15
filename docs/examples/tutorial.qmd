@@ -43,11 +43,14 @@ To run the validation you will need your own dataset as a CSV file, and a
 validation schema specific to the version of the ODM you're using.
 
 In this example we'll validate a table of samples with the default schema. The
-`validate_data` can take multiple tables at once, so we include our sample table in a Python dictionary with the table name as the key. We are validating the `samples` table in this example.
+`validate_data` can take multiple tables at once, so we include our sample
+table in a Python dictionary with the table name as the key. We are validating
+the `samples` table in this example.
 
 ```{python}
-schema_file = join(ASSET_DIR, f"validation-schemas/schema-v{ODM_VERSION_STR}.yml")
-schema = utils.import_schema(schema_file)
+schema_name = f"schema-v{ODM_VERSION_STR}.yml"
+schema_path = join(ASSET_DIR, join("validation-schemas", schema_name))
+schema = utils.import_schema(schema_path)
 samples = utils.import_dataset("samples.csv")
 data = {"samples": samples}
 report = validate_data(schema, data)
