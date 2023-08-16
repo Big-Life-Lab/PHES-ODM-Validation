@@ -44,7 +44,9 @@ def detect_report_format_from_path(path: Optional[str]
 def detect_report_format_from_content(data: str) -> Optional[ReportFormat]:
     end = data.find('\n')
     line = data[:end]
-    if line[0] == '#':
+    if len(line) == 0:
+        return
+    elif line[0] == '#':
         return ReportFormat.TXT
     elif line[0] == '{':
         return ReportFormat.JSON
