@@ -1,9 +1,9 @@
 [project]
 name = "odm-validation"
 version = "0.4.0"
- authors = [
-     { name="OHRI", email="PHES-ODM@ohri.ca" }
- ]
+authors = [
+    { name="OHRI", email="PHES-ODM@ohri.ca" }
+]
 description = "Population Health and Envirmental Open Data Model (PHES-ODM) Validation Toolkit"
 readme = "README.md"
 license = { file="LICENSE" }
