@@ -1,5 +1,6 @@
 """Part-table definitions."""
 
+import inspect
 import os
 import re
 import sys
@@ -82,10 +83,26 @@ class OdmData:
     mappings: Dict[PartId, List[PartId]]  # v1 mapping, by part id
 
 
+def _get_asset_dir() -> str:
+    """returns a list of odm-validation schema file paths"""
+    mod = sys.modules[__name__]
+    mod_path = inspect.getfile(mod)
+    mod_dir = os.path.dirname(mod_path)
+    asset_dir = os.path.join(mod_dir, 'assets')
+
+    # If the `asset_dir` path doesn't exist, then we can assume that the
+    # package hasn't been installed, but is used directly in a development
+    # environment, meaning that we need to specify the path as it is in the
+    # repo.
+    if not os.path.isdir(asset_dir):
+        asset_dir = os.path.join(mod_dir, '..', '..', 'assets')
+
+    return asset_dir
+
+
 def _get_latest_odm_version_str() -> str:
-    file_path = normpath(os.path.realpath(__file__))
-    root_dir = join(os.path.dirname(file_path), '../..')
-    dict_dir = join(root_dir, 'assets/dictionary')
+    asset_dir = _get_asset_dir()
+    dict_dir = join(asset_dir, 'dictionary')
     versions = []
     for dir_path in Path(dict_dir).glob('v*'):
         dir_name = os.path.basename(dir_path)
