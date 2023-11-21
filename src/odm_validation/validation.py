@@ -5,6 +5,7 @@ generation and data validation.
 
 from collections import defaultdict
 from typing import Callable, Dict, List
+from enum import Enum
 # from pprint import pprint
 
 import part_tables as pt
@@ -121,11 +122,17 @@ def _validate_data_ext(schema: Schema,
     # looking at the `coerce` rules, then those rules are stripped and
     # validation is performed on the remaining rules.
 
-    # inform user of param order/type mistakes
+    # the following asserts exist to inform the user of any argument order/type
+    # mistakes
+
     assert isinstance(data, dict), (
         '`data` must be a dict. Remember to wrap the datasets in a dict with '
         'the table names as keys.')
-    assert isinstance(data_kind, DataKind), 'invalid data_kind param type'
+
+    # XXX: ideally we would check `data_kind` against DataKind itself but that
+    # throws an Error when passing in a DataKind value
+    assert isinstance(data_kind, Enum), 'invalid data_kind param type'
+
     assert isinstance(data_version, str), 'invalid data_version param type'
     assert isinstance(rule_whitelist, list), \
         'invalid rule_whitelist param type'
