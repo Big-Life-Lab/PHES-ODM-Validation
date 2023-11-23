@@ -3,6 +3,7 @@ This is the main module of the package. It contains functions for schema
 generation and data validation.
 """
 
+import logging
 from itertools import groupby
 from typing import Any, Dict, Optional, Set, Tuple
 # from pprint import pprint
@@ -84,9 +85,11 @@ def _extract_datatype(column_meta: list) -> Optional[str]:
     return odm_type
 
 
-def _get_rule_for_cerb_key(key: str, column_meta) -> Rule:
+def _get_rule_for_cerb_key(key: str, column_meta) -> Optional[Rule]:
     rule = _KEY_RULES.get(key)
-    assert rule, f'missing handler for cerberus rule "{key}"'
+    if not rule:
+        logging.error(f'missing handler for cerberus rule "{key}"')
+        return
     return _transform_rule(rule, column_meta)
 
 
@@ -106,7 +109,7 @@ def _gen_error_entry(cerb_rule, table_id, column_id, value, row_numbers,
         return
 
     rule = _get_rule_for_cerb_key(cerb_rule, column_meta)
-    if not rule_filter.enabled(rule):
+    if not (rule and rule_filter.enabled(rule)):
         return
 
     # Only report column errors for the first line in spreadsheets.
