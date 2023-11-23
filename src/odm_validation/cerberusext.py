@@ -4,7 +4,7 @@ from dataclasses import dataclass
 from datetime import datetime
 from typing import Any, Dict, List, Set, Tuple
 from copy import deepcopy
-# from pprint import pprint
+from pprint import pformat
 
 from cerberus import Validator
 from cerberus.errors import ErrorDefinition
@@ -100,7 +100,7 @@ class ContextualCoercer(Validator):
         self._config["offset"] = offset
         self._config["data_kind"] = data_kind
         if not super().validate(document):
-            logging.error(self.errors, stack_info=True)
+            logging.error(__name__ + '.coerce:\n' + pformat(self.errors))
         return self._config["coerced_document"]
 
     def _log_coercion(self, kind, ctx):
