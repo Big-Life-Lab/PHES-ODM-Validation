@@ -7,7 +7,7 @@ import sys
 from dataclasses import dataclass
 from enum import Enum
 from logging import error, info, warning
-from os.path import join, normpath
+from os.path import join
 from pathlib import Path
 from semver import Version
 from typing import DefaultDict, Dict, List, Optional, Set, Tuple
