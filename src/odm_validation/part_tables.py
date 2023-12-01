@@ -102,11 +102,11 @@ def _get_asset_dir() -> str:
 
 def _get_latest_odm_version_str() -> str:
     asset_dir = _get_asset_dir()
-    dict_dir = join(asset_dir, 'dictionary')
+    schema_dir = join(asset_dir, 'validation-schemas')
     versions = []
-    for dir_path in Path(dict_dir).glob('v*'):
-        dir_name = os.path.basename(dir_path)
-        if not (match := re.search('v(.+)', dir_name)):
+    for schema_path in Path(schema_dir).glob('schema-v*'):
+        schema_name = os.path.basename(schema_path)
+        if not (match := re.search('v(.+)', schema_name)):
             continue
         v = parse_version(match.group(1), verbose=False)
         versions.append(str(v))
