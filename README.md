@@ -64,3 +64,17 @@ Many rules are defined in the ODM parts and sets tables. For example, the parts 
 The _odmvalidator_ is the main workhorse within the toolkit. This program code accepts a ODM data and a schema and returns a validation report. We created _odmvalidator_ as an open-source python package that can be incorporated into a full range of information systems (i.e. ArgGIS, Microsoft 365, custom laboratory management information systems or data repositories). As a python package, data can be easily validated when it is stored a range of formats (CSV, Excel, SQL database).
 
 Underdevelopment is a publicly available web application that implements the toolkit, including the odmvalidator.
+
+## Publishing
+
+This package uses [Hatchling](https://pypi.org/project/hatchling/) as the
+build-backend for creating the distribution build. It was chosen
+since it was used as the default in the
+[Python Packaging](https://packaging.python.org/en/latest/tutorials/packaging-projects/#choosing-a-build-backend)
+user guide, and seems like a good modern choice.
+
+Options for the build-backend are set in [pyproject.toml](./pyproject.toml),
+within the `tool.hatch` namespace/sections.
+
+When publishing a new version, make sure to update the version field in
+[pyproject.toml](./pyproject.toml) appropriately.
