@@ -1,0 +1,40 @@
+- trans_value: 91
+  orig_value: "91"
+  trans_ctx:
+    table: sites
+    row_num: 0
+    column: geoLat
+    row:
+      siteID: "1234567"
+      geoLat: "91"
+      geoLong: "89"
+- trans_value: 89
+  orig_value: "89"
+  trans_ctx:
+    table: sites
+    row_num: 0
+    column: geoLong
+    row:
+      siteID: "1234567"
+      geoLat: "91"
+      geoLong: "89"
+- trans_value: 89
+  orig_value: "89"
+  trans_ctx:
+    table: sites
+    row_num: 1
+    column: geoLat
+    row:
+      siteID: "1"
+      geoLat: "89"
+      geoLong: "91"
+- trans_value: 91
+  orig_value: "91"
+  trans_ctx:
+    table: sites
+    row_num: 1
+    column: geoLong
+    row:
+      siteID: "1"
+      geoLat: "89"
+      geoLong: "91"
