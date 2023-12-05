@@ -222,7 +222,7 @@ def main(data_file: List[str] = typer.Argument(..., help=DATA_FILE_DESC),
         validation._VERBOSITY = verbosity
 
         if in_fmt == DataFormat.XLSX:
-            in_paths = convert_excel_to_csv(in_paths[0], in_fmt)
+            in_paths = convert_excel_to_csv(in_paths[0])
         tables = load_tables(schema, in_paths)
         db_data = load_db_data(tables)
 
