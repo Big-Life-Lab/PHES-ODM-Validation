@@ -7,7 +7,9 @@
 ASSET_DIR = get_rule_asset_dir('missing_mandatory_column')
 ```
 
-This rule checks if the rows of each table contains its mandatory columns. For example, the `addID` column is mandatory for the `addresses` table. The following address table row,
+This rule checks if the rows of each table contains its mandatory columns. For
+example, the `addID` column is mandatory for the `addresses` table. The
+following address table row,
 
 ```{python}
 #| echo: false
@@ -31,8 +33,10 @@ The error report will have the following fields
 * **columnName** The name of the missing column
 * **rowNumber**: The index of the table row with the error
 * **row** The dictionary containing the row
-* **validationRuleFields**: The ODM data dictionary rule fields violated by this row
-* **message**: Missing mandatory column \<columnName\> in table \<tableName\> in row number \<rowIndex\>
+* **validationRuleFields**: The ODM data dictionary rule fields violated by
+  this row
+* **message**: Missing mandatory column \<columnName\> in table \<tableName\>
+  in row number \<rowIndex\>
 
 Example
 
@@ -43,10 +47,12 @@ pprint_json_file(asset("error-report.json"))
 
 ## Rule metadata
 
-All the metadata for this rule is contained in the parts sheet in the data dictionary. The relevant columns are:
+All the metadata for this rule is contained in the parts sheet in the data
+dictionary. The relevant columns are:
 
 * **partID**: Contains the name of a part
-* **\<table_name\>**: Used to indicate whether the part is associated with a table
+* **\<table_name\>**: Used to indicate whether the part is associated with a
+  table
 
     Can have one of the following values:
     * **pK**: The part is a primary key for the table
@@ -54,7 +60,9 @@ All the metadata for this rule is contained in the parts sheet in the data dicti
     * **header**: The part is the name of a column in the table
     * **input**
     * **NA**: The part is not applicable to the table
-* **\<table_name\>Required**: Used to indicate whether a column is mandatory for a table
+
+* **\<table_name\>Required**: Used to indicate whether a column is mandatory
+  for a table
 
     Can have one of the following values:
     * **mandatory**: The column is mandatory
@@ -93,7 +101,9 @@ We need three pieces of information to make the cerberus schema for version 1:
 
 Details for the above points can be found [here](./README.md#version-1)
 
-We then check if the version 2 equivalent column is mandatory in the version 2 equivalent table, if it is, then it should be mandatory in version 1. For example,
+We then check if the version 2 equivalent column is mandatory in the version 2
+equivalent table, if it is, then it should be mandatory in version 1. For
+example,
 
 ```{python}
 #| echo: false
@@ -107,4 +117,6 @@ The corresponding version 1 cerberus schema is shown below,
 pprint_yaml_file(asset("schema-v1.yml"))
 ```
 
-The `meta` field for version 1 validation schemas for this rule should include the rows for version 2 along with the `version1Location`, `version1Table`, and `version1Variable` column.
+The `meta` field for version 1 validation schemas for this rule should include
+the rows for version 2 along with the `version1Location`, `version1Table`, and
+`version1Variable` column.

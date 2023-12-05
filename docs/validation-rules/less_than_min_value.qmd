@@ -7,7 +7,13 @@
 ASSET_DIR = get_rule_asset_dir('less_than_min_value')
 ```
 
-This rule ensure that columns values are not less than a defined minimum value. Currently, this rule only supports columns whose data type is float or integer i.e. numbers. As an example, consider the `geoLat` column and `geoLong` column in the `sites` table. For the purpose of explaining this rule we'll assume the `geoLat` column is an `integer` with a minimum value of -90 and the `geoLong` column is a `float` with a minimum value of `-90.15`. The following dataset snippet would fail validation,
+This rule ensure that columns values are not less than a defined minimum value.
+Currently, this rule only supports columns whose data type is float or integer
+i.e. numbers. As an example, consider the `geoLat` column and `geoLong` column
+in the `sites` table. For the purpose of explaining this rule we'll assume the
+`geoLat` column is an `integer` with a minimum value of -90 and the `geoLong`
+column is a `float` with a minimum value of `-90.15`. The following dataset
+snippet would fail validation,
 
 ```{python}
 # Using a yaml file here since in a CSV file every value is by default a string
@@ -21,7 +27,10 @@ whereas the following dataset snippet would pass validation,
 pprint_yaml_file(asset("valid-dataset-1.yml"))
 ```
 
-If the value to be validated is not a number but can be coerced into one, then a warning is given. Whether the coerced value is valid or not, a warning should reported informing the user of the mismatched type. For example the following dataset would fail validation with an error and a warning,
+If the value to be validated is not a number but can be coerced into one, then
+a warning is given. Whether the coerced value is valid or not, a warning should
+reported informing the user of the mismatched type. For example the following
+dataset would fail validation with an error and a warning,
 
 ```{python}
 #| echo: false
@@ -36,14 +45,19 @@ default all CSV values are parsed as strings in Python),
 pprint_csv_file(asset("valid-dataset-2.csv"), "Valid Dataset")
 ```
 
-If the value cannot be coerced into a number, then an error should be logged as in the following dataset where "a" and "b" cannot be coerced into a number
+If the value cannot be coerced into a number, then an error should be logged as
+in the following dataset where "a" and "b" cannot be coerced into a number
 
 ```{python}
 #| echo: false
 pprint_csv_file(asset("invalid-dataset-3.csv"), "Invalid Dataset")
 ```
 
-The ODM dictionary is currently written so that the defined minimum values are inclusive i.e. only values less than the minimum values are invalid. All other values should pass this rule. For example, for the `geoLat` column and `geoLong` column, a value of -90 and -90.15 respectively would be considered valid as in the dataset below,
+The ODM dictionary is currently written so that the defined minimum values are
+inclusive i.e. only values less than the minimum values are invalid. All other
+values should pass this rule. For example, for the `geoLat` column and
+`geoLong` column, a value of -90 and -90.15 respectively would be considered
+valid as in the dataset below,
 
 ```{python}
 # Using a yaml file here since in a CSV file every value is by default a string
@@ -57,7 +71,8 @@ This rule can generate an error and/or a warning.
 An error is generated in the following cases:
 
 1. The value is a number and is less than the min value.
-2. The value is not a number, can be coerced into one, and is less than the min value.
+2. The value is not a number, can be coerced into one, and is less than the min
+   value.
 3. The value is not a number and cannot be coerced into one.
 
 The error report for the first two cases is shown below,
@@ -68,14 +83,20 @@ The error report for the first two cases is shown below,
 * **rowNumber**: The index of the row with the invalid value
 * **row**: The dictionary containing the invalid row
 * **invalidValue**: The invalid value
-* **validationRuleFields**: The ODM data dictionary rows used to generate this rule
-* **message**: Value \<invalid_value\> in row \<row_index\> in column \<column_name\> in table \<table_name\> is less than the allowable minimum value of \<min_value\>
+* **validationRuleFields**: The ODM data dictionary rows used to generate this
+  rule
+* **message**: Value \<invalid_value\> in row \<row_index\> in column
+  \<column_name\> in table \<table_name\> is less than the allowable minimum
+  value of \<min_value\>
 
-The error report for the third case is the identical except for the message field which is shown below,
+The error report for the third case is the identical except for the message
+field which is shown below,
 
-* **message**: Value \<invalid_value\> in row \<row_index\> in column \<column_name\> in table \<table_name\> cannot be coerced into a number
+* **message**: Value \<invalid_value\> in row \<row_index\> in column
+  \<column_name\> in table \<table_name\> cannot be coerced into a number
 
-A warning is generated when the value is a not a number but is coerced into one before validation. The warning report will have the following fields,
+A warning is generated when the value is a not a number but is coerced into one
+before validation. The warning report will have the following fields,
 
 * **warningType**: _coercion
 * **coercionRules**: The list of validation rules that required this coercion
@@ -84,8 +105,11 @@ A warning is generated when the value is a not a number but is coerced into one 
 * **rowNumber**: The index of the row with the invalid value
 * **row**: The dictionary containing the invalid row
 * **invalidValue**: The invalid value
-* **validationRuleFields**: The ODM data dictionary rows used to generate this rule
-* **message**: Value \<invalid_value\> in row \<row_index\> in column \<column_name\> in table \<table_name\> is a \<invalid_type\> and was coerced into a number
+* **validationRuleFields**: The ODM data dictionary rows used to generate this
+  rule
+* **message**: Value \<invalid_value\> in row \<row_index\> in column
+  \<column_name\> in table \<table_name\> is a \<invalid_type\> and was coerced
+  into a number
 
 The error reports for each of the invalid datasets above are shown above,
 
@@ -110,7 +134,8 @@ Invalid dataset 3
 pprint_json_file(asset("error-report-3.json"))
 ```
 
-Finally, for the valid coercable dataset (valid dataset 2) above, the following warning should be generated
+Finally, for the valid coercable dataset (valid dataset 2) above, the following
+warning should be generated
 
 ```{python}
 #| echo: false
@@ -119,14 +144,18 @@ pprint_json_file(asset("error-report-pass-2.json"))
 
 ## Rule metadata
 
-All the metadata for this rule is contained in the parts sheet in the data dictionary. The steps involved are:
+All the metadata for this rule is contained in the parts sheet in the data
+dictionary. The steps involved are:
 
 1. [Get the table names in the dictionary](../specs/odm-how-tos.md#how-to-get-the-names-of-tables-that-are-part-of-the-odm)
 1. [Get all the columns for each table](../specs/odm-how-tos.md#how-to-get-the-names-of-tables-that-are-part-of-the-odm)
-2. Filter the rows to include only those columns whose data type is float or integer
+2. Filter the rows to include only those columns whose data type is float or
+   integer
     * The `dataType` column in the parts sheet contains this metadata
-    * It has a number of possible values but we're looking for values of `float` or `integer`
-3. Check whether the filtered rows has a maximum value. If it does then add the validation rule for that column.
+    * It has a number of possible values but we're looking for values of
+      `float` or `integer`
+3. Check whether the filtered rows has a maximum value. If it does then add the
+   validation rule for that column.
     * The `minValue` column contains this metadata
     * The possible values are a number or `NA`.
         * If the value is `NA` then this column does not have a maximum value.
@@ -139,12 +168,14 @@ pprint_csv_file(asset("parts.csv"), "Parts v2",
                 ignore_prefix="version1")
 ```
 
-The `geoLat` part which is a column in the `sites` table has a `minValue` value of -91 and would have this rule set for it. On the other hand, the `geoEPSG` part which is also a column in the `sites` table would not have this rule due its `minValue` value being `NA`.
+The `geoLat` part which is a column in the `sites` table has a `minValue` value
+of -91 and would have this rule set for it. On the other hand, the `geoEPSG`
+part which is also a column in the `sites` table would not have this rule due
+its `minValue` value being `NA`.
 
 ## Cerberus Schema
 
-We can use the [minimum value
-validation](https://docs.python-cerberus.org/en/stable/validation-rules.html#min-max)
+We can use the [minimum value validation](https://docs.python-cerberus.org/en/stable/validation-rules.html#min-max)
 rule from cerberus to implement this rule. Cerberus also needs to know the data
 type when performing this validation, so we need to set
 [type](https://docs.python-cerberus.org/en/stable/validation-rules.html#type)
@@ -159,11 +190,14 @@ The generated cerberus object for the example above is shown below,
 pprint_yaml_file(asset("schema-v2.yml"))
 ```
 
-The metadata for this rule should include the row from the ODM for the part with its `partID` and `minValue` column values.
+The metadata for this rule should include the row from the ODM for the part
+with its `partID` and `minValue` column values.
 
 ## ODM Version 1
 
-When generating the schema for version 1, we check whether the column has an [equivalent part in version 1](../specs/odm-how-tos.md#getting-the-version-1-equivalent-for-a-part). If it does, then we add it to the cerberus schema. For example,
+When generating the schema for version 1, we check whether the column has an
+[equivalent part in version 1](../specs/odm-how-tos.md#getting-the-version-1-equivalent-for-a-part).
+If it does, then we add it to the cerberus schema. For example,
 
 ```{python}
 #| echo: false
