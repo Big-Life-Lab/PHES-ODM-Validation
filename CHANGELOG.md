@@ -1,5 +1,66 @@
 # Changelog
 
+## [0.5.0] - 2024-01-03
+
+### General
+
+- Added integration test for package import
+- Added missing assets dir in package distribution
+- Changed required Python version to 3.8
+- Changed rule id type from string to enum
+- Fixed misc bugs and errors
+- Fixed table-attribute mapping in ODM version 1
+
+### API
+
+- Added function summarization.summarize_report for validation report
+  summarization
+
+### Tools
+
+- Added a CLI frontend (`tools/validate.py`) for the validate_data function,
+  which replaces the old validate_xlsx tool
+- Added a CLI frontend (`tools/summarize.py`) for the summarize_report
+
+### Validation schemas
+
+#### v1.1.0
+
+- Added CovidPublicHealthData
+- Added SiteMeasure.accessToAllOrg
+- Added SiteMeasure.accessToDetails
+- Added SiteMeasure.accessToLocalHA
+- Added SiteMeasure.accessToOtherProv
+- Added SiteMeasure.accessToPHAC
+- Added SiteMeasure.accessToProvHA
+- Added SiteMeasure.accessToPublic
+- Added SiteMeasure.accessToSelf
+- Added SiteMeasure.analysisDate
+- Added SiteMeasure.assayID
+- Added SiteMeasure.cphdID
+- Added SiteMeasure.date
+- Added SiteMeasure.dateType
+- Added SiteMeasure.franctionAnalysed
+- Added SiteMeasure.index
+- Added SiteMeasure.reportDate
+- Added SiteMeasure.siteMeasureID
+- Added SiteMeasure.type
+- Added SiteMeasure.uWwMeasureID
+- Added WWMeasure.accessToAllOrg
+- Added WWMeasure.accessToDetails
+- Added WWMeasure.accessToLocalHA
+- Added WWMeasure.accessToOtherProv
+- Added WWMeasure.accessToPHAC
+- Added WWMeasure.accessToProvHA
+- Added WWMeasure.accessToPublic
+- Added WWMeasure.accessToSelf
+- Added WWMeasure.assayID
+- Added WWMeasure.cphdID
+- Added WWMeasure.date
+- Added WWMeasure.dateTime
+- Added WWMeasure.dateType
+- Added WWMeasure.siteMeasureID
+
 ## [0.4.0] - 2023-04-11
 
 ### General
