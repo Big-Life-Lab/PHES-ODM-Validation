@@ -3,3 +3,4 @@ PyYAML==6.0.1
 python-dateutil==2.8.2
 semver==3.0.0.dev3
 toml==0.10.2
+typing_extensions==4.8.0

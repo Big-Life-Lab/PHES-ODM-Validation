@@ -2,6 +2,7 @@ import datetime
 from dataclasses import dataclass, field
 from enum import Enum
 from typing import Any, Dict, List, Optional, Set
+from typing_extensions import TypedDict
 # from pprint import pprint
 
 import part_tables as pt
@@ -38,8 +39,7 @@ class ErrorCtx:
     verbosity: int = 2
 
 
-@dataclass(frozen=True)
-class TableInfo:
+class TableInfo(TypedDict):
     columns: int
     rows: int
 
