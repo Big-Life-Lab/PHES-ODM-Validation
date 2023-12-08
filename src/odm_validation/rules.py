@@ -64,7 +64,7 @@ class Rule:
     keys: List[str]
     is_column: bool
     is_warning: bool
-    gen_schema: Callable[pt.OdmData, Schema]
+    gen_schema: Callable[[pt.OdmData], Schema]
     get_error_template: Callable[[Any, str, DataKind], str]
 
     match_all_keys: bool
