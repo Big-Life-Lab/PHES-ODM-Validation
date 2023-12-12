@@ -214,8 +214,8 @@ def _gen_overview(report: ValidationReport,
     table_overviews = {}
     for table_id, info in report.table_info.items():
         table_overviews[table_id] = {
-            'columns': info.columns,
-            'rows': info.rows,
+            'columns': info['columns'],
+            'rows': info['rows'],
         }
 
     overview = {

@@ -4,9 +4,8 @@ import sys
 from enum import Enum
 from os.path import join
 from typing import IO, Optional
-# from pprint import pprint
+from pprint import pprint
 
-import jsons
 import yaml
 
 root_dir = join(os.path.dirname(os.path.realpath(__file__)), '..')
@@ -54,19 +53,6 @@ def detect_report_format_from_content(data: str) -> Optional[ReportFormat]:
         return ReportFormat.YAML
 
 
-def serialize(obj) -> dict:
-    # serialization (with 'jsons') is needed to:
-    # - avoid writing serialization methods for our objects
-    # - avoid 'tags' when writing yaml
-    return jsons.dump(obj)
-
-
-def deserialize(data, cls) -> object:
-    # deserialization is needed to:
-    # - be able to safely load yaml (without tags specifying objects)
-    return jsons.load(data, cls)
-
-
 def write_txt_report(output: IO, report):
     # XXX: Make sure to start txt format output with '#' to be able to infer
     # the format later. '#' is chosen because it's how a text/markdown document
@@ -88,29 +74,32 @@ def write_txt_report(output: IO, report):
 
 
 def write_json_report(output: IO, report: ValidationReport):
-    data = serialize(report)
-    json.dump(data, output)
+    json.dump(report, output)
 
 
 def write_yaml_report(output: IO, report: ValidationReport):
-    # XXX: serialize before dumping to avoid yaml-tags
-    data = serialize(report)
-    yaml.dump(data, output)
+    # XXX: dump dict to avoid yaml-tags from class types
+    yaml.dump(report.__dict__, output)
 
 
 def read_report_from_file(file) -> ValidationReport:
     # - data is normalized as text/json before being deserialized into obj
     # - must use yaml.safe_load to avoid running arbitrary python code on
     #   the user machine
-    data = file.read()
-    fmt = detect_report_format_from_content(data)  # only peeks
-    if not fmt:
-        quit('unable to detect report format')
-    if fmt == ReportFormat.TXT:
-        quit(f'report format {fmt} can\'t be summarized')
+    raw_data: str = file.read()
+    fmt = detect_report_format_from_content(raw_data)  # only peeks
+    report_obj = None
+    if fmt == ReportFormat.JSON:
+        report_obj = json.loads(raw_data)
     elif fmt == ReportFormat.YAML:
-        data = yaml.safe_load(data)
-    report = jsons.load(data, ValidationReport)
+        report_obj = yaml.safe_load(raw_data)
+    elif fmt == ReportFormat.TXT:
+        quit(f'report format {fmt} can\'t be summarized')
+    else:
+        quit('unable to detect report format')
+    assert type(report_obj) is not str, \
+           "report data should be dict/obj, but was loaded as string"
+    report = ValidationReport(**report_obj)
     return report
 
 
