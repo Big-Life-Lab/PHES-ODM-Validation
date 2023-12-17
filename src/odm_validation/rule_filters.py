@@ -29,5 +29,5 @@ class RuleFilter:
         return (rule_id not in self.blacklist and
                 (rule_id in self.whitelist or self.whitelist == []))
 
-    def filter(self, rules: Iterable[Rule]) -> Iterator[Rule]:
+    def filter(self, rules: Iterable) -> Iterator:
         return filter(self.enabled, rules)

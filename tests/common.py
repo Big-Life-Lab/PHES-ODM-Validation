@@ -3,6 +3,7 @@ This file is imported into all tests, and ensures that they can import the main
 package modules.
 """
 
+import logging
 import os
 import sys
 import unittest
@@ -18,9 +19,14 @@ root_dir = join(_dir, '..')
 
 class OdmTestCase(unittest.TestCase):
     def run(self, result=None):
-        # makes sure that tests fails when errors are logged
-        with self.assertNoLogs(None, 'ERROR'):
+        # This makes sure that tests fails when errors are logged.
+        # XXX: assertNoLogs is not available in python < 3.10, so we need to do
+        # an inverse check with assertLogs.
+        single_entry = 'ERROR:root:this is the only valid error log entry'
+        with self.assertLogs(None, logging.ERROR) as cm:
             super().run(result)
+            logging.error(single_entry)
+        self.assertTrue([single_entry], cm.output)
 
     def assertReportEqual(self, expected, report):
         self.assertEqual(expected['errors'], report.errors)
