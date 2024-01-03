@@ -1,17 +1,17 @@
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" data-content_root="../">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
     <title>duplicate_entries_found &#8212; PHES-ODM Validation  documentation</title>
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/css/odm-styles.css" />
-    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-    <script src="../_static/doctools.js"></script>
-    <script src="../_static/sphinx_highlight.js"></script>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=4f649999" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css?v=bf1bc15e" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/odm-styles.css?v=c2e4d323" />
+    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -34,7 +34,7 @@
           <div class="body" role="main">
             
   <section id="duplicate-entries-found">
-<h1>duplicate_entries_found<a class="headerlink" href="#duplicate-entries-found" title="Permalink to this heading">¶</a></h1>
+<h1>duplicate_entries_found<a class="headerlink" href="#duplicate-entries-found" title="Link to this heading">¶</a></h1>
 <p>This rule identifies when there are two identical entries with the same
 primary key. The rational has been described
 <a class="reference external" href="https://odm.discourse.group/t/duplicate-entries-and-lastedited-field/55">here</a>.
@@ -81,7 +81,7 @@ but also the same <code class="docutils literal notranslate"><span class="pre">l
 └────────────────────────────────────────┴────────────────────────────────────────────────────────────────────────┘
 </pre>
 <section id="error-report">
-<h2>Error report<a class="headerlink" href="#error-report" title="Permalink to this heading">¶</a></h2>
+<h2>Error report<a class="headerlink" href="#error-report" title="Link to this heading">¶</a></h2>
 <p>The error report will have the following fields</p>
 <ul class="simple">
 <li><p><strong>errorType</strong>: duplicate_entries_found</p></li>
@@ -124,7 +124,7 @@ primary key column &lt;column_name&gt; and primary key value
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'addresses'</span>: <span style="color: #008000; text-decoration-color: #008000">'pK'</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="font-weight: bold">}</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="font-weight: bold">]</span>,
-<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'message'</span>: <span style="color: #008000; text-decoration-color: #008000">'duplicate_entries_found rule violated in table addresses, column addId, rows 1,2: Duplicate entries found with primary key value "1"'</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'message'</span>: <span style="color: #008000; text-decoration-color: #008000">'duplicate_entries_found rule violated in table addresses, column addId, row(s) 1,2: Duplicate entries found with primary key "1"'</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="font-weight: bold">}</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="font-weight: bold">]</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="color: #008000; text-decoration-color: #008000">'warnings'</span>: <span style="font-weight: bold">[]</span>
@@ -160,7 +160,7 @@ second invalid dataset above is shown below,</p>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'addresses'</span>: <span style="color: #008000; text-decoration-color: #008000">'pK'</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="font-weight: bold">}</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="font-weight: bold">]</span>,
-<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'message'</span>: <span style="color: #008000; text-decoration-color: #008000">'duplicate_entries_found rule violated in table addresses, column addId, rows 2,3: Duplicate entries found with primary key value "1"'</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'message'</span>: <span style="color: #008000; text-decoration-color: #008000">'duplicate_entries_found rule violated in table addresses, column addId, row(s) 2,3: Duplicate entries found with primary key "1"'</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="font-weight: bold">}</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="font-weight: bold">{</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'errorType'</span>: <span style="color: #008000; text-decoration-color: #008000">'duplicate_entries_found'</span>,
@@ -187,7 +187,7 @@ second invalid dataset above is shown below,</p>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'addresses'</span>: <span style="color: #008000; text-decoration-color: #008000">'pK'</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="font-weight: bold">}</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="font-weight: bold">]</span>,
-<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'message'</span>: <span style="color: #008000; text-decoration-color: #008000">'duplicate_entries_found rule violated in table addresses, column addId, rows 5,6: Duplicate entries found with primary key value "2"'</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'message'</span>: <span style="color: #008000; text-decoration-color: #008000">'duplicate_entries_found rule violated in table addresses, column addId, row(s) 5,6: Duplicate entries found with primary key "2"'</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="font-weight: bold">}</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="font-weight: bold">]</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="color: #008000; text-decoration-color: #008000">'warnings'</span>: <span style="font-weight: bold">[]</span>
@@ -197,7 +197,7 @@ second invalid dataset above is shown below,</p>
 one for rows 5 and 6.</p>
 </section>
 <section id="rule-metadata">
-<h2>Rule metadata<a class="headerlink" href="#rule-metadata" title="Permalink to this heading">¶</a></h2>
+<h2>Rule metadata<a class="headerlink" href="#rule-metadata" title="Link to this heading">¶</a></h2>
 <p>All the metadata for this rule is contained in the parts sheet in the
 data dictionary. This rule should be added to the primary key column for
 all tables which can identified using these
@@ -216,7 +216,7 @@ all tables which can identified using these
 addresses table and hence should have this rule implemented.</p>
 </section>
 <section id="cerberus-schema">
-<h2>Cerberus Schema<a class="headerlink" href="#cerberus-schema" title="Permalink to this heading">¶</a></h2>
+<h2>Cerberus Schema<a class="headerlink" href="#cerberus-schema" title="Link to this heading">¶</a></h2>
 <p>Cerberus currently does not have support for this rule. We will need to
 <a class="reference external" href="https://docs.python-cerberus.org/en/stable/customize.html">extend the cerberus
 validator</a> to
@@ -260,7 +260,7 @@ accomplish this.</p>
 defines the primary key column for the table.</p>
 </section>
 <section id="odm-version-1">
-<h2>ODM Version 1<a class="headerlink" href="#odm-version-1" title="Permalink to this heading">¶</a></h2>
+<h2>ODM Version 1<a class="headerlink" href="#odm-version-1" title="Link to this heading">¶</a></h2>
 <p>When generating the schema for version 1, we should add this rule to any
 version 2 primary key columns which have a version 1 equivalent. For
 example, the parts snippet above with its version 1 columns is shown
@@ -356,6 +356,7 @@ below</p>
 <li class="toctree-l2"><a class="reference internal" href="greater_than_max_length.html">greater_than_max_length</a></li>
 <li class="toctree-l2"><a class="reference internal" href="greater_than_max_value.html">greater_than_max_value</a></li>
 <li class="toctree-l2"><a class="reference internal" href="invalid_category.html">invalid_category</a></li>
+<li class="toctree-l2"><a class="reference internal" href="invalid_email.html">invalid_email</a></li>
 <li class="toctree-l2"><a class="reference internal" href="invalid_type.html">invalid_type</a></li>
 <li class="toctree-l2"><a class="reference internal" href="less_than_min_length.html">less_than_min_length</a></li>
 <li class="toctree-l2"><a class="reference internal" href="less_than_min_value.html">less_than_min_value</a></li>
@@ -406,7 +407,7 @@ below</p>
       &copy;2022, OHRI.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 7.0.1</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 7.2.6</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
       
       |

@@ -1,17 +1,17 @@
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" data-content_root="../">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
     <title>less_than_min_length &#8212; PHES-ODM Validation  documentation</title>
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/css/odm-styles.css" />
-    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-    <script src="../_static/doctools.js"></script>
-    <script src="../_static/sphinx_highlight.js"></script>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=4f649999" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css?v=bf1bc15e" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/odm-styles.css?v=c2e4d323" />
+    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -34,7 +34,7 @@
           <div class="body" role="main">
             
   <section id="less-than-min-length">
-<h1>less_than_min_length<a class="headerlink" href="#less-than-min-length" title="Permalink to this heading">¶</a></h1>
+<h1>less_than_min_length<a class="headerlink" href="#less-than-min-length" title="Link to this heading">¶</a></h1>
 <p>This rule ensures that the number of characters in a string type column
 is not less than a defined minimum value. As an example, consider the
 <code class="docutils literal notranslate"><span class="pre">phone</span></code> column in the <code class="docutils literal notranslate"><span class="pre">contacts</span></code> table whose minimum length value is 10.
@@ -61,7 +61,7 @@ snippet would pass validation,</p>
 and 11 respectively which is greater than or equal to the minimum length
 value of 10.</p>
 <section id="error-report">
-<h2>Error report<a class="headerlink" href="#error-report" title="Permalink to this heading">¶</a></h2>
+<h2>Error report<a class="headerlink" href="#error-report" title="Link to this heading">¶</a></h2>
 <p>The error report should have the following fields,</p>
 <ul class="simple">
 <li><p><strong>errorType</strong>: less_than_min_length</p></li>
@@ -97,7 +97,7 @@ below,</p>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'contacts'</span>: <span style="color: #008000; text-decoration-color: #008000">'header'</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="font-weight: bold">}</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="font-weight: bold">]</span>,
-<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'message'</span>: <span style="color: #008000; text-decoration-color: #008000">'less_than_min_length rule violated in table contacts, column phone, row 1: Value "123-456-1" has length 9 which is less than the min length of "10"'</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'message'</span>: <span style="color: #008000; text-decoration-color: #008000">'less_than_min_length rule violated in table contacts, column phone, row(s) 1: Value "123-456-1" (of length 9) is less than the min length of "10"'</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="font-weight: bold">}</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="font-weight: bold">]</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="color: #008000; text-decoration-color: #008000">'warnings'</span>: <span style="font-weight: bold">[]</span>
@@ -105,7 +105,7 @@ below,</p>
 </pre>
 </section>
 <section id="rule-metadata">
-<h2>Rule metadata<a class="headerlink" href="#rule-metadata" title="Permalink to this heading">¶</a></h2>
+<h2>Rule metadata<a class="headerlink" href="#rule-metadata" title="Link to this heading">¶</a></h2>
 <p>All the metadata for this rule is contained in the parts sheet in the
 ODM dictionary. The steps involved are:</p>
 <ol class="arabic simple">
@@ -146,7 +146,7 @@ length value</p></li>
 the <code class="docutils literal notranslate"><span class="pre">addL2</span></code> column in the <code class="docutils literal notranslate"><span class="pre">addresses</span></code> table would not.</p>
 </section>
 <section id="cerberus-schema">
-<h2>Cerberus Schema<a class="headerlink" href="#cerberus-schema" title="Permalink to this heading">¶</a></h2>
+<h2>Cerberus Schema<a class="headerlink" href="#cerberus-schema" title="Link to this heading">¶</a></h2>
 <p>We can use the
 <a class="reference external" href="https://docs.python-cerberus.org/en/stable/validation-rules.html#minlength-maxlength">minlength</a>
 validation rule in the cerberus library to implement this.</p>
@@ -191,7 +191,7 @@ validation rule in the cerberus library to implement this.</p>
 for the column with its <code class="docutils literal notranslate"><span class="pre">partID</span></code> and <code class="docutils literal notranslate"><span class="pre">minLength</span></code> column values.</p>
 </section>
 <section id="odm-version-1">
-<h2>ODM Version 1<a class="headerlink" href="#odm-version-1" title="Permalink to this heading">¶</a></h2>
+<h2>ODM Version 1<a class="headerlink" href="#odm-version-1" title="Link to this heading">¶</a></h2>
 <p>When generating the schema for version 1, we check whether the column
 has an <a class="reference internal" href="../specs/odm-how-tos.html#getting-the-version-1-equivalent-for-a-part"><span class="std std-ref">equivalent part in version
 1</span></a>.
@@ -291,6 +291,7 @@ If it does, then we add it to the cerberus schema. For example,</p>
 <li class="toctree-l2"><a class="reference internal" href="greater_than_max_length.html">greater_than_max_length</a></li>
 <li class="toctree-l2"><a class="reference internal" href="greater_than_max_value.html">greater_than_max_value</a></li>
 <li class="toctree-l2"><a class="reference internal" href="invalid_category.html">invalid_category</a></li>
+<li class="toctree-l2"><a class="reference internal" href="invalid_email.html">invalid_email</a></li>
 <li class="toctree-l2"><a class="reference internal" href="invalid_type.html">invalid_type</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">less_than_min_length</a></li>
 <li class="toctree-l2"><a class="reference internal" href="less_than_min_value.html">less_than_min_value</a></li>
@@ -341,7 +342,7 @@ If it does, then we add it to the cerberus schema. For example,</p>
       &copy;2022, OHRI.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 7.0.1</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 7.2.6</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
       
       |

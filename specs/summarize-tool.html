@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>Summarize Tool &#8212; PHES-ODM Validation  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=4f649999" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css?v=bf1bc15e" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/odm-styles.css?v=c2e4d323" />
+    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Summary Report" href="summary-report.html" />
+    <link rel="prev" title="summarize_report" href="summarize-report-function.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="summarize-tool">
+<h1>Summarize Tool<a class="headerlink" href="#summarize-tool" title="Link to this heading">¶</a></h1>
+<p>The summarization tool “summarize” is used to create a summarized
+version of the validation report. It can be found in the <code class="docutils literal notranslate"><span class="pre">tools</span></code>
+subdirectory of the repository. It should use the report file outputted
+from the validation tool (<code class="docutils literal notranslate"><span class="pre">tools/validate</span></code>) as its input, and it will
+output a summarized report file.</p>
+<section id="usage">
+<h2>Usage<a class="headerlink" href="#usage" title="Link to this heading">¶</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">tools/summarize</span> <span class="pre">&lt;report-file&gt;</span> <span class="pre">[options...]</span></code></p>
+<section id="options">
+<h3>Options<a class="headerlink" href="#options" title="Link to this heading">¶</a></h3>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">--by=(table,</span> <span class="pre">column,</span> <span class="pre">row)</span></code></p>
+<p>The key(s) to summarize by. Multiple keys can be specified by passing
+this option multiple times. Each key will add a separate summarization
+to the summary report, but the same key can’t be repeated as this is a
+set. Specifying an empty set (with <code class="docutils literal notranslate"><span class="pre">--by=</span></code>) will create a summary
+report without any error summaries. Defaults to <code class="docutils literal notranslate"><span class="pre">table</span></code>.</p>
+<p>Example: <code class="docutils literal notranslate"><span class="pre">--by=table</span> <span class="pre">--by=column</span></code></p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--errorLevel=(error,</span> <span class="pre">warning)</span></code></p>
+<p>Specifies the level of detail for errors, ranging from important
+errors to less important warnings. Selecting the lower <code class="docutils literal notranslate"><span class="pre">warning</span></code> level
+will also include the higher <code class="docutils literal notranslate"><span class="pre">error</span></code> level. Defaults to <code class="docutils literal notranslate"><span class="pre">error</span></code>.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--out=&lt;path&gt;</span></code></p>
+<p>The path to write the summary file to. Defaults to stdout when not
+specified.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--format=(json,</span> <span class="pre">yaml)</span></code></p>
+<p>The output format. The format can be inferred from the file extension
+when the <code class="docutils literal notranslate"><span class="pre">--out</span></code> parameter is used. Defaults to YAML.</p>
+</li>
+</ul>
+</section>
+</section>
+<section id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Link to this heading">¶</a></h2>
+<section id="validate">
+<h3>Validate<a class="headerlink" href="#validate" title="Link to this heading">¶</a></h3>
+<p>A validation report of the input data must be generated before it can be
+summarized. (The report content is simplified for readability.)</p>
+<div class="highlight-{shell} notranslate"><div class="highlight"><pre><span></span>&gt; DIR=./example-directory
+&gt; REPORT=$DIR/report.yml
+&gt; python tools/validate.py data.xlsx --out=$REPORT
+&gt; cat $REPORT
+
+errors:
+- errorType: less_than_min_value
+  tableName: sites
+  columnName: geoLat
+- errorType: less_than_min_value
+  tableName: sites
+  columnName: geoLat
+- errorType: less_than_min_value
+  tableName: sites
+  columnName: geoLat
+warnings:
+- warningType: _coercion
+  tableName: sites
+  columnName: geoLat
+- warningType: _coercion
+  tableName: sites
+  columnName: geoLat
+- warningType: _coercion
+  tableName: sites
+  columnName: geoLat
+</pre></div>
+</div>
+</section>
+<section id="summarize">
+<h3>Summarize<a class="headerlink" href="#summarize" title="Link to this heading">¶</a></h3>
+<p>The following command will summarize the validation report by tables,
+columns and rows, and write the result to the console using markdown
+syntax.</p>
+<div class="highlight-{shell} notranslate"><div class="highlight"><pre><span></span>&gt; cd tools
+&gt; ./summarize.py $REPORT --by=table --by=column --by=row --format=markdown
+
+# summary
+
+## errors
+
+### table
+
+sites:
+- less_than_min_value: 3
+
+### column
+
+sites:
+- geoLat:
+    - less_than_min_value: 3
+
+### row
+
+sites:
+- 1:
+    - less_than_min_value: 1
+- 2:
+    - less_than_min_value: 1
+- 3:
+    - less_than_min_value: 1
+</pre></div>
+</div>
+<p>Specifying <code class="docutils literal notranslate"><span class="pre">--errorLevel=warning</span></code> would include warnings as well:</p>
+<div class="highlight-{shell} notranslate"><div class="highlight"><pre><span></span>## warnings
+
+### table
+
+sites:
+- _coercion: 3
+
+### column
+
+sites:
+- geoLat:
+    - _coercion: 3
+
+### row
+
+sites:
+- 1:
+    - _coercion: 1
+- 2:
+    - _coercion: 1
+- 3:
+    - _coercion: 1
+</pre></div>
+</div>
+</section>
+<section id="summarize-to-file">
+<h3>Summarize to file<a class="headerlink" href="#summarize-to-file" title="Link to this heading">¶</a></h3>
+<p>The summary can also be written to a file with the <code class="docutils literal notranslate"><span class="pre">--out</span></code> parameter.
+YAML format is implied by the ‘.yml’ file extension.</p>
+<div class="highlight-{shell} notranslate"><div class="highlight"><pre><span></span>&gt; SUMMARY=$DIR/report-summary.yml
+&gt; cd tools
+&gt; ./summarize.py $REPORT --by=table --by=column --by=row --out=$SUMMARY
+&gt; cat $SUMMARY
+
+errors:
+  table:
+    sites:
+    - less_than_min_value: 3
+  column:
+    sites:
+    - geoLat:
+      - less_than_min_value: 3
+  row:
+    sites:
+      1:
+      - less_than_min_value: 1
+      2:
+      - less_than_min_value: 1
+      3:
+      - less_than_min_value: 1
+</pre></div>
+</div>
+</section>
+</section>
+<section id="implementation">
+<h2>Implementation<a class="headerlink" href="#implementation" title="Link to this heading">¶</a></h2>
+<p>Under the hood this tool uses the <code class="docutils literal notranslate"><span class="pre">summarize_report</span></code> function, in
+addition to parameter parsing (handled by the <code class="docutils literal notranslate"><span class="pre">typer</span></code> package), and
+normal I/O operations. The implementation should be fairly straight
+forward, as it simply wraps the <code class="docutils literal notranslate"><span class="pre">summarize_report</span></code> function, which also
+handles the <code class="docutils literal notranslate"><span class="pre">--by</span></code> parameter.</p>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/ODM-logo.png" alt="Logo"/>
+            </a></p>
+<h1 class="logo"><a href="../index.html">PHES-ODM Validation</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../examples/tutorial.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/explanation-document/explanation-document.html">Getting to know the validation library</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/schema-additions/schema-additions.html">Customizing a Validation Schema</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../api.html">API Documentation</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../api.html#module-odm_validation.validation">Validation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#module-odm_validation.utils">Utils</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../api.html#specification">Specification</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../rules.html">Validation rules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../links/contributing_link.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../links/code_of_conduct_link.html">Code of Conduct</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../links/license_link.html">License</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="../api.html">API Documentation</a><ul>
+      <li>Previous: <a href="summarize-report-function.html" title="previous chapter">summarize_report</a></li>
+      <li>Next: <a href="summary-report.html" title="next chapter">Summary Report</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2022, OHRI.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 7.2.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
+      
+      |
+      <a href="../_sources/specs/summarize-tool.md.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

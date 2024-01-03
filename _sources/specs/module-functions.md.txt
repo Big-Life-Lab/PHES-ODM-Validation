@@ -119,10 +119,52 @@ All errors and warnings for each validation rule are documented in the
     schema used
   - `package_version`: string consisting of the version of the
     validation package used
+  - `table_info`: A Python dictionary mapping all validated table(-ids)
+    to their column/row counts.
   - `errors`: A list of Python dictionaries describing each error. For
     more information refer to the files in the
     [validation-rules](../validation-rules/) folder
   - `warnings`: A list of Python dictionaries describing each warning.
+
+## summarize_report
+
+Summarizes the validation report.
+
+### Arguments
+
+1.  `report`: A validation report returned from `validate_data`.
+
+    - type: A `ValidationReport` object.
+
+2.  `by`: Specifies what to summarize by. Defaults to `table`.
+
+    - type: A Python enumeration with the values `(table, column, row)`.
+
+### Return
+
+Returns a summarized version of `report`.
+
+- type: A `SummarizedReport` object with the following fields and
+  methods:
+  - `data_version`: string consisting of the version of the ODM data
+  - `schema_version`: string consisting of the version of the validation
+    schema used
+  - `package_version`: string consisting of the version of the
+    validation package used
+  - `overview`: A Python dictionary with a general overview.
+  - `errors`: A Python dictionary with the error summaries.
+  - `warnings`: A python dictionary with the warning summaries.
+
+### Example
+
+``` python
+report = validate_data(...)
+summary = summarize_report(report)
+pprint(summary.overview)
+```
+
+See the [summarize-report-function](summarize-report-function.md) spec
+for more details.
 
 ## generate_validation_schema
 

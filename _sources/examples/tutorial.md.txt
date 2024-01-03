@@ -34,8 +34,9 @@ include our sample table in a Python dictionary with the table name as
 the key. We are validating the `samples` table in this example.
 
 ``` python
-schema_file = join(ASSET_DIR, f"validation-schemas/schema-v{ODM_VERSION_STR}.yml")
-schema = utils.import_schema(schema_file)
+schema_name = f"schema-v{ODM_VERSION_STR}.yml"
+schema_path = join(ASSET_DIR, join("validation-schemas", schema_name))
+schema = utils.import_schema(schema_path)
 samples = utils.import_dataset("samples.csv")
 data = {"samples": samples}
 report = validate_data(schema, data)
@@ -65,11 +66,11 @@ for e in report.errors:
     print("- " + e["message"])
 ```
 
-    - missing_mandatory_column rule violated in table samples, column collDT, row 1: Missing mandatory column collDT
-    - missing_mandatory_column rule violated in table samples, column collNumPer, row 1: Missing mandatory column collNumPer
-    - invalid_type rule violated in table samples, column collPer, row 1: Value "asd" has type string but should be of type float or coercable into a float
-    - missing_mandatory_column rule violated in table samples, column collType, row 1: Missing mandatory column collType
-    - missing_mandatory_column rule violated in table samples, column sampleID, row 1: Missing mandatory column sampleID
+    - missing_mandatory_column rule violated in table samples, column collDT: Missing mandatory column collDT
+    - missing_mandatory_column rule violated in table samples, column collNumPer: Missing mandatory column collNumPer
+    - invalid_type rule violated in table samples, column collPer, row(s) 1: Value "asd" has type string which is incompatible with float
+    - missing_mandatory_column rule violated in table samples, column collType: Missing mandatory column collType
+    - missing_mandatory_column rule violated in table samples, column sampleID: Missing mandatory column sampleID
 
 The error message starts with the name of the rule that has been broken,
 followed by the table name, field name, and row number. The actual
@@ -100,7 +101,7 @@ print(report.schema_version)
 print(report.data_version)
 ```
 
-    0.4.0
+    0.5.0
     2.0.0
     2.0.0
 

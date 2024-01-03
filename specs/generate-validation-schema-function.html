@@ -1,17 +1,17 @@
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" data-content_root="../">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
     <title>generate_validation_schema &#8212; PHES-ODM Validation  documentation</title>
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/css/odm-styles.css" />
-    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-    <script src="../_static/doctools.js"></script>
-    <script src="../_static/sphinx_highlight.js"></script>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=4f649999" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css?v=bf1bc15e" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/odm-styles.css?v=c2e4d323" />
+    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -34,13 +34,13 @@
           <div class="body" role="main">
             
   <section id="generate-validation-schema">
-<h1>generate_validation_schema<a class="headerlink" href="#generate-validation-schema" title="Permalink to this heading">¶</a></h1>
+<h1>generate_validation_schema<a class="headerlink" href="#generate-validation-schema" title="Link to this heading">¶</a></h1>
 <p>This document provides the specifications for programmatically
 generating a validation schema for PHES-ODM data. The program is exposed
 as a function called <code class="docutils literal notranslate"><span class="pre">generate_validation_schema</span></code> within the
 <code class="docutils literal notranslate"><span class="pre">PHES-ODM-Validaion</span></code> Python package.</p>
 <section id="context">
-<h2>Context<a class="headerlink" href="#context" title="Permalink to this heading">¶</a></h2>
+<h2>Context<a class="headerlink" href="#context" title="Link to this heading">¶</a></h2>
 <p>The PHES-ODM data structure is complex. Trying to manually create the
 validation schema for the
 validate_data function can be an
@@ -55,7 +55,7 @@ validation metadata. Using this data dictionary file, the
 validation schema for different ODM data versions.</p>
 </section>
 <section id="features">
-<h2>Features<a class="headerlink" href="#features" title="Permalink to this heading">¶</a></h2>
+<h2>Features<a class="headerlink" href="#features" title="Link to this heading">¶</a></h2>
 <p>At its core, the <code class="docutils literal notranslate"><span class="pre">generate_validation_schema</span></code> function creates a Python
 dictionary that is actionable by the <code class="docutils literal notranslate"><span class="pre">generate_validate_data</span></code> function.
 The details regarding the dictionary creation and the fields that go
@@ -63,7 +63,7 @@ into it can be seen in the <a class="reference external" href="../validation-rul
 folder. This document will go over the function features that are
 agnostic to each validation rule.</p>
 <section id="warnings">
-<h3>Warnings<a class="headerlink" href="#warnings" title="Permalink to this heading">¶</a></h3>
+<h3>Warnings<a class="headerlink" href="#warnings" title="Link to this heading">¶</a></h3>
 <p>During the process of generating a validation schema there may be
 non-fatal issues that come up when parsing a row. A non-fatal issue is
 one which should not stop the function execution. Instead, whenever such
@@ -75,7 +75,7 @@ encountered, with each warning encoded as an object. The remaining
 sections in this group will go over each warning, providing examples
 that generate it.</p>
 <section id="missing-version1-fields">
-<h4>missing_version1_fields<a class="headerlink" href="#missing-version1-fields" title="Permalink to this heading">¶</a></h4>
+<h4>missing_version1_fields<a class="headerlink" href="#missing-version1-fields" title="Link to this heading">¶</a></h4>
 <p>This warning is reported when generating the schema for a version 1
 dataset. The data dictionary contains columns that backports version 2
 parts to their version 1 equivalent, this process is described
@@ -479,11 +479,11 @@ generating a version 1 schema.</p>
       &copy;2022, OHRI.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 7.0.1</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 7.2.6</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
       
       |
-      <a href="../_sources/specs/generate-validation-schema.md.txt"
+      <a href="../_sources/specs/generate-validation-schema-function.md.txt"
           rel="nofollow">Page source</a>
     </div>
 

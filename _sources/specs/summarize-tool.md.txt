@@ -1,0 +1,174 @@
+# Summarize Tool
+
+The summarization tool “summarize” is used to create a summarized
+version of the validation report. It can be found in the `tools`
+subdirectory of the repository. It should use the report file outputted
+from the validation tool (`tools/validate`) as its input, and it will
+output a summarized report file.
+
+## Usage
+
+`python tools/summarize <report-file> [options...]`
+
+### Options
+
+- `--by=(table, column, row)`
+
+  The key(s) to summarize by. Multiple keys can be specified by passing
+  this option multiple times. Each key will add a separate summarization
+  to the summary report, but the same key can’t be repeated as this is a
+  set. Specifying an empty set (with `--by=`) will create a summary
+  report without any error summaries. Defaults to `table`.
+
+  Example: `--by=table --by=column`
+
+- `--errorLevel=(error, warning)`
+
+  Specifies the level of detail for errors, ranging from important
+  errors to less important warnings. Selecting the lower `warning` level
+  will also include the higher `error` level. Defaults to `error`.
+
+- `--out=<path>`
+
+  The path to write the summary file to. Defaults to stdout when not
+  specified.
+
+- `--format=(json, yaml)`
+
+  The output format. The format can be inferred from the file extension
+  when the `--out` parameter is used. Defaults to YAML.
+
+## Examples
+
+### Validate
+
+A validation report of the input data must be generated before it can be
+summarized. (The report content is simplified for readability.)
+
+``` {shell}
+> DIR=./example-directory
+> REPORT=$DIR/report.yml
+> python tools/validate.py data.xlsx --out=$REPORT
+> cat $REPORT
+
+errors:
+- errorType: less_than_min_value
+  tableName: sites
+  columnName: geoLat
+- errorType: less_than_min_value
+  tableName: sites
+  columnName: geoLat
+- errorType: less_than_min_value
+  tableName: sites
+  columnName: geoLat
+warnings:
+- warningType: _coercion
+  tableName: sites
+  columnName: geoLat
+- warningType: _coercion
+  tableName: sites
+  columnName: geoLat
+- warningType: _coercion
+  tableName: sites
+  columnName: geoLat
+```
+
+### Summarize
+
+The following command will summarize the validation report by tables,
+columns and rows, and write the result to the console using markdown
+syntax.
+
+``` {shell}
+> cd tools
+> ./summarize.py $REPORT --by=table --by=column --by=row --format=markdown
+
+# summary
+
+## errors
+
+### table
+
+sites:
+- less_than_min_value: 3
+
+### column
+
+sites:
+- geoLat:
+    - less_than_min_value: 3
+
+### row
+
+sites:
+- 1:
+    - less_than_min_value: 1
+- 2:
+    - less_than_min_value: 1
+- 3:
+    - less_than_min_value: 1
+```
+
+Specifying `--errorLevel=warning` would include warnings as well:
+
+``` {shell}
+## warnings
+
+### table
+
+sites:
+- _coercion: 3
+
+### column
+
+sites:
+- geoLat:
+    - _coercion: 3
+
+### row
+
+sites:
+- 1:
+    - _coercion: 1
+- 2:
+    - _coercion: 1
+- 3:
+    - _coercion: 1
+```
+
+### Summarize to file
+
+The summary can also be written to a file with the `--out` parameter.
+YAML format is implied by the ‘.yml’ file extension.
+
+``` {shell}
+> SUMMARY=$DIR/report-summary.yml
+> cd tools
+> ./summarize.py $REPORT --by=table --by=column --by=row --out=$SUMMARY
+> cat $SUMMARY
+
+errors:
+  table:
+    sites:
+    - less_than_min_value: 3
+  column:
+    sites:
+    - geoLat:
+      - less_than_min_value: 3
+  row:
+    sites:
+      1:
+      - less_than_min_value: 1
+      2:
+      - less_than_min_value: 1
+      3:
+      - less_than_min_value: 1
+```
+
+## Implementation
+
+Under the hood this tool uses the `summarize_report` function, in
+addition to parameter parsing (handled by the `typer` package), and
+normal I/O operations. The implementation should be fairly straight
+forward, as it simply wraps the `summarize_report` function, which also
+handles the `--by` parameter.

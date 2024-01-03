@@ -1,17 +1,17 @@
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" data-content_root="../">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
     <title>Getting started &#8212; PHES-ODM Validation  documentation</title>
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/css/odm-styles.css" />
-    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-    <script src="../_static/doctools.js"></script>
-    <script src="../_static/sphinx_highlight.js"></script>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=4f649999" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css?v=bf1bc15e" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/odm-styles.css?v=c2e4d323" />
+    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -34,16 +34,16 @@
           <div class="body" role="main">
             
   <section id="getting-started">
-<h1>Getting started<a class="headerlink" href="#getting-started" title="Permalink to this heading">¶</a></h1>
+<h1>Getting started<a class="headerlink" href="#getting-started" title="Link to this heading">¶</a></h1>
 <p>The ODM-validation library provides an easy way of checking that your
 data is ODM-compliant by validating it against a rule-based schema.</p>
 <section id="installation">
-<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this heading">¶</a></h2>
+<h2>Installation<a class="headerlink" href="#installation" title="Link to this heading">¶</a></h2>
 <p>The first step is to install the package. You can find instructions
 <a class="reference internal" href="../index-content.html#installation"><span class="std std-ref">here</span></a>.</p>
 </section>
 <section id="code-setup">
-<h2>Code setup<a class="headerlink" href="#code-setup" title="Permalink to this heading">¶</a></h2>
+<h2>Code setup<a class="headerlink" href="#code-setup" title="Link to this heading">¶</a></h2>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># stdlib</span>
 <span class="kn">from</span> <span class="nn">os.path</span> <span class="kn">import</span> <span class="n">join</span>  <span class="c1"># for constructing file paths</span>
 
@@ -58,15 +58,16 @@ data is ODM-compliant by validating it against a rule-based schema.</p>
 </div>
 </section>
 <section id="validation">
-<h2>Validation<a class="headerlink" href="#validation" title="Permalink to this heading">¶</a></h2>
+<h2>Validation<a class="headerlink" href="#validation" title="Link to this heading">¶</a></h2>
 <p>To run the validation you will need your own dataset as a CSV file, and
 a validation schema specific to the version of the ODM you’re using.</p>
 <p>In this example we’ll validate a table of samples with the default
 schema. The <code class="docutils literal notranslate"><span class="pre">validate_data</span></code> can take multiple tables at once, so we
 include our sample table in a Python dictionary with the table name as
 the key. We are validating the <code class="docutils literal notranslate"><span class="pre">samples</span></code> table in this example.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">schema_file</span> <span class="o">=</span> <span class="n">join</span><span class="p">(</span><span class="n">ASSET_DIR</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;validation-schemas/schema-v</span><span class="si">{</span><span class="n">ODM_VERSION_STR</span><span class="si">}</span><span class="s2">.yml&quot;</span><span class="p">)</span>
-<span class="n">schema</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">import_schema</span><span class="p">(</span><span class="n">schema_file</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">schema_name</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;schema-v</span><span class="si">{</span><span class="n">ODM_VERSION_STR</span><span class="si">}</span><span class="s2">.yml&quot;</span>
+<span class="n">schema_path</span> <span class="o">=</span> <span class="n">join</span><span class="p">(</span><span class="n">ASSET_DIR</span><span class="p">,</span> <span class="n">join</span><span class="p">(</span><span class="s2">&quot;validation-schemas&quot;</span><span class="p">,</span> <span class="n">schema_name</span><span class="p">))</span>
+<span class="n">schema</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">import_schema</span><span class="p">(</span><span class="n">schema_path</span><span class="p">)</span>
 <span class="n">samples</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">import_dataset</span><span class="p">(</span><span class="s2">&quot;samples.csv&quot;</span><span class="p">)</span>
 <span class="n">data</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;samples&quot;</span><span class="p">:</span> <span class="n">samples</span><span class="p">}</span>
 <span class="n">report</span> <span class="o">=</span> <span class="n">validate_data</span><span class="p">(</span><span class="n">schema</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
@@ -92,11 +93,11 @@ wrong and where. The message-field has a human-readable summary.</p>
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;- &quot;</span> <span class="o">+</span> <span class="n">e</span><span class="p">[</span><span class="s2">&quot;message&quot;</span><span class="p">])</span>
 </pre></div>
 </div>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>- missing_mandatory_column rule violated in table samples, column collDT, row 1: Missing mandatory column collDT
-- missing_mandatory_column rule violated in table samples, column collNumPer, row 1: Missing mandatory column collNumPer
-- invalid_type rule violated in table samples, column collPer, row 1: Value &quot;asd&quot; has type string but should be of type float or coercable into a float
-- missing_mandatory_column rule violated in table samples, column collType, row 1: Missing mandatory column collType
-- missing_mandatory_column rule violated in table samples, column sampleID, row 1: Missing mandatory column sampleID
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>- missing_mandatory_column rule violated in table samples, column collDT: Missing mandatory column collDT
+- missing_mandatory_column rule violated in table samples, column collNumPer: Missing mandatory column collNumPer
+- invalid_type rule violated in table samples, column collPer, row(s) 1: Value &quot;asd&quot; has type string which is incompatible with float
+- missing_mandatory_column rule violated in table samples, column collType: Missing mandatory column collType
+- missing_mandatory_column rule violated in table samples, column sampleID: Missing mandatory column sampleID
 </pre></div>
 </div>
 <p>The error message starts with the name of the rule that has been broken,
@@ -109,7 +110,7 @@ specifications in the
 directory.</p>
 </section>
 <section id="versioning">
-<h2>Versioning<a class="headerlink" href="#versioning" title="Permalink to this heading">¶</a></h2>
+<h2>Versioning<a class="headerlink" href="#versioning" title="Link to this heading">¶</a></h2>
 <p>ODM version information is an important part of the validation report.
 Consecutive validations by different people may give different results
 depending on their validation-package version, schema version, etc. This
@@ -124,14 +125,14 @@ not specified.</p>
 <span class="nb">print</span><span class="p">(</span><span class="n">report</span><span class="o">.</span><span class="n">data_version</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>0.4.0
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>0.5.0
 2.0.0
 2.0.0
 </pre></div>
 </div>
 </section>
 <section id="schema-generation">
-<h2>Schema generation<a class="headerlink" href="#schema-generation" title="Permalink to this heading">¶</a></h2>
+<h2>Schema generation<a class="headerlink" href="#schema-generation" title="Link to this heading">¶</a></h2>
 <p>You can generate your own validation schema from a CSV file of the parts
 table, using the <code class="docutils literal notranslate"><span class="pre">generate_validation_schema</span></code> function. The version
 parameter determines which version of the ODM the schema will be
@@ -222,7 +223,7 @@ compatible with.</p>
       &copy;2022, OHRI.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 7.0.1</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 7.2.6</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
       
       |

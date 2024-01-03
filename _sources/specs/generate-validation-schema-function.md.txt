@@ -164,12 +164,16 @@ The returned warning object should consist of the following fields:
 
 - warningType: The warning type. Should be set to
   `missing_version1_fields`.
+
 - row: An object containing the row that generated the warning. The row
   object should only include the `partID`, `version1Location`,
   `version1Table`, `version1Variable`, and `version1Category` columns.
+
 - rowNumber: The row number in the dictionary that generated the warning
+
 - message: A string with a human readable version of the warning. The
   message value depends on the column that generated the warning.
+
   - If the warning was generated due to the `version1Location` column
     then the message should be, ‘Skipping row \<row_index\> when
     generating a version 1 schema. Invalid value for version 1 column

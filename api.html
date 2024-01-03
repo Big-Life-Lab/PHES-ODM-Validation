@@ -1,21 +1,21 @@
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" data-content_root="./">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
     <title>API Documentation &#8212; PHES-ODM Validation  documentation</title>
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
-    <link rel="stylesheet" type="text/css" href="_static/css/odm-styles.css" />
-    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-    <script src="_static/doctools.js"></script>
-    <script src="_static/sphinx_highlight.js"></script>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=4f649999" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css?v=bf1bc15e" />
+    <link rel="stylesheet" type="text/css" href="_static/css/odm-styles.css?v=c2e4d323" />
+    <script src="_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="_static/doctools.js?v=888ff710"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="generate_validation_schema" href="specs/generate-validation-schema.html" />
+    <link rel="next" title="generate_validation_schema" href="specs/generate-validation-schema-function.html" />
     <link rel="prev" title="Customizing a Validation Schema" href="examples/schema-additions/schema-additions.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
@@ -34,48 +34,19 @@
           <div class="body" role="main">
             
   <section id="api-documentation">
-<h1>API Documentation<a class="headerlink" href="#api-documentation" title="Permalink to this heading">¶</a></h1>
+<h1>API Documentation<a class="headerlink" href="#api-documentation" title="Link to this heading">¶</a></h1>
 <section id="module-odm_validation.validation">
-<span id="validation"></span><h2>Validation<a class="headerlink" href="#module-odm_validation.validation" title="Permalink to this heading">¶</a></h2>
+<span id="validation"></span><h2>Validation<a class="headerlink" href="#module-odm_validation.validation" title="Link to this heading">¶</a></h2>
 <p>This is the main module of the package. It contains functions for schema
 generation and data validation.</p>
-<dl class="py class">
-<dt class="sig sig-object py" id="odm_validation.validation.RuleFilter">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">RuleFilter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">blacklist</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">whitelist</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#odm_validation.validation.RuleFilter" title="Permalink to this definition">¶</a></dt>
-<dd><p>A rule filter.</p>
-<p>The blacklist takes precedence over the whitelist, and an empty whitelist
-represents all rules.</p>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="odm_validation.validation.RuleFilter.blacklist">
-<span class="sig-name descname"><span class="pre">blacklist</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#odm_validation.validation.RuleFilter.blacklist" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="odm_validation.validation.RuleFilter.enabled">
-<span class="sig-name descname"><span class="pre">enabled</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rule</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Rule</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#odm_validation.validation.RuleFilter.enabled" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns true if the rule <cite>rule_id</cite> is enabled.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="odm_validation.validation.RuleFilter.filter">
-<span class="sig-name descname"><span class="pre">filter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rules</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><span class="pre">Rule</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Iterator</span><span class="p"><span class="pre">[</span></span><span class="pre">Rule</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#odm_validation.validation.RuleFilter.filter" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="odm_validation.validation.RuleFilter.whitelist">
-<span class="sig-name descname"><span class="pre">whitelist</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#odm_validation.validation.RuleFilter.whitelist" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
 <dl class="py function">
 <dt class="sig sig-object py" id="odm_validation.validation.generate_validation_schema">
-<span class="sig-name descname"><span class="pre">generate_validation_schema</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parts</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sets</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">schema_version</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'2.0.0'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">schema_additions</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="headerlink" href="#odm_validation.validation.generate_validation_schema" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">generate_validation_schema</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parts</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sets</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">schema_version</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'2.0.0'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">schema_additions</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="headerlink" href="#odm_validation.validation.generate_validation_schema" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="odm_validation.validation.validate_data">
-<span class="sig-name descname"><span class="pre">validate_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">schema</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_kind</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataKind</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">DataKind.python</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_version</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'2.0.0'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rule_blacklist</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">[]</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ValidationReport</span></span></span><a class="headerlink" href="#odm_validation.validation.validate_data" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">validate_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">schema</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_kind</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataKind</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">DataKind.python</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_version</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'2.0.0'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rule_blacklist</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">RuleId</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">[]</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ValidationReport</span></span></span><a class="headerlink" href="#odm_validation.validation.validate_data" title="Link to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>rule_blacklist</strong> – A list of rule ids to explicitly disable.</p>
@@ -85,52 +56,52 @@ represents all rules.</p>
 
 </section>
 <section id="module-odm_validation.utils">
-<span id="utils"></span><h2>Utils<a class="headerlink" href="#module-odm_validation.utils" title="Permalink to this heading">¶</a></h2>
+<span id="utils"></span><h2>Utils<a class="headerlink" href="#module-odm_validation.utils" title="Link to this heading">¶</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="odm_validation.utils.export_schema">
-<span class="sig-name descname"><span class="pre">export_schema</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">schema</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#odm_validation.utils.export_schema" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">export_schema</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">schema</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#odm_validation.utils.export_schema" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="odm_validation.utils.export_yaml_file">
-<span class="sig-name descname"><span class="pre">export_yaml_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#odm_validation.utils.export_yaml_file" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">export_yaml_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#odm_validation.utils.export_yaml_file" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="odm_validation.utils.import_csv_file">
-<span class="sig-name descname"><span class="pre">import_csv_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#odm_validation.utils.import_csv_file" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">import_csv_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#odm_validation.utils.import_csv_file" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="odm_validation.utils.import_dataset">
-<span class="sig-name descname"><span class="pre">import_dataset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="headerlink" href="#odm_validation.utils.import_dataset" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">import_dataset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="headerlink" href="#odm_validation.utils.import_dataset" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="odm_validation.utils.import_json_file">
-<span class="sig-name descname"><span class="pre">import_json_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="headerlink" href="#odm_validation.utils.import_json_file" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">import_json_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="headerlink" href="#odm_validation.utils.import_json_file" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="odm_validation.utils.import_schema">
-<span class="sig-name descname"><span class="pre">import_schema</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="headerlink" href="#odm_validation.utils.import_schema" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">import_schema</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="headerlink" href="#odm_validation.utils.import_schema" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="odm_validation.utils.import_yaml_file">
-<span class="sig-name descname"><span class="pre">import_yaml_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="headerlink" href="#odm_validation.utils.import_yaml_file" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">import_yaml_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="headerlink" href="#odm_validation.utils.import_yaml_file" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </section>
 <section id="specification">
-<h2>Specification<a class="headerlink" href="#specification" title="Permalink to this heading">¶</a></h2>
+<h2>Specification<a class="headerlink" href="#specification" title="Link to this heading">¶</a></h2>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="specs/generate-validation-schema.html">generate_validation_schema</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="specs/generate-validation-schema.html#context">Context</a></li>
-<li class="toctree-l2"><a class="reference internal" href="specs/generate-validation-schema.html#features">Features</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="specs/generate-validation-schema.html#warnings">Warnings</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="specs/generate-validation-schema.html#missing-version1-fields">missing_version1_fields</a></li>
+<li class="toctree-l1"><a class="reference internal" href="specs/generate-validation-schema-function.html">generate_validation_schema</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="specs/generate-validation-schema-function.html#context">Context</a></li>
+<li class="toctree-l2"><a class="reference internal" href="specs/generate-validation-schema-function.html#features">Features</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="specs/generate-validation-schema-function.html#warnings">Warnings</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="specs/generate-validation-schema-function.html#missing-version1-fields">missing_version1_fields</a></li>
 </ul>
 </li>
 </ul>
@@ -143,9 +114,15 @@ represents all rules.</p>
 <li class="toctree-l3"><a class="reference internal" href="specs/module-functions.html#return">Return</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="specs/module-functions.html#generate-validation-schema">generate_validation_schema</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="specs/module-functions.html#summarize-report">summarize_report</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="specs/module-functions.html#id1">Arguments</a></li>
 <li class="toctree-l3"><a class="reference internal" href="specs/module-functions.html#id2">Return</a></li>
+<li class="toctree-l3"><a class="reference internal" href="specs/module-functions.html#example">Example</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="specs/module-functions.html#generate-validation-schema">generate_validation_schema</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="specs/module-functions.html#id3">Arguments</a></li>
+<li class="toctree-l3"><a class="reference internal" href="specs/module-functions.html#id4">Return</a></li>
 <li class="toctree-l3"><a class="reference internal" href="specs/module-functions.html#logic">Logic</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="specs/module-functions.html#working-with-the-version-parameter">Working with the <code class="docutils literal notranslate"><span class="pre">version</span></code> parameter</a></li>
 <li class="toctree-l4"><a class="reference internal" href="specs/module-functions.html#working-with-the-schema-additions">Working with the schema_additions</a></li>
@@ -161,6 +138,87 @@ represents all rules.</p>
 <li class="toctree-l2"><a class="reference internal" href="specs/odm-how-tos.html#getting-the-version-1-equivalent-for-a-part">Getting the version 1 equivalent for a part</a></li>
 <li class="toctree-l2"><a class="reference internal" href="specs/odm-how-tos.html#checking-if-a-column-is-mandatory-for-a-table">Checking if a column is mandatory for a table</a></li>
 <li class="toctree-l2"><a class="reference internal" href="specs/odm-how-tos.html#getting-the-data-type-for-a-column">Getting the data type for a column</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="specs/summarize-report-function.html">summarize_report</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="specs/summarize-report-function.html#function-signature">Function signature</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="specs/summarize-report-function.html#arguments">Arguments</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="specs/summarize-report-function.html#summarizedreport-object">SummarizedReport object</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="specs/summarize-report-function.html#fields">Fields</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="specs/summarize-report-function.html#overview-data-structure">Overview data-structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="specs/summarize-report-function.html#errorsummary-data-structure">ErrorSummary data-structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="specs/summarize-report-function.html#example-usage">Example usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="specs/summarize-report-function.html#appendix-1">Appendix 1</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="specs/summarize-tool.html">Summarize Tool</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="specs/summarize-tool.html#usage">Usage</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="specs/summarize-tool.html#options">Options</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="specs/summarize-tool.html#examples">Examples</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="specs/summarize-tool.html#validate">Validate</a></li>
+<li class="toctree-l3"><a class="reference internal" href="specs/summarize-tool.html#summarize">Summarize</a></li>
+<li class="toctree-l3"><a class="reference internal" href="specs/summarize-tool.html#summarize-to-file">Summarize to file</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="specs/summarize-tool.html#implementation">Implementation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="specs/summary-report.html">Summary Report</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="specs/summary-report.html#context">Context</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="specs/summary-report.html#the-validation-schema">The validation schema</a></li>
+<li class="toctree-l3"><a class="reference internal" href="specs/summary-report.html#the-dataset">The dataset</a></li>
+<li class="toctree-l3"><a class="reference internal" href="specs/summary-report.html#the-validation-report">The validation report</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="specs/summary-report.html#specifications">Specifications</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="specs/summary-report.html#summarizing-by-table">Summarizing by table</a></li>
+<li class="toctree-l3"><a class="reference internal" href="specs/summary-report.html#summarizing-by-row">Summarizing by row</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="specs/summary-report.html#summarizing-by-column">Summarizing by column</a></li>
+<li class="toctree-l2"><a class="reference internal" href="specs/summary-report.html#default-summarization">Default summarization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="specs/summary-report.html#printing-a-summary">Printing a summary</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="specs/validate-tool.html">Validate Tool</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="specs/validate-tool.html#usage">Usage</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="specs/validate-tool.html#arguments">Arguments</a></li>
+<li class="toctree-l3"><a class="reference internal" href="specs/validate-tool.html#options">Options</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="specs/validate-tool.html#examples">Examples</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="specs/validation-rule.html">Standardized Validation Rule API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="specs/validation-rule.html#audience">Audience</a></li>
+<li class="toctree-l2"><a class="reference internal" href="specs/validation-rule.html#context">Context</a></li>
+<li class="toctree-l2"><a class="reference internal" href="specs/validation-rule.html#design-approach">Design Approach</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="specs/validation-rule.html#rule-processes">Rule processes</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="specs/validation-rule.html#generating-a-schema">Generating a schema</a></li>
+<li class="toctree-l4"><a class="reference internal" href="specs/validation-rule.html#validating-data">Validating data</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="specs/validation-rule.html#specifications">Specifications</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="specs/validation-rule.html#the-validationrule-class">The <code class="docutils literal notranslate"><span class="pre">ValidationRule</span></code> class</a></li>
+<li class="toctree-l3"><a class="reference internal" href="specs/validation-rule.html#get-schema-keys-and-gen-schema-values"><code class="docutils literal notranslate"><span class="pre">get_schema_keys</span></code> and <code class="docutils literal notranslate"><span class="pre">gen_schema_values</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="specs/validation-rule.html#validate-data"><code class="docutils literal notranslate"><span class="pre">validate_data</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="specs/validation-rule.html#gen-report"><code class="docutils literal notranslate"><span class="pre">gen_report</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="specs/validation-rule.html#transformed"><code class="docutils literal notranslate"><span class="pre">transformed</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="specs/validation-rule.html#two-methods-for-schema-generation">Two methods for schema generation?</a></li>
+<li class="toctree-l4"><a class="reference internal" href="specs/validation-rule.html#working-with-self">Working with <code class="docutils literal notranslate"><span class="pre">self</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="specs/validation-rule.html#the-report-object">The Report object</a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="specs/versioning.html">Versioning</a><ul>
@@ -216,7 +274,7 @@ represents all rules.</p>
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
       <li>Previous: <a href="examples/schema-additions/schema-additions.html" title="previous chapter">Customizing a Validation Schema</a></li>
-      <li>Next: <a href="specs/generate-validation-schema.html" title="next chapter">generate_validation_schema</a></li>
+      <li>Next: <a href="specs/generate-validation-schema-function.html" title="next chapter">generate_validation_schema</a></li>
   </ul></li>
 </ul>
 </div>
@@ -246,7 +304,7 @@ represents all rules.</p>
       &copy;2022, OHRI.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 7.0.1</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 7.2.6</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
       
       |

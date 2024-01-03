@@ -1,17 +1,17 @@
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" data-content_root="../">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
     <title>missing_mandatory_column &#8212; PHES-ODM Validation  documentation</title>
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/css/odm-styles.css" />
-    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-    <script src="../_static/doctools.js"></script>
-    <script src="../_static/sphinx_highlight.js"></script>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=4f649999" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css?v=bf1bc15e" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/odm-styles.css?v=c2e4d323" />
+    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -34,7 +34,7 @@
           <div class="body" role="main">
             
   <section id="missing-mandatory-column">
-<h1>missing_mandatory_column<a class="headerlink" href="#missing-mandatory-column" title="Permalink to this heading">¶</a></h1>
+<h1>missing_mandatory_column<a class="headerlink" href="#missing-mandatory-column" title="Link to this heading">¶</a></h1>
 <p>This rule checks if the rows of each table contains its mandatory
 columns. For example, the <code class="docutils literal notranslate"><span class="pre">addID</span></code> column is mandatory for the
 <code class="docutils literal notranslate"><span class="pre">addresses</span></code> table. The following address table row,</p>
@@ -55,7 +55,7 @@ validation,</p>
 └───────────────────────────────────┴─────────────────────────────────────────────────────────────────────────────┘
 </pre>
 <section id="error-report">
-<h2>Error report<a class="headerlink" href="#error-report" title="Permalink to this heading">¶</a></h2>
+<h2>Error report<a class="headerlink" href="#error-report" title="Link to this heading">¶</a></h2>
 <p>The error report will have the following fields</p>
 <ul class="simple">
 <li><p><strong>errorType</strong>: missing_mandatory_column</p></li>
@@ -86,7 +86,7 @@ by this row</p></li>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'addressesRequired'</span>: <span style="color: #008000; text-decoration-color: #008000">'mandatory'</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="font-weight: bold">}</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="font-weight: bold">]</span>,
-<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'message'</span>: <span style="color: #008000; text-decoration-color: #008000">'missing_mandatory_column rule violated in table addresses, column addID, row 1: Missing mandatory column addID'</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'message'</span>: <span style="color: #008000; text-decoration-color: #008000">'missing_mandatory_column rule violated in table addresses, column addID: Missing mandatory column addID'</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="font-weight: bold">}</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="font-weight: bold">]</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="color: #008000; text-decoration-color: #008000">'warnings'</span>: <span style="font-weight: bold">[]</span>
@@ -94,7 +94,7 @@ by this row</p></li>
 </pre>
 </section>
 <section id="rule-metadata">
-<h2>Rule metadata<a class="headerlink" href="#rule-metadata" title="Permalink to this heading">¶</a></h2>
+<h2>Rule metadata<a class="headerlink" href="#rule-metadata" title="Link to this heading">¶</a></h2>
 <p>All the metadata for this rule is contained in the parts sheet in the
 data dictionary. The relevant columns are:</p>
 <ul>
@@ -134,7 +134,7 @@ mandatory for a table</p>
 </pre>
 </section>
 <section id="cerberus-schema">
-<h2>Cerberus Schema<a class="headerlink" href="#cerberus-schema" title="Permalink to this heading">¶</a></h2>
+<h2>Cerberus Schema<a class="headerlink" href="#cerberus-schema" title="Link to this heading">¶</a></h2>
 <p>The generated cerberus object for the example above is shown below,</p>
 <pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="font-weight: bold">{</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="color: #008000; text-decoration-color: #008000">'schemaVersion'</span>: <span style="color: #008000; text-decoration-color: #008000">'2.0.0'</span>,
@@ -204,7 +204,7 @@ mandatory for a table</p>
 are: * partID * &lt;table_name&gt; * &lt;table_name&gt;Required</p>
 </section>
 <section id="version-1">
-<h2>Version 1<a class="headerlink" href="#version-1" title="Permalink to this heading">¶</a></h2>
+<h2>Version 1<a class="headerlink" href="#version-1" title="Link to this heading">¶</a></h2>
 <p>We need three pieces of information to make the cerberus schema for
 version 1:</p>
 <ol class="arabic simple">
@@ -339,6 +339,7 @@ include the rows for version 2 along with the <code class="docutils literal notr
 <li class="toctree-l2"><a class="reference internal" href="greater_than_max_length.html">greater_than_max_length</a></li>
 <li class="toctree-l2"><a class="reference internal" href="greater_than_max_value.html">greater_than_max_value</a></li>
 <li class="toctree-l2"><a class="reference internal" href="invalid_category.html">invalid_category</a></li>
+<li class="toctree-l2"><a class="reference internal" href="invalid_email.html">invalid_email</a></li>
 <li class="toctree-l2"><a class="reference internal" href="invalid_type.html">invalid_type</a></li>
 <li class="toctree-l2"><a class="reference internal" href="less_than_min_length.html">less_than_min_length</a></li>
 <li class="toctree-l2"><a class="reference internal" href="less_than_min_value.html">less_than_min_value</a></li>
@@ -389,7 +390,7 @@ include the rows for version 2 along with the <code class="docutils literal notr
       &copy;2022, OHRI.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 7.0.1</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 7.2.6</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
       
       |
