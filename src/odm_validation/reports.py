@@ -1,13 +1,13 @@
 import datetime
-from collections import defaultdict
 from dataclasses import dataclass, field
 from enum import Enum
 from typing import Any, Dict, List, Optional, Set
+from typing_extensions import TypedDict
 # from pprint import pprint
 
 import part_tables as pt
 from input_data import DataKind
-from rules import RuleId, COERCION_RULE_ID
+from rules import RuleId
 from stdext import (
     get_len,
     quote,
@@ -26,7 +26,7 @@ class ErrorCtx:
     column_meta: dict
     row_numbers: List[int]
     rows: List[dict]
-    rule_id: str
+    rule_id: RuleId
     table_id: str
     value: Any
 
@@ -36,23 +36,12 @@ class ErrorCtx:
     data_kind: DataKind = DataKind.python
     err_template: str = ''
     is_column: bool = False
+    verbosity: int = 2
 
 
-class TableSummary:
-    error_counts: Dict[RuleId, int]
-
-    def __init__(self):
-        self.error_counts = defaultdict(int)
-
-
-class ValidationSummary:
-    table_summaries: Dict[pt.TableId, TableSummary]
-
-    def __init__(self):
-        self.table_summaries = defaultdict(TableSummary)
-
-    def record_error(self, table_id, rule_id):
-        self.table_summaries[table_id].error_counts[rule_id] += 1
+class TableInfo(TypedDict):
+    columns: int
+    rows: int
 
 
 @dataclass(frozen=True)
@@ -60,12 +49,30 @@ class ValidationReport:
     data_version: str
     schema_version: str
     package_version: str
-    errors: List[str]
-    warnings: List[str]
-    summary: ValidationSummary
+    table_info: Dict[pt.TableId, TableInfo]
+    errors: List[dict]
+    warnings: List[dict]
 
     def valid(self) -> bool:
         return len(self.errors) == 0
+
+
+def join_reports(a, b: ValidationReport) -> ValidationReport:
+    """Joins two reports together into a new report."""
+    if a is None:
+        assert b is not None
+        return b
+    assert a.data_version == b.data_version
+    assert a.schema_version == b.schema_version
+    assert a.package_version == b.package_version
+    return ValidationReport(
+        data_version=a.data_version,
+        schema_version=a.schema_version,
+        package_version=a.package_version,
+        table_info={**a.table_info, **b.table_info},
+        errors=(a.errors + b.errors),
+        warnings=(a.warnings + b.warnings),
+    )
 
 
 def _fmt_list(items: list) -> str:
@@ -128,31 +135,57 @@ def _gen_error_msg(ctx: ErrorCtx, template: Optional[str] = None,
     #   the text otherwise.
     verb = 'violated' if error_kind == ErrorKind.ERROR else 'triggered'
 
-    # prefix gen
-    prefix = ('{rule_id} rule ' + verb + ' in '
-              'table {table_id}, column {column_id}')
-    if not (ctx.is_column and ctx.data_kind == DataKind.spreadsheet):
-        if len(ctx.row_numbers) == 1:
-            prefix += ', row '
-        else:
-            prefix += ', rows '
-        prefix += '{row_num}'
-    prefix += ': '
+    # prefix and suffix, with increasing verbosity
+    is_col = ctx.is_column
+    verbosity_xfix = [
+        {
+            'prefix': '{table_id}({column_id}',
+            'prefix_end': ('' if is_col else ', {row_num}') + '): ',
+            'suffix': ' [{rule_id}]',
+        },
+        {},  # same as prev level, just with messages
+        {
+            'prefix': ('{rule_id} rule ' + verb + ' in table {table_id}, '
+                       'column {column_id}'),
+            'prefix_end': ('' if is_col else ', row(s) {row_num}') + ': ',
+            'suffix': '',
+        },
+    ]
+    verbosity_xfix[1] = verbosity_xfix[0]
+    xfix = verbosity_xfix[ctx.verbosity]
 
     if not template:
         template = ctx.err_template
-    template = prefix + template
+    if ctx.verbosity == 0:
+        template = ''
+    template = xfix['prefix'] + xfix['prefix_end'] + template + xfix['suffix']
     return template.format(
         allowed_values=_fmt_allowed_values(ctx.allowed_values),
         column_id=ctx.column_id,
         constraint=_fmt_msg_value(ctx.constraint, relaxed=True),
         row_num=_fmt_list(ctx.row_numbers),
-        rule_id=ctx.rule_id,
+        rule_id=ctx.rule_id.name,
         table_id=ctx.table_id,
         value=_fmt_msg_value(ctx.value),
         value_len=get_len(ctx.value),
         value_type=type_name(type(ctx.value))
     )
+
+
+def get_error_kind(report_error) -> ErrorKind:
+    if 'warningType' in report_error:
+        return ErrorKind.WARNING
+    else:
+        return ErrorKind.ERROR
+
+
+def get_error_type_field_name(error_kind: ErrorKind) -> str:
+    return error_kind.value + 'Type'
+
+
+def get_error_rule_id(report_error: dict, error_kind: ErrorKind) -> RuleId:
+    rule_name = report_error[get_error_type_field_name(error_kind)]
+    return RuleId[rule_name]
 
 
 def gen_rule_error(ctx: ErrorCtx,
@@ -165,7 +198,7 @@ def gen_rule_error(ctx: ErrorCtx,
     rule_ids = _get_meta_rule_ids(ctx.column_meta)
     rule_fields = pt.get_validation_rule_fields(ctx.column_meta, rule_ids)
     error = {
-        (kind.value + 'Type'): ctx.rule_id,
+        (get_error_type_field_name(kind)): ctx.rule_id.name,
         'tableName': ctx.table_id,
         'columnName': ctx.column_id,
         'validationRuleFields': _fmt_dataset_values(rule_fields),
@@ -194,7 +227,7 @@ def gen_rule_error(ctx: ErrorCtx,
         error['invalidValue'] = _fmt_value(ctx.value)
 
     # coercion
-    if ctx.rule_id == COERCION_RULE_ID:
+    if ctx.rule_id == RuleId._coercion:
         error['coercionRules'] = rule_ids
 
     return error

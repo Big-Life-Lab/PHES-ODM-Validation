@@ -15,9 +15,21 @@
                     "partID": "geoLat",
                     "sites": "header",
                     "sitesRequired": "mandatory"
+                },
+                {
+                    "partID": "NA",
+                    "partType": "missingness"
+                },
+                {
+                    "partID": "NA_missing",
+                    "partType": "missingness"
+                },
+                {
+                    "partID": "null",
+                    "partType": "missingness"
                 }
             ],
-            "message": "missing_values_found rule triggered in table sites, column geoLat, row 1: Missing value \"NA\""
+            "message": "missing_values_found rule triggered in table sites, column geoLat, row(s) 1: Missing value \"NA\""
         }
     ],
     "errors": []

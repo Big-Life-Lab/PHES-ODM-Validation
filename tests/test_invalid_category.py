@@ -4,6 +4,7 @@ from os.path import join
 
 import common
 import utils
+from rules import RuleId
 from validation import _generate_validation_schema_ext, validate_data
 
 asset_dir = join(common.root_dir,
@@ -32,7 +33,7 @@ class TestInvalidCategory(common.OdmTestCase):
     @classmethod
     def setUpClass(cls):
         cls.maxDiff = None
-        cls.whitelist = ['invalid_category']
+        cls.whitelist = [RuleId.invalid_category]
 
     def test_schema_generation_v1(self):
         # XXX: The part 'tp24s' should not be included, since it doesn't belong

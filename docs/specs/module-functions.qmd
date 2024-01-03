@@ -13,7 +13,10 @@ Validates an ODM dataset.
 
 ### Arguments
 
-1. `schema`: The rules to validate the data against. This is a dictionary that contains a [cerberus](https://docs.python-cerberus.org/en/stable/) schema object, as well as the odm-version it's based on. The cerberus schema object should ideally be generated using the `generate_validation_schema` function.
+1. `schema`: The rules to validate the data against. This is a dictionary that
+   contains a [cerberus](https://docs.python-cerberus.org/en/stable/) schema
+   object, as well as the odm-version it's based on. The cerberus schema object
+   should ideally be generated using the `generate_validation_schema` function.
 
     `type`: A Python dictionary with the following fields
 
@@ -55,7 +58,9 @@ Validates an ODM dataset.
 
 2. `data`: The ODM data to be validated.
 
-    * `type`: A Python dictionary whose keys are the names of the tables as contained in the ODM data dictionary and values is a list containing the table rows.
+    * `type`: A Python dictionary whose keys are the names of the tables as
+      contained in the ODM data dictionary and values is a list containing the
+      table rows.
 
         Example
 
@@ -108,25 +113,71 @@ Validates an ODM dataset.
 
 Returns a dictionary with the found errors and warnings.
 
-All errors and warnings for each validation rule are documented in the [specification for each validation rule](../validation-rules/).
+All errors and warnings for each validation rule are documented in the
+[specification for each validation rule](../validation-rules/).
 
 * type: A Python dictionary consisting of the following fields
     * `data_version`: string consisting of the version of the ODM data
     * `schema_version`: string consisting of the version of the validation schema used
     * `package_version`: string consisting of the version of the validation package used
-    * `errors`: A list of Python dictionaries describing each error. For more information refer to the files in the [validation-rules](../validation-rules/) folder
+    * `table_info`: A Python dictionary mapping all validated table(-ids) to
+      their column/row counts.
+    * `errors`: A list of Python dictionaries describing each error. For more
+      information refer to the files in the
+      [validation-rules](../validation-rules/) folder
     * `warnings`: A list of Python dictionaries describing each warning.
 
-## generate_validation_schema
+## summarize_report
 
-Generates the cerberus schema containing the validation rules to be used with the `validate_data` function.
+Summarizes the validation report.
 
 ### Arguments
 
-1. `parts`: The ODM data dictionary [excel
-sheet](https://github.com/Big-Life-Lab/PHES-ODM/tree/V2.0.0-rc.3/dictionary-tables) 'parts'.
+1. `report`: A validation report returned from `validate_data`.
 
-    * `type`: A dictionary whose keys are the sheet names and values is a list containing the sheet rows. Currently the parts and sets sheet are required.
+   - type: A `ValidationReport` object.
+
+2. `by`: Specifies what to summarize by. Defaults to `table`.
+
+   - type: A Python enumeration with the values `(table, column, row)`.
+
+### Return
+
+Returns a summarized version of `report`.
+
+- type: A `SummarizedReport` object with the following fields and methods:
+    * `data_version`: string consisting of the version of the ODM data
+    * `schema_version`: string consisting of the version of the validation schema used
+    * `package_version`: string consisting of the version of the validation package used
+    - `overview`: A Python dictionary with a general overview.
+    - `errors`: A Python dictionary with the error summaries.
+    - `warnings`: A python dictionary with the warning summaries.
+
+### Example
+
+```{python}
+#| eval: false
+report = validate_data(...)
+summary = summarize_report(report)
+pprint(summary.overview)
+```
+
+See the [summarize-report-function](summarize-report-function.md) spec for more details.
+
+## generate_validation_schema
+
+Generates the cerberus schema containing the validation rules to be used with
+the `validate_data` function.
+
+### Arguments
+
+1. `parts`: The ODM data dictionary
+   [excel sheet](https://github.com/Big-Life-Lab/PHES-ODM/tree/V2.0.0-rc.3/dictionary-tables)
+   'parts'.
+
+    * `type`: A dictionary whose keys are the sheet names and values is a list
+      containing the sheet rows. Currently the parts and sets sheet are
+      required.
 
         Example
 
@@ -151,9 +202,13 @@ sheet](https://github.com/Big-Life-Lab/PHES-ODM/tree/V2.0.0-rc.3/dictionary-tabl
         }
         ```
 
-2. `sets`: The ODM data dictionary [excel sheet](https://github.com/Big-Life-Lab/PHES-ODM/tree/V2.0.0-rc.3/dictionary-tables) 'sets'.
+2. `sets`: The ODM data dictionary
+   [excel sheet](https://github.com/Big-Life-Lab/PHES-ODM/tree/V2.0.0-rc.3/dictionary-tables)
+   'sets'.
 
-    * `type`: A dictionary whose keys are the sheet names and values is a list containing the sheet rows. Currently the parts and sets sheet are required.
+    * `type`: A dictionary whose keys are the sheet names and values is a list
+      containing the sheet rows. Currently the parts and sets sheet are
+      required.
 
         Example
 
@@ -173,11 +228,13 @@ sheet](https://github.com/Big-Life-Lab/PHES-ODM/tree/V2.0.0-rc.3/dictionary-tabl
         }
         ```
 
-3. `schema_version`: Optional version of the ODM dictionary the cerberus schema is for.
+3. `schema_version`: Optional version of the ODM dictionary the cerberus schema
+   is for.
 
     * `type`: A string representing the version of the ODM to use.
 
-4. `schema_additions`: Optional argument which allows the user to update the cerberus schema with additional validations
+4. `schema_additions`: Optional argument which allows the user to update the
+   cerberus schema with additional validations
 
     * `type`: A dictionary containing the updates. The shape is shown below,
 
@@ -201,7 +258,8 @@ Return a dictionary that contains:
  2. The ODM dataset version the schema is for and
  3. A list of warnings generated during the generation process.
 
- Values from the ODM data dictionary will also be added to the `meta` field for debugging purposes.
+ Values from the ODM data dictionary will also be added to the `meta` field for
+ debugging purposes.
 
 Example
 
@@ -245,13 +303,20 @@ Example
 
 #### Working with the `version` parameter
 
-The cerberus schema for a part should be added only if it is active for the provided `version` argument. To see whether a part is valid for a version, the `status`, `firstReleased`, and `lastUpdated` fields are used.
+The cerberus schema for a part should be added only if it is active for the
+provided `version` argument. To see whether a part is valid for a version, the
+`status`, `firstReleased`, and `lastUpdated` fields are used.
 
-* The `status` field can take one of two values, `active` or `depreciated`. `active` says that a part is currently being actively used while `depreciated` says the opposite.
-* The `firstReleased` and `lastUpdated` fields has the version of the ODM when the part was first added and last changed respectively.
-* The `changes` field is used to describe the changes made from one version to another.
+* The `status` field can take one of two values, `active` or `depreciated`.
+  `active` says that a part is currently being actively used while
+  `depreciated` says the opposite.
+* The `firstReleased` and `lastUpdated` fields has the version of the ODM when
+  the part was first added and last changed respectively.
+* The `changes` field is used to describe the changes made from one version to
+  another.
 
-The validation metadata for a part should only be used if it was active for the version in the `version` argument.
+The validation metadata for a part should only be used if it was active for the
+version in the `version` argument.
 
 Example of an `odm_data_dictionary` parameter is shown below,
 
@@ -284,10 +349,16 @@ Example of an `odm_data_dictionary` parameter is shown below,
 }
 ```
 
-* The addresses part is currently active (status = 'active') and should only be included in version 2 since it was first released (firstReleased = '2') then.
-* The `comp3` part was depreciated in version 2 (status = 'depreciated' and lastUpdated = '2') and should only be included in version 1 (firstReleased = '1')
+* The addresses part is currently active (status = 'active') and should only be
+  included in version 2 since it was first released (firstReleased = '2') then.
+* The `comp3` part was depreciated in version 2 (status = 'depreciated' and
+  lastUpdated = '2') and should only be included in version 1 (firstReleased =
+  '1')
 
-For the sets sheet, the versioning fields (`firstReleased` and `lastUpdated`) define the dictionary version when a part was added to a set. These values can be different from the versioning fields in the parts sheet. For example, consider the following ODM snippet,
+For the sets sheet, the versioning fields (`firstReleased` and `lastUpdated`)
+define the dictionary version when a part was added to a set. These values can
+be different from the versioning fields in the parts sheet. For example,
+consider the following ODM snippet,
 
 ```python
 {
@@ -331,15 +402,23 @@ It defines,
 
 * A table called `samples`
 * A column in the `samples` table called `collType`
-* A part called `comp8r` which is a measure and which is a category in the `collType` column
+* A part called `comp8r` which is a measure and which is a category in the
+  `collType` column
 
-However, notice that `comp8r` was only added as a category for the `collType` column in version 2. This can be seen from its entry in the sets sheet where it was `firstReleased` in version 2. For version 1, although a part was defined for it, it was not a category for `collType` only from version 2 onwards.
+However, notice that `comp8r` was only added as a category for the `collType`
+column in version 2. This can be seen from its entry in the sets sheet where it
+was `firstReleased` in version 2. For version 1, although a part was defined
+for it, it was not a category for `collType` only from version 2 onwards.
 
-Version 2 of the dictionary renamed certain part pieces, for example, the `WWMeasures` table was renamed to `measures` in version 2. To be backcompatible with version 1, columns were added to the parts list to document their version 1 equivalents. These columns are documented where necessary in the spec.
+Version 2 of the dictionary renamed certain part pieces, for example, the
+`WWMeasures` table was renamed to `measures` in version 2. To be backcompatible
+with version 1, columns were added to the parts list to document their version
+1 equivalents. These columns are documented where necessary in the spec.
 
 #### Working with the schema_additions
 
-Currently, the function only supports updating the following cerberus validation rules,
+Currently, the function only supports updating the following cerberus
+validation rules,
 
 * [allowed](https://docs.python-cerberus.org/en/stable/validation-rules.html#allowed)
 
@@ -368,7 +447,9 @@ The corresponding validation schema should be,
 pprint_yaml_file(asset("schema-1.yml"))
 ```
 
-Care should be taken to perform an update and not an overwrite of the `allowed` field if the schema already contains an `allowed` field for that column. For example for the arguments below,
+Care should be taken to perform an update and not an overwrite of the `allowed`
+field if the schema already contains an `allowed` field for that column. For
+example for the arguments below,
 
 parts =
 

@@ -1,0 +1,178 @@
+# summarize_report
+
+This document specifies the implementation the `summarize_report` function, based
+on the [summary report](summary-report.md) specification.
+
+The `summarize_report` function is used to transform the report outputted from
+`validate_data` into a summarized report. It can summarize by multiple
+categories.
+
+## Function signature
+
+```
+def summarize_report(report: ValidationReport,
+                     by: Set[SummaryKey] = {SummaryKey.table}
+                     ) -> SummarizedReport
+```
+
+### Arguments
+
+- `report`: a validation report returned from `validate_data`
+- `by`: a set of keys to summarize by. The full set consists of the keys
+  (table, column, row). An error/warning summarization will be performed for
+  each group/key specified. Defaults to `table`.
+
+## SummarizedReport object
+
+This is the summarized report object returned from the function.
+
+```
+class SummarizedReport:
+    data_version: str
+    schema_version: str
+    package_version: str
+    overview: dict
+    errors: dict
+    warnings: dict
+```
+
+### Fields
+
+The following fields are shared with `ValidationReport` (and documented [here](module-functions.md#validate_data)):
+
+- data_version
+- schema_version
+- package_version
+
+The remaining fields are unique to the summarized report:
+
+- `overview` contains a high level summary of the summarized data. It is
+  specified [below](#overview-data-structure).
+
+- `errors` and `warnings` contains summarizations grouped by the keys specified
+  when calling the function. It is specified [below](#errorsummary-data-structure).
+
+## Overview data-structure
+
+The overview holds the most basic information about the validation:
+
+- number of columns and rows per table
+- number of errors/warnings per rule
+
+It should be separated from the error-summary to simplify
+implementation and because the summary report should have this info regardless
+of which keys are summarized by.
+
+The table information is taken from the validation report's `table_info` field.
+
+```
+overview = {
+    'tables': {
+        'addresses': {
+            'columns': 2,
+            'rows': 6,
+            'rules': {
+                'x': 4,
+                'y': 2,
+            }
+        }
+    },
+    'errors': {
+        'x': 4,
+        'y': 2,
+    },
+    'warnings': {
+    }
+}
+```
+
+## ErrorSummary data-structure
+
+use a flat table approach, where each table has a list of 'summary objects'
+with the appropriate fields for the selected group key,
+
+```
+class SummaryEntry:
+    ruleId: RuleId
+    count: int
+
+    key: SummaryKey
+    """The group/summary-key this entry is summarized by."""
+
+    value: str
+    """Id of the entity in group `key` that this entry is derived from. This
+    corresponds to the table-id when grouping by `table`, the column-id when
+    grouping by `column`, etc."""
+
+E = SummaryEntry
+
+ErrorSummary = Dict[TableId, List[E]]
+
+errors: ErrorSummary = {
+    'addresses': [
+        E(ruleId='x', count=4, key='table',  value='addresses'),
+        E(ruleId='y', count=2, key='table',  value='addresses'),
+        E(ruleId='x', count=1, key='column', value='addId'),
+        E(ruleId='y', count=2, key='column', value='addId'),
+        E(ruleId='x', count=3, key='column', value='addL1'),
+        E(ruleId='x', count=2, key='row',    value='1'),
+        E(ruleId='y', count=1, key='row',    value='1'),
+        E(ruleId='x', count=2, key='row',    value='2'),
+        E(ruleId='y', count=1, key='row',    value='2'),
+
+        E(ruleId='_all', count=6, key='table',  value='addresses'),
+        E(ruleId='_all', count=3, key='column', value='addId'),
+        E(ruleId='_all', count=3, key='column', value='addL1'),
+        E(ruleId='_all', count=3, key='row',    value='1'),
+        E(ruleId='_all', count=3, key='row',    value='2'),
+    ]
+}
+```
+
+This enables the user to use their own select/filter functions on the data as
+it has a flat table form.
+
+The main reasons for choosing this structure is:
+
+- Users can easily transform the data to fit their needs, as its a flat table.
+- Multiple groupings can be included in the same dataset (table, column, etc.).
+- It's less complex than its corresponding tree-representation.
+
+See [Appendix 1](#Appendix-1) for an alternative tree-based implementation.
+
+## Example usage
+
+```
+report = validate_data(...)
+summary = summarize_report(report, by=column)
+```
+
+See [summarize-tool](summarize-tool.md) for more examples of how the summary
+generation may be used in practice.
+
+## Appendix 1
+
+This is an alternative data-structure for representing the error summary.
+
+```
+Count = int
+ErrorSummary = Dict[TableId, Dict[SummaryKey, Dict[str, Count]]]
+
+errors: ErrorSummary = {
+    'addresses': {
+        table: {'x': 4, 'y': 2, '_all': 6},
+        column: {
+            'addId': {'x': 1, 'y': 2, '_all': 3},
+            'addL1': {'x': 3, '_all': 3},
+        },
+        row: {
+            '1': {'x': 2, 'y': 1, '_all': 3},
+            '2': {'x': 2, 'y': 1, '_all': 3},
+        }
+    }
+}
+```
+
+The main advantage of this data-structure is that it can be iterated and used
+directly without performing additional transforms; however, the inner structure
+of the table-key is not consistent with the other keys.

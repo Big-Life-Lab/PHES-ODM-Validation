@@ -4,7 +4,7 @@ from dataclasses import dataclass
 from datetime import datetime
 from typing import Any, Dict, List, Set, Tuple
 from copy import deepcopy
-# from pprint import pprint
+from pprint import pformat
 
 from cerberus import Validator
 from cerberus.errors import ErrorDefinition
@@ -13,7 +13,7 @@ import part_tables as pt
 import reports
 from input_data import DataKind
 from reports import get_row_num
-from rules import COERCION_RULE_ID
+from rules import RuleId
 from part_tables import Dataset, Row
 from schemas import CerberusSchema
 from stdext import (
@@ -100,10 +100,11 @@ class ContextualCoercer(Validator):
         self._config["offset"] = offset
         self._config["data_kind"] = data_kind
         if not super().validate(document):
-            logging.error(self.errors, stack_info=True)
+            logging.error(__name__ + '.coerce:\n' + pformat(self.errors))
         return self._config["coerced_document"]
 
     def _log_coercion(self, kind, ctx):
+        # set `errors` and `warnings`
         entry = reports.gen_coercion_error(ctx, kind)
         self._config[kind.value + 's'].append(entry)
 
@@ -122,7 +123,7 @@ class ContextualCoercer(Validator):
         row = self.document
         column_meta = self.schema[field].get('meta')
         ctx = reports.ErrorCtx(
-            rule_id=COERCION_RULE_ID,
+            rule_id=RuleId._coercion,
             cerb_type_name=type_name(type_class),
             column_id=field,
             column_meta=column_meta,

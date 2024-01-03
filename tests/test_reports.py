@@ -110,7 +110,7 @@ class TestReports(common.OdmTestCase):
         table_schema['addID'] = {'max': 1, 'type': 'integer'}
         data = {'addresses': [{'addID': '123'}]}
         report = validate_data(schema, data, data_kind=DataKind.spreadsheet)
-        self.assertTrue(', row 2: ' in report.errors[0]['message'], report)
+        self.assertTrue(', row(s) 2: ' in report.errors[0]['message'], report)
 
     def test_spreadsheet_column_error_does_not_have_row_prefix(self):
         schema = deepcopy(base_schema)

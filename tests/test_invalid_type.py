@@ -6,6 +6,7 @@ from parameterized import parameterized, parameterized_class
 
 import common
 from common import asset, root_dir, param_range
+from rules import RuleId
 from utils import (
     import_dataset,
     import_json_file,
@@ -15,8 +16,8 @@ from validation import _generate_validation_schema_ext, _validate_data_ext
 
 
 class Assets():
-    def __init__(self, rule_id: str, kind: str, table: str):
-        rule_dirname = rule_id.replace('_', '-')
+    def __init__(self, rule_id: RuleId, kind: str, table: str):
+        rule_dirname = rule_id.name.replace('_', '-')
         common.ASSET_DIR = join(root_dir,
                                 f'assets/validation-rules/{rule_dirname}')
 
@@ -60,7 +61,7 @@ class Assets():
     {'kind': 'integer', 'table': 'sites'},
 ])
 class TestInvalidType(common.OdmTestCase):
-    rule_id = 'invalid_type'
+    rule_id = RuleId.invalid_type
     kind: str  # asset datatype name
     table: str  # asset table name
 

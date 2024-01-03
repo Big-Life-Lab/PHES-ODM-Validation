@@ -6,6 +6,7 @@ from parameterized import parameterized
 
 import common
 from common import asset, root_dir, param_range
+from rules import RuleId
 from utils import (
     import_json_file,
     import_schema,
@@ -43,7 +44,8 @@ class TestSchemaAdditions(common.OdmTestCase):
     def setUpClass(cls):
         cls.maxDiff = None
         cls.assets = Assets()
-        cls.whitelist = ['invalid_category', 'missing_mandatory_column']
+        cls.whitelist = [RuleId.invalid_category,
+                         RuleId.missing_mandatory_column]
 
     @parameterized.expand(param_range(1, 3))
     def test_schema_generation(self, i):

@@ -1,12 +1,13 @@
 """Part-table definitions."""
 
+import inspect
 import os
 import re
 import sys
 from dataclasses import dataclass
 from enum import Enum
 from logging import error, info, warning
-from os.path import join, normpath
+from os.path import join
 from pathlib import Path
 from semver import Version
 from typing import DefaultDict, Dict, List, Optional, Set, Tuple
@@ -82,14 +83,30 @@ class OdmData:
     mappings: Dict[PartId, List[PartId]]  # v1 mapping, by part id
 
 
+def _get_asset_dir() -> str:
+    """returns a list of odm-validation schema file paths"""
+    mod = sys.modules[__name__]
+    mod_path = inspect.getfile(mod)
+    mod_dir = os.path.dirname(mod_path)
+    asset_dir = os.path.join(mod_dir, 'assets')
+
+    # If the `asset_dir` path doesn't exist, then we can assume that the
+    # package hasn't been installed, but is used directly in a development
+    # environment, meaning that we need to specify the path as it is in the
+    # repo.
+    if not os.path.isdir(asset_dir):
+        asset_dir = os.path.join(mod_dir, '..', '..', 'assets')
+
+    return asset_dir
+
+
 def _get_latest_odm_version_str() -> str:
-    file_path = normpath(os.path.realpath(__file__))
-    root_dir = join(os.path.dirname(file_path), '../..')
-    dict_dir = join(root_dir, 'assets/dictionary')
+    asset_dir = _get_asset_dir()
+    schema_dir = join(asset_dir, 'validation-schemas')
     versions = []
-    for dir_path in Path(dict_dir).glob('v*'):
-        dir_name = os.path.basename(dir_path)
-        if not (match := re.search('v(.+)', dir_name)):
+    for schema_path in Path(schema_dir).glob('schema-v*'):
+        schema_name = os.path.basename(schema_path)
+        if not (match := re.search('v(.+)', schema_name)):
             continue
         v = parse_version(match.group(1), verbose=False)
         versions.append(str(v))
@@ -431,13 +448,15 @@ def map_ids(mappings: Dict[PartId, PartId], part_ids: List[PartId],
         return part_ids
 
 
-def _table_has_attr(table: Part, attr: Part, version: Version):
+def _table_has_attr(table: Part, attr: Part, version: Version) -> bool:
     # docs/specs/odm-how-tos.md#how-to-get-the-columns-names-for-a-table
     assert is_attr(attr)
-    result = get_partID(table) in attr
-    if not result and version.major == 1:
-        result = (table[V1_TABLE] in _parse_version1Field(attr, V1_TABLE))
-    return result
+    if version.major == 1:
+        table_ids = set(_parse_version1Field(table, V1_TABLE))
+        attr_table_ids = set(_parse_version1Field(attr, V1_TABLE))
+        return len(table_ids & attr_table_ids) > 0
+    else:
+        return get_partID(table) in attr
 
 
 def validate_and_fix(all_parts: PartMap, version):

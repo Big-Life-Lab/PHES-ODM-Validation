@@ -17,6 +17,12 @@ schema:
             - partID: geoLat
               sites: header
               sitesRequired: mandatory
+            - partID: NA
+              partType: missingness
+            - partID: NA_missing
+              partType: missingness
+            - partID: 'null'
+              partType: missingness
       meta:
       - partID: sites
         partType: tables

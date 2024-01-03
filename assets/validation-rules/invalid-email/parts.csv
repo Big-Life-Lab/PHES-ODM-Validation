@@ -1,0 +1,5 @@
+partID,partType,sites,contacts,version1Location,version1Table,version1Variable
+sites,tables,NA,NA,tables,Site,NA
+geoLat,attributes,header,NA,variables,Site,Latitude
+contacts,tables,NA,NA,tables,Contact,NA
+email,attributes,NA,header,variables,Contact,contactEmail

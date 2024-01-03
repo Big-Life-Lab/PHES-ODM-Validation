@@ -7,43 +7,56 @@
 ASSET_DIR = get_rule_asset_dir('invalid_type')
 ```
 
-This rule checks that the type of a value matches with a defined type or can be coerced into the defined type. There are a number of types in the ODM that this validation rule will need to handle, we'll go over each of them in the following sections.
+This rule checks that the type of a value matches with a defined type or can be
+coerced into the defined type. There are a number of types in the ODM that this
+validation rule will need to handle, we'll go over each of them in the
+following sections.
 
 ## integer
 
-An integer is defined as a number without a decimal point. Imagine a column `geoLat` in the sites table which is defined to be an integer. The following ODM data snippet would fail validation,
+An integer is defined as a number without a decimal point. Imagine a column
+`geoLat` in the sites table which is defined to be an integer. The following
+ODM data snippet would fail validation,
 
 ```{python}
-# This is a YAML file since in a CSV file all the numbers would be included as a string
+# This is a YAML file since in a CSV file all the numbers would be included as
+# a string
 pprint_yaml_file(asset("integer-invalid-dataset-1.yml"))
 ```
 
 whereas the following would pass validation
 
 ```{python}
-# This is a YAML file since in a CSV file all the numbers would be included as a string
+# This is a YAML file since in a CSV file all the numbers would be included as
+# a string
 pprint_yaml_file(asset("integer-valid-dataset-1.yml"))
 ```
 
-Values that are not explicitly integers but can be coerced into integers should pass validation. For example, the following should pass validation,
+Values that are not explicitly integers but can be coerced into integers should
+pass validation. For example, the following should pass validation,
 
 ```{python}
 #| echo: false
 pprint_csv_file(asset("integer-valid-dataset-2.csv"), "Valid integer dataset")
 ```
 
-A floating point number can be coerced into an integer if the coercion does not result in a value change. In above example, coercing 1.00 to its integer value of 1 does not change its value.
+A floating point number can be coerced into an integer if the coercion does not
+result in a value change. In above example, coercing 1.00 to its integer value
+of 1 does not change its value.
 
-The snippet below should fail validation since they cannot be coerced to integers.
+The snippet below should fail validation since they cannot be coerced to
+integers.
 
 ```{python}
 #| echo: false
-pprint_csv_file(asset("integer-invalid-dataset-2.csv"), "Invalid integer dataset")
+pprint_csv_file(asset("integer-invalid-dataset-2.csv"),
+                "Invalid integer dataset")
 ```
 
 ## float
 
-A float is a decimal number. Imagine the same `geoLat` column but its defined type is now a float. The following dataset snippet would fail validation,
+A float is a decimal number. Imagine the same `geoLat` column but its defined
+type is now a float. The following dataset snippet would fail validation,
 
 ```{python}
 #| echo: false
@@ -57,44 +70,22 @@ whereas the following would pass validation
 pprint_yaml_file(asset("float-valid-dataset-1.yml"))
 ```
 
-Once again, values that can be coerced into floats should pass validation. All integers and certain strings can be coerced into floats. For example, the following snippet below should pass validation,
+Once again, values that can be coerced into floats should pass validation. All
+integers and certain strings can be coerced into floats. For example, the
+following snippet below should pass validation,
 
 ```{python}
 #| echo: false
 pprint_csv_file(asset("float-valid-dataset-2.csv"), "Valid float dataset")
 ```
 
-## email
-
-An email address. As an example, imagine a part with id `contactEmail` which is a header in a `labs` table and has its defined type to be `email`. The following ODM snippet would fail validation,
-
-```python
-{
-    "labs": [
-        {
-            "labID": "1",
-            "email": "john.doe"
-        }
-    ]
-}
-```
-
-whereas the following should pass validation
-
-```python
-{
-    "labs": [
-        {
-            "labID": "1",
-            "email": "john.doe@email.com"
-        }
-    ]
-}
-```
-
 ## boolean
 
-A column that can have one of two values, representing Yes/No. The category values representing Yes/No are encoded in the dictionary. For example, consider the `reportable` column in the `measures` table whose data type is boolean. Also, assume that `true` and `false` are the allowed boolean category values`. The following dataset snippet would fail validation,
+A column that can have one of two values, representing Yes/No. The category
+values representing Yes/No are encoded in the dictionary. For example, consider
+the `reportable` column in the `measures` table whose data type is boolean.
+Also, assume that `true` and `false` are the allowed boolean category values.
+The following dataset snippet would fail validation,
 
 ```{python}
 #| echo: false
@@ -108,7 +99,9 @@ whereas the following the would pass validation,
 pprint_csv_file(asset("bool-valid-dataset-1.csv"), "Valid bool dataset")
 ```
 
-The category values are case-sensitive i.e. the boolean column value case should match the one in the category values. For example, the following would fail validation,
+The category values are case-sensitive i.e. the boolean column value case
+should match the one in the category values. For example, the following would
+fail validation,
 
 ```{python}
 #| echo: false
@@ -117,22 +110,31 @@ pprint_csv_file(asset("bool-invalid-dataset-2.csv"), "Invalid bool dataset")
 
 ## datetime
 
-A type that allows columns to have a string that holds a date and time value. The date component is mandatory whereas the time component is optional. Regardless of what's included in the column value, the string should be formatted using the [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) standard. Although the standard specifies a number of ways to represent datetime, for the purposes of the ODM only the following formats will be supported.
+A type that allows columns to have a string that holds a date and time value.
+The date component is mandatory whereas the time component is optional.
+Regardless of what's included in the column value, the string should be
+formatted using the [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601)
+standard. Although the standard specifies a number of ways to represent
+datetime, for the purposes of the ODM only the following formats will be
+supported.
 
 1. date
 2. datetime and
 3. datetime with timezone
 
-For example, consider the `reportDate` column in the `measures` table whose type is `datetime`. The following dataset snippet should pass validation,
+For example, consider the `reportDate` column in the `measures` table whose
+type is `datetime`. The following dataset snippet should pass validation,
 
 ```{python}
-pprint_csv_file(asset("datetime-valid-dataset-1.csv"), "Valid datetime dataset")
+pprint_csv_file(asset("datetime-valid-dataset-1.csv"),
+                "Valid datetime dataset")
 ```
 
 whereas the following dataset should fail validation,
 
 ```{python}
-pprint_csv_file(asset("datetime-invalid-dataset-1.csv"), "Invalid datetime dataset")
+pprint_csv_file(asset("datetime-invalid-dataset-1.csv"),
+                "Invalid datetime dataset")
 ```
 
 ## categorical
@@ -141,7 +143,8 @@ This type is handled by the [invalid_category](./invalid_category.md) rule
 
 ## varchar
 
-No validation is currently needed for this type since all the previously mentioned types can be coerced into a varchar.
+No validation is currently needed for this type since all the previously
+mentioned types can be coerced into a varchar.
 
 ## see measure
 
@@ -157,16 +160,24 @@ The error report should have the following fields,
 * **rowNumber**: The 1-based index of the row with the invalid value
 * **row**: The dictionary containing the invalid row
 * **invalidValue**: The invalid value
-* **validationRuleFields**: The ODM data dictionary rows used to generate this rule
-* **message**: Value \<invalid_value\> in row \<row_number\> in column \<column_name\> in table \<table_name\> has type \<invalid_value_type\> but should be of type \<valid_type\> or coercable into a \<valid_type\>.
+* **validationRuleFields**: The ODM data dictionary rows used to generate this
+  rule
+* **message**: Value \<invalid_value\> in row \<row_number\> in column
+  \<column_name\> in table \<table_name\> has type \<invalid_value_type\> but
+  should be of type \<valid_type\> or coercable into a \<valid_type\>.
 
 For a boolean data type, the message is shown below,
 
-* **message**: Row \<row_number\> in column \<column_name\> in table \<table_name\> is a boolean but has value \<invalid_value\>. Allowed values are \<boolean_categories\>.
+* **message**: Row \<row_number\> in column \<column_name\> in table
+  \<table_name\> is a boolean but has value \<invalid_value\>. Allowed values
+  are \<boolean_categories\>.
 
 For a datetime data type, the message is shown belowm,
 
-* **message**: Row \<row_number\> in column \<column_name\> in table \<table_name\> is a datetime with value \<invalid_value\> that has an unsupported datetime format. Allowed values are ISO 8601 standard full dates, full dates and times, or full dates and times with timezone.
+* **message**: Row \<row_number\> in column \<column_name\> in table
+  \<table_name\> is a datetime with value \<invalid_value\> that has an
+  unsupported datetime format. Allowed values are ISO 8601 standard full dates,
+  full dates and times, or full dates and times with timezone.
 
 The error report objects for the invalid examples above can be seen below,
 
@@ -191,32 +202,6 @@ float
 pprint_json_file(asset("float-error-report-1.json"))
 ```
 
-email
-
-```python
-[
-    {
-        "errorType": "invalid_type",
-        "tableName": "labs",
-        "columnName": "contactEmail",
-        "rowNumber": 1,
-        "row": {
-            "labID": "1",
-            "contactEmail": "john.doe"
-        },
-        "invalidValue": "john.doe",
-        "validationRuleFields": [
-            {
-                "partID": "contactEmail",
-                "dataType": "email",
-                "labs": "header"
-            }
-        ],
-        "message": "Value john.doe in row 1 in column contactEmail in table labs has type varchar but should be of type email or coercable into an email"
-    }
-]
-```
-
 boolean 1
 
 ```{python}
@@ -239,14 +224,19 @@ pprint_json_file(asset("datetime-error-report-1.json"))
 
 ## Rule metadata
 
-All the metadata for this rule is contained in the parts sheet in the ODM dictionary. The steps to retreive the metadata are:
+All the metadata for this rule is contained in the parts sheet in the ODM
+dictionary. The steps to retreive the metadata are:
 
 1. [Get the table names in the dictionary](../specs/odm-how-tos.md#how-to-get-the-names-of-tables-that-are-part-of-the-odm)
 2. [Get all the columns for each table](../specs/odm-how-tos.md#how-to-get-the-names-of-tables-that-are-part-of-the-odm)
-3. [Get the defined data type for each column](../specs/odm-how-tos.md#getting-the-data-type-for-a-column). If the data type is a boolean then retreive the category values by using the sets sheet:
-    1. Filter out all rows except for the ones whose `setID` is `booleanSet`
-    2. The `partID` columns in the filtered rows contains the category values
-4. Add this validation rule if the data type is supported by this validation rule. Currently, only the `blob` is not supported and we don't need to add a rule for the `varchar` column.
+3. [Get the defined data type for each column](../specs/odm-how-tos.md#getting-the-data-type-for-a-column).
+   If the data type is a boolean then retreive the category values by using the sets sheet:
+       1. Filter out all rows except for the ones whose `setID` is `booleanSet`
+       2. The `partID` columns in the filtered rows contains the category
+          values
+4. Add this validation rule if the data type is supported by this validation
+   rule. Currently, only the `blob` is not supported and we don't need to add a
+   rule for the `varchar` column.
 
 For example, the parts sheet snippets for the examples above can be seen below,
 
@@ -264,27 +254,6 @@ For a float `geoLat` column in a sites table
 #| echo: false
 pprint_csv_file(asset("float-parts.csv"), "Float parts v2",
                 ignore_prefix="version1")
-```
-
-For the email `contactEmail` column in the labs table
-
-```python
-{
-    "parts": [
-        {
-            "partID": "labs",
-            "partType": "tables",
-            "labs": "NA",
-            "dataType": "NA"
-        },
-        {
-            "partID": "contactEmail",
-            "partType": "attribute",
-            "labs": "header",
-            "dataType": "email"
-        }
-    ]
-}
 ```
 
 For the boolean `reportable` column in the `measures` table,
@@ -313,13 +282,18 @@ pprint_csv_file(asset("datetime-parts.csv"), "Datetime parts v2",
 
 ## Cerberus schema
 
-We can use the [type](https://docs.python-cerberus.org/en/stable/validation-rules.html#type) rule in cerberus to perform this validation. Cerberus by default does not coerce the data before validating, we will need to explicitly tell it to do so by using the [coerce](https://docs.python-cerberus.org/en/stable/normalization-rules.html#value-coercion) field.
+We can use the [type](https://docs.python-cerberus.org/en/stable/validation-rules.html#type)
+rule in cerberus to perform this validation. Cerberus by default does not
+coerce the data before validating, we will need to explicitly tell it to do so
+by using the
+[coerce](https://docs.python-cerberus.org/en/stable/normalization-rules.html#value-coercion)
+field.
 
-For an `email` type we will need to create a [custom type](https://docs.python-cerberus.org/en/stable/customize.html#new-types) in cerberus.
+For a `boolean` type we will need to use the [allowed](https://docs.python-cerberus.org/en/stable/validation-rules.html#allowed)
+rule in cerberus.
 
-For a `boolean` type we will need to use the [allowed](https://docs.python-cerberus.org/en/stable/validation-rules.html#allowed) rule in cerberus.
-
-For a `datetime` type we will need to [extend](https://docs.python-cerberus.org/en/stable/customize.html#custom-data-types) cerberus and add a new datetime type.
+For a `datetime` type we will need to [extend](https://docs.python-cerberus.org/en/stable/customize.html#custom-data-types)
+cerberus and add a new datetime type.
 
 The generated cerberus objects for the examples above are shown below,
 
@@ -337,40 +311,6 @@ float
 pprint_yaml_file(asset("float-schema-v2.yml"))
 ```
 
-email
-
-```python
-{
-    "labs": {
-        "type": "list",
-        "schema": {
-            "type": "dict",
-            "schema": {
-                "contactEmail": {
-                    "type": "email"
-                    "meta": [
-                        {
-                            "ruleId": "invalid_type",
-                            "meta": [
-                                {
-                                    "partID": "contactEmail",
-                                    "dataType": "email",
-                                    "labs": "header"
-                                }
-                            ]
-                        }
-                    ]
-                }
-            }
-        },
-        "meta": {
-            "partID": "labs",
-            "partType": "table"
-        }
-    }
-}
-```
-
 boolean
 
 ```{python}
@@ -384,13 +324,19 @@ datetime
 pprint_yaml_file(asset("datetime-schema-v2.yml"))
 ```
 
-The meta for this rule should include the `partID`, `<table_name>`, and `dataType`.
+The meta for this rule should include the `partID`, `<table_name>`, and
+`dataType`.
 
-For a boolean data type, it should also include the rows that contain the category values. The `partID` and `setID` from each row should be included in the category value rows.
+For a boolean data type, it should also include the rows that contain the
+category values. The `partID` and `setID` from each row should be included in
+the category value rows.
 
 ## ODM Version 1
 
-When generating the schema for version 1, we check whether the column has an [equivalent part in version 1](../specs/odm-how-tos.md#getting-the-version-1-equivalent-for-a-part). If it does, then we add this validaton rule to it. For example, the v1 parts snippets for each of examples above are shown below,
+When generating the schema for version 1, we check whether the column has an
+[equivalent part in version 1](../specs/odm-how-tos.md#getting-the-version-1-equivalent-for-a-part).
+If it does, then we add this validaton rule to it. For example, the v1 parts
+snippets for each of examples above are shown below,
 
 integer
 
@@ -406,33 +352,6 @@ float
 #| echo: false
 pprint_csv_file(asset("float-parts.csv"), "Float parts v1",
                 ignore_prefix="version1")
-```
-
-email
-
-```python
-{
-    "parts": [
-        {
-            "partID": "labs",
-            "partType": "tables",
-            "labs": "NA",
-            "dataType": "NA",
-            "version1Location": "tables",
-            "version1Table": "Lab",
-            "version1Variable": "NA"
-        },
-        {
-            "partID": "contactEmail",
-            "partType": "attribute",
-            "labs": "header",
-            "dataType": "email",
-            "version1Location": "variables",
-            "version1Table": "Lab",
-            "version1Variable": "email"
-        }
-    ]
-}
 ```
 
 boolean
@@ -466,45 +385,6 @@ float
 pprint_yaml_file(asset("float-schema-v1.yml"))
 ```
 
-email
-
-```python
-{
-    "Lab": {
-        "type": "list",
-        "schema": {
-            "type": "dict",
-            "schema": {
-                "email": {
-                    "type": "email"
-                    "meta": [
-                        {
-                            "ruleId": "invalid_type",
-                            "meta": [
-                                {
-                                    "partID": "contactEmail",
-                                    "dataType": "email",
-                                    "labs": "header",
-                                    "version1Location": "variables",
-                                    "version1Table": "Lab",
-                                    "version1Variable": "email"
-                                }
-                            ]
-                        }
-                    ]
-                }
-            }
-        },
-        "meta": {
-            "partID": "labs",
-            "partType": "table",
-            "version1Location": "tables",
-            "version1Table": "Lab"
-        }
-    }
-}
-```
-
 boolean
 
 ```{python}
@@ -518,6 +398,8 @@ datetime
 pprint_yaml_file(asset("datetime-schema-v1.yml"))
 ```
 
-The metadata should include the meta columns for version 2 as well as the `version1Location`, `version1Table`, and the `version1Variable` columns.
+The metadata should include the meta columns for version 2 as well as the
+`version1Location`, `version1Table`, and the `version1Variable` columns.
 
-For a boolean data type, only the `version1Category` column should be added on for the boolean category values.
+For a boolean data type, only the `version1Category` column should be added on
+for the boolean category values.

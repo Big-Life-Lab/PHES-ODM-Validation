@@ -37,13 +37,31 @@ def get_table_meta(table: Part, version: Version) -> Meta:
 
 
 def _get_attr_meta(attr: Part, table_id: PartId, version: Version,
-                   odm_key: str = None):
+                   odm_key: str = None, cerb_rules: dict = None):
+    result = []
     keys = [pt.PART_ID, table_id, pt.table_required_field(table_id)]
     if version.major == 1:
         keys += [pt.V1_LOCATION, pt.V1_TABLE, pt.V1_VARIABLE]
     if odm_key:
         keys += [odm_key]
-    return [{k: attr[k] for k in keys if k in attr}]
+    result += [{k: attr[k] for k in keys if k in attr}]
+
+    if cerb_rules:
+        # pseudo sets
+        forbidden_ids = cerb_rules.get('forbidden')
+        if forbidden_ids:
+            for part_id in forbidden_ids:
+                result.append({'partID': part_id, 'partType': pt.MISSINGNESS})
+
+        # sets
+        if version.major >= 2:
+            allowed_ids = cerb_rules.get('allowed')
+            if allowed_ids:
+                # print(pt.get_partID(attr))
+                set_id = attr['mmaSet']
+                for part_id in allowed_ids:
+                    result.append({'partID': part_id, 'setID': set_id})
+    return result
 
 
 def get_catset_meta(table_id: PartId, catset: Part, categories: List[Part],
@@ -84,15 +102,8 @@ def _get_mapped_part_ids(data: OdmData, part_id: PartId,
     return [part_id]
 
 
-def _get_mapped_attribute_ids(data: OdmData, mapped_table_id: PartId,
-                              attr: Part, version: Version
+def _get_mapped_attribute_ids(data: OdmData, attr: Part, version: Version
                               ) -> List[PartId]:
-    # FIXME: This is a hack that skips v1 attributes that don't belong to
-    # the current v1 table. The v1 mapping isn't working properly in this
-    # respect.
-    if version.major == 1:
-        if mapped_table_id not in pt._parse_version1Field(attr, pt.V1_TABLE):
-            return []
     attr_id = pt.get_partID(attr)
     return _get_mapped_part_ids(data, attr_id, version)
 
@@ -118,16 +129,16 @@ def attr_items(data: OdmData, table_id0: PartId, table_id1: PartId,
         attributes = pt.partmap(
             filter(lambda attr: pred(table_id0, attr), attributes))
     for attr_id0, attr in attributes.items():
-        for attr_id1 in _get_mapped_attribute_ids(data, table_id1, attr,
-                                                  version):
+        for attr_id1 in _get_mapped_attribute_ids(data, attr, version):
             yield (attr_id0, attr_id1, attr)
 
 
-def add_attr_schemas(table_schema, data, table_id0, table_id1, attr, rule_id,
-                     odm_key: Optional[str], cerb_rules, version):
-    for attr_id1 in _get_mapped_attribute_ids(data, table_id1, attr,
-                                              version):
-        attr_meta = _get_attr_meta(attr, table_id0, version, odm_key)
+def add_attr_schemas(table_schema, data, table_id0, table_id1, attr,
+                     rule_id: str, odm_key: Optional[str],
+                     cerb_rules, version):
+    for attr_id1 in _get_mapped_attribute_ids(data, attr, version):
+        attr_meta = _get_attr_meta(attr, table_id0, version, odm_key,
+                                   cerb_rules)
         attr_schema = init_attr_schema(attr_id1, rule_id, cerb_rules,
                                        attr_meta)
         deep_update(table_schema[table_id1]['schema']['schema'], attr_schema)

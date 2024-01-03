@@ -17,7 +17,7 @@
                     "contacts": "header"
                 }
             ],
-            "message": "less_than_min_length rule violated in table contacts, column phone, row 1: Value \"123-456-1\" has length 9 which is less than the min length of \"10\""
+            "message": "less_than_min_length rule violated in table contacts, column phone, row(s) 1: Value \"123-456-1\" (of length 9) is less than the min length of \"10\""
         }
     ],
     "warnings": []

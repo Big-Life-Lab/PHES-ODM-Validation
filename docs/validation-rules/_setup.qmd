@@ -2,9 +2,10 @@
 #| echo: false
 import os
 import sys
+sys.path.append("..")
 sys.path.append("../../src")
 
-from odm_validation.doc_utils import (
+from doc_utils import (
     pprint_csv_file,
     pprint_dict_list,
     pprint_json_file,

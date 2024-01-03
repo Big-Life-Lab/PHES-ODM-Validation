@@ -1,0 +1,17 @@
+schemaVersion: '2.0.0'
+schema:
+  sites:
+    type: list
+    schema:
+      type: dict
+      email:
+        is_email: true
+        meta:
+          - ruleID: invalid_email
+            meta:
+              - partID: email
+                partType: attributes
+                contacts: header
+    meta:
+      - partID: sites
+        partType: tables

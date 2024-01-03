@@ -6,6 +6,7 @@ from parameterized import parameterized
 
 import common
 from common import asset, root_dir, param_range
+from rules import RuleId
 from utils import (
     import_dataset,
     import_schema,
@@ -14,8 +15,8 @@ from validation import _generate_validation_schema_ext, _validate_data_ext
 
 
 class Assets():
-    def __init__(self, rule_id: str, table: str):
-        rule_dirname = rule_id.replace('_', '-')
+    def __init__(self, rule_id: RuleId, table: str):
+        rule_dirname = rule_id.name.replace('_', '-')
         common.ASSET_DIR = join(root_dir,
                                 f'assets/validation-rules/{rule_dirname}')
 
@@ -39,7 +40,7 @@ class Assets():
 
 
 class TestMissingValuesFound(common.OdmTestCase):
-    rule_id = 'missing_values_found'
+    rule_id = RuleId.missing_values_found
     table = 'sites'
 
     @classmethod
