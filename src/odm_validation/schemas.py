@@ -6,6 +6,8 @@ from stdext import deep_update
 CerberusSchema = dict
 Schema = dict  # {'schemaVersion': str, 'schema': CerberusSchema}
 
+COERCE_KEY = 'coerce'
+
 
 def init_table_schema(table_id, table_meta, attr_schema):
     return {
