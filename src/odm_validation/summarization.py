@@ -71,6 +71,7 @@ class SummaryEntry:
     corresponds to the table-id when grouping by `table`, the column-id when
     grouping by `column`, etc."""
 
+
 SummaryEntryList = List[SummaryEntry]
 ErrorSummary = Dict[TableId, SummaryEntryList]
 
