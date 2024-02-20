@@ -14,7 +14,7 @@ import settings
 from cerberusext import ContextualCoercer, OdmValidator
 from copy import deepcopy
 from input_data import DataKind
-from reports import ErrorVerbosity, TableInfo
+from reports import ErrorVerbosity, TableInfo, ValidationCtx
 from rule_filters import RuleFilter
 from rules import RuleId, ruleset
 from schemas import Schema
@@ -139,6 +139,8 @@ def _validate_data_ext(
     assert isinstance(rule_whitelist, list), \
         'invalid rule_whitelist param type'
 
+    vctx = ValidationCtx(verbosity=verbosity)
+
     errors = []
     warnings = []
     versioned_schema = schema
@@ -182,11 +184,12 @@ def _validate_data_ext(
             v._errors.clear()
             if v.validate(offset, data_kind, batch_data, validation_schema):
                 continue
-            e, w = map_cerb_errors(table_id, v._errors, validation_schema,
-                                   rule_filter, offset, data_kind)
+            e, w = map_cerb_errors(vctx, table_id, v._errors,
+                                   validation_schema, rule_filter, offset,
+                                   data_kind)
             errors += e
             warnings += w
-        errors += map_aggregated_errors(table_id,
+        errors += map_aggregated_errors(vctx, table_id,
                                         v.error_state.aggregated_errors,
                                         rule_filter)
 

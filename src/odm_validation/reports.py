@@ -28,6 +28,11 @@ class ErrorVerbosity(int, Enum):
 
 
 @dataclass(frozen=True)
+class ValidationCtx:
+    verbosity: ErrorVerbosity
+
+
+@dataclass(frozen=True)
 class ErrorCtx:
     column_id: str
     column_meta: dict
