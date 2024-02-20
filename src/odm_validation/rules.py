@@ -30,7 +30,7 @@ from rule_primitives import (
 from versions import Version
 
 
-RuleId = Enum('RuleId', [
+RuleId = Enum('RuleId', type=int, names=[
     '_all',
     '_coercion',
     'duplicate_entries_found',
