@@ -96,15 +96,16 @@ def _strip_coerce_rules(cerb_schema):
     return strip_dict_key(deepcopy(cerb_schema), 'coerce')
 
 
-def _validate_data_ext(schema: Schema,
-                       data: TableDataset,
-                       data_kind: DataKind = DataKind.python,
-                       data_version: str = pt.ODM_VERSION_STR,
-                       rule_blacklist: List[RuleId] = [],
-                       rule_whitelist: List[RuleId] = [],
-                       on_progress: OnProgress = None,
-                       batch_size=settings.BATCH_SIZE,
-                       ) -> reports.ValidationReport:
+def _validate_data_ext(
+    schema: Schema,
+    data: TableDataset,
+    data_kind: DataKind = DataKind.python,
+    data_version: str = pt.ODM_VERSION_STR,
+    rule_blacklist: List[RuleId] = [],
+    rule_whitelist: List[RuleId] = [],
+    on_progress: OnProgress = None,
+    batch_size=settings.BATCH_SIZE,
+) -> reports.ValidationReport:
     """
     Validates `data` with `schema`, using Cerberus.
 
