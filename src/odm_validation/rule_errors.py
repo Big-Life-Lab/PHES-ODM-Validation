@@ -136,7 +136,7 @@ def _gen_error_entry(cerb_rule, table_id, column_id, value, row_numbers,
         is_column=rule.is_column,
         verbosity=settings.VERBOSITY,
     )
-    entry = reports.gen_rule_error(error_ctx, kind=kind)
+    entry = reports.gen_rule_error(error_ctx, kind)
     return (rule.id, entry)
 
 

@@ -189,8 +189,8 @@ def get_error_rule_id(report_error: dict, error_kind: ErrorKind) -> RuleId:
 
 
 def gen_rule_error(ctx: ErrorCtx,
+                   kind: ErrorKind,
                    err_template: Optional[str] = None,
-                   kind: Optional[ErrorKind] = None,
                    ) -> dict:
     """
     :param err_template: overrides rule error-template
@@ -240,7 +240,7 @@ def _generalize_cerb_type_name(name: str) -> str:
         return name
 
 
-def _get_meta_rule_ids(column_meta) -> Set[str]:
+def _get_meta_rule_ids(column_meta: Optional[dict]) -> List[str]:
     if not column_meta:
         return []
     return [m['ruleID'] for m in column_meta]
@@ -260,4 +260,4 @@ def _gen_coercion_msg(ctx: ErrorCtx, kind: ErrorKind):
 
 def gen_coercion_error(ctx, kind: ErrorKind):
     msg = _gen_coercion_msg(ctx, kind)
-    return gen_rule_error(ctx, err_template=msg, kind=kind)
+    return gen_rule_error(ctx, kind, err_template=msg)
