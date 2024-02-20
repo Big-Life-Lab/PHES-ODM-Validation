@@ -21,6 +21,7 @@ class ErrorKind(Enum):
 
 
 class ErrorVerbosity(int, Enum):
+    MESSAGE = 0
     SHORT_METADATA = 1
     SHORT_METADATA_MESSAGE = 2
     LONG_METADATA_MESSAGE = 3
@@ -158,6 +159,7 @@ def _gen_error_msg(ctx: ErrorCtx, template: Optional[str] = None,
     }
 
     xfix_templates: Dict[ErrorVerbosity, dict] = {
+        ErrorVerbosity.MESSAGE: {},
         ErrorVerbosity.SHORT_METADATA: short_template,
         ErrorVerbosity.SHORT_METADATA_MESSAGE: short_template,
         ErrorVerbosity.LONG_METADATA_MESSAGE: long_template,
