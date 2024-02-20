@@ -1,5 +1,7 @@
-# temporary
-__pycache__/
+# temp dirs
+__pycache__
+
+# temp files
 *.log
 
 # python `venv`
