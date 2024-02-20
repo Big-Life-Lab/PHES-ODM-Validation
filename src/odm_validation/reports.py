@@ -20,6 +20,12 @@ class ErrorKind(Enum):
     ERROR = 'error'
 
 
+class ErrorVerbosity(int, Enum):
+    SHORT_METADATA = 1
+    SHORT_METADATA_MESSAGE = 2
+    LONG_METADATA_MESSAGE = 3
+
+
 @dataclass(frozen=True)
 class ErrorCtx:
     column_id: str
@@ -36,7 +42,7 @@ class ErrorCtx:
     data_kind: DataKind = DataKind.python
     err_template: str = ''
     is_column: bool = False
-    verbosity: int = 2
+    verbosity: ErrorVerbosity = ErrorVerbosity.LONG_METADATA_MESSAGE
 
 
 class TableInfo(TypedDict):
@@ -137,29 +143,43 @@ def _gen_error_msg(ctx: ErrorCtx, template: Optional[str] = None,
 
     # prefix and suffix, with increasing verbosity
     is_col = ctx.is_column
-    verbosity_xfix = [
-        {
-            'prefix': '{table_id}({column_id}',
-            'prefix_end': ('' if is_col else ', {row_num}') + '): ',
-            'suffix': ' [{rule_id}]',
-        },
-        {},  # same as prev level, just with messages
-        {
-            'prefix': ('{rule_id} rule ' + verb + ' in table {table_id}, '
-                       'column {column_id}'),
-            'prefix_end': ('' if is_col else ', row(s) {row_num}') + ': ',
-            'suffix': '',
-        },
-    ]
-    verbosity_xfix[1] = verbosity_xfix[0]
-    xfix = verbosity_xfix[ctx.verbosity]
 
-    if not template:
-        template = ctx.err_template
-    if ctx.verbosity == 0:
+    short_template = {
+        'prefix': '{table_id}({column_id}',
+        'prefix_end': ('' if is_col else ', {row_num}') + '): ',
+        'suffix': ' [{rule_id}]',
+    }
+
+    long_template = {
+        'prefix': ('{rule_id} rule ' + verb + ' in table {table_id}, '
+                   'column {column_id}'),
+        'prefix_end': ('' if is_col else ', row(s) {row_num}') + ': ',
+        'suffix': '',
+    }
+
+    xfix_templates: Dict[ErrorVerbosity, dict] = {
+        ErrorVerbosity.SHORT_METADATA: short_template,
+        ErrorVerbosity.SHORT_METADATA_MESSAGE: short_template,
+        ErrorVerbosity.LONG_METADATA_MESSAGE: long_template,
+    }
+
+    xfix = xfix_templates[ctx.verbosity]
+
+    # use rule error template if not overridden
+    template = template or ctx.err_template
+
+    # remove message from SHORT_METADATA
+    if ctx.verbosity == ErrorVerbosity.SHORT_METADATA:
         template = ''
-    template = xfix['prefix'] + xfix['prefix_end'] + template + xfix['suffix']
-    return template.format(
+
+    full_template = ''.join([
+        xfix.get('prefix', ''),
+        xfix.get('prefix_end', ''),
+        template,
+        xfix.get('suffix', ''),
+    ])
+
+    return full_template.format(
         allowed_values=_fmt_allowed_values(ctx.allowed_values),
         column_id=ctx.column_id,
         constraint=_fmt_msg_value(ctx.constraint, relaxed=True),

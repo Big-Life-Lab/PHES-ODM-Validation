@@ -14,7 +14,7 @@ import settings
 from cerberusext import ContextualCoercer, OdmValidator
 from copy import deepcopy
 from input_data import DataKind
-from reports import TableInfo
+from reports import ErrorVerbosity, TableInfo
 from rule_filters import RuleFilter
 from rules import RuleId, ruleset
 from schemas import Schema
@@ -105,6 +105,7 @@ def _validate_data_ext(
     rule_whitelist: List[RuleId] = [],
     on_progress: OnProgress = None,
     batch_size=settings.BATCH_SIZE,
+    verbosity: ErrorVerbosity = ErrorVerbosity.LONG_METADATA_MESSAGE,
 ) -> reports.ValidationReport:
     """
     Validates `data` with `schema`, using Cerberus.

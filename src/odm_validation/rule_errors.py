@@ -5,9 +5,8 @@ from typing import Any, Dict, Optional, Set, Tuple
 
 import part_tables as pt
 import reports
-import settings
 from input_data import DataKind
-from reports import ErrorKind, get_row_num
+from reports import ErrorKind, ErrorVerbosity, get_row_num
 from rule_filters import RuleFilter
 from rules import Rule, RuleId, ruleset
 from schemas import CerberusSchema, init_table_schema
