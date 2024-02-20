@@ -1,8 +1,3 @@
-"""
-This is the main module of the package. It contains functions for schema
-generation and data validation.
-"""
-
 import logging
 from itertools import groupby
 from typing import Any, Dict, Optional, Set, Tuple
