@@ -14,7 +14,7 @@ import settings
 from cerberusext import ContextualCoercer, OdmValidator
 from copy import deepcopy
 from input_data import DataKind
-from reports import TableInfo
+from reports import ErrorVerbosity, TableInfo, ValidationCtx
 from rule_filters import RuleFilter
 from rules import RuleId, ruleset
 from schemas import Schema
@@ -96,15 +96,17 @@ def _strip_coerce_rules(cerb_schema):
     return strip_dict_key(deepcopy(cerb_schema), 'coerce')
 
 
-def _validate_data_ext(schema: Schema,
-                       data: TableDataset,
-                       data_kind: DataKind = DataKind.python,
-                       data_version: str = pt.ODM_VERSION_STR,
-                       rule_blacklist: List[RuleId] = [],
-                       rule_whitelist: List[RuleId] = [],
-                       on_progress: OnProgress = None,
-                       batch_size=settings.BATCH_SIZE,
-                       ) -> reports.ValidationReport:
+def _validate_data_ext(
+    schema: Schema,
+    data: TableDataset,
+    data_kind: DataKind = DataKind.python,
+    data_version: str = pt.ODM_VERSION_STR,
+    rule_blacklist: List[RuleId] = [],
+    rule_whitelist: List[RuleId] = [],
+    on_progress: OnProgress = None,
+    batch_size=settings.BATCH_SIZE,
+    verbosity: ErrorVerbosity = ErrorVerbosity.LONG_METADATA_MESSAGE,
+) -> reports.ValidationReport:
     """
     Validates `data` with `schema`, using Cerberus.
 
@@ -136,6 +138,8 @@ def _validate_data_ext(schema: Schema,
     assert isinstance(data_version, str), 'invalid data_version param type'
     assert isinstance(rule_whitelist, list), \
         'invalid rule_whitelist param type'
+
+    vctx = ValidationCtx(verbosity=verbosity)
 
     errors = []
     warnings = []
@@ -180,11 +184,12 @@ def _validate_data_ext(schema: Schema,
             v._errors.clear()
             if v.validate(offset, data_kind, batch_data, validation_schema):
                 continue
-            e, w = map_cerb_errors(table_id, v._errors, validation_schema,
-                                   rule_filter, offset, data_kind)
+            e, w = map_cerb_errors(vctx, table_id, v._errors,
+                                   validation_schema, rule_filter, offset,
+                                   data_kind)
             errors += e
             warnings += w
-        errors += map_aggregated_errors(table_id,
+        errors += map_aggregated_errors(vctx, table_id,
                                         v.error_state.aggregated_errors,
                                         rule_filter)
 

@@ -1,8 +1,3 @@
-"""
-This is the main module of the package. It contains functions for schema
-generation and data validation.
-"""
-
 import logging
 from itertools import groupby
 from typing import Any, Dict, Optional, Set, Tuple
@@ -10,9 +5,8 @@ from typing import Any, Dict, Optional, Set, Tuple
 
 import part_tables as pt
 import reports
-import settings
 from input_data import DataKind
-from reports import ErrorKind, get_row_num
+from reports import ErrorKind, ValidationCtx, get_row_num
 from rule_filters import RuleFilter
 from rules import Rule, RuleId, ruleset
 from schemas import CerberusSchema, init_table_schema
@@ -99,7 +93,7 @@ def _cerb_to_odm_type(cerb_type: str) -> Optional[str]:
         return t
 
 
-def _gen_error_entry(cerb_rule, table_id, column_id, value, row_numbers,
+def _gen_error_entry(vctx, cerb_rule, table_id, column_id, value, row_numbers,
                      rows, column_meta, rule_filter: RuleFilter,
                      constraint=None, schema_column=None,
                      data_kind=DataKind.python
@@ -139,13 +133,13 @@ def _gen_error_entry(cerb_rule, table_id, column_id, value, row_numbers,
         table_id=table_id,
         data_kind=data_kind,
         is_column=rule.is_column,
-        verbosity=settings.VERBOSITY,
+        verbosity=vctx.verbosity,
     )
-    entry = reports.gen_rule_error(error_ctx, kind=kind)
+    entry = reports.gen_rule_error(error_ctx, kind)
     return (rule.id, entry)
 
 
-def _gen_cerb_error_entry(e, row, schema: CerberusSchema,
+def _gen_cerb_error_entry(vctx, e, row, schema: CerberusSchema,
                           rule_filter: RuleFilter, offset: int,
                           data_kind: DataKind) -> Optional[RuleError]:
     "Transforms a single Cerberus error into a validation error."
@@ -157,6 +151,7 @@ def _gen_cerb_error_entry(e, row, schema: CerberusSchema,
     row_numbers = [get_row_num(row_index, offset, data_kind)]
     rows = [row]
     return _gen_error_entry(
+        vctx,
         cerb_rule,
         table_id,
         column_id,
@@ -171,11 +166,12 @@ def _gen_cerb_error_entry(e, row, schema: CerberusSchema,
     )
 
 
-def _gen_aggregated_error_entry(agg_error, rule_filter: RuleFilter
+def _gen_aggregated_error_entry(vctx, agg_error, rule_filter: RuleFilter
                                 ) -> Optional[dict]:
     """Transforms a single aggregated error (from OdmValidator) to a validation
     error."""
     return _gen_error_entry(
+        vctx,
         agg_error.cerb_rule,
         agg_error.table_id,
         agg_error.column_id,
@@ -239,8 +235,8 @@ def filter_errors(errors):
     return result
 
 
-def map_cerb_errors(table_id, cerb_errors, schema, rule_filter, offset: int,
-                    data_kind):
+def map_cerb_errors(vctx: ValidationCtx, table_id, cerb_errors, schema,
+                    rule_filter, offset: int, data_kind):
     """Transforms Cerberus errors to validation errors (and warnings).
 
     :return: a pair of lists (errors, warnings).
@@ -253,7 +249,7 @@ def map_cerb_errors(table_id, cerb_errors, schema, rule_filter, offset: int,
                 row = e.value
                 for attr_errors in e.info:
                     for e in attr_errors:
-                        rule_error = _gen_cerb_error_entry(e, row, schema,
+                        rule_error = _gen_cerb_error_entry(vctx, e, row, schema,
                                                            rule_filter, offset,
                                                            data_kind)
                         if not rule_error:
@@ -266,12 +262,12 @@ def map_cerb_errors(table_id, cerb_errors, schema, rule_filter, offset: int,
     return errors, warnings
 
 
-def map_aggregated_errors(table_id, agg_errors, rule_filter):
+def map_aggregated_errors(vctx, table_id, agg_errors, rule_filter):
     """Transforms a list of aggregated errors from OdmValidator to a list of
     validation errors."""
     errors = []
     for ae in agg_errors:
-        rule_error = _gen_aggregated_error_entry(ae, rule_filter)
+        rule_error = _gen_aggregated_error_entry(vctx, ae, rule_filter)
         if not rule_error:
             continue
         (rule_id, entry) = rule_error
