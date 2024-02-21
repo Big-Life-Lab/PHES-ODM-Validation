@@ -10,7 +10,6 @@ from enum import Enum
 
 import part_tables as pt
 import reports
-import settings
 from cerberusext import ContextualCoercer, OdmValidator
 from copy import deepcopy
 from input_data import DataKind
@@ -29,6 +28,8 @@ from rule_errors import (
 )
 
 TableDataset = Dict[pt.TableId, pt.Dataset]
+
+_BATCH_SIZE = 100
 
 
 def _generate_validation_schema_ext(parts: pt.Dataset,
@@ -104,7 +105,6 @@ def _validate_data_ext(
     rule_blacklist: List[RuleId] = [],
     rule_whitelist: List[RuleId] = [],
     on_progress: OnProgress = None,
-    batch_size=settings.BATCH_SIZE,
     verbosity: ErrorVerbosity = ErrorVerbosity.LONG_METADATA_MESSAGE,
 ) -> reports.ValidationReport:
     """
@@ -153,7 +153,7 @@ def _validate_data_ext(
         total = len(table_data)
         offset = 0
         while offset < total:
-            n = min(total - offset, batch_size)
+            n = min(total - offset, _BATCH_SIZE)
             first = offset
             last = offset + n
             batch_data = {table_id: table_data[first:last]}
