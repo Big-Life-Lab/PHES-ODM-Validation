@@ -145,7 +145,7 @@ def _validate_data_ext(
     warnings = []
     versioned_schema = schema
     cerb_schema = versioned_schema["schema"]
-    coercion_schema = cerb_schema
+
     rule_filter = RuleFilter(whitelist=rule_whitelist,
                              blacklist=rule_blacklist)
 
@@ -162,30 +162,34 @@ def _validate_data_ext(
             if on_progress:
                 on_progress(action, table_id, offset, total)
 
+    coercion_schema = cerb_schema
     coerced_data = defaultdict(list)
     coercer = ContextualCoercer(warnings=warnings, errors=errors)
     for table_id, table_data in data.items():
+        schema = {table_id: coercion_schema[table_id]}
         for batch in batch_table_data('coercing', table_id, table_data):
             batch_data, offset = batch
-            coerce_result = coercer.coerce(batch_data, coercion_schema,
+            coerce_result = coercer.coerce(batch_data, schema,
                                            offset, data_kind)
             coerced_data[table_id] += coerce_result[table_id]
 
     table_info: Dict[pt.TableId, TableInfo] = {}
-    validation_schema = _strip_coerce_rules(coercion_schema)
+
+    validation_schema = _strip_coerce_rules(cerb_schema)
     for table_id, table_data in coerced_data.items():
         table_info[table_id] = TableInfo(
             columns=len(table_data[0]),
             rows=len(table_data),
         )
         v = OdmValidator.new()
+        schema = {table_id: validation_schema[table_id]}
         for batch in batch_table_data('validating', table_id, table_data):
             batch_data, offset = batch
             v._errors.clear()
-            if v.validate(offset, data_kind, batch_data, validation_schema):
+            if v.validate(offset, data_kind, batch_data, schema):
                 continue
             e, w = map_cerb_errors(vctx, table_id, v._errors,
-                                   validation_schema, rule_filter, offset,
+                                   schema, rule_filter, offset,
                                    data_kind)
             errors += e
             warnings += w
