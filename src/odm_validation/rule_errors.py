@@ -249,9 +249,9 @@ def map_cerb_errors(vctx: ValidationCtx, table_id, cerb_errors, schema,
                 row = e.value
                 for attr_errors in e.info:
                     for e in attr_errors:
-                        rule_error = _gen_cerb_error_entry(vctx, e, row, schema,
-                                                           rule_filter, offset,
-                                                           data_kind)
+                        rule_error = _gen_cerb_error_entry(vctx, e, row,
+                                                           schema, rule_filter,
+                                                           offset, data_kind)
                         if not rule_error:
                             continue
                         (rule_id, entry) = rule_error
