@@ -13,7 +13,7 @@ def get_len(x: Any) -> int:
 
 def hash2(x) -> int:
     """An alternative hash function that can hash anything."""
-    if isinstance(x, dict):
+    if isinstance(x, dict) or isinstance(x, list):
         return hash(json.dumps(x, sort_keys=True))
     else:
         return hash(x)
