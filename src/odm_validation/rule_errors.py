@@ -34,8 +34,15 @@ def _gen_cerb_rule_map():
     return result
 
 
+def _is_invalid_type_rule(rule):
+    return rule.id == RuleId.invalid_type
+
+
 # local constants
 _KEY_RULES = _gen_cerb_rule_map()
+
+# local globals
+_invalid_type_rule = next(filter(_is_invalid_type_rule, ruleset), None)
 
 
 def _get_rule_id(x) -> RuleId:
@@ -47,23 +54,21 @@ def _get_dataType(x):
     return x[pt.DATA_TYPE]
 
 
-def _is_invalid_type_rule(rule):
-    return rule.id == RuleId.invalid_type
-
-
 def _transform_rule(rule: Rule, column_meta) -> Rule:
-    """Returns a new rule, depending on `column_meta`. Currently only returns
-    invalid_type if rule-key is 'allowed' and dataType is bool."""
+    '''Returns a new rule, depending on `column_meta`.'''
     # XXX: dependency on meta value (which is only supposed to aid debug)
     # XXX: does not handle rules with match_all_keys enabled
+
+    '''cerberus 'allowed' -> invalid_type, when dataType is boolean'''
     if rule.keys[0] == 'allowed':
+        new_rule = _invalid_type_rule
         rule_ids = list(map(_get_rule_id, column_meta))
-        new_rule = next(filter(_is_invalid_type_rule, ruleset), None)
         if not new_rule or (new_rule.id not in rule_ids):
             return rule
         ix = rule_ids.index(new_rule.id)
         if pt.BOOLEAN in map(_get_dataType, column_meta[ix]['meta']):
             return new_rule
+
     return rule
 
 
