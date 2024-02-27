@@ -29,7 +29,7 @@ from rule_errors import (
 
 TableDataset = Dict[pt.TableId, pt.Dataset]
 
-_BATCH_SIZE = 100
+_BATCH_SIZE = 20
 
 
 def _generate_validation_schema_ext(parts: pt.Dataset,
