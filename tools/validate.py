@@ -155,7 +155,7 @@ def strip_report(report: ValidationReport):
     }
     for errors in errorkind_errors.values():
         for e in errors:
-            del e['validationRuleFields']
+            e.pop('validationRuleFields', None)
             e.pop('row', None)
             e.pop('rows', None)
 

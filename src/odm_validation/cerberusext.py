@@ -121,7 +121,7 @@ class ContextualCoercer(Validator):
         table = self.document_path[0]
         row_ix = self.document_path[1]
         row = self.document
-        column_meta = self.schema[field].get('meta')
+        column_meta = self.schema[field].get('meta', [])
         ctx = reports.ErrorCtx(
             rule_id=RuleId._coercion,
             cerb_type_name=type_name(type_class),
@@ -243,7 +243,7 @@ class OdmValidator(Validator):
                     column_id=field,
                     row_numbers=[first_row_num],
                     rows=[first_row],
-                    column_meta=self.schema[field].get('meta'),
+                    column_meta=self.schema[field].get('meta', []),
                     value=pk[0]
                 )
                 state.tablekey_errors[tablekey] = err

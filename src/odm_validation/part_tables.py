@@ -186,9 +186,9 @@ def get_validation_rule_fields(column_meta, rule_ids: List[str]):
         return []
     assert isinstance(column_meta, list)
     assert isinstance(column_meta[0], dict)
-    assert isinstance(column_meta[0]['meta'], list)
+    assert isinstance(column_meta[0].get('meta', []), list)
     return flatten(list(
-        map(lambda x: x['meta'],
+        map(lambda x: x.get('meta', []),
             filter(lambda x: x['ruleID'] in rule_ids,
                    column_meta))))
 

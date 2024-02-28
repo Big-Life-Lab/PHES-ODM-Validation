@@ -78,7 +78,8 @@ def _get_allowed_values(cerb_rules: Dict[str, Any]) -> Set[str]:
 
 def _extract_datatype(column_meta: list) -> Optional[str]:
     # XXX: depends on meta (which should only be for debug)
-    rule_metas = flatten(map(lambda x: x['meta'], column_meta))
+    assert column_meta is not None
+    rule_metas = flatten(map(lambda x: x.get('meta', []), column_meta))
     datatype_metas = filter(lambda x: pt.DATA_TYPE in x, rule_metas)
     odm_type = next(datatype_metas, {}).get(pt.DATA_TYPE)
     return odm_type
@@ -104,6 +105,7 @@ def _gen_error_entry(vctx, cerb_rule, table_id, column_id, value, row_numbers,
                      data_kind=DataKind.python
                      ) -> Optional[RuleError]:
     "Generates a single validation error from input params."
+    assert column_meta is not None
     if not value and cerb_rule == 'type':
         return
 
@@ -155,6 +157,7 @@ def _gen_cerb_error_entry(vctx, e, row, schema: CerberusSchema,
     column_meta = schema_column.get('meta', [])
     row_numbers = [get_row_num(row_index, offset, data_kind)]
     rows = [row]
+    assert column_meta is not None
     return _gen_error_entry(
         vctx,
         cerb_rule,
