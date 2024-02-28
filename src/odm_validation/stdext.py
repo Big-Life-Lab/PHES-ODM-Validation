@@ -3,7 +3,7 @@ import json
 import operator
 from datetime import datetime
 from functools import reduce
-from typing import Any, List, Optional
+from typing import Any, List, Optional, Union
 
 
 def get_len(x: Any) -> int:
@@ -13,7 +13,7 @@ def get_len(x: Any) -> int:
 
 def hash2(x) -> int:
     """An alternative hash function that can hash anything."""
-    if isinstance(x, dict):
+    if isinstance(x, dict) or isinstance(x, list):
         return hash(json.dumps(x, sort_keys=True))
     else:
         return hash(x)
@@ -114,3 +114,46 @@ def countdown(count: int):
     "counts down from `count`-1 to 0"
     for i in range(count - 1, -1, -1):
         yield i
+
+
+def iscollection(x) -> bool:
+    assert not isinstance(x, set), "sets are not supported in this context"
+    return isinstance(x, dict) or isinstance(x, list)
+
+
+def swapDelete(items: list, i: int):
+    '''swaps the item at `i` with the last element, and removes the last
+    element.'''
+    last = items.pop()
+    if i < len(items):
+        items[i] = last
+
+
+def keep(x: Union[dict, list], target: str):
+    '''Recursively removes all dict-keys and list-values not matching
+    `target`.'''
+    assert not isinstance(x, set)
+    if isinstance(x, dict):
+        for key in list(x):
+            if key == target:
+                continue
+            val = x[key]
+            if iscollection(val):
+                keep(val, target)
+                if len(val) == 0:
+                    del x[key]
+            elif key != target:
+                del x[key]
+    elif isinstance(x, list):
+        i = 0
+        while i < len(x):
+            val = x[i]
+            if iscollection(val):
+                keep(val, target)
+                if len(val) == 0:
+                    swapDelete(x, i)
+                    continue
+            elif val != target:
+                swapDelete(x, i)
+                continue
+            i += 1

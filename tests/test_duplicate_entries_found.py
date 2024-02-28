@@ -67,9 +67,7 @@ class TestDuplicateEntriesFound(common.OdmTestCase):
     @parameterized.expand(param_range(1, 3))
     def test_failing_datasets(self, i):
         data = self.assets.data_fail[i]
-        report = _validate_data_ext(schema=self.assets.schemas[2],
-                                    data=data,
-                                    batch_size=(max(1, len(data) // 2)))
+        report = _validate_data_ext(schema=self.assets.schemas[2], data=data)
         expected = self.assets.error_report[i]
         self.assertReportEqual(expected, report)
 
