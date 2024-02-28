@@ -228,7 +228,8 @@ def main(data_file: List[str] = typer.Argument(..., help=DATA_FILE_DESC),
 
         def validate(data):
             report = _validate_data_ext(schema, data, DataKind.spreadsheet,
-                                        version, on_progress=on_progress)
+                                        version, on_progress=on_progress,
+                                        with_metadata=False)
             strip_report(report)
             info()  # newline after progressbar
 

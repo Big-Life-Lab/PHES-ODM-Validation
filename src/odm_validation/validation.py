@@ -17,7 +17,7 @@ from reports import ErrorVerbosity, TableInfo, ValidationCtx
 from rule_filters import RuleFilter
 from rules import RuleId, ruleset
 from schemas import Schema
-from stdext import deep_update, strip_dict_key
+from stdext import deep_update, keep, strip_dict_key
 from versions import __version__, parse_version
 
 from rule_errors import (
@@ -97,6 +97,35 @@ def _strip_coerce_rules(cerb_schema):
     return strip_dict_key(deepcopy(cerb_schema), 'coerce')
 
 
+def filter_dict_by_key(key: str, d: dict) -> dict:
+    result = {}
+    val = d.get(key, None)
+    if val is not None:
+        result[key] = val
+    return result
+
+
+def filter_column_schemas_by_key(key: str, column_schemas: dict) -> dict:
+    result = {}
+    for col_name, col_schema in column_schemas.items():
+        d = filter_dict_by_key(key, col_schema)
+        if d:
+            result[col_name] = d
+    return result
+
+
+def gen_coercion_schema(cerb_schema: dict) -> dict:
+    result = {}
+    for table_name, table_schema in cerb_schema.items():
+        cs = table_schema['schema']['schema']
+        result[table_name] = {
+            'schema': {
+                'schema': filter_column_schemas_by_key('coerce', cs),
+            }
+        }
+    return result
+
+
 def _validate_data_ext(
     schema: Schema,
     data: TableDataset,
@@ -106,6 +135,7 @@ def _validate_data_ext(
     rule_whitelist: List[RuleId] = [],
     on_progress: OnProgress = None,
     verbosity: ErrorVerbosity = ErrorVerbosity.LONG_METADATA_MESSAGE,
+    with_metadata: bool = True,
 ) -> reports.ValidationReport:
     """
     Validates `data` with `schema`, using Cerberus.
@@ -146,6 +176,19 @@ def _validate_data_ext(
     versioned_schema = schema
     cerb_schema = versioned_schema["schema"]
 
+    # remove meta fields, except for dataType and ruleID
+    if not with_metadata:
+        for t in cerb_schema.values():
+            s = t['schema']
+            s.pop('meta', None)
+            for c in s['schema'].values():
+                for metaEntry in c.get('meta', []):
+                    metaRuleDicts = metaEntry.get('meta')
+                    if metaRuleDicts:
+                        keep(metaRuleDicts, 'dataType')
+                        if len(metaRuleDicts) == 0:
+                            del metaEntry['meta']
+
     rule_filter = RuleFilter(whitelist=rule_whitelist,
                              blacklist=rule_blacklist)
 
@@ -162,7 +205,8 @@ def _validate_data_ext(
             if on_progress:
                 on_progress(action, table_id, offset, total)
 
-    coercion_schema = cerb_schema
+    coercion_schema = (cerb_schema if with_metadata else
+                       gen_coercion_schema(cerb_schema))
     coerced_data = defaultdict(list)
     coercer = ContextualCoercer(warnings=warnings, errors=errors)
     for table_id, table_data in data.items():
