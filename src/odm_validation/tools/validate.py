@@ -78,7 +78,7 @@ def import_xlsx(src_file, dst_dir) -> List[str]:
 def get_sheet_table_id(schema, sheet_name) -> Optional[str]:
     table_ids = list(schema['schema'].keys())
     for table_id in table_ids:
-        if sheet_name.endswith(' ' + table_id):
+        if sheet_name.lower().endswith(table_id.lower()):
             return table_id
 
 
