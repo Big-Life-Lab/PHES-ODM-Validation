@@ -22,11 +22,10 @@ dynamic = ["dependencies"]
 requires = ["hatchling", "hatch-requirements-txt"]
 build-backend = "hatchling.build"
 
-# https://stackoverflow.com/a/75397171
+# include validation schemas
 [tool.hatch.build.targets.wheel.force-include]
 "assets/validation-schemas" = "odm_validation/assets/validation-schemas"
 
-# This ensures that the dependencies are installed when the package is
-# installed
+# install dependencies automatically
 [tool.hatch.metadata.hooks.requirements_txt]
 files = ["requirements.txt"]
