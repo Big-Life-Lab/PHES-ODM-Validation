@@ -235,7 +235,6 @@ def main_cli(
     try:
         info(f'validating {in_paths}')
         info(f'using schema "{os.path.basename(schema_path)}"')
-        validation._VERBOSITY = verbosity
 
         if in_fmt == DataFormat.XLSX:
             in_paths = convert_excel_to_csv(in_paths[0])
@@ -245,7 +244,8 @@ def main_cli(
         def validate(data):
             report = _validate_data_ext(schema, data, DataKind.spreadsheet,
                                         version, on_progress=on_progress,
-                                        with_metadata=False)
+                                        with_metadata=False,
+                                        verbosity=verbosity)
             strip_report(report)
             info()  # newline after progressbar
 
