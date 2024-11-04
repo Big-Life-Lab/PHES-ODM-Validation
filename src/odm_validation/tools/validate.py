@@ -185,7 +185,7 @@ def write_report(output: IO, report, fmt: ReportFormat):
 
 
 # XXX: locals must be disabled to avoid `schema` being dumped to console on an
-# exception (and makeing it unreadable)
+# exception (which makes it unreadable)
 app = typer.Typer(pretty_exceptions_show_locals=False)
 
 
