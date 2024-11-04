@@ -190,13 +190,14 @@ app = typer.Typer(pretty_exceptions_show_locals=False)
 
 
 @app.command()
-def main(data_file: List[str] = typer.Argument(..., help=DATA_FILE_DESC),
-         version: str = typer.Option(default=DEF_VER, help=VERSION_DESC),
-         out: str = typer.Option(default="", help=OUT_DESC),
-         format: Optional[ReportFormat] = typer.Option(default=None,
-                                                       help=FORMAT_DESC),
-         verbosity: int = typer.Option(default=2, help=VERB_DESC)):
-
+def main(
+    data_file: List[str] = typer.Argument(default=..., help=DATA_FILE_DESC),
+    version: str = typer.Option(default=DEF_VER, help=VERSION_DESC),
+    out: str = typer.Option(default="", help=OUT_DESC),
+    format: Optional[ReportFormat] = typer.Option(default=None,
+                                                  help=FORMAT_DESC),
+    verbosity: int = typer.Option(default=2, help=VERB_DESC)
+):
     out_path = out
     out_fmt = format
     in_paths: list = data_file
