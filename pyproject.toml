@@ -22,6 +22,10 @@ dynamic = ["dependencies"]
 requires = ["hatchling", "hatch-requirements-txt"]
 build-backend = "hatchling.build"
 
+# specify package dir
+[tool.hatch.build.targets.wheel]
+packages = ["src/odm_validation"]
+
 # include validation schemas
 [tool.hatch.build.targets.wheel.force-include]
 "assets/validation-schemas" = "odm_validation/assets/validation-schemas"
