@@ -13,9 +13,7 @@ import typer
 root_dir = join(os.path.dirname(os.path.realpath(__file__)), '..')
 sys.path.append(join(root_dir, 'src'))
 
-from odm_validation import reports  # noqa:E402
-
-from reports import ErrorKind, ValidationReport  # noqa:E402
+from odm_validation.reports import ErrorKind, ValidationReport  # noqa:E402
 
 from odm_validation.summarization import (  # noqa:E402
     SummaryEntry,
