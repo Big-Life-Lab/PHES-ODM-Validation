@@ -27,7 +27,7 @@ from odm_validation.reports import (  # noqa:E402
     join_reports
 )
 
-from reportutils import (  # noqa:E402
+from odm_validation.tools.reportutils import (  # noqa:E402
     ReportFormat,
     detect_report_format_from_path,
     get_ext,

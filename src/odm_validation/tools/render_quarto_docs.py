@@ -8,7 +8,7 @@ import os
 from pathlib import Path
 
 tool_dir = Path(__file__).parent
-root_dir = tool_dir.parent
+root_dir = tool_dir.parent.parent.parent
 glob_expr = 'docs/**/*.qmd'
 
 print(f'rendering {glob_expr}')
