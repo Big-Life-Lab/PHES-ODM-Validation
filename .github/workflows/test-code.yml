@@ -14,4 +14,5 @@ jobs:
         cache: 'pip' # caching pip dependencies
     - run: pip install -r requirements.txt
     - run: pip install -r tests/requirements.txt
+    - run: pip install .
     - run: python -m unittest discover tests
