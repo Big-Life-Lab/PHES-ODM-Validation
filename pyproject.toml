@@ -18,6 +18,9 @@ dynamic = ["dependencies"]
 "Homepage" = "https://github.com/Big-Life-Lab/PHES-ODM-Validation"
 "Bug Tracker" = "https://github.com/Big-Life-Lab/PHES-ODM-Validation/issues"
 
+[project.scripts]
+odm-validate = "odm_validation.tools.validate:main"
+
 [build-system]
 requires = ["hatchling", "hatch-requirements-txt"]
 build-backend = "hatchling.build"

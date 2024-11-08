@@ -190,7 +190,7 @@ app = typer.Typer(pretty_exceptions_show_locals=False)
 
 
 @app.command()
-def main(
+def main_cli(
     data_file: List[str] = typer.Argument(default=..., help=DATA_FILE_DESC),
     version: str = typer.Option(default=DEF_VER, help=VERSION_DESC),
     out: str = typer.Option(default="", help=OUT_DESC),
@@ -289,5 +289,11 @@ def main(
     info('done!')
 
 
-if __name__ == '__main__':
+def main():
+    # XXX: needed to make odm-validate work
+    # runs main_cli
     app()
+
+
+if __name__ == '__main__':
+    main()
