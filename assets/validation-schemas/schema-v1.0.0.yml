@@ -1135,6 +1135,9 @@ schema:
             ruleID: invalid_type
           type: string
         contactPhone:
+          anyof:
+          - empty: true
+            minlength: 10
           maxlength: 12
           meta:
           - meta:
@@ -1158,7 +1161,6 @@ schema:
               version1Table: Lab
               version1Variable: contactPhone
             ruleID: less_than_min_length
-          minlength: 10
           type: string
         labID:
           maxlength: 10

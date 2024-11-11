@@ -568,6 +568,9 @@ schema:
           required: true
           type: string
         phone:
+          anyof:
+          - empty: true
+            minlength: 10
           maxlength: 12
           meta:
           - meta:
@@ -588,7 +591,6 @@ schema:
               minLength: '10'
               partID: phone
             ruleID: less_than_min_length
-          minlength: 10
           type: string
         role:
           maxlength: 30
