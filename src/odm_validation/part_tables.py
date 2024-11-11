@@ -6,7 +6,7 @@ import re
 import sys
 from dataclasses import dataclass
 from enum import Enum
-from logging import error, info, warning
+from logging import error, info
 from os.path import join
 from pathlib import Path
 from semver import Version
@@ -328,16 +328,6 @@ def is_catset_attr(p):
     return is_attr(p) and has_catset(p)
 
 
-def is_cat(p):
-    """
-    Categories are the actual values of a category-set.
-    This is analogous to the values of 'enum' types.
-
-    Categories without a catSetID are invalid and ignored.
-    """
-    return p.get(PART_TYPE) == CATEGORY and has_catset(p)
-
-
 def get_partID(p):
     # TODO: rename to get_partid or get_id?
     assert PART_ID in p, str(p)
@@ -358,31 +348,6 @@ def get_key(pair):
 
 def get_val(pair):
     return pair[1]
-
-
-def _get_table_id(part: dict) -> Optional[str]:
-    """Retrieves the table id of `part`.
-
-    It is looked up in the following order:
-
-    1. partID (if partType is table)
-    2. <table>Required (addressesRequired, etc.)
-    3. <table>=<column_kind> (addresses=header, etc.)
-    """
-    # The returned id must match a corresponding part with
-    # partId=id and partType=table.
-    if is_table(part):
-        return part[PART_ID]
-    req_keys = list(filter(lambda k: k.endswith(_REQUIRED), part.keys()))
-    if len(req_keys) > 0:
-        req = req_keys[0]
-        return req[:req.find(_REQUIRED)]
-    column_keys = list(
-        map(get_key,
-            filter(lambda pair: get_val(pair) in COLUMN_KINDS, part.items())))
-    if len(column_keys) > 0:
-        return column_keys[0]
-    warning(f'missing table relation for part {get_partID(part)}')
 
 
 def _not_empty(field):
