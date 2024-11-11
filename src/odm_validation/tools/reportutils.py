@@ -4,7 +4,6 @@ import sys
 from enum import Enum
 from os.path import join
 from typing import IO, Optional
-from pprint import pprint
 
 import yaml
 

@@ -18,7 +18,6 @@ sys.path.append(join(root_dir, 'src'))
 
 import odm_validation.part_tables as pt  # noqa:E402
 import odm_validation.utils as utils  # noqa:E402
-import odm_validation.validation as validation  # noqa:E402
 from odm_validation.validation import _validate_data_ext, DataKind  # noqa:E402
 
 from odm_validation.reports import (  # noqa:E402
