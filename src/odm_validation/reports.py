@@ -186,10 +186,23 @@ def _gen_error_msg(ctx: ErrorCtx, template: Optional[str] = None,
         xfix.get('suffix', ''),
     ])
 
+    # XXX: constraint may be a combination of rules due to a need for the
+    # 'empty' rule, which we'll have to exclude to get the actual rule value we
+    # want. This is the case when constraint has the type List[dict]
+    constraint = ctx.constraint
+    if isinstance(constraint, list):
+        rules = constraint[0]
+        if isinstance(rules, dict):
+            del rules['empty']
+            assert len(rules) == 1
+            key = next(iter(rules))
+            val = rules[key]
+            constraint = val
+
     return full_template.format(
         allowed_values=_fmt_allowed_values(ctx.allowed_values),
         column_id=ctx.column_id,
-        constraint=_fmt_msg_value(ctx.constraint, relaxed=True),
+        constraint=_fmt_msg_value(constraint, relaxed=True),
         row_num=_fmt_list(ctx.row_numbers),
         rule_id=ctx.rule_id.name,
         table_id=ctx.table_id,
