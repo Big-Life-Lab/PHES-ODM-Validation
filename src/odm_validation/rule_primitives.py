@@ -4,6 +4,7 @@ from typing import Any, Callable, List, Optional, Set
 # from pprint import pprint
 
 import part_tables as pt
+import schemas
 from part_tables import Meta, MetaEntry, OdmData, Part, PartId
 from schemas import init_attr_schema, init_table_schema
 from stdext import (
@@ -243,7 +244,7 @@ def gen_cerb_rules_for_type(val_ctx: OdmValueCtx) -> dict:
     if cerb_type:
         result['type'] = cerb_type
         if cerb_type != 'string':
-            result['coerce'] = cerb_type
+            result[schemas.COERCE_KEY] = cerb_type
         if odm_type == 'boolean':
             result['allowed'] = sorted(val_ctx.bool_set)
     return result

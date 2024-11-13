@@ -10,6 +10,7 @@ from cerberus import Validator
 from cerberus.errors import ErrorDefinition
 
 import part_tables as pt
+import schemas
 import reports
 from input_data import DataKind
 from reports import get_row_num
@@ -76,7 +77,7 @@ class ContextualCoercer(Validator):
             schema = result[table]['schema']['schema']
             for field, rules in list(schema.items()):
                 for key in list(rules.keys()):
-                    if key == 'coerce':
+                    if key == schemas.COERCE_KEY:
                         rules['check_with'] = rules.pop(key)
                     elif key != 'meta':
                         del rules[key]

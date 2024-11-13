@@ -10,6 +10,7 @@ from enum import Enum
 
 import part_tables as pt
 import reports
+import schemas
 from cerberusext import ContextualCoercer, OdmValidator
 from copy import deepcopy
 from input_data import DataKind
@@ -94,7 +95,7 @@ OnProgress = Callable[[str, str, int, int], None]
 
 
 def _strip_coerce_rules(cerb_schema):
-    return strip_dict_key(deepcopy(cerb_schema), 'coerce')
+    return strip_dict_key(deepcopy(cerb_schema), schemas.COERCE_KEY)
 
 
 def filter_dict_by_key(key: str, d: dict) -> dict:
