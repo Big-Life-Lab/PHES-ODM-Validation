@@ -212,8 +212,8 @@ schema:
       schema:
         accessToAllOrg:
           allowed:
-          - 'False'
-          - 'True'
+          - 'FALSE'
+          - 'TRUE'
           maxlength: 1
           meta:
           - meta:
@@ -233,8 +233,8 @@ schema:
           type: string
         accessToDetails:
           allowed:
-          - 'False'
-          - 'True'
+          - 'FALSE'
+          - 'TRUE'
           maxlength: 1
           meta:
           - meta:
@@ -254,8 +254,8 @@ schema:
           type: string
         accessToLocalHA:
           allowed:
-          - 'False'
-          - 'True'
+          - 'FALSE'
+          - 'TRUE'
           maxlength: 1
           meta:
           - meta:
@@ -275,8 +275,8 @@ schema:
           type: string
         accessToOtherProv:
           allowed:
-          - 'False'
-          - 'True'
+          - 'FALSE'
+          - 'TRUE'
           maxlength: 1
           meta:
           - meta:
@@ -296,8 +296,8 @@ schema:
           type: string
         accessToPHAC:
           allowed:
-          - 'False'
-          - 'True'
+          - 'FALSE'
+          - 'TRUE'
           maxlength: 1
           meta:
           - meta:
@@ -317,8 +317,8 @@ schema:
           type: string
         accessToProvHA:
           allowed:
-          - 'False'
-          - 'True'
+          - 'FALSE'
+          - 'TRUE'
           maxlength: 1
           meta:
           - meta:
@@ -338,8 +338,8 @@ schema:
           type: string
         accessToPublic:
           allowed:
-          - 'False'
-          - 'True'
+          - 'FALSE'
+          - 'TRUE'
           maxlength: 1
           meta:
           - meta:
@@ -359,8 +359,8 @@ schema:
           type: string
         accessToSelf:
           allowed:
-          - 'False'
-          - 'True'
+          - 'FALSE'
+          - 'TRUE'
           maxlength: 1
           meta:
           - meta:
@@ -1875,8 +1875,8 @@ schema:
           type: string
         pooled:
           allowed:
-          - 'False'
-          - 'True'
+          - 'FALSE'
+          - 'TRUE'
           maxlength: 30
           meta:
           - meta:
@@ -2496,8 +2496,8 @@ schema:
       schema:
         accessToAllOrg:
           allowed:
-          - 'False'
-          - 'True'
+          - 'FALSE'
+          - 'TRUE'
           maxlength: 1
           meta:
           - meta:
@@ -2517,8 +2517,8 @@ schema:
           type: string
         accessToDetails:
           allowed:
-          - 'False'
-          - 'True'
+          - 'FALSE'
+          - 'TRUE'
           maxlength: 1
           meta:
           - meta:
@@ -2538,8 +2538,8 @@ schema:
           type: string
         accessToLocalHA:
           allowed:
-          - 'False'
-          - 'True'
+          - 'FALSE'
+          - 'TRUE'
           maxlength: 1
           meta:
           - meta:
@@ -2559,8 +2559,8 @@ schema:
           type: string
         accessToOtherProv:
           allowed:
-          - 'False'
-          - 'True'
+          - 'FALSE'
+          - 'TRUE'
           maxlength: 1
           meta:
           - meta:
@@ -2580,8 +2580,8 @@ schema:
           type: string
         accessToPHAC:
           allowed:
-          - 'False'
-          - 'True'
+          - 'FALSE'
+          - 'TRUE'
           maxlength: 1
           meta:
           - meta:
@@ -2601,8 +2601,8 @@ schema:
           type: string
         accessToProvHA:
           allowed:
-          - 'False'
-          - 'True'
+          - 'FALSE'
+          - 'TRUE'
           maxlength: 1
           meta:
           - meta:
@@ -2622,8 +2622,8 @@ schema:
           type: string
         accessToPublic:
           allowed:
-          - 'False'
-          - 'True'
+          - 'FALSE'
+          - 'TRUE'
           maxlength: 1
           meta:
           - meta:
@@ -2643,8 +2643,8 @@ schema:
           type: string
         accessToSelf:
           allowed:
-          - 'False'
-          - 'True'
+          - 'FALSE'
+          - 'TRUE'
           maxlength: 1
           meta:
           - meta:
@@ -3180,8 +3180,8 @@ schema:
       schema:
         accessToAllOrg:
           allowed:
-          - 'False'
-          - 'True'
+          - 'FALSE'
+          - 'TRUE'
           maxlength: 1
           meta:
           - meta:
@@ -3201,8 +3201,8 @@ schema:
           type: string
         accessToDetails:
           allowed:
-          - 'False'
-          - 'True'
+          - 'FALSE'
+          - 'TRUE'
           maxlength: 1
           meta:
           - meta:
@@ -3222,8 +3222,8 @@ schema:
           type: string
         accessToLocalHA:
           allowed:
-          - 'False'
-          - 'True'
+          - 'FALSE'
+          - 'TRUE'
           maxlength: 1
           meta:
           - meta:
@@ -3243,8 +3243,8 @@ schema:
           type: string
         accessToOtherProv:
           allowed:
-          - 'False'
-          - 'True'
+          - 'FALSE'
+          - 'TRUE'
           maxlength: 1
           meta:
           - meta:
@@ -3264,8 +3264,8 @@ schema:
           type: string
         accessToPHAC:
           allowed:
-          - 'False'
-          - 'True'
+          - 'FALSE'
+          - 'TRUE'
           maxlength: 1
           meta:
           - meta:
@@ -3285,8 +3285,8 @@ schema:
           type: string
         accessToProvHA:
           allowed:
-          - 'False'
-          - 'True'
+          - 'FALSE'
+          - 'TRUE'
           maxlength: 1
           meta:
           - meta:
@@ -3306,8 +3306,8 @@ schema:
           type: string
         accessToPublic:
           allowed:
-          - 'False'
-          - 'True'
+          - 'FALSE'
+          - 'TRUE'
           maxlength: 1
           meta:
           - meta:
@@ -3327,8 +3327,8 @@ schema:
           type: string
         accessToSelf:
           allowed:
-          - 'False'
-          - 'True'
+          - 'FALSE'
+          - 'TRUE'
           maxlength: 1
           meta:
           - meta:
