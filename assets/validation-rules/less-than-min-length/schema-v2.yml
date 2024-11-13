@@ -6,7 +6,9 @@ schema:
       type: dict
       schema:
         phone:
-          minlength: 10
+          anyof:
+          - empty: True
+            minlength: 10
           meta:
           - ruleID: less_than_min_length
             meta:

@@ -7,9 +7,11 @@ schema:
       schema:
         SiteID:
           required: true
-          allowed:
-          - Ottawa Site
-          - Montreal Site
+          anyof:
+          - allowed:
+            - Ottawa Site
+            - Montreal Site
+            empty: true
           meta:
           - ruleID: missing_mandatory_column
             meta:
