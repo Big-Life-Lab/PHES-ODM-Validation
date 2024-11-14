@@ -27,20 +27,20 @@ def deep_update(dst: dict, src: dict):
 
     Originally from: https://stackoverflow.com/a/8310229
     """
-    for key, value in src.items():
+    for key, src_val in src.items():
         if key not in dst:
-            dst[key] = value
-        elif isinstance(value, dict):
-            deep_update(dst[key], value)
-        elif isinstance(value, list):
-            src_list = value
+            dst[key] = src_val
+        elif isinstance(src_val, dict):
+            deep_update(dst[key], src_val)
+        elif isinstance(src_val, list):
+            src_list = src_val
             if len(src_list) == 0:
                 continue
             dst_list = dst[key]
             dst_hashset = set(map(hash2, dst_list))
-            for item in src_list:
-                if hash2(item) not in dst_hashset:
-                    dst_list.append(item)
+            for src_item in src_list:
+                if hash2(src_item) not in dst_hashset:
+                    dst_list.append(src_item)
 
 
 def strip_dict_key(d: dict, target_key: str):
