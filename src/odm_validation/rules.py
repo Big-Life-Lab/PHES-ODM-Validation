@@ -10,8 +10,9 @@ from typing import Any, Callable, List, Tuple
 
 import part_tables as pt
 from input_data import DataKind
-from schemas import Schema, update_schema
+from schemas import Schema, init_attr_schema, init_table_schema
 from stdext import (
+    deep_update,
     try_parse_int,
 )
 from rule_primitives import (
@@ -84,7 +85,8 @@ def init_rule(rule_id, error, gen_cerb_rules, gen_schema,
     - `error` can either be a string or a function taking a value and returning
       a string.
     - `gen_cerb_rules` must accept a dummy context of `None` values, and return
-      a dict with cerberus rule names as keys.
+      a dict with cerberus rule names as keys. Only the keys are used, so the
+      values can be empty.
     - `is_column` determines if the rule is validating columns/headers.
     """
     dummy_ctx = OdmValueCtx(value=1, datatype='integer', bool_set=set(),
@@ -230,9 +232,6 @@ def invalid_category():
     cerb_rule_key = 'allowed'
     err = 'Invalid category {value}'
 
-    def gen_cerb_rules(val_ctx: OdmValueCtx):
-        return {cerb_rule_key: None}
-
     def gen_schema(data: pt.OdmData, ver: Version):
         # FIXME: `cat_ids1` contains duplicates due to v1 categories belonging
         # to multiple tables.
@@ -251,11 +250,18 @@ def invalid_category():
                 cat_ids1 = pt.map_ids(data.mappings, cat_ids0, ver)
                 if len(cat_ids1) == 0:
                     continue
-                cerb_rule = (cerb_rule_key, sorted(set(cat_ids1 + other_cat)))
+                cerb_rules = {cerb_rule_key: sorted(set(cat_ids1 + other_cat))}
                 attr_meta = get_catset_meta(table_id0, cs, categories, ver)
-                update_schema(schema, table_id1, attr_id1, rule_id.name,
-                              cerb_rule, table_meta, attr_meta)
+                attr_schema = init_attr_schema(attr_id1, rule_id.name,
+                                               cerb_rules, attr_meta)
+                table_schema = init_table_schema(table_id1, table_meta,
+                                                 attr_schema)
+                deep_update(schema, table_schema)
+
         return schema
+
+    def gen_cerb_rules(val_ctx: OdmValueCtx):
+        return {cerb_rule_key: None}
 
     return init_rule(rule_id, err, gen_cerb_rules, gen_schema)
 
