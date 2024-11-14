@@ -69,7 +69,7 @@ def _generate_validation_schema_ext(parts: pt.Dataset,
         assert s is not None
         deep_update(cerb_schema, s)
     additions_schema = gen_additions_schema(schema_additions)
-    deep_update(cerb_schema, additions_schema)
+    deep_update(cerb_schema, additions_schema, merge_dict_lists=True)
 
     # strip empty tables
     for table in list(cerb_schema):

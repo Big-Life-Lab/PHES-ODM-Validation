@@ -19,26 +19,42 @@ def hash2(x) -> int:
         return hash(x)
 
 
-def deep_update(dst: dict, src: dict):
-    """
-    Recursively update a dict.
-    Subdict's won't be overwritten but also updated.
-    List values will be joined, but not recursed.
+def deep_update(dst: dict, src: dict, merge_dict_lists: bool = False):
+    '''recursively merge two dictionaries
 
-    Originally from: https://stackoverflow.com/a/8310229
-    """
+    :param dst: the dict to merge into
+    :param src: the dict to merge from
+    :param merge_dict_lists: recurse into lists of dictionaries instead of
+        simply appending to the lists.
+    '''
     for key, src_val in src.items():
         if key not in dst:
             dst[key] = src_val
         elif isinstance(src_val, dict):
-            deep_update(dst[key], src_val)
+            deep_update(dst[key], src_val, merge_dict_lists)
         elif isinstance(src_val, list):
             src_list = src_val
-            if len(src_list) == 0:
+            n = len(src_list)
+            if n == 0:
                 continue
             dst_list = dst[key]
+            assert isinstance(dst_list, list)
+
+            # match dicts for as long as possible...
+            off = 0
+            if merge_dict_lists:
+                for i in range(min(len(dst_list), n)):
+                    dst_dict = dst_list[i]
+                    src_dict = src_list[i]
+                    if not (isinstance(dst_dict, dict) and
+                            isinstance(src_dict, dict)):
+                        break
+                    deep_update(dst_dict, src_dict, merge_dict_lists)
+                    off = i + 1
+
+            # ...then resort to appending the rest
             dst_hashset = set(map(hash2, dst_list))
-            for src_item in src_list:
+            for src_item in src_list[off:]:
                 if hash2(src_item) not in dst_hashset:
                     dst_list.append(src_item)
 
