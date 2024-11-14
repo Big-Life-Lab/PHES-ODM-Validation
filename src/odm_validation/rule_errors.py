@@ -1,4 +1,5 @@
 import logging
+from copy import deepcopy
 from itertools import groupby
 from typing import Any, Dict, Optional, Set, Tuple
 # from pprint import pprint
@@ -146,11 +147,24 @@ def _gen_error_entry(vctx, cerb_rule, table_id, column_id, value, row_numbers,
     return (rule.id, entry)
 
 
+def _get_cerb_rule(e):
+    rule = e.schema_path[-1]
+
+    # 'anyof' may be used to wrap the actual rule together with 'empty'
+    if rule == 'anyof':
+        rules: dict = deepcopy(e.constraint[0])
+        del rules['empty']
+        assert len(rules) == 1
+        rule = next(iter(rules))
+
+    return rule
+
+
 def _gen_cerb_error_entry(vctx, e, row, schema: CerberusSchema,
                           rule_filter: RuleFilter, offset: int,
                           data_kind: DataKind) -> Optional[RuleError]:
     "Transforms a single Cerberus error into a validation error."
-    cerb_rule = e.schema_path[-1]
+    cerb_rule = _get_cerb_rule(e)
     (table_id, _, column_id) = e.document_path
     row_index = e.document_path[1]
     schema_column = schema[table_id]['schema']['schema'][column_id]
