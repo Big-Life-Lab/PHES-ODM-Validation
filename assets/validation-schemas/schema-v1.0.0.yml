@@ -111,13 +111,15 @@ schema:
             ruleID: invalid_type
           type: string
         unit:
-          allowed:
-          - gcCrA
-          - gcGs
-          - gcL
-          - gcMl
-          - gcPMMoV
-          - other
+          anyof:
+          - allowed:
+            - gcCrA
+            - gcGs
+            - gcL
+            - gcMl
+            - gcPMMoV
+            - other
+            empty: true
           maxlength: 30
           meta:
           - meta:
@@ -951,12 +953,14 @@ schema:
             ruleID: invalid_type
           type: string
         type:
-          allowed:
-          - atline
-          - hand
-          - lab
-          - online
-          - other
+          anyof:
+          - allowed:
+            - atline
+            - hand
+            - lab
+            - online
+            - other
+            empty: true
           emptyTrimmed: false
           forbidden:
           - NA
@@ -1303,10 +1307,12 @@ schema:
           type: string
           unique: true
         type:
-          allowed:
-          - hlthReg
-          - other
-          - swrCatSet
+          anyof:
+          - allowed:
+            - hlthReg
+            - other
+            - swrCatSet
+            empty: true
           emptyTrimmed: false
           forbidden:
           - NA
@@ -1492,15 +1498,17 @@ schema:
         version1Table: Sample
       schema:
         collection:
-          allowed:
-          - cpFP24h
-          - cpTP24h
-          - grb
-          - grbCp3
-          - grbCp3h
-          - grbCp8h
-          - mooreSw
-          - other
+          anyof:
+          - allowed:
+            - cpFP24h
+            - cpTP24h
+            - grb
+            - grbCp3
+            - grbCp3h
+            - grbCp8h
+            - mooreSw
+            - other
+            empty: true
           emptyTrimmed: false
           forbidden:
           - NA
@@ -1748,17 +1756,19 @@ schema:
             ruleID: invalid_type
           type: string
         type:
-          allowed:
-          - hTank
-          - other
-          - pEfflu
-          - pSludge
-          - pstGrit
-          - rawWW
-          - sEfflu
-          - sSludge
-          - swrSed
-          - water
+          anyof:
+          - allowed:
+            - hTank
+            - other
+            - pEfflu
+            - pSludge
+            - pstGrit
+            - rawWW
+            - sEfflu
+            - sSludge
+            - swrSed
+            - water
+            empty: true
           emptyTrimmed: false
           forbidden:
           - NA
@@ -1989,28 +1999,30 @@ schema:
             ruleID: invalid_type
           type: string
         type:
-          allowed:
-          - airPln
-          - corFcil
-          - estuary
-          - faeces
-          - holdTnk
-          - hosptl
-          - lagoon
-          - lake
-          - ltcf
-          - mSwrPpl
-          - ocean
-          - other
-          - pStat
-          - retPond
-          - river
-          - school
-          - sea
-          - septTnk
-          - swgTrck
-          - wwtpInd
-          - wwtpMuC
+          anyof:
+          - allowed:
+            - airPln
+            - corFcil
+            - estuary
+            - faeces
+            - holdTnk
+            - hosptl
+            - lagoon
+            - lake
+            - ltcf
+            - mSwrPpl
+            - ocean
+            - other
+            - pStat
+            - retPond
+            - river
+            - school
+            - sea
+            - septTnk
+            - swgTrck
+            - wwtpInd
+            - wwtpMuC
+            empty: true
           emptyTrimmed: false
           forbidden:
           - NA
