@@ -7,12 +7,14 @@ schema:
       type: dict
       schema:
         Collection:
-          allowed:
-          - Comp3h
-          - Comp8h
-          - FlowPr
-          - FlowRatePr
-          - other
+          anyof:
+          - allowed:
+            - Comp3h
+            - Comp8h
+            - FlowPr
+            - FlowRatePr
+            - other
+            empty: true
           meta:
           - ruleID: invalid_category
             meta:
@@ -47,11 +49,13 @@ schema:
       type: dict
       schema:
         type:
-          allowed:
+          anyof:
+          - allowed:
             - other
             - someOldCat1
             - wwtpMuC
             - wwtpMuS
+            empty: true
           meta:
           - ruleID: invalid_category
             meta:
@@ -86,10 +90,12 @@ schema:
       type: dict
       schema:
         type:
-          allowed:
-          - other
-          - wqCOD
-          - wwCOD
+          anyof:
+          - allowed:
+            - other
+            - wqCOD
+            - wwCOD
+            empty: true
           meta:
           - ruleID: invalid_category
             meta:

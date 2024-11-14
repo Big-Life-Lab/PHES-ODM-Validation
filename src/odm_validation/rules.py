@@ -250,7 +250,10 @@ def invalid_category():
                 cat_ids1 = pt.map_ids(data.mappings, cat_ids0, ver)
                 if len(cat_ids1) == 0:
                     continue
-                cerb_rules = {cerb_rule_key: sorted(set(cat_ids1 + other_cat))}
+                cerb_rules = {'anyof': [{
+                    'empty': True,
+                    cerb_rule_key: sorted(set(cat_ids1 + other_cat)),
+                }]}
                 attr_meta = get_catset_meta(table_id0, cs, categories, ver)
                 attr_schema = init_attr_schema(attr_id1, rule_id.name,
                                                cerb_rules, attr_meta)
