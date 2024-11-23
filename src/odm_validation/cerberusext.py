@@ -212,7 +212,7 @@ class OdmValidator(Validator):
         expect_empty = constraint
         is_str = isinstance(raw_value, str)
         value = raw_value.strip() if is_str else raw_value
-        is_empty = not value or (is_str and value == '')
+        is_empty = not value
         if is_empty != expect_empty:
             err = ErrorDefinition(EMPTY_TRIMMED_RULE, 'emptyTrimmed')
             self._error(field, err)
