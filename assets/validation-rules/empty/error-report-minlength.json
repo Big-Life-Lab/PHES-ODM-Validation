@@ -1,0 +1,75 @@
+{
+    "warnings": [
+        {
+            "warningType": "missing_values_found",
+            "tableName": "sites",
+            "columnName": "minlengthField",
+            "validationRuleFields": [],
+            "message": "missing_values_found rule triggered in table sites, column minlengthField, row(s) 1: Empty string found",
+            "rowNumber": 1,
+            "row": {"siteID": "1", "minlengthField": ""},
+            "invalidValue": ""
+        },
+        {
+            "warningType": "missing_values_found",
+            "tableName": "sites",
+            "columnName": "minlengthField",
+            "validationRuleFields": [],
+            "message": "missing_values_found rule triggered in table sites, column minlengthField, row(s) 2: Empty string found",
+            "rowNumber": 2,
+            "row": {"siteID": "2", "minlengthField": ""}, "invalidValue": ""
+        },
+        {
+            "warningType": "missing_values_found",
+            "tableName": "sites",
+            "columnName": "minlengthField",
+            "validationRuleFields": [],
+            "message": "missing_values_found rule triggered in table sites, column minlengthField, row(s) 3: Missing value \"   \"",
+            "rowNumber": 3,
+            "row": {"siteID": "3", "minlengthField": "   "},
+            "invalidValue": "   "
+        },
+        {
+            "warningType": "missing_values_found",
+            "tableName": "sites",
+            "columnName": "minlengthField",
+            "validationRuleFields": [],
+            "message": "missing_values_found rule triggered in table sites, column minlengthField, row(s) 4: Missing value \"NA\"",
+            "rowNumber": 4,
+            "row": {"siteID": "4", "minlengthField": "NA"},
+            "invalidValue": "NA"
+        }
+    ],
+    "errors": [
+        {
+            "errorType": "less_than_min_length",
+            "tableName": "sites",
+            "columnName": "minlengthField",
+            "validationRuleFields": [],
+            "message": "less_than_min_length rule violated in table sites, column minlengthField, row(s) 3: Value \"   \" (of length 3) is less than the min length of \"5\"",
+            "rowNumber": 3,
+            "row": {"siteID": "3", "minlengthField": "   "},
+            "invalidValue": "   "
+        },
+        {
+            "errorType": "less_than_min_length",
+            "tableName": "sites",
+            "columnName": "minlengthField",
+            "validationRuleFields": [],
+            "message": "less_than_min_length rule violated in table sites, column minlengthField, row(s) 4: Value \"NA\" (of length 2) is less than the min length of \"5\"",
+            "rowNumber": 4,
+            "row": {"siteID": "4", "minlengthField": "NA"},
+            "invalidValue": "NA"
+        },
+        {
+            "errorType": "less_than_min_length",
+            "tableName": "sites",
+            "columnName": "minlengthField",
+            "validationRuleFields": [],
+            "message": "less_than_min_length rule violated in table sites, column minlengthField, row(s) 5: Value \"x\" (of length 1) is less than the min length of \"5\"",
+            "rowNumber" : 5,
+            "row": {"siteID": "5", "minlengthField": "x"},
+            "invalidValue": "x"
+        }
+    ]
+}

@@ -1,0 +1,14 @@
+schemaVersion: 2.0.0
+schema:
+  sites:
+    type: list
+    schema:
+      type: dict
+      schema:
+        minlengthField:
+          anyof:
+          - minlength: 5
+            empty: true
+          emptyTrimmed: false
+          forbidden:
+          - NA
