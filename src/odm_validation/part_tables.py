@@ -127,6 +127,7 @@ ODM_VERSION = parse_version(ODM_VERSION_STR)
 
 # field constants
 CATSET_ID = 'mmaSet'
+CLASS = 'class'
 DATA_TYPE = 'dataType'
 FIRST_RELEASED = 'firstReleased'
 LAST_UPDATED = 'lastUpdated'
@@ -315,8 +316,14 @@ def is_null_set(part):
     return part.get(PART_TYPE) == MISSINGNESS
 
 
-def is_table(p):
+def is_table_v1(p):
     return p.get(PART_TYPE) == TABLE
+
+
+def is_table_v2(p):
+    # XXX: v2 includes the meta-tables 'parts' and 'sets', which shouldn't be
+    # validated
+    return is_table_v1(p) and p.get(CLASS) != 'lookup'
 
 
 def is_attr(p):
@@ -450,7 +457,8 @@ def gen_odmdata(parts: Dataset, sets: Dataset, version: Version):
     # process sets
     sets = filter_compatible(sets, version)
 
-    tables = gen_partmap(filter(is_table, parts))
+    table_pred = is_table_v1 if version.major < 2 else is_table_v2
+    tables = gen_partmap(filter(table_pred, parts))
     attributes = list(filter(is_attr, parts))
     null_set = set(map(get_partID, filter(is_null_set, parts)))
 
