@@ -46,7 +46,7 @@ summarized. (The report content is simplified for readability.)
 ```{shell}
 > DIR=./example-directory
 > REPORT=$DIR/report.yml
-> python tools/validate.py data.xlsx --out=$REPORT
+> odm-validate data.xlsx --out=$REPORT
 > cat $REPORT
 
 errors:

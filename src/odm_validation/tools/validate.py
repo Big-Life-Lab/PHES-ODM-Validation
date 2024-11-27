@@ -5,7 +5,7 @@ import sys
 import tempfile
 from enum import Enum
 from math import ceil
-from os.path import basename, join, normpath, splitext
+from os.path import basename, join, splitext
 from pathlib import Path
 from typing import Dict, IO, List, Optional
 # from pprint import pprint
@@ -18,7 +18,6 @@ sys.path.append(join(root_dir, 'src'))
 
 import odm_validation.part_tables as pt  # noqa:E402
 import odm_validation.utils as utils  # noqa:E402
-import odm_validation.validation as validation  # noqa:E402
 from odm_validation.validation import _validate_data_ext, DataKind  # noqa:E402
 
 from odm_validation.reports import (  # noqa:E402
@@ -27,7 +26,7 @@ from odm_validation.reports import (  # noqa:E402
     join_reports
 )
 
-from reportutils import (  # noqa:E402
+from odm_validation.tools.reportutils import (  # noqa:E402
     ReportFormat,
     detect_report_format_from_path,
     get_ext,
@@ -78,7 +77,7 @@ def import_xlsx(src_file, dst_dir) -> List[str]:
 def get_sheet_table_id(schema, sheet_name) -> Optional[str]:
     table_ids = list(schema['schema'].keys())
     for table_id in table_ids:
-        if sheet_name.endswith(' ' + table_id):
+        if sheet_name.endswith(table_id):
             return table_id
 
 
@@ -103,10 +102,26 @@ def detect_data_format(path: str) -> Optional[DataFormat]:
         return
 
 
+def get_pkg_dir() -> str:
+    # aka src dir
+    tools_dir = Path(__file__).parent
+    return str(tools_dir.parent)
+
+
+def get_asset_dir() -> str:
+    '''returns package asset dir, or repo asset dir when not installed as a
+    package'''
+    pkgdir = get_pkg_dir()
+    p = join(pkgdir, 'assets')
+    if os.path.exists(p):
+        return p
+    projdir = join(pkgdir, '..', '..')
+    return join(projdir, 'assets')
+
+
 def get_schema_path(version: str) -> str:
-    script_dir = os.path.dirname(os.path.realpath(__file__))
-    asset_dir = join(script_dir, '../assets')
-    schema_dir = Path(normpath(join(asset_dir, 'validation-schemas')))
+    asset_dir = get_asset_dir()
+    schema_dir = join(asset_dir, 'validation-schemas')
     schema_filename = f'schema-v{version}.yml'
     return join(schema_dir, schema_filename)
 
@@ -170,18 +185,19 @@ def write_report(output: IO, report, fmt: ReportFormat):
 
 
 # XXX: locals must be disabled to avoid `schema` being dumped to console on an
-# exception (and makeing it unreadable)
+# exception (which makes it unreadable)
 app = typer.Typer(pretty_exceptions_show_locals=False)
 
 
 @app.command()
-def main(data_file: List[str] = typer.Argument(..., help=DATA_FILE_DESC),
-         version: str = typer.Option(default=DEF_VER, help=VERSION_DESC),
-         out: str = typer.Option(default="", help=OUT_DESC),
-         format: Optional[ReportFormat] = typer.Option(default=None,
-                                                       help=FORMAT_DESC),
-         verbosity: int = typer.Option(default=2, help=VERB_DESC)):
-
+def main_cli(
+    data_file: List[str] = typer.Argument(default=..., help=DATA_FILE_DESC),
+    version: str = typer.Option(default=DEF_VER, help=VERSION_DESC),
+    out: str = typer.Option(default="", help=OUT_DESC),
+    format: Optional[ReportFormat] = typer.Option(default=None,
+                                                  help=FORMAT_DESC),
+    verbosity: int = typer.Option(default=2, help=VERB_DESC)
+):
     out_path = out
     out_fmt = format
     in_paths: list = data_file
@@ -219,7 +235,6 @@ def main(data_file: List[str] = typer.Argument(..., help=DATA_FILE_DESC),
     try:
         info(f'validating {in_paths}')
         info(f'using schema "{os.path.basename(schema_path)}"')
-        validation._VERBOSITY = verbosity
 
         if in_fmt == DataFormat.XLSX:
             in_paths = convert_excel_to_csv(in_paths[0])
@@ -229,7 +244,8 @@ def main(data_file: List[str] = typer.Argument(..., help=DATA_FILE_DESC),
         def validate(data):
             report = _validate_data_ext(schema, data, DataKind.spreadsheet,
                                         version, on_progress=on_progress,
-                                        with_metadata=False)
+                                        with_metadata=False,
+                                        verbosity=verbosity)
             strip_report(report)
             info()  # newline after progressbar
 
@@ -273,5 +289,11 @@ def main(data_file: List[str] = typer.Argument(..., help=DATA_FILE_DESC),
     info('done!')
 
 
-if __name__ == '__main__':
+def main():
+    # XXX: needed to make odm-validate work
+    # runs main_cli
     app()
+
+
+if __name__ == '__main__':
+    main()

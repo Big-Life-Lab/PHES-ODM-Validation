@@ -9,7 +9,8 @@ from os.path import join, normpath, relpath
 from pathlib import Path
 from semver import Version
 
-root_dir = join(os.path.dirname(os.path.realpath(__file__)), '..')
+tool_dir = Path(__file__).parent
+root_dir = tool_dir.parent.parent.parent
 sys.path.append(join(root_dir, 'src'))
 
 import odm_validation.utils as utils  # noqa:E402
@@ -57,8 +58,7 @@ def generate_schemas_from_odm_tables(odm_dir, schema_dir):
 
 
 def main():
-    dir = os.path.dirname(os.path.realpath(__file__))
-    asset_dir = join(dir, '../assets')
+    asset_dir = join(root_dir, 'assets')
     schema_dir = normpath(join(asset_dir, 'validation-schemas'))
     dataset_dir = normpath(join(asset_dir, 'dictionary'))
 
