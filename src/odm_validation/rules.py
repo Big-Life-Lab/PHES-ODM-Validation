@@ -10,8 +10,9 @@ from typing import Any, Callable, List, Tuple
 
 import part_tables as pt
 from input_data import DataKind
-from schemas import Schema, update_schema
+from schemas import Schema, init_attr_schema, init_table_schema
 from stdext import (
+    deep_update,
     try_parse_int,
 )
 from rule_primitives import (
@@ -78,18 +79,46 @@ class Rule:
     these should be mapped to a missing_values_found error."""
 
 
+def get_anyof_constraint(anyof_constraint: dict) -> Tuple[str, str]:
+    '''returns actual constraint (key, val) from anyof-rule containing an empty
+    rule in addition to the actual rule'''
+    rules = anyof_constraint
+    assert 'empty' in rules and len(rules) == 2
+    key = next(filter(lambda x: x != 'empty', rules))
+    val = rules[key]
+    return (key, val)
+
+
+def extract_cerb_keys(gen_cerb_rules: Callable) -> List[str]:
+    '''extracts the cerberus' rule-keys from an ODM rule's `gen_cerb_rules`
+    function'''
+    dummy_ctx = OdmValueCtx(value=1, datatype='integer', bool_set=set(),
+                            null_set=set())
+    cerb_rules = gen_cerb_rules(dummy_ctx)
+    assert isinstance(cerb_rules, dict)
+
+    # 'anyof' may be used to wrap the actual rule together with 'empty'
+    if 'anyof' in cerb_rules:
+        assert len(cerb_rules) == 1
+        anyof_list = cerb_rules['anyof']
+        assert len(anyof_list) == 1
+        (key, _) = get_anyof_constraint(anyof_list[0])
+        return [key]
+
+    return list(cerb_rules.keys())
+
+
 def init_rule(rule_id, error, gen_cerb_rules, gen_schema,
               is_column=False, is_warning=False, match_all_keys=False):
     """
     - `error` can either be a string or a function taking a value and returning
       a string.
     - `gen_cerb_rules` must accept a dummy context of `None` values, and return
-      a dict with cerberus rule names as keys.
+      a dict with cerberus rule names as keys. Only the keys are used, so the
+      values can be empty.
     - `is_column` determines if the rule is validating columns/headers.
     """
-    dummy_ctx = OdmValueCtx(value=1, datatype='integer', bool_set=set(),
-                            null_set=set())
-    cerb_keys = list(gen_cerb_rules(dummy_ctx).keys())
+    cerb_keys = extract_cerb_keys(gen_cerb_rules)
     get_error_template = error if callable(error) else (lambda x, y, z: error)
     return Rule(
         id=rule_id,
@@ -199,7 +228,7 @@ def less_than_min_length():
     def gen_cerb_rules(val_ctx: OdmValueCtx):
         val = try_parse_int(val_ctx.value)
         if val > 0:
-            return {'minlength': val}
+            return {'anyof': [{'empty': True, 'minlength': val}]}
 
     def gen_schema(data: pt.OdmData, ver):
         return gen_value_schema(data, ver, rule_id.name, odm_key,
@@ -230,9 +259,6 @@ def invalid_category():
     cerb_rule_key = 'allowed'
     err = 'Invalid category {value}'
 
-    def gen_cerb_rules(val_ctx: OdmValueCtx):
-        return {cerb_rule_key: None}
-
     def gen_schema(data: pt.OdmData, ver: Version):
         # FIXME: `cat_ids1` contains duplicates due to v1 categories belonging
         # to multiple tables.
@@ -251,11 +277,21 @@ def invalid_category():
                 cat_ids1 = pt.map_ids(data.mappings, cat_ids0, ver)
                 if len(cat_ids1) == 0:
                     continue
-                cerb_rule = (cerb_rule_key, sorted(set(cat_ids1 + other_cat)))
+                cerb_rules = {'anyof': [{
+                    'empty': True,
+                    cerb_rule_key: sorted(set(cat_ids1 + other_cat)),
+                }]}
                 attr_meta = get_catset_meta(table_id0, cs, categories, ver)
-                update_schema(schema, table_id1, attr_id1, rule_id.name,
-                              cerb_rule, table_meta, attr_meta)
+                attr_schema = init_attr_schema(attr_id1, rule_id.name,
+                                               cerb_rules, attr_meta)
+                table_schema = init_table_schema(table_id1, table_meta,
+                                                 attr_schema)
+                deep_update(schema, table_schema)
+
         return schema
+
+    def gen_cerb_rules(val_ctx: OdmValueCtx):
+        return {cerb_rule_key: None}
 
     return init_rule(rule_id, err, gen_cerb_rules, gen_schema)
 

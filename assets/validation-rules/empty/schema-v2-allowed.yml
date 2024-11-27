@@ -1,0 +1,16 @@
+schemaVersion: 2.0.0
+schema:
+  sites:
+    type: list
+    schema:
+      type: dict
+      schema:
+        allowedField:
+          anyof:
+          - allowed:
+            - a
+            - b
+            empty: true
+          emptyTrimmed: false
+          forbidden:
+          - NA

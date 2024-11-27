@@ -7,7 +7,7 @@ from typing_extensions import TypedDict
 
 import part_tables as pt
 from input_data import DataKind
-from rules import RuleId
+from rules import get_anyof_constraint, RuleId
 from stdext import (
     get_len,
     quote,
@@ -186,10 +186,20 @@ def _gen_error_msg(ctx: ErrorCtx, template: Optional[str] = None,
         xfix.get('suffix', ''),
     ])
 
+    # XXX: constraint may be a combination of rules due to a need for the
+    # 'empty' rule, which we'll have to exclude to get the actual rule value we
+    # want. This is the case when constraint has the type List[dict]
+    constraint_val = ctx.constraint
+    if isinstance(constraint_val, list):
+        rules = constraint_val[0]
+        if isinstance(rules, dict):
+            (_, val) = get_anyof_constraint(rules)
+            constraint_val = val
+
     return full_template.format(
         allowed_values=_fmt_allowed_values(ctx.allowed_values),
         column_id=ctx.column_id,
-        constraint=_fmt_msg_value(ctx.constraint, relaxed=True),
+        constraint=_fmt_msg_value(constraint_val, relaxed=True),
         row_num=_fmt_list(ctx.row_numbers),
         rule_id=ctx.rule_id.name,
         table_id=ctx.table_id,

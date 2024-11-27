@@ -568,6 +568,9 @@ schema:
           required: true
           type: string
         phone:
+          anyof:
+          - empty: true
+            minlength: 10
           maxlength: 12
           meta:
           - meta:
@@ -588,7 +591,6 @@ schema:
               minLength: '10'
               partID: phone
             ruleID: less_than_min_length
-          minlength: 10
           type: string
         role:
           maxlength: 30
@@ -1031,12 +1033,14 @@ schema:
             ruleID: invalid_type
           type: string
         insType:
-          allowed:
-          - aas
-          - hma
-          - instrumentTypeOther
-          - ola
-          - onse
+          anyof:
+          - allowed:
+            - aas
+            - hma
+            - instrumentTypeOther
+            - ola
+            - onse
+            empty: true
           emptyTrimmed: false
           forbidden:
           - NA
@@ -2047,10 +2051,12 @@ schema:
             ruleID: invalid_type
           type: string
         fraction:
-          allowed:
-          - liq
-          - mix
-          - sol
+          anyof:
+          - allowed:
+            - liq
+            - mix
+            - sol
+            empty: true
           maxlength: 30
           meta:
           - meta:
@@ -2334,14 +2340,16 @@ schema:
             ruleID: invalid_type
           type: string
         purpose:
-          allowed:
-          - education
-          - multiple
-          - provisional
-          - qualityControl
-          - regular
-          - testing
-          - validationStudy
+          anyof:
+          - allowed:
+            - education
+            - multiple
+            - provisional
+            - qualityControl
+            - regular
+            - testing
+            - validationStudy
+            empty: true
           maxlength: 30
           meta:
           - meta:
@@ -2414,6 +2422,11 @@ schema:
           allowed:
           - 'false'
           - 'true'
+          anyof:
+          - allowed:
+            - 'false'
+            - 'true'
+            empty: true
           maxlength: 10
           meta:
           - meta:
@@ -2488,10 +2501,12 @@ schema:
           required: true
           type: string
         severity:
-          allowed:
-          - high
-          - low
-          - mid
+          anyof:
+          - allowed:
+            - high
+            - low
+            - mid
+            empty: true
           maxlength: 30
           meta:
           - meta:
@@ -2897,13 +2912,15 @@ schema:
             ruleID: invalid_type
           type: string
         orgLevel:
-          allowed:
-          - admRegLevel
-          - countryLevel
-          - countyLevel
-          - municipalLevel
-          - neighborLevel
-          - stateProvLevel
+          anyof:
+          - allowed:
+            - admRegLevel
+            - countryLevel
+            - countyLevel
+            - municipalLevel
+            - neighborLevel
+            - stateProvLevel
+            empty: true
           maxlength: 30
           meta:
           - meta:
@@ -2938,19 +2955,21 @@ schema:
             ruleID: invalid_type
           type: string
         orgSector:
-          allowed:
-          - airport
-          - ccc
-          - dorm
-          - fiNa
-          - healthAdm
-          - lab
-          - ltcf
-          - ltcfAl
-          - pubHealth
-          - school
-          - sss
-          - uCampus
+          anyof:
+          - allowed:
+            - airport
+            - ccc
+            - dorm
+            - fiNa
+            - healthAdm
+            - lab
+            - ltcf
+            - ltcfAl
+            - pubHealth
+            - school
+            - sss
+            - uCampus
+            empty: true
           maxlength: 30
           meta:
           - meta:
@@ -2997,10 +3016,12 @@ schema:
             ruleID: invalid_type
           type: string
         orgType:
-          allowed:
-          - academ
-          - govt
-          - priv
+          anyof:
+          - allowed:
+            - academ
+            - govt
+            - priv
+            empty: true
           maxlength: 30
           meta:
           - meta:
@@ -3203,9 +3224,11 @@ schema:
           required: true
           type: float
         geoType:
-          allowed:
-          - hlthReg
-          - swrSet
+          anyof:
+          - allowed:
+            - hlthReg
+            - swrSet
+            empty: true
           emptyTrimmed: false
           forbidden:
           - NA
@@ -3586,6 +3609,11 @@ schema:
           allowed:
           - 'false'
           - 'true'
+          anyof:
+          - allowed:
+            - 'false'
+            - 'true'
+            empty: true
           maxlength: 10
           meta:
           - meta:
@@ -4179,6 +4207,11 @@ schema:
           allowed:
           - 'false'
           - 'true'
+          anyof:
+          - allowed:
+            - 'false'
+            - 'true'
+            empty: true
           maxlength: 10
           meta:
           - meta:
@@ -4416,10 +4449,12 @@ schema:
             ruleID: invalid_type
           type: string
         severity:
-          allowed:
-          - high
-          - low
-          - mid
+          anyof:
+          - allowed:
+            - high
+            - low
+            - mid
+            empty: true
           maxlength: 30
           meta:
           - meta:
@@ -4863,16 +4898,18 @@ schema:
           required: true
           type: float
         collType:
-          allowed:
-          - areaPr
-          - comp
-          - cosca
-          - flowPr
-          - grb
-          - moorSw
-          - surfSw
-          - timePr
-          - volPr
+          anyof:
+          - allowed:
+            - areaPr
+            - comp
+            - cosca
+            - flowPr
+            - grb
+            - moorSw
+            - surfSw
+            - timePr
+            - volPr
+            empty: true
           emptyTrimmed: false
           forbidden:
           - NA
@@ -5041,6 +5078,11 @@ schema:
           allowed:
           - 'false'
           - 'true'
+          anyof:
+          - allowed:
+            - 'false'
+            - 'true'
+            empty: true
           maxlength: 30
           meta:
           - meta:
@@ -5087,14 +5129,16 @@ schema:
             ruleID: invalid_type
           type: string
         purpose:
-          allowed:
-          - education
-          - multiple
-          - provisional
-          - qualityControl
-          - regular
-          - testing
-          - validationStudy
+          anyof:
+          - allowed:
+            - education
+            - multiple
+            - provisional
+            - qualityControl
+            - regular
+            - testing
+            - validationStudy
+            empty: true
           maxlength: 30
           meta:
           - meta:
@@ -5148,13 +5192,15 @@ schema:
             ruleID: invalid_type
           type: datetime
         repType:
-          allowed:
-          - colocated
-          - fieldReplicate
-          - labDuplicate
-          - lcsd
-          - msd
-          - unique
+          anyof:
+          - allowed:
+            - colocated
+            - fieldReplicate
+            - labDuplicate
+            - lcsd
+            - msd
+            - unique
+            empty: true
           maxlength: 30
           meta:
           - meta:
@@ -5192,6 +5238,11 @@ schema:
           allowed:
           - 'false'
           - 'true'
+          anyof:
+          - allowed:
+            - 'false'
+            - 'true'
+            empty: true
           maxlength: 10
           meta:
           - meta:
@@ -5222,24 +5273,26 @@ schema:
             ruleID: invalid_type
           type: string
         saMaterial:
-          allowed:
-          - afu
-          - desk
-          - faeces
-          - floor
-          - htSam
-          - nww
-          - pEfflu
-          - pSludge
-          - pstGrit
-          - rawWW
-          - rawWWdown
-          - rawWWup
-          - sEfflu
-          - sSludge
-          - septage
-          - surface
-          - swrSed
+          anyof:
+          - allowed:
+            - afu
+            - desk
+            - faeces
+            - floor
+            - htSam
+            - nww
+            - pEfflu
+            - pSludge
+            - pstGrit
+            - rawWW
+            - rawWWdown
+            - rawWWup
+            - sEfflu
+            - sSludge
+            - septage
+            - surface
+            - swrSed
+            empty: true
           emptyTrimmed: false
           forbidden:
           - NA
@@ -5391,10 +5444,12 @@ schema:
             ruleID: invalid_type
           type: datetime
         severity:
-          allowed:
-          - high
-          - low
-          - mid
+          anyof:
+          - allowed:
+            - high
+            - low
+            - mid
+            empty: true
           maxlength: 30
           meta:
           - meta:
@@ -5789,26 +5844,28 @@ schema:
             ruleID: invalid_type
           type: string
         sampleShed:
-          allowed:
-          - airpln
-          - airport
-          - ccc
-          - cdc
-          - corFcil
-          - dorm
-          - fiNa
-          - hosptl
-          - ltcf
-          - ltcfAl
-          - ltcfO
-          - municp
-          - neigh
-          - orb
-          - school
-          - ship
-          - sss
-          - terminal
-          - uCampus
+          anyof:
+          - allowed:
+            - airpln
+            - airport
+            - ccc
+            - cdc
+            - corFcil
+            - dorm
+            - fiNa
+            - hosptl
+            - ltcf
+            - ltcfAl
+            - ltcfO
+            - municp
+            - neigh
+            - orb
+            - school
+            - ship
+            - sss
+            - terminal
+            - uCampus
+            empty: true
           emptyTrimmed: false
           forbidden:
           - NA
@@ -5947,28 +6004,30 @@ schema:
           type: string
           unique: true
         siteType:
-          allowed:
-          - bSwrPpl
-          - buildCO
-          - estuary
-          - htSite
-          - lagoon
-          - lake
-          - mSwrPpl
-          - ocean
-          - pStat
-          - retPond
-          - river
-          - sea
-          - septTnk
-          - stabPnd
-          - swgTrck
-          - upstream
-          - wwtp
-          - wwtpBack
-          - wwtpInd
-          - wwtpMuC
-          - wwtpMuS
+          anyof:
+          - allowed:
+            - bSwrPpl
+            - buildCO
+            - estuary
+            - htSite
+            - lagoon
+            - lake
+            - mSwrPpl
+            - ocean
+            - pStat
+            - retPond
+            - river
+            - sea
+            - septTnk
+            - stabPnd
+            - swgTrck
+            - upstream
+            - wwtp
+            - wwtpBack
+            - wwtpInd
+            - wwtpMuC
+            - wwtpMuS
+            empty: true
           emptyTrimmed: false
           forbidden:
           - NA
