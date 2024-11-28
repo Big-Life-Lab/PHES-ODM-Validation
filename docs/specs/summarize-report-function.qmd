@@ -38,7 +38,7 @@ class SummarizedReport:
 
 ### Fields
 
-The following fields are shared with `ValidationReport` (and documented [here](module-functions.md)):
+The following fields are shared with `ValidationReport` (and documented [here](module-functions.md#validate_data)):
 
 - data_version
 - schema_version
