@@ -58,8 +58,12 @@ def _get_attr_meta(attr: Part, table_id: PartId, version: Version,
         if version.major >= 2:
             allowed_ids = cerb_rules.get('allowed')
             if allowed_ids:
-                # print(pt.get_partID(attr))
                 set_id = attr['mmaSet']
+
+                # XXX: bool part-ids are in lower case
+                if set_id == pt.BOOLEAN_SET:
+                    allowed_ids = list(map(str.lower, allowed_ids))
+
                 for part_id in allowed_ids:
                     result.append({'partID': part_id, 'setID': set_id})
     return result

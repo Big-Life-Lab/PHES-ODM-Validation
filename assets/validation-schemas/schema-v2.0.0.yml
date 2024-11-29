@@ -1994,8 +1994,8 @@ schema:
           type: datetime
         reportable:
           allowed:
-          - 'false'
-          - 'true'
+          - 'FALSE'
+          - 'TRUE'
           anyof:
           - allowed:
             - 'false'
@@ -3181,8 +3181,8 @@ schema:
           type: string
         reportable:
           allowed:
-          - 'false'
-          - 'true'
+          - 'FALSE'
+          - 'TRUE'
           anyof:
           - allowed:
             - 'false'
@@ -3779,8 +3779,8 @@ schema:
           type: string
         reportable:
           allowed:
-          - 'false'
-          - 'true'
+          - 'FALSE'
+          - 'TRUE'
           anyof:
           - allowed:
             - 'false'
@@ -4650,8 +4650,8 @@ schema:
           type: string
         pooled:
           allowed:
-          - 'false'
-          - 'true'
+          - 'FALSE'
+          - 'TRUE'
           anyof:
           - allowed:
             - 'false'
@@ -4810,8 +4810,8 @@ schema:
           type: string
         reportable:
           allowed:
-          - 'false'
-          - 'true'
+          - 'FALSE'
+          - 'TRUE'
           anyof:
           - allowed:
             - 'false'

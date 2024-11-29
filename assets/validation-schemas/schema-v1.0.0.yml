@@ -211,7 +211,9 @@ schema:
         version1Table: WWMeasure; SiteMeasure;CovidPublicHealthData
       schema:
         accessToAllOrg:
-          allowed: []
+          allowed:
+          - 'FALSE'
+          - 'TRUE'
           maxlength: 1
           meta:
           - meta:
@@ -230,7 +232,9 @@ schema:
             ruleID: invalid_type
           type: string
         accessToDetails:
-          allowed: []
+          allowed:
+          - 'FALSE'
+          - 'TRUE'
           maxlength: 1
           meta:
           - meta:
@@ -249,7 +253,9 @@ schema:
             ruleID: invalid_type
           type: string
         accessToLocalHA:
-          allowed: []
+          allowed:
+          - 'FALSE'
+          - 'TRUE'
           maxlength: 1
           meta:
           - meta:
@@ -268,7 +274,9 @@ schema:
             ruleID: invalid_type
           type: string
         accessToOtherProv:
-          allowed: []
+          allowed:
+          - 'FALSE'
+          - 'TRUE'
           maxlength: 1
           meta:
           - meta:
@@ -287,7 +295,9 @@ schema:
             ruleID: invalid_type
           type: string
         accessToPHAC:
-          allowed: []
+          allowed:
+          - 'FALSE'
+          - 'TRUE'
           maxlength: 1
           meta:
           - meta:
@@ -306,7 +316,9 @@ schema:
             ruleID: invalid_type
           type: string
         accessToProvHA:
-          allowed: []
+          allowed:
+          - 'FALSE'
+          - 'TRUE'
           maxlength: 1
           meta:
           - meta:
@@ -325,7 +337,9 @@ schema:
             ruleID: invalid_type
           type: string
         accessToPublic:
-          allowed: []
+          allowed:
+          - 'FALSE'
+          - 'TRUE'
           maxlength: 1
           meta:
           - meta:
@@ -344,7 +358,9 @@ schema:
             ruleID: invalid_type
           type: string
         accessToSelf:
-          allowed: []
+          allowed:
+          - 'FALSE'
+          - 'TRUE'
           maxlength: 1
           meta:
           - meta:
@@ -1717,7 +1733,9 @@ schema:
             ruleID: invalid_type
           type: datetime
         pooled:
-          allowed: []
+          allowed:
+          - 'FALSE'
+          - 'TRUE'
           maxlength: 30
           meta:
           - meta:
@@ -2221,7 +2239,9 @@ schema:
         version1Table: WWMeasure; SiteMeasure;CovidPublicHealthData
       schema:
         accessToAllOrg:
-          allowed: []
+          allowed:
+          - 'FALSE'
+          - 'TRUE'
           maxlength: 1
           meta:
           - meta:
@@ -2240,7 +2260,9 @@ schema:
             ruleID: invalid_type
           type: string
         accessToDetails:
-          allowed: []
+          allowed:
+          - 'FALSE'
+          - 'TRUE'
           maxlength: 1
           meta:
           - meta:
@@ -2259,7 +2281,9 @@ schema:
             ruleID: invalid_type
           type: string
         accessToLocalHA:
-          allowed: []
+          allowed:
+          - 'FALSE'
+          - 'TRUE'
           maxlength: 1
           meta:
           - meta:
@@ -2278,7 +2302,9 @@ schema:
             ruleID: invalid_type
           type: string
         accessToOtherProv:
-          allowed: []
+          allowed:
+          - 'FALSE'
+          - 'TRUE'
           maxlength: 1
           meta:
           - meta:
@@ -2297,7 +2323,9 @@ schema:
             ruleID: invalid_type
           type: string
         accessToPHAC:
-          allowed: []
+          allowed:
+          - 'FALSE'
+          - 'TRUE'
           maxlength: 1
           meta:
           - meta:
@@ -2316,7 +2344,9 @@ schema:
             ruleID: invalid_type
           type: string
         accessToProvHA:
-          allowed: []
+          allowed:
+          - 'FALSE'
+          - 'TRUE'
           maxlength: 1
           meta:
           - meta:
@@ -2335,7 +2365,9 @@ schema:
             ruleID: invalid_type
           type: string
         accessToPublic:
-          allowed: []
+          allowed:
+          - 'FALSE'
+          - 'TRUE'
           maxlength: 1
           meta:
           - meta:
@@ -2354,7 +2386,9 @@ schema:
             ruleID: invalid_type
           type: string
         accessToSelf:
-          allowed: []
+          allowed:
+          - 'FALSE'
+          - 'TRUE'
           maxlength: 1
           meta:
           - meta:
@@ -2867,7 +2901,9 @@ schema:
         version1Table: WWMeasure; SiteMeasure;CovidPublicHealthData
       schema:
         accessToAllOrg:
-          allowed: []
+          allowed:
+          - 'FALSE'
+          - 'TRUE'
           maxlength: 1
           meta:
           - meta:
@@ -2886,7 +2922,9 @@ schema:
             ruleID: invalid_type
           type: string
         accessToDetails:
-          allowed: []
+          allowed:
+          - 'FALSE'
+          - 'TRUE'
           maxlength: 1
           meta:
           - meta:
@@ -2905,7 +2943,9 @@ schema:
             ruleID: invalid_type
           type: string
         accessToLocalHA:
-          allowed: []
+          allowed:
+          - 'FALSE'
+          - 'TRUE'
           maxlength: 1
           meta:
           - meta:
@@ -2924,7 +2964,9 @@ schema:
             ruleID: invalid_type
           type: string
         accessToOtherProv:
-          allowed: []
+          allowed:
+          - 'FALSE'
+          - 'TRUE'
           maxlength: 1
           meta:
           - meta:
@@ -2943,7 +2985,9 @@ schema:
             ruleID: invalid_type
           type: string
         accessToPHAC:
-          allowed: []
+          allowed:
+          - 'FALSE'
+          - 'TRUE'
           maxlength: 1
           meta:
           - meta:
@@ -2962,7 +3006,9 @@ schema:
             ruleID: invalid_type
           type: string
         accessToProvHA:
-          allowed: []
+          allowed:
+          - 'FALSE'
+          - 'TRUE'
           maxlength: 1
           meta:
           - meta:
@@ -2981,7 +3027,9 @@ schema:
             ruleID: invalid_type
           type: string
         accessToPublic:
-          allowed: []
+          allowed:
+          - 'FALSE'
+          - 'TRUE'
           maxlength: 1
           meta:
           - meta:
@@ -3000,7 +3048,9 @@ schema:
             ruleID: invalid_type
           type: string
         accessToSelf:
-          allowed: []
+          allowed:
+          - 'FALSE'
+          - 'TRUE'
           maxlength: 1
           meta:
           - meta:

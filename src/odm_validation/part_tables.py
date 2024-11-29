@@ -152,6 +152,7 @@ TABLE = 'tables'
 ACTIVE = 'active'
 BOOLEAN = 'boolean'
 BOOLEAN_SET = 'booleanSet'
+BOOL_SET_IDS = ['false', 'true']
 DATETIME = 'datetime'
 DEPRECIATED = 'depreciated'  # aka deprecated
 MANDATORY = 'mandatory'
@@ -166,12 +167,6 @@ V1_VARIABLE = 'version1Variable'
 V1_LOCATION = 'version1Location'
 V1_TABLE = 'version1Table'
 V1_CATEGORY = 'version1Category'
-
-# XXX: These are the part ids for the boolean set parts. They are hardcoded
-# here to be able to check if a part is in the boolean set. This is only needed
-# to reduce complexity when checking that a part has the required
-# version1-fields, which the boolean-set parts do not.
-BOOL_SET = {'true', 'false'}
 
 # mapping
 V1_KIND_MAP = {
@@ -270,7 +265,7 @@ def _get_mappings(part: dict, version: Version) -> Optional[List[PartId]]:
             ids = _parse_version1Field(part, V1_TABLE)
         elif kind == MapKind.ATTRIBUTE:
             ids = _parse_version1Field(part, V1_VARIABLE)
-        elif kind == MapKind.CATEGORY or part.get(PART_ID) in BOOL_SET:
+        elif kind == MapKind.CATEGORY or part.get(PART_ID) in BOOL_SET_IDS:
             ids = _parse_version1Field(part, V1_CATEGORY)
     except KeyError:
         return
@@ -435,7 +430,7 @@ def validate_and_fix(all_parts: PartMap, version):
     # function parts/sets validation and hotfixes
 
     # FIXME: true/false parts are missing version1Category
-    for part_id in BOOL_SET:
+    for part_id in BOOL_SET_IDS:
         part = all_parts.get(part_id)
         if part and should_have_mapping(part, version, ODM_VERSION):
             if V1_CATEGORY not in part:
@@ -461,16 +456,6 @@ def gen_odmdata(parts: Dataset, sets: Dataset, version: Version):
     tables = gen_partmap(filter(table_pred, parts))
     attributes = list(filter(is_attr, parts))
     null_set = set(map(get_partID, filter(is_null_set, parts)))
-
-    # bool set
-    bool_set0 = {}
-    bool_set_rows = []
-    if version.major == 1:
-        if version.minor > 0:
-            bool_set0 = BOOL_SET
-    else:
-        bool_set_rows = list(filter(lambda s: s[SET_ID] == BOOLEAN_SET, sets))
-        bool_set0 = set(map(get_partID, bool_set_rows))
 
     # table attributes
     table_data = {}
@@ -537,11 +522,9 @@ def gen_odmdata(parts: Dataset, sets: Dataset, version: Version):
     mappings = {get_partID(p): _get_mappings(p, version) for p in parts}
     assert None not in mappings
 
-    bool_set1 = set(map_ids(mappings, list(bool_set0), version))
-
     # TODO: preserve unmapped version of bool_set for bool meta fields
     return OdmData(
-        bool_set=bool_set1,
+        bool_set=set(map(str.upper, BOOL_SET_IDS)),
         null_set=null_set,
         table_data=table_data,
         catset_data=catset_data,
