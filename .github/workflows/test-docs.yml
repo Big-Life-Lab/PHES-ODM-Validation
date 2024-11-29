@@ -14,18 +14,12 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/setup-python@v2
-      with:
-        python-version: '3.8'
+    - uses: actions/checkout@v3
+    - uses: ./.github/actions/setup
     - uses: nikeee/setup-pandoc@v1
     - uses: quarto-dev/quarto-actions/setup@v2.0.3
-    - uses: actions/checkout@v3
       with:
         fetch-depth: 0
-    - name: Install python dependencies
-      run: |
-        pip install -r requirements.txt
-        pip install -r docs/requirements.txt
     - name: Render Quarto docs
       run: python src/odm_validation/tools/render_quarto_docs.py
     - name: Build and Commit
