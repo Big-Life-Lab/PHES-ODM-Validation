@@ -1,5 +1,33 @@
 # Changelog
 
+## [0.6.0] - 2024-12-02
+
+### General
+
+- Added CLI command `odm-validate`
+- Fixed documentation generation
+- Fixed issue where empty values triggered rules "less-than-min-length" and
+  "invalid_category"
+- Fixed json serialization of summarized report
+- Fixed misc bugs and errors
+
+### API
+
+- Added verbosity parameter to `_validate_data_ext`
+
+### Validation schemas
+
+- Added `anyof` with `empty` for fields with `allowed` or `minlength`
+- Fixed boolean-set values
+
+#### v2.0.0
+
+- Removed tables:
+    - languages
+    - parts
+    - sets
+    - translations
+
 ## [0.5.0] - 2024-01-03
 
 ### General
