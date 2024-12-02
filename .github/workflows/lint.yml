@@ -1,4 +1,4 @@
-name: flake8 Lint
+name: lint code
 
 on: [pull_request]
 

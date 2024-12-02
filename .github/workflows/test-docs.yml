@@ -1,4 +1,4 @@
-name: test documentation generation
+name: test doc generation
 
 on:
   pull_request:

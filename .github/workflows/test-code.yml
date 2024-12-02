@@ -1,4 +1,4 @@
-name: Test code
+name: test code
 
 on: [pull_request]
 
