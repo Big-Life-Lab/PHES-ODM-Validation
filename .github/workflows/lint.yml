@@ -1,4 +1,4 @@
-name: flake8 Lint
+name: lint code
 
 on: [pull_request]
 
@@ -7,14 +7,11 @@ jobs:
     runs-on: ubuntu-latest
     name: Lint
     steps:
-      - name: Check out source repository
-        uses: actions/checkout@v2
-      - name: Set up Python environment
-        uses: actions/setup-python@v2
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v5
         with:
-          python-version: "3.10"
+          python-version: "3.8"
       - name: flake8 Lint
         uses: py-actions/flake8@v2
         with:
           path: "src tests"
-          max-line-length: "80"

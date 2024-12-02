@@ -1,0 +1,16 @@
+name: install pkg
+
+runs:
+  using: composite
+  steps:
+  - uses: actions/setup-python@v5
+    with:
+      python-version: '3.8'
+      cache: 'pip'
+  - run: |
+      set -e
+      pip install -r requirements.txt
+      pip install -r tests/requirements.txt
+      pip install -r docs/requirements.txt
+      pip install .
+    shell: bash
