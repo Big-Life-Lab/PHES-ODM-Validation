@@ -8,7 +8,10 @@ jobs:
     name: Lint
     steps:
       - uses: actions/checkout@v3
-      - uses: ./.github/actions/setup
-      - uses: py-actions/flake8@v2.3.0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.8"
+      - name: flake8 Lint
+        uses: py-actions/flake8@v2
         with:
           path: "src tests"

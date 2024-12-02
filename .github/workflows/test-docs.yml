@@ -1,4 +1,4 @@
-name: Test documentation generation
+name: test documentation generation
 
 on:
   pull_request:
@@ -15,15 +15,5 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
-    - uses: ./.github/actions/setup
-    - uses: nikeee/setup-pandoc@v1
-    - uses: quarto-dev/quarto-actions/setup@v2.0.3
-      with:
-        fetch-depth: 0
-    - name: Render Quarto docs
-      run: python src/odm_validation/tools/render_quarto_docs.py
-    - name: Build and Commit
-      uses: sphinx-notes/pages@2.1 # requires checkout with `fetch-depth: 0`
-      with:
-        documentation_path: docs
-        target_branch: gh-pages
+    - uses: ./.github/actions/install-pkg
+    - uses: ./.github/actions/render-docs
