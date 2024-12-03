@@ -1,13 +1,14 @@
 # Summarize Tool
 
 The summarization tool "summarize" is used to create a summarized version of
-the validation report. It can be found in the `tools` subdirectory of the
-repository. It should use the report file outputted from the validation tool
-(`tools/validate`) as its input, and it will output a summarized report file.
+the validation report. It can be found in the `src/odm_validation/tools`
+directory in the repository. It should use the report file outputted from the
+validation tool (`validate.py`) as its input, and it will output a
+summarized report file.
 
 ## Usage
 
-` python tools/summarize <report-file> [options...]`
+`python summarize.py <report-file> [options...]`
 
 ### Options
 
@@ -77,7 +78,7 @@ The following command will summarize the validation report by tables, columns
 and rows, and write the result to the console using markdown syntax.
 
 ```{shell}
-> cd tools
+> cd src/odm_validation/tools
 > ./summarize.py $REPORT --by=table --by=column --by=row --format=markdown
 
 # summary
@@ -141,7 +142,7 @@ format is implied by the '.yml' file extension.
 
 ```{shell}
 > SUMMARY=$DIR/report-summary.yml
-> cd tools
+> cd src/odm_validation/tools
 > ./summarize.py $REPORT --by=table --by=column --by=row --out=$SUMMARY
 > cat $SUMMARY
 
