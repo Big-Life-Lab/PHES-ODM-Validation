@@ -1,10 +1,11 @@
 # Changelog
 
-## [0.6.0] - 2024-12-02
+## [0.6.0] - 2024-12-03
 
 ### General
 
 - Added CLI command `odm-validate`
+- Changed location of tools to `src/odm_validation/tools`
 - Fixed documentation generation
 - Fixed issue where empty values triggered rules "less-than-min-length" and
   "invalid_category"
