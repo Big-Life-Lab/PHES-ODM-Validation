@@ -3,7 +3,7 @@ import json
 import operator
 from datetime import datetime
 from functools import reduce
-from typing import Any, List, Optional
+from typing import Any, List, Optional, Union
 
 
 def get_len(x: Any) -> int:
@@ -13,34 +13,50 @@ def get_len(x: Any) -> int:
 
 def hash2(x) -> int:
     """An alternative hash function that can hash anything."""
-    if isinstance(x, dict):
+    if isinstance(x, dict) or isinstance(x, list):
         return hash(json.dumps(x, sort_keys=True))
     else:
         return hash(x)
 
 
-def deep_update(dst: dict, src: dict):
-    """
-    Recursively update a dict.
-    Subdict's won't be overwritten but also updated.
-    List values will be joined, but not recursed.
+def deep_update(dst: dict, src: dict, merge_dict_lists: bool = False):
+    '''recursively merge two dictionaries
 
-    Originally from: https://stackoverflow.com/a/8310229
-    """
-    for key, value in src.items():
+    :param dst: the dict to merge into
+    :param src: the dict to merge from
+    :param merge_dict_lists: recurse into lists of dictionaries instead of
+        simply appending to the lists.
+    '''
+    for key, src_val in src.items():
         if key not in dst:
-            dst[key] = value
-        elif isinstance(value, dict):
-            deep_update(dst[key], value)
-        elif isinstance(value, list):
-            src_list = value
-            if len(src_list) == 0:
+            dst[key] = src_val
+        elif isinstance(src_val, dict):
+            deep_update(dst[key], src_val, merge_dict_lists)
+        elif isinstance(src_val, list):
+            src_list = src_val
+            n = len(src_list)
+            if n == 0:
                 continue
             dst_list = dst[key]
+            assert isinstance(dst_list, list)
+
+            # match dicts for as long as possible...
+            off = 0
+            if merge_dict_lists:
+                for i in range(min(len(dst_list), n)):
+                    dst_dict = dst_list[i]
+                    src_dict = src_list[i]
+                    if not (isinstance(dst_dict, dict) and
+                            isinstance(src_dict, dict)):
+                        break
+                    deep_update(dst_dict, src_dict, merge_dict_lists)
+                    off = i + 1
+
+            # ...then resort to appending the rest
             dst_hashset = set(map(hash2, dst_list))
-            for item in src_list:
-                if hash2(item) not in dst_hashset:
-                    dst_list.append(item)
+            for src_item in src_list[off:]:
+                if hash2(src_item) not in dst_hashset:
+                    dst_list.append(src_item)
 
 
 def strip_dict_key(d: dict, target_key: str):
@@ -114,3 +130,46 @@ def countdown(count: int):
     "counts down from `count`-1 to 0"
     for i in range(count - 1, -1, -1):
         yield i
+
+
+def iscollection(x) -> bool:
+    assert not isinstance(x, set), "sets are not supported in this context"
+    return isinstance(x, dict) or isinstance(x, list)
+
+
+def swapDelete(items: list, i: int):
+    '''swaps the item at `i` with the last element, and removes the last
+    element.'''
+    last = items.pop()
+    if i < len(items):
+        items[i] = last
+
+
+def keep(x: Union[dict, list], target: str):
+    '''Recursively removes all dict-keys and list-values not matching
+    `target`.'''
+    assert not isinstance(x, set)
+    if isinstance(x, dict):
+        for key in list(x):
+            if key == target:
+                continue
+            val = x[key]
+            if iscollection(val):
+                keep(val, target)
+                if len(val) == 0:
+                    del x[key]
+            elif key != target:
+                del x[key]
+    elif isinstance(x, list):
+        i = 0
+        while i < len(x):
+            val = x[i]
+            if iscollection(val):
+                keep(val, target)
+                if len(val) == 0:
+                    swapDelete(x, i)
+                    continue
+            elif val != target:
+                swapDelete(x, i)
+                continue
+            i += 1

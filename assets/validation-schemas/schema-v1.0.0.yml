@@ -111,13 +111,15 @@ schema:
             ruleID: invalid_type
           type: string
         unit:
-          allowed:
-          - gcCrA
-          - gcGs
-          - gcL
-          - gcMl
-          - gcPMMoV
-          - other
+          anyof:
+          - allowed:
+            - gcCrA
+            - gcGs
+            - gcL
+            - gcMl
+            - gcPMMoV
+            - other
+            empty: true
           maxlength: 30
           meta:
           - meta:
@@ -209,7 +211,9 @@ schema:
         version1Table: WWMeasure; SiteMeasure;CovidPublicHealthData
       schema:
         accessToAllOrg:
-          allowed: []
+          allowed:
+          - 'FALSE'
+          - 'TRUE'
           maxlength: 1
           meta:
           - meta:
@@ -228,7 +232,9 @@ schema:
             ruleID: invalid_type
           type: string
         accessToDetails:
-          allowed: []
+          allowed:
+          - 'FALSE'
+          - 'TRUE'
           maxlength: 1
           meta:
           - meta:
@@ -247,7 +253,9 @@ schema:
             ruleID: invalid_type
           type: string
         accessToLocalHA:
-          allowed: []
+          allowed:
+          - 'FALSE'
+          - 'TRUE'
           maxlength: 1
           meta:
           - meta:
@@ -266,7 +274,9 @@ schema:
             ruleID: invalid_type
           type: string
         accessToOtherProv:
-          allowed: []
+          allowed:
+          - 'FALSE'
+          - 'TRUE'
           maxlength: 1
           meta:
           - meta:
@@ -285,7 +295,9 @@ schema:
             ruleID: invalid_type
           type: string
         accessToPHAC:
-          allowed: []
+          allowed:
+          - 'FALSE'
+          - 'TRUE'
           maxlength: 1
           meta:
           - meta:
@@ -304,7 +316,9 @@ schema:
             ruleID: invalid_type
           type: string
         accessToProvHA:
-          allowed: []
+          allowed:
+          - 'FALSE'
+          - 'TRUE'
           maxlength: 1
           meta:
           - meta:
@@ -323,7 +337,9 @@ schema:
             ruleID: invalid_type
           type: string
         accessToPublic:
-          allowed: []
+          allowed:
+          - 'FALSE'
+          - 'TRUE'
           maxlength: 1
           meta:
           - meta:
@@ -342,7 +358,9 @@ schema:
             ruleID: invalid_type
           type: string
         accessToSelf:
-          allowed: []
+          allowed:
+          - 'FALSE'
+          - 'TRUE'
           maxlength: 1
           meta:
           - meta:
@@ -951,12 +969,14 @@ schema:
             ruleID: invalid_type
           type: string
         type:
-          allowed:
-          - atline
-          - hand
-          - lab
-          - online
-          - other
+          anyof:
+          - allowed:
+            - atline
+            - hand
+            - lab
+            - online
+            - other
+            empty: true
           emptyTrimmed: false
           forbidden:
           - NA
@@ -1131,6 +1151,9 @@ schema:
             ruleID: invalid_type
           type: string
         contactPhone:
+          anyof:
+          - empty: true
+            minlength: 10
           maxlength: 12
           meta:
           - meta:
@@ -1154,7 +1177,6 @@ schema:
               version1Table: Lab
               version1Variable: contactPhone
             ruleID: less_than_min_length
-          minlength: 10
           type: string
         labID:
           maxlength: 10
@@ -1303,10 +1325,12 @@ schema:
           type: string
           unique: true
         type:
-          allowed:
-          - hlthReg
-          - other
-          - swrCatSet
+          anyof:
+          - allowed:
+            - hlthReg
+            - other
+            - swrCatSet
+            empty: true
           emptyTrimmed: false
           forbidden:
           - NA
@@ -1492,15 +1516,17 @@ schema:
         version1Table: Sample
       schema:
         collection:
-          allowed:
-          - cpFP24h
-          - cpTP24h
-          - grb
-          - grbCp3
-          - grbCp3h
-          - grbCp8h
-          - mooreSw
-          - other
+          anyof:
+          - allowed:
+            - cpFP24h
+            - cpTP24h
+            - grb
+            - grbCp3
+            - grbCp3h
+            - grbCp8h
+            - mooreSw
+            - other
+            empty: true
           emptyTrimmed: false
           forbidden:
           - NA
@@ -1707,7 +1733,9 @@ schema:
             ruleID: invalid_type
           type: datetime
         pooled:
-          allowed: []
+          allowed:
+          - 'FALSE'
+          - 'TRUE'
           maxlength: 30
           meta:
           - meta:
@@ -1748,17 +1776,19 @@ schema:
             ruleID: invalid_type
           type: string
         type:
-          allowed:
-          - hTank
-          - other
-          - pEfflu
-          - pSludge
-          - pstGrit
-          - rawWW
-          - sEfflu
-          - sSludge
-          - swrSed
-          - water
+          anyof:
+          - allowed:
+            - hTank
+            - other
+            - pEfflu
+            - pSludge
+            - pstGrit
+            - rawWW
+            - sEfflu
+            - sSludge
+            - swrSed
+            - water
+            empty: true
           emptyTrimmed: false
           forbidden:
           - NA
@@ -1989,28 +2019,30 @@ schema:
             ruleID: invalid_type
           type: string
         type:
-          allowed:
-          - airPln
-          - corFcil
-          - estuary
-          - faeces
-          - holdTnk
-          - hosptl
-          - lagoon
-          - lake
-          - ltcf
-          - mSwrPpl
-          - ocean
-          - other
-          - pStat
-          - retPond
-          - river
-          - school
-          - sea
-          - septTnk
-          - swgTrck
-          - wwtpInd
-          - wwtpMuC
+          anyof:
+          - allowed:
+            - airPln
+            - corFcil
+            - estuary
+            - faeces
+            - holdTnk
+            - hosptl
+            - lagoon
+            - lake
+            - ltcf
+            - mSwrPpl
+            - ocean
+            - other
+            - pStat
+            - retPond
+            - river
+            - school
+            - sea
+            - septTnk
+            - swgTrck
+            - wwtpInd
+            - wwtpMuC
+            empty: true
           emptyTrimmed: false
           forbidden:
           - NA
@@ -2207,7 +2239,9 @@ schema:
         version1Table: WWMeasure; SiteMeasure;CovidPublicHealthData
       schema:
         accessToAllOrg:
-          allowed: []
+          allowed:
+          - 'FALSE'
+          - 'TRUE'
           maxlength: 1
           meta:
           - meta:
@@ -2226,7 +2260,9 @@ schema:
             ruleID: invalid_type
           type: string
         accessToDetails:
-          allowed: []
+          allowed:
+          - 'FALSE'
+          - 'TRUE'
           maxlength: 1
           meta:
           - meta:
@@ -2245,7 +2281,9 @@ schema:
             ruleID: invalid_type
           type: string
         accessToLocalHA:
-          allowed: []
+          allowed:
+          - 'FALSE'
+          - 'TRUE'
           maxlength: 1
           meta:
           - meta:
@@ -2264,7 +2302,9 @@ schema:
             ruleID: invalid_type
           type: string
         accessToOtherProv:
-          allowed: []
+          allowed:
+          - 'FALSE'
+          - 'TRUE'
           maxlength: 1
           meta:
           - meta:
@@ -2283,7 +2323,9 @@ schema:
             ruleID: invalid_type
           type: string
         accessToPHAC:
-          allowed: []
+          allowed:
+          - 'FALSE'
+          - 'TRUE'
           maxlength: 1
           meta:
           - meta:
@@ -2302,7 +2344,9 @@ schema:
             ruleID: invalid_type
           type: string
         accessToProvHA:
-          allowed: []
+          allowed:
+          - 'FALSE'
+          - 'TRUE'
           maxlength: 1
           meta:
           - meta:
@@ -2321,7 +2365,9 @@ schema:
             ruleID: invalid_type
           type: string
         accessToPublic:
-          allowed: []
+          allowed:
+          - 'FALSE'
+          - 'TRUE'
           maxlength: 1
           meta:
           - meta:
@@ -2340,7 +2386,9 @@ schema:
             ruleID: invalid_type
           type: string
         accessToSelf:
-          allowed: []
+          allowed:
+          - 'FALSE'
+          - 'TRUE'
           maxlength: 1
           meta:
           - meta:
@@ -2853,7 +2901,9 @@ schema:
         version1Table: WWMeasure; SiteMeasure;CovidPublicHealthData
       schema:
         accessToAllOrg:
-          allowed: []
+          allowed:
+          - 'FALSE'
+          - 'TRUE'
           maxlength: 1
           meta:
           - meta:
@@ -2872,7 +2922,9 @@ schema:
             ruleID: invalid_type
           type: string
         accessToDetails:
-          allowed: []
+          allowed:
+          - 'FALSE'
+          - 'TRUE'
           maxlength: 1
           meta:
           - meta:
@@ -2891,7 +2943,9 @@ schema:
             ruleID: invalid_type
           type: string
         accessToLocalHA:
-          allowed: []
+          allowed:
+          - 'FALSE'
+          - 'TRUE'
           maxlength: 1
           meta:
           - meta:
@@ -2910,7 +2964,9 @@ schema:
             ruleID: invalid_type
           type: string
         accessToOtherProv:
-          allowed: []
+          allowed:
+          - 'FALSE'
+          - 'TRUE'
           maxlength: 1
           meta:
           - meta:
@@ -2929,7 +2985,9 @@ schema:
             ruleID: invalid_type
           type: string
         accessToPHAC:
-          allowed: []
+          allowed:
+          - 'FALSE'
+          - 'TRUE'
           maxlength: 1
           meta:
           - meta:
@@ -2948,7 +3006,9 @@ schema:
             ruleID: invalid_type
           type: string
         accessToProvHA:
-          allowed: []
+          allowed:
+          - 'FALSE'
+          - 'TRUE'
           maxlength: 1
           meta:
           - meta:
@@ -2967,7 +3027,9 @@ schema:
             ruleID: invalid_type
           type: string
         accessToPublic:
-          allowed: []
+          allowed:
+          - 'FALSE'
+          - 'TRUE'
           maxlength: 1
           meta:
           - meta:
@@ -2986,7 +3048,9 @@ schema:
             ruleID: invalid_type
           type: string
         accessToSelf:
-          allowed: []
+          allowed:
+          - 'FALSE'
+          - 'TRUE'
           maxlength: 1
           meta:
           - meta:

@@ -6,7 +6,7 @@ import re
 import sys
 from dataclasses import dataclass
 from enum import Enum
-from logging import error, info, warning
+from logging import error, info
 from os.path import join
 from pathlib import Path
 from semver import Version
@@ -127,6 +127,7 @@ ODM_VERSION = parse_version(ODM_VERSION_STR)
 
 # field constants
 CATSET_ID = 'mmaSet'
+CLASS = 'class'
 DATA_TYPE = 'dataType'
 FIRST_RELEASED = 'firstReleased'
 LAST_UPDATED = 'lastUpdated'
@@ -151,6 +152,7 @@ TABLE = 'tables'
 ACTIVE = 'active'
 BOOLEAN = 'boolean'
 BOOLEAN_SET = 'booleanSet'
+BOOL_SET_IDS = ['false', 'true']
 DATETIME = 'datetime'
 DEPRECIATED = 'depreciated'  # aka deprecated
 MANDATORY = 'mandatory'
@@ -166,12 +168,6 @@ V1_LOCATION = 'version1Location'
 V1_TABLE = 'version1Table'
 V1_CATEGORY = 'version1Category'
 
-# XXX: These are the part ids for the boolean set parts. They are hardcoded
-# here to be able to check if a part is in the boolean set. This is only needed
-# to reduce complexity when checking that a part has the required
-# version1-fields, which the boolean-set parts do not.
-BOOL_SET = {'true', 'false'}
-
 # mapping
 V1_KIND_MAP = {
     TABLES: MapKind.TABLE,
@@ -186,9 +182,9 @@ def get_validation_rule_fields(column_meta, rule_ids: List[str]):
         return []
     assert isinstance(column_meta, list)
     assert isinstance(column_meta[0], dict)
-    assert isinstance(column_meta[0]['meta'], list)
+    assert isinstance(column_meta[0].get('meta', []), list)
     return flatten(list(
-        map(lambda x: x['meta'],
+        map(lambda x: x.get('meta', []),
             filter(lambda x: x['ruleID'] in rule_ids,
                    column_meta))))
 
@@ -269,7 +265,7 @@ def _get_mappings(part: dict, version: Version) -> Optional[List[PartId]]:
             ids = _parse_version1Field(part, V1_TABLE)
         elif kind == MapKind.ATTRIBUTE:
             ids = _parse_version1Field(part, V1_VARIABLE)
-        elif kind == MapKind.CATEGORY or part.get(PART_ID) in BOOL_SET:
+        elif kind == MapKind.CATEGORY or part.get(PART_ID) in BOOL_SET_IDS:
             ids = _parse_version1Field(part, V1_CATEGORY)
     except KeyError:
         return
@@ -315,8 +311,14 @@ def is_null_set(part):
     return part.get(PART_TYPE) == MISSINGNESS
 
 
-def is_table(p):
+def is_table_v1(p):
     return p.get(PART_TYPE) == TABLE
+
+
+def is_table_v2(p):
+    # XXX: v2 includes the meta-tables 'parts' and 'sets', which shouldn't be
+    # validated
+    return is_table_v1(p) and p.get(CLASS) != 'lookup'
 
 
 def is_attr(p):
@@ -326,16 +328,6 @@ def is_attr(p):
 def is_catset_attr(p):
     "A category set attribute holds a category value from the specified set."
     return is_attr(p) and has_catset(p)
-
-
-def is_cat(p):
-    """
-    Categories are the actual values of a category-set.
-    This is analogous to the values of 'enum' types.
-
-    Categories without a catSetID are invalid and ignored.
-    """
-    return p.get(PART_TYPE) == CATEGORY and has_catset(p)
 
 
 def get_partID(p):
@@ -358,31 +350,6 @@ def get_key(pair):
 
 def get_val(pair):
     return pair[1]
-
-
-def _get_table_id(part: dict) -> Optional[str]:
-    """Retrieves the table id of `part`.
-
-    It is looked up in the following order:
-
-    1. partID (if partType is table)
-    2. <table>Required (addressesRequired, etc.)
-    3. <table>=<column_kind> (addresses=header, etc.)
-    """
-    # The returned id must match a corresponding part with
-    # partId=id and partType=table.
-    if is_table(part):
-        return part[PART_ID]
-    req_keys = list(filter(lambda k: k.endswith(_REQUIRED), part.keys()))
-    if len(req_keys) > 0:
-        req = req_keys[0]
-        return req[:req.find(_REQUIRED)]
-    column_keys = list(
-        map(get_key,
-            filter(lambda pair: get_val(pair) in COLUMN_KINDS, part.items())))
-    if len(column_keys) > 0:
-        return column_keys[0]
-    warning(f'missing table relation for part {get_partID(part)}')
 
 
 def _not_empty(field):
@@ -463,7 +430,7 @@ def validate_and_fix(all_parts: PartMap, version):
     # function parts/sets validation and hotfixes
 
     # FIXME: true/false parts are missing version1Category
-    for part_id in BOOL_SET:
+    for part_id in BOOL_SET_IDS:
         part = all_parts.get(part_id)
         if part and should_have_mapping(part, version, ODM_VERSION):
             if V1_CATEGORY not in part:
@@ -485,19 +452,10 @@ def gen_odmdata(parts: Dataset, sets: Dataset, version: Version):
     # process sets
     sets = filter_compatible(sets, version)
 
-    tables = gen_partmap(filter(is_table, parts))
+    table_pred = is_table_v1 if version.major < 2 else is_table_v2
+    tables = gen_partmap(filter(table_pred, parts))
     attributes = list(filter(is_attr, parts))
     null_set = set(map(get_partID, filter(is_null_set, parts)))
-
-    # bool set
-    bool_set0 = {}
-    bool_set_rows = []
-    if version.major == 1:
-        if version.minor > 0:
-            bool_set0 = BOOL_SET
-    else:
-        bool_set_rows = list(filter(lambda s: s[SET_ID] == BOOLEAN_SET, sets))
-        bool_set0 = set(map(get_partID, bool_set_rows))
 
     # table attributes
     table_data = {}
@@ -564,11 +522,9 @@ def gen_odmdata(parts: Dataset, sets: Dataset, version: Version):
     mappings = {get_partID(p): _get_mappings(p, version) for p in parts}
     assert None not in mappings
 
-    bool_set1 = set(map_ids(mappings, list(bool_set0), version))
-
     # TODO: preserve unmapped version of bool_set for bool meta fields
     return OdmData(
-        bool_set=bool_set1,
+        bool_set=set(map(str.upper, BOOL_SET_IDS)),
         null_set=null_set,
         table_data=table_data,
         catset_data=catset_data,

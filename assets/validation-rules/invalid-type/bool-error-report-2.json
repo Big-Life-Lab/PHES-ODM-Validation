@@ -7,9 +7,9 @@
             "rowNumber": 1,
             "row": {
                 "measureID": "1",
-                "reportable": "True"
+                "reportable": "true"
             },
-            "invalidValue": "True",
+            "invalidValue": "true",
             "validationRuleFields": [
                 {
                     "partID": "reportable",
@@ -25,7 +25,7 @@
                     "setID": "booleanSet"
                 }
             ],
-            "message": "invalid_type rule violated in table measures, column reportable, row(s) 1: Column reportable is a boolean but has value \"True\". Allowed values are false/true."
+            "message": "invalid_type rule violated in table measures, column reportable, row(s) 1: Column reportable is a boolean but has value \"true\". Allowed values are FALSE/TRUE."
         }
     ],
     "warnings": []

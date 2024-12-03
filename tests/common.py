@@ -13,6 +13,8 @@ from os.path import join, splitext
 unused_import_dummy = 0
 
 ASSET_DIR = ''
+PKG_NAME = 'odm_validation'
+
 _dir = os.path.dirname(os.path.realpath(__file__))
 root_dir = join(_dir, '..')
 

@@ -6,12 +6,14 @@ schema:
       type: dict
       schema:
         collection:
-          allowed:
-          - comp3h
-          - comp8h
-          - flowPr
-          - comp3
-          - comp3dep
+          anyof:
+          - allowed:
+            - comp3h
+            - comp8h
+            - flowPr
+            - comp3
+            - comp3dep
+            empty: true
           meta:
           - ruleID: invalid_category
             meta:

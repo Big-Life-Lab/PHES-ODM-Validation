@@ -4,11 +4,12 @@ import os
 from os.path import join, relpath
 
 import common
+from common import PKG_NAME, root_dir
 
 cwd = os.getcwd()
-asset_dir = relpath(join(common.root_dir, join('assets', 'tools')), cwd)
-tools_dir = relpath(join(common.root_dir, 'tools'), cwd)
-validate_tool = relpath(join(tools_dir, 'validate.py'), cwd)
+asset_dir = relpath(join(root_dir, 'assets', 'tools'), cwd)
+tools_dir = relpath(join(root_dir, 'src', PKG_NAME, 'tools'), cwd)
+validate_tool = 'odm-validate'
 summarize_tool = relpath(join(tools_dir, 'summarize.py'), cwd)
 
 

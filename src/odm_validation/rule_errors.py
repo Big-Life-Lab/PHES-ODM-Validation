@@ -1,8 +1,3 @@
-"""
-This is the main module of the package. It contains functions for schema
-generation and data validation.
-"""
-
 import logging
 from itertools import groupby
 from typing import Any, Dict, Optional, Set, Tuple
@@ -10,11 +5,10 @@ from typing import Any, Dict, Optional, Set, Tuple
 
 import part_tables as pt
 import reports
-import settings
 from input_data import DataKind
-from reports import ErrorKind, get_row_num
+from reports import ErrorKind, ValidationCtx, get_row_num
 from rule_filters import RuleFilter
-from rules import Rule, RuleId, ruleset
+from rules import Rule, RuleId, get_anyof_constraint, ruleset
 from schemas import CerberusSchema, init_table_schema
 from stdext import (
     countdown,
@@ -40,8 +34,15 @@ def _gen_cerb_rule_map():
     return result
 
 
+def _is_invalid_type_rule(rule):
+    return rule.id == RuleId.invalid_type
+
+
 # local constants
 _KEY_RULES = _gen_cerb_rule_map()
+
+# local globals
+_invalid_type_rule = next(filter(_is_invalid_type_rule, ruleset), None)
 
 
 def _get_rule_id(x) -> RuleId:
@@ -53,23 +54,21 @@ def _get_dataType(x):
     return x[pt.DATA_TYPE]
 
 
-def _is_invalid_type_rule(rule):
-    return rule.id == RuleId.invalid_type
-
-
 def _transform_rule(rule: Rule, column_meta) -> Rule:
-    """Returns a new rule, depending on `column_meta`. Currently only returns
-    invalid_type if rule-key is 'allowed' and dataType is bool."""
+    '''Returns a new rule, depending on `column_meta`.'''
     # XXX: dependency on meta value (which is only supposed to aid debug)
     # XXX: does not handle rules with match_all_keys enabled
+
+    '''cerberus 'allowed' -> invalid_type, when dataType is boolean'''
     if rule.keys[0] == 'allowed':
+        new_rule = _invalid_type_rule
         rule_ids = list(map(_get_rule_id, column_meta))
-        new_rule = next(filter(_is_invalid_type_rule, ruleset), None)
         if not new_rule or (new_rule.id not in rule_ids):
             return rule
         ix = rule_ids.index(new_rule.id)
         if pt.BOOLEAN in map(_get_dataType, column_meta[ix]['meta']):
             return new_rule
+
     return rule
 
 
@@ -79,7 +78,8 @@ def _get_allowed_values(cerb_rules: Dict[str, Any]) -> Set[str]:
 
 def _extract_datatype(column_meta: list) -> Optional[str]:
     # XXX: depends on meta (which should only be for debug)
-    rule_metas = flatten(map(lambda x: x['meta'], column_meta))
+    assert column_meta is not None
+    rule_metas = flatten(map(lambda x: x.get('meta', []), column_meta))
     datatype_metas = filter(lambda x: pt.DATA_TYPE in x, rule_metas)
     odm_type = next(datatype_metas, {}).get(pt.DATA_TYPE)
     return odm_type
@@ -99,12 +99,13 @@ def _cerb_to_odm_type(cerb_type: str) -> Optional[str]:
         return t
 
 
-def _gen_error_entry(cerb_rule, table_id, column_id, value, row_numbers,
+def _gen_error_entry(vctx, cerb_rule, table_id, column_id, value, row_numbers,
                      rows, column_meta, rule_filter: RuleFilter,
                      constraint=None, schema_column=None,
                      data_kind=DataKind.python
                      ) -> Optional[RuleError]:
     "Generates a single validation error from input params."
+    assert column_meta is not None
     if not value and cerb_rule == 'type':
         return
 
@@ -139,24 +140,37 @@ def _gen_error_entry(cerb_rule, table_id, column_id, value, row_numbers,
         table_id=table_id,
         data_kind=data_kind,
         is_column=rule.is_column,
-        verbosity=settings.VERBOSITY,
+        verbosity=vctx.verbosity,
     )
-    entry = reports.gen_rule_error(error_ctx, kind=kind)
+    entry = reports.gen_rule_error(error_ctx, kind)
     return (rule.id, entry)
 
 
-def _gen_cerb_error_entry(e, row, schema: CerberusSchema,
+def _get_cerb_rule(e):
+    rule = e.schema_path[-1]
+
+    # 'anyof' may be used to wrap the actual rule together with 'empty'
+    if rule == 'anyof':
+        (key, _) = get_anyof_constraint(e.constraint[0])
+        rule = key
+
+    return rule
+
+
+def _gen_cerb_error_entry(vctx, e, row, schema: CerberusSchema,
                           rule_filter: RuleFilter, offset: int,
                           data_kind: DataKind) -> Optional[RuleError]:
     "Transforms a single Cerberus error into a validation error."
-    cerb_rule = e.schema_path[-1]
+    cerb_rule = _get_cerb_rule(e)
     (table_id, _, column_id) = e.document_path
     row_index = e.document_path[1]
     schema_column = schema[table_id]['schema']['schema'][column_id]
     column_meta = schema_column.get('meta', [])
     row_numbers = [get_row_num(row_index, offset, data_kind)]
     rows = [row]
+    assert column_meta is not None
     return _gen_error_entry(
+        vctx,
         cerb_rule,
         table_id,
         column_id,
@@ -171,11 +185,12 @@ def _gen_cerb_error_entry(e, row, schema: CerberusSchema,
     )
 
 
-def _gen_aggregated_error_entry(agg_error, rule_filter: RuleFilter
+def _gen_aggregated_error_entry(vctx, agg_error, rule_filter: RuleFilter
                                 ) -> Optional[dict]:
     """Transforms a single aggregated error (from OdmValidator) to a validation
     error."""
     return _gen_error_entry(
+        vctx,
         agg_error.cerb_rule,
         agg_error.table_id,
         agg_error.column_id,
@@ -239,8 +254,8 @@ def filter_errors(errors):
     return result
 
 
-def map_cerb_errors(table_id, cerb_errors, schema, rule_filter, offset: int,
-                    data_kind):
+def map_cerb_errors(vctx: ValidationCtx, table_id, cerb_errors, schema,
+                    rule_filter, offset: int, data_kind):
     """Transforms Cerberus errors to validation errors (and warnings).
 
     :return: a pair of lists (errors, warnings).
@@ -253,9 +268,9 @@ def map_cerb_errors(table_id, cerb_errors, schema, rule_filter, offset: int,
                 row = e.value
                 for attr_errors in e.info:
                     for e in attr_errors:
-                        rule_error = _gen_cerb_error_entry(e, row, schema,
-                                                           rule_filter, offset,
-                                                           data_kind)
+                        rule_error = _gen_cerb_error_entry(vctx, e, row,
+                                                           schema, rule_filter,
+                                                           offset, data_kind)
                         if not rule_error:
                             continue
                         (rule_id, entry) = rule_error
@@ -266,12 +281,12 @@ def map_cerb_errors(table_id, cerb_errors, schema, rule_filter, offset: int,
     return errors, warnings
 
 
-def map_aggregated_errors(table_id, agg_errors, rule_filter):
+def map_aggregated_errors(vctx, table_id, agg_errors, rule_filter):
     """Transforms a list of aggregated errors from OdmValidator to a list of
     validation errors."""
     errors = []
     for ae in agg_errors:
-        rule_error = _gen_aggregated_error_entry(ae, rule_filter)
+        rule_error = _gen_aggregated_error_entry(vctx, ae, rule_filter)
         if not rule_error:
             continue
         (rule_id, entry) = rule_error

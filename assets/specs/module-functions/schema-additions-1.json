@@ -1,7 +1,12 @@
 {
     "Site": {
         "SiteID": {
-            "allowed": ["Ottawa Site", "Montreal Site"]
+            "anyof": [
+                {
+                    "allowed": ["Ottawa Site", "Montreal Site"],
+                    "empty": true
+                }
+            ]
         }
     }
 }

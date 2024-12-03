@@ -8,8 +8,8 @@ schema:
         reportable:
           type: string
           allowed:
-          - 'false'
-          - 'true'
+          - 'FALSE'
+          - 'TRUE'
           meta:
           - ruleID: invalid_type
             meta:

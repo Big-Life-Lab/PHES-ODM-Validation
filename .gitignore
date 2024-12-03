@@ -1,9 +1,11 @@
-# temporary
-__pycache__/
+# temp dirs
+__pycache__
+
+# temp files
 *.log
 
 # python `venv`
-.venv/
+/.env/
 
 # python `pyenv`
 .python-version

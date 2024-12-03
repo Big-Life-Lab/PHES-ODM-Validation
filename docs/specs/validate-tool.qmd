@@ -9,7 +9,7 @@ validation result to another program.
 
 ## Usage
 
-` python tools/validate.py [OPTIONS] DATA_FILE...`
+` odm-validate [OPTIONS] DATA_FILE...`
 
 ### Arguments
 
@@ -46,9 +46,9 @@ validation result to another program.
 - Validate two CSV files with the latest ODM version, and print human readable
   errors to the console:
 
-    `python tools/validate.py measures.csv samples.csv`
+    `odm-validate measures.csv samples.csv`
 
 - Validate an Excel file with version 1.1.0 of the ODM, and write the result to
   a YAML file:
 
-    `python tools/validate.py lab-data.xlsx --version=1.1.0 --out=./report.yaml`
+    `odm-validate lab-data.xlsx --version=1.1.0 --out=./report.yaml`

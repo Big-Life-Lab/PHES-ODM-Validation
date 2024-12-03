@@ -4,6 +4,7 @@ from typing import Any, Callable, List, Optional, Set
 # from pprint import pprint
 
 import part_tables as pt
+import schemas
 from part_tables import Meta, MetaEntry, OdmData, Part, PartId
 from schemas import init_attr_schema, init_table_schema
 from stdext import (
@@ -57,8 +58,12 @@ def _get_attr_meta(attr: Part, table_id: PartId, version: Version,
         if version.major >= 2:
             allowed_ids = cerb_rules.get('allowed')
             if allowed_ids:
-                # print(pt.get_partID(attr))
                 set_id = attr['mmaSet']
+
+                # XXX: bool part-ids are in lower case
+                if set_id == pt.BOOLEAN_SET:
+                    allowed_ids = list(map(str.lower, allowed_ids))
+
                 for part_id in allowed_ids:
                     result.append({'partID': part_id, 'setID': set_id})
     return result
@@ -243,7 +248,7 @@ def gen_cerb_rules_for_type(val_ctx: OdmValueCtx) -> dict:
     if cerb_type:
         result['type'] = cerb_type
         if cerb_type != 'string':
-            result['coerce'] = cerb_type
+            result[schemas.COERCE_KEY] = cerb_type
         if odm_type == 'boolean':
             result['allowed'] = sorted(val_ctx.bool_set)
     return result

@@ -1,6 +1,6 @@
 [project]
 name = "odm_validation"
-version = "0.5.0"
+version = "0.6.0"
 authors = [
     { name="OHRI", email="PHES-ODM@ohri.ca" }
 ]
@@ -18,15 +18,21 @@ dynamic = ["dependencies"]
 "Homepage" = "https://github.com/Big-Life-Lab/PHES-ODM-Validation"
 "Bug Tracker" = "https://github.com/Big-Life-Lab/PHES-ODM-Validation/issues"
 
+[project.scripts]
+odm-validate = "odm_validation.tools.validate:main"
+
 [build-system]
 requires = ["hatchling", "hatch-requirements-txt"]
 build-backend = "hatchling.build"
 
-# https://stackoverflow.com/a/75397171
+# specify package dir
+[tool.hatch.build.targets.wheel]
+packages = ["src/odm_validation"]
+
+# include validation schemas
 [tool.hatch.build.targets.wheel.force-include]
 "assets/validation-schemas" = "odm_validation/assets/validation-schemas"
 
-# This ensures that the dependencies are installed when the package is
-# installed
+# install dependencies automatically
 [tool.hatch.metadata.hooks.requirements_txt]
 files = ["requirements.txt"]

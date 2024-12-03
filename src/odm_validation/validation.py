@@ -10,15 +10,15 @@ from enum import Enum
 
 import part_tables as pt
 import reports
-import settings
+import schemas
 from cerberusext import ContextualCoercer, OdmValidator
 from copy import deepcopy
 from input_data import DataKind
-from reports import TableInfo
+from reports import ErrorVerbosity, TableInfo, ValidationCtx
 from rule_filters import RuleFilter
 from rules import RuleId, ruleset
 from schemas import Schema
-from stdext import deep_update, strip_dict_key
+from stdext import deep_update, keep, strip_dict_key
 from versions import __version__, parse_version
 
 from rule_errors import (
@@ -29,6 +29,8 @@ from rule_errors import (
 )
 
 TableDataset = Dict[pt.TableId, pt.Dataset]
+
+_BATCH_SIZE = 20
 
 
 def _generate_validation_schema_ext(parts: pt.Dataset,
@@ -67,7 +69,7 @@ def _generate_validation_schema_ext(parts: pt.Dataset,
         assert s is not None
         deep_update(cerb_schema, s)
     additions_schema = gen_additions_schema(schema_additions)
-    deep_update(cerb_schema, additions_schema)
+    deep_update(cerb_schema, additions_schema, merge_dict_lists=True)
 
     # strip empty tables
     for table in list(cerb_schema):
@@ -93,18 +95,49 @@ OnProgress = Callable[[str, str, int, int], None]
 
 
 def _strip_coerce_rules(cerb_schema):
-    return strip_dict_key(deepcopy(cerb_schema), 'coerce')
+    return strip_dict_key(deepcopy(cerb_schema), schemas.COERCE_KEY)
 
 
-def _validate_data_ext(schema: Schema,
-                       data: TableDataset,
-                       data_kind: DataKind = DataKind.python,
-                       data_version: str = pt.ODM_VERSION_STR,
-                       rule_blacklist: List[RuleId] = [],
-                       rule_whitelist: List[RuleId] = [],
-                       on_progress: OnProgress = None,
-                       batch_size=settings.BATCH_SIZE,
-                       ) -> reports.ValidationReport:
+def filter_dict_by_key(key: str, d: dict) -> dict:
+    result = {}
+    val = d.get(key, None)
+    if val is not None:
+        result[key] = val
+    return result
+
+
+def filter_column_schemas_by_key(key: str, column_schemas: dict) -> dict:
+    result = {}
+    for col_name, col_schema in column_schemas.items():
+        d = filter_dict_by_key(key, col_schema)
+        if d:
+            result[col_name] = d
+    return result
+
+
+def gen_coercion_schema(cerb_schema: dict) -> dict:
+    result = {}
+    for table_name, table_schema in cerb_schema.items():
+        cs = table_schema['schema']['schema']
+        result[table_name] = {
+            'schema': {
+                'schema': filter_column_schemas_by_key('coerce', cs),
+            }
+        }
+    return result
+
+
+def _validate_data_ext(
+    schema: Schema,
+    data: TableDataset,
+    data_kind: DataKind = DataKind.python,
+    data_version: str = pt.ODM_VERSION_STR,
+    rule_blacklist: List[RuleId] = [],
+    rule_whitelist: List[RuleId] = [],
+    on_progress: OnProgress = None,
+    verbosity: ErrorVerbosity = ErrorVerbosity.LONG_METADATA_MESSAGE,
+    with_metadata: bool = True,
+) -> reports.ValidationReport:
     """
     Validates `data` with `schema`, using Cerberus.
 
@@ -137,11 +170,26 @@ def _validate_data_ext(schema: Schema,
     assert isinstance(rule_whitelist, list), \
         'invalid rule_whitelist param type'
 
+    vctx = ValidationCtx(verbosity=verbosity)
+
     errors = []
     warnings = []
     versioned_schema = schema
     cerb_schema = versioned_schema["schema"]
-    coercion_schema = cerb_schema
+
+    # remove meta fields, except for dataType and ruleID
+    if not with_metadata:
+        for t in cerb_schema.values():
+            s = t['schema']
+            s.pop('meta', None)
+            for c in s['schema'].values():
+                for metaEntry in c.get('meta', []):
+                    metaRuleDicts = metaEntry.get('meta')
+                    if metaRuleDicts:
+                        keep(metaRuleDicts, 'dataType')
+                        if len(metaRuleDicts) == 0:
+                            del metaEntry['meta']
+
     rule_filter = RuleFilter(whitelist=rule_whitelist,
                              blacklist=rule_blacklist)
 
@@ -149,7 +197,7 @@ def _validate_data_ext(schema: Schema,
         total = len(table_data)
         offset = 0
         while offset < total:
-            n = min(total - offset, batch_size)
+            n = min(total - offset, _BATCH_SIZE)
             first = offset
             last = offset + n
             batch_data = {table_id: table_data[first:last]}
@@ -158,33 +206,39 @@ def _validate_data_ext(schema: Schema,
             if on_progress:
                 on_progress(action, table_id, offset, total)
 
+    coercion_schema = (cerb_schema if with_metadata else
+                       gen_coercion_schema(cerb_schema))
     coerced_data = defaultdict(list)
     coercer = ContextualCoercer(warnings=warnings, errors=errors)
     for table_id, table_data in data.items():
+        schema = {table_id: coercion_schema[table_id]}
         for batch in batch_table_data('coercing', table_id, table_data):
             batch_data, offset = batch
-            coerce_result = coercer.coerce(batch_data, coercion_schema,
+            coerce_result = coercer.coerce(batch_data, schema,
                                            offset, data_kind)
             coerced_data[table_id] += coerce_result[table_id]
 
     table_info: Dict[pt.TableId, TableInfo] = {}
-    validation_schema = _strip_coerce_rules(coercion_schema)
+
+    validation_schema = _strip_coerce_rules(cerb_schema)
     for table_id, table_data in coerced_data.items():
         table_info[table_id] = TableInfo(
             columns=len(table_data[0]),
             rows=len(table_data),
         )
         v = OdmValidator.new()
+        schema = {table_id: validation_schema[table_id]}
         for batch in batch_table_data('validating', table_id, table_data):
             batch_data, offset = batch
             v._errors.clear()
-            if v.validate(offset, data_kind, batch_data, validation_schema):
+            if v.validate(offset, data_kind, batch_data, schema):
                 continue
-            e, w = map_cerb_errors(table_id, v._errors, validation_schema,
-                                   rule_filter, offset, data_kind)
+            e, w = map_cerb_errors(vctx, table_id, v._errors,
+                                   schema, rule_filter, offset,
+                                   data_kind)
             errors += e
             warnings += w
-        errors += map_aggregated_errors(table_id,
+        errors += map_aggregated_errors(vctx, table_id,
                                         v.error_state.aggregated_errors,
                                         rule_filter)
 

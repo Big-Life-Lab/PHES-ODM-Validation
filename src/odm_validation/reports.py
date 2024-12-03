@@ -7,7 +7,7 @@ from typing_extensions import TypedDict
 
 import part_tables as pt
 from input_data import DataKind
-from rules import RuleId
+from rules import get_anyof_constraint, RuleId
 from stdext import (
     get_len,
     quote,
@@ -18,6 +18,18 @@ from stdext import (
 class ErrorKind(Enum):
     WARNING = 'warning'
     ERROR = 'error'
+
+
+class ErrorVerbosity(int, Enum):
+    MESSAGE = 0
+    SHORT_METADATA = 1
+    SHORT_METADATA_MESSAGE = 2
+    LONG_METADATA_MESSAGE = 3
+
+
+@dataclass(frozen=True)
+class ValidationCtx:
+    verbosity: ErrorVerbosity
 
 
 @dataclass(frozen=True)
@@ -36,7 +48,7 @@ class ErrorCtx:
     data_kind: DataKind = DataKind.python
     err_template: str = ''
     is_column: bool = False
-    verbosity: int = 2
+    verbosity: ErrorVerbosity = ErrorVerbosity.LONG_METADATA_MESSAGE
 
 
 class TableInfo(TypedDict):
@@ -137,32 +149,57 @@ def _gen_error_msg(ctx: ErrorCtx, template: Optional[str] = None,
 
     # prefix and suffix, with increasing verbosity
     is_col = ctx.is_column
-    verbosity_xfix = [
-        {
-            'prefix': '{table_id}({column_id}',
-            'prefix_end': ('' if is_col else ', {row_num}') + '): ',
-            'suffix': ' [{rule_id}]',
-        },
-        {},  # same as prev level, just with messages
-        {
-            'prefix': ('{rule_id} rule ' + verb + ' in table {table_id}, '
-                       'column {column_id}'),
-            'prefix_end': ('' if is_col else ', row(s) {row_num}') + ': ',
-            'suffix': '',
-        },
-    ]
-    verbosity_xfix[1] = verbosity_xfix[0]
-    xfix = verbosity_xfix[ctx.verbosity]
 
-    if not template:
-        template = ctx.err_template
-    if ctx.verbosity == 0:
+    short_template = {
+        'prefix': '{table_id}({column_id}',
+        'prefix_end': ('' if is_col else ', {row_num}') + '): ',
+        'suffix': ' [{rule_id}]',
+    }
+
+    long_template = {
+        'prefix': ('{rule_id} rule ' + verb + ' in table {table_id}, '
+                   'column {column_id}'),
+        'prefix_end': ('' if is_col else ', row(s) {row_num}') + ': ',
+        'suffix': '',
+    }
+
+    xfix_templates: Dict[ErrorVerbosity, dict] = {
+        ErrorVerbosity.MESSAGE: {},
+        ErrorVerbosity.SHORT_METADATA: short_template,
+        ErrorVerbosity.SHORT_METADATA_MESSAGE: short_template,
+        ErrorVerbosity.LONG_METADATA_MESSAGE: long_template,
+    }
+
+    xfix = xfix_templates[ctx.verbosity]
+
+    # use rule error template if not overridden
+    template = template or ctx.err_template
+
+    # remove message from SHORT_METADATA
+    if ctx.verbosity == ErrorVerbosity.SHORT_METADATA:
         template = ''
-    template = xfix['prefix'] + xfix['prefix_end'] + template + xfix['suffix']
-    return template.format(
+
+    full_template = ''.join([
+        xfix.get('prefix', ''),
+        xfix.get('prefix_end', ''),
+        template,
+        xfix.get('suffix', ''),
+    ])
+
+    # XXX: constraint may be a combination of rules due to a need for the
+    # 'empty' rule, which we'll have to exclude to get the actual rule value we
+    # want. This is the case when constraint has the type List[dict]
+    constraint_val = ctx.constraint
+    if isinstance(constraint_val, list):
+        rules = constraint_val[0]
+        if isinstance(rules, dict):
+            (_, val) = get_anyof_constraint(rules)
+            constraint_val = val
+
+    return full_template.format(
         allowed_values=_fmt_allowed_values(ctx.allowed_values),
         column_id=ctx.column_id,
-        constraint=_fmt_msg_value(ctx.constraint, relaxed=True),
+        constraint=_fmt_msg_value(constraint_val, relaxed=True),
         row_num=_fmt_list(ctx.row_numbers),
         rule_id=ctx.rule_id.name,
         table_id=ctx.table_id,
@@ -189,8 +226,8 @@ def get_error_rule_id(report_error: dict, error_kind: ErrorKind) -> RuleId:
 
 
 def gen_rule_error(ctx: ErrorCtx,
+                   kind: ErrorKind,
                    err_template: Optional[str] = None,
-                   kind: Optional[ErrorKind] = None,
                    ) -> dict:
     """
     :param err_template: overrides rule error-template
@@ -240,7 +277,7 @@ def _generalize_cerb_type_name(name: str) -> str:
         return name
 
 
-def _get_meta_rule_ids(column_meta) -> Set[str]:
+def _get_meta_rule_ids(column_meta: Optional[dict]) -> List[str]:
     if not column_meta:
         return []
     return [m['ruleID'] for m in column_meta]
@@ -260,4 +297,4 @@ def _gen_coercion_msg(ctx: ErrorCtx, kind: ErrorKind):
 
 def gen_coercion_error(ctx, kind: ErrorKind):
     msg = _gen_coercion_msg(ctx, kind)
-    return gen_rule_error(ctx, err_template=msg, kind=kind)
+    return gen_rule_error(ctx, kind, err_template=msg)

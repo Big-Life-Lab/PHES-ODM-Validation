@@ -568,6 +568,9 @@ schema:
           required: true
           type: string
         phone:
+          anyof:
+          - empty: true
+            minlength: 10
           maxlength: 12
           meta:
           - meta:
@@ -588,7 +591,6 @@ schema:
               minLength: '10'
               partID: phone
             ruleID: less_than_min_length
-          minlength: 10
           type: string
         role:
           maxlength: 30
@@ -1031,12 +1033,14 @@ schema:
             ruleID: invalid_type
           type: string
         insType:
-          allowed:
-          - aas
-          - hma
-          - instrumentTypeOther
-          - ola
-          - onse
+          anyof:
+          - allowed:
+            - aas
+            - hma
+            - instrumentTypeOther
+            - ola
+            - onse
+            empty: true
           emptyTrimmed: false
           forbidden:
           - NA
@@ -1301,432 +1305,6 @@ schema:
               instruments: header
               instrumentsRequired: optional
               partID: refLink
-            ruleID: invalid_type
-          type: string
-      type: dict
-    type: list
-  languages:
-    schema:
-      meta:
-      - partID: languages
-        partType: tables
-      schema:
-        iso6391:
-          emptyTrimmed: false
-          forbidden:
-          - NA
-          - nan
-          - nr
-          - 'null'
-          - undisc
-          maxlength: 30
-          meta:
-          - meta:
-            - languages: header
-              languagesRequired: mandatory
-              maxLength: '30'
-              partID: iso6391
-            ruleID: greater_than_max_length
-          - meta:
-            - dataType: categorical
-              languages: header
-              languagesRequired: mandatory
-              partID: iso6391
-            ruleID: invalid_type
-          - meta:
-            - languages: header
-              languagesRequired: mandatory
-              partID: iso6391
-            ruleID: missing_mandatory_column
-          - meta:
-            - languages: header
-              languagesRequired: mandatory
-              partID: iso6391
-            - partID: NA
-              partType: missingness
-            - partID: nan
-              partType: missingness
-            - partID: nr
-              partType: missingness
-            - partID: 'null'
-              partType: missingness
-            - partID: undisc
-              partType: missingness
-            ruleID: missing_values_found
-          required: true
-          type: string
-        iso6392B:
-          emptyTrimmed: false
-          forbidden:
-          - NA
-          - nan
-          - nr
-          - 'null'
-          - undisc
-          maxlength: 30
-          meta:
-          - meta:
-            - languages: header
-              languagesRequired: mandatory
-              maxLength: '30'
-              partID: iso6392B
-            ruleID: greater_than_max_length
-          - meta:
-            - dataType: categorical
-              languages: header
-              languagesRequired: mandatory
-              partID: iso6392B
-            ruleID: invalid_type
-          - meta:
-            - languages: header
-              languagesRequired: mandatory
-              partID: iso6392B
-            ruleID: missing_mandatory_column
-          - meta:
-            - languages: header
-              languagesRequired: mandatory
-              partID: iso6392B
-            - partID: NA
-              partType: missingness
-            - partID: nan
-              partType: missingness
-            - partID: nr
-              partType: missingness
-            - partID: 'null'
-              partType: missingness
-            - partID: undisc
-              partType: missingness
-            ruleID: missing_values_found
-          required: true
-          type: string
-        iso6392T:
-          emptyTrimmed: false
-          forbidden:
-          - NA
-          - nan
-          - nr
-          - 'null'
-          - undisc
-          maxlength: 30
-          meta:
-          - meta:
-            - languages: header
-              languagesRequired: mandatory
-              maxLength: '30'
-              partID: iso6392T
-            ruleID: greater_than_max_length
-          - meta:
-            - dataType: categorical
-              languages: header
-              languagesRequired: mandatory
-              partID: iso6392T
-            ruleID: invalid_type
-          - meta:
-            - languages: header
-              languagesRequired: mandatory
-              partID: iso6392T
-            ruleID: missing_mandatory_column
-          - meta:
-            - languages: header
-              languagesRequired: mandatory
-              partID: iso6392T
-            - partID: NA
-              partType: missingness
-            - partID: nan
-              partType: missingness
-            - partID: nr
-              partType: missingness
-            - partID: 'null'
-              partType: missingness
-            - partID: undisc
-              partType: missingness
-            ruleID: missing_values_found
-          required: true
-          type: string
-        iso6393:
-          emptyTrimmed: false
-          forbidden:
-          - NA
-          - nan
-          - nr
-          - 'null'
-          - undisc
-          maxlength: 30
-          meta:
-          - meta:
-            - languages: header
-              languagesRequired: mandatory
-              maxLength: '30'
-              partID: iso6393
-            ruleID: greater_than_max_length
-          - meta:
-            - dataType: categorical
-              languages: header
-              languagesRequired: mandatory
-              partID: iso6393
-            ruleID: invalid_type
-          - meta:
-            - languages: header
-              languagesRequired: mandatory
-              partID: iso6393
-            ruleID: missing_mandatory_column
-          - meta:
-            - languages: header
-              languagesRequired: mandatory
-              partID: iso6393
-            - partID: NA
-              partType: missingness
-            - partID: nan
-              partType: missingness
-            - partID: nr
-              partType: missingness
-            - partID: 'null'
-              partType: missingness
-            - partID: undisc
-              partType: missingness
-            ruleID: missing_values_found
-          required: true
-          type: string
-        iso6396:
-          emptyTrimmed: false
-          forbidden:
-          - NA
-          - nan
-          - nr
-          - 'null'
-          - undisc
-          maxlength: 30
-          meta:
-          - meta:
-            - languages: header
-              languagesRequired: mandatory
-              maxLength: '30'
-              partID: iso6396
-            ruleID: greater_than_max_length
-          - meta:
-            - dataType: categorical
-              languages: header
-              languagesRequired: mandatory
-              partID: iso6396
-            ruleID: invalid_type
-          - meta:
-            - languages: header
-              languagesRequired: mandatory
-              partID: iso6396
-            ruleID: missing_mandatory_column
-          - meta:
-            - languages: header
-              languagesRequired: mandatory
-              partID: iso6396
-            - partID: NA
-              partType: missingness
-            - partID: nan
-              partType: missingness
-            - partID: nr
-              partType: missingness
-            - partID: 'null'
-              partType: missingness
-            - partID: undisc
-              partType: missingness
-            ruleID: missing_values_found
-          required: true
-          type: string
-        lang:
-          emptyTrimmed: false
-          forbidden:
-          - NA
-          - nan
-          - nr
-          - 'null'
-          - undisc
-          maxlength: 30
-          meta:
-          - meta:
-            - languages: pK
-              languagesRequired: mandatory
-              partID: lang
-            ruleID: duplicate_entries_found
-          - meta:
-            - languages: pK
-              languagesRequired: mandatory
-              maxLength: '30'
-              partID: lang
-            ruleID: greater_than_max_length
-          - meta:
-            - dataType: varchar
-              languages: pK
-              languagesRequired: mandatory
-              partID: lang
-            ruleID: invalid_type
-          - meta:
-            - languages: pK
-              languagesRequired: mandatory
-              partID: lang
-            ruleID: missing_mandatory_column
-          - meta:
-            - languages: pK
-              languagesRequired: mandatory
-              partID: lang
-            - partID: NA
-              partType: missingness
-            - partID: nan
-              partType: missingness
-            - partID: nr
-              partType: missingness
-            - partID: 'null'
-              partType: missingness
-            - partID: undisc
-              partType: missingness
-            ruleID: missing_values_found
-          required: true
-          type: string
-          unique: true
-        langFam:
-          emptyTrimmed: false
-          forbidden:
-          - NA
-          - nan
-          - nr
-          - 'null'
-          - undisc
-          maxlength: 30
-          meta:
-          - meta:
-            - languages: header
-              languagesRequired: mandatory
-              maxLength: '30'
-              partID: langFam
-            ruleID: greater_than_max_length
-          - meta:
-            - dataType: varchar
-              languages: header
-              languagesRequired: mandatory
-              partID: langFam
-            ruleID: invalid_type
-          - meta:
-            - languages: header
-              languagesRequired: mandatory
-              partID: langFam
-            ruleID: missing_mandatory_column
-          - meta:
-            - languages: header
-              languagesRequired: mandatory
-              partID: langFam
-            - partID: NA
-              partType: missingness
-            - partID: nan
-              partType: missingness
-            - partID: nr
-              partType: missingness
-            - partID: 'null'
-              partType: missingness
-            - partID: undisc
-              partType: missingness
-            ruleID: missing_values_found
-          required: true
-          type: string
-        langName:
-          emptyTrimmed: false
-          forbidden:
-          - NA
-          - nan
-          - nr
-          - 'null'
-          - undisc
-          maxlength: 30
-          meta:
-          - meta:
-            - languages: header
-              languagesRequired: mandatory
-              maxLength: '30'
-              partID: langName
-            ruleID: greater_than_max_length
-          - meta:
-            - dataType: varchar
-              languages: header
-              languagesRequired: mandatory
-              partID: langName
-            ruleID: invalid_type
-          - meta:
-            - languages: header
-              languagesRequired: mandatory
-              partID: langName
-            ruleID: missing_mandatory_column
-          - meta:
-            - languages: header
-              languagesRequired: mandatory
-              partID: langName
-            - partID: NA
-              partType: missingness
-            - partID: nan
-              partType: missingness
-            - partID: nr
-              partType: missingness
-            - partID: 'null'
-              partType: missingness
-            - partID: undisc
-              partType: missingness
-            ruleID: missing_values_found
-          required: true
-          type: string
-        natName:
-          emptyTrimmed: false
-          forbidden:
-          - NA
-          - nan
-          - nr
-          - 'null'
-          - undisc
-          maxlength: 30
-          meta:
-          - meta:
-            - languages: header
-              languagesRequired: mandatory
-              maxLength: '30'
-              partID: natName
-            ruleID: greater_than_max_length
-          - meta:
-            - dataType: categorical
-              languages: header
-              languagesRequired: mandatory
-              partID: natName
-            ruleID: invalid_type
-          - meta:
-            - languages: header
-              languagesRequired: mandatory
-              partID: natName
-            ruleID: missing_mandatory_column
-          - meta:
-            - languages: header
-              languagesRequired: mandatory
-              partID: natName
-            - partID: NA
-              partType: missingness
-            - partID: nan
-              partType: missingness
-            - partID: nr
-              partType: missingness
-            - partID: 'null'
-              partType: missingness
-            - partID: undisc
-              partType: missingness
-            ruleID: missing_values_found
-          required: true
-          type: string
-        notes:
-          maxlength: 200
-          meta:
-          - meta:
-            - languages: header
-              languagesRequired: optional
-              maxLength: '200'
-              partID: notes
-            ruleID: greater_than_max_length
-          - meta:
-            - dataType: varchar
-              languages: header
-              languagesRequired: optional
-              partID: notes
             ruleID: invalid_type
           type: string
       type: dict
@@ -2047,10 +1625,12 @@ schema:
             ruleID: invalid_type
           type: string
         fraction:
-          allowed:
-          - liq
-          - mix
-          - sol
+          anyof:
+          - allowed:
+            - liq
+            - mix
+            - sol
+            empty: true
           maxlength: 30
           meta:
           - meta:
@@ -2334,14 +1914,16 @@ schema:
             ruleID: invalid_type
           type: string
         purpose:
-          allowed:
-          - education
-          - multiple
-          - provisional
-          - qualityControl
-          - regular
-          - testing
-          - validationStudy
+          anyof:
+          - allowed:
+            - education
+            - multiple
+            - provisional
+            - qualityControl
+            - regular
+            - testing
+            - validationStudy
+            empty: true
           maxlength: 30
           meta:
           - meta:
@@ -2412,8 +1994,13 @@ schema:
           type: datetime
         reportable:
           allowed:
-          - 'false'
-          - 'true'
+          - 'FALSE'
+          - 'TRUE'
+          anyof:
+          - allowed:
+            - 'false'
+            - 'true'
+            empty: true
           maxlength: 10
           meta:
           - meta:
@@ -2488,10 +2075,12 @@ schema:
           required: true
           type: string
         severity:
-          allowed:
-          - high
-          - low
-          - mid
+          anyof:
+          - allowed:
+            - high
+            - low
+            - mid
+            empty: true
           maxlength: 30
           meta:
           - meta:
@@ -2897,13 +2486,15 @@ schema:
             ruleID: invalid_type
           type: string
         orgLevel:
-          allowed:
-          - admRegLevel
-          - countryLevel
-          - countyLevel
-          - municipalLevel
-          - neighborLevel
-          - stateProvLevel
+          anyof:
+          - allowed:
+            - admRegLevel
+            - countryLevel
+            - countyLevel
+            - municipalLevel
+            - neighborLevel
+            - stateProvLevel
+            empty: true
           maxlength: 30
           meta:
           - meta:
@@ -2938,19 +2529,21 @@ schema:
             ruleID: invalid_type
           type: string
         orgSector:
-          allowed:
-          - airport
-          - ccc
-          - dorm
-          - fiNa
-          - healthAdm
-          - lab
-          - ltcf
-          - ltcfAl
-          - pubHealth
-          - school
-          - sss
-          - uCampus
+          anyof:
+          - allowed:
+            - airport
+            - ccc
+            - dorm
+            - fiNa
+            - healthAdm
+            - lab
+            - ltcf
+            - ltcfAl
+            - pubHealth
+            - school
+            - sss
+            - uCampus
+            empty: true
           maxlength: 30
           meta:
           - meta:
@@ -2997,10 +2590,12 @@ schema:
             ruleID: invalid_type
           type: string
         orgType:
-          allowed:
-          - academ
-          - govt
-          - priv
+          anyof:
+          - allowed:
+            - academ
+            - govt
+            - priv
+            empty: true
           maxlength: 30
           meta:
           - meta:
@@ -3090,424 +2685,6 @@ schema:
             - dataType: varchar
               organizations: input
               partID: stateProvLevel
-            ruleID: invalid_type
-          type: string
-      type: dict
-    type: list
-  parts:
-    schema:
-      meta:
-      - partID: parts
-        partType: tables
-      schema:
-        aggragationScale:
-          emptyTrimmed: false
-          forbidden:
-          - NA
-          - nan
-          - nr
-          - 'null'
-          - undisc
-          maxlength: 12
-          meta:
-          - meta:
-            - maxLength: '12'
-              partID: aggragationScale
-              parts: header
-              partsRequired: mandatory
-            ruleID: greater_than_max_length
-          - meta:
-            - dataType: categorical
-              partID: aggragationScale
-              parts: header
-              partsRequired: mandatory
-            ruleID: invalid_type
-          - meta:
-            - partID: aggragationScale
-              parts: header
-              partsRequired: mandatory
-            ruleID: missing_mandatory_column
-          - meta:
-            - partID: aggragationScale
-              parts: header
-              partsRequired: mandatory
-            - partID: NA
-              partType: missingness
-            - partID: nan
-              partType: missingness
-            - partID: nr
-              partType: missingness
-            - partID: 'null'
-              partType: missingness
-            - partID: undisc
-              partType: missingness
-            ruleID: missing_values_found
-          required: true
-          type: string
-        aggregationSet:
-          emptyTrimmed: false
-          forbidden:
-          - NA
-          - nan
-          - nr
-          - 'null'
-          - undisc
-          maxlength: 12
-          meta:
-          - meta:
-            - maxLength: '12'
-              partID: aggregationSet
-              parts: header
-              partsRequired: mandatory
-            ruleID: greater_than_max_length
-          - meta:
-            - dataType: categorical
-              partID: aggregationSet
-              parts: header
-              partsRequired: mandatory
-            ruleID: invalid_type
-          - meta:
-            - partID: aggregationSet
-              parts: header
-              partsRequired: mandatory
-            ruleID: missing_mandatory_column
-          - meta:
-            - partID: aggregationSet
-              parts: header
-              partsRequired: mandatory
-            - partID: NA
-              partType: missingness
-            - partID: nan
-              partType: missingness
-            - partID: nr
-              partType: missingness
-            - partID: 'null'
-              partType: missingness
-            - partID: undisc
-              partType: missingness
-            ruleID: missing_values_found
-          required: true
-          type: string
-        class:
-          emptyTrimmed: false
-          forbidden:
-          - NA
-          - nan
-          - nr
-          - 'null'
-          - undisc
-          maxlength: 30
-          meta:
-          - meta:
-            - maxLength: '30'
-              partID: class
-              parts: header
-              partsRequired: mandatory
-            ruleID: greater_than_max_length
-          - meta:
-            - dataType: categorical
-              partID: class
-              parts: header
-              partsRequired: mandatory
-            ruleID: invalid_type
-          - meta:
-            - partID: class
-              parts: header
-              partsRequired: mandatory
-            ruleID: missing_mandatory_column
-          - meta:
-            - partID: class
-              parts: header
-              partsRequired: mandatory
-            - partID: NA
-              partType: missingness
-            - partID: nan
-              partType: missingness
-            - partID: nr
-              partType: missingness
-            - partID: 'null'
-              partType: missingness
-            - partID: undisc
-              partType: missingness
-            ruleID: missing_values_found
-          required: true
-          type: string
-        domain:
-          emptyTrimmed: false
-          forbidden:
-          - NA
-          - nan
-          - nr
-          - 'null'
-          - undisc
-          maxlength: 30
-          meta:
-          - meta:
-            - maxLength: '30'
-              partID: domain
-              parts: header
-              partsRequired: mandatory
-            ruleID: greater_than_max_length
-          - meta:
-            - dataType: categorical
-              partID: domain
-              parts: header
-              partsRequired: mandatory
-            ruleID: invalid_type
-          - meta:
-            - partID: domain
-              parts: header
-              partsRequired: mandatory
-            ruleID: missing_mandatory_column
-          - meta:
-            - partID: domain
-              parts: header
-              partsRequired: mandatory
-            - partID: NA
-              partType: missingness
-            - partID: nan
-              partType: missingness
-            - partID: nr
-              partType: missingness
-            - partID: 'null'
-              partType: missingness
-            - partID: undisc
-              partType: missingness
-            ruleID: missing_values_found
-          required: true
-          type: string
-        group:
-          emptyTrimmed: false
-          forbidden:
-          - NA
-          - nan
-          - nr
-          - 'null'
-          - undisc
-          maxlength: 30
-          meta:
-          - meta:
-            - maxLength: '30'
-              partID: group
-              parts: header
-              partsRequired: mandatory
-            ruleID: greater_than_max_length
-          - meta:
-            - dataType: categorical
-              partID: group
-              parts: header
-              partsRequired: mandatory
-            ruleID: invalid_type
-          - meta:
-            - partID: group
-              parts: header
-              partsRequired: mandatory
-            ruleID: missing_mandatory_column
-          - meta:
-            - partID: group
-              parts: header
-              partsRequired: mandatory
-            - partID: NA
-              partType: missingness
-            - partID: nan
-              partType: missingness
-            - partID: nr
-              partType: missingness
-            - partID: 'null'
-              partType: missingness
-            - partID: undisc
-              partType: missingness
-            ruleID: missing_values_found
-          required: true
-          type: string
-        mmaSet:
-          emptyTrimmed: false
-          forbidden:
-          - NA
-          - nan
-          - nr
-          - 'null'
-          - undisc
-          maxlength: 12
-          meta:
-          - meta:
-            - maxLength: '12'
-              partID: mmaSet
-              parts: header
-              partsRequired: mandatory
-            ruleID: greater_than_max_length
-          - meta:
-            - dataType: categorical
-              partID: mmaSet
-              parts: header
-              partsRequired: mandatory
-            ruleID: invalid_type
-          - meta:
-            - partID: mmaSet
-              parts: header
-              partsRequired: mandatory
-            ruleID: missing_mandatory_column
-          - meta:
-            - partID: mmaSet
-              parts: header
-              partsRequired: mandatory
-            - partID: NA
-              partType: missingness
-            - partID: nan
-              partType: missingness
-            - partID: nr
-              partType: missingness
-            - partID: 'null'
-              partType: missingness
-            - partID: undisc
-              partType: missingness
-            ruleID: missing_values_found
-          required: true
-          type: string
-        nomenclature:
-          emptyTrimmed: false
-          forbidden:
-          - NA
-          - nan
-          - nr
-          - 'null'
-          - undisc
-          maxlength: 30
-          meta:
-          - meta:
-            - maxLength: '30'
-              partID: nomenclature
-              parts: header
-              partsRequired: mandatory
-            ruleID: greater_than_max_length
-          - meta:
-            - dataType: categorical
-              partID: nomenclature
-              parts: header
-              partsRequired: mandatory
-            ruleID: invalid_type
-          - meta:
-            - partID: nomenclature
-              parts: header
-              partsRequired: mandatory
-            ruleID: missing_mandatory_column
-          - meta:
-            - partID: nomenclature
-              parts: header
-              partsRequired: mandatory
-            - partID: NA
-              partType: missingness
-            - partID: nan
-              partType: missingness
-            - partID: nr
-              partType: missingness
-            - partID: 'null'
-              partType: missingness
-            - partID: undisc
-              partType: missingness
-            ruleID: missing_values_found
-          required: true
-          type: string
-        qualitySetID:
-          emptyTrimmed: false
-          forbidden:
-          - NA
-          - nan
-          - nr
-          - 'null'
-          - undisc
-          maxlength: 30
-          meta:
-          - meta:
-            - maxLength: '30'
-              partID: qualitySetID
-              parts: header
-              partsRequired: mandatory
-            ruleID: greater_than_max_length
-          - meta:
-            - dataType: varchar
-              partID: qualitySetID
-              parts: header
-              partsRequired: mandatory
-            ruleID: invalid_type
-          - meta:
-            - partID: qualitySetID
-              parts: header
-              partsRequired: mandatory
-            ruleID: missing_mandatory_column
-          - meta:
-            - partID: qualitySetID
-              parts: header
-              partsRequired: mandatory
-            - partID: NA
-              partType: missingness
-            - partID: nan
-              partType: missingness
-            - partID: nr
-              partType: missingness
-            - partID: 'null'
-              partType: missingness
-            - partID: undisc
-              partType: missingness
-            ruleID: missing_values_found
-          required: true
-          type: string
-        refLink:
-          emptyTrimmed: false
-          forbidden:
-          - NA
-          - nan
-          - nr
-          - 'null'
-          - undisc
-          maxlength: 255
-          meta:
-          - meta:
-            - maxLength: '255'
-              partID: refLink
-              parts: header
-              partsRequired: mandatory
-            ruleID: greater_than_max_length
-          - meta:
-            - dataType: varchar
-              partID: refLink
-              parts: header
-              partsRequired: mandatory
-            ruleID: invalid_type
-          - meta:
-            - partID: refLink
-              parts: header
-              partsRequired: mandatory
-            ruleID: missing_mandatory_column
-          - meta:
-            - partID: refLink
-              parts: header
-              partsRequired: mandatory
-            - partID: NA
-              partType: missingness
-            - partID: nan
-              partType: missingness
-            - partID: nr
-              partType: missingness
-            - partID: 'null'
-              partType: missingness
-            - partID: undisc
-              partType: missingness
-            ruleID: missing_values_found
-          required: true
-          type: string
-        value:
-          maxlength: 15
-          meta:
-          - meta:
-            - maxLength: '15'
-              partID: value
-              parts: input
-            ruleID: greater_than_max_length
-          - meta:
-            - dataType: varchar
-              partID: value
-              parts: input
             ruleID: invalid_type
           type: string
       type: dict
@@ -3621,9 +2798,11 @@ schema:
           required: true
           type: float
         geoType:
-          allowed:
-          - hlthReg
-          - swrSet
+          anyof:
+          - allowed:
+            - hlthReg
+            - swrSet
+            empty: true
           emptyTrimmed: false
           forbidden:
           - NA
@@ -4002,8 +3181,13 @@ schema:
           type: string
         reportable:
           allowed:
-          - 'false'
-          - 'true'
+          - 'FALSE'
+          - 'TRUE'
+          anyof:
+          - allowed:
+            - 'false'
+            - 'true'
+            empty: true
           maxlength: 10
           meta:
           - meta:
@@ -4595,8 +3779,13 @@ schema:
           type: string
         reportable:
           allowed:
-          - 'false'
-          - 'true'
+          - 'FALSE'
+          - 'TRUE'
+          anyof:
+          - allowed:
+            - 'false'
+            - 'true'
+            empty: true
           maxlength: 10
           meta:
           - meta:
@@ -4834,10 +4023,12 @@ schema:
             ruleID: invalid_type
           type: string
         severity:
-          allowed:
-          - high
-          - low
-          - mid
+          anyof:
+          - allowed:
+            - high
+            - low
+            - mid
+            empty: true
           maxlength: 30
           meta:
           - meta:
@@ -5281,16 +4472,18 @@ schema:
           required: true
           type: float
         collType:
-          allowed:
-          - areaPr
-          - comp
-          - cosca
-          - flowPr
-          - grb
-          - moorSw
-          - surfSw
-          - timePr
-          - volPr
+          anyof:
+          - allowed:
+            - areaPr
+            - comp
+            - cosca
+            - flowPr
+            - grb
+            - moorSw
+            - surfSw
+            - timePr
+            - volPr
+            empty: true
           emptyTrimmed: false
           forbidden:
           - NA
@@ -5457,8 +4650,13 @@ schema:
           type: string
         pooled:
           allowed:
-          - 'false'
-          - 'true'
+          - 'FALSE'
+          - 'TRUE'
+          anyof:
+          - allowed:
+            - 'false'
+            - 'true'
+            empty: true
           maxlength: 30
           meta:
           - meta:
@@ -5505,14 +4703,16 @@ schema:
             ruleID: invalid_type
           type: string
         purpose:
-          allowed:
-          - education
-          - multiple
-          - provisional
-          - qualityControl
-          - regular
-          - testing
-          - validationStudy
+          anyof:
+          - allowed:
+            - education
+            - multiple
+            - provisional
+            - qualityControl
+            - regular
+            - testing
+            - validationStudy
+            empty: true
           maxlength: 30
           meta:
           - meta:
@@ -5566,13 +4766,15 @@ schema:
             ruleID: invalid_type
           type: datetime
         repType:
-          allowed:
-          - colocated
-          - fieldReplicate
-          - labDuplicate
-          - lcsd
-          - msd
-          - unique
+          anyof:
+          - allowed:
+            - colocated
+            - fieldReplicate
+            - labDuplicate
+            - lcsd
+            - msd
+            - unique
+            empty: true
           maxlength: 30
           meta:
           - meta:
@@ -5608,8 +4810,13 @@ schema:
           type: string
         reportable:
           allowed:
-          - 'false'
-          - 'true'
+          - 'FALSE'
+          - 'TRUE'
+          anyof:
+          - allowed:
+            - 'false'
+            - 'true'
+            empty: true
           maxlength: 10
           meta:
           - meta:
@@ -5640,24 +4847,26 @@ schema:
             ruleID: invalid_type
           type: string
         saMaterial:
-          allowed:
-          - afu
-          - desk
-          - faeces
-          - floor
-          - htSam
-          - nww
-          - pEfflu
-          - pSludge
-          - pstGrit
-          - rawWW
-          - rawWWdown
-          - rawWWup
-          - sEfflu
-          - sSludge
-          - septage
-          - surface
-          - swrSed
+          anyof:
+          - allowed:
+            - afu
+            - desk
+            - faeces
+            - floor
+            - htSam
+            - nww
+            - pEfflu
+            - pSludge
+            - pstGrit
+            - rawWW
+            - rawWWdown
+            - rawWWup
+            - sEfflu
+            - sSludge
+            - septage
+            - surface
+            - swrSed
+            empty: true
           emptyTrimmed: false
           forbidden:
           - NA
@@ -5809,10 +5018,12 @@ schema:
             ruleID: invalid_type
           type: datetime
         severity:
-          allowed:
-          - high
-          - low
-          - mid
+          anyof:
+          - allowed:
+            - high
+            - low
+            - mid
+            empty: true
           maxlength: 30
           meta:
           - meta:
@@ -5896,117 +5107,6 @@ schema:
               samples: input
             ruleID: invalid_type
           type: string
-      type: dict
-    type: list
-  sets:
-    schema:
-      meta:
-      - partID: sets
-        partType: tables
-      schema:
-        notes:
-          maxlength: 200
-          meta:
-          - meta:
-            - maxLength: '200'
-              partID: notes
-              sets: header
-              setsRequired: optional
-            ruleID: greater_than_max_length
-          - meta:
-            - dataType: varchar
-              partID: notes
-              sets: header
-              setsRequired: optional
-            ruleID: invalid_type
-          type: string
-        setID:
-          emptyTrimmed: false
-          forbidden:
-          - NA
-          - nan
-          - nr
-          - 'null'
-          - undisc
-          maxlength: 28
-          meta:
-          - meta:
-            - partID: setID
-              sets: pK
-              setsRequired: mandatory
-            ruleID: duplicate_entries_found
-          - meta:
-            - maxLength: '28'
-              partID: setID
-              sets: pK
-              setsRequired: mandatory
-            ruleID: greater_than_max_length
-          - meta:
-            - dataType: varchar
-              partID: setID
-              sets: pK
-              setsRequired: mandatory
-            ruleID: invalid_type
-          - meta:
-            - partID: setID
-              sets: pK
-              setsRequired: mandatory
-            ruleID: missing_mandatory_column
-          - meta:
-            - partID: setID
-              sets: pK
-              setsRequired: mandatory
-            - partID: NA
-              partType: missingness
-            - partID: nan
-              partType: missingness
-            - partID: nr
-              partType: missingness
-            - partID: 'null'
-              partType: missingness
-            - partID: undisc
-              partType: missingness
-            ruleID: missing_values_found
-          required: true
-          type: string
-          unique: true
-        setValue:
-          emptyTrimmed: false
-          forbidden:
-          - NA
-          - nan
-          - nr
-          - 'null'
-          - undisc
-          maxlength: 30
-          meta:
-          - meta:
-            - maxLength: '30'
-              partID: setValue
-              sets: fK
-              setsRequired: mandatory
-            ruleID: greater_than_max_length
-          - meta:
-            - partID: setValue
-              sets: fK
-              setsRequired: mandatory
-            ruleID: missing_mandatory_column
-          - meta:
-            - partID: setValue
-              sets: fK
-              setsRequired: mandatory
-            - partID: NA
-              partType: missingness
-            - partID: nan
-              partType: missingness
-            - partID: nr
-              partType: missingness
-            - partID: 'null'
-              partType: missingness
-            - partID: undisc
-              partType: missingness
-            ruleID: missing_values_found
-          required: true
       type: dict
     type: list
   sites:
@@ -6318,26 +5418,28 @@ schema:
             ruleID: invalid_type
           type: string
         sampleShed:
-          allowed:
-          - airpln
-          - airport
-          - ccc
-          - cdc
-          - corFcil
-          - dorm
-          - fiNa
-          - hosptl
-          - ltcf
-          - ltcfAl
-          - ltcfO
-          - municp
-          - neigh
-          - orb
-          - school
-          - ship
-          - sss
-          - terminal
-          - uCampus
+          anyof:
+          - allowed:
+            - airpln
+            - airport
+            - ccc
+            - cdc
+            - corFcil
+            - dorm
+            - fiNa
+            - hosptl
+            - ltcf
+            - ltcfAl
+            - ltcfO
+            - municp
+            - neigh
+            - orb
+            - school
+            - ship
+            - sss
+            - terminal
+            - uCampus
+            empty: true
           emptyTrimmed: false
           forbidden:
           - NA
@@ -6476,28 +5578,30 @@ schema:
           type: string
           unique: true
         siteType:
-          allowed:
-          - bSwrPpl
-          - buildCO
-          - estuary
-          - htSite
-          - lagoon
-          - lake
-          - mSwrPpl
-          - ocean
-          - pStat
-          - retPond
-          - river
-          - sea
-          - septTnk
-          - stabPnd
-          - swgTrck
-          - upstream
-          - wwtp
-          - wwtpBack
-          - wwtpInd
-          - wwtpMuC
-          - wwtpMuS
+          anyof:
+          - allowed:
+            - bSwrPpl
+            - buildCO
+            - estuary
+            - htSite
+            - lagoon
+            - lake
+            - mSwrPpl
+            - ocean
+            - pStat
+            - retPond
+            - river
+            - sea
+            - septTnk
+            - stabPnd
+            - swgTrck
+            - upstream
+            - wwtp
+            - wwtpBack
+            - wwtpInd
+            - wwtpMuC
+            - wwtpMuS
+            empty: true
           emptyTrimmed: false
           forbidden:
           - NA
@@ -6588,74 +5692,6 @@ schema:
               partType: missingness
             ruleID: missing_values_found
           required: true
-          type: string
-      type: dict
-    type: list
-  translations:
-    schema:
-      meta:
-      - partID: translations
-        partType: tables
-      schema:
-        lang:
-          emptyTrimmed: false
-          forbidden:
-          - NA
-          - nan
-          - nr
-          - 'null'
-          - undisc
-          maxlength: 30
-          meta:
-          - meta:
-            - maxLength: '30'
-              partID: lang
-              translations: fK
-              translationsRequired: mandatory
-            ruleID: greater_than_max_length
-          - meta:
-            - dataType: varchar
-              partID: lang
-              translations: fK
-              translationsRequired: mandatory
-            ruleID: invalid_type
-          - meta:
-            - partID: lang
-              translations: fK
-              translationsRequired: mandatory
-            ruleID: missing_mandatory_column
-          - meta:
-            - partID: lang
-              translations: fK
-              translationsRequired: mandatory
-            - partID: NA
-              partType: missingness
-            - partID: nan
-              partType: missingness
-            - partID: nr
-              partType: missingness
-            - partID: 'null'
-              partType: missingness
-            - partID: undisc
-              partType: missingness
-            ruleID: missing_values_found
-          required: true
-          type: string
-        notes:
-          maxlength: 200
-          meta:
-          - meta:
-            - maxLength: '200'
-              partID: notes
-              translations: header
-              translationsRequired: optional
-            ruleID: greater_than_max_length
-          - meta:
-            - dataType: varchar
-              partID: notes
-              translations: header
-              translationsRequired: optional
-            ruleID: invalid_type
           type: string
       type: dict
     type: list

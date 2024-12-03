@@ -10,6 +10,7 @@ from cerberus import Validator
 from cerberus.errors import ErrorDefinition
 
 import part_tables as pt
+import schemas
 import reports
 from input_data import DataKind
 from reports import get_row_num
@@ -76,7 +77,7 @@ class ContextualCoercer(Validator):
             schema = result[table]['schema']['schema']
             for field, rules in list(schema.items()):
                 for key in list(rules.keys()):
-                    if key == 'coerce':
+                    if key == schemas.COERCE_KEY:
                         rules['check_with'] = rules.pop(key)
                     elif key != 'meta':
                         del rules[key]
@@ -121,7 +122,7 @@ class ContextualCoercer(Validator):
         table = self.document_path[0]
         row_ix = self.document_path[1]
         row = self.document
-        column_meta = self.schema[field].get('meta')
+        column_meta = self.schema[field].get('meta', [])
         ctx = reports.ErrorCtx(
             rule_id=RuleId._coercion,
             cerb_type_name=type_name(type_class),
@@ -211,7 +212,7 @@ class OdmValidator(Validator):
         expect_empty = constraint
         is_str = isinstance(raw_value, str)
         value = raw_value.strip() if is_str else raw_value
-        is_empty = not value or (is_str and value == '')
+        is_empty = not value
         if is_empty != expect_empty:
             err = ErrorDefinition(EMPTY_TRIMMED_RULE, 'emptyTrimmed')
             self._error(field, err)
@@ -243,7 +244,7 @@ class OdmValidator(Validator):
                     column_id=field,
                     row_numbers=[first_row_num],
                     rows=[first_row],
-                    column_meta=self.schema[field].get('meta'),
+                    column_meta=self.schema[field].get('meta', []),
                     value=pk[0]
                 )
                 state.tablekey_errors[tablekey] = err

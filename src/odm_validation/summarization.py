@@ -1,3 +1,4 @@
+import json
 from collections import defaultdict
 from dataclasses import dataclass
 from enum import Enum
@@ -20,7 +21,7 @@ Count = int
 EntityId = str
 
 
-class SummaryKey(Enum):
+class SummaryKey(int, Enum):
     # XXX:
     # - int-values are for comparison/order
     # - values are overloaded as lower-case names
@@ -83,6 +84,9 @@ class SummarizedReport:
     overview: dict
     errors: ErrorSummary
     warnings: ErrorSummary
+
+    def toJson(self):
+        return json.dumps(self, default=lambda x: x.__dict__)
 
 
 # error counting
