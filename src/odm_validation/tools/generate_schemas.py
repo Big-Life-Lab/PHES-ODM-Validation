@@ -53,6 +53,7 @@ def generate_schemas_from_odm_tables(odm_dir, schema_dir):
         generate_schema_for_version(parts, sets, str(version), schema_dir)
 
 
+# TODO: generate a file with only the table names
 def main():
     asset_dir = join(root_dir, 'assets')
     schema_dir = normpath(join(asset_dir, 'validation-schemas'))
