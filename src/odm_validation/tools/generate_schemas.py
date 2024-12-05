@@ -7,22 +7,18 @@ import sys
 from logging import warning
 from os.path import join, normpath, relpath
 from pathlib import Path
-from semver import Version
 
 tool_dir = Path(__file__).parent
 root_dir = tool_dir.parent.parent.parent
 sys.path.append(join(root_dir, 'src'))
 
+import odm_validation.part_tables as pt  # noqa:E402
 import odm_validation.utils as utils  # noqa:E402
 from odm_validation.validation import generate_validation_schema  # noqa:E402
 from odm_validation.versions import parse_version  # noqa:E402
 
 PARTS_FILENAME = 'parts.csv'
 SETS_FILENAME = 'sets.csv'
-LEGACY_SCHEMA_VERSIONS = sorted([
-    Version(major=1),
-    Version(major=1, minor=1),
-])
 
 # setup logging
 log_dir = normpath(join(root_dir, 'logs'))
@@ -52,7 +48,7 @@ def generate_schemas_from_odm_tables(odm_dir, schema_dir):
     odm_version = parse_version(match.group(1))
     parts = utils.import_dataset(join(odm_dir, PARTS_FILENAME))
     sets = utils.import_dataset(join(odm_dir, SETS_FILENAME))
-    for version in (LEGACY_SCHEMA_VERSIONS + [odm_version]):
+    for version in (pt.ODM_LEGACY_VERSIONS + [odm_version]):
         assert version <= odm_version
         generate_schema_for_version(parts, sets, str(version), schema_dir)
 

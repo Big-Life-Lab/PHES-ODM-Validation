@@ -124,6 +124,10 @@ def _get_latest_odm_version_str() -> str:
 COLUMN_KINDS = set(list(map(lambda e: e.value, ColumnKind)))
 ODM_VERSION_STR = _get_latest_odm_version_str()
 ODM_VERSION = parse_version(ODM_VERSION_STR)
+ODM_LEGACY_VERSIONS = sorted([
+    Version(major=1),
+    Version(major=1, minor=1),
+])
 
 # field constants
 CATSET_ID = 'mmaSet'
