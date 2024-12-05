@@ -16,6 +16,7 @@ from xlsx2csv import Xlsx2csv
 root_dir = join(os.path.dirname(os.path.realpath(__file__)), '..')
 sys.path.append(join(root_dir, 'src'))
 
+import odm_validation.odm as odm # noqa:E402
 import odm_validation.part_tables as pt  # noqa:E402
 import odm_validation.utils as utils  # noqa:E402
 from odm_validation.validation import _validate_data_ext, DataKind  # noqa:E402
@@ -41,7 +42,7 @@ class DataFormat(Enum):
     XLSX = 'xlsx'
 
 
-DEF_VER = pt.ODM_VERSION_STR
+DEF_VER = odm.VERSION_STR
 
 DATA_FILE_DESC = "Path of input files (xlsx/csv)."
 VERSION_DESC = "ODM version to validate against."
@@ -72,13 +73,6 @@ def import_xlsx(src_file, dst_dir) -> List[str]:
         xl.convert(csv_path, sheet_id)
         result.append(csv_path)
     return result
-
-
-def get_sheet_table_id(schema, sheet_name) -> Optional[str]:
-    table_ids = list(schema['schema'].keys())
-    for table_id in table_ids:
-        if sheet_name.endswith(table_id):
-            return table_id
 
 
 def filename_without_ext(path):
@@ -139,7 +133,7 @@ def load_tables(schema, in_paths: list) -> Dict[pt.TableId, str]:
     info('\nloading table info...')
     for in_path in in_paths:
         name = filename_without_ext(in_path)
-        table_id = get_sheet_table_id(schema, name)
+        table_id = odm.infer_table(schema, name)
         if not table_id:
             info(f'sheet "{name}": unable to infer table name')
             continue

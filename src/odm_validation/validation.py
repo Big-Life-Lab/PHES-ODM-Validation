@@ -8,6 +8,7 @@ from typing import Callable, Dict, List
 from enum import Enum
 # from pprint import pprint
 
+import odm
 import part_tables as pt
 import reports
 import schemas
@@ -35,7 +36,7 @@ _BATCH_SIZE = 20
 
 def _generate_validation_schema_ext(parts: pt.Dataset,
                                     sets: pt.Dataset = [],
-                                    schema_version: str = pt.ODM_VERSION_STR,
+                                    schema_version: str = odm.VERSION_STR,
                                     schema_additions: dict = {},
                                     rule_blacklist: List[RuleId] = [],
                                     rule_whitelist: List[RuleId] = []
@@ -84,7 +85,7 @@ def _generate_validation_schema_ext(parts: pt.Dataset,
 
 def generate_validation_schema(parts: pt.Dataset,
                                sets: pt.Dataset = [],
-                               schema_version=pt.ODM_VERSION_STR,
+                               schema_version=odm.VERSION_STR,
                                schema_additions={}) -> Schema:
     return _generate_validation_schema_ext(parts, sets, schema_version,
                                            schema_additions)
@@ -131,7 +132,7 @@ def _validate_data_ext(
     schema: Schema,
     data: TableDataset,
     data_kind: DataKind = DataKind.python,
-    data_version: str = pt.ODM_VERSION_STR,
+    data_version: str = odm.VERSION_STR,
     rule_blacklist: List[RuleId] = [],
     rule_whitelist: List[RuleId] = [],
     on_progress: OnProgress = None,
@@ -257,7 +258,7 @@ def _validate_data_ext(
 def validate_data(schema: Schema,
                   data: TableDataset,
                   data_kind: DataKind = DataKind.python,
-                  data_version=pt.ODM_VERSION_STR,
+                  data_version=odm.VERSION_STR,
                   rule_blacklist: List[RuleId] = [],
                   ) -> reports.ValidationReport:
     """
