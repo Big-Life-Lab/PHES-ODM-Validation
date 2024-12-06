@@ -12,6 +12,7 @@ tool_dir = Path(__file__).parent
 root_dir = tool_dir.parent.parent.parent
 sys.path.append(join(root_dir, 'src'))
 
+import odm_validation.odm as odm  # noqa:E402
 import odm_validation.part_tables as pt  # noqa:E402
 import odm_validation.utils as utils  # noqa:E402
 from odm_validation.validation import generate_validation_schema  # noqa:E402
@@ -35,9 +36,17 @@ logging.basicConfig(
 def generate_schema_for_version(parts, sets, version, schema_dir):
     filename = f'schema-v{version}.yml'
     path = join(schema_dir, filename)
-    print(f'generating {os.path.basename(path)}')
+    print(f'generating {filename}')
     schema = generate_validation_schema(parts, sets, version)
     utils.export_schema(schema, path)
+
+    # file with table names, for table inference
+    filename = f'tables-v{version}.txt'
+    path = join(schema_dir, filename)
+    print(f'generating {filename}')
+    with open(path, 'w') as f:
+        tables = list(schema['schema'])
+        f.write(os.linesep.join(tables))
 
 
 def generate_schemas_from_odm_tables(odm_dir, schema_dir):
@@ -48,12 +57,11 @@ def generate_schemas_from_odm_tables(odm_dir, schema_dir):
     odm_version = parse_version(match.group(1))
     parts = utils.import_dataset(join(odm_dir, PARTS_FILENAME))
     sets = utils.import_dataset(join(odm_dir, SETS_FILENAME))
-    for version in (pt.ODM_LEGACY_VERSIONS + [odm_version]):
+    for version in (odm.LEGACY_VERSIONS + [odm_version]):
         assert version <= odm_version
         generate_schema_for_version(parts, sets, str(version), schema_dir)
 
 
-# TODO: generate a file with only the table names
 def main():
     asset_dir = join(root_dir, 'assets')
     schema_dir = normpath(join(asset_dir, 'validation-schemas'))

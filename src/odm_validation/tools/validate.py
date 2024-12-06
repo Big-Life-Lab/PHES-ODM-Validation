@@ -10,7 +10,9 @@ from pathlib import Path
 from typing import Dict, IO, List, Optional
 # from pprint import pprint
 
+
 import typer
+from semver import Version
 from xlsx2csv import Xlsx2csv
 
 root_dir = join(os.path.dirname(os.path.realpath(__file__)), '..')
@@ -128,18 +130,17 @@ def convert_excel_to_csv(path: str) -> List[str]:
     return import_xlsx(path, csvdir)
 
 
-def load_tables(schema, in_paths: list) -> Dict[pt.TableId, str]:
+def infer_tables(in_paths: list, version: Version) -> Dict[pt.TableId, str]:
     result = {}
-    info('\nloading table info...')
     for in_path in in_paths:
         name = filename_without_ext(in_path)
-        table_id = odm.infer_table(schema, name)
+        table_id = odm.infer_table(name, version)
         if not table_id:
             info(f'sheet "{name}": unable to infer table name')
             continue
         result[table_id] = in_path
     if len(result) == 0:
-        info('\nno tables found. did you specify the correct ODM version?')
+        info('no tables recognized. Did you specify the correct ODM version?')
         quit(1)
     info('found tables:')
     for table_id in result:
@@ -232,7 +233,7 @@ def main_cli(
 
         if in_fmt == DataFormat.XLSX:
             in_paths = convert_excel_to_csv(in_paths[0])
-        tables = load_tables(schema, in_paths)
+        tables = infer_tables(in_paths, version)
         db_data = load_db_data(tables)
 
         def validate(data):

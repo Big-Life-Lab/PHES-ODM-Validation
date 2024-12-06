@@ -5,9 +5,6 @@ import csv
 import json
 import yaml
 
-from schemas import Schema
-
-
 def import_csv_file(path: str) -> List[dict]:
     result = []
     with open(path, newline='', encoding='utf8') as f:
@@ -31,7 +28,7 @@ def export_yaml_file(data: dict, path: str):
         return f.write(yaml.dump(data))
 
 
-def import_dataset(path: str) -> Schema:
+def import_dataset(path: str) -> dict:
     # print('importing ' + path)
     _, ext = splitext(path)
     if ext == '.csv':
@@ -44,9 +41,9 @@ def import_dataset(path: str) -> Schema:
         assert False, f'unknown dataset extension "{ext}"'
 
 
-def import_schema(path: str) -> Schema:
+def import_schema(path: str) -> dict:
     return import_yaml_file(path)
 
 
-def export_schema(schema: Schema, path: str):
+def export_schema(schema: dict, path: str):
     export_yaml_file(schema, path)

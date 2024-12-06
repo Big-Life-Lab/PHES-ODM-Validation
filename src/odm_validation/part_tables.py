@@ -2,17 +2,15 @@
 
 import inspect
 import os
-import re
 import sys
 from dataclasses import dataclass
 from enum import Enum
 from logging import error, info
-from os.path import join
-from pathlib import Path
 from semver import Version
 from typing import DefaultDict, Dict, List, Optional, Set, Tuple
 # from pprint import pprint
 
+import odm
 from stdext import flatten
 from versions import parse_version
 
@@ -185,7 +183,7 @@ def get_version_range(part: dict) -> (Version, Version):
     # XXX: must have default for tests (without versioned parts) to work
     row = part
     v1 = Version(major=1)
-    latest = _strip_prerelease(ODM_VERSION)
+    latest = _strip_prerelease(odm.VERSION)
     first = parse_row_version(row, FIRST_RELEASED, default=v1)
     last = parse_row_version(row, LAST_UPDATED, default=latest)
     assert first <= last
@@ -237,7 +235,7 @@ def _get_mappings(part: dict, version: Version) -> Optional[List[PartId]]:
     # - parts may be missing version1 fields
     # - partType 'missingness' does not have version1 fields
     # - catSet 'booleanSet' is not required to have a version1Location
-    if not should_have_mapping(part, version, ODM_VERSION):
+    if not should_have_mapping(part, version, odm.VERSION):
         return
     ids = []
     loc = part.get(V1_LOCATION)
@@ -368,7 +366,7 @@ def filter_compatible(rows: Dataset, version: Version) -> Dataset:
 def filter_backportable(parts: Dataset, version: Version) -> Dataset:
     "Retuns the subset of `parts` that has a mapping to v1."
     result = []
-    latest = ODM_VERSION
+    latest = odm.VERSION
     for row in parts:
         part_id = get_partID(row)
         first, _ = get_version_range(row)
@@ -414,7 +412,7 @@ def validate_and_fix(all_parts: PartMap, version):
     # FIXME: true/false parts are missing version1Category
     for part_id in BOOL_SET_IDS:
         part = all_parts.get(part_id)
-        if part and should_have_mapping(part, version, ODM_VERSION):
+        if part and should_have_mapping(part, version, odm.VERSION):
             if V1_CATEGORY not in part:
                 part[V1_CATEGORY] = part_id.capitalize()
                 assert has_mapping(part, version)
