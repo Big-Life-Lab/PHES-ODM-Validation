@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
 import csv
-import os
 import sys
 from enum import Enum
 from typing import List

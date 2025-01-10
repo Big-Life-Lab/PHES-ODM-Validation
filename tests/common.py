@@ -5,7 +5,6 @@ package modules.
 
 import logging
 import os
-import sys
 import unittest
 from glob import glob
 from os.path import join, splitext
