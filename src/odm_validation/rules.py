@@ -8,14 +8,14 @@ from enum import Enum
 from typing import Any, Callable, List, Tuple
 # from pprint import pprint
 
-import part_tables as pt
-from input_data import DataKind
-from schemas import Schema, init_attr_schema, init_table_schema
-from stdext import (
+import odm_validation.part_tables as pt
+from odm_validation.input_data import DataKind
+from odm_validation.schemas import Schema, init_attr_schema, init_table_schema
+from odm_validation.stdext import (
     deep_update,
     try_parse_int,
 )
-from rule_primitives import (
+from odm_validation.rule_primitives import (
     OdmValueCtx,
     attr_items,
     gen_cerb_rules_for_type,
@@ -28,7 +28,7 @@ from rule_primitives import (
     parse_odm_val,
     table_items,
 )
-from versions import Version
+from odm_validation.versions import Version
 
 
 RuleId = Enum('RuleId', type=int, names=[

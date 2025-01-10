@@ -1,6 +1,6 @@
 from copy import deepcopy
 
-from part_tables import Meta
+from odm_validation.part_tables import Meta
 
 CerberusSchema = dict
 Schema = dict  # {'schemaVersion': str, 'schema': CerberusSchema}

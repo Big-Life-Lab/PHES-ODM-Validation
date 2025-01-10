@@ -10,8 +10,6 @@ import unittest
 from glob import glob
 from os.path import join, splitext
 
-unused_import_dummy = 0
-
 ASSET_DIR = ''
 PKG_NAME = 'odm_validation'
 
@@ -33,19 +31,6 @@ class OdmTestCase(unittest.TestCase):
     def assertReportEqual(self, expected, report):
         self.assertEqual(expected['errors'], report.errors)
         self.assertEqual(expected['warnings'], report.warnings)
-
-
-def setup_import_path():
-    global __package__
-    if __package__ not in {None, ''}:
-        return
-    __package__ = 'tests'
-    src_dir = join(root_dir, 'src')
-    pkg_dir = join(src_dir, 'odm_validation')
-    sys.path.append(pkg_dir)
-
-
-setup_import_path()
 
 
 def param_range(start, stop):

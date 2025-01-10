@@ -1,10 +1,9 @@
 import unittest
 from copy import deepcopy
 
-import common
-from stdext import deep_update, keep, swapDelete, try_parse_int
+from odm_validation.stdext import deep_update, keep, swapDelete, try_parse_int
 
-common.unused_import_dummy = 1
+import common
 
 
 class TestStdExt(common.OdmTestCase):

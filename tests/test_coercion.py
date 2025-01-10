@@ -1,11 +1,11 @@
 import unittest
 # from pprint import pprint
 
-import common
-from cerberusext import ContextualCoercer
-from validation import _validate_data_ext
+from odm_validation.cerberusext import ContextualCoercer
+from odm_validation.validation import _validate_data_ext
 
-common.unused_import_dummy = 1
+import common
+
 
 column_meta = [
     {

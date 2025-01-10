@@ -4,22 +4,22 @@ generation and data validation.
 """
 
 from collections import defaultdict
+from copy import deepcopy
 from typing import Callable, Dict, List
 from enum import Enum
 # from pprint import pprint
 
-import part_tables as pt
-import reports
-import schemas
-from cerberusext import ContextualCoercer, OdmValidator
-from copy import deepcopy
-from input_data import DataKind
-from reports import ErrorVerbosity, TableInfo, ValidationCtx
-from rule_filters import RuleFilter
-from rules import RuleId, ruleset
-from schemas import Schema
-from stdext import deep_update, keep, strip_dict_key
-from versions import __version__, parse_version
+import odm_validation.part_tables as pt
+import odm_validation.reports as reports
+import odm_validation.schemas as schemas
+from odm_validation.cerberusext import ContextualCoercer, OdmValidator
+from odm_validation.input_data import DataKind
+from odm_validation.reports import ErrorVerbosity, TableInfo, ValidationCtx
+from odm_validation.rule_filters import RuleFilter
+from odm_validation.rules import RuleId, ruleset
+from odm_validation.schemas import Schema
+from odm_validation.stdext import deep_update, keep, strip_dict_key
+from odm_validation.versions import __version__, parse_version
 
 from rule_errors import (
     filter_errors,

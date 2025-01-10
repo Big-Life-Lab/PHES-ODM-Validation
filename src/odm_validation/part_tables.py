@@ -13,8 +13,8 @@ from semver import Version
 from typing import DefaultDict, Dict, List, Optional, Set, Tuple
 # from pprint import pprint
 
-from stdext import flatten
-from versions import parse_version
+from odm_validation.stdext import flatten
+from odm_validation.versions import parse_version
 
 
 # type aliases (primitive)

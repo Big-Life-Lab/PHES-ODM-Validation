@@ -6,11 +6,11 @@ from itertools import groupby
 from typing import Dict, List, Set, Tuple
 # from pprint import pprint
 
-import reports
-from part_tables import TableId
-from reports import ErrorKind, ValidationReport
-from rules import RuleId
-from versions import __version__
+import odm_validation.reports as reports
+from odm_validation.part_tables import TableId
+from odm_validation.reports import ErrorKind, ValidationReport
+from odm_validation.rules import RuleId
+from odm_validation.versions import __version__
 
 
 # types

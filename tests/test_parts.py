@@ -1,13 +1,11 @@
 import unittest
 
-import common
-import part_tables as pt
-from part_tables import _get_mappings, is_compatible
-from validation import generate_validation_schema
-from versions import Version, parse_version
-# from pprint import pprint
+import odm_validation.part_tables as pt
+from odm_validation.part_tables import is_compatible
+from odm_validation.validation import generate_validation_schema
+from odm_validation.versions import Version, parse_version
 
-common.unused_import_dummy = 1
+import common
 
 
 def get_row(first: str, last: str, active: bool):
@@ -66,8 +64,8 @@ class TestVersion1FieldsExist(common.OdmTestCase):
 
     def test(self):
         v = Version(major=1)
-        id_list_pass = [_get_mappings(p, v) for p in self.parts_pass]
-        id_list_fail = [_get_mappings(p, v) for p in self.parts_fail]
+        id_list_pass = [pt._get_mappings(p, v) for p in self.parts_pass]
+        id_list_fail = [pt._get_mappings(p, v) for p in self.parts_fail]
         self.assertEqual(id_list_pass, [['a'], ['b'], ['c', 'd']])
         self.assertEqual(id_list_fail, [None, None, None])
 

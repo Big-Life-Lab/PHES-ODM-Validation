@@ -1,11 +1,9 @@
-
 import unittest
 
-import common
-from rules import RuleId, ruleset
-from validation import RuleFilter
+from odm_validation.rules import RuleId, ruleset
+from odm_validation.validation import RuleFilter
 
-common.unused_import_dummy = 1
+import common
 
 
 def get_enabled_ids(rule_filter):

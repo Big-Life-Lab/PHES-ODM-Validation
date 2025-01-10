@@ -1,13 +1,12 @@
 import unittest
 from copy import deepcopy
 
-import common
-from input_data import DataKind
-from reports import get_row_num
-from validation import validate_data
-# from pprint import pprint
+from odm_validation.input_data import DataKind
+from odm_validation.reports import get_row_num
+from odm_validation.validation import validate_data
 
-common.unused_import_dummy = 1
+import common
+
 
 base_schema = {
     'schemaVersion': '2.0.0',

@@ -5,7 +5,7 @@ import csv
 import json
 import yaml
 
-from schemas import Schema
+from odm_validation.schemas import Schema
 
 
 def import_csv_file(path: str) -> List[dict]:

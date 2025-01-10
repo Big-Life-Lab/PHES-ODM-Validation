@@ -5,10 +5,10 @@ from typing import Any, Dict, List, Optional, Set
 from typing_extensions import TypedDict
 # from pprint import pprint
 
-import part_tables as pt
-from input_data import DataKind
-from rules import get_anyof_constraint, RuleId
-from stdext import (
+import odm_validation.part_tables as pt
+from odm_validation.input_data import DataKind
+from odm_validation.rules import get_anyof_constraint, RuleId
+from odm_validation.stdext import (
     get_len,
     quote,
     type_name,
