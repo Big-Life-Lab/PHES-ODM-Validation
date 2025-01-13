@@ -4,15 +4,19 @@ from os.path import join
 
 from parameterized import parameterized, parameterized_class
 
-import common
-from common import asset, root_dir, param_range
-from rules import RuleId
-from utils import (
+from odm_validation.rules import RuleId
+from odm_validation.schemas import import_schema
+from odm_validation.utils import (
     import_dataset,
     import_json_file,
-    import_schema,
 )
-from validation import _generate_validation_schema_ext, _validate_data_ext
+from odm_validation.validation import (
+    _generate_validation_schema_ext,
+    _validate_data_ext,
+)
+
+import common
+from common import asset, root_dir, param_range
 
 
 class Assets():

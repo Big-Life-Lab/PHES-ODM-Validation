@@ -3,7 +3,6 @@ import unittest
 from odm_validation.part_tables import ODM_VERSION_STR
 from odm_validation.reports import ErrorKind, TableInfo, ValidationReport
 from odm_validation.rules import RuleId
-from odm_validation.versions import __version__
 from odm_validation.summarization import (
     _calc_summary_entry_totals,
     ErrorSummary,
@@ -11,6 +10,7 @@ from odm_validation.summarization import (
     SummaryKey,
     summarize_report,
 )
+from odm_validation.versions import __version__
 
 import common
 

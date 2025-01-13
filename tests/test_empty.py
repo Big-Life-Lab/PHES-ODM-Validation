@@ -3,13 +3,12 @@ from os.path import join
 
 from parameterized import parameterized
 
+from odm_validation.schemas import import_schema
+from odm_validation.utils import import_dataset
+from odm_validation.validation import _validate_data_ext
+
 import common
 from common import asset, root_dir
-from utils import (
-    import_dataset,
-    import_schema,
-)
-from validation import _validate_data_ext
 
 
 class TestEmpty(common.OdmTestCase):

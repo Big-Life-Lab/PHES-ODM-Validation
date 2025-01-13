@@ -4,8 +4,6 @@ import csv
 import json
 import yaml
 
-from odm_validation.schemas import Schema
-
 
 def import_csv_file(path: str) -> list[dict]:
     result = []
@@ -30,7 +28,7 @@ def export_yaml_file(data: dict, path: str):
         return f.write(yaml.dump(data))
 
 
-def import_dataset(path: str) -> Schema:
+def import_dataset(path: str) -> dict:
     # print('importing ' + path)
     _, ext = splitext(path)
     if ext == '.csv':
@@ -41,11 +39,3 @@ def import_dataset(path: str) -> Schema:
         return import_yaml_file(path)
     else:
         assert False, f'unknown dataset extension "{ext}"'
-
-
-def import_schema(path: str) -> Schema:
-    return import_yaml_file(path)
-
-
-def export_schema(schema: Schema, path: str):
-    export_yaml_file(schema, path)

@@ -8,25 +8,22 @@ from math import ceil
 from os.path import basename, join, splitext
 from pathlib import Path
 from typing import Dict, IO, List, Optional
-# from pprint import pprint
 
 import typer
 from xlsx2csv import Xlsx2csv
 
-root_dir = join(os.path.dirname(os.path.realpath(__file__)), '..')
-sys.path.append(join(root_dir, 'src'))
+import odm_validation.part_tables as pt
+import odm_validation.utils as utils
+from odm_validation.schemas import import_schema
+from odm_validation.validation import _validate_data_ext, DataKind
 
-import odm_validation.part_tables as pt  # noqa:E402
-import odm_validation.utils as utils  # noqa:E402
-from odm_validation.validation import _validate_data_ext, DataKind  # noqa:E402
-
-from odm_validation.reports import (  # noqa:E402
+from odm_validation.reports import (
     ErrorKind,
     ValidationReport,
     join_reports
 )
 
-from odm_validation.tools.reportutils import (  # noqa:E402
+from odm_validation.tools.reportutils import (
     ReportFormat,
     detect_report_format_from_path,
     get_ext,
@@ -226,7 +223,7 @@ def main_cli(
             out_fmt = ReportFormat.TXT
 
     schema_path = get_schema_path(version)
-    schema = utils.import_schema(schema_path)
+    schema = import_schema(schema_path)
 
     if out_path:
         info(f'writing result to {out_path}\n')

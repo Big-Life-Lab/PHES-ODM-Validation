@@ -4,18 +4,17 @@ import csv
 import sys
 from enum import Enum
 from typing import List
-# from pprint import pprint
 
 import typer
 
-from odm_validation.reports import ErrorKind  # noqa:E402
-from odm_validation.summarization import (  # noqa:E402
+from odm_validation.reports import ErrorKind
+from odm_validation.summarization import (
     SummaryEntry,
     SummaryKey,
     summarize_report
 )
 
-from reportutils import (  # noqa:E402
+from reportutils import (
     ReportFormat,
     read_report,
     read_report_from_file,

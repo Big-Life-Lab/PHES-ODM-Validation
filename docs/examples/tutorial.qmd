@@ -28,6 +28,7 @@ logging.disable(logging.WARNING)
 from os.path import join  # for constructing file paths
 
 # odm-validation
+import odm_validation.schemas as schemas
 import odm_validation.utils as utils
 from odm_validation.part_tables import ODM_VERSION_STR
 from odm_validation.validation import generate_validation_schema, validate_data
@@ -50,7 +51,7 @@ the `samples` table in this example.
 ```{python}
 schema_name = f"schema-v{ODM_VERSION_STR}.yml"
 schema_path = join(ASSET_DIR, join("validation-schemas", schema_name))
-schema = utils.import_schema(schema_path)
+schema = schemas.import_schema(schema_path)
 samples = utils.import_dataset("samples.csv")
 data = {"samples": samples}
 report = validate_data(schema, data)
@@ -121,5 +122,5 @@ The resulting schema can also be exported to a YAML file for future use.
 
 ```{python}
 #| eval: false
-utils.export_schema(schema, "my_schema.yml")
+schemas.export_schema(schema, "my_schema.yml")
 ```

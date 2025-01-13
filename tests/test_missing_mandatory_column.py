@@ -1,24 +1,30 @@
 import unittest
 from os.path import join
 
+from odm_validation.rules import RuleId
+from odm_validation.schemas import import_schema
+from odm_validation.utils import import_dataset, import_json_file
+from odm_validation.validation import (
+    _generate_validation_schema_ext,
+    validate_data,
+)
+
 import common
-from rules import RuleId
-import utils
-from validation import _generate_validation_schema_ext, validate_data
+
 
 asset_dir = join(common.root_dir,
                  'assets/validation-rules/missing-mandatory-column')
 
-parts_v2 = utils.import_dataset(join(asset_dir, 'parts.csv'))
-schema_v1 = utils.import_schema(join(asset_dir, 'schema-v1.yml'))
-schema_v2 = utils.import_schema(join(asset_dir, 'schema-v2.yml'))
+parts_v2 = import_dataset(join(asset_dir, 'parts.csv'))
+schema_v1 = import_schema(join(asset_dir, 'schema-v1.yml'))
+schema_v2 = import_schema(join(asset_dir, 'schema-v2.yml'))
 
 missing_mandatory_column_pass_v2 = {
-    'addresses': utils.import_dataset(join(asset_dir, 'valid-dataset.csv')),
+    'addresses': import_dataset(join(asset_dir, 'valid-dataset.csv')),
 }
 
 missing_mandatory_column_fail_v2 = {
-    'addresses': utils.import_dataset(join(asset_dir, 'invalid-dataset.csv')),
+    'addresses': import_dataset(join(asset_dir, 'invalid-dataset.csv')),
 }
 
 
@@ -45,7 +51,7 @@ class TestMissingMandatoryColumn(common.OdmTestCase):
         report = validate_data(schema_v2, missing_mandatory_column_pass_v2)
         self.assertTrue(report.valid())
         report = validate_data(schema_v2, missing_mandatory_column_fail_v2)
-        expected = utils.import_json_file(join(asset_dir, 'error-report.json'))
+        expected = import_json_file(join(asset_dir, 'error-report.json'))
         self.assertEqual(report.errors, expected['errors'])
 
 

@@ -2,30 +2,39 @@ import unittest
 from os.path import join
 # from pprint import pprint
 
+from odm_validation.rules import RuleId
+from odm_validation.schemas import import_schema
+from odm_validation.utils import (
+    import_dataset,
+    import_json_file,
+)
+from odm_validation.validation import (
+    _generate_validation_schema_ext,
+    validate_data,
+)
+
 import common
-import utils
-from rules import RuleId
-from validation import _generate_validation_schema_ext, validate_data
+
 
 asset_dir = join(common.root_dir,
                  'assets/validation-rules/invalid-category')
 
-parts = utils.import_dataset(join(asset_dir, 'parts.csv'))
-sets = utils.import_dataset(join(asset_dir, 'sets.csv'))
-schema_v1 = utils.import_schema(join(asset_dir, 'schema-v1.yml'))
-schema_v2 = utils.import_schema(join(asset_dir, 'schema-v2.yml'))
+parts = import_dataset(join(asset_dir, 'parts.csv'))
+sets = import_dataset(join(asset_dir, 'sets.csv'))
+schema_v1 = import_schema(join(asset_dir, 'schema-v1.yml'))
+schema_v2 = import_schema(join(asset_dir, 'schema-v2.yml'))
 
 
 invalid_category_pass_1_v2 = {
-    'samples': utils.import_dataset(join(asset_dir, 'valid-dataset-1.csv')),
+    'samples': import_dataset(join(asset_dir, 'valid-dataset-1.csv')),
 }
 
 invalid_category_pass_2_v2 = {
-    'samples': utils.import_dataset(join(asset_dir, 'valid-dataset-2.csv')),
+    'samples': import_dataset(join(asset_dir, 'valid-dataset-2.csv')),
 }
 
 invalid_category_fail_v2 = {
-    'samples': utils.import_dataset(join(asset_dir, 'invalid-dataset.csv')),
+    'samples': import_dataset(join(asset_dir, 'invalid-dataset.csv')),
 }
 
 
@@ -62,7 +71,7 @@ class TestInvalidCategory(common.OdmTestCase):
         self.assertTrue(report.valid())
 
         report = validate_data(schema_v2, invalid_category_fail_v2)
-        expected = utils.import_json_file(join(asset_dir, 'error-report.json'))
+        expected = import_json_file(join(asset_dir, 'error-report.json'))
         self.assertEqual(report.errors, expected['errors'])
 
 
