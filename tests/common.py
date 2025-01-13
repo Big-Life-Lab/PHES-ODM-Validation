@@ -4,16 +4,18 @@ package modules.
 """
 
 import logging
-import os
 import unittest
 from glob import glob
 from os.path import join, splitext
+from pathlib import Path
+
+import odm_validation.utils as utils
+
 
 ASSET_DIR = ''
 PKG_NAME = 'odm_validation'
 
-_dir = os.path.dirname(os.path.realpath(__file__))
-root_dir = join(_dir, '..')
+root_dir = Path(utils.get_pkg_dir()).parent.parent
 
 
 class OdmTestCase(unittest.TestCase):

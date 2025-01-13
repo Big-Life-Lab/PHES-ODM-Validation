@@ -26,7 +26,7 @@ tool_dir = Path(__file__).parent
 root_dir = tool_dir.parent.parent.parent
 
 # setup logging
-log_dir = normpath(join(root_dir, 'logs'))
+log_dir = normpath(join(utils.get_pkg_dir(), 'logs'))
 log_file = join(log_dir, 'generate_schemas.log')
 logging.basicConfig(
     level=logging.WARNING,
@@ -59,7 +59,7 @@ def generate_schemas_from_odm_tables(odm_dir, schema_dir):
 
 
 def main():
-    asset_dir = join(root_dir, 'assets')
+    asset_dir = utils.get_asset_dir()
     schema_dir = normpath(join(asset_dir, 'validation-schemas'))
     dataset_dir = normpath(join(asset_dir, 'dictionary'))
 

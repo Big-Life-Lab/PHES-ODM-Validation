@@ -1,18 +1,17 @@
 """Part-table definitions."""
 
-import inspect
 import os
 import re
 import sys
 from dataclasses import dataclass
 from enum import Enum
 from logging import error, info
-from os.path import join
 from pathlib import Path
 from semver import Version
 from typing import DefaultDict, Optional
 # from pprint import pprint
 
+import odm_validation.utils as utils
 from odm_validation.stdext import flatten
 from odm_validation.versions import parse_version
 
@@ -83,26 +82,9 @@ class OdmData:
     mappings: dict[PartId, list[PartId]]  # v1 mapping, by part id
 
 
-def _get_asset_dir() -> str:
-    """returns a list of odm-validation schema file paths"""
-    mod = sys.modules[__name__]
-    mod_path = inspect.getfile(mod)
-    mod_dir = os.path.dirname(mod_path)
-    asset_dir = os.path.join(mod_dir, 'assets')
-
-    # If the `asset_dir` path doesn't exist, then we can assume that the
-    # package hasn't been installed, but is used directly in a development
-    # environment, meaning that we need to specify the path as it is in the
-    # repo.
-    if not os.path.isdir(asset_dir):
-        asset_dir = os.path.join(mod_dir, '..', '..', 'assets')
-
-    return asset_dir
-
-
 def _get_latest_odm_version_str() -> str:
-    asset_dir = _get_asset_dir()
-    schema_dir = join(asset_dir, 'validation-schemas')
+    asset_dir = utils.get_asset_dir()
+    schema_dir = os.path.join(asset_dir, 'validation-schemas')
     versions = []
     for schema_path in Path(schema_dir).glob('schema-v*'):
         schema_name = os.path.basename(schema_path)

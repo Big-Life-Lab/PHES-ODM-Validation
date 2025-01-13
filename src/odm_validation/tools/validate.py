@@ -6,7 +6,6 @@ import tempfile
 from enum import Enum
 from math import ceil
 from os.path import basename, join, splitext
-from pathlib import Path
 from typing import Dict, IO, List, Optional
 
 import typer
@@ -99,25 +98,8 @@ def detect_data_format(path: str) -> Optional[DataFormat]:
         return
 
 
-def get_pkg_dir() -> str:
-    # aka src dir
-    tools_dir = Path(__file__).parent
-    return str(tools_dir.parent)
-
-
-def get_asset_dir() -> str:
-    '''returns package asset dir, or repo asset dir when not installed as a
-    package'''
-    pkgdir = get_pkg_dir()
-    p = join(pkgdir, 'assets')
-    if os.path.exists(p):
-        return p
-    projdir = join(pkgdir, '..', '..')
-    return join(projdir, 'assets')
-
-
 def get_schema_path(version: str) -> str:
-    asset_dir = get_asset_dir()
+    asset_dir = utils.get_asset_dir()
     schema_dir = join(asset_dir, 'validation-schemas')
     schema_filename = f'schema-v{version}.yml'
     return join(schema_dir, schema_filename)
