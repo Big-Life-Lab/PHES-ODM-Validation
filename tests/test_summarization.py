@@ -1,19 +1,19 @@
 import unittest
 
-import common
-from part_tables import ODM_VERSION_STR
-from reports import ErrorKind, TableInfo, ValidationReport
-from rules import RuleId
-from versions import __version__
-# from pprint import pprint
-
-from summarization import (
+from odm_validation.part_tables import ODM_VERSION_STR
+from odm_validation.reports import ErrorKind, TableInfo, ValidationReport
+from odm_validation.rules import RuleId
+from odm_validation.versions import __version__
+from odm_validation.summarization import (
     _calc_summary_entry_totals,
     ErrorSummary,
     SummaryEntry,
     SummaryKey,
     summarize_report,
 )
+
+import common
+
 
 SE = SummaryEntry
 

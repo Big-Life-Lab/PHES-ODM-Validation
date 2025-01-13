@@ -2,10 +2,9 @@ import unittest
 
 from semver import Version
 
-import common
-from versions import parse_version
+from odm_validation.versions import parse_version
 
-common.unused_import_dummy = 1
+import common
 
 
 class TestParseVersion(common.OdmTestCase):

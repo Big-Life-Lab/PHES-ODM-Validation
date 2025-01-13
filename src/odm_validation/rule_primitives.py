@@ -3,11 +3,11 @@ from logging import error, warning
 from typing import Any, Callable, List, Optional, Set
 # from pprint import pprint
 
-import part_tables as pt
-import schemas
-from part_tables import Meta, MetaEntry, OdmData, Part, PartId
-from schemas import init_attr_schema, init_table_schema
-from stdext import (
+import odm_validation.part_tables as pt
+import odm_validation.schemas as schemas
+from odm_validation.part_tables import Meta, MetaEntry, OdmData, Part, PartId
+from odm_validation.schemas import init_attr_schema, init_table_schema
+from odm_validation.stdext import (
     deep_update,
     parse_datetime,
     try_parse_float,

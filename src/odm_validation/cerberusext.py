@@ -9,15 +9,15 @@ from pprint import pformat
 from cerberus import Validator
 from cerberus.errors import ErrorDefinition
 
-import part_tables as pt
-import schemas
-import reports
-from input_data import DataKind
-from reports import get_row_num
-from rules import RuleId
-from part_tables import Dataset, Row
-from schemas import CerberusSchema
-from stdext import (
+import odm_validation.part_tables as pt
+import odm_validation.schemas as schemas
+import odm_validation.reports as reports
+from odm_validation.input_data import DataKind
+from odm_validation.reports import get_row_num
+from odm_validation.rules import RuleId
+from odm_validation.part_tables import Dataset, Row
+from odm_validation.schemas import CerberusSchema
+from odm_validation.stdext import (
     parse_datetime,
     parse_int,
     type_name,

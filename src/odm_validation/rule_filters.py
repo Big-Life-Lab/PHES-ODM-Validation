@@ -2,7 +2,7 @@ from collections.abc import Iterable, Iterator
 from typing import List, Tuple
 # from pprint import pprint
 
-from rules import Rule, RuleId
+from odm_validation.rules import Rule, RuleId
 
 RuleError = Tuple[RuleId, dict]
 
