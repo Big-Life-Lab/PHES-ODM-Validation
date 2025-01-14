@@ -23,6 +23,7 @@ root_dir = tool_dir.parent.parent.parent
 
 # setup logging
 log_dir = normpath(join(utils.get_pkg_dir(), 'logs'))
+os.makedirs(log_dir, exist_ok=True)
 log_file = join(log_dir, 'generate_assets.log')
 logging.basicConfig(
     level=logging.WARNING,
