@@ -1,6 +1,6 @@
 import unittest
 
-from odm_validation.part_tables import ODM_VERSION_STR
+import odm_validation.odm as odm
 from odm_validation.reports import ErrorKind, TableInfo, ValidationReport
 from odm_validation.rules import RuleId
 from odm_validation.summarization import (
@@ -124,8 +124,8 @@ overview = {
 
 def init_report(errors: list, warnings: list) -> ValidationReport:
     return ValidationReport(
-        data_version=ODM_VERSION_STR,
-        schema_version=ODM_VERSION_STR,
+        data_version=odm.VERSION_STR,
+        schema_version=odm.VERSION_STR,
         package_version=__version__,
         table_info={
             'addresses': TableInfo(columns=1, rows=2),

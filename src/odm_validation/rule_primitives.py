@@ -3,6 +3,7 @@ from logging import error, warning
 from typing import Any, Callable, Optional
 # from pprint import pprint
 
+import odm_validation.odm as odm
 import odm_validation.part_tables as pt
 import odm_validation.schemas as schemas
 from odm_validation.part_tables import Meta, MetaEntry, OdmData, Part, PartId
@@ -31,7 +32,7 @@ def get_table_meta(table: Part, version: Version) -> Meta:
     keys = [pt.PART_ID, pt.PART_TYPE]
     if version.major == 1:
         first, _ = pt.get_version_range(table)
-        if pt.should_have_mapping(table, first, pt.ODM_VERSION):
+        if pt.should_have_mapping(table, first, odm.VERSION):
             keys += [pt.V1_LOCATION, pt.V1_TABLE]
     m: MetaEntry = {k: table[k] for k in keys}
     return [m]
