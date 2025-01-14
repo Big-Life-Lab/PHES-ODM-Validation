@@ -1,6 +1,4 @@
 import unittest
-from os.path import join
-# from pprint import pprint
 
 from parameterized import parameterized
 
@@ -13,14 +11,13 @@ from odm_validation.validation import (
 )
 
 import common
-from common import asset, root_dir, param_range
+from common import asset, param_range
 
 
 class Assets():
     def __init__(self, rule_id: RuleId, table: str):
         rule_dirname = rule_id.name.replace('_', '-')
-        common.ASSET_DIR = join(root_dir,
-                                f'assets/validation-rules/{rule_dirname}')
+        common.ASSET_SUBDIR = f'validation-rules/{rule_dirname}'
 
         # parts
         self.parts = import_dataset(asset('parts.csv'))

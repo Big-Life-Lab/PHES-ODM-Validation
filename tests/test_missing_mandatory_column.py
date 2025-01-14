@@ -1,5 +1,4 @@
 import unittest
-from os.path import join
 
 from odm_validation.rules import RuleId
 from odm_validation.schemas import import_schema
@@ -10,21 +9,22 @@ from odm_validation.validation import (
 )
 
 import common
+from common import asset
 
 
-asset_dir = join(common.root_dir,
-                 'assets/validation-rules/missing-mandatory-column')
+common.ASSET_SUBDIR = 'validation-rules/missing-mandatory-column'
 
-parts_v2 = import_dataset(join(asset_dir, 'parts.csv'))
-schema_v1 = import_schema(join(asset_dir, 'schema-v1.yml'))
-schema_v2 = import_schema(join(asset_dir, 'schema-v2.yml'))
+parts_v2 = import_dataset(asset('parts.csv'))
+schema_v1 = import_schema(asset('schema-v1.yml'))
+schema_v2 = import_schema(asset('schema-v2.yml'))
+error_report = import_json_file(asset('error-report.json'))
 
 missing_mandatory_column_pass_v2 = {
-    'addresses': import_dataset(join(asset_dir, 'valid-dataset.csv')),
+    'addresses': import_dataset(asset('valid-dataset.csv')),
 }
 
 missing_mandatory_column_fail_v2 = {
-    'addresses': import_dataset(join(asset_dir, 'invalid-dataset.csv')),
+    'addresses': import_dataset(asset('invalid-dataset.csv')),
 }
 
 
@@ -51,7 +51,7 @@ class TestMissingMandatoryColumn(common.OdmTestCase):
         report = validate_data(schema_v2, missing_mandatory_column_pass_v2)
         self.assertTrue(report.valid())
         report = validate_data(schema_v2, missing_mandatory_column_fail_v2)
-        expected = import_json_file(join(asset_dir, 'error-report.json'))
+        expected = error_report
         self.assertEqual(report.errors, expected['errors'])
 
 

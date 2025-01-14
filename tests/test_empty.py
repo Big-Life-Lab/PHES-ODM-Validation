@@ -1,5 +1,4 @@
 import unittest
-from os.path import join
 
 from parameterized import parameterized
 
@@ -8,7 +7,7 @@ from odm_validation.utils import import_dataset
 from odm_validation.validation import _validate_data_ext
 
 import common
-from common import asset, root_dir
+from common import asset
 
 
 class TestEmpty(common.OdmTestCase):
@@ -21,7 +20,7 @@ class TestEmpty(common.OdmTestCase):
 
     @parameterized.expand(['allowed', 'minlength'])
     def test_empty(self, rulename: str):
-        common.ASSET_DIR = join(root_dir, 'assets/validation-rules/empty')
+        common.ASSET_SUBDIR = 'validation-rules/empty'
         schema = import_schema(asset(f'schema-v2-{rulename}.yml'))
         data = {'sites': import_dataset(asset(f'dataset-{rulename}.csv'))}
         report = _validate_data_ext(schema, data)
