@@ -1,5 +1,4 @@
 from os.path import splitext
-from typing import List
 
 import csv
 import json
@@ -8,7 +7,7 @@ import yaml
 from odm_validation.schemas import Schema
 
 
-def import_csv_file(path: str) -> List[dict]:
+def import_csv_file(path: str) -> list[dict]:
     result = []
     with open(path, newline='', encoding='utf8') as f:
         for row in csv.DictReader(f):

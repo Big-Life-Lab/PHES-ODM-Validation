@@ -1,7 +1,7 @@
 import datetime
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Any, Dict, List, Optional, Set, TypedDict
+from typing import Any, Optional, TypedDict
 
 import odm_validation.part_tables as pt
 from odm_validation.input_data import DataKind
@@ -34,13 +34,13 @@ class ValidationCtx:
 class ErrorCtx:
     column_id: str
     column_meta: dict
-    row_numbers: List[int]
-    rows: List[dict]
+    row_numbers: list[int]
+    rows: list[dict]
     rule_id: RuleId
     table_id: str
     value: Any
 
-    allowed_values: Set[str] = field(default_factory=set)
+    allowed_values: set[str] = field(default_factory=set)
     cerb_type_name: str = ''
     constraint: Any = None
     data_kind: DataKind = DataKind.python
@@ -59,9 +59,9 @@ class ValidationReport:
     data_version: str
     schema_version: str
     package_version: str
-    table_info: Dict[pt.TableId, TableInfo]
-    errors: List[dict]
-    warnings: List[dict]
+    table_info: dict[pt.TableId, TableInfo]
+    errors: list[dict]
+    warnings: list[dict]
 
     def valid(self) -> bool:
         return len(self.errors) == 0
@@ -108,7 +108,7 @@ def _fmt_value(val: Any) -> Any:
     return val
 
 
-def _fmt_dataset_values(rows: List[pt.Row]) -> List[pt.Row]:
+def _fmt_dataset_values(rows: list[pt.Row]) -> list[pt.Row]:
     """Returns a copy of `rows` with formated values."""
     def _fmt_row(row: pt.Row) -> pt.Row:
         return {key: _fmt_value(val) for key, val in row.items()}
@@ -116,7 +116,7 @@ def _fmt_dataset_values(rows: List[pt.Row]) -> List[pt.Row]:
     return list(map(_fmt_row, rows))
 
 
-def _fmt_allowed_values(values: Set[str]) -> str:
+def _fmt_allowed_values(values: set[str]) -> str:
     # XXX: The order of set-elements isn't deterministic, so we need to sort.
     return '/'.join(sorted(values))
 
@@ -161,7 +161,7 @@ def _gen_error_msg(ctx: ErrorCtx, template: Optional[str] = None,
         'suffix': '',
     }
 
-    xfix_templates: Dict[ErrorVerbosity, dict] = {
+    xfix_templates: dict[ErrorVerbosity, dict] = {
         ErrorVerbosity.MESSAGE: {},
         ErrorVerbosity.SHORT_METADATA: short_template,
         ErrorVerbosity.SHORT_METADATA_MESSAGE: short_template,
@@ -186,7 +186,7 @@ def _gen_error_msg(ctx: ErrorCtx, template: Optional[str] = None,
 
     # XXX: constraint may be a combination of rules due to a need for the
     # 'empty' rule, which we'll have to exclude to get the actual rule value we
-    # want. This is the case when constraint has the type List[dict]
+    # want. This is the case when constraint has the type list[dict]
     constraint_val = ctx.constraint
     if isinstance(constraint_val, list):
         rules = constraint_val[0]
@@ -275,7 +275,7 @@ def _generalize_cerb_type_name(name: str) -> str:
         return name
 
 
-def _get_meta_rule_ids(column_meta: Optional[dict]) -> List[str]:
+def _get_meta_rule_ids(column_meta: Optional[dict]) -> list[str]:
     if not column_meta:
         return []
     return [m['ruleID'] for m in column_meta]

@@ -10,7 +10,7 @@ from logging import error, info
 from os.path import join
 from pathlib import Path
 from semver import Version
-from typing import DefaultDict, Dict, List, Optional, Set, Tuple
+from typing import DefaultDict, Optional
 # from pprint import pprint
 
 from odm_validation.stdext import flatten
@@ -27,14 +27,14 @@ AttrId = PartId
 TableId = PartId
 
 # type aliases (meta)
-MetaEntry = Dict[str, str]
-Meta = List[MetaEntry]
+MetaEntry = dict[str, str]
+Meta = list[MetaEntry]
 MetaMap = DefaultDict[PartId, Meta]
 
 # type aliases (other)
-Dataset = List[Row]
-PartMap = Dict[PartId, Part]
-TableAttrId = Tuple[TableId, AttrId]
+Dataset = list[Row]
+PartMap = dict[PartId, Part]
+TableAttrId = tuple[TableId, AttrId]
 
 
 class MapKind(Enum):
@@ -54,8 +54,8 @@ class ColumnKind(Enum):
 class CatsetData:
     """Data for each category set."""
     part: Part
-    cat_parts: List[Part]  # the parts belonging to this catset
-    cat_values: List[str]  # Ex: category set `coll` has ['flowPr', ...]
+    cat_parts: list[Part]  # the parts belonging to this catset
+    cat_values: list[str]  # Ex: category set `coll` has ['flowPr', ...]
 
 
 @dataclass(frozen=True)
@@ -76,11 +76,11 @@ class OdmData:
     #           version1Variable, and set values from version1Category
     #         else use version1Variable directly
 
-    bool_set: Set[str]
-    null_set: Set[str]
-    catset_data: Dict[TableAttrId, CatsetData]
-    table_data: Dict[PartId, TableData]  # table data, by table id
-    mappings: Dict[PartId, List[PartId]]  # v1 mapping, by part id
+    bool_set: set[str]
+    null_set: set[str]
+    catset_data: dict[TableAttrId, CatsetData]
+    table_data: dict[PartId, TableData]  # table data, by table id
+    mappings: dict[PartId, list[PartId]]  # v1 mapping, by part id
 
 
 def _get_asset_dir() -> str:
@@ -176,7 +176,7 @@ V1_KIND_MAP = {
 }
 
 
-def get_validation_rule_fields(column_meta, rule_ids: List[str]):
+def get_validation_rule_fields(column_meta, rule_ids: list[str]):
     # TODO: add meta from sets-table?
     if not column_meta:
         return []
@@ -232,7 +232,7 @@ def should_have_mapping(part, first: Version, latest: Version) -> bool:
     return first.major < latest.major
 
 
-def _parse_version1Field(part, key) -> List[str]:
+def _parse_version1Field(part, key) -> list[str]:
     "`key` must be one of the part columns that starts with 'version1*'."
     val = part.get(key)
     if not val:
@@ -249,7 +249,7 @@ def _normalize_key(key: Optional[str]) -> Optional[str]:
     return key[0].lower() + key[1:]
 
 
-def _get_mappings(part: dict, version: Version) -> Optional[List[PartId]]:
+def _get_mappings(part: dict, version: Version) -> Optional[list[PartId]]:
     "Returns the mapping from part.partID to the equivalent ids in `version`."
     # XXX:
     # - parts may be missing version1 fields
@@ -336,7 +336,7 @@ def get_partID(p):
     return p[PART_ID]
 
 
-def get_catset_table_ids(row: Row, table_ids: List[str]) -> List[str]:
+def get_catset_table_ids(row: Row, table_ids: list[str]) -> list[str]:
     result = []
     for table in table_ids:
         if row.get(table):
@@ -404,8 +404,8 @@ def gen_partmap(parts) -> PartMap:
     return {get_partID(part): part for part in parts}
 
 
-def map_ids(mappings: Dict[PartId, PartId], part_ids: List[PartId],
-            ver: Version) -> List[PartId]:
+def map_ids(mappings: dict[PartId, PartId], part_ids: list[PartId],
+            ver: Version) -> list[PartId]:
     "Maps `part_ids` using `mappings`. Defaults to original id."
     # XXX: The default fallback of `mappings.get` is needed in tests that don't
     # have the boolean parts in their parts list.
@@ -469,10 +469,10 @@ def gen_odmdata(parts: Dataset, sets: Dataset, version: Version):
         )
 
     # category sets
-    # v1: Set ids are not unique and must be paired with the table id.
+    # v1: set ids are not unique and must be paired with the table id.
     #     Ex: the `type` cat set in v1 differs depending on the table.
-    # v2: Set ids are unique and formalised as "mmaSet/setID".
-    catset_data: Dict[TableAttrId, CatsetData] = {}
+    # v2: set ids are unique and formalised as "mmaSet/setID".
+    catset_data: dict[TableAttrId, CatsetData] = {}
     if version.major == 1:
         def is_cat_v1(p: Part) -> bool:
             return (p.get(V1_TABLE) and

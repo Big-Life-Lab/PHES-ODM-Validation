@@ -1,6 +1,6 @@
 import logging
 from itertools import groupby
-from typing import Any, Dict, Optional, Set, Tuple
+from typing import Any, Optional
 # from pprint import pprint
 
 import odm_validation.part_tables as pt
@@ -16,7 +16,7 @@ from odm_validation.stdext import (
     flatten,
 )
 
-RuleError = Tuple[RuleId, dict]
+RuleError = tuple[RuleId, dict]
 
 
 def _gen_cerb_rule_map():
@@ -72,7 +72,7 @@ def _transform_rule(rule: Rule, column_meta) -> Rule:
     return rule
 
 
-def _get_allowed_values(cerb_rules: Dict[str, Any]) -> Set[str]:
+def _get_allowed_values(cerb_rules: dict[str, Any]) -> set[str]:
     return set(cerb_rules.get('allowed', []))
 
 

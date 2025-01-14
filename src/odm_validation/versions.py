@@ -5,7 +5,7 @@ import toml
 from importlib import metadata
 from os import path
 from semver import Version
-from typing import Optional, Tuple
+from typing import Optional
 
 
 def _get_package_version():
@@ -33,7 +33,7 @@ BASEVERSION = re.compile(
 )
 
 
-def _coerce(version: str) -> Tuple[Version, Optional[str]]:
+def _coerce(version: str) -> tuple[Version, Optional[str]]:
     """
     Convert an incomplete version string into a semver-compatible Version
     object.
