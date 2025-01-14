@@ -1,9 +1,7 @@
 import datetime
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Any, Dict, List, Optional, Set
-from typing_extensions import TypedDict
-# from pprint import pprint
+from typing import Any, Dict, List, Optional, Set, TypedDict
 
 import odm_validation.part_tables as pt
 from odm_validation.input_data import DataKind

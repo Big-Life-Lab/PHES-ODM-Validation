@@ -4,5 +4,4 @@ python-dateutil==2.9.0.post0
 semver==3.0.2
 toml==0.10.2
 typer==0.15.1
-typing_extensions==4.12.2
 xlsx2csv==0.8.4
