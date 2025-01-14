@@ -16,7 +16,7 @@ jobs:
     steps:
     - uses: actions/setup-python@v2
       with:
-        python-version: '3.8'
+        python-version: '3.9'
     - uses: nikeee/setup-pandoc@v1
     - uses: quarto-dev/quarto-actions/setup@v2.0.3
     - uses: actions/checkout@v3

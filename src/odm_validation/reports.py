@@ -81,7 +81,7 @@ def join_reports(a, b: ValidationReport) -> ValidationReport:
         data_version=a.data_version,
         schema_version=a.schema_version,
         package_version=a.package_version,
-        table_info={**a.table_info, **b.table_info},
+        table_info=(a.table_info | b.table_info),
         errors=(a.errors + b.errors),
         warnings=(a.warnings + b.warnings),
     )

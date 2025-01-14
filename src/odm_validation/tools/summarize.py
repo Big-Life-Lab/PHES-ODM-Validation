@@ -57,7 +57,7 @@ def write_csv_summary(sum_report, output):
                 data = e.__dict__
                 data['rule_id'] = data['rule_id'].name
                 data['key'] = data['key'].value
-                row = {**row_ext, **data}
+                row = (row_ext | data)
                 writer.writerow(row)
 
 

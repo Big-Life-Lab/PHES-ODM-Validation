@@ -5,7 +5,7 @@
 
 set -ex
 
-[[ "$(python --version)" == "Python 3.8."* ]]
+[[ "$(python --version)" == "Python 3.9."* ]]
 
 repo=$(dirname $(realpath $0))/..
 url="git+file://$repo"
