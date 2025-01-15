@@ -1,5 +1,6 @@
 from copy import deepcopy
 
+import odm_validation.utils as utils
 from odm_validation.part_tables import Meta
 
 CerberusSchema = dict
@@ -34,3 +35,11 @@ def init_attr_schema(attr_id: str, rule_id: str, cerb_rules: dict,
         }
     ]
     return {attr_id: inner}
+
+
+def import_schema(path: str) -> Schema:
+    return utils.import_yaml_file(path)
+
+
+def export_schema(schema: Schema, path: str):
+    utils.export_yaml_file(schema, path)

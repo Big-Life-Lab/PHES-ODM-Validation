@@ -28,7 +28,7 @@ The validation schema we will be working with is displayed below,
 
 ```{python}
 #| echo: false
-from odm_validation.utils import import_schema
+from odm_validation.schemas import import_schema
 
 schema = import_schema(asset('schema.yml'))
 pprint(schema, expand_all=True)

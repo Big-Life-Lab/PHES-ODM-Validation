@@ -1,26 +1,27 @@
 import unittest
-from os.path import join
-# from pprint import pprint
 
 from parameterized import parameterized, parameterized_class
 
-import common
-from common import asset, root_dir, param_range
-from rules import RuleId
-from stdext import deep_update
-from utils import (
+from odm_validation.rules import RuleId
+from odm_validation.schemas import import_schema
+from odm_validation.stdext import deep_update
+from odm_validation.utils import (
     import_dataset,
     import_json_file,
-    import_schema,
 )
-from validation import _generate_validation_schema_ext, _validate_data_ext
+from odm_validation.validation import (
+    _generate_validation_schema_ext,
+    _validate_data_ext,
+)
+
+import common
+from common import asset, param_range
 
 
 class Assets():
     def __init__(self, ruleId: RuleId):
         rule_dirname = ruleId.name.replace('_', '-')
-        common.ASSET_DIR = join(root_dir,
-                                f'assets/validation-rules/{rule_dirname}')
+        common.ASSET_SUBDIR = f'validation-rules/{rule_dirname}'
 
         datetime_parts = import_dataset(asset('parts-datetime.csv'))
         datetime_schema_v1 = import_schema(asset('schema-datetime-v1.yml'))

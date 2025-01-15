@@ -31,6 +31,7 @@ packages = ["src/odm_validation"]
 
 # include validation schemas
 [tool.hatch.build.targets.wheel.force-include]
+"assets/odm" = "odm_validation/assets/odm"
 "assets/validation-schemas" = "odm_validation/assets/validation-schemas"
 
 # install dependencies automatically

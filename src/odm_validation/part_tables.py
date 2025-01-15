@@ -1,18 +1,13 @@
 """Part-table definitions."""
 
-import inspect
-import os
-import re
-import sys
 from dataclasses import dataclass
 from enum import Enum
 from logging import error, info
-from os.path import join
-from pathlib import Path
 from semver import Version
 from typing import DefaultDict, Optional
 # from pprint import pprint
 
+import odm_validation.odm as odm
 from odm_validation.stdext import flatten
 from odm_validation.versions import parse_version
 
@@ -83,47 +78,12 @@ class OdmData:
     mappings: dict[PartId, list[PartId]]  # v1 mapping, by part id
 
 
-def _get_asset_dir() -> str:
-    """returns a list of odm-validation schema file paths"""
-    mod = sys.modules[__name__]
-    mod_path = inspect.getfile(mod)
-    mod_dir = os.path.dirname(mod_path)
-    asset_dir = os.path.join(mod_dir, 'assets')
-
-    # If the `asset_dir` path doesn't exist, then we can assume that the
-    # package hasn't been installed, but is used directly in a development
-    # environment, meaning that we need to specify the path as it is in the
-    # repo.
-    if not os.path.isdir(asset_dir):
-        asset_dir = os.path.join(mod_dir, '..', '..', 'assets')
-
-    return asset_dir
-
-
-def _get_latest_odm_version_str() -> str:
-    asset_dir = _get_asset_dir()
-    schema_dir = join(asset_dir, 'validation-schemas')
-    versions = []
-    for schema_path in Path(schema_dir).glob('schema-v*'):
-        schema_name = os.path.basename(schema_path)
-        if not (match := re.search('v(.+)', schema_name)):
-            continue
-        v = parse_version(match.group(1), verbose=False)
-        versions.append(str(v))
-    if len(versions) == 0:
-        sys.exit("failed to get latest ODM version")
-    versions.sort()
-    return versions[-1]
-
-
 # The following constants are not enums because they would be a pain to use.
 # even with a `__str__` overload to avoid writing `.value` all the time,
 # we would still have to explicitly call the `str` function.
 # Ex: str(PartType.ATTRIBUTE.value) vs ATTRIBUTE
 
 COLUMN_KINDS = set(list(map(lambda e: e.value, ColumnKind)))
-ODM_VERSION_STR = _get_latest_odm_version_str()
-ODM_VERSION = parse_version(ODM_VERSION_STR)
 
 # field constants
 CATSET_ID = 'mmaSet'
@@ -203,7 +163,7 @@ def get_version_range(part: dict) -> (Version, Version):
     # XXX: must have default for tests (without versioned parts) to work
     row = part
     v1 = Version(major=1)
-    latest = _strip_prerelease(ODM_VERSION)
+    latest = _strip_prerelease(odm.VERSION)
     first = parse_row_version(row, FIRST_RELEASED, default=v1)
     last = parse_row_version(row, LAST_UPDATED, default=latest)
     assert first <= last
@@ -255,7 +215,7 @@ def _get_mappings(part: dict, version: Version) -> Optional[list[PartId]]:
     # - parts may be missing version1 fields
     # - partType 'missingness' does not have version1 fields
     # - catSet 'booleanSet' is not required to have a version1Location
-    if not should_have_mapping(part, version, ODM_VERSION):
+    if not should_have_mapping(part, version, odm.VERSION):
         return
     ids = []
     loc = part.get(V1_LOCATION)
@@ -386,7 +346,7 @@ def filter_compatible(rows: Dataset, version: Version) -> Dataset:
 def filter_backportable(parts: Dataset, version: Version) -> Dataset:
     "Retuns the subset of `parts` that has a mapping to v1."
     result = []
-    latest = ODM_VERSION
+    latest = odm.VERSION
     for row in parts:
         part_id = get_partID(row)
         first, _ = get_version_range(row)
@@ -432,7 +392,7 @@ def validate_and_fix(all_parts: PartMap, version):
     # FIXME: true/false parts are missing version1Category
     for part_id in BOOL_SET_IDS:
         part = all_parts.get(part_id)
-        if part and should_have_mapping(part, version, ODM_VERSION):
+        if part and should_have_mapping(part, version, odm.VERSION):
             if V1_CATEGORY not in part:
                 part[V1_CATEGORY] = part_id.capitalize()
                 assert has_mapping(part, version)

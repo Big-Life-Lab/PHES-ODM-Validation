@@ -1,22 +1,19 @@
 import unittest
-from os.path import join
-# from pprint import pprint
 
 from parameterized import parameterized
 
+from odm_validation.rules import RuleId
+from odm_validation.schemas import import_schema
+from odm_validation.utils import import_json_file
+from odm_validation.validation import _generate_validation_schema_ext
+
 import common
-from common import asset, root_dir, param_range
-from rules import RuleId
-from utils import (
-    import_json_file,
-    import_schema,
-)
-from validation import _generate_validation_schema_ext
+from common import asset, param_range
 
 
 class Assets():
     def __init__(self):
-        common.ASSET_DIR = join(root_dir, 'assets/specs/module-functions')
+        common.ASSET_SUBDIR = 'specs/module-functions'
 
         self.parts = {
             1: import_json_file(asset('parts-1.json')),

@@ -32,7 +32,8 @@ import sys
 sys.path.append("../../../src")
 
 # For importing YAML and CSV files
-from odm_validation.utils import import_schema, import_dataset
+from odm_validation.utils import import_dataset
+from odm_validation.schemas import import_schema
 
 # Some pretty printing library and code
 from rich.pretty import pprint

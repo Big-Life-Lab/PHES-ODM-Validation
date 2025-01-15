@@ -1,0 +1,10 @@
+Instrument
+WWMeasure
+SiteMeasure
+CovidPublicHealthData
+Lab
+Polygon
+AssayMethod
+Reporter
+Sample
+Site

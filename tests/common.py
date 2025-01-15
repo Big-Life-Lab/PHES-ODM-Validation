@@ -4,16 +4,22 @@ package modules.
 """
 
 import logging
-import os
 import unittest
 from glob import glob
 from os.path import join, splitext
+from pathlib import Path
 
-ASSET_DIR = ''
-PKG_NAME = 'odm_validation'
 
-_dir = os.path.dirname(os.path.realpath(__file__))
-root_dir = join(_dir, '..')
+# TODO: make this global lower-case, since it's not constant
+# FIXME: this global is unreliable, especially when assigned from the global
+# scope of a (test-)module at import time
+ASSET_SUBDIR = ''
+
+# XXX: unit test currently have to be run in a development environment to have
+# access to their assets. This means that we have to use a consistent local
+# path instead of the dynamic 'package' path from utils.get_asset_dir.
+ROOT_DIR = Path(__file__).parent.parent
+ASSET_DIR = join(ROOT_DIR, 'assets')
 
 
 class OdmTestCase(unittest.TestCase):
@@ -43,10 +49,10 @@ def _find_asset(glob_expr: str) -> str:
 
 
 def asset(filename: str) -> str:
-    """Returns path to `filename`, using `ASSET_DIR`. The file extension may be
-    a wildcard."""
+    """Returns path to `filename`, using `ASSET_SUBDIR`. The file extension may
+    be a wildcard."""
     _, ext = splitext(filename)
-    path = join(ASSET_DIR, filename)
+    path = join(ASSET_DIR, ASSET_SUBDIR, filename)
     if ext == '.*':
         path = _find_asset(path)
     return path

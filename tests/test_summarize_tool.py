@@ -4,13 +4,14 @@ import os
 from os.path import join, relpath
 
 import common
-from common import PKG_NAME, root_dir
+from odm_validation.utils import get_pkg_dir
 
-cwd = os.getcwd()
-asset_dir = relpath(join(root_dir, 'assets', 'tools'), cwd)
-tools_dir = relpath(join(root_dir, 'src', PKG_NAME, 'tools'), cwd)
+
+tool_asset_dir = join(common.ASSET_DIR, 'tools')  # from repo
+tools_dir = join(get_pkg_dir(), 'tools')  # from pkg
+
+summarize_tool = relpath(join(tools_dir, 'summarize.py'), os.getcwd())
 validate_tool = 'odm-validate'
-summarize_tool = relpath(join(tools_dir, 'summarize.py'), cwd)
 
 
 class TestSummarizeTool(common.OdmTestCase):
@@ -25,11 +26,11 @@ class TestSummarizeTool(common.OdmTestCase):
         self.assertEqual(0, rc)
 
     def test_validate_and_summarize(self):
-        expected_summary = relpath(join(asset_dir, 'summary.csv'))
+        expected_summary = relpath(join(tool_asset_dir, 'summary.csv'))
         v = f'{validate_tool} --version=1.1.0 --format=yaml'
         s = f'{summarize_tool}'
         d = f'diff {expected_summary} -'
-        self.cmd(f'{v} {asset_dir}/*.csv 2> /dev/null | {s} | {d}')
+        self.cmd(f'{v} {tool_asset_dir}/*.csv 2> /dev/null | {s} | {d}')
 
 
 if __name__ == '__main__':
