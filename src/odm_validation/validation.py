@@ -5,7 +5,7 @@ generation and data validation.
 
 from collections import defaultdict
 from copy import deepcopy
-from typing import Callable, Dict, List
+from typing import Callable
 from enum import Enum
 # from pprint import pprint
 
@@ -28,7 +28,7 @@ from rule_errors import (
     map_cerb_errors,
 )
 
-TableDataset = Dict[pt.TableId, pt.Dataset]
+TableDataset = dict[pt.TableId, pt.Dataset]
 
 _BATCH_SIZE = 20
 
@@ -37,8 +37,8 @@ def _generate_validation_schema_ext(parts: pt.Dataset,
                                     sets: pt.Dataset = [],
                                     schema_version: str = pt.ODM_VERSION_STR,
                                     schema_additions: dict = {},
-                                    rule_blacklist: List[RuleId] = [],
-                                    rule_whitelist: List[RuleId] = []
+                                    rule_blacklist: list[RuleId] = [],
+                                    rule_whitelist: list[RuleId] = []
                                     ) -> Schema:
     """
     This is the extended version of `generate_validation_schema`, with
@@ -132,8 +132,8 @@ def _validate_data_ext(
     data: TableDataset,
     data_kind: DataKind = DataKind.python,
     data_version: str = pt.ODM_VERSION_STR,
-    rule_blacklist: List[RuleId] = [],
-    rule_whitelist: List[RuleId] = [],
+    rule_blacklist: list[RuleId] = [],
+    rule_whitelist: list[RuleId] = [],
     on_progress: OnProgress = None,
     verbosity: ErrorVerbosity = ErrorVerbosity.LONG_METADATA_MESSAGE,
     with_metadata: bool = True,
@@ -218,7 +218,7 @@ def _validate_data_ext(
                                            offset, data_kind)
             coerced_data[table_id] += coerce_result[table_id]
 
-    table_info: Dict[pt.TableId, TableInfo] = {}
+    table_info: dict[pt.TableId, TableInfo] = {}
 
     validation_schema = _strip_coerce_rules(cerb_schema)
     for table_id, table_data in coerced_data.items():
@@ -258,7 +258,7 @@ def validate_data(schema: Schema,
                   data: TableDataset,
                   data_kind: DataKind = DataKind.python,
                   data_version=pt.ODM_VERSION_STR,
-                  rule_blacklist: List[RuleId] = [],
+                  rule_blacklist: list[RuleId] = [],
                   ) -> reports.ValidationReport:
     """
     :param rule_blacklist: A list of rule ids to explicitly disable.

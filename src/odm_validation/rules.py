@@ -5,7 +5,7 @@ Rule functions are ordered alphabetically.
 
 from dataclasses import dataclass
 from enum import Enum
-from typing import Any, Callable, List, Tuple
+from typing import Any, Callable
 # from pprint import pprint
 
 import odm_validation.part_tables as pt
@@ -62,7 +62,7 @@ class Rule:
     - value_type
     """
     id: RuleId
-    keys: List[str]
+    keys: list[str]
     is_column: bool
     is_warning: bool
     gen_schema: Callable[[pt.OdmData], Schema]
@@ -79,7 +79,7 @@ class Rule:
     these should be mapped to a missing_values_found error."""
 
 
-def get_anyof_constraint(anyof_constraint: dict) -> Tuple[str, str]:
+def get_anyof_constraint(anyof_constraint: dict) -> tuple[str, str]:
     '''returns actual constraint (key, val) from anyof-rule containing an empty
     rule in addition to the actual rule'''
     rules = anyof_constraint
@@ -89,7 +89,7 @@ def get_anyof_constraint(anyof_constraint: dict) -> Tuple[str, str]:
     return (key, val)
 
 
-def extract_cerb_keys(gen_cerb_rules: Callable) -> List[str]:
+def extract_cerb_keys(gen_cerb_rules: Callable) -> list[str]:
     '''extracts the cerberus' rule-keys from an ODM rule's `gen_cerb_rules`
     function'''
     dummy_ctx = OdmValueCtx(value=1, datatype='integer', bool_set=set(),
@@ -171,7 +171,7 @@ def greater_than_max_value():
     def gen_cerb_rules(val_ctx: OdmValueCtx):
         val = parse_odm_val(val_ctx)
         if val is not None:
-            return {**{'max': val}, **gen_cerb_rules_for_type(val_ctx)}
+            return {'max': val} | gen_cerb_rules_for_type(val_ctx)
 
     def gen_schema(data: pt.OdmData, ver):
         return gen_value_schema(data, ver, rule_id.name, odm_key,
@@ -245,7 +245,7 @@ def less_than_min_value():
     def gen_cerb_rules(val_ctx: OdmValueCtx):
         val = parse_odm_val(val_ctx)
         if val is not None:
-            return {**{'min': val}, **gen_cerb_rules_for_type(val_ctx)}
+            return {'min': val} | gen_cerb_rules_for_type(val_ctx)
 
     def gen_schema(data: pt.OdmData, ver):
         return gen_value_schema(data, ver, rule_id.name, odm_key,
@@ -328,7 +328,7 @@ def invalid_type():
 
 # This is the collection of all validation rules.
 # A tuple is used for immutability.
-ruleset: Tuple[Rule] = (
+ruleset: tuple[Rule] = (
     duplicate_entries_found(),
     greater_than_max_length(),
     greater_than_max_value(),

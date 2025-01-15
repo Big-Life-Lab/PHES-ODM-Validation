@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from logging import error, warning
-from typing import Any, Callable, List, Optional, Set
+from typing import Any, Callable, Optional
 # from pprint import pprint
 
 import odm_validation.part_tables as pt
@@ -23,8 +23,8 @@ class OdmValueCtx:
     """ODM value context."""
     value: str
     datatype: str
-    bool_set: Set[str]
-    null_set: Set[str]
+    bool_set: set[str]
+    null_set: set[str]
 
 
 def get_table_meta(table: Part, version: Version) -> Meta:
@@ -69,7 +69,7 @@ def _get_attr_meta(attr: Part, table_id: PartId, version: Version,
     return result
 
 
-def get_catset_meta(table_id: PartId, catset: Part, categories: List[Part],
+def get_catset_meta(table_id: PartId, catset: Part, categories: list[Part],
                     version: Version) -> Meta:
     catset_keys = [pt.PART_ID, pt.DATA_TYPE]
     cat_keys = [pt.PART_ID]
@@ -92,12 +92,12 @@ def get_catset_meta(table_id: PartId, catset: Part, categories: List[Part],
     return meta
 
 
-def get_part_ids(parts: List[Part]) -> List[PartId]:
+def get_part_ids(parts: list[Part]) -> list[PartId]:
     return list(map(pt.get_partID, parts))
 
 
 def _get_mapped_part_ids(data: OdmData, part_id: PartId,
-                         version: Version) -> List[PartId]:
+                         version: Version) -> list[PartId]:
     if version.major == 1:
         mapping = data.mappings.get(part_id)
         if mapping:
@@ -108,7 +108,7 @@ def _get_mapped_part_ids(data: OdmData, part_id: PartId,
 
 
 def _get_mapped_attribute_ids(data: OdmData, attr: Part, version: Version
-                              ) -> List[PartId]:
+                              ) -> list[PartId]:
     attr_id = pt.get_partID(attr)
     return _get_mapped_part_ids(data, attr_id, version)
 

@@ -3,7 +3,6 @@ from collections import defaultdict
 from dataclasses import dataclass
 from enum import Enum
 from itertools import groupby
-from typing import Dict, List, Set, Tuple
 # from pprint import pprint
 
 import odm_validation.reports as reports
@@ -40,22 +39,22 @@ class SummaryKey(int, Enum):
 
 
 # this is the core error/rule-to-count data structure
-ErrorCounts = Dict[RuleId, Count]
+ErrorCounts = dict[RuleId, Count]
 
 # table -> entity -> error/rule -> count
 # ex: SummaryKey.COLUMN -> 'addresses' -> 'addID' -> 'invalid_type' -> 3
-EntityCounts = Dict[EntityId, ErrorCounts]
-TableCounts = Dict[TableId, EntityCounts]
+EntityCounts = dict[EntityId, ErrorCounts]
+TableCounts = dict[TableId, EntityCounts]
 
 # simplified data structures for total counts
-TableErrorCounts = Dict[TableId, ErrorCounts]
-ErrorKindErrorCounts = Dict[ErrorKind, ErrorCounts]
+TableErrorCounts = dict[TableId, ErrorCounts]
+ErrorKindErrorCounts = dict[ErrorKind, ErrorCounts]
 
 
 @dataclass(frozen=True)
 class Counts:
     total_counts: ErrorCounts
-    key_counts: Dict[SummaryKey, TableCounts]
+    key_counts: dict[SummaryKey, TableCounts]
 
 
 @dataclass(frozen=True)
@@ -72,8 +71,8 @@ class SummaryEntry:
     grouping by `column`, etc."""
 
 
-SummaryEntryList = List[SummaryEntry]
-ErrorSummary = Dict[TableId, SummaryEntryList]
+SummaryEntryList = list[SummaryEntry]
+ErrorSummary = dict[TableId, SummaryEntryList]
 
 
 @dataclass(frozen=True)
@@ -100,7 +99,7 @@ def _get_error_table_rule(e) -> (TableId, RuleId):
     return (table_id, rule_id)
 
 
-def _get_error_row_ids(e) -> List[int]:
+def _get_error_row_ids(e) -> list[int]:
     row_id0 = e.get('rowNumber')
     if row_id0 is not None:
         return [row_id0]
@@ -108,7 +107,7 @@ def _get_error_row_ids(e) -> List[int]:
         return e['rowNumbers']
 
 
-def _count_errors(keys: Set[SummaryKey], errors: list) -> Counts:
+def _count_errors(keys: set[SummaryKey], errors: list) -> Counts:
     """Counts errors. Should be called once for every error kind, with its list
     of errors."""
 
@@ -124,7 +123,7 @@ def _count_errors(keys: Set[SummaryKey], errors: list) -> Counts:
     # XXX: errors are only iterated once, to avoid counting the same error
     # multiple times
     total_counts: ErrorCounts = defaultdict(Count)
-    key_counts: Dict[SummaryKey, TableCounts] = defaultdict(dict)
+    key_counts: dict[SummaryKey, TableCounts] = defaultdict(dict)
     for e in errors:
         table_id, rule_id = _get_error_table_rule(e)
         row_ids = _get_error_row_ids(e)
@@ -167,7 +166,7 @@ def _gen_summary_list(key: SummaryKey, entity_counts: EntityCounts
     return summary_list
 
 
-def _gen_summary(keys: Set[SummaryKey], counts: Counts) -> ErrorSummary:
+def _gen_summary(keys: set[SummaryKey], counts: Counts) -> ErrorSummary:
     """generates summary lists per table, for all `keys`
 
     :param keys: the set of keys to summarize by.
@@ -191,7 +190,7 @@ def _increment_error_counts(a, b: ErrorCounts):
         a[rule_id] += count
 
 
-def _get_keyval(e: SummaryEntry) -> Tuple[int, str]:
+def _get_keyval(e: SummaryEntry) -> tuple[int, str]:
     """Returns tuple for sorting/grouping summary entries"""
     return (e.key, e.value)
 
@@ -214,7 +213,7 @@ def _calc_summary_entry_totals(entries: SummaryEntryList) -> SummaryEntryList:
 
 
 def _gen_overview(report: ValidationReport,
-                  errorkind_totals: Dict[ErrorKind, ErrorCounts]) -> dict:
+                  errorkind_totals: dict[ErrorKind, ErrorCounts]) -> dict:
     table_overviews = {}
     for table_id, info in report.table_info.items():
         table_overviews[table_id] = {
@@ -242,7 +241,7 @@ def _remove_summary_entries(summary: ErrorSummary, key: SummaryKey):
 
 
 def summarize_report(report: ValidationReport,
-                     by: Set[SummaryKey] = {SummaryKey.TABLE}
+                     by: set[SummaryKey] = {SummaryKey.TABLE}
                      ) -> SummarizedReport:
     """Summarizes `report`.
 
@@ -256,8 +255,8 @@ def summarize_report(report: ValidationReport,
     keys = by
 
     # count errors and generate summaries, one per error kind
-    errorkind_summaries: Dict[ErrorKind, ErrorSummary] = {}
-    errorkind_totals: Dict[ErrorKind, ErrorCounts] = {}
+    errorkind_summaries: dict[ErrorKind, ErrorSummary] = {}
+    errorkind_totals: dict[ErrorKind, ErrorCounts] = {}
     errorkind_errors = {
         ErrorKind.ERROR: report.errors,
         ErrorKind.WARNING: report.warnings,

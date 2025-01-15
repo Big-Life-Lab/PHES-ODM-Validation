@@ -3,7 +3,7 @@ import json
 import operator
 from datetime import datetime
 from functools import reduce
-from typing import Any, List, Optional, Union
+from typing import Any, Optional, Union
 
 
 def get_len(x: Any) -> int:
@@ -74,7 +74,7 @@ def strip_dict_key(d: dict, target_key: str):
     return d
 
 
-def flatten(x: List[List[Any]]) -> List[Any]:
+def flatten(x: list[list[Any]]) -> list[Any]:
     return reduce(operator.iconcat, x, [])
 
 

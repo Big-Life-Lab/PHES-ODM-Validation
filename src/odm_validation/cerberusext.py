@@ -2,7 +2,7 @@ import logging
 from collections import defaultdict
 from dataclasses import dataclass
 from datetime import datetime
-from typing import Any, Dict, List, Set, Tuple
+from typing import Any
 from copy import deepcopy
 from pprint import pformat
 
@@ -152,8 +152,8 @@ class ContextualCoercer(Validator):
 
 
 DateStr = str
-PrimaryKey = Tuple[pt.PartId, DateStr]
-TableKey = Tuple[pt.TableId, PrimaryKey]
+PrimaryKey = tuple[pt.PartId, DateStr]
+TableKey = tuple[pt.TableId, PrimaryKey]
 RowNum = int
 
 
@@ -162,18 +162,18 @@ class AggregatedError:
     cerb_rule: str
     table_id: str
     column_id: str
-    row_numbers: List[int]
-    rows: List[dict]
-    column_meta: List[dict]
+    row_numbers: list[int]
+    rows: list[dict]
+    column_meta: list[dict]
     value: Any
 
 
 class UniqueRuleState:
     """State for the 'unique' rule."""
     def __init__(self):
-        self.table_keys: Dict[pt.TableId, Set[PrimaryKey]] = defaultdict(set)
-        self.tablekey_rows: Dict[TableKey, (RowNum, Row)] = {}
-        self.tablekey_errors: Dict[TableKey, AggregatedError] = \
+        self.table_keys: dict[pt.TableId, set[PrimaryKey]] = defaultdict(set)
+        self.tablekey_rows: dict[TableKey, (RowNum, Row)] = {}
+        self.tablekey_errors: dict[TableKey, AggregatedError] = \
             defaultdict(AggregatedError)
 
 
@@ -181,7 +181,7 @@ class ErrorState:
     def __init__(self):
         self.offset = 0
         self.data_kind = DataKind.python
-        self.aggregated_errors: List[AggregatedError] = []
+        self.aggregated_errors: list[AggregatedError] = []
 
 
 class OdmValidator(Validator):

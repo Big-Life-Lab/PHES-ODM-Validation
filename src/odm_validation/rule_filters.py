@@ -1,10 +1,9 @@
 from collections.abc import Iterable, Iterator
-from typing import List, Tuple
 # from pprint import pprint
 
 from odm_validation.rules import Rule, RuleId
 
-RuleError = Tuple[RuleId, dict]
+RuleError = tuple[RuleId, dict]
 
 
 class RuleFilter:
@@ -16,8 +15,8 @@ class RuleFilter:
     # Users may be more interested in `blacklist`, to remove certain irrelevant
     # errors from their reports.
 
-    blacklist: List[RuleId]
-    whitelist: List[RuleId]
+    blacklist: list[RuleId]
+    whitelist: list[RuleId]
 
     def __init__(self, blacklist=[], whitelist=[]):
         self.blacklist = blacklist

@@ -1,6 +1,6 @@
-Sphinx==5.3.0
-ipykernel==6.18.1
-linkify-it-py==2.0.0
-myst-parser==0.18.0
-nbsphinx==0.8.9
-rich==12.6.0
+Sphinx==7.4.7
+ipykernel==6.29.5
+linkify-it-py==2.0.3
+myst-parser==3.0.1
+nbsphinx==0.9.6
+rich==13.9.4
