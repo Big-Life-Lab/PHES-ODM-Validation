@@ -1,7 +1,8 @@
-The validation toolkit for the [Population Health Environmental Surveillance
-Open Data Model (PHES-ODM)](https://github.com/Big-Life-Lab/PHES-ODM) ensures
-your ODM data is complete and interoperable. Users can check whether their data
-meets the ODM dictionary format.
+The [validation toolkit](https://github.com/Big-Life-Lab/PHES-ODM-Validation)
+for the [Population Health Environmental Surveillance Open Data Model
+(PHES-ODM)](https://github.com/Big-Life-Lab/PHES-ODM) ensures your ODM data is
+complete and interoperable. Users can check whether their data meets the ODM
+dictionary format.
 
 # At a glance
 
