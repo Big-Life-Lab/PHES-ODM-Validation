@@ -57,14 +57,8 @@ def export_yaml_file(data: dict, path: str):
         return f.write(yaml.dump(data))
 
 
-def import_dataset(path: str) -> dict:
+def import_dataset(path: str) -> list[dict]:
     # print('importing ' + path)
     _, ext = splitext(path)
-    if ext == '.csv':
-        return import_csv_file(path)
-    elif ext == '.json':
-        return import_json_file(path)
-    elif ext == '.yml':
-        return import_yaml_file(path)
-    else:
-        assert False, f'unknown dataset extension "{ext}"'
+    assert ext == ".csv", f'"{ext}" is not a dataset file extension'
+    return import_csv_file(path)

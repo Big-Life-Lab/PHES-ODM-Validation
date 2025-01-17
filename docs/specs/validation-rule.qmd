@@ -9,7 +9,7 @@ ASSET_DIR = f"../../assets/specs/validation-rule"
 ```{python}
 #| echo: false
 
-from odm_validation.utils import import_dataset
+from odm_validation.utils import import_dataset, import_yaml_file
 from rich.pretty import pprint
 
 ```
@@ -239,7 +239,7 @@ to each call of the `validate_data` method.
 ```{python}
 #| echo: false
 
-validate_data_parameters = import_dataset(asset("validate-data-parameters.yml"))
+validate_data_parameters = import_yaml_file(asset("validate-data-parameters.yml"))
 pprint(validate_data_parameters)
 ```
 
@@ -277,7 +277,7 @@ has the parameters for each call of the `gen_report` method.
 ```{python}
 #| echo: false
 
-gen_report_parameters = import_dataset(asset("gen-error-parameters.yml"))
+gen_report_parameters = import_yaml_file(asset("gen-error-parameters.yml"))
 pprint(gen_report_parameters)
 ```
 
@@ -309,7 +309,7 @@ corresponds to each call.
 ```{python}
 #| echo: false
 
-transformed_parameters = import_dataset(asset("transformed-parameters.yml"))
+transformed_parameters = import_yaml_file(asset("transformed-parameters.yml"))
 pprint(transformed_parameters)
 ```
 

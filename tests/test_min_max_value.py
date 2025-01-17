@@ -15,7 +15,7 @@ from odm_validation.validation import (
 )
 
 import common
-from common import asset, param_range
+from common import asset, import_dataset2, param_range
 
 
 class Assets():
@@ -38,7 +38,7 @@ class Assets():
         self.data_pass = []
         for i in range(1, 5):
             self.data_pass.append({
-                'sites': import_dataset(asset(f'valid-dataset-{i}.*'))
+                'sites': import_dataset2(asset(f'valid-dataset-{i}.*'))
             })
         empty_report = {'errors': [], 'warnings': []}
         self.error_report_pass = [
@@ -52,7 +52,7 @@ class Assets():
         self.error_report_fail = []
         for i in range(1, 5):
             self.data_fail.append(
-                {'sites': import_dataset(asset(f'invalid-dataset-{i}.*'))})
+                {'sites': import_dataset2(asset(f'invalid-dataset-{i}.*'))})
             self.error_report_fail.append(
                 import_json_file(asset(f'error-report-{i}.json')))
 
