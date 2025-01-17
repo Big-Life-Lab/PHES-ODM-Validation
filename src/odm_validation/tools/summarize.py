@@ -14,7 +14,7 @@ from odm_validation.summarization import (
     summarize_report
 )
 
-from reportutils import (
+from odm_validation.tools.reportutils import (
     ReportFormat,
     read_report,
     read_report_from_file,
