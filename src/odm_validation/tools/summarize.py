@@ -74,14 +74,16 @@ app = typer.Typer(pretty_exceptions_show_locals=False)
 
 
 @app.command()
-def main(report_file: str = typer.Argument(default='', help=REPORT_FILE_DESC),
-         by: List[SummaryKey] = typer.Option(default=[SummaryKey.TABLE.value],
-                                             help=BY_DESC),
-         errorLevel: ErrorKind = typer.Option(default=ErrorKind.ERROR.value,
-                                              help=ERRLVL_DESC),
-         out: str = typer.Option(default='', help=OUT_DESC),
-         format: SummaryFormat = typer.Option(default=SummaryFormat.CSV.value,
-                                              help=FMT_DESC)):
+def main(
+    report_file: str = typer.Argument(default='', help=REPORT_FILE_DESC),
+    by: List[SummaryKey] = typer.Option(default=[SummaryKey.TABLE.value],
+                                        help=BY_DESC),
+    errorLevel: ErrorKind = typer.Option(default=ErrorKind.ERROR.value,
+                                         help=ERRLVL_DESC),
+    out: str = typer.Option(default='', help=OUT_DESC),
+    format: SummaryFormat = typer.Option(default=SummaryFormat.CSV.value,
+                                         help=FMT_DESC)
+):
     in_path = report_file
     out_fmt = format
     out_path = out
