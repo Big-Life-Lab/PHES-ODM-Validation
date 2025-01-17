@@ -52,9 +52,9 @@ def import_yaml_file(path: str) -> dict:
         return yaml.load(f.read(), Loader=yaml.Loader)
 
 
-def export_yaml_file(data: dict, path: str):
+def export_yaml_file(data: dict, path: str) -> None:
     with open(path, "w") as f:
-        return f.write(yaml.dump(data))
+        f.write(yaml.dump(data))
 
 
 def import_dataset(path: str) -> list[dict]:

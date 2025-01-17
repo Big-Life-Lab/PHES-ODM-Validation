@@ -5,10 +5,11 @@ Rule functions are ordered alphabetically.
 
 from dataclasses import dataclass
 from enum import Enum
-from typing import Any, Callable
+from typing import Callable, Optional, Union
 # from pprint import pprint
 
 import odm_validation.part_tables as pt
+from odm_validation.part_tables import SomeValue
 from odm_validation.input_data import DataKind
 from odm_validation.schemas import Schema, init_attr_schema, init_table_schema
 from odm_validation.stdext import (
@@ -16,6 +17,7 @@ from odm_validation.stdext import (
     try_parse_int,
 )
 from odm_validation.rule_primitives import (
+    GenCerbRulesFunc,
     OdmValueCtx,
     attr_items,
     gen_cerb_rules_for_type,
@@ -30,6 +32,8 @@ from odm_validation.rule_primitives import (
 )
 from odm_validation.versions import Version
 
+
+GetErrorTemplateFunc = Callable[[SomeValue, Optional[str], DataKind], str]
 
 RuleId = Enum('RuleId', type=int, names=[
     '_all',
@@ -66,7 +70,7 @@ class Rule:
     is_column: bool
     is_warning: bool
     gen_schema: Callable[[pt.OdmData], Schema]
-    get_error_template: Callable[[Any, str, DataKind], str]
+    get_error_template: GetErrorTemplateFunc
 
     match_all_keys: bool
     """Used when mapping a Cerberus error to its ODM validation rule. It
@@ -89,10 +93,10 @@ def get_anyof_constraint(anyof_constraint: dict) -> tuple[str, str]:
     return (key, val)
 
 
-def extract_cerb_keys(gen_cerb_rules: Callable) -> list[str]:
+def extract_cerb_keys(gen_cerb_rules: GenCerbRulesFunc) -> list[str]:
     '''extracts the cerberus' rule-keys from an ODM rule's `gen_cerb_rules`
     function'''
-    dummy_ctx = OdmValueCtx(value=1, datatype='integer', bool_set=set(),
+    dummy_ctx = OdmValueCtx(value='1', datatype='integer', bool_set=set(),
                             null_set=set())
     cerb_rules = gen_cerb_rules(dummy_ctx)
     assert isinstance(cerb_rules, dict)
@@ -108,8 +112,15 @@ def extract_cerb_keys(gen_cerb_rules: Callable) -> list[str]:
     return list(cerb_rules.keys())
 
 
-def init_rule(rule_id, error, gen_cerb_rules, gen_schema,
-              is_column=False, is_warning=False, match_all_keys=False):
+def init_rule(
+    rule_id: RuleId,
+    error: Union[str, GetErrorTemplateFunc],
+    gen_cerb_rules: GenCerbRulesFunc,
+    gen_schema: Callable,
+    is_column: bool = False,
+    is_warning: bool = False,
+    match_all_keys: bool = False,
+) -> Rule:
     """
     - `error` can either be a string or a function taking a value and returning
       a string.
@@ -131,63 +142,65 @@ def init_rule(rule_id, error, gen_cerb_rules, gen_schema,
     )
 
 
-def duplicate_entries_found():
+def duplicate_entries_found() -> Rule:
     rule_id = RuleId.duplicate_entries_found
     err = ('Duplicate entries found with primary key {value}')
 
-    def gen_cerb_rules(val_ctx: OdmValueCtx):
+    def gen_cerb_rules(val_ctx: OdmValueCtx) -> dict:
         return {'unique': True}
 
-    def gen_schema(data: pt.OdmData, ver):
+    def gen_schema(data: pt.OdmData, ver: Version) -> dict:
         return gen_conditional_schema(data, ver, rule_id.name, gen_cerb_rules,
                                       is_primary_key)
 
     return init_rule(rule_id, err, gen_cerb_rules, gen_schema)
 
 
-def greater_than_max_length():
+def greater_than_max_length() -> Rule:
     rule_id = RuleId.greater_than_max_length
     odm_key = 'maxLength'
     err = ('Value {value} (of length {value_len}) '
            'exceeds the max length of {constraint}')
 
-    def gen_cerb_rules(val_ctx: OdmValueCtx):
+    def gen_cerb_rules(val_ctx: OdmValueCtx) -> dict:
         val = try_parse_int(val_ctx.value)
         if val:
             return {'maxlength': val}
+        return {}
 
-    def gen_schema(data: pt.OdmData, ver):
+    def gen_schema(data: pt.OdmData, ver: Version) -> dict:
         return gen_value_schema(data, ver, rule_id.name, odm_key,
                                 gen_cerb_rules)
 
     return init_rule(rule_id, err, gen_cerb_rules, gen_schema)
 
 
-def greater_than_max_value():
+def greater_than_max_value() -> Rule:
     rule_id = RuleId.greater_than_max_value
     odm_key = 'maxValue'
     err = ('Value {value} is greater than the max value of {constraint}')
 
-    def gen_cerb_rules(val_ctx: OdmValueCtx):
+    def gen_cerb_rules(val_ctx: OdmValueCtx) -> dict:
         val = parse_odm_val(val_ctx)
         if val is not None:
             return {'max': val} | gen_cerb_rules_for_type(val_ctx)
+        return {}
 
-    def gen_schema(data: pt.OdmData, ver):
+    def gen_schema(data: pt.OdmData, ver: Version) -> dict:
         return gen_value_schema(data, ver, rule_id.name, odm_key,
                                 gen_cerb_rules)
 
     return init_rule(rule_id, err, gen_cerb_rules, gen_schema)
 
 
-def missing_mandatory_column():
+def missing_mandatory_column() -> Rule:
     rule_id = RuleId.missing_mandatory_column
     err = 'Missing mandatory column {column_id}'
 
-    def gen_cerb_rules(val_ctx: OdmValueCtx):
+    def gen_cerb_rules(val_ctx: OdmValueCtx) -> dict:
         return {'required': True}
 
-    def gen_schema(data: pt.OdmData, ver):
+    def gen_schema(data: pt.OdmData, ver: Version) -> dict:
         return gen_conditional_schema(data, ver, rule_id.name, gen_cerb_rules,
                                       is_mandatory)
 
@@ -195,23 +208,24 @@ def missing_mandatory_column():
                      is_column=True)
 
 
-def missing_values_found():
+def missing_values_found() -> Rule:
     # TODO: rename to missing_mandatory_value?
     rule_id = RuleId.missing_values_found
 
-    def get_error_template(odm_value: Any, odm_type: str, data_kind: DataKind):
+    def get_error_template(odm_value: SomeValue, odm_type: Optional[str],
+                           data_kind: DataKind) -> str:
         if odm_value == '':
             return 'Empty string found'
         else:
             return 'Missing value {value}'
 
-    def gen_cerb_rules(val_ctx: OdmValueCtx):
+    def gen_cerb_rules(val_ctx: OdmValueCtx) -> dict:
         return {
             'emptyTrimmed': False,
             'forbidden': sorted(val_ctx.null_set),
         }
 
-    def gen_schema(data: pt.OdmData, ver):
+    def gen_schema(data: pt.OdmData, ver: Version) -> dict:
         return gen_conditional_schema(data, ver, rule_id.name, gen_cerb_rules,
                                       is_mandatory)
 
@@ -219,50 +233,52 @@ def missing_values_found():
                      is_warning=True, match_all_keys=True)
 
 
-def less_than_min_length():
+def less_than_min_length() -> Rule:
     rule_id = RuleId.less_than_min_length
     odm_key = 'minLength'
     err = ('Value {value} (of length {value_len}) is less than the min '
            'length of {constraint}')
 
-    def gen_cerb_rules(val_ctx: OdmValueCtx):
+    def gen_cerb_rules(val_ctx: OdmValueCtx) -> dict:
         val = try_parse_int(val_ctx.value)
-        if val > 0:
+        if val and val > 0:
             return {'anyof': [{'empty': True, 'minlength': val}]}
+        return {}
 
-    def gen_schema(data: pt.OdmData, ver):
+    def gen_schema(data: pt.OdmData, ver: Version) -> dict:
         return gen_value_schema(data, ver, rule_id.name, odm_key,
                                 gen_cerb_rules)
 
     return init_rule(rule_id, err, gen_cerb_rules, gen_schema)
 
 
-def less_than_min_value():
+def less_than_min_value() -> Rule:
     rule_id = RuleId.less_than_min_value
     odm_key = 'minValue'
     err = ('Value {value} is less than the min value of {constraint}')
 
-    def gen_cerb_rules(val_ctx: OdmValueCtx):
+    def gen_cerb_rules(val_ctx: OdmValueCtx) -> dict:
         val = parse_odm_val(val_ctx)
         if val is not None:
             return {'min': val} | gen_cerb_rules_for_type(val_ctx)
+        return {}
 
-    def gen_schema(data: pt.OdmData, ver):
+    def gen_schema(data: pt.OdmData, ver: Version) -> dict:
         return gen_value_schema(data, ver, rule_id.name, odm_key,
                                 gen_cerb_rules)
 
     return init_rule(rule_id, err, gen_cerb_rules, gen_schema)
 
 
-def invalid_category():
+def invalid_category() -> Rule:
     rule_id = RuleId.invalid_category
     cerb_rule_key = 'allowed'
     err = 'Invalid category {value}'
 
-    def gen_schema(data: pt.OdmData, ver: Version):
+    def gen_schema(data: pt.OdmData, ver: Version) -> dict:
         # FIXME: `cat_ids1` contains duplicates due to v1 categories belonging
         # to multiple tables.
-        schema = {}
+        schema: dict = {}
         other_cat = ['other'] if ver.major == 1 else []
         for table_id0, table_id1, table in table_items(data, ver):
             table_meta = get_table_meta(table, ver)
@@ -290,13 +306,13 @@ def invalid_category():
 
         return schema
 
-    def gen_cerb_rules(val_ctx: OdmValueCtx):
+    def gen_cerb_rules(val_ctx: OdmValueCtx) -> dict:
         return {cerb_rule_key: None}
 
     return init_rule(rule_id, err, gen_cerb_rules, gen_schema)
 
 
-def invalid_type():
+def invalid_type() -> Rule:
     rule_id = RuleId.invalid_type
     odm_key = 'dataType'
     err_default = ('Value {value} has type {value_type} '
@@ -307,7 +323,8 @@ def invalid_type():
                 'Allowed values are ISO 8601 standard full dates, full dates '
                 'and times, or full dates and times with timezone.')
 
-    def get_error_template(odm_value: Any, odm_type: str, data_kind: DataKind):
+    def get_error_template(odm_value: SomeValue, odm_type: Optional[str],
+                           data_kind: DataKind) -> str:
         if odm_type == pt.BOOLEAN:
             assert isinstance(odm_value, str)
             return err_bool
@@ -316,10 +333,10 @@ def invalid_type():
         else:
             return err_default
 
-    def gen_cerb_rules(val_ctx: OdmValueCtx):
+    def gen_cerb_rules(val_ctx: OdmValueCtx) -> dict:
         return gen_cerb_rules_for_type(val_ctx)
 
-    def gen_schema(data: pt.OdmData, ver):
+    def gen_schema(data: pt.OdmData, ver: Version) -> dict:
         return gen_value_schema(data, ver, rule_id.name, odm_key,
                                 gen_cerb_rules)
 
@@ -328,7 +345,7 @@ def invalid_type():
 
 # This is the collection of all validation rules.
 # A tuple is used for immutability.
-ruleset: tuple[Rule] = (
+ruleset: tuple = (
     duplicate_entries_found(),
     greater_than_max_length(),
     greater_than_max_value(),

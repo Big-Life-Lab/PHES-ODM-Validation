@@ -3,12 +3,13 @@
 import csv
 import sys
 from enum import Enum
-from typing import List
+from typing import IO
 
 import typer
 
 from odm_validation.reports import ErrorKind
 from odm_validation.summarization import (
+    SummarizedReport,
     SummaryEntry,
     SummaryKey,
     summarize_report
@@ -40,7 +41,7 @@ OUT_DESC = 'The path to write the summary file to.'
 FMT_DESC = 'The output format.'
 
 
-def write_csv_summary(sum_report, output):
+def write_csv_summary(sum_report: SummarizedReport, output: IO) -> None:
     headers = ['errorLevel'] + list(SummaryEntry.__dataclass_fields__)
     errorkind_summaries = {
         ErrorKind.ERROR: sum_report.errors,
@@ -60,7 +61,8 @@ def write_csv_summary(sum_report, output):
                 writer.writerow(row)
 
 
-def write_summary(output, sum_report, fmt):
+def write_summary(output: IO, sum_report: SummarizedReport,
+                  fmt: SummaryFormat) -> None:
     if fmt == SummaryFormat.CSV:
         write_csv_summary(sum_report, output)
     elif fmt == SummaryFormat.JSON:
@@ -76,14 +78,14 @@ app = typer.Typer(pretty_exceptions_show_locals=False)
 @app.command()
 def main(
     report_file: str = typer.Argument(default='', help=REPORT_FILE_DESC),
-    by: List[SummaryKey] = typer.Option(default=[SummaryKey.TABLE.value],
+    by: list[SummaryKey] = typer.Option(default=[SummaryKey.TABLE.value],
                                         help=BY_DESC),
     errorLevel: ErrorKind = typer.Option(default=ErrorKind.ERROR.value,
                                          help=ERRLVL_DESC),
     out: str = typer.Option(default='', help=OUT_DESC),
     format: SummaryFormat = typer.Option(default=SummaryFormat.CSV.value,
                                          help=FMT_DESC)
-):
+) -> None:
     in_path = report_file
     out_fmt = format
     out_path = out

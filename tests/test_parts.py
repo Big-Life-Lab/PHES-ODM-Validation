@@ -10,6 +10,7 @@ import common
 
 def get_row(first: str, last: str, active: bool):
     return {
+        pt.PART_ID: 'dummy-partid',
         'firstReleased': first,
         'lastUpdated': last,
         pt.STATUS: pt.ACTIVE if active else 'depreciated',
@@ -67,7 +68,7 @@ class TestVersion1FieldsExist(common.OdmTestCase):
         id_list_pass = [pt._get_mappings(p, v) for p in self.parts_pass]
         id_list_fail = [pt._get_mappings(p, v) for p in self.parts_fail]
         self.assertEqual(id_list_pass, [['a'], ['b'], ['c', 'd']])
-        self.assertEqual(id_list_fail, [None, None, None])
+        self.assertEqual(id_list_fail, [[], [], []])
 
 
 class TestVersion1Table(common.OdmTestCase):

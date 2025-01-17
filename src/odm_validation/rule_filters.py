@@ -18,11 +18,12 @@ class RuleFilter:
     blacklist: list[RuleId]
     whitelist: list[RuleId]
 
-    def __init__(self, blacklist=[], whitelist=[]):
+    def __init__(self, blacklist: list[RuleId] = [],
+                 whitelist: list[RuleId] = []) -> None:
         self.blacklist = blacklist
         self.whitelist = whitelist
 
-    def enabled(self, rule: Rule):
+    def enabled(self, rule: Rule) -> bool:
         "Returns true if the rule `rule_id` is enabled."
         rule_id = rule.id
         return (rule_id not in self.blacklist and

@@ -59,3 +59,4 @@ def infer_table(name: str, v: Version) -> Optional[str]:
     for table_id in TABLE_NAMES[v]:
         if name.endswith(table_id):
             return table_id
+    return None
