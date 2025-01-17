@@ -16,7 +16,7 @@ from rich.pretty import pprint
 
 # Standardized Validation Rule API
 
-This document will go over the design for a standardized API to define 
+This document will go over the design for a standardized API to define
 validation rules in the library. It will also provide reasoning for some
 of the design decisions made.
 
@@ -27,24 +27,24 @@ library.
 
 ## Context
 
-Adding a new validation rule in the library cannot currently be done in an 
-isolated manner. Programming the different pieces that goes into a new rule 
-more often than not requires modifying multiple files in the  library. In 
-addition, the code in these files are not directly related to the rule itself. 
+Adding a new validation rule in the library cannot currently be done in an
+isolated manner. Programming the different pieces that goes into a new rule
+more often than not requires modifying multiple files in the  library. In
+addition, the code in these files are not directly related to the rule itself.
 
-For example, the code for the `duplicate_entries_found` rule is in multiple 
-spots in the library. The schema generation is in one file, and the validation 
-logic/error generation is in another. Worse, its not intuitive which parts of 
+For example, the code for the `duplicate_entries_found` rule is in multiple
+spots in the library. The schema generation is in one file, and the validation
+logic/error generation is in another. Worse, its not intuitive which parts of
 these files are immediately related to the rule.
 
 There is a growing need to enable the users of the library to create their own
-rules. Users of the ODM come from a variety of backgrounds, disciplines, and 
-professions. Trying to accomodate all the validation needs of such a diverse 
-group of individuals is not possible, hence the need for a better way to 
+rules. Users of the ODM come from a variety of backgrounds, disciplines, and
+professions. Trying to accomodate all the validation needs of such a diverse
+group of individuals is not possible, hence the need for a better way to
 implement rules.
 
-Keeping the above in mind, the goal of of this document is to specify a 
-standardized, intuitive, and isolated API for the creation of validation rules. 
+Keeping the above in mind, the goal of of this document is to specify a
+standardized, intuitive, and isolated API for the creation of validation rules.
 This API should work not only for the core set of rules included with the
 library, but for any future rules that need to be implemented.
 
@@ -54,7 +54,7 @@ The design for this API was developed by:
 
 1. Going through all the rules currently implemented in the library as well as
 certain new rules that users have asked for;
-2. Identifying the common elements between the rules; and 
+2. Identifying the common elements between the rules; and
 3. Developing an API to expose those elements to a user, in a way that works
 for all of the rules
 
@@ -67,28 +67,28 @@ At a high level, implementing a new rule requires the following two processes:
 1. Generating a schema; and
 2. Validating data using the generated schema
 
-There are other details that need to be thought off, for example, generating 
+There are other details that need to be thought off, for example, generating
 errors for the validation report, but they are all within the context of the
 above two processes.
 
 #### Generating a schema
 
-Generating a  schema means returning the information needed by the rule to 
+Generating a  schema means returning the information needed by the rule to
 perform its validation during the validation process.
 
-The rule needs to generate a schema for every table-column pair in the ODM 
-dictionary. Certain table-column pairs may not be applicable to a rule, which 
-the design needs to keep in mind. 
+The rule needs to generate a schema for every table-column pair in the ODM
+dictionary. Certain table-column pairs may not be applicable to a rule, which
+the design needs to keep in mind.
 
-The metadata needed to generate a schema will most probably come from an 
+The metadata needed to generate a schema will most probably come from an
 outside source. Currently, all this metadata comes from the ODM dictionary
-excel sheet. 
+excel sheet.
 
-For example, consider the `greater_than_max_length` rule. It needs to know 
+For example, consider the `greater_than_max_length` rule. It needs to know
 what the max length is for a particular value in order to implement its
-validation logic. In addition, the rule only applies to string columns with a 
+validation logic. In addition, the rule only applies to string columns with a
 defined max length. Finally, all the information needed to generate this
-rule comes from the `maxLength` column of a part, locatedin the `parts` sheet 
+rule comes from the `maxLength` column of a part, locatedin the `parts` sheet
 in the ODM dictionary.
 
 Take a look at the parts sheet below,
@@ -113,7 +113,7 @@ value of **6**.
 
 #### Validating data
 
-Validating data means asking the rule if a value in a dataset is valid, 
+Validating data means asking the rule if a value in a dataset is valid,
 according to the information returned in the schema generation process.
 
 For example, for the dataset below,
@@ -132,18 +132,18 @@ values in the `siteID` column.
 
 ## Specifications
 
-These next few sections will go over the different elements of the API. 
+These next few sections will go over the different elements of the API.
 
 Keep in mind that the library uses [cerberus](https://docs.python-cerberus.org/en/stable/)
 as its validation engine. Some of its idiosyncrancies may leak into the design.
 
 ### The `ValidationRule` class
 
-This is an **abstract** class that every validation rule that can be used 
+This is an **abstract** class that every validation rule that can be used
 with the library will need to extend.
 
-By using an abstract class it becomes clear what methods need to be 
-implemented when programming a new rule. Run-time checks that show errors if 
+By using an abstract class it becomes clear what methods need to be
+implemented when programming a new rule. Run-time checks that show errors if
 all methods are not implemented can be shown to the user.
 
 The `ValidationRule` class has the following methods:
@@ -157,9 +157,9 @@ The `ValidationRule` class has the following methods:
 The first two methods are used in the schema generation process while the other
 three methods are used in the validation process.
 
-In the following sections we will go over the listed methods in detail. 
+In the following sections we will go over the listed methods in detail.
 
-**Every method by default takes the Python `self` parameter as its first 
+**Every method by default takes the Python `self` parameter as its first
 argument. Its presence is assumed and will not be mentioned unless warranted.**
 
 ### `get_schema_keys` and `gen_schema_values`
@@ -167,18 +167,18 @@ argument. Its presence is assumed and will not be mentioned unless warranted.**
 These two functions are used in the schema generation process and are together
 used to construct the schema for a rule. The schema for a rule is an object
 that contains key-value pairs, where each key is the unique name for
-a piece of validation metadata, and the value contains the metadata. 
+a piece of validation metadata, and the value contains the metadata.
 
-The `get_schema_keys` method does not take any parameters and should return a 
+The `get_schema_keys` method does not take any parameters and should return a
 list of strings that represents the keys.
 
 The `gen_schema_values` method takes the following 4 parameters:
 
 1. The name of the **table** to generate the schema values for;
 2. The name of the **column** in the above table to generate the schema values for;
-3. An object that represents the **ODM dictionary** the schema is for. This can 
+3. An object that represents the **ODM dictionary** the schema is for. This can
 be used to generate the schema values for the provided table-column pair.
-4. An object which contains metadata about the current generation process. It 
+4. An object which contains metadata about the current generation process. It
 should contain the following metadata:
     1. The version of the dictionary the schema is for
 
@@ -191,14 +191,14 @@ The method should return one of the following values:
 For example, for the `greater_than_max_length` rule:
 
 1. The `gen_schema_keys` method would return the list `['maxlength']`; and
-2. The `gen_schema_values` method would return the list `[6]` for the `siteID` column 
+2. The `gen_schema_values` method would return the list `[6]` for the `siteID` column
 and `None` otherwise
 
-Similiarly, if we were to implement the two methods for the 
+Similiarly, if we were to implement the two methods for the
 `greater_than_max_value` rule with the parts sheet displayed above:
 
 1. The `get_schema_keys` method would return the list `['type', 'coerce', 'max']`
-2. The `gen_schema_values` method would return the list `['integer', 'integer', 90]`  
+2. The `gen_schema_values` method would return the list `['integer', 'integer', 90]`
 for the `geoLat` and `geoLong` columns. It would return `None` for the
 other columns.
 
@@ -217,23 +217,23 @@ no uses cases for custom validation with multiple schema keys.**
 
 The method takes the following 3 parameters:
 
-1. The value to be validated. 
+1. The value to be validated.
 2. The schema information to validate this value with. This is the schema
 value that the rule returned in their `gen_schema_values` method for the table-column
 pair that the value belongs to.
-3. An object that contains metadata about the value. It should include the 
+3. An object that contains metadata about the value. It should include the
 following:
     1. The row that the value belongs to
     2. The row index
     3. The name of the column
     4. The name of the table
 
-The method should return a boolean, `True` if the value passed validation, and 
+The method should return a boolean, `True` if the value passed validation, and
 `False` otherwise.
 
-For example, with the `greater_than_max_length` rule and the `sites` table 
-printed above, the `validate_data` method would be called twice for each row of 
-the `sites` table with the parameters below. Each item in the list corresponds 
+For example, with the `greater_than_max_length` rule and the `sites` table
+printed above, the `validate_data` method would be called twice for each row of
+the `sites` table with the parameters below. Each item in the list corresponds
 to each call of the `validate_data` method.
 
 ```{python}
@@ -252,7 +252,7 @@ validation report.
 It takes the following parameters:
 
 1. The value that failed validation
-2. An object that contains metadata about the failed validation. The metadata 
+2. An object that contains metadata about the failed validation. The metadata
 includes:
     1. The name of the table the failed value is from
     2. The index of the row the failed value is from
@@ -264,10 +264,10 @@ includes:
 The method can return `None` or a [`report object`](#the-report-object).
 
 A rule can return `None`, for example, to avoid duplicate errors in the report.
-For example, with the `greater_than_max_value` rule, the `gen_report` method 
+For example, with the `greater_than_max_value` rule, the `gen_report` method
 could return an object only for the `max` schema key.
 
-For example, for the `greater_than_max_value` rule, this method would be called 
+For example, for the `greater_than_max_value` rule, this method would be called
 twice, once for the `geoLat` column value in row 1 and once for the `geoLong`
 value in row 2.
 
@@ -283,14 +283,14 @@ pprint(gen_report_parameters)
 
 #### `transformed`
 
-This is an optional method used to inform the rule when a value has been 
+This is an optional method used to inform the rule when a value has been
 transformed. Its useful only if the cerberus `coerce` rule is used.
 
 It takes three parameters:
 
 1. The transformed value
 2. The original value
-3. An object that includes metadata about the transformed value. The metadata 
+3. An object that includes metadata about the transformed value. The metadata
 includes:
     1. The name of the table the value is from
     2. The index of the row the value is from
@@ -313,13 +313,13 @@ transformed_parameters = import_dataset(asset("transformed-parameters.yml"))
 pprint(transformed_parameters)
 ```
 
-This method was added due to the `less_than_min_value` and 
+This method was added due to the `less_than_min_value` and
 `greater_than_max_value` rules, where we needed to show warnings to the user
 if a successful coercion took place.
 
 #### Two methods for schema generation?
 
-The functionality of `get_schema_keys` could be rolled into `gen_schema_values`, 
+The functionality of `get_schema_keys` could be rolled into `gen_schema_values`,
 so that the latter method now returns the entire schema object, with keys
 and values.
 
@@ -337,7 +337,7 @@ If there was only one schema generation method, the library could not rely
 on it to always return a schema object, since most rules are not applicable
 to all table-column pairs.
 
-With `get_schema_keys`, the library can always know what schema keys belong to 
+With `get_schema_keys`, the library can always know what schema keys belong to
 a rule.
 
 #### Working with `self`
@@ -349,7 +349,7 @@ primaryKey-lastUpdated pairs it encounters during the validation process.
 It uses this information to check whether a new value is unique within a table,
 or if it has been encountered before.
 
-The `self` parameter allows a rule to keep track of whatever **state** 
+The `self` parameter allows a rule to keep track of whatever **state**
 information it needs between calls of the different methods.
 
 For example, for the `duplicate_entries_found` rule, it can keep track of each
@@ -359,14 +359,14 @@ unique or not.
 
 #### The Report object
 
-Within the `gen_report` and `transformed` functions the validation rule can 
+Within the `gen_report` and `transformed` functions the validation rule can
 decide to return an object that represents an error/warning report.
 
-Depending on whether the report is an error or a warning the `errorType` or 
+Depending on whether the report is an error or a warning the `errorType` or
 `warningType` field should be set, with `errorType` being for the former and
 `warningType` being for the latter.
 
-If the report is an error then it should be added to the errors list in the 
+If the report is an error then it should be added to the errors list in the
 report and if it is warning it should be to the warnings list.
 
 Finally, the validation rule is allowed to add any other metadata it deems
