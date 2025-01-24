@@ -26,13 +26,17 @@ class TestVersionCompat(common.OdmTestCase):
         row = get_row('1.0.0', '2.0.0', False)
         self.assertTrue(is_compatible(row, parse_version('1.0.0')))
 
-    def test_eq_last(self):
+    def test_eq_last_inactive(self):
         row = get_row('1.0.0', '2.0.0', False)
         self.assertFalse(is_compatible(row, parse_version('2.0.0')))
 
     def test_incomplete(self):
         row = get_row('2', '2.0', True)
         self.assertTrue(is_compatible(row, parse_version('2.0.')))
+
+    def test_latest_version_larger_than_last_updated(self):
+        row = get_row('2', '2.0', True)
+        self.assertTrue(is_compatible(row, parse_version('2.1.0')))
 
 
 class TestVersion1FieldsExist(common.OdmTestCase):

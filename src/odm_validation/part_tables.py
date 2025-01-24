@@ -165,29 +165,35 @@ def _strip_prerelease(v: Version) -> Version:
     return result
 
 
-def get_version_range(part: Part) -> tuple[Version, Version]:
-    # XXX: must have default for tests (without versioned parts) to work
-    row = part
+def get_first_released(part: Part) -> Version:
     v1 = Version(major=1)
-    latest = _strip_prerelease(odm.VERSION)
-    first = parse_row_version(row, FIRST_RELEASED, default=v1)
-    last = parse_row_version(row, LAST_UPDATED, default=latest)
-    assert first <= last
-    return (first, last)
+    return parse_row_version(part, FIRST_RELEASED, default=v1)
 
 
 def is_compatible(part: Part, version: Version) -> bool:
-    """Returns True if part is compatible with `version`."""
+    '''Returns True if `part` is compatible with `version`.'''
+    # The version range for a part is [firstReleased, currentVersion], unless
+    # it's not active anymore, then it becomes [firstReleased, lastUpdated>.
+    #
+    # XXX: must have a default value for tests without versioned parts to work
+    #
     # XXX: prerelease (like rc.3, etc.) must be stripped from `version` before
     # compare, because a version with a rc-suffix is seen as less than a
     # version without it, and our ODM version is lagging behind the version of
     # the parts (which don't have suffixes) in that sense, but we still want
-    # them to be equal.
-    # Example: (ODM version) 2.0.0-rc.3 < (part version) 2.0.0
+    # them to be equal. Ex: (ODM version) 2.0.0-rc.3 < (part version) 2.0.0
+
     v = _strip_prerelease(version)
-    first, last = get_version_range(part)
-    active = is_active(part)
-    return (first <= v and v < last) or (v == last and active)
+    first = get_first_released(part)
+    latest = _strip_prerelease(odm.VERSION)
+    assert v <= latest
+    if is_active(part):
+        assert first <= latest
+        return first <= v
+    else:
+        last = parse_row_version(part, LAST_UPDATED, default=latest)
+        assert first <= last
+        return first <= v < last
 
 
 def should_have_mapping(part: Part, first: Version, latest: Version) -> bool:
@@ -345,7 +351,7 @@ def filter_backportable(parts: Dataset, version: Version) -> Dataset:
     latest = odm.VERSION
     for row in parts:
         part_id = get_partID(row)
-        first, _ = get_version_range(row)
+        first = get_first_released(row)
         if version.major < latest.major:
             if should_have_mapping(row, first, latest):
                 if not has_mapping(row, version):
