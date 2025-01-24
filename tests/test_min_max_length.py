@@ -2,6 +2,7 @@ import unittest
 
 from parameterized import parameterized, parameterized_class
 
+import odm_validation.odm as odm
 from odm_validation.rules import RuleId
 from odm_validation.schemas import import_schema
 from odm_validation.utils import (
@@ -14,7 +15,7 @@ from odm_validation.validation import (
 )
 
 import common
-from common import asset, param_range
+from common import asset, gen_v2_testschemas
 
 
 class Assets():
@@ -23,10 +24,9 @@ class Assets():
         common.ASSET_SUBDIR = f'validation-rules/{rule_dirname}'
 
         self.parts_v2 = import_dataset(asset('parts.csv'))
-        self.schemas = {
-            1: import_schema(asset('schema-v1.yml')),
-            2: import_schema(asset('schema-v2.yml')),
-        }
+        self.schemas = gen_v2_testschemas(
+            import_schema(asset('schema-v2.yml')))
+        self.schemas['1.0.0'] = import_schema(asset('schema-v1.yml'))
 
         self.data_pass_v2 = {
             'contacts': import_dataset(asset('valid-dataset.csv')),
@@ -52,21 +52,23 @@ class TestMinMaxLength(common.OdmTestCase):
         cls.assets = Assets(cls.ruleId)
         cls.whitelist = [cls.ruleId]
 
-    @parameterized.expand(param_range(1, 3))
-    def test_schema_generation(self, major_ver):
+    @parameterized.expand(['1.0.0'] + odm.CURRENT_VERSION_STRS)
+    def test_schema_generation(self, vstr):
         result = _generate_validation_schema_ext(
             parts=self.assets.parts_v2,
-            schema_version=f'{major_ver}.0.0',
+            schema_version=vstr,
             rule_whitelist=self.whitelist)
-        self.assertDictEqual(self.assets.schemas[major_ver], result)
+        self.assertDictEqual(self.assets.schemas[vstr], result)
 
-    def test_pass(self):
-        report = validate_data(self.assets.schemas[2],
+    @parameterized.expand(odm.CURRENT_VERSION_STRS)
+    def test_pass(self, vstr):
+        report = validate_data(self.assets.schemas[vstr],
                                self.assets.data_pass_v2)
         self.assertTrue(report.valid())
 
-    def test_fail(self):
-        report = validate_data(self.assets.schemas[2],
+    @parameterized.expand(odm.CURRENT_VERSION_STRS)
+    def test_fail(self, vstr):
+        report = validate_data(self.assets.schemas[vstr],
                                self.assets.data_fail_v2)
         self.assertReportEqual(self.assets.error_report, report)
 

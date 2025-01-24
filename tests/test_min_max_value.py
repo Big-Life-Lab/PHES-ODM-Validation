@@ -2,6 +2,7 @@ import unittest
 
 from parameterized import parameterized, parameterized_class
 
+import odm_validation.odm as odm
 from odm_validation.rules import RuleId
 from odm_validation.schemas import import_schema
 from odm_validation.stdext import deep_update
@@ -15,7 +16,7 @@ from odm_validation.validation import (
 )
 
 import common
-from common import asset, import_dataset2, param_range
+from common import asset, gen_v2_testschemas, import_dataset2, param_range
 
 
 class Assets():
@@ -28,12 +29,12 @@ class Assets():
         datetime_schema_v2 = import_schema(asset('schema-datetime-v2.yml'))
 
         self.parts = (import_dataset(asset('parts.csv')) + datetime_parts)
-        self.schemas = {
-            1: import_schema(asset('schema-v1.yml')),
-            2: import_schema(asset('schema-v2.yml')),
-        }
-        deep_update(self.schemas[1], datetime_schema_v1)
-        deep_update(self.schemas[2], datetime_schema_v2)
+        v1_schema = import_schema(asset('schema-v1.yml'))
+        v2_schema = import_schema(asset('schema-v2.yml'))
+        deep_update(v1_schema, datetime_schema_v1)
+        deep_update(v2_schema, datetime_schema_v2)
+        self.schemas = gen_v2_testschemas(v2_schema)
+        self.schemas['1.0.0'] = v1_schema
 
         self.data_pass = []
         for i in range(1, 5):
@@ -70,17 +71,17 @@ class TestMinMaxValue(common.OdmTestCase):
         cls.assets = Assets(cls.ruleId)
         cls.whitelist = [cls.ruleId]
 
-    @parameterized.expand(param_range(1, 3))
-    def test_schema_generation(self, major_ver):
+    @parameterized.expand(['1.0.0'] + odm.CURRENT_VERSION_STRS)
+    def test_schema_generation(self, vstr):
         result = _generate_validation_schema_ext(
             parts=self.assets.parts,
-            schema_version=f'{major_ver}.0.0',
+            schema_version=vstr,
             rule_whitelist=[self.ruleId])
-        self.assertDictEqual(self.assets.schemas[major_ver], result)
+        self.assertDictEqual(self.assets.schemas[vstr], result)
 
     @parameterized.expand(param_range(0, 4))
     def test_passing_datasets(self, ix):
-        report = _validate_data_ext(self.assets.schemas[2],
+        report = _validate_data_ext(self.assets.schemas['2.0.0'],
                                     self.assets.data_pass[ix],
                                     rule_whitelist=self.whitelist)
         expected = self.assets.error_report_pass[ix]
@@ -88,7 +89,7 @@ class TestMinMaxValue(common.OdmTestCase):
 
     @parameterized.expand(param_range(0, 4))
     def test_failing_datasets(self, ix):
-        report = _validate_data_ext(self.assets.schemas[2],
+        report = _validate_data_ext(self.assets.schemas['2.0.0'],
                                     self.assets.data_fail[ix],
                                     rule_whitelist=self.whitelist)
         expected = self.assets.error_report_fail[ix]

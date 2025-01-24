@@ -5,11 +5,13 @@ package modules.
 
 import logging
 import unittest
+from copy import deepcopy
 from glob import glob
 from os.path import join, splitext
 from pathlib import Path
 from typing import Union
 
+import odm_validation.odm as odm
 import odm_validation.utils as utils
 
 
@@ -68,3 +70,13 @@ def import_dataset2(path: str) -> Union[list[dict], dict]:
         return utils.import_yaml_file(path)
     else:
         return utils.import_dataset(path)
+
+
+def gen_testschema(schema: dict, version_str: str) -> dict:
+    result = deepcopy(schema)
+    result['schemaVersion'] = version_str
+    return result
+
+
+def gen_v2_testschemas(schema: dict) -> dict[str, dict]:
+    return {v: gen_testschema(schema, v) for v in odm.CURRENT_VERSION_STRS}

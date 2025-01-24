@@ -2,6 +2,7 @@ import unittest
 
 from parameterized import parameterized
 
+import odm_validation.odm as odm
 from odm_validation.rules import RuleId
 from odm_validation.schemas import import_schema
 from odm_validation.utils import import_dataset, import_json_file
@@ -11,7 +12,7 @@ from odm_validation.validation import (
 )
 
 import common
-from common import asset, param_range
+from common import asset, gen_v2_testschemas, param_range
 
 
 class Assets():
@@ -23,10 +24,8 @@ class Assets():
         self.parts = import_dataset(asset('parts.csv'))
 
         # schemas
-        self.schemas = {
-            1: import_schema(asset('schema-v1.yml')),
-            2: import_schema(asset('schema-v2.yml')),
-        }
+        self.schemas = gen_v2_testschemas(import_schema(asset('schema-v2.yml')))
+        self.schemas['1.0.0'] = import_schema(asset('schema-v1.yml'))
 
         # datasets and error reports
         self.data_pass = {table: import_dataset(asset('valid-dataset.csv'))}
@@ -48,22 +47,22 @@ class TestMissingValuesFound(common.OdmTestCase):
         cls.assets = Assets(cls.rule_id, cls.table)
         cls.whitelist = [cls.rule_id]
 
-    @parameterized.expand(param_range(1, 3))
-    def test_schema_generation(self, major_ver):
-        ver = f'{major_ver}.0.0'
+    @parameterized.expand(['1.0.0'] + odm.CURRENT_VERSION_STRS)
+    def test_schema_generation(self, vstr):
         result = _generate_validation_schema_ext(parts=self.assets.parts,
-                                                 schema_version=ver,
+                                                 schema_version=vstr,
                                                  rule_whitelist=self.whitelist)
-        self.assertDictEqual(self.assets.schemas[major_ver], result)
+        self.assertDictEqual(self.assets.schemas[vstr], result)
 
-    def test_passing_datasets(self):
-        report = _validate_data_ext(self.assets.schemas[2],
+    @parameterized.expand(odm.CURRENT_VERSION_STRS)
+    def test_passing_datasets(self, vstr):
+        report = _validate_data_ext(self.assets.schemas[vstr],
                                     self.assets.data_pass)
         self.assertTrue(report.valid())
 
     @parameterized.expand(param_range(1, 4))
     def test_failing_datasets(self, i):
-        report = _validate_data_ext(schema=self.assets.schemas[2],
+        report = _validate_data_ext(schema=self.assets.schemas['2.0.0'],
                                     data=self.assets.data_fail[i])
         expected = self.assets.reports[i]
         self.assertReportEqual(expected, report)

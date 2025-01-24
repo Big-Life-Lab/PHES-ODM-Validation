@@ -14,6 +14,7 @@ LEGACY_VERSIONS = sorted([
     Version(major=1),
     Version(major=1, minor=1),
 ])
+LEGACY_VERSION_STRS = list(map(str, LEGACY_VERSIONS))
 
 
 # the following directories are used by asset generation, and should always
