@@ -18,22 +18,27 @@ def get_table_names_filepath(v: Version) -> str:
     return join(_odm_dir, f'tables-v{v}.txt')
 
 
-def _get_latest_odm_version_str() -> str:
+def _get_odm_versions() -> list[Version]:
+    '''returns list of current versions (not including legacy versions)'''
     versions = []
     for path in Path(_odm_dir).glob('tables-v*'):
         name = os.path.basename(path)
         if not (match := re.search('v(.+)', name)):
             continue
         v = parse_version(match.group(1), verbose=False)
-        versions.append(str(v))
+        if v.major < 2:
+            continue
+        versions.append(v)
     if len(versions) == 0:
         sys.exit("failed to get latest ODM version")
     versions.sort()
-    return versions[-1]
+    return versions
 
 
-VERSION_STR = _get_latest_odm_version_str()
-VERSION = parse_version(VERSION_STR)
+CURRENT_VERSIONS = _get_odm_versions()
+CURRENT_VERSION_STRS = list(map(str, CURRENT_VERSIONS))
+VERSION = CURRENT_VERSIONS[-1]
+VERSION_STR = str(VERSION)
 LEGACY_VERSIONS = sorted([
     Version(major=1),
     Version(major=1, minor=1),
