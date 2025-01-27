@@ -11,8 +11,9 @@ from pathlib import Path
 import odm_validation.odm as odm
 import odm_validation.schemas as schemas
 import odm_validation.utils as utils
+from odm_validation.part_tables import Dataset
 from odm_validation.validation import generate_validation_schema
-from odm_validation.versions import parse_version
+from odm_validation.versions import Version, parse_version
 
 
 PARTS_FILENAME = 'parts.csv'
@@ -34,11 +35,12 @@ logging.basicConfig(
 )
 
 
-def generate_schema_for_version(parts, sets, version, schema_dir):
+def generate_schema_for_version(parts: Dataset, sets: Dataset,
+                                version: Version, schema_dir: str) -> None:
     filename = f'schema-v{version}.yml'
     path = join(schema_dir, filename)
     print(f'generating {filename}')
-    schema = generate_validation_schema(parts, sets, version)
+    schema = generate_validation_schema(parts, sets, str(version))
     schemas.export_schema(schema, path)
 
     # generate file with table names, for table inference
@@ -50,7 +52,7 @@ def generate_schema_for_version(parts, sets, version, schema_dir):
         f.write(os.linesep.join(tables))
 
 
-def generate_schemas_from_odm_tables(odm_dir, schema_dir):
+def generate_schemas_from_odm_tables(odm_dir: str, schema_dir: str) -> None:
     print(f'using {relpath(odm_dir)}')
     path_version_re = '.+/v(.+)/?'
     if not (match := re.search(path_version_re, odm_dir)):
@@ -60,10 +62,10 @@ def generate_schemas_from_odm_tables(odm_dir, schema_dir):
     sets = utils.import_dataset(join(odm_dir, SETS_FILENAME))
     for version in (odm.LEGACY_VERSIONS + [odm_version]):
         assert version <= odm_version
-        generate_schema_for_version(parts, sets, str(version), schema_dir)
+        generate_schema_for_version(parts, sets, version, schema_dir)
 
 
-def main():
+def main() -> None:
     asset_dir = utils.get_asset_dir()
     schema_dir = normpath(join(asset_dir, 'validation-schemas'))
     dataset_dir = normpath(join(asset_dir, 'dictionary'))

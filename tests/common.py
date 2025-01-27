@@ -8,6 +8,9 @@ import unittest
 from glob import glob
 from os.path import join, splitext
 from pathlib import Path
+from typing import Union
+
+import odm_validation.utils as utils
 
 
 # TODO: make this global lower-case, since it's not constant
@@ -56,3 +59,12 @@ def asset(filename: str) -> str:
     if ext == '.*':
         path = _find_asset(path)
     return path
+
+
+def import_dataset2(path: str) -> Union[list[dict], dict]:
+    '''works just like `import_dataset` with the exception of supporting yaml
+    files'''
+    if path.endswith('yml'):
+        return utils.import_yaml_file(path)
+    else:
+        return utils.import_dataset(path)

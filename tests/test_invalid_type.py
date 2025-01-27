@@ -14,7 +14,7 @@ from odm_validation.validation import (
 )
 
 import common
-from common import asset, param_range
+from common import asset, import_dataset2, param_range
 
 
 class Assets():
@@ -34,17 +34,17 @@ class Assets():
         # datasets
         # TODO: glob all files instead of hardcoding them like this?
         self.data_pass = [
-            {table: import_dataset(asset(f'{kind}-valid-dataset-1.*'))},
+            {table: import_dataset2(asset(f'{kind}-valid-dataset-1.*'))},
         ]
         self.data_fail = [
-            {table: import_dataset(asset(f'{kind}-invalid-dataset-1.*'))},
+            {table: import_dataset2(asset(f'{kind}-invalid-dataset-1.*'))},
         ]
         if kind in {'float', 'integer'}:
             self.data_pass.append(
-                {table: import_dataset(asset(f'{kind}-valid-dataset-2.*'))})
+                {table: import_dataset2(asset(f'{kind}-valid-dataset-2.*'))})
         if kind in {'bool', 'integer'}:
             self.data_fail.append(
-                {table: import_dataset(asset(f'{kind}-invalid-dataset-2.*'))})
+                {table: import_dataset2(asset(f'{kind}-invalid-dataset-2.*'))})
 
         # error reports
         self.error_report = [

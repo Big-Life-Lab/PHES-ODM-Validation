@@ -3,15 +3,18 @@ import json
 import operator
 from datetime import datetime
 from functools import reduce
-from typing import Any, Optional, Union
+from typing import Iterator, Optional, Union
 
 
-def get_len(x: Any) -> int:
+def get_len(x: Union[int, float, str, list, dict, datetime]) -> int:
     """Returns len if possible, otherwise zero."""
-    return len(x) if getattr(x, '__len__', None) else 0
+    if isinstance(x, (str, list, dict)):
+        return len(x)
+    else:
+        return 0
 
 
-def hash2(x) -> int:
+def hash2(x) -> int:  # type: ignore
     """An alternative hash function that can hash anything."""
     if isinstance(x, dict) or isinstance(x, list):
         return hash(json.dumps(x, sort_keys=True))
@@ -19,7 +22,7 @@ def hash2(x) -> int:
         return hash(x)
 
 
-def deep_update(dst: dict, src: dict, merge_dict_lists: bool = False):
+def deep_update(dst: dict, src: dict, merge_dict_lists: bool = False) -> None:
     '''recursively merge two dictionaries
 
     :param dst: the dict to merge into
@@ -59,7 +62,7 @@ def deep_update(dst: dict, src: dict, merge_dict_lists: bool = False):
                     dst_list.append(src_item)
 
 
-def strip_dict_key(d: dict, target_key: str):
+def strip_dict_key(d: dict, target_key: str) -> dict:
     """Recursively strips `d` of `target_key` entries."""
     assert isinstance(d, dict)
     for key, val in list(d.items()):
@@ -74,7 +77,7 @@ def strip_dict_key(d: dict, target_key: str):
     return d
 
 
-def flatten(x: list[list[Any]]) -> list[Any]:
+def flatten(x: list[list]) -> list:
     return reduce(operator.iconcat, x, [])
 
 
@@ -84,9 +87,11 @@ def parse_datetime(s: str) -> datetime:
     return dateutil_parser.parse(s)
 
 
-def parse_int(val) -> int:
+def parse_int(val: Union[int, float, str]) -> int:
     """Returns `val` as an int. A number with only zeroes as decimals also
     counts as an int. A ValueError is raised otherwise."""
+    # FIXME: converting to int through float may cause precision loss
+    # TODO: coerce empty string to zero?
     float_val = float(val)  # may raise
     int_val = int(float_val)
     if int_val == float_val:
@@ -95,25 +100,26 @@ def parse_int(val) -> int:
         raise ValueError('not a valid integer')
 
 
-def try_parse_int(val) -> Optional[int]:
-    if val is None:
-        return
+def try_parse_int(val: Optional[str]) -> Optional[int]:
     try:
-        return parse_int(val)
+        if val is not None:
+            return parse_int(val)
     except ValueError:
         pass
+    return None
 
 
-def try_parse_float(val) -> Optional[float]:
-    if not val:
-        return
+def try_parse_float(val: Optional[str]) -> Optional[float]:
+    # TODO: coerce empty string to zero?
     try:
-        return float(val)
+        if val:
+            return float(val)
     except ValueError:
         pass
+    return None
 
 
-def type_name(type_class) -> str:
+def type_name(type_class: type) -> str:
     result = type_class.__name__
     if result == 'int':
         result = 'integer'
@@ -126,18 +132,18 @@ def quote(x: str) -> str:
     return f'"{x}"'
 
 
-def countdown(count: int):
+def countdown(count: int) -> Iterator[int]:
     "counts down from `count`-1 to 0"
     for i in range(count - 1, -1, -1):
         yield i
 
 
-def iscollection(x) -> bool:
+def iscollection(x) -> bool:  # type: ignore
     assert not isinstance(x, set), "sets are not supported in this context"
     return isinstance(x, dict) or isinstance(x, list)
 
 
-def swapDelete(items: list, i: int):
+def swapDelete(items: list, i: int) -> None:
     '''swaps the item at `i` with the last element, and removes the last
     element.'''
     last = items.pop()
@@ -145,7 +151,7 @@ def swapDelete(items: list, i: int):
         items[i] = last
 
 
-def keep(x: Union[dict, list], target: str):
+def keep(x: Union[dict, list], target: str) -> None:
     '''Recursively removes all dict-keys and list-values not matching
     `target`.'''
     assert not isinstance(x, set)

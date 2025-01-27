@@ -29,10 +29,10 @@ class SummaryKey(int, Enum):
     ROW = 3
 
     @property
-    def value(self):
+    def value(self) -> str:
         return self.name.lower()
 
-    def __lt__(self, other):
+    def __lt__(self, other) -> bool:  # type: ignore
         if self.__class__ is other.__class__:
             return self._value_ < other._value_
         return NotImplemented
@@ -84,7 +84,7 @@ class SummarizedReport:
     errors: ErrorSummary
     warnings: ErrorSummary
 
-    def toJson(self):
+    def toJson(self) -> str:
         return json.dumps(self, default=lambda x: x.__dict__)
 
 
@@ -92,14 +92,14 @@ class SummarizedReport:
 # -----------------------------------------------------------------------------
 
 
-def _get_error_table_rule(e) -> (TableId, RuleId):
+def _get_error_table_rule(e: dict) -> tuple[TableId, RuleId]:
     error_kind = reports.get_error_kind(e)
     rule_id = reports.get_error_rule_id(e, error_kind)
     table_id = e['tableName']
     return (table_id, rule_id)
 
 
-def _get_error_row_ids(e) -> list[int]:
+def _get_error_row_ids(e: dict) -> list[int]:
     row_id0 = e.get('rowNumber')
     if row_id0 is not None:
         return [row_id0]
@@ -111,7 +111,8 @@ def _count_errors(keys: set[SummaryKey], errors: list) -> Counts:
     """Counts errors. Should be called once for every error kind, with its list
     of errors."""
 
-    def _update_entity(key, table_id, entity_id, rule_id, count):
+    def _update_entity(key: SummaryKey, table_id: TableId, entity_id: str,
+                       rule_id: RuleId, count: int) -> None:
         table_counts: TableCounts = key_counts[key]
         if table_id not in table_counts:
             table_counts[table_id] = defaultdict(dict)
@@ -185,11 +186,6 @@ def _gen_summary(keys: set[SummaryKey], counts: Counts) -> ErrorSummary:
 # -----------------------------------------------------------------------------
 
 
-def _increment_error_counts(a, b: ErrorCounts):
-    for rule_id, count in b.items():
-        a[rule_id] += count
-
-
 def _get_keyval(e: SummaryEntry) -> tuple[int, str]:
     """Returns tuple for sorting/grouping summary entries"""
     return (e.key, e.value)
@@ -205,7 +201,7 @@ def _calc_summary_entry_totals(entries: SummaryEntryList) -> SummaryEntryList:
         entry = SummaryEntry(
             rule_id=RuleId._all,
             count=total,
-            key=key,
+            key=SummaryKey(key),
             value=val,
         )
         result.append(entry)
@@ -229,7 +225,7 @@ def _gen_overview(report: ValidationReport,
     return overview
 
 
-def _remove_summary_entries(summary: ErrorSummary, key: SummaryKey):
+def _remove_summary_entries(summary: ErrorSummary, key: SummaryKey) -> None:
     """Removes summary entries with `key`."""
     for table_id, entries in summary.items():
         summary[table_id] = list(filter(lambda e: e.key != key, entries))

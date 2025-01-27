@@ -5,7 +5,7 @@ generation and data validation.
 
 from collections import defaultdict
 from copy import deepcopy
-from typing import Callable
+from typing import Callable, Iterator, Optional
 from enum import Enum
 # from pprint import pprint
 
@@ -54,7 +54,6 @@ def _generate_validation_schema_ext(parts: pt.Dataset,
     # `rule_whitelist` determines which rules are included in the schema. It is
     # needed when testing schema generation, to be able to compare isolated
     # rule-specific schemas.
-    assert isinstance(sets, list), "invalid sets param"
     version = parse_version(schema_version)
     odm_data = pt.gen_odmdata(parts, sets, version)
 
@@ -62,7 +61,7 @@ def _generate_validation_schema_ext(parts: pt.Dataset,
                              blacklist=rule_blacklist)
     enabled_rules = list(rule_filter.filter(ruleset))
 
-    cerb_schema = {}
+    cerb_schema: dict = {}
     for r in enabled_rules:
         assert r.gen_schema, f'missing `gen_schema` in rule {r.id}'
         s = r.gen_schema(odm_data, version)
@@ -84,8 +83,8 @@ def _generate_validation_schema_ext(parts: pt.Dataset,
 
 def generate_validation_schema(parts: pt.Dataset,
                                sets: pt.Dataset = [],
-                               schema_version=odm.VERSION_STR,
-                               schema_additions={}) -> Schema:
+                               schema_version: str = odm.VERSION_STR,
+                               schema_additions: dict = {}) -> Schema:
     return _generate_validation_schema_ext(parts, sets, schema_version,
                                            schema_additions)
 
@@ -94,7 +93,7 @@ def generate_validation_schema(parts: pt.Dataset,
 OnProgress = Callable[[str, str, int, int], None]
 
 
-def _strip_coerce_rules(cerb_schema):
+def _strip_coerce_rules(cerb_schema: dict) -> dict:
     return strip_dict_key(deepcopy(cerb_schema), schemas.COERCE_KEY)
 
 
@@ -134,7 +133,7 @@ def _validate_data_ext(
     data_version: str = odm.VERSION_STR,
     rule_blacklist: list[RuleId] = [],
     rule_whitelist: list[RuleId] = [],
-    on_progress: OnProgress = None,
+    on_progress: Optional[OnProgress] = None,
     verbosity: ErrorVerbosity = ErrorVerbosity.LONG_METADATA_MESSAGE,
     with_metadata: bool = True,
 ) -> reports.ValidationReport:
@@ -172,8 +171,8 @@ def _validate_data_ext(
 
     vctx = ValidationCtx(verbosity=verbosity)
 
-    errors = []
-    warnings = []
+    errors: list = []
+    warnings: list = []
     versioned_schema = schema
     cerb_schema = versioned_schema["schema"]
 
@@ -193,7 +192,11 @@ def _validate_data_ext(
     rule_filter = RuleFilter(whitelist=rule_whitelist,
                              blacklist=rule_blacklist)
 
-    def batch_table_data(action, table_id, table_data):
+    def batch_table_data(
+        action: str,
+        table_id: pt.TableId,
+        table_data: pt.Dataset
+    ) -> Iterator[tuple[dict[pt.TableId, pt.Dataset], int]]:
         total = len(table_data)
         offset = 0
         while offset < total:
@@ -206,9 +209,12 @@ def _validate_data_ext(
             if on_progress:
                 on_progress(action, table_id, offset, total)
 
+    batch_data: dict[pt.TableId, pt.Dataset] = {}
+    offset: int = 0
+
     coercion_schema = (cerb_schema if with_metadata else
                        gen_coercion_schema(cerb_schema))
-    coerced_data = defaultdict(list)
+    coerced_data: dict[pt.TableId, pt.Dataset] = defaultdict(list)
     coercer = ContextualCoercer(warnings=warnings, errors=errors)
     for table_id, table_data in data.items():
         schema = {table_id: coercion_schema[table_id]}
@@ -226,7 +232,7 @@ def _validate_data_ext(
             columns=len(table_data[0]),
             rows=len(table_data),
         )
-        v = OdmValidator.new()
+        v: OdmValidator = OdmValidator.new()  # type: ignore
         schema = {table_id: validation_schema[table_id]}
         for batch in batch_table_data('validating', table_id, table_data):
             batch_data, offset = batch
@@ -257,7 +263,7 @@ def _validate_data_ext(
 def validate_data(schema: Schema,
                   data: TableDataset,
                   data_kind: DataKind = DataKind.python,
-                  data_version=odm.VERSION_STR,
+                  data_version: str = odm.VERSION_STR,
                   rule_blacklist: list[RuleId] = [],
                   ) -> reports.ValidationReport:
     """

@@ -1,10 +1,12 @@
 """Part-table definitions."""
 
 from dataclasses import dataclass
+from datetime import datetime
 from enum import Enum
+from functools import partial
 from logging import error, info
 from semver import Version
-from typing import DefaultDict, Optional
+from typing import Optional, Union, cast
 # from pprint import pprint
 
 import odm_validation.odm as odm
@@ -22,13 +24,15 @@ AttrId = PartId
 TableId = PartId
 
 # type aliases (meta)
-MetaEntry = dict[str, str]
-Meta = list[MetaEntry]
-MetaMap = DefaultDict[PartId, Meta]
+MetaEntry = dict[str, str]  # per partID
+Meta = list[MetaEntry]  # per ruleID
+ColRuleMeta = dict[str, Union[Meta, str]]  # {'meta': Meta, 'ruleID': str}
+ColMeta = list[ColRuleMeta]
 
 # type aliases (other)
 Dataset = list[Row]
 PartMap = dict[PartId, Part]
+SomeValue = Union[int, float, str, datetime]
 TableAttrId = tuple[TableId, AttrId]
 
 
@@ -136,7 +140,8 @@ V1_KIND_MAP = {
 }
 
 
-def get_validation_rule_fields(column_meta, rule_ids: list[str]):
+def get_validation_rule_fields(column_meta: ColMeta, rule_ids: list[str]
+                               ) -> Meta:
     # TODO: add meta from sets-table?
     if not column_meta:
         return []
@@ -144,13 +149,14 @@ def get_validation_rule_fields(column_meta, rule_ids: list[str]):
     assert isinstance(column_meta[0], dict)
     assert isinstance(column_meta[0].get('meta', []), list)
     return flatten(list(
-        map(lambda x: x.get('meta', []),
+        map(lambda x: cast(Meta, x.get('meta', [])),
             filter(lambda x: x['ruleID'] in rule_ids,
                    column_meta))))
 
 
-def parse_row_version(row, field, default=None):
-    return parse_version(row.get(field), row.get('partID'), field, default)
+def parse_row_version(row: dict, field: str, default: Optional[Version] = None
+                      ) -> Version:
+    return parse_version(row.get(field), get_partID(row), field, default)
 
 
 def _strip_prerelease(v: Version) -> Version:
@@ -159,7 +165,7 @@ def _strip_prerelease(v: Version) -> Version:
     return result
 
 
-def get_version_range(part: dict) -> (Version, Version):
+def get_version_range(part: Part) -> tuple[Version, Version]:
     # XXX: must have default for tests (without versioned parts) to work
     row = part
     v1 = Version(major=1)
@@ -170,7 +176,7 @@ def get_version_range(part: dict) -> (Version, Version):
     return (first, last)
 
 
-def is_compatible(part, version: Version) -> bool:
+def is_compatible(part: Part, version: Version) -> bool:
     """Returns True if part is compatible with `version`."""
     # XXX: prerelease (like rc.3, etc.) must be stripped from `version` before
     # compare, because a version with a rc-suffix is seen as less than a
@@ -184,15 +190,15 @@ def is_compatible(part, version: Version) -> bool:
     return (first <= v and v < last) or (v == last and active)
 
 
-def should_have_mapping(part, first: Version, latest: Version) -> bool:
+def should_have_mapping(part: Part, first: Version, latest: Version) -> bool:
     # All parts released before the latest (major) version should have a
     # mapping to that previous version, unless it's a 'missingness' part.
     if (part.get(PART_TYPE) == MISSINGNESS):
-        return
+        return False
     return first.major < latest.major
 
 
-def _parse_version1Field(part, key) -> list[str]:
+def _parse_version1Field(part: Part, key: str) -> list[str]:
     "`key` must be one of the part columns that starts with 'version1*'."
     val = part.get(key)
     if not val:
@@ -201,22 +207,22 @@ def _parse_version1Field(part, key) -> list[str]:
     return list(map(str.strip, raw_ids))
 
 
-def _normalize_key(key: Optional[str]) -> Optional[str]:
+def _normalize_key(key: Optional[str]) -> str:
     """Returns `key` with the first char in lower case."""
     # TODO: remove this when casing is fixed in the dictionary
     if not key:
-        return
+        return ''
     return key[0].lower() + key[1:]
 
 
-def _get_mappings(part: dict, version: Version) -> Optional[list[PartId]]:
+def _get_mappings(part: dict, version: Version) -> list[PartId]:
     "Returns the mapping from part.partID to the equivalent ids in `version`."
     # XXX:
     # - parts may be missing version1 fields
     # - partType 'missingness' does not have version1 fields
     # - catSet 'booleanSet' is not required to have a version1Location
     if not should_have_mapping(part, version, odm.VERSION):
-        return
+        return []
     ids = []
     loc = part.get(V1_LOCATION)
     kind = V1_KIND_MAP.get(_normalize_key(loc))
@@ -228,14 +234,14 @@ def _get_mappings(part: dict, version: Version) -> Optional[list[PartId]]:
         elif kind == MapKind.CATEGORY or part.get(PART_ID) in BOOL_SET_IDS:
             ids = _parse_version1Field(part, V1_CATEGORY)
     except KeyError:
-        return
+        return []
     valid_ids = list(filter(lambda id: id and id != '', ids))
     if len(valid_ids) == 0:
-        return
+        return []
     return ids
 
 
-def is_active(part) -> bool:
+def is_active(part: Part) -> bool:
     "Returns True if the part status is active or missing."
     # missing status defaults to "active" to make it easier to write tests
     status = part.get(STATUS)
@@ -243,15 +249,14 @@ def is_active(part) -> bool:
 
 
 def has_mapping(part: dict, version: Version) -> bool:
-    ms = _get_mappings(part, version)
-    return ms and len(ms) > 0
+    return bool(_get_mappings(part, version))
 
 
-def table_required_field(table_name):
+def table_required_field(table_name: str) -> str:
     return table_name + 'Required'
 
 
-def get_catset_id(p: Part) -> str:
+def get_catset_id(p: Part) -> Optional[str]:
     # XXX: This is not called `get_set_id` because it depends on `mmaSet` which
     # supposedly is different from `setID`.
     # XXX: measureID doesn't have a set id due to partType=measure being its
@@ -262,37 +267,36 @@ def get_catset_id(p: Part) -> str:
     return result
 
 
-def has_catset(p):
+def has_catset(p: Part) -> bool:
     return bool(get_catset_id(p))
 
 
-def is_null_set(part):
+def is_null_set(p: Part) -> bool:
     # the ODM doesn't have these values as a catset, but it's a set
-    return part.get(PART_TYPE) == MISSINGNESS
+    return p.get(PART_TYPE) == MISSINGNESS
 
 
-def is_table_v1(p):
+def is_table_v1(p: Part) -> bool:
     return p.get(PART_TYPE) == TABLE
 
 
-def is_table_v2(p):
+def is_table_v2(p: Part) -> bool:
     # XXX: v2 includes the meta-tables 'parts' and 'sets', which shouldn't be
     # validated
     return is_table_v1(p) and p.get(CLASS) != 'lookup'
 
 
-def is_attr(p):
+def is_attr(p: Part) -> bool:
     return p.get(PART_TYPE) == ATTRIBUTE
 
 
-def is_catset_attr(p):
+def is_catset_attr(p: Part) -> bool:
     "A category set attribute holds a category value from the specified set."
     return is_attr(p) and has_catset(p)
 
 
-def get_partID(p):
+def get_partID(p: Part) -> PartId:
     # TODO: rename to get_partid or get_id?
-    assert PART_ID in p, str(p)
     return p[PART_ID]
 
 
@@ -304,30 +308,22 @@ def get_catset_table_ids(row: Row, table_ids: list[str]) -> list[str]:
     return result
 
 
-def get_key(pair):
-    return pair[0]
-
-
-def get_val(pair):
-    return pair[1]
-
-
-def _not_empty(field):
-    _, val = field
+def _not_empty(kv_pair: tuple) -> bool:
+    _, val = kv_pair
     return val not in PART_NULL_SET
 
 
-def strip(parts: Dataset):
+def strip(parts: Dataset) -> Dataset:
     """Removes null fields, except from partID."""
     # 'partID' may be defining null fields for data, so we can't strip those.
     # TODO: Strip version1* fields when not version 1.
-    result = []
+    result: Dataset = []
     for sparse_row in parts:
-        fields = iter(sparse_row.items())
-        part_id_pair = next(fields)
-        assert part_id_pair[0] == PART_ID, 'partID must be the first column'
-        row = {k: v for k, v in filter(_not_empty, fields)}
-        row[PART_ID] = part_id_pair[1]
+        kv_pairs = iter(sparse_row.items())
+        (part_id_key, part_id_val) = next(kv_pairs)
+        assert part_id_key == PART_ID, 'partID must be the first column'
+        row = {k: v for k, v in filter(_not_empty, kv_pairs)}
+        row[PART_ID] = part_id_val
         result.append(row)
     return result
 
@@ -359,18 +355,18 @@ def filter_backportable(parts: Dataset, version: Version) -> Dataset:
     return result
 
 
-def gen_partmap(parts) -> PartMap:
-    "Returns a mapping/dict between part-id and part."
+def gen_partmap(parts: list[Part]) -> PartMap:
+    '''maps part-ids to parts'''
     return {get_partID(part): part for part in parts}
 
 
-def map_ids(mappings: dict[PartId, PartId], part_ids: list[PartId],
+def map_ids(mappings: dict[PartId, list[PartId]], part_ids: list[PartId],
             ver: Version) -> list[PartId]:
     "Maps `part_ids` using `mappings`. Defaults to original id."
     # XXX: The default fallback of `mappings.get` is needed in tests that don't
     # have the boolean parts in their parts list.
     if ver.major == 1:
-        return flatten([mappings.get(id, id) for id in part_ids])
+        return flatten([mappings.get(id, [id]) for id in part_ids])
     else:
         return part_ids
 
@@ -386,7 +382,7 @@ def _table_has_attr(table: Part, attr: Part, version: Version) -> bool:
         return get_partID(table) in attr
 
 
-def validate_and_fix(all_parts: PartMap, version):
+def validate_and_fix(all_parts: PartMap, version: Version) -> None:
     # function parts/sets validation and hotfixes
 
     # FIXME: true/false parts are missing version1Category
@@ -398,7 +394,7 @@ def validate_and_fix(all_parts: PartMap, version):
                 assert has_mapping(part, version)
 
 
-def gen_odmdata(parts: Dataset, sets: Dataset, version: Version):
+def gen_odmdata(parts: Dataset, sets: Dataset, version: Version) -> OdmData:
     # `parts` must be stripped first, before further processing. This is
     # important for performance and simplicity of implementation.
 
@@ -413,7 +409,7 @@ def gen_odmdata(parts: Dataset, sets: Dataset, version: Version):
     sets = filter_compatible(sets, version)
 
     table_pred = is_table_v1 if version.major < 2 else is_table_v2
-    tables = gen_partmap(filter(table_pred, parts))
+    tables = gen_partmap(list(filter(table_pred, parts)))
     attributes = list(filter(is_attr, parts))
     null_set = set(map(get_partID, filter(is_null_set, parts)))
 
@@ -435,27 +431,29 @@ def gen_odmdata(parts: Dataset, sets: Dataset, version: Version):
     catset_data: dict[TableAttrId, CatsetData] = {}
     if version.major == 1:
         def is_cat_v1(p: Part) -> bool:
-            return (p.get(V1_TABLE) and
+            return (bool(p.get(V1_TABLE)) and
                     p.get(V1_LOCATION) == VARIABLE_CATEGORIES and
-                    p.get(V1_VARIABLE) and
-                    p.get(V1_CATEGORY))
+                    bool(p.get(V1_VARIABLE)) and
+                    bool(p.get(V1_CATEGORY)))
 
-        def attr_has_cat_v1(table_id_v1, attr, cat):
+        def attr_has_cat_v1(table_id_v1: TableId, attr: Part, cat: Part
+                            ) -> bool:
             """Returns true if `cat` is in the category set of `attr`, in table
             `table_id_v1`"""
             return (cat[V1_VARIABLE] == attr[V1_VARIABLE] and
                     table_id_v1 in _parse_version1Field(cat, V1_TABLE))
 
-        def get_categories_v1(table_id_v1, attr):
-            return list(
-                filter(lambda c: attr_has_cat_v1(table_id_v1, attr, c),
-                       categories_v1))
+        def get_categories_v1(categories_v1: list[Part], table_id_v1: TableId,
+                              attr: Part) -> list[Part]:
+            '''returns all v1 category-parts belonging to `attr`'''
+            pred = partial(attr_has_cat_v1, table_id_v1, attr)
+            return list(filter(pred, categories_v1))
 
-        categories_v1 = list(filter(is_cat_v1, parts))
+        categories_v1: list[Part] = list(filter(is_cat_v1, parts))
         for table_id, table in tables.items():
             table_id_v1 = table[V1_TABLE]
             for attr_id, attr in table_data[table_id].attributes.items():
-                cats = get_categories_v1(table_id_v1, attr)
+                cats = get_categories_v1(categories_v1, table_id_v1, attr)
                 values = list(map(get_partID, cats))
                 data = CatsetData(
                     part=attr,
@@ -465,7 +463,7 @@ def gen_odmdata(parts: Dataset, sets: Dataset, version: Version):
                 catset_data[(table_id, attr_id)] = data
 
     else:
-        categorical_attrs = gen_partmap(filter(is_catset_attr, parts))
+        categorical_attrs = gen_partmap(list(filter(is_catset_attr, parts)))
         for attr_id, categorical_attr in categorical_attrs.items():
             set_id = get_catset_id(categorical_attr)
             cs_sets = list(filter(lambda s: s[SET_ID] == set_id, sets))
@@ -480,7 +478,6 @@ def gen_odmdata(parts: Dataset, sets: Dataset, version: Version):
                 catset_data[(table_id, attr_id)] = data
 
     mappings = {get_partID(p): _get_mappings(p, version) for p in parts}
-    assert None not in mappings
 
     # TODO: preserve unmapped version of bool_set for bool meta fields
     return OdmData(

@@ -1,9 +1,10 @@
 import datetime
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Any, Optional, TypedDict
+from typing import Optional, TypedDict, Union, cast
 
 import odm_validation.part_tables as pt
+from odm_validation.part_tables import SomeValue
 from odm_validation.input_data import DataKind
 from odm_validation.rules import get_anyof_constraint, RuleId
 from odm_validation.stdext import (
@@ -33,16 +34,16 @@ class ValidationCtx:
 @dataclass(frozen=True)
 class ErrorCtx:
     column_id: str
-    column_meta: dict
+    column_meta: pt.ColMeta
     row_numbers: list[int]
     rows: list[dict]
     rule_id: RuleId
     table_id: str
-    value: Any
+    value: SomeValue
 
     allowed_values: set[str] = field(default_factory=set)
     cerb_type_name: str = ''
-    constraint: Any = None
+    constraint: Optional[SomeValue] = None
     data_kind: DataKind = DataKind.python
     err_template: str = ''
     is_column: bool = False
@@ -67,10 +68,10 @@ class ValidationReport:
         return len(self.errors) == 0
 
 
-def join_reports(a, b: ValidationReport) -> ValidationReport:
+def join_reports(a: Optional[ValidationReport], b: ValidationReport
+                 ) -> ValidationReport:
     """Joins two reports together into a new report."""
     if a is None:
-        assert b is not None
         return b
     assert a.data_version == b.data_version
     assert a.schema_version == b.schema_version
@@ -101,7 +102,7 @@ def get_row_num(row_index: int, offset: int, data_kind: DataKind) -> int:
     return result
 
 
-def _fmt_value(val: Any) -> Any:
+def _preprocess_value(val: SomeValue) -> Union[int, float, str]:
     # needed to avoid the default `datetime.datetime(year, month, day, ...)`
     if isinstance(val, datetime.date) or isinstance(val, datetime.datetime):
         return str(val)
@@ -111,7 +112,7 @@ def _fmt_value(val: Any) -> Any:
 def _fmt_dataset_values(rows: list[pt.Row]) -> list[pt.Row]:
     """Returns a copy of `rows` with formated values."""
     def _fmt_row(row: pt.Row) -> pt.Row:
-        return {key: _fmt_value(val) for key, val in row.items()}
+        return {key: _preprocess_value(val) for key, val in row.items()}
 
     return list(map(_fmt_row, rows))
 
@@ -121,21 +122,24 @@ def _fmt_allowed_values(values: set[str]) -> str:
     return '/'.join(sorted(values))
 
 
-def _fmt_msg_value(value: Any, relaxed=False) -> Any:
+def _fmt_msg_value(value: Optional[SomeValue], relaxed: bool = False) -> str:
     """Quote `value` as needed, in addition to the formatting done by
-    `_fmt_value`. This is meant to be used as part of another string/message.
+    `_preprocess_value`. This is meant to be used as part of another
+    string/message.
 
     :param relaxed: skips quotation when not needed.
     """
-    fval = _fmt_value(value)
-    if relaxed and isinstance(fval, str):
-        if (fval != '') and (' ' not in fval):
-            return fval
-    return quote(str(fval))
+    if value is None:
+        return ''
+    x = _preprocess_value(value)
+    if relaxed and isinstance(x, str):
+        if (x != '') and (' ' not in x):
+            return x
+    return quote(str(x))
 
 
 def _gen_error_msg(ctx: ErrorCtx, template: Optional[str] = None,
-                   error_kind: Optional[ErrorKind] = None):
+                   error_kind: Optional[ErrorKind] = None) -> str:
     ":param template: overrides ctx.err_template"
     # requirements for error message:
     # - prefix with sortable order: table before column, etc.
@@ -207,7 +211,7 @@ def _gen_error_msg(ctx: ErrorCtx, template: Optional[str] = None,
     )
 
 
-def get_error_kind(report_error) -> ErrorKind:
+def get_error_kind(report_error: dict) -> ErrorKind:
     if 'warningType' in report_error:
         return ErrorKind.WARNING
     else:
@@ -232,7 +236,7 @@ def gen_rule_error(ctx: ErrorCtx,
     """
     rule_ids = _get_meta_rule_ids(ctx.column_meta)
     rule_fields = pt.get_validation_rule_fields(ctx.column_meta, rule_ids)
-    error = {
+    error: dict[str, Union[int, float, str, list, dict]] = {
         (get_error_type_field_name(kind)): ctx.rule_id.name,
         'tableName': ctx.table_id,
         'columnName': ctx.column_id,
@@ -259,7 +263,7 @@ def gen_rule_error(ctx: ErrorCtx,
 
     # value
     if ctx.value is not None:
-        error['invalidValue'] = _fmt_value(ctx.value)
+        error['invalidValue'] = _preprocess_value(ctx.value)
 
     # coercion
     if ctx.rule_id == RuleId._coercion:
@@ -275,13 +279,13 @@ def _generalize_cerb_type_name(name: str) -> str:
         return name
 
 
-def _get_meta_rule_ids(column_meta: Optional[dict]) -> list[str]:
+def _get_meta_rule_ids(column_meta: pt.ColMeta) -> list[str]:
     if not column_meta:
         return []
-    return [m['ruleID'] for m in column_meta]
+    return [cast(str, m['ruleID']) for m in column_meta]
 
 
-def _gen_coercion_msg(ctx: ErrorCtx, kind: ErrorKind):
+def _gen_coercion_msg(ctx: ErrorCtx, kind: ErrorKind) -> str:
     orig_type_name = type_name(type(ctx.value))
     coerced_type_alias = _generalize_cerb_type_name(ctx.cerb_type_name)
     result = 'Value {value} '
@@ -293,6 +297,6 @@ def _gen_coercion_msg(ctx: ErrorCtx, kind: ErrorKind):
     return result
 
 
-def gen_coercion_error(ctx, kind: ErrorKind):
+def gen_coercion_error(ctx: ErrorCtx, kind: ErrorKind) -> dict:
     msg = _gen_coercion_msg(ctx, kind)
     return gen_rule_error(ctx, kind, err_template=msg)

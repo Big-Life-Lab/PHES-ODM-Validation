@@ -8,7 +8,7 @@ from semver import Version
 from typing import Optional
 
 
-def _get_package_version():
+def _get_package_version() -> str:
     try:
         return metadata.version("odm_validation")
     except metadata.PackageNotFoundError:
@@ -33,7 +33,7 @@ BASEVERSION = re.compile(
 )
 
 
-def _coerce(version: str) -> tuple[Version, Optional[str]]:
+def _coerce(version: str) -> tuple[Optional[Version], Optional[str]]:
     """
     Convert an incomplete version string into a semver-compatible Version
     object.
@@ -57,19 +57,20 @@ def _coerce(version: str) -> tuple[Version, Optional[str]]:
         return (None, version)
 
     iter = match.groupdict().items()
-    ver = {
+    ver_dict = {
         key: (0 if value is None else value) for key, value in iter
     }
-    ver = Version(**ver)
+    ver = Version(**ver_dict)  # type: ignore
     rest = match.string[match.end() :]  # noqa:E203
     return ver, rest
 
 
-def parse_version(version: str, id='', label='', default: Version = None,
-                  verbose=True) -> Version:
+def parse_version(version: Optional[str], id: str = '', label: str = '',
+                  default: Optional[Version] = None, verbose: bool = True
+                  ) -> Version:
     origin = '' if id == '' and label == '' else f'for "{id}.{label}"'
 
-    def log_correction(new):
+    def log_correction(new: Version) -> None:
         if verbose:
             logging.info(f'corrected version {version} --> {new} ' + origin)
 
@@ -83,5 +84,7 @@ def parse_version(version: str, id='', label='', default: Version = None,
         return Version.parse(version)
     except ValueError:
         (result, _) = _coerce(version)
+        if not result:
+            raise ValueError(f'unable to coerce invalid version {version}')
         log_correction(result)
         return result

@@ -6,7 +6,7 @@ import tempfile
 from enum import Enum
 from math import ceil
 from os.path import basename, join, splitext
-from typing import Dict, IO, List, Optional
+from typing import IO, Optional
 
 
 import typer
@@ -16,6 +16,7 @@ from xlsx2csv import Xlsx2csv
 import odm_validation.odm as odm
 import odm_validation.part_tables as pt
 import odm_validation.utils as utils
+from odm_validation.reports import ErrorVerbosity
 from odm_validation.schemas import import_schema
 from odm_validation.validation import _validate_data_ext, DataKind
 
@@ -49,7 +50,7 @@ FORMAT_DESC = "Output format. Defaults to txt if unable to autodetect."
 VERB_DESC = "Error message verbosity, between 0 and 2."
 
 
-def info(s="", line=True):
+def info(s: str = "", line: bool = True) -> None:
     file = sys.stderr
     if line:
         print(s, file=file)
@@ -57,7 +58,7 @@ def info(s="", line=True):
         print(s, file=file, end='', flush=True)
 
 
-def import_xlsx(src_file, dst_dir) -> List[str]:
+def import_xlsx(src_file: str, dst_dir: str) -> list[str]:
     "Returns list of imported csv files."
     result = []
     info(f'importing {basename(src_file)}')
@@ -73,16 +74,16 @@ def import_xlsx(src_file, dst_dir) -> List[str]:
     return result
 
 
-def filename_without_ext(path):
+def filename_without_ext(path: str) -> str:
     return splitext(basename(path))[0]
 
 
-def on_progress(action, table_id, offset, total):
+def on_progress(action: str, table_id: str, offset: int, total: int) -> None:
     percent = int(ceil(offset/total * 100))
     info('\r' + f'# {table_id:20} \t{action} {percent}%', line=False)
 
 
-def enum_values(E) -> List[str]:
+def enum_values(E) -> list[str]:  # type: ignore
     return list(map(lambda e: e.value, iter(E)))
 
 
@@ -91,7 +92,7 @@ def detect_data_format(path: str) -> Optional[DataFormat]:
     try:
         return DataFormat[ext.upper()]
     except KeyError:
-        return
+        return None
 
 
 def get_schema_path(version: str) -> str:
@@ -101,7 +102,7 @@ def get_schema_path(version: str) -> str:
     return join(schema_dir, schema_filename)
 
 
-def convert_excel_to_csv(path: str) -> List[str]:
+def convert_excel_to_csv(path: str) -> list[str]:
     """Returns list of csv file paths."""
     tmpdir = tempfile.mkdtemp(suffix='-'+filename_without_ext(path))
     csvdir = join(tmpdir, 'csv-files')
@@ -109,7 +110,7 @@ def convert_excel_to_csv(path: str) -> List[str]:
     return import_xlsx(path, csvdir)
 
 
-def infer_tables(in_paths: list, version: Version) -> Dict[pt.TableId, str]:
+def infer_tables(in_paths: list, version: Version) -> dict[pt.TableId, str]:
     result = {}
     for in_path in in_paths:
         name = filename_without_ext(in_path)
@@ -127,7 +128,7 @@ def infer_tables(in_paths: list, version: Version) -> Dict[pt.TableId, str]:
     return result
 
 
-def load_db_data(tables: Dict[pt.TableId, str]) -> dict:
+def load_db_data(tables: dict[pt.TableId, str]) -> dict:
     info('\nloading data...')
     result = {}
     for table_id, path in tables.items():
@@ -135,7 +136,7 @@ def load_db_data(tables: Dict[pt.TableId, str]) -> dict:
     return result
 
 
-def strip_report(report: ValidationReport):
+def strip_report(report: ValidationReport) -> None:
     """Removes the error debug fields 'validationRuleFields' and
     'row'/'rows'."""
     errorkind_errors = {
@@ -149,7 +150,8 @@ def strip_report(report: ValidationReport):
             e.pop('rows', None)
 
 
-def write_report(output: IO, report, fmt: ReportFormat):
+def write_report(output: IO, report: ValidationReport, fmt: ReportFormat
+                 ) -> None:
     if fmt == ReportFormat.TXT:
         write_txt_report(output, report)
     elif fmt == ReportFormat.JSON:
@@ -165,13 +167,13 @@ app = typer.Typer(pretty_exceptions_show_locals=False)
 
 @app.command()
 def main_cli(
-    data_file: List[str] = typer.Argument(default=..., help=DATA_FILE_DESC),
+    data_file: list[str] = typer.Argument(default=..., help=DATA_FILE_DESC),
     version: str = typer.Option(default=DEF_VER, help=VERSION_DESC),
     out: str = typer.Option(default="", help=OUT_DESC),
     format: Optional[ReportFormat] = typer.Option(default=None,
                                                   help=FORMAT_DESC),
     verbosity: int = typer.Option(default=2, help=VERB_DESC)
-):
+) -> None:
     out_path = out
     out_fmt = format
     in_paths: list = data_file
@@ -198,6 +200,7 @@ def main_cli(
                      f'using {out_fmt}.')
         else:
             out_fmt = ReportFormat.TXT
+    assert out_fmt
 
     schema_path = get_schema_path(version)
     schema = import_schema(schema_path)
@@ -215,11 +218,11 @@ def main_cli(
         tables = infer_tables(in_paths, Version.parse(version))
         db_data = load_db_data(tables)
 
-        def validate(data):
+        def validate(data: dict[pt.TableId, pt.Dataset]) -> ValidationReport:
             report = _validate_data_ext(schema, data, DataKind.spreadsheet,
                                         version, on_progress=on_progress,
                                         with_metadata=False,
-                                        verbosity=verbosity)
+                                        verbosity=ErrorVerbosity(verbosity))
             strip_report(report)
             info()  # newline after progressbar
 
@@ -244,6 +247,7 @@ def main_cli(
             for table_id, table_data in db_data.items():
                 report = validate({table_id: table_data})
                 main_report = join_reports(main_report, report)
+            assert main_report
             write_report(output, main_report, out_fmt)
 
         # XXX: report data doesn't have newline at the end, so we need to add
@@ -263,7 +267,7 @@ def main_cli(
     info('done!')
 
 
-def main():
+def main() -> None:
     # XXX: needed to make odm-validate work
     # runs main_cli
     app()

@@ -1,12 +1,14 @@
 from dataclasses import dataclass
+from functools import partial
 from logging import error, warning
-from typing import Any, Callable, Optional
+from typing import Callable, Iterator, Optional
 # from pprint import pprint
 
 import odm_validation.odm as odm
 import odm_validation.part_tables as pt
 import odm_validation.schemas as schemas
-from odm_validation.part_tables import Meta, MetaEntry, OdmData, Part, PartId
+from odm_validation.part_tables import (
+    Meta, MetaEntry, OdmData, Part, PartId, SomeValue)
 from odm_validation.schemas import init_attr_schema, init_table_schema
 from odm_validation.stdext import (
     deep_update,
@@ -14,18 +16,20 @@ from odm_validation.stdext import (
     try_parse_float,
     try_parse_int,
 )
-from versions import Version
-
-AttrPredicate = Callable[[pt.TableId, Part], bool]
+from odm_validation.versions import Version
 
 
 @dataclass(frozen=True)
 class OdmValueCtx:
     """ODM value context."""
-    value: str
-    datatype: str
+    value: Optional[str]
+    datatype: Optional[str]
     bool_set: set[str]
     null_set: set[str]
+
+
+AttrPredicate = Callable[[pt.TableId, Part], bool]
+GenCerbRulesFunc = Callable[[OdmValueCtx], dict]
 
 
 def get_table_meta(table: Part, version: Version) -> Meta:
@@ -39,8 +43,9 @@ def get_table_meta(table: Part, version: Version) -> Meta:
 
 
 def _get_attr_meta(attr: Part, table_id: PartId, version: Version,
-                   odm_key: str = None, cerb_rules: dict = None):
-    result = []
+                   odm_key: Optional[str] = None,
+                   cerb_rules: Optional[dict] = None) -> list:
+    result: list = []
     keys = [pt.PART_ID, table_id, pt.table_required_field(table_id)]
     if version.major == 1:
         keys += [pt.V1_LOCATION, pt.V1_TABLE, pt.V1_VARIABLE]
@@ -114,7 +119,8 @@ def _get_mapped_attribute_ids(data: OdmData, attr: Part, version: Version
     return _get_mapped_part_ids(data, attr_id, version)
 
 
-def table_items(data: OdmData, version: Version):
+def table_items(data: OdmData, version: Version
+                ) -> Iterator[tuple[PartId, PartId, Part]]:
     """Iterates over all tables.
 
     Yields a tuple of: (original id, mapped id, part).
@@ -126,22 +132,28 @@ def table_items(data: OdmData, version: Version):
 
 
 def attr_items(data: OdmData, table_id0: PartId, table_id1: PartId,
-               version: Version, pred: AttrPredicate = None):
+               version: Version, pred: Optional[AttrPredicate] = None
+               ) -> Iterator[tuple[str, str, dict]]:
     """Iterates over all attributes in a table.
 
     Yields a tuple of: (original id, mapped id, part)."""
     attributes = data.table_data[table_id0].attributes
+
+    # filter attributes using `pred`
     if pred:
-        attributes = pt.partmap(
-            filter(lambda attr: pred(table_id0, attr), attributes))
+        pred2 = partial(pred, table_id0)
+        attributes = pt.PartMap(
+            filter(lambda item: pred2(item[1]), attributes.items()))
+
     for attr_id0, attr in attributes.items():
         for attr_id1 in _get_mapped_attribute_ids(data, attr, version):
             yield (attr_id0, attr_id1, attr)
 
 
-def add_attr_schemas(table_schema, data, table_id0, table_id1, attr,
+def add_attr_schemas(table_schema: dict, data: pt.OdmData, table_id0: str,
+                     table_id1: str, attr: Part,
                      rule_id: str, odm_key: Optional[str],
-                     cerb_rules, version):
+                     cerb_rules: dict, version: Version) -> None:
     for attr_id1 in _get_mapped_attribute_ids(data, attr, version):
         attr_meta = _get_attr_meta(attr, table_id0, version, odm_key,
                                    cerb_rules)
@@ -155,14 +167,14 @@ def init_val_ctx(data: OdmData, attr: Part, odm_key: Optional[str],
     odm_val = attr.get(odm_key)
     if odm_key and odm_val is None:
         # warning(f'missing value for {pt.get_partID(attr)}.{odm_key}')
-        return
+        return None
     odm_datatype = attr.get(pt.DATA_TYPE)
     return OdmValueCtx(value=odm_val, datatype=odm_datatype,
                        bool_set=data.bool_set, null_set=data.null_set)
 
 
 def gen_value_schema(data: pt.OdmData, ver: Version, rule_id: str,
-                     odm_key: str, gen_cerb_rules):
+                     odm_key: str, gen_cerb_rules: GenCerbRulesFunc) -> dict:
     """Provides a simple way to generate a value schema. This should be
     prefered to iterating over part-data directly in the rule-functions.
 
@@ -172,7 +184,7 @@ def gen_value_schema(data: pt.OdmData, ver: Version, rule_id: str,
     :odm_key: The ODM rule attribute
     :gen_cerb_rules: A function returning a dict of Cerberus rules
     """
-    schema = {}
+    schema: dict = {}
     for table_id0, table_id1, table in table_items(data, ver):
         table_meta = get_table_meta(table, ver)
         table_schema = init_table_schema(table_id1, table_meta, {})
@@ -189,26 +201,27 @@ def gen_value_schema(data: pt.OdmData, ver: Version, rule_id: str,
     return schema
 
 
-def is_mandatory(table_id: pt.TableId, attr: Part):
+def is_mandatory(table_id: pt.TableId, attr: Part) -> bool:
     # Checks whether an attribute is mandatory in a table
     req_key = pt.table_required_field(table_id)
     req_val = attr.get(req_key)
     return req_val == pt.MANDATORY
 
 
-def is_primary_key(table_id: pt.TableId, attr: Part):
+def is_primary_key(table_id: pt.TableId, attr: Part) -> bool:
     return attr.get(table_id) == pt.ColumnKind.PK.value
 
 
 def gen_conditional_schema(data: pt.OdmData, ver: Version, rule_id: str,
-                           gen_cerb_rules, pred: AttrPredicate):
+                           gen_cerb_rules: GenCerbRulesFunc,
+                           pred: AttrPredicate) -> dict:
     """Helper function to generate a cerberus schema that implements an ODM
     validation rule. Uses `pred` to decide whether an entry should be created
     for an attribute in a table.
     """
-    schema = {}
+    schema: dict = {}
     odm_key = None
-    table_attr = {}
+    table_attr: dict = {}
     for table_id0, table_id1, table in table_items(data, ver):
         table_meta = get_table_meta(table, ver)
         table_schema = init_table_schema(table_id1, table_meta, {})
@@ -231,21 +244,22 @@ def gen_conditional_schema(data: pt.OdmData, ver: Version, rule_id: str,
     return schema
 
 
-def _odm_to_cerb_datatype(odm_datatype: str) -> Optional[str]:
+def _odm_to_cerb_datatype(odm_datatype: Optional[str]) -> Optional[str]:
     """converts odm datatype to cerb rule type"""
     t = odm_datatype
-    assert t
     if t in ['boolean', 'categorical', 'varchar']:
         return 'string'
-    if t in ['datetime', 'integer', 'float']:
+    elif t in ['datetime', 'integer', 'float']:
         return t
-    warning(f'conversion of odm datatype "{t}" is not implemented')
+    else:
+        warning(f'conversion of odm datatype "{t}" is not implemented')
+        return None
 
 
 def gen_cerb_rules_for_type(val_ctx: OdmValueCtx) -> dict:
     odm_type = val_ctx.datatype
     cerb_type = _odm_to_cerb_datatype(odm_type)
-    result = {}
+    result: dict = {}
     if cerb_type:
         result['type'] = cerb_type
         if cerb_type != 'string':
@@ -255,12 +269,12 @@ def gen_cerb_rules_for_type(val_ctx: OdmValueCtx) -> dict:
     return result
 
 
-def parse_odm_val(val_ctx: OdmValueCtx) -> Optional[Any]:
+def parse_odm_val(val_ctx: OdmValueCtx) -> Optional[SomeValue]:
     """Parses the ODM value from `val_ctx`."""
     val = val_ctx.value
     kind = val_ctx.datatype
     if val is None:
-        return
+        return None
     if kind == 'integer':
         return try_parse_int(val)
     elif kind == 'float':
@@ -271,3 +285,4 @@ def parse_odm_val(val_ctx: OdmValueCtx) -> Optional[Any]:
         return str(val)
     else:
         warning(f'parsing of odm datatype "{kind}" is not implemented')
+        return None

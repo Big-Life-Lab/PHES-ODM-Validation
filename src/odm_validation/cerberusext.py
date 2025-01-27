@@ -2,7 +2,7 @@ import logging
 from collections import defaultdict
 from dataclasses import dataclass
 from datetime import datetime
-from typing import Any
+from typing import Optional, Union, cast
 from copy import deepcopy
 from pprint import pformat
 
@@ -13,9 +13,9 @@ import odm_validation.part_tables as pt
 import odm_validation.schemas as schemas
 import odm_validation.reports as reports
 from odm_validation.input_data import DataKind
+from odm_validation.part_tables import Dataset, Row, SomeValue
 from odm_validation.reports import get_row_num
 from odm_validation.rules import RuleId
-from odm_validation.part_tables import Dataset, Row
 from odm_validation.schemas import CerberusSchema
 from odm_validation.stdext import (
     parse_datetime,
@@ -27,14 +27,15 @@ from odm_validation.stdext import (
 EMPTY_TRIMMED_RULE = 0x101
 
 
-def _convert_value(val: Any, type_class) -> Any:
+def _convert_value(val: SomeValue, type_class: type) -> SomeValue:
     "Convert `val` to `type_class`."
     # `parse_int` is explicitly called because floats without decimals
     # (ex: 1.0) also are valid integers.
     if isinstance(val, type_class):
         return val
     elif type_class is int:
-        return parse_int(val)
+        assert val is not datetime
+        return parse_int(cast(Union[int, float, str], val))
     elif type_class is datetime and isinstance(val, str):
         return parse_datetime(val)
     else:
@@ -65,11 +66,11 @@ class ContextualCoercer(Validator):
     # - Retrieving the coerced document from Cerberus' validation step didn't
     #   seem to work either.
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs) -> None:  # type: ignore
         super().__init__(*args, **kwargs)
         self.allow_unknown = True
 
-    def _extract_coercion_schema(schema):
+    def _extract_coercion_schema(schema: CerberusSchema) -> dict:
         """Strips `schema` of all rules except 'meta' and 'coerce', and
         replaces 'coerce' with 'check_with'."""
         result = deepcopy(schema)
@@ -85,8 +86,10 @@ class ContextualCoercer(Validator):
                     del schema[field]
         return result
 
-    def coerce(self, document: Dataset, schema: CerberusSchema,
-               offset: int, data_kind=DataKind.python) -> Dataset:
+    def coerce(self, document: dict[pt.TableId, Dataset],
+               schema: CerberusSchema, offset: int,
+               data_kind: DataKind = DataKind.python
+               ) -> dict[pt.TableId, Dataset]:
         # Coercion is performed by validating using a coercion-only schema.
         # Native cerberus normalization can't be used because it doesn't
         # provide context. Coercions are kept track of using `_config`.
@@ -104,12 +107,14 @@ class ContextualCoercer(Validator):
             logging.error(__name__ + '.coerce:\n' + pformat(self.errors))
         return self._config["coerced_document"]
 
-    def _log_coercion(self, kind, ctx):
+    def _log_coercion(self, kind: reports.ErrorKind, ctx: reports.ErrorCtx
+                      ) -> None:
         # set `errors` and `warnings`
         entry = reports.gen_coercion_error(ctx, kind)
         self._config[kind.value + 's'].append(entry)
 
-    def _set_value(self, field, value, type_class):
+    def _set_value(self, field: str, value: Optional[SomeValue],
+                   type_class: type) -> None:
         # ignore empty values, they can't be coerced anyway
         if not value:
             return
@@ -141,13 +146,16 @@ class ContextualCoercer(Validator):
         except (ArithmeticError, ValueError):
             self._log_coercion(reports.ErrorKind.ERROR, ctx)
 
-    def _check_with_datetime(self, field, value):
+    def _check_with_datetime(self, field: str, value: Optional[SomeValue]
+                             ) -> None:
         self._set_value(field, value, datetime)
 
-    def _check_with_float(self, field, value):
+    def _check_with_float(self, field: str, value: Optional[SomeValue]
+                          ) -> None:
         self._set_value(field, value, float)
 
-    def _check_with_integer(self, field, value):
+    def _check_with_integer(self, field: str, value: Optional[SomeValue]
+                            ) -> None:
         self._set_value(field, value, int)
 
 
@@ -165,20 +173,19 @@ class AggregatedError:
     row_numbers: list[int]
     rows: list[dict]
     column_meta: list[dict]
-    value: Any
+    value: SomeValue
 
 
 class UniqueRuleState:
     """State for the 'unique' rule."""
-    def __init__(self):
+    def __init__(self) -> None:
         self.table_keys: dict[pt.TableId, set[PrimaryKey]] = defaultdict(set)
-        self.tablekey_rows: dict[TableKey, (RowNum, Row)] = {}
-        self.tablekey_errors: dict[TableKey, AggregatedError] = \
-            defaultdict(AggregatedError)
+        self.tablekey_rows: dict[TableKey, tuple[RowNum, Row]] = {}
+        self.tablekey_errors: dict[TableKey, AggregatedError] = {}
 
 
 class ErrorState:
-    def __init__(self):
+    def __init__(self) -> None:
         self.offset = 0
         self.data_kind = DataKind.python
         self.aggregated_errors: list[AggregatedError] = []
@@ -188,7 +195,7 @@ class OdmValidator(Validator):
     # This is the main class used for validation.
 
     @staticmethod
-    def new():
+    def new():  # type: ignore
         """Constructs this class with initialized state."""
         # `__init__` can't be used to init state because Cerberus creates
         # multiple instances of the validator, so the same instance/state won't
@@ -199,7 +206,7 @@ class OdmValidator(Validator):
             error_state=ErrorState(),
         )
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs) -> None:  # type: ignore
         # Unknown fields must be allowed because we're only generating a schema
         # for the requirements, not the optional data.
         super().__init__(*args, **kwargs)
@@ -207,17 +214,19 @@ class OdmValidator(Validator):
         self.unique_state = self._config['unique_state']
         self.error_state = self._config['error_state']
 
-    def _validate_emptyTrimmed(self, constraint, field, raw_value):
+    def _validate_emptyTrimmed(self, constraint: bool, field: str,
+                               raw_value: Optional[SomeValue]) -> None:
         """{'type': 'boolean'}"""
         expect_empty = constraint
         is_str = isinstance(raw_value, str)
-        value = raw_value.strip() if is_str else raw_value
+        value = str(raw_value).strip() if is_str else raw_value
         is_empty = not value
         if is_empty != expect_empty:
             err = ErrorDefinition(EMPTY_TRIMMED_RULE, 'emptyTrimmed')
             self._error(field, err)
 
-    def _validate_unique(self, constraint, field, value):
+    def _validate_unique(self, constraint: bool, field: str,
+                         value: Optional[SomeValue]) -> None:
         """{'type': 'boolean'}"""
         # the primary key (pk) is a compound key of partID and lastUpdated
         if not constraint:
@@ -255,7 +264,7 @@ class OdmValidator(Validator):
             primary_keys.add(pk)
 
     def validate(self, offset: int, data_kind: DataKind,
-                 *args, **kwargs) -> bool:
+                 *args: dict, **kwargs: dict) -> bool:
         self.error_state.offset = offset
         self.error_state.data_kind = data_kind
         self.error_state.aggregated_errors.clear()
