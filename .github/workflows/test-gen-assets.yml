@@ -1,0 +1,25 @@
+name: Test generated assets
+
+on: [pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    continue-on-error: false
+    name: test-gen-assets
+    steps:
+    - uses: actions/checkout@v3
+    - uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
+        cache: 'pip'
+    - run: pip install -r requirements.txt
+    - run: pip install -e .
+    - run: python src/odm_validation/tools/generate_assets.py
+    - name: detect changed (asset) files
+      run: |
+        if [[ -n "$(git status --porcelain)" ]]; then
+          echo "Generated assets differ. Please re-generate and commit assets."
+          git status
+          exit 1
+        fi
