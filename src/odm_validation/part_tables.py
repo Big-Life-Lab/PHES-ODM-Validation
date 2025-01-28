@@ -1,5 +1,5 @@
 """Part-table definitions."""
-
+import sys
 from dataclasses import dataclass
 from datetime import datetime
 from enum import Enum
@@ -82,6 +82,8 @@ class OdmData:
     mappings: dict[PartId, list[PartId]]  # v1 mapping, by part id
 
 
+UNITTEST = ('unittest' in sys.modules)
+
 # The following constants are not enums because they would be a pain to use.
 # even with a `__str__` overload to avoid writing `.value` all the time,
 # we would still have to explicitly call the `str` function.
@@ -116,7 +118,7 @@ TABLE = 'tables'
 ACTIVE = 'active'
 BOOLEAN = 'boolean'
 BOOLEAN_SET = 'booleanSet'
-BOOL_PART_IDS = ['false', 'true']
+BOOL_PART_IDS = ['FALSE', 'TRUE']
 DATETIME = 'datetime'
 DEPRECIATED = 'depreciated'  # aka deprecated
 MANDATORY = 'mandatory'
@@ -388,16 +390,51 @@ def _table_has_attr(table: Part, attr: Part, version: Version) -> bool:
         return get_partID(table) in attr
 
 
-def validate_and_fix(all_parts: PartMap, version: Version) -> None:
-    # function parts/sets validation and hotfixes
+def fix_parts(all_parts: PartMap, version: Version) -> None:
+    '''fix inconsistencies in the parts'''
+    # NOTE: when running tests, parts may not exist, and test data may not be
+    # for the specified version
 
-    # FIXME: true/false parts are missing version1Category
-    for part_id in BOOL_PART_IDS:
-        part = all_parts.get(part_id)
-        if part and should_have_mapping(part, version, odm.VERSION):
-            if V1_CATEGORY not in part:
-                part[V1_CATEGORY] = part_id.capitalize()
-                assert has_mapping(part, version)
+    if (version.major == 2 and version.minor == 0) or UNITTEST:
+        # XXX: normalize bool part ids to upper case, since they're lower-case
+        # in ODM v2.0
+        for upper_id in BOOL_PART_IDS:
+            lower_id = upper_id.lower()
+            p = all_parts.pop(lower_id, None)
+            if p:
+                p[PART_ID] = upper_id
+                all_parts[upper_id] = p
+
+    if version.major == 2 and version.minor == 0:
+        # boolean parts are missing version1Category
+        # NOTE: v1 schemas are only generated from ODM v2.0
+        for part_id in BOOL_PART_IDS:
+            part = all_parts.get(part_id)
+            if part and should_have_mapping(part, version, odm.VERSION):
+                if V1_CATEGORY not in part:
+                    part[V1_CATEGORY] = part_id.capitalize()
+                    assert has_mapping(part, version)
+
+
+def fix_sets(sets: Dataset, version: Version) -> None:
+    '''fix inconsistencies in the sets'''
+    # XXX: when running tests, parts may not exist
+
+    if version.major == 2:
+        if version.minor in [0, 2]:
+            # XXX: normalize bool sets' part id to upper case, since they're
+            # lower-case in ODM v2.0 and v2.2.
+            for s in sets:
+                if s[SET_ID] == BOOLEAN_SET:
+                    s[PART_ID] = s[PART_ID].upper()
+
+        if version.minor == 2 and version.patch == 3:
+            # TODO: remove this if ODM v2.2 gets patched again
+            # 'setCompID' has the wrong version (2.3.0) in ODM v2.2.3
+            for s in sets:
+                if s.get('setCompID') == 'siteTypeSet_triturator':
+                    s['firstReleased'] = '2.2.3'
+                    s['lastUpdated'] = '2.2.3'
 
 
 def gen_odmdata(parts: Dataset, sets: Dataset, version: Version) -> OdmData:
@@ -407,11 +444,12 @@ def gen_odmdata(parts: Dataset, sets: Dataset, version: Version) -> OdmData:
     # process parts
     parts = strip(parts)
     all_parts = gen_partmap(parts)
-    validate_and_fix(all_parts, version)
+    fix_parts(all_parts, version)
     parts = filter_compatible(parts, version)
     parts = filter_backportable(parts, version)
 
     # process sets
+    fix_sets(sets, version)
     sets = filter_compatible(sets, version)
 
     table_pred = is_table_v1 if version.major < 2 else is_table_v2
@@ -486,8 +524,11 @@ def gen_odmdata(parts: Dataset, sets: Dataset, version: Version) -> OdmData:
     mappings = {get_partID(p): _get_mappings(p, version) for p in parts}
 
     # TODO: preserve unmapped version of bool_set for bool meta fields
+    #
+    # NOTE: bool values must be upper case, and the bool part ids are already
+    # upper case so we can use them directly
     return OdmData(
-        bool_set=set(map(str.upper, BOOL_PART_IDS)),
+        bool_set=set(BOOL_PART_IDS),
         null_set=null_set,
         table_data=table_data,
         catset_data=catset_data,

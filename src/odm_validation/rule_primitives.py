@@ -66,8 +66,9 @@ def _get_attr_meta(attr: Part, table_id: PartId, version: Version,
             if allowed_ids:
                 set_id = attr['mmaSet']
 
-                # XXX: bool part-ids are in lower case
-                if set_id == pt.BOOLEAN_SET:
+                # XXX: booleanSet's part-ids are lower case in ODM v2.2 and
+                # below
+                if set_id == pt.BOOLEAN_SET and version.minor <= 2:
                     allowed_ids = list(map(str.lower, allowed_ids))
 
                 for part_id in allowed_ids:
