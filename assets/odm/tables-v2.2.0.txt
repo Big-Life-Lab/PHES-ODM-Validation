@@ -1,0 +1,15 @@
+addresses
+contacts
+datasets
+instruments
+organizations
+polygons
+protocolRelationships
+protocols
+protocolSteps
+sites
+measures
+measureSets
+qualityReports
+sampleRelationships
+samples

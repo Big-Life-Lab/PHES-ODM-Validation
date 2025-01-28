@@ -1,0 +1,6058 @@
+schema:
+  addresses:
+    schema:
+      meta:
+      - partID: addresses
+        partType: tables
+      schema:
+        addL1:
+          emptyTrimmed: false
+          forbidden:
+          - NA
+          - nan
+          - nr
+          - 'null'
+          - undisc
+          maxlength: 30
+          meta:
+          - meta:
+            - addresses: header
+              addressesRequired: mandatory
+              maxLength: '30'
+              partID: addL1
+            ruleID: greater_than_max_length
+          - meta:
+            - addresses: header
+              addressesRequired: mandatory
+              dataType: varchar
+              partID: addL1
+            ruleID: invalid_type
+          - meta:
+            - addresses: header
+              addressesRequired: mandatory
+              partID: addL1
+            ruleID: missing_mandatory_column
+          - meta:
+            - addresses: header
+              addressesRequired: mandatory
+              partID: addL1
+            - partID: NA
+              partType: missingness
+            - partID: nan
+              partType: missingness
+            - partID: nr
+              partType: missingness
+            - partID: 'null'
+              partType: missingness
+            - partID: undisc
+              partType: missingness
+            ruleID: missing_values_found
+          required: true
+          type: string
+        addL2:
+          maxlength: 30
+          meta:
+          - meta:
+            - addresses: header
+              addressesRequired: optional
+              maxLength: '30'
+              partID: addL2
+            ruleID: greater_than_max_length
+          - meta:
+            - addresses: header
+              addressesRequired: optional
+              dataType: varchar
+              partID: addL2
+            ruleID: invalid_type
+          type: string
+        addressID:
+          emptyTrimmed: false
+          forbidden:
+          - NA
+          - nan
+          - nr
+          - 'null'
+          - undisc
+          maxlength: 30
+          meta:
+          - meta:
+            - addresses: pK
+              addressesRequired: mandatory
+              partID: addressID
+            ruleID: duplicate_entries_found
+          - meta:
+            - addresses: pK
+              addressesRequired: mandatory
+              maxLength: '30'
+              partID: addressID
+            ruleID: greater_than_max_length
+          - meta:
+            - addresses: pK
+              addressesRequired: mandatory
+              dataType: varchar
+              partID: addressID
+            ruleID: invalid_type
+          - meta:
+            - addresses: pK
+              addressesRequired: mandatory
+              partID: addressID
+            ruleID: missing_mandatory_column
+          - meta:
+            - addresses: pK
+              addressesRequired: mandatory
+              partID: addressID
+            - partID: NA
+              partType: missingness
+            - partID: nan
+              partType: missingness
+            - partID: nr
+              partType: missingness
+            - partID: 'null'
+              partType: missingness
+            - partID: undisc
+              partType: missingness
+            ruleID: missing_values_found
+          required: true
+          type: string
+          unique: true
+        city:
+          emptyTrimmed: false
+          forbidden:
+          - NA
+          - nan
+          - nr
+          - 'null'
+          - undisc
+          maxlength: 30
+          meta:
+          - meta:
+            - addresses: header
+              addressesRequired: mandatory
+              maxLength: '30'
+              partID: city
+            ruleID: greater_than_max_length
+          - meta:
+            - addresses: header
+              addressesRequired: mandatory
+              dataType: varchar
+              partID: city
+            ruleID: invalid_type
+          - meta:
+            - addresses: header
+              addressesRequired: mandatory
+              partID: city
+            ruleID: missing_mandatory_column
+          - meta:
+            - addresses: header
+              addressesRequired: mandatory
+              partID: city
+            - partID: NA
+              partType: missingness
+            - partID: nan
+              partType: missingness
+            - partID: nr
+              partType: missingness
+            - partID: 'null'
+              partType: missingness
+            - partID: undisc
+              partType: missingness
+            ruleID: missing_values_found
+          required: true
+          type: string
+        country:
+          emptyTrimmed: false
+          forbidden:
+          - NA
+          - nan
+          - nr
+          - 'null'
+          - undisc
+          maxlength: 30
+          meta:
+          - meta:
+            - addresses: fK
+              addressesRequired: mandatory
+              maxLength: '30'
+              partID: country
+            ruleID: greater_than_max_length
+          - meta:
+            - addresses: fK
+              addressesRequired: mandatory
+              dataType: varchar
+              partID: country
+            ruleID: invalid_type
+          - meta:
+            - addresses: fK
+              addressesRequired: mandatory
+              partID: country
+            ruleID: missing_mandatory_column
+          - meta:
+            - addresses: fK
+              addressesRequired: mandatory
+              partID: country
+            - partID: NA
+              partType: missingness
+            - partID: nan
+              partType: missingness
+            - partID: nr
+              partType: missingness
+            - partID: 'null'
+              partType: missingness
+            - partID: undisc
+              partType: missingness
+            ruleID: missing_values_found
+          required: true
+          type: string
+        datasetID:
+          emptyTrimmed: false
+          forbidden:
+          - NA
+          - nan
+          - nr
+          - 'null'
+          - undisc
+          maxlength: 30
+          meta:
+          - meta:
+            - addresses: fK
+              addressesRequired: mandatory
+              maxLength: '30'
+              partID: datasetID
+            ruleID: greater_than_max_length
+          - meta:
+            - addresses: fK
+              addressesRequired: mandatory
+              dataType: varchar
+              partID: datasetID
+            ruleID: invalid_type
+          - meta:
+            - addresses: fK
+              addressesRequired: mandatory
+              partID: datasetID
+            ruleID: missing_mandatory_column
+          - meta:
+            - addresses: fK
+              addressesRequired: mandatory
+              partID: datasetID
+            - partID: NA
+              partType: missingness
+            - partID: nan
+              partType: missingness
+            - partID: nr
+              partType: missingness
+            - partID: 'null'
+              partType: missingness
+            - partID: undisc
+              partType: missingness
+            ruleID: missing_values_found
+          required: true
+          type: string
+        isoCode:
+          anyof:
+          - empty: true
+            minlength: 2
+          maxlength: 2
+          meta:
+          - meta:
+            - addresses: header
+              addressesRequired: optional
+              maxLength: '2'
+              partID: isoCode
+            ruleID: greater_than_max_length
+          - meta:
+            - addresses: header
+              addressesRequired: optional
+              dataType: varchar
+              partID: isoCode
+            ruleID: invalid_type
+          - meta:
+            - addresses: header
+              addressesRequired: optional
+              minLength: '2'
+              partID: isoCode
+            ruleID: less_than_min_length
+          type: string
+        isoZone:
+          anyof:
+          - empty: true
+            minlength: 4
+          maxlength: 6
+          meta:
+          - meta:
+            - addresses: header
+              addressesRequired: optional
+              maxLength: '6'
+              partID: isoZone
+            ruleID: greater_than_max_length
+          - meta:
+            - addresses: header
+              addressesRequired: optional
+              dataType: varchar
+              partID: isoZone
+            ruleID: invalid_type
+          - meta:
+            - addresses: header
+              addressesRequired: optional
+              minLength: '4'
+              partID: isoZone
+            ruleID: less_than_min_length
+          type: string
+        lastEdited:
+          coerce: datetime
+          maxlength: 30
+          meta:
+          - meta:
+            - addresses: header
+              addressesRequired: optional
+              maxLength: '30'
+              partID: lastEdited
+            ruleID: greater_than_max_length
+          - meta:
+            - addresses: header
+              addressesRequired: optional
+              dataType: datetime
+              partID: lastEdited
+            ruleID: invalid_type
+          type: datetime
+        notes:
+          maxlength: 200
+          meta:
+          - meta:
+            - addresses: header
+              addressesRequired: optional
+              maxLength: '200'
+              partID: notes
+            ruleID: greater_than_max_length
+          - meta:
+            - addresses: header
+              addressesRequired: optional
+              dataType: varchar
+              partID: notes
+            ruleID: invalid_type
+          type: string
+        pCode:
+          maxlength: 30
+          meta:
+          - meta:
+            - addresses: header
+              addressesRequired: optional
+              maxLength: '30'
+              partID: pCode
+            ruleID: greater_than_max_length
+          - meta:
+            - addresses: header
+              addressesRequired: optional
+              dataType: varchar
+              partID: pCode
+            ruleID: invalid_type
+          type: string
+        stateProvReg:
+          emptyTrimmed: false
+          forbidden:
+          - NA
+          - nan
+          - nr
+          - 'null'
+          - undisc
+          maxlength: 30
+          meta:
+          - meta:
+            - addresses: header
+              addressesRequired: mandatory
+              maxLength: '30'
+              partID: stateProvReg
+            ruleID: greater_than_max_length
+          - meta:
+            - addresses: header
+              addressesRequired: mandatory
+              dataType: varchar
+              partID: stateProvReg
+            ruleID: invalid_type
+          - meta:
+            - addresses: header
+              addressesRequired: mandatory
+              partID: stateProvReg
+            ruleID: missing_mandatory_column
+          - meta:
+            - addresses: header
+              addressesRequired: mandatory
+              partID: stateProvReg
+            - partID: NA
+              partType: missingness
+            - partID: nan
+              partType: missingness
+            - partID: nr
+              partType: missingness
+            - partID: 'null'
+              partType: missingness
+            - partID: undisc
+              partType: missingness
+            ruleID: missing_values_found
+          required: true
+          type: string
+      type: dict
+    type: list
+  contacts:
+    schema:
+      meta:
+      - partID: contacts
+        partType: tables
+      schema:
+        contactID:
+          emptyTrimmed: false
+          forbidden:
+          - NA
+          - nan
+          - nr
+          - 'null'
+          - undisc
+          maxlength: 30
+          meta:
+          - meta:
+            - contacts: pK
+              contactsRequired: mandatory
+              partID: contactID
+            ruleID: duplicate_entries_found
+          - meta:
+            - contacts: pK
+              contactsRequired: mandatory
+              maxLength: '30'
+              partID: contactID
+            ruleID: greater_than_max_length
+          - meta:
+            - contacts: pK
+              contactsRequired: mandatory
+              dataType: varchar
+              partID: contactID
+            ruleID: invalid_type
+          - meta:
+            - contacts: pK
+              contactsRequired: mandatory
+              partID: contactID
+            ruleID: missing_mandatory_column
+          - meta:
+            - contacts: pK
+              contactsRequired: mandatory
+              partID: contactID
+            - partID: NA
+              partType: missingness
+            - partID: nan
+              partType: missingness
+            - partID: nr
+              partType: missingness
+            - partID: 'null'
+              partType: missingness
+            - partID: undisc
+              partType: missingness
+            ruleID: missing_values_found
+          required: true
+          type: string
+          unique: true
+        datasetID:
+          maxlength: 30
+          meta:
+          - meta:
+            - contacts: fK
+              contactsRequired: optional
+              maxLength: '30'
+              partID: datasetID
+            ruleID: greater_than_max_length
+          - meta:
+            - contacts: fK
+              contactsRequired: optional
+              dataType: varchar
+              partID: datasetID
+            ruleID: invalid_type
+          type: string
+        email:
+          emptyTrimmed: false
+          forbidden:
+          - NA
+          - nan
+          - nr
+          - 'null'
+          - undisc
+          maxlength: 100
+          meta:
+          - meta:
+            - contacts: header
+              contactsRequired: mandatory
+              maxLength: '100'
+              partID: email
+            ruleID: greater_than_max_length
+          - meta:
+            - contacts: header
+              contactsRequired: mandatory
+              dataType: varchar
+              partID: email
+            ruleID: invalid_type
+          - meta:
+            - contacts: header
+              contactsRequired: mandatory
+              partID: email
+            ruleID: missing_mandatory_column
+          - meta:
+            - contacts: header
+              contactsRequired: mandatory
+              partID: email
+            - partID: NA
+              partType: missingness
+            - partID: nan
+              partType: missingness
+            - partID: nr
+              partType: missingness
+            - partID: 'null'
+              partType: missingness
+            - partID: undisc
+              partType: missingness
+            ruleID: missing_values_found
+          required: true
+          type: string
+        firstName:
+          maxlength: 30
+          meta:
+          - meta:
+            - contacts: header
+              contactsRequired: optional
+              maxLength: '30'
+              partID: firstName
+            ruleID: greater_than_max_length
+          - meta:
+            - contacts: header
+              contactsRequired: optional
+              dataType: varchar
+              partID: firstName
+            ruleID: invalid_type
+          type: string
+        lastEdited:
+          coerce: datetime
+          maxlength: 30
+          meta:
+          - meta:
+            - contacts: header
+              contactsRequired: optional
+              maxLength: '30'
+              partID: lastEdited
+            ruleID: greater_than_max_length
+          - meta:
+            - contacts: header
+              contactsRequired: optional
+              dataType: datetime
+              partID: lastEdited
+            ruleID: invalid_type
+          type: datetime
+        lastName:
+          maxlength: 30
+          meta:
+          - meta:
+            - contacts: header
+              contactsRequired: optional
+              maxLength: '30'
+              partID: lastName
+            ruleID: greater_than_max_length
+          - meta:
+            - contacts: header
+              contactsRequired: optional
+              dataType: varchar
+              partID: lastName
+            ruleID: invalid_type
+          type: string
+        notes:
+          maxlength: 200
+          meta:
+          - meta:
+            - contacts: header
+              contactsRequired: optional
+              maxLength: '200'
+              partID: notes
+            ruleID: greater_than_max_length
+          - meta:
+            - contacts: header
+              contactsRequired: optional
+              dataType: varchar
+              partID: notes
+            ruleID: invalid_type
+          type: string
+        organizationID:
+          emptyTrimmed: false
+          forbidden:
+          - NA
+          - nan
+          - nr
+          - 'null'
+          - undisc
+          maxlength: 100
+          meta:
+          - meta:
+            - contacts: fK
+              contactsRequired: mandatory
+              maxLength: '100'
+              partID: organizationID
+            ruleID: greater_than_max_length
+          - meta:
+            - contacts: fK
+              contactsRequired: mandatory
+              dataType: varchar
+              partID: organizationID
+            ruleID: invalid_type
+          - meta:
+            - contacts: fK
+              contactsRequired: mandatory
+              partID: organizationID
+            ruleID: missing_mandatory_column
+          - meta:
+            - contacts: fK
+              contactsRequired: mandatory
+              partID: organizationID
+            - partID: NA
+              partType: missingness
+            - partID: nan
+              partType: missingness
+            - partID: nr
+              partType: missingness
+            - partID: 'null'
+              partType: missingness
+            - partID: undisc
+              partType: missingness
+            ruleID: missing_values_found
+          required: true
+          type: string
+        phone:
+          anyof:
+          - empty: true
+            minlength: 10
+          maxlength: 12
+          meta:
+          - meta:
+            - contacts: header
+              contactsRequired: optional
+              maxLength: '12'
+              partID: phone
+            ruleID: greater_than_max_length
+          - meta:
+            - contacts: header
+              contactsRequired: optional
+              dataType: varchar
+              partID: phone
+            ruleID: invalid_type
+          - meta:
+            - contacts: header
+              contactsRequired: optional
+              minLength: '10'
+              partID: phone
+            ruleID: less_than_min_length
+          type: string
+        role:
+          maxlength: 30
+          meta:
+          - meta:
+            - contacts: header
+              contactsRequired: optional
+              maxLength: '30'
+              partID: role
+            ruleID: greater_than_max_length
+          - meta:
+            - contacts: header
+              contactsRequired: optional
+              dataType: varchar
+              partID: role
+            ruleID: invalid_type
+          type: string
+      type: dict
+    type: list
+  datasets:
+    schema:
+      meta:
+      - partID: datasets
+        partType: tables
+      schema:
+        custodyCont:
+          maxlength: 30
+          meta:
+          - meta:
+            - datasets: fK
+              datasetsRequired: recommended
+              maxLength: '30'
+              partID: custodyCont
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              datasets: fK
+              datasetsRequired: recommended
+              partID: custodyCont
+            ruleID: invalid_type
+          type: string
+        custodyID:
+          emptyTrimmed: false
+          forbidden:
+          - NA
+          - nan
+          - nr
+          - 'null'
+          - undisc
+          maxlength: 30
+          meta:
+          - meta:
+            - datasets: fK
+              datasetsRequired: mandatory
+              maxLength: '30'
+              partID: custodyID
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              datasets: fK
+              datasetsRequired: mandatory
+              partID: custodyID
+            ruleID: invalid_type
+          - meta:
+            - datasets: fK
+              datasetsRequired: mandatory
+              partID: custodyID
+            ruleID: missing_mandatory_column
+          - meta:
+            - datasets: fK
+              datasetsRequired: mandatory
+              partID: custodyID
+            - partID: NA
+              partType: missingness
+            - partID: nan
+              partType: missingness
+            - partID: nr
+              partType: missingness
+            - partID: 'null'
+              partType: missingness
+            - partID: undisc
+              partType: missingness
+            ruleID: missing_values_found
+          required: true
+          type: string
+        datasetDate:
+          coerce: datetime
+          maxlength: 30
+          meta:
+          - meta:
+            - datasets: header
+              datasetsRequired: recommended
+              maxLength: '30'
+              partID: datasetDate
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: datetime
+              datasets: header
+              datasetsRequired: recommended
+              partID: datasetDate
+            ruleID: invalid_type
+          type: datetime
+        datasetID:
+          emptyTrimmed: false
+          forbidden:
+          - NA
+          - nan
+          - nr
+          - 'null'
+          - undisc
+          maxlength: 30
+          meta:
+          - meta:
+            - datasets: pK
+              datasetsRequired: mandatory
+              partID: datasetID
+            ruleID: duplicate_entries_found
+          - meta:
+            - datasets: pK
+              datasetsRequired: mandatory
+              maxLength: '30'
+              partID: datasetID
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              datasets: pK
+              datasetsRequired: mandatory
+              partID: datasetID
+            ruleID: invalid_type
+          - meta:
+            - datasets: pK
+              datasetsRequired: mandatory
+              partID: datasetID
+            ruleID: missing_mandatory_column
+          - meta:
+            - datasets: pK
+              datasetsRequired: mandatory
+              partID: datasetID
+            - partID: NA
+              partType: missingness
+            - partID: nan
+              partType: missingness
+            - partID: nr
+              partType: missingness
+            - partID: 'null'
+              partType: missingness
+            - partID: undisc
+              partType: missingness
+            ruleID: missing_values_found
+          required: true
+          type: string
+          unique: true
+        descr:
+          maxlength: 200
+          meta:
+          - meta:
+            - datasets: header
+              datasetsRequired: optional
+              maxLength: '200'
+              partID: descr
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              datasets: header
+              datasetsRequired: optional
+              partID: descr
+            ruleID: invalid_type
+          type: string
+        funderCont:
+          maxlength: 30
+          meta:
+          - meta:
+            - datasets: fK
+              datasetsRequired: recommended
+              maxLength: '30'
+              partID: funderCont
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              datasets: fK
+              datasetsRequired: recommended
+              partID: funderCont
+            ruleID: invalid_type
+          type: string
+        funderID:
+          maxlength: 30
+          meta:
+          - meta:
+            - datasets: fK
+              datasetsRequired: optional
+              maxLength: '30'
+              partID: funderID
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              datasets: fK
+              datasetsRequired: optional
+              partID: funderID
+            ruleID: invalid_type
+          type: string
+        lang:
+          maxlength: 30
+          meta:
+          - meta:
+            - datasets: fK
+              datasetsRequired: optional
+              maxLength: '30'
+              partID: lang
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              datasets: fK
+              datasetsRequired: optional
+              partID: lang
+            ruleID: invalid_type
+          type: string
+        lastEdited:
+          coerce: datetime
+          maxlength: 30
+          meta:
+          - meta:
+            - datasets: header
+              datasetsRequired: optional
+              maxLength: '30'
+              partID: lastEdited
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: datetime
+              datasets: header
+              datasetsRequired: optional
+              partID: lastEdited
+            ruleID: invalid_type
+          type: datetime
+        license:
+          anyof:
+          - allowed:
+            - afl30
+            - agpl30
+            - apache20
+            - artistic20
+            - bsd0
+            - bsd2Clause
+            - bsd3Clause
+            - bsd3ClauseClear
+            - bsd4Clause
+            - bsl10
+            - cc010
+            - ccby40
+            - ccbysa40
+            - cecill21
+            - ecl20
+            - epl10
+            - epl20
+            - eupl11
+            - eupl12
+            - gfdl13
+            - gpl20
+            - gpl30
+            - isc
+            - lgpl21
+            - lgpl30
+            - lppl13c
+            - mit
+            - mit0
+            - mpl20
+            - mspl
+            - mulanPSL20
+            - ncsa
+            - ofl11
+            - open
+            - osl30
+            - postgreSQL
+            - private
+            - unlicense
+            - wtfpl
+            - zlib
+            empty: true
+          emptyTrimmed: false
+          forbidden:
+          - NA
+          - nan
+          - nr
+          - 'null'
+          - undisc
+          maxlength: 30
+          meta:
+          - meta:
+            - datasets: fK
+              datasetsRequired: mandatory
+              maxLength: '30'
+              partID: license
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: categorical
+              datasets: fK
+              mmaSet: licSet
+              partID: license
+            - partID: afl30
+              setID: licSet
+            - partID: apache20
+              setID: licSet
+            - partID: artistic20
+              setID: licSet
+            - partID: bsl10
+              setID: licSet
+            - partID: bsd2Clause
+              setID: licSet
+            - partID: bsd3Clause
+              setID: licSet
+            - partID: bsd3ClauseClear
+              setID: licSet
+            - partID: bsd4Clause
+              setID: licSet
+            - partID: bsd0
+              setID: licSet
+            - partID: cecill21
+              setID: licSet
+            - partID: cc010
+              setID: licSet
+            - partID: ccby40
+              setID: licSet
+            - partID: ccbysa40
+              setID: licSet
+            - partID: wtfpl
+              setID: licSet
+            - partID: ecl20
+              setID: licSet
+            - partID: epl10
+              setID: licSet
+            - partID: epl20
+              setID: licSet
+            - partID: eupl11
+              setID: licSet
+            - partID: eupl12
+              setID: licSet
+            - partID: agpl30
+              setID: licSet
+            - partID: gfdl13
+              setID: licSet
+            - partID: gpl20
+              setID: licSet
+            - partID: gpl30
+              setID: licSet
+            - partID: mulanPSL20
+              setID: licSet
+            - partID: lgpl21
+              setID: licSet
+            - partID: lgpl30
+              setID: licSet
+            - partID: isc
+              setID: licSet
+            - partID: lppl13c
+              setID: licSet
+            - partID: mspl
+              setID: licSet
+            - partID: mit0
+              setID: licSet
+            - partID: mit
+              setID: licSet
+            - partID: mpl20
+              setID: licSet
+            - partID: osl30
+              setID: licSet
+            - partID: postgreSQL
+              setID: licSet
+            - partID: ofl11
+              setID: licSet
+            - partID: ncsa
+              setID: licSet
+            - partID: unlicense
+              setID: licSet
+            - partID: zlib
+              setID: licSet
+            - partID: open
+              setID: licSet
+            - partID: private
+              setID: licSet
+            ruleID: invalid_category
+          - meta:
+            - dataType: categorical
+              datasets: fK
+              datasetsRequired: mandatory
+              partID: license
+            ruleID: invalid_type
+          - meta:
+            - datasets: fK
+              datasetsRequired: mandatory
+              partID: license
+            ruleID: missing_mandatory_column
+          - meta:
+            - datasets: fK
+              datasetsRequired: mandatory
+              partID: license
+            - partID: NA
+              partType: missingness
+            - partID: nan
+              partType: missingness
+            - partID: nr
+              partType: missingness
+            - partID: 'null'
+              partType: missingness
+            - partID: undisc
+              partType: missingness
+            ruleID: missing_values_found
+          required: true
+          type: string
+        name:
+          maxlength: 30
+          meta:
+          - meta:
+            - datasets: header
+              datasetsRequired: recommended
+              maxLength: '30'
+              partID: name
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              datasets: header
+              datasetsRequired: recommended
+              partID: name
+            ruleID: invalid_type
+          type: string
+        notes:
+          maxlength: 200
+          meta:
+          - meta:
+            - datasets: header
+              datasetsRequired: optional
+              maxLength: '200'
+              partID: notes
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              datasets: header
+              datasetsRequired: optional
+              partID: notes
+            ruleID: invalid_type
+          type: string
+        parDatasetID:
+          maxlength: 30
+          meta:
+          - meta:
+            - datasets: fK
+              datasetsRequired: optional
+              maxLength: '30'
+              partID: parDatasetID
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              datasets: fK
+              datasetsRequired: optional
+              partID: parDatasetID
+            ruleID: invalid_type
+          type: string
+        refLink:
+          maxlength: 255
+          meta:
+          - meta:
+            - datasets: header
+              datasetsRequired: optional
+              maxLength: '255'
+              partID: refLink
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              datasets: header
+              datasetsRequired: optional
+              partID: refLink
+            ruleID: invalid_type
+          type: string
+      type: dict
+    type: list
+  instruments:
+    schema:
+      meta:
+      - partID: instruments
+        partType: tables
+      schema:
+        contactID:
+          maxlength: 30
+          meta:
+          - meta:
+            - instruments: fK
+              instrumentsRequired: optional
+              maxLength: '30'
+              partID: contactID
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              instruments: fK
+              instrumentsRequired: optional
+              partID: contactID
+            ruleID: invalid_type
+          type: string
+        datasetID:
+          emptyTrimmed: false
+          forbidden:
+          - NA
+          - nan
+          - nr
+          - 'null'
+          - undisc
+          maxlength: 30
+          meta:
+          - meta:
+            - instruments: fK
+              instrumentsRequired: mandatory
+              maxLength: '30'
+              partID: datasetID
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              instruments: fK
+              instrumentsRequired: mandatory
+              partID: datasetID
+            ruleID: invalid_type
+          - meta:
+            - instruments: fK
+              instrumentsRequired: mandatory
+              partID: datasetID
+            ruleID: missing_mandatory_column
+          - meta:
+            - instruments: fK
+              instrumentsRequired: mandatory
+              partID: datasetID
+            - partID: NA
+              partType: missingness
+            - partID: nan
+              partType: missingness
+            - partID: nr
+              partType: missingness
+            - partID: 'null'
+              partType: missingness
+            - partID: undisc
+              partType: missingness
+            ruleID: missing_values_found
+          required: true
+          type: string
+        descr:
+          maxlength: 200
+          meta:
+          - meta:
+            - instruments: header
+              instrumentsRequired: optional
+              maxLength: '200'
+              partID: descr
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              instruments: header
+              instrumentsRequired: optional
+              partID: descr
+            ruleID: invalid_type
+          type: string
+        index:
+          maxlength: 50
+          meta:
+          - meta:
+            - instruments: header
+              instrumentsRequired: optional
+              maxLength: '50'
+              partID: index
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              instruments: header
+              instrumentsRequired: optional
+              partID: index
+            ruleID: invalid_type
+          type: string
+        insType:
+          anyof:
+          - allowed:
+            - aas
+            - hma
+            - instrumentTypeOther
+            - ola
+            - onse
+            empty: true
+          emptyTrimmed: false
+          forbidden:
+          - NA
+          - nan
+          - nr
+          - 'null'
+          - undisc
+          maxlength: 30
+          meta:
+          - meta:
+            - instruments: fK
+              instrumentsRequired: mandatory
+              maxLength: '30'
+              partID: insType
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              instruments: fK
+              mmaSet: insTypeSet
+              partID: insType
+            - partID: aas
+              setID: insTypeSet
+            - partID: hma
+              setID: insTypeSet
+            - partID: instrumentTypeOther
+              setID: insTypeSet
+            - partID: ola
+              setID: insTypeSet
+            - partID: onse
+              setID: insTypeSet
+            ruleID: invalid_category
+          - meta:
+            - dataType: varchar
+              instruments: fK
+              instrumentsRequired: mandatory
+              partID: insType
+            ruleID: invalid_type
+          - meta:
+            - instruments: fK
+              instrumentsRequired: mandatory
+              partID: insType
+            ruleID: missing_mandatory_column
+          - meta:
+            - instruments: fK
+              instrumentsRequired: mandatory
+              partID: insType
+            - partID: NA
+              partType: missingness
+            - partID: nan
+              partType: missingness
+            - partID: nr
+              partType: missingness
+            - partID: 'null'
+              partType: missingness
+            - partID: undisc
+              partType: missingness
+            ruleID: missing_values_found
+          required: true
+          type: string
+        insTypeOth:
+          maxlength: 100
+          meta:
+          - meta:
+            - instruments: header
+              instrumentsRequired: optional
+              maxLength: '100'
+              partID: insTypeOth
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              instruments: header
+              instrumentsRequired: optional
+              partID: insTypeOth
+            ruleID: invalid_type
+          type: string
+        instrumentID:
+          emptyTrimmed: false
+          forbidden:
+          - NA
+          - nan
+          - nr
+          - 'null'
+          - undisc
+          maxlength: 10
+          meta:
+          - meta:
+            - instruments: pK
+              instrumentsRequired: mandatory
+              partID: instrumentID
+            ruleID: duplicate_entries_found
+          - meta:
+            - instruments: pK
+              instrumentsRequired: mandatory
+              maxLength: '10'
+              partID: instrumentID
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              instruments: pK
+              instrumentsRequired: mandatory
+              partID: instrumentID
+            ruleID: invalid_type
+          - meta:
+            - instruments: pK
+              instrumentsRequired: mandatory
+              partID: instrumentID
+            ruleID: missing_mandatory_column
+          - meta:
+            - instruments: pK
+              instrumentsRequired: mandatory
+              partID: instrumentID
+            - partID: NA
+              partType: missingness
+            - partID: nan
+              partType: missingness
+            - partID: nr
+              partType: missingness
+            - partID: 'null'
+              partType: missingness
+            - partID: undisc
+              partType: missingness
+            ruleID: missing_values_found
+          required: true
+          type: string
+          unique: true
+        lastEdited:
+          coerce: datetime
+          maxlength: 30
+          meta:
+          - meta:
+            - instruments: header
+              instrumentsRequired: optional
+              maxLength: '30'
+              partID: lastEdited
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: datetime
+              instruments: header
+              instrumentsRequired: optional
+              partID: lastEdited
+            ruleID: invalid_type
+          type: datetime
+        manufacturer:
+          maxlength: 100
+          meta:
+          - meta:
+            - instruments: header
+              instrumentsRequired: optional
+              maxLength: '100'
+              partID: manufacturer
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              instruments: header
+              instrumentsRequired: optional
+              partID: manufacturer
+            ruleID: invalid_type
+          type: string
+        model:
+          emptyTrimmed: false
+          forbidden:
+          - NA
+          - nan
+          - nr
+          - 'null'
+          - undisc
+          maxlength: 100
+          meta:
+          - meta:
+            - instruments: header
+              instrumentsRequired: mandatory
+              maxLength: '100'
+              partID: model
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              instruments: header
+              instrumentsRequired: mandatory
+              partID: model
+            ruleID: invalid_type
+          - meta:
+            - instruments: header
+              instrumentsRequired: mandatory
+              partID: model
+            ruleID: missing_mandatory_column
+          - meta:
+            - instruments: header
+              instrumentsRequired: mandatory
+              partID: model
+            - partID: NA
+              partType: missingness
+            - partID: nan
+              partType: missingness
+            - partID: nr
+              partType: missingness
+            - partID: 'null'
+              partType: missingness
+            - partID: undisc
+              partType: missingness
+            ruleID: missing_values_found
+          required: true
+          type: string
+        name:
+          maxlength: 30
+          meta:
+          - meta:
+            - instruments: header
+              instrumentsRequired: recommended
+              maxLength: '30'
+              partID: name
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              instruments: header
+              instrumentsRequired: recommended
+              partID: name
+            ruleID: invalid_type
+          type: string
+        notes:
+          maxlength: 200
+          meta:
+          - meta:
+            - instruments: header
+              instrumentsRequired: optional
+              maxLength: '200'
+              partID: notes
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              instruments: header
+              instrumentsRequired: optional
+              partID: notes
+            ruleID: invalid_type
+          type: string
+        organizationID:
+          maxlength: 100
+          meta:
+          - meta:
+            - instruments: fK
+              instrumentsRequired: optional
+              maxLength: '100'
+              partID: organizationID
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              instruments: fK
+              instrumentsRequired: optional
+              partID: organizationID
+            ruleID: invalid_type
+          type: string
+        refLink:
+          maxlength: 255
+          meta:
+          - meta:
+            - instruments: header
+              instrumentsRequired: optional
+              maxLength: '255'
+              partID: refLink
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              instruments: header
+              instrumentsRequired: optional
+              partID: refLink
+            ruleID: invalid_type
+          type: string
+      type: dict
+    type: list
+  measureSets:
+    schema:
+      meta:
+      - partID: measureSets
+        partType: tables
+      schema:
+        contactID:
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              measureSets: fK
+              measureSetsRequired: optional
+              partID: contactID
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              measureSets: fK
+              measureSetsRequired: optional
+              partID: contactID
+            ruleID: invalid_type
+          type: string
+        lastEdited:
+          coerce: datetime
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              measureSets: header
+              measureSetsRequired: optional
+              partID: lastEdited
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: datetime
+              measureSets: header
+              measureSetsRequired: optional
+              partID: lastEdited
+            ruleID: invalid_type
+          type: datetime
+        measureSetRepID:
+          emptyTrimmed: false
+          forbidden:
+          - NA
+          - nan
+          - nr
+          - 'null'
+          - undisc
+          maxlength: 30
+          meta:
+          - meta:
+            - measureSets: pK
+              measureSetsRequired: mandatory
+              partID: measureSetRepID
+            ruleID: duplicate_entries_found
+          - meta:
+            - maxLength: '30'
+              measureSets: pK
+              measureSetsRequired: mandatory
+              partID: measureSetRepID
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              measureSets: pK
+              measureSetsRequired: mandatory
+              partID: measureSetRepID
+            ruleID: invalid_type
+          - meta:
+            - measureSets: pK
+              measureSetsRequired: mandatory
+              partID: measureSetRepID
+            ruleID: missing_mandatory_column
+          - meta:
+            - measureSets: pK
+              measureSetsRequired: mandatory
+              partID: measureSetRepID
+            - partID: NA
+              partType: missingness
+            - partID: nan
+              partType: missingness
+            - partID: nr
+              partType: missingness
+            - partID: 'null'
+              partType: missingness
+            - partID: undisc
+              partType: missingness
+            ruleID: missing_values_found
+          required: true
+          type: string
+          unique: true
+        name:
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              measureSets: header
+              measureSetsRequired: optional
+              partID: name
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              measureSets: header
+              measureSetsRequired: optional
+              partID: name
+            ruleID: invalid_type
+          type: string
+        notes:
+          maxlength: 200
+          meta:
+          - meta:
+            - maxLength: '200'
+              measureSets: header
+              measureSetsRequired: optional
+              partID: notes
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              measureSets: header
+              measureSetsRequired: optional
+              partID: notes
+            ruleID: invalid_type
+          type: string
+        organizationID:
+          maxlength: 100
+          meta:
+          - meta:
+            - maxLength: '100'
+              measureSets: fK
+              measureSetsRequired: optional
+              partID: organizationID
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              measureSets: fK
+              measureSetsRequired: optional
+              partID: organizationID
+            ruleID: invalid_type
+          type: string
+        protocolID:
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              measureSets: fK
+              measureSetsRequired: optional
+              partID: protocolID
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              measureSets: fK
+              measureSetsRequired: optional
+              partID: protocolID
+            ruleID: invalid_type
+          type: string
+      type: dict
+    type: list
+  measures:
+    schema:
+      meta:
+      - partID: measures
+        partType: tables
+      schema:
+        aDateEnd:
+          coerce: datetime
+          emptyTrimmed: false
+          forbidden:
+          - NA
+          - nan
+          - nr
+          - 'null'
+          - undisc
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              measures: header
+              measuresRequired: mandatory
+              partID: aDateEnd
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: datetime
+              measures: header
+              measuresRequired: mandatory
+              partID: aDateEnd
+            ruleID: invalid_type
+          - meta:
+            - measures: header
+              measuresRequired: mandatory
+              partID: aDateEnd
+            ruleID: missing_mandatory_column
+          - meta:
+            - measures: header
+              measuresRequired: mandatory
+              partID: aDateEnd
+            - partID: NA
+              partType: missingness
+            - partID: nan
+              partType: missingness
+            - partID: nr
+              partType: missingness
+            - partID: 'null'
+              partType: missingness
+            - partID: undisc
+              partType: missingness
+            ruleID: missing_values_found
+          required: true
+          type: datetime
+        aDateStart:
+          coerce: datetime
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              measures: header
+              measuresRequired: optional
+              partID: aDateStart
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: datetime
+              measures: header
+              measuresRequired: optional
+              partID: aDateStart
+            ruleID: invalid_type
+          type: datetime
+        aggregation:
+          emptyTrimmed: false
+          forbidden:
+          - NA
+          - nan
+          - nr
+          - 'null'
+          - undisc
+          maxlength: 12
+          meta:
+          - meta:
+            - maxLength: '12'
+              measures: fK
+              measuresRequired: mandatory
+              partID: aggregation
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: categorical
+              measures: fK
+              measuresRequired: mandatory
+              partID: aggregation
+            ruleID: invalid_type
+          - meta:
+            - measures: fK
+              measuresRequired: mandatory
+              partID: aggregation
+            ruleID: missing_mandatory_column
+          - meta:
+            - measures: fK
+              measuresRequired: mandatory
+              partID: aggregation
+            - partID: NA
+              partType: missingness
+            - partID: nan
+              partType: missingness
+            - partID: nr
+              partType: missingness
+            - partID: 'null'
+              partType: missingness
+            - partID: undisc
+              partType: missingness
+            ruleID: missing_values_found
+          required: true
+          type: string
+        class:
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              measures: fK
+              measuresRequired: optional
+              partID: class
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: categorical
+              measures: fK
+              measuresRequired: optional
+              partID: class
+            ruleID: invalid_type
+          type: string
+        compartment:
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              measures: fK
+              measuresRequired: optional
+              partID: compartment
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: categorical
+              measures: fK
+              measuresRequired: optional
+              partID: compartment
+            ruleID: invalid_type
+          type: string
+        contactID:
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              measures: header
+              measuresRequired: optional
+              partID: contactID
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              measures: header
+              measuresRequired: optional
+              partID: contactID
+            ruleID: invalid_type
+          type: string
+        datasetID:
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              measures: fK
+              measuresRequired: optional
+              partID: datasetID
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              measures: fK
+              measuresRequired: optional
+              partID: datasetID
+            ruleID: invalid_type
+          type: string
+        fraction:
+          anyof:
+          - allowed:
+            - NA
+            - liq
+            - mix
+            - sol
+            empty: true
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              measures: fK
+              measuresRequired: recommended
+              partID: fraction
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: categorical
+              measures: fK
+              mmaSet: fractionSet
+              partID: fraction
+            - partID: liq
+              setID: fractionSet
+            - partID: mix
+              setID: fractionSet
+            - partID: sol
+              setID: fractionSet
+            - partID: NA
+              setID: fractionSet
+            ruleID: invalid_category
+          - meta:
+            - dataType: categorical
+              measures: fK
+              measuresRequired: recommended
+              partID: fraction
+            ruleID: invalid_type
+          type: string
+        group:
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              measures: fK
+              measuresRequired: optional
+              partID: group
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: categorical
+              measures: fK
+              measuresRequired: optional
+              partID: group
+            ruleID: invalid_type
+          type: string
+        index:
+          maxlength: 50
+          meta:
+          - meta:
+            - maxLength: '50'
+              measures: header
+              measuresRequired: optional
+              partID: index
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              measures: header
+              measuresRequired: optional
+              partID: index
+            ruleID: invalid_type
+          type: string
+        lastEdited:
+          coerce: datetime
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              measures: header
+              measuresRequired: optional
+              partID: lastEdited
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: datetime
+              measures: header
+              measuresRequired: optional
+              partID: lastEdited
+            ruleID: invalid_type
+          type: datetime
+        measure:
+          emptyTrimmed: false
+          forbidden:
+          - NA
+          - nan
+          - nr
+          - 'null'
+          - undisc
+          maxlength: 12
+          meta:
+          - meta:
+            - maxLength: '12'
+              measures: fK
+              measuresRequired: mandatory
+              partID: measure
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: categorical
+              measures: fK
+              measuresRequired: mandatory
+              partID: measure
+            ruleID: invalid_type
+          - meta:
+            - measures: fK
+              measuresRequired: mandatory
+              partID: measure
+            ruleID: missing_mandatory_column
+          - meta:
+            - measures: fK
+              measuresRequired: mandatory
+              partID: measure
+            - partID: NA
+              partType: missingness
+            - partID: nan
+              partType: missingness
+            - partID: nr
+              partType: missingness
+            - partID: 'null'
+              partType: missingness
+            - partID: undisc
+              partType: missingness
+            ruleID: missing_values_found
+          required: true
+          type: string
+        measureLic:
+          anyof:
+          - allowed:
+            - afl30
+            - agpl30
+            - apache20
+            - artistic20
+            - bsd0
+            - bsd2Clause
+            - bsd3Clause
+            - bsd3ClauseClear
+            - bsd4Clause
+            - bsl10
+            - cc010
+            - ccby40
+            - ccbysa40
+            - cecill21
+            - ecl20
+            - epl10
+            - epl20
+            - eupl11
+            - eupl12
+            - gfdl13
+            - gpl20
+            - gpl30
+            - isc
+            - lgpl21
+            - lgpl30
+            - lppl13c
+            - mit
+            - mit0
+            - mpl20
+            - mspl
+            - mulanPSL20
+            - ncsa
+            - ofl11
+            - open
+            - osl30
+            - postgreSQL
+            - private
+            - unlicense
+            - wtfpl
+            - zlib
+            empty: true
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              measures: header
+              measuresRequired: optional
+              partID: measureLic
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: categorical
+              measures: header
+              mmaSet: licSet
+              partID: measureLic
+            - partID: afl30
+              setID: licSet
+            - partID: apache20
+              setID: licSet
+            - partID: artistic20
+              setID: licSet
+            - partID: bsl10
+              setID: licSet
+            - partID: bsd2Clause
+              setID: licSet
+            - partID: bsd3Clause
+              setID: licSet
+            - partID: bsd3ClauseClear
+              setID: licSet
+            - partID: bsd4Clause
+              setID: licSet
+            - partID: bsd0
+              setID: licSet
+            - partID: cecill21
+              setID: licSet
+            - partID: cc010
+              setID: licSet
+            - partID: ccby40
+              setID: licSet
+            - partID: ccbysa40
+              setID: licSet
+            - partID: wtfpl
+              setID: licSet
+            - partID: ecl20
+              setID: licSet
+            - partID: epl10
+              setID: licSet
+            - partID: epl20
+              setID: licSet
+            - partID: eupl11
+              setID: licSet
+            - partID: eupl12
+              setID: licSet
+            - partID: agpl30
+              setID: licSet
+            - partID: gfdl13
+              setID: licSet
+            - partID: gpl20
+              setID: licSet
+            - partID: gpl30
+              setID: licSet
+            - partID: mulanPSL20
+              setID: licSet
+            - partID: lgpl21
+              setID: licSet
+            - partID: lgpl30
+              setID: licSet
+            - partID: isc
+              setID: licSet
+            - partID: lppl13c
+              setID: licSet
+            - partID: mspl
+              setID: licSet
+            - partID: mit0
+              setID: licSet
+            - partID: mit
+              setID: licSet
+            - partID: mpl20
+              setID: licSet
+            - partID: osl30
+              setID: licSet
+            - partID: postgreSQL
+              setID: licSet
+            - partID: ofl11
+              setID: licSet
+            - partID: ncsa
+              setID: licSet
+            - partID: unlicense
+              setID: licSet
+            - partID: zlib
+              setID: licSet
+            - partID: open
+              setID: licSet
+            - partID: private
+              setID: licSet
+            ruleID: invalid_category
+          - meta:
+            - dataType: categorical
+              measures: header
+              measuresRequired: optional
+              partID: measureLic
+            ruleID: invalid_type
+          type: string
+        measureRepID:
+          emptyTrimmed: false
+          forbidden:
+          - NA
+          - nan
+          - nr
+          - 'null'
+          - undisc
+          maxlength: 30
+          meta:
+          - meta:
+            - measures: pK
+              measuresRequired: mandatory
+              partID: measureRepID
+            ruleID: duplicate_entries_found
+          - meta:
+            - maxLength: '30'
+              measures: pK
+              measuresRequired: mandatory
+              partID: measureRepID
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              measures: pK
+              measuresRequired: mandatory
+              partID: measureRepID
+            ruleID: invalid_type
+          - meta:
+            - measures: pK
+              measuresRequired: mandatory
+              partID: measureRepID
+            ruleID: missing_mandatory_column
+          - meta:
+            - measures: pK
+              measuresRequired: mandatory
+              partID: measureRepID
+            - partID: NA
+              partType: missingness
+            - partID: nan
+              partType: missingness
+            - partID: nr
+              partType: missingness
+            - partID: 'null'
+              partType: missingness
+            - partID: undisc
+              partType: missingness
+            ruleID: missing_values_found
+          required: true
+          type: string
+          unique: true
+        measureSetRepID:
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              measures: fK
+              measuresRequired: optional
+              partID: measureSetRepID
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              measures: fK
+              measuresRequired: optional
+              partID: measureSetRepID
+            ruleID: invalid_type
+          type: string
+        nomenclature:
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              measures: fK
+              measuresRequired: optional
+              partID: nomenclature
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: categorical
+              measures: fK
+              measuresRequired: optional
+              partID: nomenclature
+            ruleID: invalid_type
+          type: string
+        notes:
+          maxlength: 200
+          meta:
+          - meta:
+            - maxLength: '200'
+              measures: header
+              measuresRequired: optional
+              partID: notes
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              measures: header
+              measuresRequired: optional
+              partID: notes
+            ruleID: invalid_type
+          type: string
+        organizationID:
+          maxlength: 100
+          meta:
+          - meta:
+            - maxLength: '100'
+              measures: header
+              measuresRequired: optional
+              partID: organizationID
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              measures: header
+              measuresRequired: optional
+              partID: organizationID
+            ruleID: invalid_type
+          type: string
+        polygonID:
+          maxlength: 10
+          meta:
+          - meta:
+            - maxLength: '10'
+              measures: fK
+              measuresRequired: optional
+              partID: polygonID
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              measures: fK
+              measuresRequired: optional
+              partID: polygonID
+            ruleID: invalid_type
+          type: string
+        protocolID:
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              measures: fK
+              measuresRequired: optional
+              partID: protocolID
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              measures: fK
+              measuresRequired: optional
+              partID: protocolID
+            ruleID: invalid_type
+          type: string
+        purpose:
+          anyof:
+          - allowed:
+            - education
+            - multiple
+            - provisional
+            - qualityControl
+            - regular
+            - testing
+            - validationStudy
+            empty: true
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              measures: fK
+              measuresRequired: optional
+              partID: purpose
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: categorical
+              measures: fK
+              mmaSet: purposeSet
+              partID: purpose
+            - partID: education
+              setID: purposeSet
+            - partID: multiple
+              setID: purposeSet
+            - partID: provisional
+              setID: purposeSet
+            - partID: qualityControl
+              setID: purposeSet
+            - partID: regular
+              setID: purposeSet
+            - partID: testing
+              setID: purposeSet
+            - partID: validationStudy
+              setID: purposeSet
+            ruleID: invalid_category
+          - meta:
+            - dataType: categorical
+              measures: fK
+              measuresRequired: optional
+              partID: purpose
+            ruleID: invalid_type
+          type: string
+        refLink:
+          maxlength: 255
+          meta:
+          - meta:
+            - maxLength: '255'
+              measures: header
+              measuresRequired: optional
+              partID: refLink
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              measures: header
+              measuresRequired: optional
+              partID: refLink
+            ruleID: invalid_type
+          type: string
+        reportDate:
+          coerce: datetime
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              measures: header
+              measuresRequired: optional
+              partID: reportDate
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: datetime
+              measures: header
+              measuresRequired: optional
+              partID: reportDate
+            ruleID: invalid_type
+          type: datetime
+        reportable:
+          allowed:
+          - 'FALSE'
+          - 'TRUE'
+          anyof:
+          - allowed:
+            - 'FALSE'
+            - 'TRUE'
+            empty: true
+          maxlength: 10
+          meta:
+          - meta:
+            - maxLength: '10'
+              measures: header
+              measuresRequired: optional
+              partID: reportable
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: boolean
+              measures: header
+              mmaSet: booleanSet
+              partID: reportable
+            - partID: 'TRUE'
+              setID: booleanSet
+            - partID: 'FALSE'
+              setID: booleanSet
+            ruleID: invalid_category
+          - meta:
+            - dataType: boolean
+              measures: header
+              measuresRequired: optional
+              partID: reportable
+            - partID: 'false'
+              setID: booleanSet
+            - partID: 'true'
+              setID: booleanSet
+            ruleID: invalid_type
+          type: string
+        sampleID:
+          emptyTrimmed: false
+          forbidden:
+          - NA
+          - nan
+          - nr
+          - 'null'
+          - undisc
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              measures: fK
+              measuresRequired: mandatory
+              partID: sampleID
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              measures: fK
+              measuresRequired: mandatory
+              partID: sampleID
+            ruleID: invalid_type
+          - meta:
+            - measures: fK
+              measuresRequired: mandatory
+              partID: sampleID
+            ruleID: missing_mandatory_column
+          - meta:
+            - measures: fK
+              measuresRequired: mandatory
+              partID: sampleID
+            - partID: NA
+              partType: missingness
+            - partID: nan
+              partType: missingness
+            - partID: nr
+              partType: missingness
+            - partID: 'null'
+              partType: missingness
+            - partID: undisc
+              partType: missingness
+            ruleID: missing_values_found
+          required: true
+          type: string
+        severity:
+          anyof:
+          - allowed:
+            - high
+            - low
+            - mid
+            empty: true
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              measures: input
+              partID: severity
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: categorical
+              measures: input
+              mmaSet: sevSet
+              partID: severity
+            - partID: low
+              setID: sevSet
+            - partID: mid
+              setID: sevSet
+            - partID: high
+              setID: sevSet
+            ruleID: invalid_category
+          - meta:
+            - dataType: categorical
+              measures: input
+              partID: severity
+            ruleID: invalid_type
+          type: string
+        siteID:
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              measures: fK
+              measuresRequired: recommended
+              partID: siteID
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              measures: fK
+              measuresRequired: recommended
+              partID: siteID
+            ruleID: invalid_type
+          type: string
+        specimen:
+          emptyTrimmed: false
+          forbidden:
+          - NA
+          - nan
+          - nr
+          - 'null'
+          - undisc
+          maxlength: 12
+          meta:
+          - meta:
+            - maxLength: '12'
+              measures: fK
+              measuresRequired: mandatory
+              partID: specimen
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: categorical
+              measures: fK
+              measuresRequired: mandatory
+              partID: specimen
+            ruleID: invalid_type
+          - meta:
+            - measures: fK
+              measuresRequired: mandatory
+              partID: specimen
+            ruleID: missing_mandatory_column
+          - meta:
+            - measures: fK
+              measuresRequired: mandatory
+              partID: specimen
+            - partID: NA
+              partType: missingness
+            - partID: nan
+              partType: missingness
+            - partID: nr
+              partType: missingness
+            - partID: 'null'
+              partType: missingness
+            - partID: undisc
+              partType: missingness
+            ruleID: missing_values_found
+          required: true
+          type: string
+        unit:
+          emptyTrimmed: false
+          forbidden:
+          - NA
+          - nan
+          - nr
+          - 'null'
+          - undisc
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              measures: fK
+              measuresRequired: mandatory
+              partID: unit
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: categorical
+              measures: fK
+              measuresRequired: mandatory
+              partID: unit
+            ruleID: invalid_type
+          - meta:
+            - measures: fK
+              measuresRequired: mandatory
+              partID: unit
+            ruleID: missing_mandatory_column
+          - meta:
+            - measures: fK
+              measuresRequired: mandatory
+              partID: unit
+            - partID: NA
+              partType: missingness
+            - partID: nan
+              partType: missingness
+            - partID: nr
+              partType: missingness
+            - partID: 'null'
+              partType: missingness
+            - partID: undisc
+              partType: missingness
+            ruleID: missing_values_found
+          required: true
+          type: string
+        unitSet:
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              measures: input
+              partID: unitSet
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              measures: input
+              partID: unitSet
+            ruleID: invalid_type
+          type: string
+        value:
+          emptyTrimmed: false
+          forbidden:
+          - NA
+          - nan
+          - nr
+          - 'null'
+          - undisc
+          maxlength: 15
+          meta:
+          - meta:
+            - maxLength: '15'
+              measures: header
+              measuresRequired: mandatory
+              partID: value
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              measures: header
+              measuresRequired: mandatory
+              partID: value
+            ruleID: invalid_type
+          - meta:
+            - measures: header
+              measuresRequired: mandatory
+              partID: value
+            ruleID: missing_mandatory_column
+          - meta:
+            - measures: header
+              measuresRequired: mandatory
+              partID: value
+            - partID: NA
+              partType: missingness
+            - partID: nan
+              partType: missingness
+            - partID: nr
+              partType: missingness
+            - partID: 'null'
+              partType: missingness
+            - partID: undisc
+              partType: missingness
+            ruleID: missing_values_found
+          required: true
+          type: string
+        wideMeasure:
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              measures: input
+              partID: wideMeasure
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              measures: input
+              partID: wideMeasure
+            ruleID: invalid_type
+          type: string
+        wideName:
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              measures: input
+              partID: wideName
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              measures: input
+              partID: wideName
+            ruleID: invalid_type
+          type: string
+      type: dict
+    type: list
+  organizations:
+    schema:
+      meta:
+      - partID: organizations
+        partType: tables
+      schema:
+        addressID:
+          emptyTrimmed: false
+          forbidden:
+          - NA
+          - nan
+          - nr
+          - 'null'
+          - undisc
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              organizations: fK
+              organizationsRequired: mandatory
+              partID: addressID
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              organizations: fK
+              organizationsRequired: mandatory
+              partID: addressID
+            ruleID: invalid_type
+          - meta:
+            - organizations: fK
+              organizationsRequired: mandatory
+              partID: addressID
+            ruleID: missing_mandatory_column
+          - meta:
+            - organizations: fK
+              organizationsRequired: mandatory
+              partID: addressID
+            - partID: NA
+              partType: missingness
+            - partID: nan
+              partType: missingness
+            - partID: nr
+              partType: missingness
+            - partID: 'null'
+              partType: missingness
+            - partID: undisc
+              partType: missingness
+            ruleID: missing_values_found
+          required: true
+          type: string
+        datasetID:
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              organizations: fK
+              organizationsRequired: optional
+              partID: datasetID
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              organizations: fK
+              organizationsRequired: optional
+              partID: datasetID
+            ruleID: invalid_type
+          type: string
+        descr:
+          maxlength: 200
+          meta:
+          - meta:
+            - maxLength: '200'
+              organizations: header
+              organizationsRequired: optional
+              partID: descr
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              organizations: header
+              organizationsRequired: optional
+              partID: descr
+            ruleID: invalid_type
+          type: string
+        lastEdited:
+          coerce: datetime
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              organizations: header
+              organizationsRequired: optional
+              partID: lastEdited
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: datetime
+              organizations: header
+              organizationsRequired: optional
+              partID: lastEdited
+            ruleID: invalid_type
+          type: datetime
+        name:
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              organizations: header
+              organizationsRequired: recommended
+              partID: name
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              organizations: header
+              organizationsRequired: recommended
+              partID: name
+            ruleID: invalid_type
+          type: string
+        notes:
+          maxlength: 200
+          meta:
+          - meta:
+            - maxLength: '200'
+              organizations: header
+              organizationsRequired: optional
+              partID: notes
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              organizations: header
+              organizationsRequired: optional
+              partID: notes
+            ruleID: invalid_type
+          type: string
+        orgLevel:
+          anyof:
+          - allowed:
+            - admRegLevel
+            - countryLevel
+            - countyLevel
+            - municipalLevel
+            - neighborLevel
+            - stateProvLevel
+            empty: true
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              organizations: header
+              organizationsRequired: recommended
+              partID: orgLevel
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: categorical
+              mmaSet: orgLevelSet
+              organizations: header
+              partID: orgLevel
+            - partID: neighborLevel
+              setID: orgLevelSet
+            - partID: municipalLevel
+              setID: orgLevelSet
+            - partID: stateProvLevel
+              setID: orgLevelSet
+            - partID: admRegLevel
+              setID: orgLevelSet
+            - partID: countryLevel
+              setID: orgLevelSet
+            - partID: countyLevel
+              setID: orgLevelSet
+            ruleID: invalid_category
+          - meta:
+            - dataType: categorical
+              organizations: header
+              organizationsRequired: recommended
+              partID: orgLevel
+            ruleID: invalid_type
+          type: string
+        orgSector:
+          anyof:
+          - allowed:
+            - dataColl
+            - fiNa
+            - healthAdm
+            - policy
+            - pubHealth
+            - research
+            - utilities
+            empty: true
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              organizations: header
+              organizationsRequired: recommended
+              partID: orgSector
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: categorical
+              mmaSet: orgSectorSet
+              organizations: header
+              partID: orgSector
+            - partID: healthAdm
+              setID: orgSectorSet
+            - partID: fiNa
+              setID: orgSectorSet
+            - partID: utilities
+              setID: orgSectorSet
+            - partID: dataColl
+              setID: orgSectorSet
+            - partID: pubHealth
+              setID: orgSectorSet
+            - partID: research
+              setID: orgSectorSet
+            - partID: policy
+              setID: orgSectorSet
+            ruleID: invalid_category
+          - meta:
+            - dataType: categorical
+              organizations: header
+              organizationsRequired: recommended
+              partID: orgSector
+            ruleID: invalid_type
+          type: string
+        orgType:
+          anyof:
+          - allowed:
+            - academ
+            - govt
+            - priv
+            empty: true
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              organizations: header
+              organizationsRequired: recommended
+              partID: orgType
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: categorical
+              mmaSet: orgTypeSet
+              organizations: header
+              partID: orgType
+            - partID: academ
+              setID: orgTypeSet
+            - partID: govt
+              setID: orgTypeSet
+            - partID: priv
+              setID: orgTypeSet
+            ruleID: invalid_category
+          - meta:
+            - dataType: categorical
+              organizations: header
+              organizationsRequired: recommended
+              partID: orgType
+            ruleID: invalid_type
+          type: string
+        organizationID:
+          emptyTrimmed: false
+          forbidden:
+          - NA
+          - nan
+          - nr
+          - 'null'
+          - undisc
+          maxlength: 100
+          meta:
+          - meta:
+            - organizations: pK
+              organizationsRequired: mandatory
+              partID: organizationID
+            ruleID: duplicate_entries_found
+          - meta:
+            - maxLength: '100'
+              organizations: pK
+              organizationsRequired: mandatory
+              partID: organizationID
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              organizations: pK
+              organizationsRequired: mandatory
+              partID: organizationID
+            ruleID: invalid_type
+          - meta:
+            - organizations: pK
+              organizationsRequired: mandatory
+              partID: organizationID
+            ruleID: missing_mandatory_column
+          - meta:
+            - organizations: pK
+              organizationsRequired: mandatory
+              partID: organizationID
+            - partID: NA
+              partType: missingness
+            - partID: nan
+              partType: missingness
+            - partID: nr
+              partType: missingness
+            - partID: 'null'
+              partType: missingness
+            - partID: undisc
+              partType: missingness
+            ruleID: missing_values_found
+          required: true
+          type: string
+          unique: true
+      type: dict
+    type: list
+  polygons:
+    schema:
+      meta:
+      - partID: polygons
+        partType: tables
+      schema:
+        contactID:
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              partID: contactID
+              polygons: header
+              polygonsRequired: optional
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              partID: contactID
+              polygons: header
+              polygonsRequired: optional
+            ruleID: invalid_type
+          type: string
+        datasetID:
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              partID: datasetID
+              polygons: fK
+              polygonsRequired: optional
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              partID: datasetID
+              polygons: fK
+              polygonsRequired: optional
+            ruleID: invalid_type
+          type: string
+        descr:
+          maxlength: 200
+          meta:
+          - meta:
+            - maxLength: '200'
+              partID: descr
+              polygons: header
+              polygonsRequired: optional
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              partID: descr
+              polygons: header
+              polygonsRequired: optional
+            ruleID: invalid_type
+          type: string
+        fileLocation:
+          maxlength: 65535
+          meta:
+          - meta:
+            - maxLength: '65535'
+              partID: fileLocation
+              polygons: header
+              polygonsRequired: optional
+            ruleID: greater_than_max_length
+        geoEPSG:
+          coerce: float
+          emptyTrimmed: false
+          forbidden:
+          - NA
+          - nan
+          - nr
+          - 'null'
+          - undisc
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              partID: geoEPSG
+              polygons: header
+              polygonsRequired: mandatory
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: float
+              partID: geoEPSG
+              polygons: header
+              polygonsRequired: mandatory
+            ruleID: invalid_type
+          - meta:
+            - partID: geoEPSG
+              polygons: header
+              polygonsRequired: mandatory
+            ruleID: missing_mandatory_column
+          - meta:
+            - partID: geoEPSG
+              polygons: header
+              polygonsRequired: mandatory
+            - partID: NA
+              partType: missingness
+            - partID: nan
+              partType: missingness
+            - partID: nr
+              partType: missingness
+            - partID: 'null'
+              partType: missingness
+            - partID: undisc
+              partType: missingness
+            ruleID: missing_values_found
+          required: true
+          type: float
+        geoType:
+          anyof:
+          - allowed:
+            - hlthReg
+            - swrSet
+            empty: true
+          emptyTrimmed: false
+          forbidden:
+          - NA
+          - nan
+          - nr
+          - 'null'
+          - undisc
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              partID: geoType
+              polygons: header
+              polygonsRequired: mandatory
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: categorical
+              mmaSet: geoTypeSet
+              partID: geoType
+              polygons: header
+            - partID: hlthReg
+              setID: geoTypeSet
+            - partID: swrSet
+              setID: geoTypeSet
+            ruleID: invalid_category
+          - meta:
+            - dataType: categorical
+              partID: geoType
+              polygons: header
+              polygonsRequired: mandatory
+            ruleID: invalid_type
+          - meta:
+            - partID: geoType
+              polygons: header
+              polygonsRequired: mandatory
+            ruleID: missing_mandatory_column
+          - meta:
+            - partID: geoType
+              polygons: header
+              polygonsRequired: mandatory
+            - partID: NA
+              partType: missingness
+            - partID: nan
+              partType: missingness
+            - partID: nr
+              partType: missingness
+            - partID: 'null'
+              partType: missingness
+            - partID: undisc
+              partType: missingness
+            ruleID: missing_values_found
+          required: true
+          type: string
+        geoWKT:
+          emptyTrimmed: false
+          forbidden:
+          - NA
+          - nan
+          - nr
+          - 'null'
+          - undisc
+          maxlength: 63
+          meta:
+          - meta:
+            - maxLength: '63'
+              partID: geoWKT
+              polygons: header
+              polygonsRequired: mandatory
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              partID: geoWKT
+              polygons: header
+              polygonsRequired: mandatory
+            ruleID: invalid_type
+          - meta:
+            - partID: geoWKT
+              polygons: header
+              polygonsRequired: mandatory
+            ruleID: missing_mandatory_column
+          - meta:
+            - partID: geoWKT
+              polygons: header
+              polygonsRequired: mandatory
+            - partID: NA
+              partType: missingness
+            - partID: nan
+              partType: missingness
+            - partID: nr
+              partType: missingness
+            - partID: 'null'
+              partType: missingness
+            - partID: undisc
+              partType: missingness
+            ruleID: missing_values_found
+          required: true
+          type: string
+        lastEdited:
+          coerce: datetime
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              partID: lastEdited
+              polygons: header
+              polygonsRequired: optional
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: datetime
+              partID: lastEdited
+              polygons: header
+              polygonsRequired: optional
+            ruleID: invalid_type
+          type: datetime
+        name:
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              partID: name
+              polygons: header
+              polygonsRequired: recommended
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              partID: name
+              polygons: header
+              polygonsRequired: recommended
+            ruleID: invalid_type
+          type: string
+        notes:
+          maxlength: 200
+          meta:
+          - meta:
+            - maxLength: '200'
+              partID: notes
+              polygons: header
+              polygonsRequired: optional
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              partID: notes
+              polygons: header
+              polygonsRequired: optional
+            ruleID: invalid_type
+          type: string
+        organizationID:
+          maxlength: 100
+          meta:
+          - meta:
+            - maxLength: '100'
+              partID: organizationID
+              polygons: header
+              polygonsRequired: optional
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              partID: organizationID
+              polygons: header
+              polygonsRequired: optional
+            ruleID: invalid_type
+          type: string
+        polyPop:
+          coerce: integer
+          meta:
+          - meta:
+            - dataType: integer
+              partID: polyPop
+              polygons: header
+              polygonsRequired: optional
+            ruleID: invalid_type
+          - meta:
+            - minValue: '0'
+              partID: polyPop
+              polygons: header
+              polygonsRequired: optional
+            ruleID: less_than_min_value
+          min: 0
+          type: integer
+        polygonID:
+          emptyTrimmed: false
+          forbidden:
+          - NA
+          - nan
+          - nr
+          - 'null'
+          - undisc
+          maxlength: 10
+          meta:
+          - meta:
+            - partID: polygonID
+              polygons: pK
+              polygonsRequired: mandatory
+            ruleID: duplicate_entries_found
+          - meta:
+            - maxLength: '10'
+              partID: polygonID
+              polygons: pK
+              polygonsRequired: mandatory
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              partID: polygonID
+              polygons: pK
+              polygonsRequired: mandatory
+            ruleID: invalid_type
+          - meta:
+            - partID: polygonID
+              polygons: pK
+              polygonsRequired: mandatory
+            ruleID: missing_mandatory_column
+          - meta:
+            - partID: polygonID
+              polygons: pK
+              polygonsRequired: mandatory
+            - partID: NA
+              partType: missingness
+            - partID: nan
+              partType: missingness
+            - partID: nr
+              partType: missingness
+            - partID: 'null'
+              partType: missingness
+            - partID: undisc
+              partType: missingness
+            ruleID: missing_values_found
+          required: true
+          type: string
+          unique: true
+        refLink:
+          maxlength: 255
+          meta:
+          - meta:
+            - maxLength: '255'
+              partID: refLink
+              polygons: header
+              polygonsRequired: optional
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              partID: refLink
+              polygons: header
+              polygonsRequired: optional
+            ruleID: invalid_type
+          type: string
+      type: dict
+    type: list
+  protocolRelationships:
+    schema:
+      meta:
+      - partID: protocolRelationships
+        partType: tables
+      schema:
+        lastEdited:
+          coerce: datetime
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              partID: lastEdited
+              protocolRelationships: header
+              protocolRelationshipsRequired: optional
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: datetime
+              partID: lastEdited
+              protocolRelationships: header
+              protocolRelationshipsRequired: optional
+            ruleID: invalid_type
+          type: datetime
+        notes:
+          maxlength: 200
+          meta:
+          - meta:
+            - maxLength: '200'
+              partID: notes
+              protocolRelationships: header
+              protocolRelationshipsRequired: optional
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              partID: notes
+              protocolRelationships: header
+              protocolRelationshipsRequired: optional
+            ruleID: invalid_type
+          type: string
+        protocolID:
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              partID: protocolID
+              protocolRelationships: input
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              partID: protocolID
+              protocolRelationships: input
+            ruleID: invalid_type
+          type: string
+        protocolIDContainer:
+          emptyTrimmed: false
+          forbidden:
+          - NA
+          - nan
+          - nr
+          - 'null'
+          - undisc
+          maxlength: 15
+          meta:
+          - meta:
+            - maxLength: '15'
+              partID: protocolIDContainer
+              protocolRelationships: fK
+              protocolRelationshipsRequired: mandatory
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              partID: protocolIDContainer
+              protocolRelationships: fK
+              protocolRelationshipsRequired: mandatory
+            ruleID: invalid_type
+          - meta:
+            - partID: protocolIDContainer
+              protocolRelationships: fK
+              protocolRelationshipsRequired: mandatory
+            ruleID: missing_mandatory_column
+          - meta:
+            - partID: protocolIDContainer
+              protocolRelationships: fK
+              protocolRelationshipsRequired: mandatory
+            - partID: NA
+              partType: missingness
+            - partID: nan
+              partType: missingness
+            - partID: nr
+              partType: missingness
+            - partID: 'null'
+              partType: missingness
+            - partID: undisc
+              partType: missingness
+            ruleID: missing_values_found
+          required: true
+          type: string
+        protocolIDObj:
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              partID: protocolIDObj
+              protocolRelationships: fK
+              protocolRelationshipsRequired: mandatoryIf
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              partID: protocolIDObj
+              protocolRelationships: fK
+              protocolRelationshipsRequired: mandatoryIf
+            ruleID: invalid_type
+          type: string
+        protocolIDSub:
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              partID: protocolIDSub
+              protocolRelationships: fK
+              protocolRelationshipsRequired: mandatoryIf
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              partID: protocolIDSub
+              protocolRelationships: fK
+              protocolRelationshipsRequired: mandatoryIf
+            ruleID: invalid_type
+          type: string
+        protocolRelationshipsID:
+          emptyTrimmed: false
+          forbidden:
+          - NA
+          - nan
+          - nr
+          - 'null'
+          - undisc
+          maxlength: 50
+          meta:
+          - meta:
+            - partID: protocolRelationshipsID
+              protocolRelationships: pK
+              protocolRelationshipsRequired: mandatory
+            ruleID: duplicate_entries_found
+          - meta:
+            - maxLength: '50'
+              partID: protocolRelationshipsID
+              protocolRelationships: pK
+              protocolRelationshipsRequired: mandatory
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              partID: protocolRelationshipsID
+              protocolRelationships: pK
+              protocolRelationshipsRequired: mandatory
+            ruleID: invalid_type
+          - meta:
+            - partID: protocolRelationshipsID
+              protocolRelationships: pK
+              protocolRelationshipsRequired: mandatory
+            ruleID: missing_mandatory_column
+          - meta:
+            - partID: protocolRelationshipsID
+              protocolRelationships: pK
+              protocolRelationshipsRequired: mandatory
+            - partID: NA
+              partType: missingness
+            - partID: nan
+              partType: missingness
+            - partID: nr
+              partType: missingness
+            - partID: 'null'
+              partType: missingness
+            - partID: undisc
+              partType: missingness
+            ruleID: missing_values_found
+          required: true
+          type: string
+          unique: true
+        relationshipID:
+          emptyTrimmed: false
+          forbidden:
+          - NA
+          - nan
+          - nr
+          - 'null'
+          - undisc
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              partID: relationshipID
+              protocolRelationships: fK
+              protocolRelationshipsRequired: mandatory
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              partID: relationshipID
+              protocolRelationships: fK
+              protocolRelationshipsRequired: mandatory
+            ruleID: invalid_type
+          - meta:
+            - partID: relationshipID
+              protocolRelationships: fK
+              protocolRelationshipsRequired: mandatory
+            ruleID: missing_mandatory_column
+          - meta:
+            - partID: relationshipID
+              protocolRelationships: fK
+              protocolRelationshipsRequired: mandatory
+            - partID: NA
+              partType: missingness
+            - partID: nan
+              partType: missingness
+            - partID: nr
+              partType: missingness
+            - partID: 'null'
+              partType: missingness
+            - partID: undisc
+              partType: missingness
+            ruleID: missing_values_found
+          required: true
+          type: string
+        reportable:
+          allowed:
+          - 'FALSE'
+          - 'TRUE'
+          anyof:
+          - allowed:
+            - 'FALSE'
+            - 'TRUE'
+            empty: true
+          maxlength: 10
+          meta:
+          - meta:
+            - maxLength: '10'
+              partID: reportable
+              protocolRelationships: input
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: boolean
+              mmaSet: booleanSet
+              partID: reportable
+              protocolRelationships: input
+            - partID: 'TRUE'
+              setID: booleanSet
+            - partID: 'FALSE'
+              setID: booleanSet
+            ruleID: invalid_category
+          - meta:
+            - dataType: boolean
+              partID: reportable
+              protocolRelationships: input
+            - partID: 'false'
+              setID: booleanSet
+            - partID: 'true'
+              setID: booleanSet
+            ruleID: invalid_type
+          type: string
+        stepID:
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              partID: stepID
+              protocolRelationships: input
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              partID: stepID
+              protocolRelationships: input
+            ruleID: invalid_type
+          type: string
+        stepIDObj:
+          coerce: integer
+          meta:
+          - meta:
+            - dataType: integer
+              partID: stepIDObj
+              protocolRelationships: fK
+              protocolRelationshipsRequired: mandatoryIf
+            ruleID: invalid_type
+          - meta:
+            - minValue: '1'
+              partID: stepIDObj
+              protocolRelationships: fK
+              protocolRelationshipsRequired: mandatoryIf
+            ruleID: less_than_min_value
+          min: 1
+          type: integer
+        stepIDSub:
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              partID: stepIDSub
+              protocolRelationships: fK
+              protocolRelationshipsRequired: mandatoryIf
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              partID: stepIDSub
+              protocolRelationships: fK
+              protocolRelationshipsRequired: mandatoryIf
+            ruleID: invalid_type
+          type: string
+      type: dict
+    type: list
+  protocolSteps:
+    schema:
+      meta:
+      - partID: protocolSteps
+        partType: tables
+      schema:
+        aggregation:
+          maxlength: 12
+          meta:
+          - meta:
+            - maxLength: '12'
+              partID: aggregation
+              protocolSteps: fK
+              protocolStepsRequired: mandatoryIf
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: categorical
+              partID: aggregation
+              protocolSteps: fK
+              protocolStepsRequired: mandatoryIf
+            ruleID: invalid_type
+          type: string
+        contactID:
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              partID: contactID
+              protocolSteps: fK
+              protocolStepsRequired: optional
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              partID: contactID
+              protocolSteps: fK
+              protocolStepsRequired: optional
+            ruleID: invalid_type
+          type: string
+        instrumentID:
+          maxlength: 10
+          meta:
+          - meta:
+            - maxLength: '10'
+              partID: instrumentID
+              protocolSteps: fK
+              protocolStepsRequired: optional
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              partID: instrumentID
+              protocolSteps: fK
+              protocolStepsRequired: optional
+            ruleID: invalid_type
+          type: string
+        lastEdited:
+          coerce: datetime
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              partID: lastEdited
+              protocolSteps: header
+              protocolStepsRequired: optional
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: datetime
+              partID: lastEdited
+              protocolSteps: header
+              protocolStepsRequired: optional
+            ruleID: invalid_type
+          type: datetime
+        measure:
+          maxlength: 12
+          meta:
+          - meta:
+            - maxLength: '12'
+              partID: measure
+              protocolSteps: fK
+              protocolStepsRequired: mandatoryIf
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: categorical
+              partID: measure
+              protocolSteps: fK
+              protocolStepsRequired: mandatoryIf
+            ruleID: invalid_type
+          type: string
+        method:
+          maxlength: 10
+          meta:
+          - meta:
+            - maxLength: '10'
+              partID: method
+              protocolSteps: fK
+              protocolStepsRequired: mandatoryIf
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: categorical
+              partID: method
+              protocolSteps: fK
+              protocolStepsRequired: mandatoryIf
+            ruleID: invalid_type
+          type: string
+        notes:
+          maxlength: 200
+          meta:
+          - meta:
+            - maxLength: '200'
+              partID: notes
+              protocolSteps: header
+              protocolStepsRequired: optional
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              partID: notes
+              protocolSteps: header
+              protocolStepsRequired: optional
+            ruleID: invalid_type
+          type: string
+        organizationID:
+          maxlength: 100
+          meta:
+          - meta:
+            - maxLength: '100'
+              partID: organizationID
+              protocolSteps: fK
+              protocolStepsRequired: optional
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              partID: organizationID
+              protocolSteps: fK
+              protocolStepsRequired: optional
+            ruleID: invalid_type
+          type: string
+        refLink:
+          maxlength: 255
+          meta:
+          - meta:
+            - maxLength: '255'
+              partID: refLink
+              protocolSteps: header
+              protocolStepsRequired: optional
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              partID: refLink
+              protocolSteps: header
+              protocolStepsRequired: optional
+            ruleID: invalid_type
+          type: string
+        sourceStep:
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              partID: sourceStep
+              protocolSteps: fK
+              protocolStepsRequired: optional
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              partID: sourceStep
+              protocolSteps: fK
+              protocolStepsRequired: optional
+            ruleID: invalid_type
+          type: string
+        stepID:
+          emptyTrimmed: false
+          forbidden:
+          - NA
+          - nan
+          - nr
+          - 'null'
+          - undisc
+          maxlength: 30
+          meta:
+          - meta:
+            - partID: stepID
+              protocolSteps: pK
+              protocolStepsRequired: mandatory
+            ruleID: duplicate_entries_found
+          - meta:
+            - maxLength: '30'
+              partID: stepID
+              protocolSteps: pK
+              protocolStepsRequired: mandatory
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              partID: stepID
+              protocolSteps: pK
+              protocolStepsRequired: mandatory
+            ruleID: invalid_type
+          - meta:
+            - partID: stepID
+              protocolSteps: pK
+              protocolStepsRequired: mandatory
+            ruleID: missing_mandatory_column
+          - meta:
+            - partID: stepID
+              protocolSteps: pK
+              protocolStepsRequired: mandatory
+            - partID: NA
+              partType: missingness
+            - partID: nan
+              partType: missingness
+            - partID: nr
+              partType: missingness
+            - partID: 'null'
+              partType: missingness
+            - partID: undisc
+              partType: missingness
+            ruleID: missing_values_found
+          required: true
+          type: string
+          unique: true
+        stepVer:
+          maxlength: 50
+          meta:
+          - meta:
+            - maxLength: '50'
+              partID: stepVer
+              protocolSteps: header
+              protocolStepsRequired: optional
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              partID: stepVer
+              protocolSteps: header
+              protocolStepsRequired: optional
+            ruleID: invalid_type
+          type: string
+        summ:
+          maxlength: 255
+          meta:
+          - meta:
+            - maxLength: '255'
+              partID: summ
+              protocolSteps: header
+              protocolStepsRequired: optional
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              partID: summ
+              protocolSteps: header
+              protocolStepsRequired: optional
+            ruleID: invalid_type
+          type: string
+        unit:
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              partID: unit
+              protocolSteps: fK
+              protocolStepsRequired: mandatoryIf
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: categorical
+              partID: unit
+              protocolSteps: fK
+              protocolStepsRequired: mandatoryIf
+            ruleID: invalid_type
+          type: string
+        value:
+          maxlength: 15
+          meta:
+          - meta:
+            - maxLength: '15'
+              partID: value
+              protocolSteps: header
+              protocolStepsRequired: mandatoryif
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              partID: value
+              protocolSteps: header
+              protocolStepsRequired: mandatoryif
+            ruleID: invalid_type
+          type: string
+      type: dict
+    type: list
+  protocols:
+    schema:
+      meta:
+      - partID: protocols
+        partType: tables
+      schema:
+        contactID:
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              partID: contactID
+              protocols: fK
+              protocolsRequired: optional
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              partID: contactID
+              protocols: fK
+              protocolsRequired: optional
+            ruleID: invalid_type
+          type: string
+        datasetID:
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              partID: datasetID
+              protocols: fK
+              protocolsRequired: optional
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              partID: datasetID
+              protocols: fK
+              protocolsRequired: optional
+            ruleID: invalid_type
+          type: string
+        lastEdited:
+          coerce: datetime
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              partID: lastEdited
+              protocols: header
+              protocolsRequired: optional
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: datetime
+              partID: lastEdited
+              protocols: header
+              protocolsRequired: optional
+            ruleID: invalid_type
+          type: datetime
+        name:
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              partID: name
+              protocols: header
+              protocolsRequired: optional
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              partID: name
+              protocols: header
+              protocolsRequired: optional
+            ruleID: invalid_type
+          type: string
+        notes:
+          maxlength: 200
+          meta:
+          - meta:
+            - maxLength: '200'
+              partID: notes
+              protocols: header
+              protocolsRequired: optional
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              partID: notes
+              protocols: header
+              protocolsRequired: optional
+            ruleID: invalid_type
+          type: string
+        organizationID:
+          maxlength: 100
+          meta:
+          - meta:
+            - maxLength: '100'
+              partID: organizationID
+              protocols: fK
+              protocolsRequired: optional
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              partID: organizationID
+              protocols: fK
+              protocolsRequired: optional
+            ruleID: invalid_type
+          type: string
+        protocolID:
+          emptyTrimmed: false
+          forbidden:
+          - NA
+          - nan
+          - nr
+          - 'null'
+          - undisc
+          maxlength: 30
+          meta:
+          - meta:
+            - partID: protocolID
+              protocols: pK
+              protocolsRequired: mandatory
+            ruleID: duplicate_entries_found
+          - meta:
+            - maxLength: '30'
+              partID: protocolID
+              protocols: pK
+              protocolsRequired: mandatory
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              partID: protocolID
+              protocols: pK
+              protocolsRequired: mandatory
+            ruleID: invalid_type
+          - meta:
+            - partID: protocolID
+              protocols: pK
+              protocolsRequired: mandatory
+            ruleID: missing_mandatory_column
+          - meta:
+            - partID: protocolID
+              protocols: pK
+              protocolsRequired: mandatory
+            - partID: NA
+              partType: missingness
+            - partID: nan
+              partType: missingness
+            - partID: nr
+              partType: missingness
+            - partID: 'null'
+              partType: missingness
+            - partID: undisc
+              partType: missingness
+            ruleID: missing_values_found
+          required: true
+          type: string
+          unique: true
+        protocolVersion:
+          coerce: integer
+          meta:
+          - meta:
+            - dataType: integer
+              partID: protocolVersion
+              protocols: header
+              protocolsRequired: optional
+            ruleID: invalid_type
+          - meta:
+            - minValue: '1'
+              partID: protocolVersion
+              protocols: header
+              protocolsRequired: optional
+            ruleID: less_than_min_value
+          min: 1
+          type: integer
+        refLink:
+          maxlength: 255
+          meta:
+          - meta:
+            - maxLength: '255'
+              partID: refLink
+              protocols: header
+              protocolsRequired: optional
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              partID: refLink
+              protocols: header
+              protocolsRequired: optional
+            ruleID: invalid_type
+          type: string
+        reportable:
+          allowed:
+          - 'FALSE'
+          - 'TRUE'
+          anyof:
+          - allowed:
+            - 'FALSE'
+            - 'TRUE'
+            empty: true
+          maxlength: 10
+          meta:
+          - meta:
+            - maxLength: '10'
+              partID: reportable
+              protocols: input
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: boolean
+              mmaSet: booleanSet
+              partID: reportable
+              protocols: input
+            - partID: 'TRUE'
+              setID: booleanSet
+            - partID: 'FALSE'
+              setID: booleanSet
+            ruleID: invalid_category
+          - meta:
+            - dataType: boolean
+              partID: reportable
+              protocols: input
+            - partID: 'false'
+              setID: booleanSet
+            - partID: 'true'
+              setID: booleanSet
+            ruleID: invalid_type
+          type: string
+        sourceProtocol:
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              partID: sourceProtocol
+              protocols: fK
+              protocolsRequired: optional
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              partID: sourceProtocol
+              protocols: fK
+              protocolsRequired: optional
+            ruleID: invalid_type
+          type: string
+        summ:
+          maxlength: 255
+          meta:
+          - meta:
+            - maxLength: '255'
+              partID: summ
+              protocols: header
+              protocolsRequired: optional
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              partID: summ
+              protocols: header
+              protocolsRequired: optional
+            ruleID: invalid_type
+          type: string
+      type: dict
+    type: list
+  qualityReports:
+    schema:
+      meta:
+      - partID: qualityReports
+        partType: tables
+      schema:
+        lastEdited:
+          coerce: datetime
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              partID: lastEdited
+              qualityReports: header
+              qualityReportsRequired: optional
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: datetime
+              partID: lastEdited
+              qualityReports: header
+              qualityReportsRequired: optional
+            ruleID: invalid_type
+          type: datetime
+        measureRepID:
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              partID: measureRepID
+              qualityReports: FK
+              qualityReportsRequired: mandatoryIf
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              partID: measureRepID
+              qualityReports: FK
+              qualityReportsRequired: mandatoryIf
+            ruleID: invalid_type
+          type: string
+        measureSetRepID:
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              partID: measureSetRepID
+              qualityReports: FK
+              qualityReportsRequired: mandatoryIf
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              partID: measureSetRepID
+              qualityReports: FK
+              qualityReportsRequired: mandatoryIf
+            ruleID: invalid_type
+          type: string
+        notes:
+          maxlength: 200
+          meta:
+          - meta:
+            - maxLength: '200'
+              partID: notes
+              qualityReports: header
+              qualityReportsRequired: optional
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              partID: notes
+              qualityReports: header
+              qualityReportsRequired: optional
+            ruleID: invalid_type
+          type: string
+        qualityFlag:
+          emptyTrimmed: false
+          forbidden:
+          - NA
+          - nan
+          - nr
+          - 'null'
+          - undisc
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              partID: qualityFlag
+              qualityReports: header
+              qualityReportsRequired: mandatory
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: categorical
+              partID: qualityFlag
+              qualityReports: header
+              qualityReportsRequired: mandatory
+            ruleID: invalid_type
+          - meta:
+            - partID: qualityFlag
+              qualityReports: header
+              qualityReportsRequired: mandatory
+            ruleID: missing_mandatory_column
+          - meta:
+            - partID: qualityFlag
+              qualityReports: header
+              qualityReportsRequired: mandatory
+            - partID: NA
+              partType: missingness
+            - partID: nan
+              partType: missingness
+            - partID: nr
+              partType: missingness
+            - partID: 'null'
+              partType: missingness
+            - partID: undisc
+              partType: missingness
+            ruleID: missing_values_found
+          required: true
+          type: string
+        qualityReportID:
+          emptyTrimmed: false
+          forbidden:
+          - NA
+          - nan
+          - nr
+          - 'null'
+          - undisc
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              partID: qualityReportID
+              qualityReports: PK
+              qualityReportsRequired: mandatory
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              partID: qualityReportID
+              qualityReports: PK
+              qualityReportsRequired: mandatory
+            ruleID: invalid_type
+          - meta:
+            - partID: qualityReportID
+              qualityReports: PK
+              qualityReportsRequired: mandatory
+            ruleID: missing_mandatory_column
+          - meta:
+            - partID: qualityReportID
+              qualityReports: PK
+              qualityReportsRequired: mandatory
+            - partID: NA
+              partType: missingness
+            - partID: nan
+              partType: missingness
+            - partID: nr
+              partType: missingness
+            - partID: 'null'
+              partType: missingness
+            - partID: undisc
+              partType: missingness
+            ruleID: missing_values_found
+          required: true
+          type: string
+        sampleID:
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              partID: sampleID
+              qualityReports: FK
+              qualityReportsRequired: mandatoryIf
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              partID: sampleID
+              qualityReports: FK
+              qualityReportsRequired: mandatoryIf
+            ruleID: invalid_type
+          type: string
+        severity:
+          anyof:
+          - allowed:
+            - high
+            - low
+            - mid
+            empty: true
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              partID: severity
+              qualityReports: header
+              qualityReportsRequired: optional
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: categorical
+              mmaSet: sevSet
+              partID: severity
+              qualityReports: header
+            - partID: low
+              setID: sevSet
+            - partID: mid
+              setID: sevSet
+            - partID: high
+              setID: sevSet
+            ruleID: invalid_category
+          - meta:
+            - dataType: categorical
+              partID: severity
+              qualityReports: header
+              qualityReportsRequired: optional
+            ruleID: invalid_type
+          type: string
+        wideMeasure:
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              partID: wideMeasure
+              qualityReports: input
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              partID: wideMeasure
+              qualityReports: input
+            ruleID: invalid_type
+          type: string
+        wideName:
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              partID: wideName
+              qualityReports: input
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              partID: wideName
+              qualityReports: input
+            ruleID: invalid_type
+          type: string
+      type: dict
+    type: list
+  sampleRelationships:
+    schema:
+      meta:
+      - partID: sampleRelationships
+        partType: tables
+      schema:
+        lastEdited:
+          coerce: datetime
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              partID: lastEdited
+              sampleRelationships: header
+              sampleRelationshipsRequired: optional
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: datetime
+              partID: lastEdited
+              sampleRelationships: header
+              sampleRelationshipsRequired: optional
+            ruleID: invalid_type
+          type: datetime
+        notes:
+          maxlength: 200
+          meta:
+          - meta:
+            - maxLength: '200'
+              partID: notes
+              sampleRelationships: header
+              sampleRelationshipsRequired: optional
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              partID: notes
+              sampleRelationships: header
+              sampleRelationshipsRequired: optional
+            ruleID: invalid_type
+          type: string
+        relationshipID:
+          emptyTrimmed: false
+          forbidden:
+          - NA
+          - nan
+          - nr
+          - 'null'
+          - undisc
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              partID: relationshipID
+              sampleRelationships: fK
+              sampleRelationshipsRequired: mandatory
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              partID: relationshipID
+              sampleRelationships: fK
+              sampleRelationshipsRequired: mandatory
+            ruleID: invalid_type
+          - meta:
+            - partID: relationshipID
+              sampleRelationships: fK
+              sampleRelationshipsRequired: mandatory
+            ruleID: missing_mandatory_column
+          - meta:
+            - partID: relationshipID
+              sampleRelationships: fK
+              sampleRelationshipsRequired: mandatory
+            - partID: NA
+              partType: missingness
+            - partID: nan
+              partType: missingness
+            - partID: nr
+              partType: missingness
+            - partID: 'null'
+              partType: missingness
+            - partID: undisc
+              partType: missingness
+            ruleID: missing_values_found
+          required: true
+          type: string
+        sampleIDObject:
+          emptyTrimmed: false
+          forbidden:
+          - NA
+          - nan
+          - nr
+          - 'null'
+          - undisc
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              partID: sampleIDObject
+              sampleRelationships: fK
+              sampleRelationshipsRequired: mandatory
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              partID: sampleIDObject
+              sampleRelationships: fK
+              sampleRelationshipsRequired: mandatory
+            ruleID: invalid_type
+          - meta:
+            - partID: sampleIDObject
+              sampleRelationships: fK
+              sampleRelationshipsRequired: mandatory
+            ruleID: missing_mandatory_column
+          - meta:
+            - partID: sampleIDObject
+              sampleRelationships: fK
+              sampleRelationshipsRequired: mandatory
+            - partID: NA
+              partType: missingness
+            - partID: nan
+              partType: missingness
+            - partID: nr
+              partType: missingness
+            - partID: 'null'
+              partType: missingness
+            - partID: undisc
+              partType: missingness
+            ruleID: missing_values_found
+          required: true
+          type: string
+        sampleIDSubject:
+          emptyTrimmed: false
+          forbidden:
+          - NA
+          - nan
+          - nr
+          - 'null'
+          - undisc
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              partID: sampleIDSubject
+              sampleRelationships: fK
+              sampleRelationshipsRequired: mandatory
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              partID: sampleIDSubject
+              sampleRelationships: fK
+              sampleRelationshipsRequired: mandatory
+            ruleID: invalid_type
+          - meta:
+            - partID: sampleIDSubject
+              sampleRelationships: fK
+              sampleRelationshipsRequired: mandatory
+            ruleID: missing_mandatory_column
+          - meta:
+            - partID: sampleIDSubject
+              sampleRelationships: fK
+              sampleRelationshipsRequired: mandatory
+            - partID: NA
+              partType: missingness
+            - partID: nan
+              partType: missingness
+            - partID: nr
+              partType: missingness
+            - partID: 'null'
+              partType: missingness
+            - partID: undisc
+              partType: missingness
+            ruleID: missing_values_found
+          required: true
+          type: string
+        sampleRelationshipsID:
+          emptyTrimmed: false
+          forbidden:
+          - NA
+          - nan
+          - nr
+          - 'null'
+          - undisc
+          maxlength: 50
+          meta:
+          - meta:
+            - partID: sampleRelationshipsID
+              sampleRelationships: pK
+              sampleRelationshipsRequired: mandatory
+            ruleID: duplicate_entries_found
+          - meta:
+            - maxLength: '50'
+              partID: sampleRelationshipsID
+              sampleRelationships: pK
+              sampleRelationshipsRequired: mandatory
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              partID: sampleRelationshipsID
+              sampleRelationships: pK
+              sampleRelationshipsRequired: mandatory
+            ruleID: invalid_type
+          - meta:
+            - partID: sampleRelationshipsID
+              sampleRelationships: pK
+              sampleRelationshipsRequired: mandatory
+            ruleID: missing_mandatory_column
+          - meta:
+            - partID: sampleRelationshipsID
+              sampleRelationships: pK
+              sampleRelationshipsRequired: mandatory
+            - partID: NA
+              partType: missingness
+            - partID: nan
+              partType: missingness
+            - partID: nr
+              partType: missingness
+            - partID: 'null'
+              partType: missingness
+            - partID: undisc
+              partType: missingness
+            ruleID: missing_values_found
+          required: true
+          type: string
+          unique: true
+      type: dict
+    type: list
+  samples:
+    schema:
+      meta:
+      - partID: samples
+        partType: tables
+      schema:
+        collDT:
+          coerce: datetime
+          emptyTrimmed: false
+          forbidden:
+          - NA
+          - nan
+          - nr
+          - 'null'
+          - undisc
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              partID: collDT
+              samples: header
+              samplesRequired: mandatory
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: datetime
+              partID: collDT
+              samples: header
+              samplesRequired: mandatory
+            ruleID: invalid_type
+          - meta:
+            - partID: collDT
+              samples: header
+              samplesRequired: mandatory
+            ruleID: missing_mandatory_column
+          - meta:
+            - partID: collDT
+              samples: header
+              samplesRequired: mandatory
+            - partID: NA
+              partType: missingness
+            - partID: nan
+              partType: missingness
+            - partID: nr
+              partType: missingness
+            - partID: 'null'
+              partType: missingness
+            - partID: undisc
+              partType: missingness
+            ruleID: missing_values_found
+          required: true
+          type: datetime
+        collDTEnd:
+          coerce: datetime
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              partID: collDTEnd
+              samples: header
+              samplesRequired: optional
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: datetime
+              partID: collDTEnd
+              samples: header
+              samplesRequired: optional
+            ruleID: invalid_type
+          type: datetime
+        collDTStart:
+          coerce: datetime
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              partID: collDTStart
+              samples: header
+              samplesRequired: optional
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: datetime
+              partID: collDTStart
+              samples: header
+              samplesRequired: optional
+            ruleID: invalid_type
+          type: datetime
+        collNum:
+          coerce: integer
+          emptyTrimmed: false
+          forbidden:
+          - NA
+          - nan
+          - nr
+          - 'null'
+          - undisc
+          meta:
+          - meta:
+            - dataType: integer
+              partID: collNum
+              samples: header
+              samplesRequired: mandatory
+            ruleID: invalid_type
+          - meta:
+            - minValue: '1'
+              partID: collNum
+              samples: header
+              samplesRequired: mandatory
+            ruleID: less_than_min_value
+          - meta:
+            - partID: collNum
+              samples: header
+              samplesRequired: mandatory
+            ruleID: missing_mandatory_column
+          - meta:
+            - partID: collNum
+              samples: header
+              samplesRequired: mandatory
+            - partID: NA
+              partType: missingness
+            - partID: nan
+              partType: missingness
+            - partID: nr
+              partType: missingness
+            - partID: 'null'
+              partType: missingness
+            - partID: undisc
+              partType: missingness
+            ruleID: missing_values_found
+          min: 1
+          required: true
+          type: integer
+        collNumPer:
+          maxlength: 6
+          meta:
+          - meta:
+            - maxLength: '6'
+              partID: collNumPer
+              samples: header
+              samplesRequired: optional
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              partID: collNumPer
+              samples: header
+              samplesRequired: optional
+            ruleID: invalid_type
+          type: string
+        collPer:
+          coerce: float
+          emptyTrimmed: false
+          forbidden:
+          - NA
+          - nan
+          - nr
+          - 'null'
+          - undisc
+          meta:
+          - meta:
+            - dataType: float
+              partID: collPer
+              samples: header
+              samplesRequired: mandatory
+            ruleID: invalid_type
+          - meta:
+            - minValue: '1'
+              partID: collPer
+              samples: header
+              samplesRequired: mandatory
+            ruleID: less_than_min_value
+          - meta:
+            - partID: collPer
+              samples: header
+              samplesRequired: mandatory
+            ruleID: missing_mandatory_column
+          - meta:
+            - partID: collPer
+              samples: header
+              samplesRequired: mandatory
+            - partID: NA
+              partType: missingness
+            - partID: nan
+              partType: missingness
+            - partID: nr
+              partType: missingness
+            - partID: 'null'
+              partType: missingness
+            - partID: undisc
+              partType: missingness
+            ruleID: missing_values_found
+          min: 1.0
+          required: true
+          type: float
+        collType:
+          anyof:
+          - allowed:
+            - areaPr
+            - comp
+            - cosca
+            - flowPr
+            - grb
+            - manComp
+            - moorSw
+            - passiveGen
+            - surfSw
+            - timePr
+            - volPr
+            empty: true
+          emptyTrimmed: false
+          forbidden:
+          - NA
+          - nan
+          - nr
+          - 'null'
+          - undisc
+          maxlength: 12
+          meta:
+          - meta:
+            - maxLength: '12'
+              partID: collType
+              samples: fk
+              samplesRequired: mandatory
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: categorical
+              mmaSet: collectSet
+              partID: collType
+              samples: fk
+            - partID: areaPr
+              setID: collectSet
+            - partID: cosca
+              setID: collectSet
+            - partID: flowPr
+              setID: collectSet
+            - partID: grb
+              setID: collectSet
+            - partID: moorSw
+              setID: collectSet
+            - partID: surfSw
+              setID: collectSet
+            - partID: timePr
+              setID: collectSet
+            - partID: volPr
+              setID: collectSet
+            - partID: comp
+              setID: collectSet
+            - partID: manComp
+              setID: collectSet
+            - partID: passiveGen
+              setID: collectSet
+            ruleID: invalid_category
+          - meta:
+            - dataType: categorical
+              partID: collType
+              samples: fk
+              samplesRequired: mandatory
+            ruleID: invalid_type
+          - meta:
+            - partID: collType
+              samples: fk
+              samplesRequired: mandatory
+            ruleID: missing_mandatory_column
+          - meta:
+            - partID: collType
+              samples: fk
+              samplesRequired: mandatory
+            - partID: NA
+              partType: missingness
+            - partID: nan
+              partType: missingness
+            - partID: nr
+              partType: missingness
+            - partID: 'null'
+              partType: missingness
+            - partID: undisc
+              partType: missingness
+            ruleID: missing_values_found
+          required: true
+          type: string
+        contactID:
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              partID: contactID
+              samples: fK
+              samplesRequired: optional
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              partID: contactID
+              samples: fK
+              samplesRequired: optional
+            ruleID: invalid_type
+          type: string
+        datasetID:
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              partID: datasetID
+              samples: fK
+              samplesRequired: optional
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              partID: datasetID
+              samples: fK
+              samplesRequired: optional
+            ruleID: invalid_type
+          type: string
+        lastEdited:
+          coerce: datetime
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              partID: lastEdited
+              samples: header
+              samplesRequired: optional
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: datetime
+              partID: lastEdited
+              samples: header
+              samplesRequired: optional
+            ruleID: invalid_type
+          type: datetime
+        notes:
+          maxlength: 200
+          meta:
+          - meta:
+            - maxLength: '200'
+              partID: notes
+              samples: header
+              samplesRequired: optional
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              partID: notes
+              samples: header
+              samplesRequired: optional
+            ruleID: invalid_type
+          type: string
+        organizationID:
+          maxlength: 100
+          meta:
+          - meta:
+            - maxLength: '100'
+              partID: organizationID
+              samples: header
+              samplesRequired: optional
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              partID: organizationID
+              samples: header
+              samplesRequired: optional
+            ruleID: invalid_type
+          type: string
+        origin:
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              partID: origin
+              samples: header
+              samplesRequired: optional
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: categorical
+              partID: origin
+              samples: header
+              samplesRequired: optional
+            ruleID: invalid_type
+          type: string
+        pooled:
+          allowed:
+          - 'FALSE'
+          - 'TRUE'
+          anyof:
+          - allowed:
+            - 'FALSE'
+            - 'TRUE'
+            empty: true
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              partID: pooled
+              samples: header
+              samplesRequired: optional
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: boolean
+              mmaSet: booleanSet
+              partID: pooled
+              samples: header
+            - partID: 'TRUE'
+              setID: booleanSet
+            - partID: 'FALSE'
+              setID: booleanSet
+            ruleID: invalid_category
+          - meta:
+            - dataType: boolean
+              partID: pooled
+              samples: header
+              samplesRequired: optional
+            - partID: 'false'
+              setID: booleanSet
+            - partID: 'true'
+              setID: booleanSet
+            ruleID: invalid_type
+          type: string
+        protocolID:
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              partID: protocolID
+              samples: fK
+              samplesRequired: optional
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              partID: protocolID
+              samples: fK
+              samplesRequired: optional
+            ruleID: invalid_type
+          type: string
+        purpose:
+          anyof:
+          - allowed:
+            - education
+            - multiple
+            - provisional
+            - qualityControl
+            - regular
+            - testing
+            - validationStudy
+            empty: true
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              partID: purpose
+              samples: fK
+              samplesRequired: optional
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: categorical
+              mmaSet: purposeSet
+              partID: purpose
+              samples: fK
+            - partID: education
+              setID: purposeSet
+            - partID: multiple
+              setID: purposeSet
+            - partID: provisional
+              setID: purposeSet
+            - partID: qualityControl
+              setID: purposeSet
+            - partID: regular
+              setID: purposeSet
+            - partID: testing
+              setID: purposeSet
+            - partID: validationStudy
+              setID: purposeSet
+            ruleID: invalid_category
+          - meta:
+            - dataType: categorical
+              partID: purpose
+              samples: fK
+              samplesRequired: optional
+            ruleID: invalid_type
+          type: string
+        recDate:
+          coerce: datetime
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              partID: recDate
+              samples: header
+              samplesRequired: optional
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: datetime
+              partID: recDate
+              samples: header
+              samplesRequired: optional
+            ruleID: invalid_type
+          type: datetime
+        repType:
+          anyof:
+          - allowed:
+            - colocated
+            - fieldReplicate
+            - labDuplicate
+            - lcsd
+            - msd
+            - unique
+            empty: true
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              partID: repType
+              samples: fK
+              samplesRequired: optional
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: categorical
+              mmaSet: replicateSet
+              partID: repType
+              samples: fK
+            - partID: colocated
+              setID: replicateSet
+            - partID: fieldReplicate
+              setID: replicateSet
+            - partID: labDuplicate
+              setID: replicateSet
+            - partID: lcsd
+              setID: replicateSet
+            - partID: msd
+              setID: replicateSet
+            - partID: unique
+              setID: replicateSet
+            ruleID: invalid_category
+          - meta:
+            - dataType: categorical
+              partID: repType
+              samples: fK
+              samplesRequired: optional
+            ruleID: invalid_type
+          type: string
+        reportable:
+          allowed:
+          - 'FALSE'
+          - 'TRUE'
+          anyof:
+          - allowed:
+            - 'FALSE'
+            - 'TRUE'
+            empty: true
+          maxlength: 10
+          meta:
+          - meta:
+            - maxLength: '10'
+              partID: reportable
+              samples: header
+              samplesRequired: optional
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: boolean
+              mmaSet: booleanSet
+              partID: reportable
+              samples: header
+            - partID: 'TRUE'
+              setID: booleanSet
+            - partID: 'FALSE'
+              setID: booleanSet
+            ruleID: invalid_category
+          - meta:
+            - dataType: boolean
+              partID: reportable
+              samples: header
+              samplesRequired: optional
+            - partID: 'false'
+              setID: booleanSet
+            - partID: 'true'
+              setID: booleanSet
+            ruleID: invalid_type
+          type: string
+        saMaterial:
+          anyof:
+          - allowed:
+            - afu
+            - desk
+            - faeces
+            - floor
+            - htSam
+            - nww
+            - pEfflu
+            - pSludge
+            - pstGrit
+            - rawWW
+            - rawWWdown
+            - rawWWup
+            - sEfflu
+            - sSludge
+            - septage
+            - surface
+            - swrSed
+            empty: true
+          emptyTrimmed: false
+          forbidden:
+          - NA
+          - nan
+          - nr
+          - 'null'
+          - undisc
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              partID: saMaterial
+              samples: fK
+              samplesRequired: mandatory
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: categorical
+              mmaSet: sampleMatSet
+              partID: saMaterial
+              samples: fK
+            - partID: afu
+              setID: sampleMatSet
+            - partID: desk
+              setID: sampleMatSet
+            - partID: faeces
+              setID: sampleMatSet
+            - partID: floor
+              setID: sampleMatSet
+            - partID: htSam
+              setID: sampleMatSet
+            - partID: nww
+              setID: sampleMatSet
+            - partID: pEfflu
+              setID: sampleMatSet
+            - partID: pSludge
+              setID: sampleMatSet
+            - partID: pstGrit
+              setID: sampleMatSet
+            - partID: rawWW
+              setID: sampleMatSet
+            - partID: rawWWdown
+              setID: sampleMatSet
+            - partID: rawWWup
+              setID: sampleMatSet
+            - partID: sEfflu
+              setID: sampleMatSet
+            - partID: septage
+              setID: sampleMatSet
+            - partID: sSludge
+              setID: sampleMatSet
+            - partID: surface
+              setID: sampleMatSet
+            - partID: swrSed
+              setID: sampleMatSet
+            ruleID: invalid_category
+          - meta:
+            - dataType: categorical
+              partID: saMaterial
+              samples: fK
+              samplesRequired: mandatory
+            ruleID: invalid_type
+          - meta:
+            - partID: saMaterial
+              samples: fK
+              samplesRequired: mandatory
+            ruleID: missing_mandatory_column
+          - meta:
+            - partID: saMaterial
+              samples: fK
+              samplesRequired: mandatory
+            - partID: NA
+              partType: missingness
+            - partID: nan
+              partType: missingness
+            - partID: nr
+              partType: missingness
+            - partID: 'null'
+              partType: missingness
+            - partID: undisc
+              partType: missingness
+            ruleID: missing_values_found
+          required: true
+          type: string
+        sampleID:
+          emptyTrimmed: false
+          forbidden:
+          - NA
+          - nan
+          - nr
+          - 'null'
+          - undisc
+          maxlength: 30
+          meta:
+          - meta:
+            - partID: sampleID
+              samples: pK
+              samplesRequired: mandatory
+            ruleID: duplicate_entries_found
+          - meta:
+            - maxLength: '30'
+              partID: sampleID
+              samples: pK
+              samplesRequired: mandatory
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              partID: sampleID
+              samples: pK
+              samplesRequired: mandatory
+            ruleID: invalid_type
+          - meta:
+            - partID: sampleID
+              samples: pK
+              samplesRequired: mandatory
+            ruleID: missing_mandatory_column
+          - meta:
+            - partID: sampleID
+              samples: pK
+              samplesRequired: mandatory
+            - partID: NA
+              partType: missingness
+            - partID: nan
+              partType: missingness
+            - partID: nr
+              partType: missingness
+            - partID: 'null'
+              partType: missingness
+            - partID: undisc
+              partType: missingness
+            ruleID: missing_values_found
+          required: true
+          type: string
+          unique: true
+        sentDate:
+          coerce: datetime
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              partID: sentDate
+              samples: header
+              samplesRequired: optional
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: datetime
+              partID: sentDate
+              samples: header
+              samplesRequired: optional
+            ruleID: invalid_type
+          type: datetime
+        severity:
+          anyof:
+          - allowed:
+            - high
+            - low
+            - mid
+            empty: true
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              partID: severity
+              samples: Input
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: categorical
+              mmaSet: sevSet
+              partID: severity
+              samples: Input
+            - partID: low
+              setID: sevSet
+            - partID: mid
+              setID: sevSet
+            - partID: high
+              setID: sevSet
+            ruleID: invalid_category
+          - meta:
+            - dataType: categorical
+              partID: severity
+              samples: Input
+            ruleID: invalid_type
+          type: string
+        siteID:
+          emptyTrimmed: false
+          forbidden:
+          - NA
+          - nan
+          - nr
+          - 'null'
+          - undisc
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              partID: siteID
+              samples: fK
+              samplesRequired: mandatory
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              partID: siteID
+              samples: fK
+              samplesRequired: mandatory
+            ruleID: invalid_type
+          - meta:
+            - partID: siteID
+              samples: fK
+              samplesRequired: mandatory
+            ruleID: missing_mandatory_column
+          - meta:
+            - partID: siteID
+              samples: fK
+              samplesRequired: mandatory
+            - partID: NA
+              partType: missingness
+            - partID: nan
+              partType: missingness
+            - partID: nr
+              partType: missingness
+            - partID: 'null'
+              partType: missingness
+            - partID: undisc
+              partType: missingness
+            ruleID: missing_values_found
+          required: true
+          type: string
+        wideMeasure:
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              partID: wideMeasure
+              samples: input
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              partID: wideMeasure
+              samples: input
+            ruleID: invalid_type
+          type: string
+        wideName:
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              partID: wideName
+              samples: input
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              partID: wideName
+              samples: input
+            ruleID: invalid_type
+          type: string
+      type: dict
+    type: list
+  sites:
+    schema:
+      meta:
+      - partID: sites
+        partType: tables
+      schema:
+        addressID:
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              partID: addressID
+              sites: fK
+              sitesRequired: optional
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              partID: addressID
+              sites: fK
+              sitesRequired: optional
+            ruleID: invalid_type
+          type: string
+        contactID:
+          emptyTrimmed: false
+          forbidden:
+          - NA
+          - nan
+          - nr
+          - 'null'
+          - undisc
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              partID: contactID
+              sites: fK
+              sitesRequired: mandatory
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              partID: contactID
+              sites: fK
+              sitesRequired: mandatory
+            ruleID: invalid_type
+          - meta:
+            - partID: contactID
+              sites: fK
+              sitesRequired: mandatory
+            ruleID: missing_mandatory_column
+          - meta:
+            - partID: contactID
+              sites: fK
+              sitesRequired: mandatory
+            - partID: NA
+              partType: missingness
+            - partID: nan
+              partType: missingness
+            - partID: nr
+              partType: missingness
+            - partID: 'null'
+              partType: missingness
+            - partID: undisc
+              partType: missingness
+            ruleID: missing_values_found
+          required: true
+          type: string
+        datasetID:
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              partID: datasetID
+              sites: fK
+              sitesRequired: optional
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              partID: datasetID
+              sites: fK
+              sitesRequired: optional
+            ruleID: invalid_type
+          type: string
+        descr:
+          maxlength: 200
+          meta:
+          - meta:
+            - maxLength: '200'
+              partID: descr
+              sites: header
+              sitesRequired: optional
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              partID: descr
+              sites: header
+              sitesRequired: optional
+            ruleID: invalid_type
+          type: string
+        geoEPSG:
+          coerce: float
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              partID: geoEPSG
+              sites: header
+              sitesRequired: mandatoryIf
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: float
+              partID: geoEPSG
+              sites: header
+              sitesRequired: mandatoryIf
+            ruleID: invalid_type
+          type: float
+        geoLat:
+          coerce: float
+          max: 90.0
+          meta:
+          - meta:
+            - maxValue: '90'
+              partID: geoLat
+              sites: header
+              sitesRequired: mandatoryIf
+            ruleID: greater_than_max_value
+          - meta:
+            - dataType: float
+              partID: geoLat
+              sites: header
+              sitesRequired: mandatoryIf
+            ruleID: invalid_type
+          - meta:
+            - minValue: '-90'
+              partID: geoLat
+              sites: header
+              sitesRequired: mandatoryIf
+            ruleID: less_than_min_value
+          min: -90.0
+          type: float
+        geoLong:
+          coerce: float
+          max: 180.0
+          meta:
+          - meta:
+            - maxValue: '180'
+              partID: geoLong
+              sites: header
+              sitesRequired: mandatoryIf
+            ruleID: greater_than_max_value
+          - meta:
+            - dataType: float
+              partID: geoLong
+              sites: header
+              sitesRequired: mandatoryIf
+            ruleID: invalid_type
+          - meta:
+            - minValue: '-180'
+              partID: geoLong
+              sites: header
+              sitesRequired: mandatoryIf
+            ruleID: less_than_min_value
+          min: -180.0
+          type: float
+        healthRegion:
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              partID: healthRegion
+              sites: header
+              sitesRequired: optional
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              partID: healthRegion
+              sites: header
+              sitesRequired: optional
+            ruleID: invalid_type
+          type: string
+        lastEdited:
+          coerce: datetime
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              partID: lastEdited
+              sites: header
+              sitesRequired: optional
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: datetime
+              partID: lastEdited
+              sites: header
+              sitesRequired: optional
+            ruleID: invalid_type
+          type: datetime
+        name:
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              partID: name
+              sites: header
+              sitesRequired: recommended
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              partID: name
+              sites: header
+              sitesRequired: recommended
+            ruleID: invalid_type
+          type: string
+        notes:
+          maxlength: 200
+          meta:
+          - meta:
+            - maxLength: '200'
+              partID: notes
+              sites: header
+              sitesRequired: optional
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              partID: notes
+              sites: header
+              sitesRequired: optional
+            ruleID: invalid_type
+          type: string
+        organizationID:
+          maxlength: 100
+          meta:
+          - meta:
+            - maxLength: '100'
+              partID: organizationID
+              sites: header
+              sitesRequired: optional
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              partID: organizationID
+              sites: header
+              sitesRequired: optional
+            ruleID: invalid_type
+          type: string
+        parSiteID:
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              partID: parSiteID
+              sites: fK
+              sitesRequired: optional
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              partID: parSiteID
+              sites: fK
+              sitesRequired: optional
+            ruleID: invalid_type
+          type: string
+        polygonID:
+          maxlength: 10
+          meta:
+          - meta:
+            - maxLength: '10'
+              partID: polygonID
+              sites: fK
+              sitesRequired: optional
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              partID: polygonID
+              sites: fK
+              sitesRequired: optional
+            ruleID: invalid_type
+          type: string
+        popServ:
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              partID: popServ
+              sites: header
+              sitesRequired: optional
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: categorical
+              partID: popServ
+              sites: header
+              sitesRequired: optional
+            ruleID: invalid_type
+          type: string
+        repOrg1:
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              partID: repOrg1
+              sites: header
+              sitesRequired: optional
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              partID: repOrg1
+              sites: header
+              sitesRequired: optional
+            ruleID: invalid_type
+          type: string
+        repOrg2:
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              partID: repOrg2
+              sites: header
+              sitesRequired: optional
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              partID: repOrg2
+              sites: header
+              sitesRequired: optional
+            ruleID: invalid_type
+          type: string
+        sampleShed:
+          anyof:
+          - allowed:
+            - airpln
+            - airport
+            - ccc
+            - cdc
+            - commFacOth
+            - corFcil
+            - dorm
+            - fiNa
+            - hosptl
+            - ltcf
+            - ltcfAl
+            - ltcfO
+            - municp
+            - neigh
+            - orb
+            - school
+            - ship
+            - sss
+            - terminal
+            - uCampus
+            empty: true
+          emptyTrimmed: false
+          forbidden:
+          - NA
+          - nan
+          - nr
+          - 'null'
+          - undisc
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              partID: sampleShed
+              sites: header
+              sitesRequired: mandatory
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: categorical
+              mmaSet: shedSet
+              partID: sampleShed
+              sites: header
+            - partID: airpln
+              setID: shedSet
+            - partID: ccc
+              setID: shedSet
+            - partID: cdc
+              setID: shedSet
+            - partID: corFcil
+              setID: shedSet
+            - partID: dorm
+              setID: shedSet
+            - partID: fiNa
+              setID: shedSet
+            - partID: hosptl
+              setID: shedSet
+            - partID: ltcf
+              setID: shedSet
+            - partID: ltcfAl
+              setID: shedSet
+            - partID: ltcfO
+              setID: shedSet
+            - partID: municp
+              setID: shedSet
+            - partID: neigh
+              setID: shedSet
+            - partID: orb
+              setID: shedSet
+            - partID: school
+              setID: shedSet
+            - partID: ship
+              setID: shedSet
+            - partID: sss
+              setID: shedSet
+            - partID: uCampus
+              setID: shedSet
+            - partID: airport
+              setID: shedSet
+            - partID: terminal
+              setID: shedSet
+            - partID: commFacOth
+              setID: shedSet
+            ruleID: invalid_category
+          - meta:
+            - dataType: categorical
+              partID: sampleShed
+              sites: header
+              sitesRequired: mandatory
+            ruleID: invalid_type
+          - meta:
+            - partID: sampleShed
+              sites: header
+              sitesRequired: mandatory
+            ruleID: missing_mandatory_column
+          - meta:
+            - partID: sampleShed
+              sites: header
+              sitesRequired: mandatory
+            - partID: NA
+              partType: missingness
+            - partID: nan
+              partType: missingness
+            - partID: nr
+              partType: missingness
+            - partID: 'null'
+              partType: missingness
+            - partID: undisc
+              partType: missingness
+            ruleID: missing_values_found
+          required: true
+          type: string
+        siteID:
+          emptyTrimmed: false
+          forbidden:
+          - NA
+          - nan
+          - nr
+          - 'null'
+          - undisc
+          maxlength: 30
+          meta:
+          - meta:
+            - partID: siteID
+              sites: pK
+              sitesRequired: mandatory
+            ruleID: duplicate_entries_found
+          - meta:
+            - maxLength: '30'
+              partID: siteID
+              sites: pK
+              sitesRequired: mandatory
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              partID: siteID
+              sites: pK
+              sitesRequired: mandatory
+            ruleID: invalid_type
+          - meta:
+            - partID: siteID
+              sites: pK
+              sitesRequired: mandatory
+            ruleID: missing_mandatory_column
+          - meta:
+            - partID: siteID
+              sites: pK
+              sitesRequired: mandatory
+            - partID: NA
+              partType: missingness
+            - partID: nan
+              partType: missingness
+            - partID: nr
+              partType: missingness
+            - partID: 'null'
+              partType: missingness
+            - partID: undisc
+              partType: missingness
+            ruleID: missing_values_found
+          required: true
+          type: string
+          unique: true
+        siteType:
+          anyof:
+          - allowed:
+            - bSwrPpl
+            - buildCO
+            - estuary
+            - htSite
+            - lagoon
+            - lake
+            - mSwrPpl
+            - ocean
+            - pStat
+            - retPond
+            - river
+            - sea
+            - septTnk
+            - stabPnd
+            - swgTrck
+            - upstream
+            - wwtp
+            - wwtpBack
+            - wwtpInd
+            - wwtpMuC
+            - wwtpMuS
+            empty: true
+          emptyTrimmed: false
+          forbidden:
+          - NA
+          - nan
+          - nr
+          - 'null'
+          - undisc
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              partID: siteType
+              sites: fK
+              sitesRequired: mandatory
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: categorical
+              mmaSet: siteTypeSet
+              partID: siteType
+              sites: fK
+            - partID: bSwrPpl
+              setID: siteTypeSet
+            - partID: buildCO
+              setID: siteTypeSet
+            - partID: estuary
+              setID: siteTypeSet
+            - partID: lake
+              setID: siteTypeSet
+            - partID: htSite
+              setID: siteTypeSet
+            - partID: lagoon
+              setID: siteTypeSet
+            - partID: mSwrPpl
+              setID: siteTypeSet
+            - partID: ocean
+              setID: siteTypeSet
+            - partID: pStat
+              setID: siteTypeSet
+            - partID: retPond
+              setID: siteTypeSet
+            - partID: river
+              setID: siteTypeSet
+            - partID: sea
+              setID: siteTypeSet
+            - partID: septTnk
+              setID: siteTypeSet
+            - partID: stabPnd
+              setID: siteTypeSet
+            - partID: swgTrck
+              setID: siteTypeSet
+            - partID: wwtpInd
+              setID: siteTypeSet
+            - partID: wwtpMuC
+              setID: siteTypeSet
+            - partID: wwtpMuS
+              setID: siteTypeSet
+            - partID: wwtp
+              setID: siteTypeSet
+            - partID: upstream
+              setID: siteTypeSet
+            - partID: wwtpBack
+              setID: siteTypeSet
+            ruleID: invalid_category
+          - meta:
+            - dataType: categorical
+              partID: siteType
+              sites: fK
+              sitesRequired: mandatory
+            ruleID: invalid_type
+          - meta:
+            - partID: siteType
+              sites: fK
+              sitesRequired: mandatory
+            ruleID: missing_mandatory_column
+          - meta:
+            - partID: siteType
+              sites: fK
+              sitesRequired: mandatory
+            - partID: NA
+              partType: missingness
+            - partID: nan
+              partType: missingness
+            - partID: nr
+              partType: missingness
+            - partID: 'null'
+              partType: missingness
+            - partID: undisc
+              partType: missingness
+            ruleID: missing_values_found
+          required: true
+          type: string
+      type: dict
+    type: list
+schemaVersion: 2.2.0
