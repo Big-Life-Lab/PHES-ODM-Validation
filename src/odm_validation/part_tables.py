@@ -116,7 +116,7 @@ TABLE = 'tables'
 ACTIVE = 'active'
 BOOLEAN = 'boolean'
 BOOLEAN_SET = 'booleanSet'
-BOOL_SET_IDS = ['false', 'true']
+BOOL_PART_IDS = ['false', 'true']
 DATETIME = 'datetime'
 DEPRECIATED = 'depreciated'  # aka deprecated
 MANDATORY = 'mandatory'
@@ -237,7 +237,7 @@ def _get_mappings(part: dict, version: Version) -> list[PartId]:
             ids = _parse_version1Field(part, V1_TABLE)
         elif kind == MapKind.ATTRIBUTE:
             ids = _parse_version1Field(part, V1_VARIABLE)
-        elif kind == MapKind.CATEGORY or part.get(PART_ID) in BOOL_SET_IDS:
+        elif kind == MapKind.CATEGORY or part.get(PART_ID) in BOOL_PART_IDS:
             ids = _parse_version1Field(part, V1_CATEGORY)
     except KeyError:
         return []
@@ -392,7 +392,7 @@ def validate_and_fix(all_parts: PartMap, version: Version) -> None:
     # function parts/sets validation and hotfixes
 
     # FIXME: true/false parts are missing version1Category
-    for part_id in BOOL_SET_IDS:
+    for part_id in BOOL_PART_IDS:
         part = all_parts.get(part_id)
         if part and should_have_mapping(part, version, odm.VERSION):
             if V1_CATEGORY not in part:
@@ -487,7 +487,7 @@ def gen_odmdata(parts: Dataset, sets: Dataset, version: Version) -> OdmData:
 
     # TODO: preserve unmapped version of bool_set for bool meta fields
     return OdmData(
-        bool_set=set(map(str.upper, BOOL_SET_IDS)),
+        bool_set=set(map(str.upper, BOOL_PART_IDS)),
         null_set=null_set,
         table_data=table_data,
         catset_data=catset_data,
