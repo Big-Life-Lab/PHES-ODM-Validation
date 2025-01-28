@@ -1998,8 +1998,8 @@ schema:
           - 'TRUE'
           anyof:
           - allowed:
-            - 'false'
-            - 'true'
+            - 'FALSE'
+            - 'TRUE'
             empty: true
           maxlength: 10
           meta:
@@ -2014,9 +2014,9 @@ schema:
               measures: header
               mmaSet: booleanSet
               partID: reportable
-            - partID: 'true'
+            - partID: 'TRUE'
               setID: booleanSet
-            - partID: 'false'
+            - partID: 'FALSE'
               setID: booleanSet
             ruleID: invalid_category
           - meta:
@@ -3185,8 +3185,8 @@ schema:
           - 'TRUE'
           anyof:
           - allowed:
-            - 'false'
-            - 'true'
+            - 'FALSE'
+            - 'TRUE'
             empty: true
           maxlength: 10
           meta:
@@ -3200,9 +3200,9 @@ schema:
               mmaSet: booleanSet
               partID: reportable
               protocolRelationships: input
-            - partID: 'true'
+            - partID: 'TRUE'
               setID: booleanSet
-            - partID: 'false'
+            - partID: 'FALSE'
               setID: booleanSet
             ruleID: invalid_category
           - meta:
@@ -3783,8 +3783,8 @@ schema:
           - 'TRUE'
           anyof:
           - allowed:
-            - 'false'
-            - 'true'
+            - 'FALSE'
+            - 'TRUE'
             empty: true
           maxlength: 10
           meta:
@@ -3798,9 +3798,9 @@ schema:
               mmaSet: booleanSet
               partID: reportable
               protocols: input
-            - partID: 'true'
+            - partID: 'TRUE'
               setID: booleanSet
-            - partID: 'false'
+            - partID: 'FALSE'
               setID: booleanSet
             ruleID: invalid_category
           - meta:
@@ -4654,8 +4654,8 @@ schema:
           - 'TRUE'
           anyof:
           - allowed:
-            - 'false'
-            - 'true'
+            - 'FALSE'
+            - 'TRUE'
             empty: true
           maxlength: 30
           meta:
@@ -4670,9 +4670,9 @@ schema:
               mmaSet: booleanSet
               partID: pooled
               samples: header
-            - partID: 'true'
+            - partID: 'TRUE'
               setID: booleanSet
-            - partID: 'false'
+            - partID: 'FALSE'
               setID: booleanSet
             ruleID: invalid_category
           - meta:
@@ -4814,8 +4814,8 @@ schema:
           - 'TRUE'
           anyof:
           - allowed:
-            - 'false'
-            - 'true'
+            - 'FALSE'
+            - 'TRUE'
             empty: true
           maxlength: 10
           meta:
@@ -4830,9 +4830,9 @@ schema:
               mmaSet: booleanSet
               partID: reportable
               samples: header
-            - partID: 'true'
+            - partID: 'TRUE'
               setID: booleanSet
-            - partID: 'false'
+            - partID: 'FALSE'
               setID: booleanSet
             ruleID: invalid_category
           - meta:
