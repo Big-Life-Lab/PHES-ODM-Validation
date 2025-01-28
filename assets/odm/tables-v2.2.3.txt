@@ -2,14 +2,14 @@ addresses
 contacts
 datasets
 instruments
+measures
+measureSets
 organizations
 polygons
 protocolRelationships
 protocols
 protocolSteps
-sites
-measures
-measureSets
 qualityReports
 sampleRelationships
 samples
+sites

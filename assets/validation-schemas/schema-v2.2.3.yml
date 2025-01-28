@@ -398,6 +398,31 @@ schema:
       - partID: contacts
         partType: tables
       schema:
+        coPhone:
+          anyof:
+          - empty: true
+            minlength: 10
+          maxlength: 12
+          meta:
+          - meta:
+            - contacts: header
+              contactsRequired: optional
+              maxLength: '12'
+              partID: coPhone
+            ruleID: greater_than_max_length
+          - meta:
+            - contacts: header
+              contactsRequired: optional
+              dataType: varchar
+              partID: coPhone
+            ruleID: invalid_type
+          - meta:
+            - contacts: header
+              contactsRequired: optional
+              minLength: '10'
+              partID: coPhone
+            ruleID: less_than_min_length
+          type: string
         contactID:
           emptyTrimmed: false
           forbidden:
@@ -616,31 +641,6 @@ schema:
               partType: missingness
             ruleID: missing_values_found
           required: true
-          type: string
-        phone:
-          anyof:
-          - empty: true
-            minlength: 10
-          maxlength: 12
-          meta:
-          - meta:
-            - contacts: header
-              contactsRequired: optional
-              maxLength: '12'
-              partID: phone
-            ruleID: greater_than_max_length
-          - meta:
-            - contacts: header
-              contactsRequired: optional
-              dataType: varchar
-              partID: phone
-            ruleID: invalid_type
-          - meta:
-            - contacts: header
-              contactsRequired: optional
-              minLength: '10'
-              partID: phone
-            ruleID: less_than_min_length
           type: string
         role:
           maxlength: 30
@@ -889,6 +889,8 @@ schema:
             - bsl10
             - cc010
             - ccby40
+            - ccbync40
+            - ccbyncsa40
             - ccbysa40
             - cecill21
             - ecl20
@@ -940,11 +942,13 @@ schema:
               partID: license
             - partID: afl30
               setID: licSet
+            - partID: agpl30
+              setID: licSet
             - partID: apache20
               setID: licSet
             - partID: artistic20
               setID: licSet
-            - partID: bsl10
+            - partID: bsd0
               setID: licSet
             - partID: bsd2Clause
               setID: licSet
@@ -954,9 +958,7 @@ schema:
               setID: licSet
             - partID: bsd4Clause
               setID: licSet
-            - partID: bsd0
-              setID: licSet
-            - partID: cecill21
+            - partID: bsl10
               setID: licSet
             - partID: cc010
               setID: licSet
@@ -964,7 +966,7 @@ schema:
               setID: licSet
             - partID: ccbysa40
               setID: licSet
-            - partID: wtfpl
+            - partID: cecill21
               setID: licSet
             - partID: ecl20
               setID: licSet
@@ -976,47 +978,51 @@ schema:
               setID: licSet
             - partID: eupl12
               setID: licSet
-            - partID: agpl30
-              setID: licSet
             - partID: gfdl13
               setID: licSet
             - partID: gpl20
               setID: licSet
             - partID: gpl30
               setID: licSet
-            - partID: mulanPSL20
+            - partID: isc
               setID: licSet
             - partID: lgpl21
               setID: licSet
             - partID: lgpl30
               setID: licSet
-            - partID: isc
-              setID: licSet
             - partID: lppl13c
-              setID: licSet
-            - partID: mspl
-              setID: licSet
-            - partID: mit0
               setID: licSet
             - partID: mit
               setID: licSet
+            - partID: mit0
+              setID: licSet
             - partID: mpl20
+              setID: licSet
+            - partID: mspl
+              setID: licSet
+            - partID: mulanPSL20
+              setID: licSet
+            - partID: ncsa
+              setID: licSet
+            - partID: ofl11
+              setID: licSet
+            - partID: open
               setID: licSet
             - partID: osl30
               setID: licSet
             - partID: postgreSQL
               setID: licSet
-            - partID: ofl11
-              setID: licSet
-            - partID: ncsa
+            - partID: private
               setID: licSet
             - partID: unlicense
               setID: licSet
+            - partID: wtfpl
+              setID: licSet
             - partID: zlib
               setID: licSet
-            - partID: open
+            - partID: ccbyncsa40
               setID: licSet
-            - partID: private
+            - partID: ccbync40
               setID: licSet
             ruleID: invalid_category
           - meta:
@@ -1787,6 +1793,20 @@ schema:
               partID: compartment
             ruleID: invalid_type
           type: string
+        compartmentSet:
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              measures: input
+              partID: compartmentSet
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              measures: input
+              partID: compartmentSet
+            ruleID: invalid_type
+          type: string
         contactID:
           maxlength: 30
           meta:
@@ -1844,9 +1864,9 @@ schema:
               setID: fractionSet
             - partID: mix
               setID: fractionSet
-            - partID: sol
-              setID: fractionSet
             - partID: NA
+              setID: fractionSet
+            - partID: sol
               setID: fractionSet
             ruleID: invalid_category
           - meta:
@@ -1964,6 +1984,8 @@ schema:
             - bsl10
             - cc010
             - ccby40
+            - ccbync40
+            - ccbyncsa40
             - ccbysa40
             - cecill21
             - ecl20
@@ -2008,11 +2030,13 @@ schema:
               partID: measureLic
             - partID: afl30
               setID: licSet
+            - partID: agpl30
+              setID: licSet
             - partID: apache20
               setID: licSet
             - partID: artistic20
               setID: licSet
-            - partID: bsl10
+            - partID: bsd0
               setID: licSet
             - partID: bsd2Clause
               setID: licSet
@@ -2022,9 +2046,7 @@ schema:
               setID: licSet
             - partID: bsd4Clause
               setID: licSet
-            - partID: bsd0
-              setID: licSet
-            - partID: cecill21
+            - partID: bsl10
               setID: licSet
             - partID: cc010
               setID: licSet
@@ -2032,7 +2054,7 @@ schema:
               setID: licSet
             - partID: ccbysa40
               setID: licSet
-            - partID: wtfpl
+            - partID: cecill21
               setID: licSet
             - partID: ecl20
               setID: licSet
@@ -2044,47 +2066,51 @@ schema:
               setID: licSet
             - partID: eupl12
               setID: licSet
-            - partID: agpl30
-              setID: licSet
             - partID: gfdl13
               setID: licSet
             - partID: gpl20
               setID: licSet
             - partID: gpl30
               setID: licSet
-            - partID: mulanPSL20
+            - partID: isc
               setID: licSet
             - partID: lgpl21
               setID: licSet
             - partID: lgpl30
               setID: licSet
-            - partID: isc
-              setID: licSet
             - partID: lppl13c
-              setID: licSet
-            - partID: mspl
-              setID: licSet
-            - partID: mit0
               setID: licSet
             - partID: mit
               setID: licSet
+            - partID: mit0
+              setID: licSet
             - partID: mpl20
+              setID: licSet
+            - partID: mspl
+              setID: licSet
+            - partID: mulanPSL20
+              setID: licSet
+            - partID: ncsa
+              setID: licSet
+            - partID: ofl11
+              setID: licSet
+            - partID: open
               setID: licSet
             - partID: osl30
               setID: licSet
             - partID: postgreSQL
               setID: licSet
-            - partID: ofl11
-              setID: licSet
-            - partID: ncsa
+            - partID: private
               setID: licSet
             - partID: unlicense
               setID: licSet
+            - partID: wtfpl
+              setID: licSet
             - partID: zlib
               setID: licSet
-            - partID: open
+            - partID: ccbyncsa40
               setID: licSet
-            - partID: private
+            - partID: ccbync40
               setID: licSet
             ruleID: invalid_category
           - meta:
@@ -2341,9 +2367,9 @@ schema:
               measures: header
               mmaSet: booleanSet
               partID: reportable
-            - partID: 'TRUE'
-              setID: booleanSet
             - partID: 'FALSE'
+              setID: booleanSet
+            - partID: 'TRUE'
               setID: booleanSet
             ruleID: invalid_category
           - meta:
@@ -2420,11 +2446,11 @@ schema:
               measures: input
               mmaSet: sevSet
               partID: severity
+            - partID: high
+              setID: sevSet
             - partID: low
               setID: sevSet
             - partID: mid
-              setID: sevSet
-            - partID: high
               setID: sevSet
             ruleID: invalid_category
           - meta:
@@ -2492,6 +2518,20 @@ schema:
               partType: missingness
             ruleID: missing_values_found
           required: true
+          type: string
+        specimenSet:
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              measures: input
+              partID: specimenSet
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              measures: input
+              partID: specimenSet
+            ruleID: invalid_type
           type: string
         unit:
           emptyTrimmed: false
@@ -2594,6 +2634,34 @@ schema:
               partType: missingness
             ruleID: missing_values_found
           required: true
+          type: string
+        version1Variable:
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              measures: input
+              partID: version1Variable
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              measures: input
+              partID: version1Variable
+            ruleID: invalid_type
+          type: string
+        wSphereNotes:
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              measures: input
+              partID: wSphereNotes
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              measures: input
+              partID: wSphereNotes
+            ruleID: invalid_type
           type: string
         wideMeasure:
           maxlength: 30
@@ -2779,17 +2847,17 @@ schema:
               mmaSet: orgLevelSet
               organizations: header
               partID: orgLevel
-            - partID: neighborLevel
-              setID: orgLevelSet
-            - partID: municipalLevel
-              setID: orgLevelSet
-            - partID: stateProvLevel
-              setID: orgLevelSet
             - partID: admRegLevel
               setID: orgLevelSet
             - partID: countryLevel
               setID: orgLevelSet
             - partID: countyLevel
+              setID: orgLevelSet
+            - partID: municipalLevel
+              setID: orgLevelSet
+            - partID: neighborLevel
+              setID: orgLevelSet
+            - partID: stateProvLevel
               setID: orgLevelSet
             ruleID: invalid_category
           - meta:
@@ -2823,19 +2891,19 @@ schema:
               mmaSet: orgSectorSet
               organizations: header
               partID: orgSector
-            - partID: healthAdm
+            - partID: dataColl
               setID: orgSectorSet
             - partID: fiNa
               setID: orgSectorSet
-            - partID: utilities
+            - partID: healthAdm
               setID: orgSectorSet
-            - partID: dataColl
+            - partID: policy
               setID: orgSectorSet
             - partID: pubHealth
               setID: orgSectorSet
             - partID: research
               setID: orgSectorSet
-            - partID: policy
+            - partID: utilities
               setID: orgSectorSet
             ruleID: invalid_category
           - meta:
@@ -3472,6 +3540,18 @@ schema:
           type: string
           unique: true
         relationshipID:
+          anyof:
+          - allowed:
+            - before
+            - child
+            - colocated
+            - concurrent
+            - fieldReplicate
+            - labDuplicate
+            - lcsd
+            - msd
+            - specifies
+            empty: true
           emptyTrimmed: false
           forbidden:
           - NA
@@ -3487,6 +3567,30 @@ schema:
               protocolRelationships: fK
               protocolRelationshipsRequired: mandatory
             ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              mmaSet: relSet
+              partID: relationshipID
+              protocolRelationships: fK
+            - partID: before
+              setID: relSet
+            - partID: concurrent
+              setID: relSet
+            - partID: specifies
+              setID: relSet
+            - partID: child
+              setID: relSet
+            - partID: colocated
+              setID: relSet
+            - partID: fieldReplicate
+              setID: relSet
+            - partID: labDuplicate
+              setID: relSet
+            - partID: lcsd
+              setID: relSet
+            - partID: msd
+              setID: relSet
+            ruleID: invalid_category
           - meta:
             - dataType: varchar
               partID: relationshipID
@@ -3536,9 +3640,9 @@ schema:
               mmaSet: booleanSet
               partID: reportable
               protocolRelationships: input
-            - partID: 'TRUE'
-              setID: booleanSet
             - partID: 'FALSE'
+              setID: booleanSet
+            - partID: 'TRUE'
               setID: booleanSet
             ruleID: invalid_category
           - meta:
@@ -4090,9 +4194,9 @@ schema:
               mmaSet: booleanSet
               partID: reportable
               protocols: input
-            - partID: 'TRUE'
-              setID: booleanSet
             - partID: 'FALSE'
+              setID: booleanSet
+            - partID: 'TRUE'
               setID: booleanSet
             ruleID: invalid_category
           - meta:
@@ -4334,11 +4438,11 @@ schema:
               mmaSet: sevSet
               partID: severity
               qualityReports: header
+            - partID: high
+              setID: sevSet
             - partID: low
               setID: sevSet
             - partID: mid
-              setID: sevSet
-            - partID: high
               setID: sevSet
             ruleID: invalid_category
           - meta:
@@ -4418,6 +4522,18 @@ schema:
             ruleID: invalid_type
           type: string
         relationshipID:
+          anyof:
+          - allowed:
+            - before
+            - child
+            - colocated
+            - concurrent
+            - fieldReplicate
+            - labDuplicate
+            - lcsd
+            - msd
+            - specifies
+            empty: true
           emptyTrimmed: false
           forbidden:
           - NA
@@ -4433,6 +4549,30 @@ schema:
               sampleRelationships: fK
               sampleRelationshipsRequired: mandatory
             ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              mmaSet: relSet
+              partID: relationshipID
+              sampleRelationships: fK
+            - partID: before
+              setID: relSet
+            - partID: concurrent
+              setID: relSet
+            - partID: specifies
+              setID: relSet
+            - partID: child
+              setID: relSet
+            - partID: colocated
+              setID: relSet
+            - partID: fieldReplicate
+              setID: relSet
+            - partID: labDuplicate
+              setID: relSet
+            - partID: lcsd
+              setID: relSet
+            - partID: msd
+              setID: relSet
+            ruleID: invalid_category
           - meta:
             - dataType: varchar
               partID: relationshipID
@@ -4829,25 +4969,25 @@ schema:
               samples: fk
             - partID: areaPr
               setID: collectSet
+            - partID: comp
+              setID: collectSet
             - partID: cosca
               setID: collectSet
             - partID: flowPr
               setID: collectSet
             - partID: grb
               setID: collectSet
+            - partID: manComp
+              setID: collectSet
             - partID: moorSw
+              setID: collectSet
+            - partID: passiveGen
               setID: collectSet
             - partID: surfSw
               setID: collectSet
             - partID: timePr
               setID: collectSet
             - partID: volPr
-              setID: collectSet
-            - partID: comp
-              setID: collectSet
-            - partID: manComp
-              setID: collectSet
-            - partID: passiveGen
               setID: collectSet
             ruleID: invalid_category
           - meta:
@@ -4997,9 +5137,9 @@ schema:
               mmaSet: booleanSet
               partID: pooled
               samples: header
-            - partID: 'TRUE'
-              setID: booleanSet
             - partID: 'FALSE'
+              setID: booleanSet
+            - partID: 'TRUE'
               setID: booleanSet
             ruleID: invalid_category
           - meta:
@@ -5157,9 +5297,9 @@ schema:
               mmaSet: booleanSet
               partID: reportable
               samples: header
-            - partID: 'TRUE'
-              setID: booleanSet
             - partID: 'FALSE'
+              setID: booleanSet
+            - partID: 'TRUE'
               setID: booleanSet
             ruleID: invalid_category
           - meta:
@@ -5177,9 +5317,15 @@ schema:
           anyof:
           - allowed:
             - afu
+            - autoComp
+            - autoSeq
+            - cone
+            - core
             - desk
+            - effluNS
             - faeces
             - floor
+            - horGrb
             - htSam
             - nww
             - pEfflu
@@ -5191,8 +5337,12 @@ schema:
             - sEfflu
             - sSludge
             - septage
+            - sludgeNS
             - surface
             - swrSed
+            - trap
+            - vac
+            - vertGrb
             empty: true
           emptyTrimmed: false
           forbidden:
@@ -5247,6 +5397,26 @@ schema:
             - partID: surface
               setID: sampleMatSet
             - partID: swrSed
+              setID: sampleMatSet
+            - partID: core
+              setID: sampleMatSet
+            - partID: vac
+              setID: sampleMatSet
+            - partID: cone
+              setID: sampleMatSet
+            - partID: horGrb
+              setID: sampleMatSet
+            - partID: vertGrb
+              setID: sampleMatSet
+            - partID: trap
+              setID: sampleMatSet
+            - partID: autoComp
+              setID: sampleMatSet
+            - partID: autoSeq
+              setID: sampleMatSet
+            - partID: sludgeNS
+              setID: sampleMatSet
+            - partID: effluNS
               setID: sampleMatSet
             ruleID: invalid_category
           - meta:
@@ -5363,11 +5533,11 @@ schema:
               mmaSet: sevSet
               partID: severity
               samples: Input
+            - partID: high
+              setID: sevSet
             - partID: low
               setID: sevSet
             - partID: mid
-              setID: sevSet
-            - partID: high
               setID: sevSet
             ruleID: invalid_category
           - meta:
@@ -5779,6 +5949,8 @@ schema:
           - allowed:
             - airpln
             - airport
+            - bus
+            - busStat
             - ccc
             - cdc
             - commFacOth
@@ -5786,17 +5958,24 @@ schema:
             - dorm
             - fiNa
             - hosptl
+            - landTH
             - ltcf
             - ltcfAl
             - ltcfO
             - municp
             - neigh
             - orb
+            - port
             - school
             - ship
             - sss
+            - tHub
             - terminal
+            - trStat
+            - train
+            - transp
             - uCampus
+            - waterTH
             empty: true
           emptyTrimmed: false
           forbidden:
@@ -5820,9 +5999,13 @@ schema:
               sites: header
             - partID: airpln
               setID: shedSet
+            - partID: airport
+              setID: shedSet
             - partID: ccc
               setID: shedSet
             - partID: cdc
+              setID: shedSet
+            - partID: commFacOth
               setID: shedSet
             - partID: corFcil
               setID: shedSet
@@ -5850,13 +6033,27 @@ schema:
               setID: shedSet
             - partID: sss
               setID: shedSet
-            - partID: uCampus
-              setID: shedSet
-            - partID: airport
-              setID: shedSet
             - partID: terminal
               setID: shedSet
-            - partID: commFacOth
+            - partID: uCampus
+              setID: shedSet
+            - partID: tHub
+              setID: shedSet
+            - partID: transp
+              setID: shedSet
+            - partID: train
+              setID: shedSet
+            - partID: trStat
+              setID: shedSet
+            - partID: bus
+              setID: shedSet
+            - partID: busStat
+              setID: shedSet
+            - partID: port
+              setID: shedSet
+            - partID: landTH
+              setID: shedSet
+            - partID: waterTH
               setID: shedSet
             ruleID: invalid_category
           - meta:
@@ -5942,10 +6139,13 @@ schema:
           - allowed:
             - bSwrPpl
             - buildCO
+            - compToi
+            - drain
             - estuary
             - htSite
             - lagoon
             - lake
+            - latrine
             - mSwrPpl
             - ocean
             - pStat
@@ -5955,6 +6155,7 @@ schema:
             - septTnk
             - stabPnd
             - swgTrck
+            - triturator
             - upstream
             - wwtp
             - wwtpBack
@@ -5988,11 +6189,11 @@ schema:
               setID: siteTypeSet
             - partID: estuary
               setID: siteTypeSet
-            - partID: lake
-              setID: siteTypeSet
             - partID: htSite
               setID: siteTypeSet
             - partID: lagoon
+              setID: siteTypeSet
+            - partID: lake
               setID: siteTypeSet
             - partID: mSwrPpl
               setID: siteTypeSet
@@ -6012,17 +6213,25 @@ schema:
               setID: siteTypeSet
             - partID: swgTrck
               setID: siteTypeSet
+            - partID: upstream
+              setID: siteTypeSet
+            - partID: wwtp
+              setID: siteTypeSet
+            - partID: wwtpBack
+              setID: siteTypeSet
             - partID: wwtpInd
               setID: siteTypeSet
             - partID: wwtpMuC
               setID: siteTypeSet
             - partID: wwtpMuS
               setID: siteTypeSet
-            - partID: wwtp
+            - partID: drain
               setID: siteTypeSet
-            - partID: upstream
+            - partID: latrine
               setID: siteTypeSet
-            - partID: wwtpBack
+            - partID: compToi
+              setID: siteTypeSet
+            - partID: triturator
               setID: siteTypeSet
             ruleID: invalid_category
           - meta:
@@ -6053,6 +6262,20 @@ schema:
             ruleID: missing_values_found
           required: true
           type: string
+        wSphereNotes:
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              partID: wSphereNotes
+              sites: input
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              partID: wSphereNotes
+              sites: input
+            ruleID: invalid_type
+          type: string
       type: dict
     type: list
-schemaVersion: 2.2.0
+schemaVersion: 2.2.3
