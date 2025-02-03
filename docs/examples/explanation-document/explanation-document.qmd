@@ -31,7 +31,7 @@ import sys
 # Import the validation package. In the future you can install it using pip
 sys.path.append("../../../src")
 
-# For importing YAML and CSV files
+# For importing (CSV) datasets and (YAML) schemas
 from odm_validation.utils import import_dataset
 from odm_validation.schemas import import_schema
 
