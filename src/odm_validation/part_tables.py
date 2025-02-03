@@ -167,7 +167,7 @@ def _strip_prerelease(v: Version) -> Version:
     return result
 
 
-def get_first_released(part: Part) -> Version:
+def get_initial_version(part: Part) -> Version:
     v1 = Version(major=1)
     return parse_row_version(part, FIRST_RELEASED, default=v1)
 
@@ -186,7 +186,7 @@ def is_compatible(part: Part, version: Version) -> bool:
     # them to be equal. Ex: (ODM version) 2.0.0-rc.3 < (part version) 2.0.0
 
     v = _strip_prerelease(version)
-    first = get_first_released(part)
+    first = get_initial_version(part)
     latest = _strip_prerelease(odm.VERSION)
     assert v <= latest
     if is_active(part):
@@ -353,7 +353,7 @@ def filter_backportable(parts: Dataset, version: Version) -> Dataset:
     latest = odm.VERSION
     for row in parts:
         part_id = get_partID(row)
-        first = get_first_released(row)
+        first = get_initial_version(row)
         if version.major < latest.major:
             if should_have_mapping(row, first, latest):
                 if not has_mapping(row, version):

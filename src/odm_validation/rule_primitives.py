@@ -35,7 +35,7 @@ GenCerbRulesFunc = Callable[[OdmValueCtx], dict]
 def get_table_meta(table: Part, version: Version) -> Meta:
     keys = [pt.PART_ID, pt.PART_TYPE]
     if version.major == 1:
-        first = pt.get_first_released(table)
+        first = pt.get_initial_version(table)
         if pt.should_have_mapping(table, first, odm.VERSION):
             keys += [pt.V1_LOCATION, pt.V1_TABLE]
     m: MetaEntry = {k: table[k] for k in keys}
