@@ -161,12 +161,6 @@ def parse_row_version(row: dict, field: str, default: Optional[Version] = None
     return parse_version(row.get(field), get_partID(row), field, default)
 
 
-def _strip_prerelease(v: Version) -> Version:
-    result = v
-    result._prerelease = None
-    return result
-
-
 def get_initial_version(part: Part) -> Version:
     v1 = Version(major=1)
     return parse_row_version(part, FIRST_RELEASED, default=v1)
@@ -178,16 +172,9 @@ def is_compatible(part: Part, version: Version) -> bool:
     # it's not active anymore, then it becomes [firstReleased, lastUpdated>.
     #
     # XXX: must have a default value for tests without versioned parts to work
-    #
-    # XXX: prerelease (like rc.3, etc.) must be stripped from `version` before
-    # compare, because a version with a rc-suffix is seen as less than a
-    # version without it, and our ODM version is lagging behind the version of
-    # the parts (which don't have suffixes) in that sense, but we still want
-    # them to be equal. Ex: (ODM version) 2.0.0-rc.3 < (part version) 2.0.0
-
-    v = _strip_prerelease(version)
+    v = version
     first = get_initial_version(part)
-    latest = _strip_prerelease(odm.VERSION)
+    latest = odm.VERSION
     assert v <= latest
     if is_active(part):
         assert first <= latest
