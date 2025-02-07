@@ -75,7 +75,7 @@ def write_txt_report(output: IO, report: ValidationReport) -> None:
 
 
 def write_json_report(output: IO, report: SomeReport) -> None:
-    json.dump(report, output)
+    json.dump(report, output, default=vars, indent=4)
 
 
 def write_yaml_report(output: IO, report: SomeReport) -> None:
