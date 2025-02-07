@@ -81,29 +81,3 @@ def write_json_report(output: IO, report: SomeReport) -> None:
 def write_yaml_report(output: IO, report: SomeReport) -> None:
     # XXX: dump dict to avoid yaml-tags from class types
     yaml.dump(report.__dict__, output)
-
-
-def read_report_from_file(file: IO) -> ValidationReport:
-    # - data is normalized as text/json before being deserialized into obj
-    # - must use yaml.safe_load to avoid running arbitrary python code on
-    #   the user machine
-    raw_data: str = file.read()
-    fmt = detect_report_format_from_content(raw_data)  # only peeks
-    report_obj = None
-    if fmt == ReportFormat.JSON:
-        report_obj = json.loads(raw_data)
-    elif fmt == ReportFormat.YAML:
-        report_obj = yaml.safe_load(raw_data)
-    elif fmt == ReportFormat.TXT:
-        quit(f'report format {fmt} can\'t be summarized')
-    else:
-        quit('unable to detect report format')
-    assert type(report_obj) is not str, \
-           "report data should be dict/obj, but was loaded as string"
-    report = ValidationReport(**report_obj)
-    return report
-
-
-def read_report(path: str) -> ValidationReport:
-    with open(path, 'r') as f:
-        return read_report_from_file(f)
