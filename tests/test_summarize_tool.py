@@ -27,7 +27,7 @@ class TestSummarizeTool(common.OdmTestCase):
 
     def test_validate_and_summarize(self):
         expected_summary = relpath(join(tool_asset_dir, 'summary.csv'))
-        v = f'{validate_tool} --version=1.1.0 --format=yaml'
+        v = f'{validate_tool} --version=1.1.0 --format=json'
         s = f'{summarize_tool}'
         d = f'diff {expected_summary} -'
         self.cmd(f'{v} {tool_asset_dir}/*.csv 2> /dev/null | {s} | {d}')

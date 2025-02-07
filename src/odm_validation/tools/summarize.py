@@ -74,17 +74,18 @@ def write_summary(output: IO, sum_report: SummarizedReport,
 
 
 def read_report_from_file(file: IO) -> Optional[ValidationReport]:
-    # - data is normalized as text/json before being deserialized into obj
-    # - must use yaml.safe_load to avoid running arbitrary python code on
-    #   the user machine
+    # XXX: must use yaml.safe_load to avoid running arbitrary python code on
+    # the user's machine, however, it's extremely slow
     raw_data: str = file.read()
     fmt = detect_report_format_from_content(raw_data)  # only peeks
     report_obj: Optional[dict] = None
     if fmt == ReportFormat.JSON:
         report_obj = json.loads(raw_data)
     elif fmt == ReportFormat.YAML:
+        logging.warn('you should use json-reports instead of yaml when ' +
+                     'summarizing, since yaml parsing is extremely slow')
         report_obj = yaml.safe_load(raw_data)
-    elif fmt == ReportFormat.TXT:
+    elif fmt is not None:
         logging.error(f'report format {fmt} can\'t be summarized')
     else:
         logging.error('unable to detect report format')
