@@ -247,6 +247,50 @@ schema:
             ruleID: missing_values_found
           required: true
           type: string
+        isoCode:
+          anyof:
+          - empty: true
+            minlength: 2
+          maxlength: 2
+          meta:
+          - meta:
+            - addresses: header
+              maxLength: '2'
+              partID: isoCode
+            ruleID: greater_than_max_length
+          - meta:
+            - addresses: header
+              dataType: varchar
+              partID: isoCode
+            ruleID: invalid_type
+          - meta:
+            - addresses: header
+              minLength: '2'
+              partID: isoCode
+            ruleID: less_than_min_length
+          type: string
+        isoZone:
+          anyof:
+          - empty: true
+            minlength: 4
+          maxlength: 6
+          meta:
+          - meta:
+            - addresses: header
+              maxLength: '6'
+              partID: isoZone
+            ruleID: greater_than_max_length
+          - meta:
+            - addresses: header
+              dataType: varchar
+              partID: isoZone
+            ruleID: invalid_type
+          - meta:
+            - addresses: header
+              minLength: '4'
+              partID: isoZone
+            ruleID: less_than_min_length
+          type: string
         lastEdited:
           coerce: datetime
           maxlength: 30
@@ -5695,4 +5739,4 @@ schema:
           type: string
       type: dict
     type: list
-schemaVersion: 2.0.0
+schemaVersion: 2.1.0

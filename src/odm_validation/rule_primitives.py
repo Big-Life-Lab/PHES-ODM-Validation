@@ -35,7 +35,7 @@ GenCerbRulesFunc = Callable[[OdmValueCtx], dict]
 def get_table_meta(table: Part, version: Version) -> Meta:
     keys = [pt.PART_ID, pt.PART_TYPE]
     if version.major == 1:
-        first, _ = pt.get_version_range(table)
+        first = pt.get_initial_version(table)
         if pt.should_have_mapping(table, first, odm.VERSION):
             keys += [pt.V1_LOCATION, pt.V1_TABLE]
     m: MetaEntry = {k: table[k] for k in keys}
@@ -66,8 +66,9 @@ def _get_attr_meta(attr: Part, table_id: PartId, version: Version,
             if allowed_ids:
                 set_id = attr['mmaSet']
 
-                # XXX: bool part-ids are in lower case
-                if set_id == pt.BOOLEAN_SET:
+                # XXX: booleanSet's part-ids are lower case in ODM v2.2 and
+                # below
+                if set_id == pt.BOOLEAN_SET and version.minor <= 2:
                     allowed_ids = list(map(str.lower, allowed_ids))
 
                 for part_id in allowed_ids:

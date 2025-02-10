@@ -43,12 +43,12 @@ pprint_json_file(asset("error-report-1.json"))
 The dictionary currently does not have any metadata to say if a column is an email or not. Instead we will be hardcoding this rule to a set of pre-determined email columns. For version 2 the email columns are:
 
 ```{python}
-pprint_yaml_file(asset("version-2-email-columns.yaml"))
+pprint_yaml_file(asset("version-2-email-columns.yml"))
 ```
 
 In the above file,
 
-* The `partID` field contains the name of the email column and 
+* The `partID` field contains the name of the email column and
 * The `table` field contains the name of the table that the part is a column in.
 
 If a parts sheet contains any of the above mentioned columns, then this validation rule should be added to them. For example, in the following parts sheet snippet this rule should be added to all columns except for `geoLat`.
@@ -62,12 +62,12 @@ pprint_csv_file(asset("parts.csv"), title = "Parts v2", ignore_prefix = "version
 We will be using a custom rule called `is_email` to each column. Alternative appraoches and reasons for not using them are:
 
 1. `type` rule: We would prefer to keep the value of this rule the same as the `dataType` column in the ODM
-2. `regex` rule: Better than type but is less clear to a user of the schema what the regex is actually trying to validate. 
+2. `regex` rule: Better than type but is less clear to a user of the schema what the regex is actually trying to validate.
 
 Underneath the hood the `is_email` rule will be using a regex to validate the column value. An example of the regex can be seen in this [stack overflow thread](https://stackoverflow.com/a/201378/1950599). For the parts snippet above the following schema should be generated,
 
 ```{python}
-pprint_yaml_file(asset("schema-v2.yaml"))
+pprint_yaml_file(asset("schema-v2.yml"))
 ```
 
 ## Version 1
@@ -75,7 +75,7 @@ pprint_yaml_file(asset("schema-v2.yaml"))
 For version 1 schemas, we add this rule to the version 1 equivalents of the above mentioned version 2 email columns. In addition, this rule should also be added to the following version 1 only columns:
 
 ```{python}
-pprint_yaml_file(asset("version-1-email-columns.yaml"))
+pprint_yaml_file(asset("version-1-email-columns.yml"))
 ```
 
 For example, for the following version 1 parts snippet,
@@ -87,5 +87,5 @@ pprint_csv_file(asset("parts.csv"), title = "Parts v1")
 the following validation schema should be generated,
 
 ```{python}
-pprint_yaml_file(asset("schema-v1.yaml"))
+pprint_yaml_file(asset("schema-v1.yml"))
 ```

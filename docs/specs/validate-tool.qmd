@@ -51,4 +51,4 @@ validation result to another program.
 - Validate an Excel file with version 1.1.0 of the ODM, and write the result to
   a YAML file:
 
-    `odm-validate lab-data.xlsx --version=1.1.0 --out=./report.yaml`
+    `odm-validate lab-data.xlsx --version=1.1.0 --out=./report.yml`

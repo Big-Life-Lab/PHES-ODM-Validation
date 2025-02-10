@@ -36,7 +36,7 @@ def get_asset_dir() -> str:
 
 def import_csv_file(path: str) -> list[dict]:
     result = []
-    with open(path, newline='', encoding='utf8') as f:
+    with open(path, newline='', encoding='utf-8-sig') as f:
         for row in csv.DictReader(f):
             result.append(row)
     return result

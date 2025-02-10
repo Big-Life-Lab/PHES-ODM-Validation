@@ -247,6 +247,56 @@ schema:
             ruleID: missing_values_found
           required: true
           type: string
+        isoCode:
+          anyof:
+          - empty: true
+            minlength: 2
+          maxlength: 2
+          meta:
+          - meta:
+            - addresses: header
+              addressesRequired: optional
+              maxLength: '2'
+              partID: isoCode
+            ruleID: greater_than_max_length
+          - meta:
+            - addresses: header
+              addressesRequired: optional
+              dataType: varchar
+              partID: isoCode
+            ruleID: invalid_type
+          - meta:
+            - addresses: header
+              addressesRequired: optional
+              minLength: '2'
+              partID: isoCode
+            ruleID: less_than_min_length
+          type: string
+        isoZone:
+          anyof:
+          - empty: true
+            minlength: 4
+          maxlength: 6
+          meta:
+          - meta:
+            - addresses: header
+              addressesRequired: optional
+              maxLength: '6'
+              partID: isoZone
+            ruleID: greater_than_max_length
+          - meta:
+            - addresses: header
+              addressesRequired: optional
+              dataType: varchar
+              partID: isoZone
+            ruleID: invalid_type
+          - meta:
+            - addresses: header
+              addressesRequired: optional
+              minLength: '4'
+              partID: isoZone
+            ruleID: less_than_min_length
+          type: string
         lastEdited:
           coerce: datetime
           maxlength: 30
@@ -348,6 +398,31 @@ schema:
       - partID: contacts
         partType: tables
       schema:
+        coPhone:
+          anyof:
+          - empty: true
+            minlength: 10
+          maxlength: 12
+          meta:
+          - meta:
+            - contacts: header
+              contactsRequired: optional
+              maxLength: '12'
+              partID: coPhone
+            ruleID: greater_than_max_length
+          - meta:
+            - contacts: header
+              contactsRequired: optional
+              dataType: varchar
+              partID: coPhone
+            ruleID: invalid_type
+          - meta:
+            - contacts: header
+              contactsRequired: optional
+              minLength: '10'
+              partID: coPhone
+            ruleID: less_than_min_length
+          type: string
         contactID:
           emptyTrimmed: false
           forbidden:
@@ -566,31 +641,6 @@ schema:
               partType: missingness
             ruleID: missing_values_found
           required: true
-          type: string
-        phone:
-          anyof:
-          - empty: true
-            minlength: 10
-          maxlength: 12
-          meta:
-          - meta:
-            - contacts: header
-              contactsRequired: optional
-              maxLength: '12'
-              partID: phone
-            ruleID: greater_than_max_length
-          - meta:
-            - contacts: header
-              contactsRequired: optional
-              dataType: varchar
-              partID: phone
-            ruleID: invalid_type
-          - meta:
-            - contacts: header
-              contactsRequired: optional
-              minLength: '10'
-              partID: phone
-            ruleID: less_than_min_length
           type: string
         role:
           maxlength: 30
@@ -825,6 +875,51 @@ schema:
             ruleID: invalid_type
           type: datetime
         license:
+          anyof:
+          - allowed:
+            - afl30
+            - agpl30
+            - apache20
+            - artistic20
+            - bsd0
+            - bsd2Clause
+            - bsd3Clause
+            - bsd3ClauseClear
+            - bsd4Clause
+            - bsl10
+            - cc010
+            - ccby40
+            - ccbync40
+            - ccbyncsa40
+            - ccbysa40
+            - cecill21
+            - ecl20
+            - epl10
+            - epl20
+            - eupl11
+            - eupl12
+            - gfdl13
+            - gpl20
+            - gpl30
+            - isc
+            - lgpl21
+            - lgpl30
+            - lppl13c
+            - mit
+            - mit0
+            - mpl20
+            - mspl
+            - mulanPSL20
+            - ncsa
+            - ofl11
+            - open
+            - osl30
+            - postgreSQL
+            - private
+            - unlicense
+            - wtfpl
+            - zlib
+            empty: true
           emptyTrimmed: false
           forbidden:
           - NA
@@ -841,7 +936,97 @@ schema:
               partID: license
             ruleID: greater_than_max_length
           - meta:
-            - dataType: varchar
+            - dataType: categorical
+              datasets: fK
+              mmaSet: licSet
+              partID: license
+            - partID: afl30
+              setID: licSet
+            - partID: agpl30
+              setID: licSet
+            - partID: apache20
+              setID: licSet
+            - partID: artistic20
+              setID: licSet
+            - partID: bsd0
+              setID: licSet
+            - partID: bsd2Clause
+              setID: licSet
+            - partID: bsd3Clause
+              setID: licSet
+            - partID: bsd3ClauseClear
+              setID: licSet
+            - partID: bsd4Clause
+              setID: licSet
+            - partID: bsl10
+              setID: licSet
+            - partID: cc010
+              setID: licSet
+            - partID: ccby40
+              setID: licSet
+            - partID: ccbysa40
+              setID: licSet
+            - partID: cecill21
+              setID: licSet
+            - partID: ecl20
+              setID: licSet
+            - partID: epl10
+              setID: licSet
+            - partID: epl20
+              setID: licSet
+            - partID: eupl11
+              setID: licSet
+            - partID: eupl12
+              setID: licSet
+            - partID: gfdl13
+              setID: licSet
+            - partID: gpl20
+              setID: licSet
+            - partID: gpl30
+              setID: licSet
+            - partID: isc
+              setID: licSet
+            - partID: lgpl21
+              setID: licSet
+            - partID: lgpl30
+              setID: licSet
+            - partID: lppl13c
+              setID: licSet
+            - partID: mit
+              setID: licSet
+            - partID: mit0
+              setID: licSet
+            - partID: mpl20
+              setID: licSet
+            - partID: mspl
+              setID: licSet
+            - partID: mulanPSL20
+              setID: licSet
+            - partID: ncsa
+              setID: licSet
+            - partID: ofl11
+              setID: licSet
+            - partID: open
+              setID: licSet
+            - partID: osl30
+              setID: licSet
+            - partID: postgreSQL
+              setID: licSet
+            - partID: private
+              setID: licSet
+            - partID: unlicense
+              setID: licSet
+            - partID: wtfpl
+              setID: licSet
+            - partID: zlib
+              setID: licSet
+            - partID: ccbyncsa40
+              setID: licSet
+            - partID: ccbync40
+              setID: licSet
+            ruleID: invalid_category
+          - meta:
+            - dataType: categorical
               datasets: fK
               datasetsRequired: mandatory
               partID: license
@@ -1138,7 +1323,7 @@ schema:
               partID: instrumentID
             ruleID: greater_than_max_length
           - meta:
-            - dataType: categorical
+            - dataType: varchar
               instruments: pK
               instrumentsRequired: mandatory
               partID: instrumentID
@@ -1348,7 +1533,7 @@ schema:
               partID: lastEdited
             ruleID: invalid_type
           type: datetime
-        meaureSetRepID:
+        measureSetRepID:
           emptyTrimmed: false
           forbidden:
           - NA
@@ -1361,29 +1546,29 @@ schema:
           - meta:
             - measureSets: pK
               measureSetsRequired: mandatory
-              partID: meaureSetRepID
+              partID: measureSetRepID
             ruleID: duplicate_entries_found
           - meta:
             - maxLength: '30'
               measureSets: pK
               measureSetsRequired: mandatory
-              partID: meaureSetRepID
+              partID: measureSetRepID
             ruleID: greater_than_max_length
           - meta:
             - dataType: varchar
               measureSets: pK
               measureSetsRequired: mandatory
-              partID: meaureSetRepID
+              partID: measureSetRepID
             ruleID: invalid_type
           - meta:
             - measureSets: pK
               measureSetsRequired: mandatory
-              partID: meaureSetRepID
+              partID: measureSetRepID
             ruleID: missing_mandatory_column
           - meta:
             - measureSets: pK
               measureSetsRequired: mandatory
-              partID: meaureSetRepID
+              partID: measureSetRepID
             - partID: NA
               partType: missingness
             - partID: nan
@@ -1592,6 +1777,36 @@ schema:
               partID: class
             ruleID: invalid_type
           type: string
+        compartment:
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              measures: fK
+              measuresRequired: optional
+              partID: compartment
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: categorical
+              measures: fK
+              measuresRequired: optional
+              partID: compartment
+            ruleID: invalid_type
+          type: string
+        compartmentSet:
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              measures: input
+              partID: compartmentSet
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              measures: input
+              partID: compartmentSet
+            ruleID: invalid_type
+          type: string
         contactID:
           maxlength: 30
           meta:
@@ -1627,6 +1842,7 @@ schema:
         fraction:
           anyof:
           - allowed:
+            - NA
             - liq
             - mix
             - sol
@@ -1647,6 +1863,8 @@ schema:
             - partID: liq
               setID: fractionSet
             - partID: mix
+              setID: fractionSet
+            - partID: NA
               setID: fractionSet
             - partID: sol
               setID: fractionSet
@@ -1724,7 +1942,7 @@ schema:
               partID: measure
             ruleID: greater_than_max_length
           - meta:
-            - dataType: varchar
+            - dataType: categorical
               measures: fK
               measuresRequired: mandatory
               partID: measure
@@ -1750,6 +1968,157 @@ schema:
               partType: missingness
             ruleID: missing_values_found
           required: true
+          type: string
+        measureLic:
+          anyof:
+          - allowed:
+            - afl30
+            - agpl30
+            - apache20
+            - artistic20
+            - bsd0
+            - bsd2Clause
+            - bsd3Clause
+            - bsd3ClauseClear
+            - bsd4Clause
+            - bsl10
+            - cc010
+            - ccby40
+            - ccbync40
+            - ccbyncsa40
+            - ccbysa40
+            - cecill21
+            - ecl20
+            - epl10
+            - epl20
+            - eupl11
+            - eupl12
+            - gfdl13
+            - gpl20
+            - gpl30
+            - isc
+            - lgpl21
+            - lgpl30
+            - lppl13c
+            - mit
+            - mit0
+            - mpl20
+            - mspl
+            - mulanPSL20
+            - ncsa
+            - ofl11
+            - open
+            - osl30
+            - postgreSQL
+            - private
+            - unlicense
+            - wtfpl
+            - zlib
+            empty: true
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              measures: header
+              measuresRequired: optional
+              partID: measureLic
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: categorical
+              measures: header
+              mmaSet: licSet
+              partID: measureLic
+            - partID: afl30
+              setID: licSet
+            - partID: agpl30
+              setID: licSet
+            - partID: apache20
+              setID: licSet
+            - partID: artistic20
+              setID: licSet
+            - partID: bsd0
+              setID: licSet
+            - partID: bsd2Clause
+              setID: licSet
+            - partID: bsd3Clause
+              setID: licSet
+            - partID: bsd3ClauseClear
+              setID: licSet
+            - partID: bsd4Clause
+              setID: licSet
+            - partID: bsl10
+              setID: licSet
+            - partID: cc010
+              setID: licSet
+            - partID: ccby40
+              setID: licSet
+            - partID: ccbysa40
+              setID: licSet
+            - partID: cecill21
+              setID: licSet
+            - partID: ecl20
+              setID: licSet
+            - partID: epl10
+              setID: licSet
+            - partID: epl20
+              setID: licSet
+            - partID: eupl11
+              setID: licSet
+            - partID: eupl12
+              setID: licSet
+            - partID: gfdl13
+              setID: licSet
+            - partID: gpl20
+              setID: licSet
+            - partID: gpl30
+              setID: licSet
+            - partID: isc
+              setID: licSet
+            - partID: lgpl21
+              setID: licSet
+            - partID: lgpl30
+              setID: licSet
+            - partID: lppl13c
+              setID: licSet
+            - partID: mit
+              setID: licSet
+            - partID: mit0
+              setID: licSet
+            - partID: mpl20
+              setID: licSet
+            - partID: mspl
+              setID: licSet
+            - partID: mulanPSL20
+              setID: licSet
+            - partID: ncsa
+              setID: licSet
+            - partID: ofl11
+              setID: licSet
+            - partID: open
+              setID: licSet
+            - partID: osl30
+              setID: licSet
+            - partID: postgreSQL
+              setID: licSet
+            - partID: private
+              setID: licSet
+            - partID: unlicense
+              setID: licSet
+            - partID: wtfpl
+              setID: licSet
+            - partID: zlib
+              setID: licSet
+            - partID: ccbyncsa40
+              setID: licSet
+            - partID: ccbync40
+              setID: licSet
+            ruleID: invalid_category
+          - meta:
+            - dataType: categorical
+              measures: header
+              measuresRequired: optional
+              partID: measureLic
+            ruleID: invalid_type
           type: string
         measureRepID:
           emptyTrimmed: false
@@ -1801,36 +2170,20 @@ schema:
           required: true
           type: string
           unique: true
-        meaureSetRepID:
+        measureSetRepID:
           maxlength: 30
           meta:
           - meta:
             - maxLength: '30'
               measures: fK
               measuresRequired: optional
-              partID: meaureSetRepID
+              partID: measureSetRepID
             ruleID: greater_than_max_length
           - meta:
             - dataType: varchar
               measures: fK
               measuresRequired: optional
-              partID: meaureSetRepID
-            ruleID: invalid_type
-          type: string
-        mesureLic:
-          maxlength: 30
-          meta:
-          - meta:
-            - maxLength: '30'
-              measures: header
-              measuresRequired: optional
-              partID: mesureLic
-            ruleID: greater_than_max_length
-          - meta:
-            - dataType: varchar
-              measures: header
-              measuresRequired: optional
-              partID: mesureLic
+              partID: measureSetRepID
             ruleID: invalid_type
           type: string
         nomenclature:
@@ -2014,9 +2367,9 @@ schema:
               measures: header
               mmaSet: booleanSet
               partID: reportable
-            - partID: 'TRUE'
-              setID: booleanSet
             - partID: 'FALSE'
+              setID: booleanSet
+            - partID: 'TRUE'
               setID: booleanSet
             ruleID: invalid_category
           - meta:
@@ -2089,19 +2442,19 @@ schema:
               partID: severity
             ruleID: greater_than_max_length
           - meta:
-            - dataType: varchar
+            - dataType: categorical
               measures: input
               mmaSet: sevSet
               partID: severity
+            - partID: high
+              setID: sevSet
             - partID: low
               setID: sevSet
             - partID: mid
               setID: sevSet
-            - partID: high
-              setID: sevSet
             ruleID: invalid_category
           - meta:
-            - dataType: varchar
+            - dataType: categorical
               measures: input
               partID: severity
             ruleID: invalid_type
@@ -2165,6 +2518,20 @@ schema:
               partType: missingness
             ruleID: missing_values_found
           required: true
+          type: string
+        specimenSet:
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              measures: input
+              partID: specimenSet
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              measures: input
+              partID: specimenSet
+            ruleID: invalid_type
           type: string
         unit:
           emptyTrimmed: false
@@ -2268,18 +2635,60 @@ schema:
             ruleID: missing_values_found
           required: true
           type: string
-        wMeasureID:
+        version1Variable:
           maxlength: 30
           meta:
           - meta:
             - maxLength: '30'
               measures: input
-              partID: wMeasureID
+              partID: version1Variable
             ruleID: greater_than_max_length
           - meta:
             - dataType: varchar
               measures: input
-              partID: wMeasureID
+              partID: version1Variable
+            ruleID: invalid_type
+          type: string
+        wSphereNotes:
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              measures: input
+              partID: wSphereNotes
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              measures: input
+              partID: wSphereNotes
+            ruleID: invalid_type
+          type: string
+        wideMeasure:
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              measures: input
+              partID: wideMeasure
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              measures: input
+              partID: wideMeasure
+            ruleID: invalid_type
+          type: string
+        wideName:
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              measures: input
+              partID: wideName
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              measures: input
+              partID: wideName
             ruleID: invalid_type
           type: string
       type: dict
@@ -2334,48 +2743,6 @@ schema:
             ruleID: missing_values_found
           required: true
           type: string
-        admRegLevel:
-          maxlength: 30
-          meta:
-          - meta:
-            - maxLength: '30'
-              organizations: input
-              partID: admRegLevel
-            ruleID: greater_than_max_length
-          - meta:
-            - dataType: varchar
-              organizations: input
-              partID: admRegLevel
-            ruleID: invalid_type
-          type: string
-        countryLevel:
-          maxlength: 30
-          meta:
-          - meta:
-            - maxLength: '30'
-              organizations: input
-              partID: countryLevel
-            ruleID: greater_than_max_length
-          - meta:
-            - dataType: varchar
-              organizations: input
-              partID: countryLevel
-            ruleID: invalid_type
-          type: string
-        countyLevel:
-          maxlength: 30
-          meta:
-          - meta:
-            - maxLength: '30'
-              organizations: input
-              partID: countyLevel
-            ruleID: greater_than_max_length
-          - meta:
-            - dataType: varchar
-              organizations: input
-              partID: countyLevel
-            ruleID: invalid_type
-          type: string
         datasetID:
           maxlength: 30
           meta:
@@ -2425,20 +2792,6 @@ schema:
               partID: lastEdited
             ruleID: invalid_type
           type: datetime
-        municipalLevel:
-          maxlength: 30
-          meta:
-          - meta:
-            - maxLength: '30'
-              organizations: input
-              partID: municipalLevel
-            ruleID: greater_than_max_length
-          - meta:
-            - dataType: varchar
-              organizations: input
-              partID: municipalLevel
-            ruleID: invalid_type
-          type: string
         name:
           maxlength: 30
           meta:
@@ -2453,20 +2806,6 @@ schema:
               organizations: header
               organizationsRequired: recommended
               partID: name
-            ruleID: invalid_type
-          type: string
-        neighborLevel:
-          maxlength: 30
-          meta:
-          - meta:
-            - maxLength: '30'
-              organizations: input
-              partID: neighborLevel
-            ruleID: greater_than_max_length
-          - meta:
-            - dataType: varchar
-              organizations: input
-              partID: neighborLevel
             ruleID: invalid_type
           type: string
         notes:
@@ -2508,17 +2847,17 @@ schema:
               mmaSet: orgLevelSet
               organizations: header
               partID: orgLevel
-            - partID: neighborLevel
-              setID: orgLevelSet
-            - partID: municipalLevel
-              setID: orgLevelSet
-            - partID: stateProvLevel
-              setID: orgLevelSet
             - partID: admRegLevel
               setID: orgLevelSet
             - partID: countryLevel
               setID: orgLevelSet
             - partID: countyLevel
+              setID: orgLevelSet
+            - partID: municipalLevel
+              setID: orgLevelSet
+            - partID: neighborLevel
+              setID: orgLevelSet
+            - partID: stateProvLevel
               setID: orgLevelSet
             ruleID: invalid_category
           - meta:
@@ -2531,18 +2870,13 @@ schema:
         orgSector:
           anyof:
           - allowed:
-            - airport
-            - ccc
-            - dorm
+            - dataColl
             - fiNa
             - healthAdm
-            - lab
-            - ltcf
-            - ltcfAl
+            - policy
             - pubHealth
-            - school
-            - sss
-            - uCampus
+            - research
+            - utilities
             empty: true
           maxlength: 30
           meta:
@@ -2557,29 +2891,19 @@ schema:
               mmaSet: orgSectorSet
               organizations: header
               partID: orgSector
-            - partID: ccc
-              setID: orgSectorSet
-            - partID: pubHealth
-              setID: orgSectorSet
-            - partID: lab
-              setID: orgSectorSet
-            - partID: healthAdm
+            - partID: dataColl
               setID: orgSectorSet
             - partID: fiNa
               setID: orgSectorSet
-            - partID: ltcf
+            - partID: healthAdm
               setID: orgSectorSet
-            - partID: ltcfAl
+            - partID: policy
               setID: orgSectorSet
-            - partID: school
+            - partID: pubHealth
               setID: orgSectorSet
-            - partID: sss
+            - partID: research
               setID: orgSectorSet
-            - partID: uCampus
-              setID: orgSectorSet
-            - partID: airport
-              setID: orgSectorSet
-            - partID: dorm
+            - partID: utilities
               setID: orgSectorSet
             ruleID: invalid_category
           - meta:
@@ -2673,20 +2997,6 @@ schema:
           required: true
           type: string
           unique: true
-        stateProvLevel:
-          maxlength: 30
-          meta:
-          - meta:
-            - maxLength: '30'
-              organizations: input
-              partID: stateProvLevel
-            ruleID: greater_than_max_length
-          - meta:
-            - dataType: varchar
-              organizations: input
-              partID: stateProvLevel
-            ruleID: invalid_type
-          type: string
       type: dict
     type: list
   polygons:
@@ -3179,6 +3489,136 @@ schema:
               protocolRelationshipsRequired: mandatoryIf
             ruleID: invalid_type
           type: string
+        protocolRelationshipsID:
+          emptyTrimmed: false
+          forbidden:
+          - NA
+          - nan
+          - nr
+          - 'null'
+          - undisc
+          maxlength: 50
+          meta:
+          - meta:
+            - partID: protocolRelationshipsID
+              protocolRelationships: pK
+              protocolRelationshipsRequired: mandatory
+            ruleID: duplicate_entries_found
+          - meta:
+            - maxLength: '50'
+              partID: protocolRelationshipsID
+              protocolRelationships: pK
+              protocolRelationshipsRequired: mandatory
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              partID: protocolRelationshipsID
+              protocolRelationships: pK
+              protocolRelationshipsRequired: mandatory
+            ruleID: invalid_type
+          - meta:
+            - partID: protocolRelationshipsID
+              protocolRelationships: pK
+              protocolRelationshipsRequired: mandatory
+            ruleID: missing_mandatory_column
+          - meta:
+            - partID: protocolRelationshipsID
+              protocolRelationships: pK
+              protocolRelationshipsRequired: mandatory
+            - partID: NA
+              partType: missingness
+            - partID: nan
+              partType: missingness
+            - partID: nr
+              partType: missingness
+            - partID: 'null'
+              partType: missingness
+            - partID: undisc
+              partType: missingness
+            ruleID: missing_values_found
+          required: true
+          type: string
+          unique: true
+        relationshipID:
+          anyof:
+          - allowed:
+            - before
+            - child
+            - colocated
+            - concurrent
+            - fieldReplicate
+            - labDuplicate
+            - lcsd
+            - msd
+            - specifies
+            empty: true
+          emptyTrimmed: false
+          forbidden:
+          - NA
+          - nan
+          - nr
+          - 'null'
+          - undisc
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              partID: relationshipID
+              protocolRelationships: fK
+              protocolRelationshipsRequired: mandatory
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              mmaSet: relSet
+              partID: relationshipID
+              protocolRelationships: fK
+            - partID: before
+              setID: relSet
+            - partID: concurrent
+              setID: relSet
+            - partID: specifies
+              setID: relSet
+            - partID: child
+              setID: relSet
+            - partID: colocated
+              setID: relSet
+            - partID: fieldReplicate
+              setID: relSet
+            - partID: labDuplicate
+              setID: relSet
+            - partID: lcsd
+              setID: relSet
+            - partID: msd
+              setID: relSet
+            ruleID: invalid_category
+          - meta:
+            - dataType: varchar
+              partID: relationshipID
+              protocolRelationships: fK
+              protocolRelationshipsRequired: mandatory
+            ruleID: invalid_type
+          - meta:
+            - partID: relationshipID
+              protocolRelationships: fK
+              protocolRelationshipsRequired: mandatory
+            ruleID: missing_mandatory_column
+          - meta:
+            - partID: relationshipID
+              protocolRelationships: fK
+              protocolRelationshipsRequired: mandatory
+            - partID: NA
+              partType: missingness
+            - partID: nan
+              partType: missingness
+            - partID: nr
+              partType: missingness
+            - partID: 'null'
+              partType: missingness
+            - partID: undisc
+              partType: missingness
+            ruleID: missing_values_found
+          required: true
+          type: string
         reportable:
           allowed:
           - 'FALSE'
@@ -3200,9 +3640,9 @@ schema:
               mmaSet: booleanSet
               partID: reportable
               protocolRelationships: input
-            - partID: 'TRUE'
-              setID: booleanSet
             - partID: 'FALSE'
+              setID: booleanSet
+            - partID: 'TRUE'
               setID: booleanSet
             ruleID: invalid_category
           - meta:
@@ -3214,50 +3654,6 @@ schema:
             - partID: 'true'
               setID: booleanSet
             ruleID: invalid_type
-          type: string
-        sampleRelID:
-          emptyTrimmed: false
-          forbidden:
-          - NA
-          - nan
-          - nr
-          - 'null'
-          - undisc
-          maxlength: 30
-          meta:
-          - meta:
-            - maxLength: '30'
-              partID: sampleRelID
-              protocolRelationships: fK
-              protocolRelationshipsRequired: mandatory
-            ruleID: greater_than_max_length
-          - meta:
-            - dataType: varchar
-              partID: sampleRelID
-              protocolRelationships: fK
-              protocolRelationshipsRequired: mandatory
-            ruleID: invalid_type
-          - meta:
-            - partID: sampleRelID
-              protocolRelationships: fK
-              protocolRelationshipsRequired: mandatory
-            ruleID: missing_mandatory_column
-          - meta:
-            - partID: sampleRelID
-              protocolRelationships: fK
-              protocolRelationshipsRequired: mandatory
-            - partID: NA
-              partType: missingness
-            - partID: nan
-              partType: missingness
-            - partID: nr
-              partType: missingness
-            - partID: 'null'
-              partType: missingness
-            - partID: undisc
-              partType: missingness
-            ruleID: missing_values_found
-          required: true
           type: string
         stepID:
           maxlength: 30
@@ -3356,7 +3752,7 @@ schema:
               protocolStepsRequired: optional
             ruleID: greater_than_max_length
           - meta:
-            - dataType: categorical
+            - dataType: varchar
               partID: instrumentID
               protocolSteps: fK
               protocolStepsRequired: optional
@@ -3389,7 +3785,7 @@ schema:
               protocolStepsRequired: mandatoryIf
             ruleID: greater_than_max_length
           - meta:
-            - dataType: varchar
+            - dataType: categorical
               partID: measure
               protocolSteps: fK
               protocolStepsRequired: mandatoryIf
@@ -3798,9 +4194,9 @@ schema:
               mmaSet: booleanSet
               partID: reportable
               protocols: input
-            - partID: 'TRUE'
-              setID: booleanSet
             - partID: 'FALSE'
+              setID: booleanSet
+            - partID: 'TRUE'
               setID: booleanSet
             ruleID: invalid_category
           - meta:
@@ -3886,18 +4282,18 @@ schema:
               qualityReportsRequired: mandatoryIf
             ruleID: invalid_type
           type: string
-        meaureSetRepID:
+        measureSetRepID:
           maxlength: 30
           meta:
           - meta:
             - maxLength: '30'
-              partID: meaureSetRepID
+              partID: measureSetRepID
               qualityReports: FK
               qualityReportsRequired: mandatoryIf
             ruleID: greater_than_max_length
           - meta:
             - dataType: varchar
-              partID: meaureSetRepID
+              partID: measureSetRepID
               qualityReports: FK
               qualityReportsRequired: mandatoryIf
             ruleID: invalid_type
@@ -3962,7 +4358,7 @@ schema:
             ruleID: missing_values_found
           required: true
           type: string
-        qualityID:
+        qualityReportID:
           emptyTrimmed: false
           forbidden:
           - NA
@@ -3974,23 +4370,23 @@ schema:
           meta:
           - meta:
             - maxLength: '30'
-              partID: qualityID
+              partID: qualityReportID
               qualityReports: PK
               qualityReportsRequired: mandatory
             ruleID: greater_than_max_length
           - meta:
             - dataType: varchar
-              partID: qualityID
+              partID: qualityReportID
               qualityReports: PK
               qualityReportsRequired: mandatory
             ruleID: invalid_type
           - meta:
-            - partID: qualityID
+            - partID: qualityReportID
               qualityReports: PK
               qualityReportsRequired: mandatory
             ruleID: missing_mandatory_column
           - meta:
-            - partID: qualityID
+            - partID: qualityReportID
               qualityReports: PK
               qualityReportsRequired: mandatory
             - partID: NA
@@ -4038,35 +4434,49 @@ schema:
               qualityReportsRequired: optional
             ruleID: greater_than_max_length
           - meta:
-            - dataType: varchar
+            - dataType: categorical
               mmaSet: sevSet
               partID: severity
               qualityReports: header
+            - partID: high
+              setID: sevSet
             - partID: low
               setID: sevSet
             - partID: mid
               setID: sevSet
-            - partID: high
-              setID: sevSet
             ruleID: invalid_category
           - meta:
-            - dataType: varchar
+            - dataType: categorical
               partID: severity
               qualityReports: header
               qualityReportsRequired: optional
             ruleID: invalid_type
           type: string
-        wMeasureID:
+        wideMeasure:
           maxlength: 30
           meta:
           - meta:
             - maxLength: '30'
-              partID: wMeasureID
+              partID: wideMeasure
               qualityReports: input
             ruleID: greater_than_max_length
           - meta:
             - dataType: varchar
-              partID: wMeasureID
+              partID: wideMeasure
+              qualityReports: input
+            ruleID: invalid_type
+          type: string
+        wideName:
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              partID: wideName
+              qualityReports: input
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              partID: wideName
               qualityReports: input
             ruleID: invalid_type
           type: string
@@ -4110,6 +4520,86 @@ schema:
               sampleRelationships: header
               sampleRelationshipsRequired: optional
             ruleID: invalid_type
+          type: string
+        relationshipID:
+          anyof:
+          - allowed:
+            - before
+            - child
+            - colocated
+            - concurrent
+            - fieldReplicate
+            - labDuplicate
+            - lcsd
+            - msd
+            - specifies
+            empty: true
+          emptyTrimmed: false
+          forbidden:
+          - NA
+          - nan
+          - nr
+          - 'null'
+          - undisc
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              partID: relationshipID
+              sampleRelationships: fK
+              sampleRelationshipsRequired: mandatory
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              mmaSet: relSet
+              partID: relationshipID
+              sampleRelationships: fK
+            - partID: before
+              setID: relSet
+            - partID: concurrent
+              setID: relSet
+            - partID: specifies
+              setID: relSet
+            - partID: child
+              setID: relSet
+            - partID: colocated
+              setID: relSet
+            - partID: fieldReplicate
+              setID: relSet
+            - partID: labDuplicate
+              setID: relSet
+            - partID: lcsd
+              setID: relSet
+            - partID: msd
+              setID: relSet
+            ruleID: invalid_category
+          - meta:
+            - dataType: varchar
+              partID: relationshipID
+              sampleRelationships: fK
+              sampleRelationshipsRequired: mandatory
+            ruleID: invalid_type
+          - meta:
+            - partID: relationshipID
+              sampleRelationships: fK
+              sampleRelationshipsRequired: mandatory
+            ruleID: missing_mandatory_column
+          - meta:
+            - partID: relationshipID
+              sampleRelationships: fK
+              sampleRelationshipsRequired: mandatory
+            - partID: NA
+              partType: missingness
+            - partID: nan
+              partType: missingness
+            - partID: nr
+              partType: missingness
+            - partID: 'null'
+              partType: missingness
+            - partID: undisc
+              partType: missingness
+            ruleID: missing_values_found
+          required: true
           type: string
         sampleIDObject:
           emptyTrimmed: false
@@ -4199,7 +4689,7 @@ schema:
             ruleID: missing_values_found
           required: true
           type: string
-        sampleRelID:
+        sampleRelationshipsID:
           emptyTrimmed: false
           forbidden:
           - NA
@@ -4207,28 +4697,33 @@ schema:
           - nr
           - 'null'
           - undisc
-          maxlength: 30
+          maxlength: 50
           meta:
           - meta:
-            - maxLength: '30'
-              partID: sampleRelID
-              sampleRelationships: fK
+            - partID: sampleRelationshipsID
+              sampleRelationships: pK
+              sampleRelationshipsRequired: mandatory
+            ruleID: duplicate_entries_found
+          - meta:
+            - maxLength: '50'
+              partID: sampleRelationshipsID
+              sampleRelationships: pK
               sampleRelationshipsRequired: mandatory
             ruleID: greater_than_max_length
           - meta:
             - dataType: varchar
-              partID: sampleRelID
-              sampleRelationships: fK
+              partID: sampleRelationshipsID
+              sampleRelationships: pK
               sampleRelationshipsRequired: mandatory
             ruleID: invalid_type
           - meta:
-            - partID: sampleRelID
-              sampleRelationships: fK
+            - partID: sampleRelationshipsID
+              sampleRelationships: pK
               sampleRelationshipsRequired: mandatory
             ruleID: missing_mandatory_column
           - meta:
-            - partID: sampleRelID
-              sampleRelationships: fK
+            - partID: sampleRelationshipsID
+              sampleRelationships: pK
               sampleRelationshipsRequired: mandatory
             - partID: NA
               partType: missingness
@@ -4243,6 +4738,7 @@ schema:
             ruleID: missing_values_found
           required: true
           type: string
+          unique: true
       type: dict
     type: list
   samples:
@@ -4376,55 +4872,20 @@ schema:
           required: true
           type: integer
         collNumPer:
-          emptyTrimmed: false
-          forbidden:
-          - NA
-          - nan
-          - nr
-          - 'null'
-          - undisc
           maxlength: 6
           meta:
           - meta:
             - maxLength: '6'
               partID: collNumPer
               samples: header
-              samplesRequired: mandatory
+              samplesRequired: optional
             ruleID: greater_than_max_length
           - meta:
             - dataType: varchar
               partID: collNumPer
               samples: header
-              samplesRequired: mandatory
+              samplesRequired: optional
             ruleID: invalid_type
-          - meta:
-            - minValue: '1:1'
-              partID: collNumPer
-              samples: header
-              samplesRequired: mandatory
-            ruleID: less_than_min_value
-          - meta:
-            - partID: collNumPer
-              samples: header
-              samplesRequired: mandatory
-            ruleID: missing_mandatory_column
-          - meta:
-            - partID: collNumPer
-              samples: header
-              samplesRequired: mandatory
-            - partID: NA
-              partType: missingness
-            - partID: nan
-              partType: missingness
-            - partID: nr
-              partType: missingness
-            - partID: 'null'
-              partType: missingness
-            - partID: undisc
-              partType: missingness
-            ruleID: missing_values_found
-          min: '1:1'
-          required: true
           type: string
         collPer:
           coerce: float
@@ -4479,7 +4940,9 @@ schema:
             - cosca
             - flowPr
             - grb
+            - manComp
             - moorSw
+            - passiveGen
             - surfSw
             - timePr
             - volPr
@@ -4506,21 +4969,25 @@ schema:
               samples: fk
             - partID: areaPr
               setID: collectSet
+            - partID: comp
+              setID: collectSet
             - partID: cosca
               setID: collectSet
             - partID: flowPr
               setID: collectSet
             - partID: grb
               setID: collectSet
+            - partID: manComp
+              setID: collectSet
             - partID: moorSw
+              setID: collectSet
+            - partID: passiveGen
               setID: collectSet
             - partID: surfSw
               setID: collectSet
             - partID: timePr
               setID: collectSet
             - partID: volPr
-              setID: collectSet
-            - partID: comp
               setID: collectSet
             ruleID: invalid_category
           - meta:
@@ -4670,9 +5137,9 @@ schema:
               mmaSet: booleanSet
               partID: pooled
               samples: header
-            - partID: 'TRUE'
-              setID: booleanSet
             - partID: 'FALSE'
+              setID: booleanSet
+            - partID: 'TRUE'
               setID: booleanSet
             ruleID: invalid_category
           - meta:
@@ -4830,9 +5297,9 @@ schema:
               mmaSet: booleanSet
               partID: reportable
               samples: header
-            - partID: 'TRUE'
-              setID: booleanSet
             - partID: 'FALSE'
+              setID: booleanSet
+            - partID: 'TRUE'
               setID: booleanSet
             ruleID: invalid_category
           - meta:
@@ -4850,9 +5317,15 @@ schema:
           anyof:
           - allowed:
             - afu
+            - autoComp
+            - autoSeq
+            - cone
+            - core
             - desk
+            - effluNS
             - faeces
             - floor
+            - horGrb
             - htSam
             - nww
             - pEfflu
@@ -4864,8 +5337,12 @@ schema:
             - sEfflu
             - sSludge
             - septage
+            - sludgeNS
             - surface
             - swrSed
+            - trap
+            - vac
+            - vertGrb
             empty: true
           emptyTrimmed: false
           forbidden:
@@ -4920,6 +5397,26 @@ schema:
             - partID: surface
               setID: sampleMatSet
             - partID: swrSed
+              setID: sampleMatSet
+            - partID: core
+              setID: sampleMatSet
+            - partID: vac
+              setID: sampleMatSet
+            - partID: cone
+              setID: sampleMatSet
+            - partID: horGrb
+              setID: sampleMatSet
+            - partID: vertGrb
+              setID: sampleMatSet
+            - partID: trap
+              setID: sampleMatSet
+            - partID: autoComp
+              setID: sampleMatSet
+            - partID: autoSeq
+              setID: sampleMatSet
+            - partID: sludgeNS
+              setID: sampleMatSet
+            - partID: effluNS
               setID: sampleMatSet
             ruleID: invalid_category
           - meta:
@@ -5032,19 +5529,19 @@ schema:
               samples: Input
             ruleID: greater_than_max_length
           - meta:
-            - dataType: varchar
+            - dataType: categorical
               mmaSet: sevSet
               partID: severity
               samples: Input
+            - partID: high
+              setID: sevSet
             - partID: low
               setID: sevSet
             - partID: mid
               setID: sevSet
-            - partID: high
-              setID: sevSet
             ruleID: invalid_category
           - meta:
-            - dataType: varchar
+            - dataType: categorical
               partID: severity
               samples: Input
             ruleID: invalid_type
@@ -5093,17 +5590,31 @@ schema:
             ruleID: missing_values_found
           required: true
           type: string
-        wMeasureID:
+        wideMeasure:
           maxlength: 30
           meta:
           - meta:
             - maxLength: '30'
-              partID: wMeasureID
+              partID: wideMeasure
               samples: input
             ruleID: greater_than_max_length
           - meta:
             - dataType: varchar
-              partID: wMeasureID
+              partID: wideMeasure
+              samples: input
+            ruleID: invalid_type
+          type: string
+        wideName:
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              partID: wideName
+              samples: input
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              partID: wideName
               samples: input
             ruleID: invalid_type
           type: string
@@ -5272,6 +5783,22 @@ schema:
             ruleID: less_than_min_value
           min: -180.0
           type: float
+        healthRegion:
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              partID: healthRegion
+              sites: header
+              sitesRequired: optional
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              partID: healthRegion
+              sites: header
+              sitesRequired: optional
+            ruleID: invalid_type
+          type: string
         lastEdited:
           coerce: datetime
           maxlength: 30
@@ -5422,23 +5949,33 @@ schema:
           - allowed:
             - airpln
             - airport
+            - bus
+            - busStat
             - ccc
             - cdc
+            - commFacOth
             - corFcil
             - dorm
             - fiNa
             - hosptl
+            - landTH
             - ltcf
             - ltcfAl
             - ltcfO
             - municp
             - neigh
             - orb
+            - port
             - school
             - ship
             - sss
+            - tHub
             - terminal
+            - trStat
+            - train
+            - transp
             - uCampus
+            - waterTH
             empty: true
           emptyTrimmed: false
           forbidden:
@@ -5462,9 +5999,13 @@ schema:
               sites: header
             - partID: airpln
               setID: shedSet
+            - partID: airport
+              setID: shedSet
             - partID: ccc
               setID: shedSet
             - partID: cdc
+              setID: shedSet
+            - partID: commFacOth
               setID: shedSet
             - partID: corFcil
               setID: shedSet
@@ -5492,11 +6033,27 @@ schema:
               setID: shedSet
             - partID: sss
               setID: shedSet
+            - partID: terminal
+              setID: shedSet
             - partID: uCampus
               setID: shedSet
-            - partID: airport
+            - partID: tHub
               setID: shedSet
-            - partID: terminal
+            - partID: transp
+              setID: shedSet
+            - partID: train
+              setID: shedSet
+            - partID: trStat
+              setID: shedSet
+            - partID: bus
+              setID: shedSet
+            - partID: busStat
+              setID: shedSet
+            - partID: port
+              setID: shedSet
+            - partID: landTH
+              setID: shedSet
+            - partID: waterTH
               setID: shedSet
             ruleID: invalid_category
           - meta:
@@ -5582,10 +6139,13 @@ schema:
           - allowed:
             - bSwrPpl
             - buildCO
+            - compToi
+            - drain
             - estuary
             - htSite
             - lagoon
             - lake
+            - latrine
             - mSwrPpl
             - ocean
             - pStat
@@ -5595,6 +6155,7 @@ schema:
             - septTnk
             - stabPnd
             - swgTrck
+            - triturator
             - upstream
             - wwtp
             - wwtpBack
@@ -5628,11 +6189,11 @@ schema:
               setID: siteTypeSet
             - partID: estuary
               setID: siteTypeSet
-            - partID: lake
-              setID: siteTypeSet
             - partID: htSite
               setID: siteTypeSet
             - partID: lagoon
+              setID: siteTypeSet
+            - partID: lake
               setID: siteTypeSet
             - partID: mSwrPpl
               setID: siteTypeSet
@@ -5652,17 +6213,25 @@ schema:
               setID: siteTypeSet
             - partID: swgTrck
               setID: siteTypeSet
+            - partID: upstream
+              setID: siteTypeSet
+            - partID: wwtp
+              setID: siteTypeSet
+            - partID: wwtpBack
+              setID: siteTypeSet
             - partID: wwtpInd
               setID: siteTypeSet
             - partID: wwtpMuC
               setID: siteTypeSet
             - partID: wwtpMuS
               setID: siteTypeSet
-            - partID: wwtp
+            - partID: drain
               setID: siteTypeSet
-            - partID: upstream
+            - partID: latrine
               setID: siteTypeSet
-            - partID: wwtpBack
+            - partID: compToi
+              setID: siteTypeSet
+            - partID: triturator
               setID: siteTypeSet
             ruleID: invalid_category
           - meta:
@@ -5693,6 +6262,20 @@ schema:
             ruleID: missing_values_found
           required: true
           type: string
+        wSphereNotes:
+          maxlength: 30
+          meta:
+          - meta:
+            - maxLength: '30'
+              partID: wSphereNotes
+              sites: input
+            ruleID: greater_than_max_length
+          - meta:
+            - dataType: varchar
+              partID: wSphereNotes
+              sites: input
+            ruleID: invalid_type
+          type: string
       type: dict
     type: list
-schemaVersion: 2.0.0
+schemaVersion: 2.2.3
