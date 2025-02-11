@@ -44,7 +44,7 @@ summarized report file.
 A validation report of the input data must be generated before it can be
 summarized. (The report content is simplified for readability.)
 
-```{shell}
+```shell
 > DIR=./example-directory
 > REPORT=$DIR/report.yml
 > odm-validate data.xlsx --out=$REPORT
@@ -77,7 +77,7 @@ warnings:
 The following command will summarize the validation report by tables, columns
 and rows, and write the result to the console using markdown syntax.
 
-```{shell}
+```shell
 > cd src/odm_validation/tools
 > ./summarize.py $REPORT --by=table --by=column --by=row --format=markdown
 
@@ -110,7 +110,7 @@ sites:
 
 Specifying `--errorLevel=warning` would include warnings as well:
 
-```{shell}
+```shell
 ## warnings
 
 ### table
@@ -140,7 +140,7 @@ sites:
 The summary can also be written to a file with the `--out` parameter. YAML
 format is implied by the '.yml' file extension.
 
-```{shell}
+```shell
 > SUMMARY=$DIR/report-summary.yml
 > cd src/odm_validation/tools
 > ./summarize.py $REPORT --by=table --by=column --by=row --out=$SUMMARY

@@ -2,8 +2,9 @@
 #| echo: false
 import os
 import sys
-sys.path.append("..")
-sys.path.append("../../src")
+
+# for doc_utils
+sys.path.append('..')
 
 from doc_utils import (
     pprint_csv_file,

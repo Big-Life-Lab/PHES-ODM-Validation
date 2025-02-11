@@ -14,10 +14,6 @@ The first step is to install the package. You can find instructions
 #| echo: false
 
 import logging
-import sys
-
-# specify the package path
-sys.path.append("../../src")
 
 # prevent warnings
 logging.disable(logging.WARNING)

@@ -3,6 +3,7 @@
 ## Generation
 
 1. Install [Quarto](https://quarto.org/docs/get-started/)
+1. Install the package
 1. From this (docs) directory, run the following commands:
 
     ```
