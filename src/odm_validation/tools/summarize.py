@@ -1,13 +1,16 @@
 #!/usr/bin/env python3
 
 import csv
+import json
 import sys
+import logging
+import yaml
 from enum import Enum
-from typing import IO
+from typing import IO, Optional
 
 import typer
 
-from odm_validation.reports import ErrorKind
+from odm_validation.reports import ErrorKind, ValidationReport
 from odm_validation.summarization import (
     SummarizedReport,
     SummaryEntry,
@@ -17,8 +20,7 @@ from odm_validation.summarization import (
 
 from odm_validation.tools.reportutils import (
     ReportFormat,
-    read_report,
-    read_report_from_file,
+    detect_report_format_from_content,
     write_json_report,
     write_yaml_report,
 )
@@ -71,6 +73,33 @@ def write_summary(output: IO, sum_report: SummarizedReport,
         write_yaml_report(output, sum_report)
 
 
+def read_report_from_file(file: IO) -> Optional[ValidationReport]:
+    # XXX: must use yaml.safe_load to avoid running arbitrary python code on
+    # the user's machine, however, it's extremely slow
+    raw_data: str = file.read()
+    fmt = detect_report_format_from_content(raw_data)  # only peeks
+    report_obj: Optional[dict] = None
+    if fmt == ReportFormat.JSON:
+        report_obj = json.loads(raw_data)
+    elif fmt == ReportFormat.YAML:
+        logging.warn('you should use json-reports instead of yaml when ' +
+                     'summarizing, since yaml parsing is extremely slow')
+        report_obj = yaml.safe_load(raw_data)
+    elif fmt is not None:
+        logging.error(f'report format {fmt} can\'t be summarized')
+    else:
+        logging.error('unable to detect report format')
+    if report_obj is None:
+        return None
+    report = ValidationReport(**report_obj)
+    return report
+
+
+def read_report(path: str) -> Optional[ValidationReport]:
+    with open(path, 'r') as f:
+        return read_report_from_file(f)
+
+
 # XXX: locals are too noisy
 app = typer.Typer(pretty_exceptions_show_locals=False)
 
@@ -98,6 +127,8 @@ def main(
         report = read_report(in_path)
     else:
         report = read_report_from_file(sys.stdin)
+    if not report:
+        quit('failed to read report')
 
     sum_report = summarize_report(report, by=set(by))
 
