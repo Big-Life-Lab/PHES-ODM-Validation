@@ -97,7 +97,7 @@ def _strip_coerce_rules(cerb_schema: dict) -> dict:
     return strip_dict_key(deepcopy(cerb_schema), schemas.COERCE_KEY)
 
 
-def filter_dict_by_key(key: str, d: dict) -> dict:
+def _filter_dict_by_key(key: str, d: dict) -> dict:
     result = {}
     val = d.get(key, None)
     if val is not None:
@@ -105,22 +105,22 @@ def filter_dict_by_key(key: str, d: dict) -> dict:
     return result
 
 
-def filter_column_schemas_by_key(key: str, column_schemas: dict) -> dict:
+def _filter_column_schemas_by_key(key: str, column_schemas: dict) -> dict:
     result = {}
     for col_name, col_schema in column_schemas.items():
-        d = filter_dict_by_key(key, col_schema)
+        d = _filter_dict_by_key(key, col_schema)
         if d:
             result[col_name] = d
     return result
 
 
-def gen_coercion_schema(cerb_schema: dict) -> dict:
+def _gen_coercion_schema(cerb_schema: dict) -> dict:
     result = {}
     for table_name, table_schema in cerb_schema.items():
         cs = table_schema['schema']['schema']
         result[table_name] = {
             'schema': {
-                'schema': filter_column_schemas_by_key('coerce', cs),
+                'schema': _filter_column_schemas_by_key('coerce', cs),
             }
         }
     return result
@@ -213,7 +213,7 @@ def _validate_data_ext(
     offset: int = 0
 
     coercion_schema = (cerb_schema if with_metadata else
-                       gen_coercion_schema(cerb_schema))
+                       _gen_coercion_schema(cerb_schema))
     coerced_data: dict[pt.TableId, pt.Dataset] = defaultdict(list)
     coercer = ContextualCoercer(warnings=warnings, errors=errors)
     for table_id, table_data in data.items():
