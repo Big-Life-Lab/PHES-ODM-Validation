@@ -43,14 +43,32 @@ generation and data validation.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="odm_validation.validation.generate_validation_schema">
 <span class="sig-name descname"><span class="pre">generate_validation_schema</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parts</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sets</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">schema_version</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'2.2.3'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">schema_additions</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="headerlink" href="#odm_validation.validation.generate_validation_schema" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Generates a validation schema.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>parts</strong> – the ODM parts table data.</p></li>
+<li><p><strong>sets</strong> – the ODM sets table data.</p></li>
+<li><p><strong>schema_version</strong> – the ODM version to generate the schema for.</p></li>
+<li><p><strong>schema_additions</strong> – any additional rules to inject into the schema.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="odm_validation.validation.validate_data">
 <span class="sig-name descname"><span class="pre">validate_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">schema</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_kind</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataKind</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">DataKind.python</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_version</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'2.2.3'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rule_blacklist</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">RuleId</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">[]</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ValidationReport</span></span></span><a class="headerlink" href="#odm_validation.validation.validate_data" title="Link to this definition">¶</a></dt>
-<dd><dl class="field-list simple">
+<dd><p>Validates <cite>data</cite> with <cite>schema</cite>, using Cerberus.</p>
+<dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>rule_blacklist</strong> – A list of rule ids to explicitly disable.</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>schema</strong> – the schema to validate.</p></li>
+<li><p><strong>data</strong> – the data to validate using the specified schema.</p></li>
+<li><p><strong>data_kind</strong> – the data kind, used to show correct line numbers.</p></li>
+<li><p><strong>data_version</strong> – the data’s ODM version.</p></li>
+<li><p><strong>rule_blacklist</strong> – a list of rule ids to explicitly disable.</p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
