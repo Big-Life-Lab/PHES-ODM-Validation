@@ -41,21 +41,6 @@
 <p>This is the main module of the package. It contains functions for schema
 generation and data validation.</p>
 <dl class="py function">
-<dt class="sig sig-object py" id="odm_validation.validation.filter_column_schemas_by_key">
-<span class="sig-name descname"><span class="pre">filter_column_schemas_by_key</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">column_schemas</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="headerlink" href="#odm_validation.validation.filter_column_schemas_by_key" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="odm_validation.validation.filter_dict_by_key">
-<span class="sig-name descname"><span class="pre">filter_dict_by_key</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">d</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="headerlink" href="#odm_validation.validation.filter_dict_by_key" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="odm_validation.validation.gen_coercion_schema">
-<span class="sig-name descname"><span class="pre">gen_coercion_schema</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cerb_schema</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="headerlink" href="#odm_validation.validation.gen_coercion_schema" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
 <dt class="sig sig-object py" id="odm_validation.validation.generate_validation_schema">
 <span class="sig-name descname"><span class="pre">generate_validation_schema</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parts</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sets</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">schema_version</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'2.2.3'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">schema_additions</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="headerlink" href="#odm_validation.validation.generate_validation_schema" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -74,22 +59,6 @@ generation and data validation.</p>
 <section id="module-odm_validation.utils">
 <span id="utils"></span><h2>Utils<a class="headerlink" href="#module-odm_validation.utils" title="Link to this heading">¶</a></h2>
 <dl class="py function">
-<dt class="sig sig-object py" id="odm_validation.utils.export_yaml_file">
-<span class="sig-name descname"><span class="pre">export_yaml_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#odm_validation.utils.export_yaml_file" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="odm_validation.utils.get_asset_dir">
-<span class="sig-name descname"><span class="pre">get_asset_dir</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#odm_validation.utils.get_asset_dir" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="odm_validation.utils.get_pkg_dir">
-<span class="sig-name descname"><span class="pre">get_pkg_dir</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#odm_validation.utils.get_pkg_dir" title="Link to this definition">¶</a></dt>
-<dd><p>returns the actual pkg. dir or <cite>/src/odm_validation/</cite> if in dev. env.</p>
-</dd></dl>
-
-<dl class="py function">
 <dt class="sig sig-object py" id="odm_validation.utils.import_csv_file">
 <span class="sig-name descname"><span class="pre">import_csv_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#odm_validation.utils.import_csv_file" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -97,7 +66,8 @@ generation and data validation.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="odm_validation.utils.import_dataset">
 <span class="sig-name descname"><span class="pre">import_dataset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#odm_validation.utils.import_dataset" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>wrapper of <cite>import_csv_file</cite></p>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="odm_validation.utils.import_json_file">

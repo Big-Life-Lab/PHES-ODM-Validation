@@ -14,6 +14,7 @@ Utils
 .. automodule:: odm_validation.utils
    :members:
    :undoc-members:
+   :exclude-members: export_yaml_file, get_asset_dir, get_pkg_dir
 
 Specification
 -------------
