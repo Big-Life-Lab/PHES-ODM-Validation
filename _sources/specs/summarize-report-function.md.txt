@@ -1,4 +1,5 @@
 
+
 # summarize_report
 
 This document specifies the implementation the `summarize_report`
@@ -37,7 +38,7 @@ This is the summarized report object returned from the function.
 ### Fields
 
 The following fields are shared with `ValidationReport` (and documented
-[here](module-functions.md#validate_data)):
+[here](module-functions.md#validate-data)):
 
 - data_version
 - schema_version

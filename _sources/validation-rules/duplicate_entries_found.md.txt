@@ -1,5 +1,6 @@
 # duplicate_entries_found
 
+
 This rule identifies when there are two identical entries with the same
 primary key. The rational has been described
 [here](https://odm.discourse.group/t/duplicate-entries-and-lastedited-field/55).

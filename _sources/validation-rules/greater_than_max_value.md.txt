@@ -1,5 +1,6 @@
 # greater_than_max_value
 
+
 This rule ensure that columns values are not greater than a defined
 maximum value. Currently, this rule only supports columns whose data
 type is float or integer i.e. numbers. As an example, consider the

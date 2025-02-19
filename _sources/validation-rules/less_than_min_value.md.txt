@@ -1,5 +1,6 @@
 # less_than_min_value
 
+
 This rule ensure that columns values are not less than a defined minimum
 value. Currently, this rule only supports columns whose data type is
 float or integer i.e. numbers. As an example, consider the `geoLat`

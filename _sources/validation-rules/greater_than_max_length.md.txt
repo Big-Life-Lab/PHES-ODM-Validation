@@ -1,5 +1,6 @@
 # greater_than_max_length
 
+
 This rule ensures that the number of characters in a string type column
 is not greater than a defined maximum value. As an example, consider the
 `phone` column in the `contacts` table whose maximum length value is 10.

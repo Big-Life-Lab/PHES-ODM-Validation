@@ -1,5 +1,6 @@
 # invalid_type
 
+
 This rule checks that the type of a value matches with a defined type or
 can be coerced into the defined type. There are a number of types in the
 ODM that this validation rule will need to handle, we’ll go over each of
@@ -129,7 +130,7 @@ whereas the following the would pass validation,
 ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
 ┃<span style="font-weight: bold"> measureID                                            </span>┃<span style="font-weight: bold"> reportable                                               </span>┃
 ┡━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
-│ 1                                                    │ true                                                     │
+│ 1                                                    │ TRUE                                                     │
 └──────────────────────────────────────────────────────┴──────────────────────────────────────────────────────────┘
 </pre>
 
@@ -141,7 +142,7 @@ following would fail validation,
 ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
 ┃<span style="font-weight: bold"> measureID                                            </span>┃<span style="font-weight: bold"> reportable                                               </span>┃
 ┡━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
-│ 1                                                    │ True                                                     │
+│ 1                                                    │ true                                                     │
 └──────────────────────────────────────────────────────┴──────────────────────────────────────────────────────────┘
 </pre>
 
@@ -373,7 +374,7 @@ boolean 1
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'setID'</span>: <span style="color: #008000; text-decoration-color: #008000">'booleanSet'</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="font-weight: bold">}</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="font-weight: bold">]</span>,
-<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'message'</span>: <span style="color: #008000; text-decoration-color: #008000">'invalid_type rule violated in table measures, column reportable, row(s) 1: Column reportable is a boolean but has value "Yes". Allowed values are false/true.'</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'message'</span>: <span style="color: #008000; text-decoration-color: #008000">'invalid_type rule violated in table measures, column reportable, row(s) 1: Column reportable is a boolean but has value "Yes". Allowed values are FALSE/TRUE.'</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="font-weight: bold">}</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="font-weight: bold">]</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="color: #008000; text-decoration-color: #008000">'warnings'</span>: <span style="font-weight: bold">[]</span>
@@ -391,9 +392,9 @@ boolean 2
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'rowNumber'</span>: <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">1</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'row'</span>: <span style="font-weight: bold">{</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'measureID'</span>: <span style="color: #008000; text-decoration-color: #008000">'1'</span>,
-<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'reportable'</span>: <span style="color: #008000; text-decoration-color: #008000">'True'</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'reportable'</span>: <span style="color: #008000; text-decoration-color: #008000">'true'</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="font-weight: bold">}</span>,
-<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'invalidValue'</span>: <span style="color: #008000; text-decoration-color: #008000">'True'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'invalidValue'</span>: <span style="color: #008000; text-decoration-color: #008000">'true'</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'validationRuleFields'</span>: <span style="font-weight: bold">[</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="font-weight: bold">{</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'partID'</span>: <span style="color: #008000; text-decoration-color: #008000">'reportable'</span>,
@@ -409,7 +410,7 @@ boolean 2
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'setID'</span>: <span style="color: #008000; text-decoration-color: #008000">'booleanSet'</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   </span><span style="font-weight: bold">}</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="font-weight: bold">]</span>,
-<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'message'</span>: <span style="color: #008000; text-decoration-color: #008000">'invalid_type rule violated in table measures, column reportable, row(s) 1: Column reportable is a boolean but has value "True". Allowed values are false/true.'</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'message'</span>: <span style="color: #008000; text-decoration-color: #008000">'invalid_type rule violated in table measures, column reportable, row(s) 1: Column reportable is a boolean but has value "true". Allowed values are FALSE/TRUE.'</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="font-weight: bold">}</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="font-weight: bold">]</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="color: #008000; text-decoration-color: #008000">'warnings'</span>: <span style="font-weight: bold">[]</span>
@@ -664,8 +665,8 @@ boolean
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'reportable'</span>: <span style="font-weight: bold">{</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'type'</span>: <span style="color: #008000; text-decoration-color: #008000">'string'</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'allowed'</span>: <span style="font-weight: bold">[</span>
-<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'false'</span>,
-<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'true'</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'FALSE'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'TRUE'</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   </span><span style="font-weight: bold">]</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'meta'</span>: <span style="font-weight: bold">[</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   │   │   │   │   </span><span style="font-weight: bold">{</span>

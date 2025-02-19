@@ -1,5 +1,6 @@
 # Customizing a Validation Schema
 
+
 ## Context
 
 You can extend the [ODM validation
@@ -81,9 +82,9 @@ Using the `validate_data` function with our current validation schema,
 we get the errors shown below:
 
 <pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="color: #800080; text-decoration-color: #800080; font-weight: bold">ValidationReport</span><span style="font-weight: bold">(</span>
-<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="color: #808000; text-decoration-color: #808000">data_version</span>=<span style="color: #008000; text-decoration-color: #008000">'2.0.0'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="color: #808000; text-decoration-color: #808000">data_version</span>=<span style="color: #008000; text-decoration-color: #008000">'2.2.3'</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="color: #808000; text-decoration-color: #808000">schema_version</span>=<span style="color: #008000; text-decoration-color: #008000">'2.0.0'</span>,
-<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="color: #808000; text-decoration-color: #808000">package_version</span>=<span style="color: #008000; text-decoration-color: #008000">'0.5.0'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="color: #808000; text-decoration-color: #808000">package_version</span>=<span style="color: #008000; text-decoration-color: #008000">'1.0.0b1'</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="color: #808000; text-decoration-color: #808000">table_info</span>=<span style="font-weight: bold">{</span><span style="color: #008000; text-decoration-color: #008000">'sites'</span>: <span style="font-weight: bold">{</span><span style="color: #008000; text-decoration-color: #008000">'columns'</span>: <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">1</span>, <span style="color: #008000; text-decoration-color: #008000">'rows'</span>: <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">2</span><span style="font-weight: bold">}}</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="color: #808000; text-decoration-color: #808000">errors</span>=<span style="font-weight: bold">[</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="font-weight: bold">{</span>
@@ -180,7 +181,7 @@ updated_validation_schema = generate_validation_schema(
 With our new validation schema printed below:
 
 <pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="font-weight: bold">{</span>
-<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="color: #008000; text-decoration-color: #008000">'schemaVersion'</span>: <span style="color: #008000; text-decoration-color: #008000">'2.0.0'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="color: #008000; text-decoration-color: #008000">'schemaVersion'</span>: <span style="color: #008000; text-decoration-color: #008000">'2.2.3'</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="color: #008000; text-decoration-color: #008000">'schema'</span>: <span style="font-weight: bold">{</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="color: #008000; text-decoration-color: #008000">'sites'</span>: <span style="font-weight: bold">{</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'type'</span>: <span style="color: #008000; text-decoration-color: #008000">'list'</span>,
@@ -201,9 +202,9 @@ Finally, lets validate our original dataset with our new validation
 schema to make sure its working correctly,
 
 <pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="color: #800080; text-decoration-color: #800080; font-weight: bold">ValidationReport</span><span style="font-weight: bold">(</span>
-<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="color: #808000; text-decoration-color: #808000">data_version</span>=<span style="color: #008000; text-decoration-color: #008000">'2.0.0'</span>,
-<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="color: #808000; text-decoration-color: #808000">schema_version</span>=<span style="color: #008000; text-decoration-color: #008000">'2.0.0'</span>,
-<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="color: #808000; text-decoration-color: #808000">package_version</span>=<span style="color: #008000; text-decoration-color: #008000">'0.5.0'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="color: #808000; text-decoration-color: #808000">data_version</span>=<span style="color: #008000; text-decoration-color: #008000">'2.2.3'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="color: #808000; text-decoration-color: #808000">schema_version</span>=<span style="color: #008000; text-decoration-color: #008000">'2.2.3'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="color: #808000; text-decoration-color: #808000">package_version</span>=<span style="color: #008000; text-decoration-color: #008000">'1.0.0b1'</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="color: #808000; text-decoration-color: #808000">table_info</span>=<span style="font-weight: bold">{</span><span style="color: #008000; text-decoration-color: #008000">'sites'</span>: <span style="font-weight: bold">{</span><span style="color: #008000; text-decoration-color: #008000">'columns'</span>: <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">1</span>, <span style="color: #008000; text-decoration-color: #008000">'rows'</span>: <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">2</span><span style="font-weight: bold">}}</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="color: #808000; text-decoration-color: #808000">errors</span>=<span style="font-weight: bold">[</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="font-weight: bold">{</span>

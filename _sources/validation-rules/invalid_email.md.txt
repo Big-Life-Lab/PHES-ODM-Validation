@@ -1,5 +1,6 @@
 # invalid_email
 
+
 This rule validates that varchar columns that represent an email have a
 valid email address. For example, consider the `email` column in the
 `contacts` table. The following dataset snippet should fail validation,
@@ -78,7 +79,7 @@ is an email or not. Instead we will be hardcoding this rule to a set of
 pre-determined email columns. For version 2 the email columns are:
 
 ``` python
-pprint_yaml_file(asset("version-2-email-columns.yaml"))
+pprint_yaml_file(asset("version-2-email-columns.yml"))
 ```
 
 <pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="font-weight: bold">[</span>
@@ -131,7 +132,7 @@ validate the column value. An example of the regex can be seen in this
 the parts snippet above the following schema should be generated,
 
 ``` python
-pprint_yaml_file(asset("schema-v2.yaml"))
+pprint_yaml_file(asset("schema-v2.yml"))
 ```
 
 <pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="font-weight: bold">{</span>
@@ -175,7 +176,7 @@ the above mentioned version 2 email columns. In addition, this rule
 should also be added to the following version 1 only columns:
 
 ``` python
-pprint_yaml_file(asset("version-1-email-columns.yaml"))
+pprint_yaml_file(asset("version-1-email-columns.yml"))
 ```
 
 <pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="font-weight: bold">[</span>
@@ -206,7 +207,7 @@ pprint_csv_file(asset("parts.csv"), title = "Parts v1")
 the following validation schema should be generated,
 
 ``` python
-pprint_yaml_file(asset("schema-v1.yaml"))
+pprint_yaml_file(asset("schema-v1.yml"))
 ```
 
 <pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="font-weight: bold">{</span>

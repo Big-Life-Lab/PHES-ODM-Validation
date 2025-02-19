@@ -1,5 +1,6 @@
 # missing_values_found
 
+
 This rule checks if a mandatory column contain any missing values. A
 value is considered missing if it contains an empty string or if it
 contains one of the values considered as missing by the ODM dictionary.

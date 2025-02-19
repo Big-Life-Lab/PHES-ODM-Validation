@@ -1,5 +1,6 @@
 # Standardized Validation Rule API
 
+
 This document will go over the design for a standardized API to define
 validation rules in the library. It will also provide reasoning for some
 of the design decisions made.
@@ -201,9 +202,8 @@ Similiarly, if we were to implement the two methods for the
 1.  The `get_schema_keys` method would return the list
     `['type', 'coerce', 'max']`
 2.  The `gen_schema_values` method would return the list
-    `['integer', 'integer', 90]`  
-    for the `geoLat` and `geoLong` columns. It would return `None` for
-    the other columns.
+    `['integer', 'integer', 90]` for the `geoLat` and `geoLong` columns.
+    It would return `None` for the other columns.
 
 Due to the seperation of the schema generation and validation processes,
 the schema generation process cannot be combined into one method. This

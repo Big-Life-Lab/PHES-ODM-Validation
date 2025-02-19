@@ -3,14 +3,14 @@
 <html lang="en" data-content_root="../../">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>Customizing a Validation Schema &#8212; PHES-ODM Validation  documentation</title>
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=4f649999" />
-    <link rel="stylesheet" type="text/css" href="../../_static/alabaster.css?v=bf1bc15e" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=5ecbeea2" />
+    <link rel="stylesheet" type="text/css" href="../../_static/alabaster.css?v=50a6f5c9" />
     <link rel="stylesheet" type="text/css" href="../../_static/css/odm-styles.css?v=c2e4d323" />
     <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
-    <script src="../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
@@ -20,8 +20,9 @@
    
   <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
   
+
   
-  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+  
 
   </head><body>
   
@@ -108,9 +109,9 @@ must be a string. If we validate the dataset shown below,</p>
 <p>Using the <code class="docutils literal notranslate"><span class="pre">validate_data</span></code> function with our current validation schema,
 we get the errors shown below:</p>
 <pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="color: #800080; text-decoration-color: #800080; font-weight: bold">ValidationReport</span><span style="font-weight: bold">(</span>
-<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="color: #808000; text-decoration-color: #808000">data_version</span>=<span style="color: #008000; text-decoration-color: #008000">'2.0.0'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="color: #808000; text-decoration-color: #808000">data_version</span>=<span style="color: #008000; text-decoration-color: #008000">'2.2.3'</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="color: #808000; text-decoration-color: #808000">schema_version</span>=<span style="color: #008000; text-decoration-color: #008000">'2.0.0'</span>,
-<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="color: #808000; text-decoration-color: #808000">package_version</span>=<span style="color: #008000; text-decoration-color: #008000">'0.5.0'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="color: #808000; text-decoration-color: #808000">package_version</span>=<span style="color: #008000; text-decoration-color: #008000">'1.0.0b1'</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="color: #808000; text-decoration-color: #808000">table_info</span>=<span style="font-weight: bold">{</span><span style="color: #008000; text-decoration-color: #008000">'sites'</span>: <span style="font-weight: bold">{</span><span style="color: #008000; text-decoration-color: #008000">'columns'</span>: <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">1</span>, <span style="color: #008000; text-decoration-color: #008000">'rows'</span>: <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">2</span><span style="font-weight: bold">}}</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="color: #808000; text-decoration-color: #808000">errors</span>=<span style="font-weight: bold">[</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="font-weight: bold">{</span>
@@ -199,7 +200,7 @@ can be seen below:</p>
 </div>
 <p>With our new validation schema printed below:</p>
 <pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="font-weight: bold">{</span>
-<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="color: #008000; text-decoration-color: #008000">'schemaVersion'</span>: <span style="color: #008000; text-decoration-color: #008000">'2.0.0'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="color: #008000; text-decoration-color: #008000">'schemaVersion'</span>: <span style="color: #008000; text-decoration-color: #008000">'2.2.3'</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="color: #008000; text-decoration-color: #008000">'schema'</span>: <span style="font-weight: bold">{</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="color: #008000; text-decoration-color: #008000">'sites'</span>: <span style="font-weight: bold">{</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   │   </span><span style="color: #008000; text-decoration-color: #008000">'type'</span>: <span style="color: #008000; text-decoration-color: #008000">'list'</span>,
@@ -217,9 +218,9 @@ can be seen below:</p>
 <p>Finally, lets validate our original dataset with our new validation
 schema to make sure its working correctly,</p>
 <pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="color: #800080; text-decoration-color: #800080; font-weight: bold">ValidationReport</span><span style="font-weight: bold">(</span>
-<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="color: #808000; text-decoration-color: #808000">data_version</span>=<span style="color: #008000; text-decoration-color: #008000">'2.0.0'</span>,
-<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="color: #808000; text-decoration-color: #808000">schema_version</span>=<span style="color: #008000; text-decoration-color: #008000">'2.0.0'</span>,
-<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="color: #808000; text-decoration-color: #808000">package_version</span>=<span style="color: #008000; text-decoration-color: #008000">'0.5.0'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="color: #808000; text-decoration-color: #808000">data_version</span>=<span style="color: #008000; text-decoration-color: #008000">'2.2.3'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="color: #808000; text-decoration-color: #808000">schema_version</span>=<span style="color: #008000; text-decoration-color: #008000">'2.2.3'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="color: #808000; text-decoration-color: #808000">package_version</span>=<span style="color: #008000; text-decoration-color: #008000">'1.0.0b1'</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="color: #808000; text-decoration-color: #808000">table_info</span>=<span style="font-weight: bold">{</span><span style="color: #008000; text-decoration-color: #008000">'sites'</span>: <span style="font-weight: bold">{</span><span style="color: #008000; text-decoration-color: #008000">'columns'</span>: <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">1</span>, <span style="color: #008000; text-decoration-color: #008000">'rows'</span>: <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">2</span><span style="font-weight: bold">}}</span>,
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="color: #808000; text-decoration-color: #808000">errors</span>=<span style="font-weight: bold">[</span>
 <span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   │   </span><span style="font-weight: bold">{</span>
@@ -266,10 +267,10 @@ looking at the <code class="docutils literal notranslate"><span class="pre">sche
           
         </div>
       </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
         <div class="sphinxsidebarwrapper">
             <p class="logo"><a href="../../index.html">
-              <img class="logo" src="../../_static/ODM-logo.png" alt="Logo"/>
+              <img class="logo" src="../../_static/ODM-logo.png" alt="Logo of PHES-ODM Validation"/>
             </a></p>
 <h1 class="logo"><a href="../../index.html">PHES-ODM Validation</a></h1>
 
@@ -295,6 +296,7 @@ looking at the <code class="docutils literal notranslate"><span class="pre">sche
 <li class="toctree-l1"><a class="reference internal" href="../../links/contributing_link.html">Contributing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../links/code_of_conduct_link.html">Code of Conduct</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../links/license_link.html">License</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/Big-Life-Lab/PHES-ODM-Validation">Source code</a></li>
 </ul>
 
 <div class="relations">
@@ -306,7 +308,7 @@ looking at the <code class="docutils literal notranslate"><span class="pre">sche
   </ul></li>
 </ul>
 </div>
-<div id="searchbox" style="display: none" role="search">
+<search id="searchbox" style="display: none" role="search">
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../../search.html" method="get">
@@ -314,7 +316,7 @@ looking at the <code class="docutils literal notranslate"><span class="pre">sche
       <input type="submit" value="Go" />
     </form>
     </div>
-</div>
+</search>
 <script>document.getElementById('searchbox').style.display = "block"</script>
 
 
@@ -329,11 +331,11 @@ looking at the <code class="docutils literal notranslate"><span class="pre">sche
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2022, OHRI.
+      &#169;2022, OHRI.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 7.2.6</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 7.4.7</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 0.7.16</a>
       
       |
       <a href="../../_sources/examples/schema-additions/schema-additions.md.txt"
