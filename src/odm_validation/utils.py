@@ -58,7 +58,7 @@ def export_yaml_file(data: dict, path: str) -> None:
 
 
 def import_dataset(path: str) -> list[dict]:
-    # print('importing ' + path)
+    '''wrapper of `import_csv_file`'''
     _, ext = splitext(path)
     assert ext == ".csv", f'"{ext}" is not a dataset file extension'
     return import_csv_file(path)

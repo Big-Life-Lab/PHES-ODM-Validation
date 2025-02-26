@@ -40,7 +40,7 @@ def _generate_validation_schema_ext(parts: pt.Dataset,
                                     rule_blacklist: list[RuleId] = [],
                                     rule_whitelist: list[RuleId] = []
                                     ) -> Schema:
-    """
+    '''
     This is the extended version of `generate_validation_schema`, with
     additional parameters for setting advanced options.
 
@@ -48,7 +48,7 @@ def _generate_validation_schema_ext(parts: pt.Dataset,
         list represents all the rules.
     :param rule_blacklist: A list of rule ids to explicitly disable. This takes
         precedence over the whitelist.
-    """
+    '''
     # `parts` must be stripped before further processing. This is important for
     # performance and simplicity of implementation.
     # `rule_whitelist` determines which rules are included in the schema. It is
@@ -85,6 +85,14 @@ def generate_validation_schema(parts: pt.Dataset,
                                sets: pt.Dataset = [],
                                schema_version: str = odm.VERSION_STR,
                                schema_additions: dict = {}) -> Schema:
+    '''
+    Generates a validation schema.
+
+    :param parts: the ODM parts table data.
+    :param sets: the ODM sets table data.
+    :param schema_version: the ODM version to generate the schema for.
+    :param schema_additions: any additional rules to inject into the schema.
+    '''
     return _generate_validation_schema_ext(parts, sets, schema_version,
                                            schema_additions)
 
@@ -97,7 +105,7 @@ def _strip_coerce_rules(cerb_schema: dict) -> dict:
     return strip_dict_key(deepcopy(cerb_schema), schemas.COERCE_KEY)
 
 
-def filter_dict_by_key(key: str, d: dict) -> dict:
+def _filter_dict_by_key(key: str, d: dict) -> dict:
     result = {}
     val = d.get(key, None)
     if val is not None:
@@ -105,22 +113,22 @@ def filter_dict_by_key(key: str, d: dict) -> dict:
     return result
 
 
-def filter_column_schemas_by_key(key: str, column_schemas: dict) -> dict:
+def _filter_column_schemas_by_key(key: str, column_schemas: dict) -> dict:
     result = {}
     for col_name, col_schema in column_schemas.items():
-        d = filter_dict_by_key(key, col_schema)
+        d = _filter_dict_by_key(key, col_schema)
         if d:
             result[col_name] = d
     return result
 
 
-def gen_coercion_schema(cerb_schema: dict) -> dict:
+def _gen_coercion_schema(cerb_schema: dict) -> dict:
     result = {}
     for table_name, table_schema in cerb_schema.items():
         cs = table_schema['schema']['schema']
         result[table_name] = {
             'schema': {
-                'schema': filter_column_schemas_by_key('coerce', cs),
+                'schema': _filter_column_schemas_by_key('coerce', cs),
             }
         }
     return result
@@ -137,15 +145,9 @@ def _validate_data_ext(
     verbosity: ErrorVerbosity = ErrorVerbosity.LONG_METADATA_MESSAGE,
     with_metadata: bool = True,
 ) -> reports.ValidationReport:
-    """
-    Validates `data` with `schema`, using Cerberus.
-
-    This is the extended version of `validate_data`, with additional parameters
-    for setting advanced options.
-
-    :param rule_whitelist: list of rule ids to explicitly enable.
-    :param rule_blacklist: list of rule ids to explicitly disable.
-    """
+    '''This is the extended version of `validate_data`, with additional
+    parameters for setting advanced options.
+    '''
     # `rule_whitelist` determines which rules/errors are triggered during
     # validation. It is needed when testing data validation, to be able to
     # compare error reports in isolation.
@@ -213,7 +215,7 @@ def _validate_data_ext(
     offset: int = 0
 
     coercion_schema = (cerb_schema if with_metadata else
-                       gen_coercion_schema(cerb_schema))
+                       _gen_coercion_schema(cerb_schema))
     coerced_data: dict[pt.TableId, pt.Dataset] = defaultdict(list)
     coercer = ContextualCoercer(warnings=warnings, errors=errors)
     for table_id, table_data in data.items():
@@ -266,8 +268,14 @@ def validate_data(schema: Schema,
                   data_version: str = odm.VERSION_STR,
                   rule_blacklist: list[RuleId] = [],
                   ) -> reports.ValidationReport:
-    """
-    :param rule_blacklist: A list of rule ids to explicitly disable.
-    """
+    '''
+    Validates `data` with `schema`, using Cerberus.
+
+    :param schema: the schema to validate.
+    :param data: the data to validate using the specified schema.
+    :param data_kind: the data kind, used to show correct line numbers.
+    :param data_version: the data's ODM version.
+    :param rule_blacklist: a list of rule ids to explicitly disable.
+    '''
     return _validate_data_ext(schema, data, data_kind, data_version,
                               rule_blacklist)
