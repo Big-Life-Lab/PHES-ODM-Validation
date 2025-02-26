@@ -226,6 +226,15 @@ class TestSummarizationApi(common.OdmTestCase):
         summary = summarize_report(self.report, by=set())
         self.assertEqual(overview, summary.overview)
 
+    def test_column_error_no_exception(self):
+        e = {
+            'columnName': 'addL1',
+            'errorType': 'missing_mandatory_column',
+            'tableName': 'addresses',
+        }
+        r = init_report([e], [])
+        summarize_report(r, by=set())
+
 
 if __name__ == '__main__':
     unittest.main()

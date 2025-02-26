@@ -127,8 +127,13 @@ def _count_errors(keys: set[SummaryKey], errors: list) -> Counts:
     key_counts: dict[SummaryKey, TableCounts] = defaultdict(dict)
     for e in errors:
         table_id, rule_id = _get_error_table_rule(e)
-        row_ids = _get_error_row_ids(e)
-        count = len(row_ids)
+        is_row_err = 'rowNumber' in e or 'rowNumbers' in e
+        if is_row_err:
+            row_ids = _get_error_row_ids(e)
+            count = len(row_ids)
+        else:
+            row_ids = []
+            count = 1
         total_counts[rule_id] += count
         for key in keys:
             if key == SummaryKey.ROW:
