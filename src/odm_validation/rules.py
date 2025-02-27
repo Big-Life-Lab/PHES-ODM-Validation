@@ -326,7 +326,8 @@ def invalid_type() -> Rule:
     def get_error_template(odm_value: SomeValue, odm_type: Optional[str],
                            data_kind: DataKind) -> str:
         if odm_type == pt.BOOLEAN:
-            # XXX: strings 'True' & 'False' may implicitly become booleans,
+            # XXX: strings 'True' & 'False' may implicitly become booleans
+            # since that's how they are written in Python,
             # but this will still be an error due to their wrong casing
             assert isinstance(odm_value, (bool, str))
             return err_bool
